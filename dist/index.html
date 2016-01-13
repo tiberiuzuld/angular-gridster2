@@ -1,0 +1,54 @@
+<!doctype html>
+<html ng-app="gridster2App">
+<head>
+  <meta charset="utf-8">
+  <title>Angular Gridster 2</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width">
+  <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+  
+
+  <link rel="stylesheet" href="gridster.css">
+
+  <link rel="stylesheet" href="styles/app.css">
+</head>
+<body ng-controller="IndexController as vm">
+<div class="toolbar">
+  <button ng-click="vm.addItem()">Add widget</button>
+  <button ng-click="vm.toggleFitToScreen()">
+    <span ng-show="vm.options.rowHeight === 'match'">Fit to screen</span>
+    <span ng-show="vm.options.rowHeight === 'fit'">Scrollable</span>
+  </button>
+  <button ng-click="vm.toggleDrag()">
+    <span ng-show="vm.options.draggable.enabled === false">Enable drag</span>
+    <span ng-show="vm.options.draggable.enabled === true">Disable drag</span>
+  </button>
+  <button ng-click="vm.toggleResize()">
+    <span ng-show="vm.options.resizable.enabled === false">Enable resize</span>
+    <span ng-show="vm.options.resizable.enabled === true">Disable resize</span>
+  </button>
+  <label>
+    Margin:
+  </label>
+  <input type="number" ng-model="vm.options.margin">
+  <label>
+    Outer Margin:
+  </label>
+  <input type="checkbox" ng-model="vm.options.outerMargin">
+</div>
+
+<div gridster="vm.options">
+  <div gridster-item="item" ng-repeat="item in vm.dashboard">
+    <button ng-click="vm.removeItem(item)">X</button>
+  </div>
+</div>
+
+<script src="scripts/vendor.js"></script>
+
+<script src="gridster.js"></script>
+
+<script src="scripts/app.js"></script>
+
+</body>
+</html>
