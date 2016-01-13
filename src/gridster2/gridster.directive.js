@@ -8,9 +8,9 @@
     function link(scope, element, attributes, gridster) {
       var gridsterPreview = '<div gridster-preview></div>';
       element.append($compile(gridsterPreview)(scope));
-      var options = scope.$eval(attributes.gridster), scrollBarPresent;
+      var scrollBarPresent;
 
-      scope.$watch(attributes.gridster, function () {
+      scope.$watch(attributes.gridster, function (options) {
         gridster.setOptions(options);
       }, true);
 

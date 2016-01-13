@@ -80,7 +80,7 @@ Simply pass your desired options to the gridster directive
 ```JavaScript
 $scope.options = {
    colWidth: 'fit', // 'fit' will divide container width to the number of columns; number of pixels to set colWidth
-   rowHeight: 'match', // 'match' will be equal to colWidth; 'fit' will divide container height to number of rows; number of pixels to set rowHeight
+   rowHeight: 'fit', // 'match' will be equal to colWidth; 'fit' will divide container height to number of rows; number of pixels to set rowHeight
    fitBreakpoint: 1024, // if the screen is not wider that this, rowHeight 'fit' will be calculated as 'match'
    mobileBreakpoint: 640, // if the screen is not wider that this, remove the grid layout and stack the items
    minCols: 1,// minimum amount of columns in the grid
@@ -97,11 +97,11 @@ $scope.options = {
    scrollSpeed: 10, //how much to scroll each mouse move when in the scrollSensitivity zone
    itemChangeCallback: undefined, //callback to call for each item when is changes x, y, rows, cols. Arguments:gridsterItem, scope
    draggable: {
-     enabled: true, // enable/disable draggable items
+     enabled: false, // enable/disable draggable items
      stop: undefined // callback when dragging an item stops. Arguments: gridsterItem, scope
    },
    resizable: {
-     enabled: true, // enable/disable resizable items
+     enabled: false, // enable/disable resizable items
      handles: ['s', 'e', 'n', 'w', 'se', 'ne', 'sw', 'nw'], // resizable edges of an item
      stop: undefined // callback when resizing an item stops. Arguments: gridsterItem, scope
    }

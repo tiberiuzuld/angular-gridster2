@@ -8,16 +8,16 @@
     var vm = this;
     vm.options = {
       colWidth: 'fit',
-      rowHeight: 'match',
+      rowHeight: 'fit',
       itemChangeCallback: itemChange,
       margin: 10,
       outerMargin: true,
       draggable: {
-        enabled: true,
+        enabled: false,
         stop: eventStop
       },
       resizable: {
-        enabled: true,
+        enabled: false,
         stop: eventStop
       }
     };
