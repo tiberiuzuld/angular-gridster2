@@ -55,20 +55,16 @@
 
       scope.gridsterItem.setSize = setSize;
 
-      var init = true;
-      scope.$watch('gridsterItem', function (newValue, oldValue) {
-        if (init) {
-          init = false;
+      scope.gridsterItem.checkItemChanges = function (newValue, oldValue) {
+        if (newValue.rows === oldValue.rows && newValue.cols === oldValue.cols && newValue.x === oldValue.x && newValue.y === oldValue.y) {
           return;
         }
-
         if (newValue.rows < scope.gridster.minItemRows || newValue.cols < scope.gridster.minItemCols ||
           scope.gridster.checkCollision(scope.gridsterItem)) {
           scope.gridsterItem.x = oldValue.x;
           scope.gridsterItem.y = oldValue.y;
           scope.gridsterItem.cols = oldValue.cols;
           scope.gridsterItem.rows = oldValue.rows;
-          init = true;
         } else {
           scope.$broadcast('gridster-item-change');
           scope.gridster.calculateLayout();
@@ -76,8 +72,7 @@
             scope.gridster.itemChangeCallback(scope.gridsterItem, scope);
           }
         }
-
-      }, true);
+      };
 
       scope.$on('$destroy', function () {
         scope.gridsterItem.drag.toggle(false);

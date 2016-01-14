@@ -117,6 +117,10 @@ angular.module('app').run(['gridsterConfig', function(gridsterConfig) {
 }]);
 ```
 
+### Gridster Item Events
+
+broadcasts 'gridster-item-change' if item changes x ,y , cols, rows
+broadcasts 'gridster-item-resize' if item changes pixels height or width
 
 ### License
  The MIT License

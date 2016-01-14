@@ -10,7 +10,7 @@
 
       var enabled, dragHandles = [], handlesIndex, dragHandleElement, scrollSensitivity, scrollSpeed, lastMouse = [0, 0],
         elemPosition = [0, 0], directionFunction, position = [0, 0], itemBackup = [0, 0, 0, 0], elemBottomOffset,
-        elemRightOffset;
+        elemRightOffset, itemCopy;
 
       function dragStart(e) {
         switch (e.which) {
@@ -39,6 +39,7 @@
         elemPosition[1] = $element[0].offsetTop;
         elemPosition[2] = $element[0].offsetWidth;
         elemPosition[3] = $element[0].offsetHeight;
+        itemCopy = angular.copy(scope.gridsterItem);
         scope.gridster.movingItem = scope.gridsterItem;
         scope.gridster.previewStyle();
 
@@ -109,7 +110,7 @@
         scope.gridster.movingItem = null;
         scope.gridster.previewStyle();
         scope.gridsterItem.setSize(true);
-        scope.$applyAsync();
+        scope.gridsterItem.checkItemChanges(scope.gridsterItem, itemCopy);
         if (scope.gridster.resizable.stop) {
           scope.gridster.resizable.stop(scope.gridsterItem, scope);
         }

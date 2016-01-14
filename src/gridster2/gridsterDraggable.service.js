@@ -9,7 +9,7 @@
     function GridsterDraggable($element, scope) {
 
       var enabled, lastMouse = [0, 0], elemPosition = [0, 0, 0, 0], position = [0, 0], positionBackup = [0, 0],
-        scrollSensitivity, scrollSpeed, elemBottomOffset, elemRightOffset;
+        scrollSensitivity, scrollSpeed, elemBottomOffset, elemRightOffset, itemCopy;
 
       function dragStart(e) {
         switch (e.which) {
@@ -38,6 +38,7 @@
         elemPosition[1] = $element[0].offsetTop;
         elemPosition[2] = $element[0].offsetWidth;
         elemPosition[3] = $element[0].offsetHeight;
+        itemCopy = angular.copy(scope.gridsterItem);
         scope.gridster.movingItem = scope.gridsterItem;
         scope.gridster.previewStyle();
 
@@ -108,7 +109,7 @@
         scope.gridster.movingItem = null;
         scope.gridsterItem.setSize(true);
         scope.gridster.previewStyle();
-        scope.$applyAsync();
+        scope.gridsterItem.checkItemChanges(scope.gridsterItem, itemCopy);
         if (scope.gridster.draggable.stop) {
           scope.gridster.draggable.stop(scope.gridsterItem, scope);
         }

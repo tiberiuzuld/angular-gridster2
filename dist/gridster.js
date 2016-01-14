@@ -23,7 +23,7 @@
 
       var enabled, dragHandles = [], handlesIndex, dragHandleElement, scrollSensitivity, scrollSpeed, lastMouse = [0, 0],
         elemPosition = [0, 0], directionFunction, position = [0, 0], itemBackup = [0, 0, 0, 0], elemBottomOffset,
-        elemRightOffset;
+        elemRightOffset, itemCopy;
 
       function dragStart(e) {
         switch (e.which) {
@@ -52,6 +52,7 @@
         elemPosition[1] = $element[0].offsetTop;
         elemPosition[2] = $element[0].offsetWidth;
         elemPosition[3] = $element[0].offsetHeight;
+        itemCopy = angular.copy(scope.gridsterItem);
         scope.gridster.movingItem = scope.gridsterItem;
         scope.gridster.previewStyle();
 
@@ -122,7 +123,7 @@
         scope.gridster.movingItem = null;
         scope.gridster.previewStyle();
         scope.gridsterItem.setSize(true);
-        scope.$applyAsync();
+        scope.gridsterItem.checkItemChanges(scope.gridsterItem, itemCopy);
         if (scope.gridster.resizable.stop) {
           scope.gridster.resizable.stop(scope.gridsterItem, scope);
         }
@@ -347,20 +348,16 @@
 
       scope.gridsterItem.setSize = setSize;
 
-      var init = true;
-      scope.$watch('gridsterItem', function (newValue, oldValue) {
-        if (init) {
-          init = false;
+      scope.gridsterItem.checkItemChanges = function (newValue, oldValue) {
+        if (newValue.rows === oldValue.rows && newValue.cols === oldValue.cols && newValue.x === oldValue.x && newValue.y === oldValue.y) {
           return;
         }
-
         if (newValue.rows < scope.gridster.minItemRows || newValue.cols < scope.gridster.minItemCols ||
           scope.gridster.checkCollision(scope.gridsterItem)) {
           scope.gridsterItem.x = oldValue.x;
           scope.gridsterItem.y = oldValue.y;
           scope.gridsterItem.cols = oldValue.cols;
           scope.gridsterItem.rows = oldValue.rows;
-          init = true;
         } else {
           scope.$broadcast('gridster-item-change');
           scope.gridster.calculateLayout();
@@ -368,8 +365,7 @@
             scope.gridster.itemChangeCallback(scope.gridsterItem, scope);
           }
         }
-
-      }, true);
+      };
 
       scope.$on('$destroy', function () {
         scope.gridsterItem.drag.toggle(false);
@@ -396,7 +392,7 @@
     function GridsterDraggable($element, scope) {
 
       var enabled, lastMouse = [0, 0], elemPosition = [0, 0, 0, 0], position = [0, 0], positionBackup = [0, 0],
-        scrollSensitivity, scrollSpeed, elemBottomOffset, elemRightOffset;
+        scrollSensitivity, scrollSpeed, elemBottomOffset, elemRightOffset, itemCopy;
 
       function dragStart(e) {
         switch (e.which) {
@@ -425,6 +421,7 @@
         elemPosition[1] = $element[0].offsetTop;
         elemPosition[2] = $element[0].offsetWidth;
         elemPosition[3] = $element[0].offsetHeight;
+        itemCopy = angular.copy(scope.gridsterItem);
         scope.gridster.movingItem = scope.gridsterItem;
         scope.gridster.previewStyle();
 
@@ -495,7 +492,7 @@
         scope.gridster.movingItem = null;
         scope.gridsterItem.setSize(true);
         scope.gridster.previewStyle();
-        scope.$applyAsync();
+        scope.gridsterItem.checkItemChanges(scope.gridsterItem, itemCopy);
         if (scope.gridster.draggable.stop) {
           scope.gridster.draggable.stop(scope.gridsterItem, scope);
         }
