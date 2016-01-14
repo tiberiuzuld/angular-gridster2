@@ -72,24 +72,28 @@
           touchEvent(e);
         }
 
-        elemBottomOffset = scope.gridster.element[0].offsetHeight + scope.gridster.element[0].scrollTop - elemPosition[1] - elemPosition[3];
-        if (lastMouse[1] < e.pageY && elemBottomOffset < scrollSensitivity) {
-          scope.gridster.element[0].scrollTop += scrollSpeed;
-          elemPosition[3] += scrollSpeed - e.pageY + lastMouse[1];
-        } else if (lastMouse[1] > e.pageY && scope.gridster.element[0].scrollTop > 0 &&
-          elemPosition[1] - scope.gridster.element[0].scrollTop < scrollSensitivity) {
-          scope.gridster.element[0].scrollTop -= scrollSpeed;
-          elemPosition[3] -= scrollSpeed;
+        if (directionFunction !== handleNW && directionFunction !== handleN && directionFunction !== handleNE) {
+          elemBottomOffset = scope.gridster.element[0].offsetHeight + scope.gridster.element[0].scrollTop - elemPosition[1] - elemPosition[3];
+          if (lastMouse[1] < e.pageY && elemBottomOffset < scrollSensitivity) {
+            scope.gridster.element[0].scrollTop += scrollSpeed;
+            elemPosition[3] += scrollSpeed - e.pageY + lastMouse[1];
+          } else if (lastMouse[1] > e.pageY && scope.gridster.element[0].scrollTop > 0 &&
+            elemPosition[1] - scope.gridster.element[0].scrollTop < scrollSensitivity) {
+            scope.gridster.element[0].scrollTop -= scrollSpeed;
+            elemPosition[3] -= scrollSpeed;
+          }
         }
 
-        elemRightOffset = scope.gridster.element[0].offsetWidth + scope.gridster.element[0].scrollLeft - elemPosition[0] - elemPosition[2];
-        if (lastMouse[0] < e.pageX && elemRightOffset < scrollSensitivity) {
-          scope.gridster.element[0].scrollLeft += scrollSpeed;
-          elemPosition[2] += scrollSpeed - e.pageX + lastMouse[0];
-        } else if (lastMouse[0] > e.pageX && scope.gridster.element[0].scrollLeft > 0 &&
-          elemPosition[2] - scope.gridster.element[0].scrollLeft < scrollSensitivity) {
-          scope.gridster.element[0].scrollLeft -= scrollSpeed;
-          elemPosition[2] -= scrollSpeed;
+        if (directionFunction !== handleW && directionFunction !== handleNW && directionFunction !== handleSW) {
+          elemRightOffset = scope.gridster.element[0].offsetWidth + scope.gridster.element[0].scrollLeft - elemPosition[0] - elemPosition[2];
+          if (lastMouse[0] < e.pageX && elemRightOffset < scrollSensitivity) {
+            scope.gridster.element[0].scrollLeft += scrollSpeed;
+            elemPosition[2] += scrollSpeed - e.pageX + lastMouse[0];
+          } else if (lastMouse[0] > e.pageX && scope.gridster.element[0].scrollLeft > 0 &&
+            elemPosition[2] - scope.gridster.element[0].scrollLeft < scrollSensitivity) {
+            scope.gridster.element[0].scrollLeft -= scrollSpeed;
+            elemPosition[2] -= scrollSpeed;
+          }
         }
 
         directionFunction(e);
