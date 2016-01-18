@@ -5,7 +5,6 @@
     .constant('gridsterConfig', {
       colWidth: 'fit', // 'fit' will divide container width to the number of columns; number of pixels to set colWidth
       rowHeight: 'fit', // 'match' will be equal to colWidth; 'fit' will divide container height to number of rows; number of pixels to set rowHeight
-      fitBreakpoint: 1024, // if the screen is not wider that this, rowHeight 'fit' will be calculated as 'match'
       mobileBreakpoint: 640, // if the screen is not wider that this, remove the grid layout and stack the items
       minCols: 1,// minimum amount of columns in the grid
       maxCols: 100,// maximum amount of columns in the grid

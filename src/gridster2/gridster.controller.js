@@ -5,7 +5,8 @@
 
   /** @ngInject */
   function gridsterController($scope, gridsterConfig) {
-    var vm = this, mobile;
+    var vm = this;
+    vm.mobile = false;
 
     angular.extend(vm, gridsterConfig);
 
@@ -32,29 +33,31 @@
         vm.curColWidth = vm.colWidth;
       }
 
-      if (!mobile && vm.mobileBreakpoint > vm.curWidth) {
-        mobile = !mobile;
+      if (!vm.mobile && vm.mobileBreakpoint > vm.curWidth) {
+        vm.mobile = !vm.mobile;
         vm.element.addClass('mobile');
-      } else if (mobile && vm.mobileBreakpoint < vm.curWidth) {
-        mobile = !mobile;
+        vm.element.addClass('scroll');
+      } else if (vm.mobile && vm.mobileBreakpoint < vm.curWidth) {
+        vm.mobile = !vm.mobile;
         vm.element.removeClass('mobile');
+        vm.element.removeClass('scroll');
       }
 
-      if (vm.rowHeight === 'match' || vm.fitBreakpoint > vm.curWidth) {
+      if (vm.rowHeight === 'match') {
         vm.element.addClass('scroll');
         vm.element.removeClass('fit');
         vm.curRowHeight = vm.curColWidth;
-      } else if (vm.rowHeight === 'fit') {
+      } else if (vm.rowHeight === 'fit' && !vm.mobile) {
         vm.element.addClass('fit');
         vm.element.removeClass('scroll');
         vm.curRowHeight = Math.floor((vm.curHeight + (vm.outerMargin ? -vm.margin : vm.margin)) / vm.rows);
-      } else {
+      } else if (!vm.mobile) {
         vm.curRowHeight = vm.rowHeight;
       }
 
       var widgetsIndex = vm.grid.length - 1;
       for (; widgetsIndex >= 0; widgetsIndex--) {
-        vm.grid[widgetsIndex].setSize(undefined, mobile);
+        vm.grid[widgetsIndex].setSize();
         vm.grid[widgetsIndex].drag.toggle(vm.draggable.enabled);
         vm.grid[widgetsIndex].resize.toggle(vm.resizable.enabled);
       }
@@ -85,6 +88,9 @@
       }
       vm.grid.push(item);
       vm.calculateLayout();
+      if (item.initCallback) {
+        item.initCallback(item);
+      }
     };
 
     vm.removeItem = function (item) {

@@ -15,7 +15,7 @@
       }, true);
 
       function setGridSize() {
-        if (gridster.rowHeight === 'fit' && gridster.fitBreakpoint < element[0].clientWidth) {
+        if (gridster.rowHeight === 'fit' && !gridster.mobile) {
           gridster.curWidth = element[0].offsetWidth;
           gridster.curHeight = element[0].offsetHeight;
         } else {

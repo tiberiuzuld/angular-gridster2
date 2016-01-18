@@ -312,8 +312,8 @@
 
       var itemTop, itemLeft, itemWidth, itemHeight, top, left, width, height, itemMarginBottom;
 
-      function setSize(noCheck, mobile) {
-        if (mobile) {
+      function setSize(noCheck) {
+        if (scope.gridster.mobile) {
           top = (scope.gridster.outerMargin ? scope.gridster.margin : 0);
           left = (scope.gridster.outerMargin ? scope.gridster.margin : 0);
           width = scope.gridster.curWidth - (scope.gridster.outerMargin ? 2 * scope.gridster.margin : 0);
@@ -544,7 +544,7 @@
       }, true);
 
       function setGridSize() {
-        if (gridster.rowHeight === 'fit' && gridster.fitBreakpoint < element[0].clientWidth) {
+        if (gridster.rowHeight === 'fit' && !gridster.mobile) {
           gridster.curWidth = element[0].offsetWidth;
           gridster.curHeight = element[0].offsetHeight;
         } else {
@@ -605,7 +605,8 @@
 
   /** @ngInject */
   function gridsterController($scope, gridsterConfig) {
-    var vm = this, mobile;
+    var vm = this;
+    vm.mobile = false;
 
     angular.extend(vm, gridsterConfig);
 
@@ -632,29 +633,31 @@
         vm.curColWidth = vm.colWidth;
       }
 
-      if (!mobile && vm.mobileBreakpoint > vm.curWidth) {
-        mobile = !mobile;
+      if (!vm.mobile && vm.mobileBreakpoint > vm.curWidth) {
+        vm.mobile = !vm.mobile;
         vm.element.addClass('mobile');
-      } else if (mobile && vm.mobileBreakpoint < vm.curWidth) {
-        mobile = !mobile;
+        vm.element.addClass('scroll');
+      } else if (vm.mobile && vm.mobileBreakpoint < vm.curWidth) {
+        vm.mobile = !vm.mobile;
         vm.element.removeClass('mobile');
+        vm.element.removeClass('scroll');
       }
 
-      if (vm.rowHeight === 'match' || vm.fitBreakpoint > vm.curWidth) {
+      if (vm.rowHeight === 'match') {
         vm.element.addClass('scroll');
         vm.element.removeClass('fit');
         vm.curRowHeight = vm.curColWidth;
-      } else if (vm.rowHeight === 'fit') {
+      } else if (vm.rowHeight === 'fit' && !vm.mobile) {
         vm.element.addClass('fit');
         vm.element.removeClass('scroll');
         vm.curRowHeight = Math.floor((vm.curHeight + (vm.outerMargin ? -vm.margin : vm.margin)) / vm.rows);
-      } else {
+      } else if (!vm.mobile) {
         vm.curRowHeight = vm.rowHeight;
       }
 
       var widgetsIndex = vm.grid.length - 1;
       for (; widgetsIndex >= 0; widgetsIndex--) {
-        vm.grid[widgetsIndex].setSize(undefined, mobile);
+        vm.grid[widgetsIndex].setSize();
         vm.grid[widgetsIndex].drag.toggle(vm.draggable.enabled);
         vm.grid[widgetsIndex].resize.toggle(vm.resizable.enabled);
       }
@@ -685,6 +688,9 @@
       }
       vm.grid.push(item);
       vm.calculateLayout();
+      if (item.initCallback) {
+        item.initCallback(item);
+      }
     };
 
     vm.removeItem = function (item) {
@@ -748,7 +754,6 @@
     .constant('gridsterConfig', {
       colWidth: 'fit', // 'fit' will divide container width to the number of columns; number of pixels to set colWidth
       rowHeight: 'fit', // 'match' will be equal to colWidth; 'fit' will divide container height to number of rows; number of pixels to set rowHeight
-      fitBreakpoint: 1024, // if the screen is not wider that this, rowHeight 'fit' will be calculated as 'match'
       mobileBreakpoint: 640, // if the screen is not wider that this, remove the grid layout and stack the items
       minCols: 1,// minimum amount of columns in the grid
       maxCols: 100,// maximum amount of columns in the grid

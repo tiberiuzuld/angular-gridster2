@@ -38,7 +38,7 @@
       {cols: 1, rows: 3, y: 2, x: 0},
       {cols: 2, rows: 1, y: 2, x: 1},
       {cols: 1, rows: 1, y: 2, x: 3},
-      {cols: 1, rows: 1, y: 3, x: 4}
+      {cols: 1, rows: 1, y: 3, x: 4, initCallback: itemInit}
     ];
 
     vm.removeItem = function (item) {
@@ -70,6 +70,10 @@
 
     function itemChange(item, scope) {
       $log.info('itemChanged', item, scope);
+    }
+
+    function itemInit(item) {
+      $log.info('itemInitialized', item);
     }
   }
   IndexController.$inject = ["$log"];

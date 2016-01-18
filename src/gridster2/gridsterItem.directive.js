@@ -15,8 +15,8 @@
 
       var itemTop, itemLeft, itemWidth, itemHeight, top, left, width, height, itemMarginBottom;
 
-      function setSize(noCheck, mobile) {
-        if (mobile) {
+      function setSize(noCheck) {
+        if (scope.gridster.mobile) {
           top = (scope.gridster.outerMargin ? scope.gridster.margin : 0);
           left = (scope.gridster.outerMargin ? scope.gridster.margin : 0);
           width = scope.gridster.curWidth - (scope.gridster.outerMargin ? 2 * scope.gridster.margin : 0);
