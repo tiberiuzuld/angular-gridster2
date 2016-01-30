@@ -4,13 +4,13 @@
   angular.module('angular-gridster2').factory('gridsterResizable', gridsterResizable);
 
   /** @ngInject */
-  function gridsterResizable($document) {
+  function gridsterResizable($document, gridsterScroll) {
 
     function GridsterResizable($element, scope) {
 
-      var enabled, dragHandles = [], handlesIndex, dragHandleElement, scrollSensitivity, scrollSpeed, lastMouse = [0, 0],
-        elemPosition = [0, 0], directionFunction, position = [0, 0], itemBackup = [0, 0, 0, 0], elemBottomOffset,
-        elemRightOffset, itemCopy;
+      var enabled, dragHandles = [], handlesIndex, dragHandleElement, lastMouse = {},
+        elemPosition = [0, 0], directionFunction, position = [0, 0], itemBackup = [0, 0, 0, 0], itemCopy,
+        resizeEventScrollType;
 
       function dragStart(e) {
         switch (e.which) {
@@ -33,34 +33,44 @@
         $document[0].addEventListener('touchend', dragStop);
         $document[0].addEventListener('touchcancel', dragStop);
         $element.addClass('gridster-item-resizing');
-        lastMouse[0] = e.pageX;
-        lastMouse[1] = e.pageY;
-        elemPosition[0] = $element[0].offsetLeft;
-        elemPosition[1] = $element[0].offsetTop;
+        lastMouse.pageX = e.pageX;
+        lastMouse.pageY = e.pageY;
+        elemPosition[0] = parseInt($element[0].style.left, 10);
+        elemPosition[1] = parseInt($element[0].style.top, 10);
         elemPosition[2] = $element[0].offsetWidth;
         elemPosition[3] = $element[0].offsetHeight;
         itemCopy = angular.copy(scope.gridsterItem);
         scope.gridster.movingItem = scope.gridsterItem;
         scope.gridster.previewStyle();
 
-        scrollSensitivity = scope.gridster.scrollSensitivity;
-        scrollSpeed = scope.gridster.scrollSpeed;
-
+        resizeEventScrollType = {};
         if (this.classList.contains('handle-n')) {
+          resizeEventScrollType.n = true;
           directionFunction = handleN;
         } else if (this.classList.contains('handle-w')) {
+          resizeEventScrollType.w = true;
           directionFunction = handleW;
         } else if (this.classList.contains('handle-s')) {
+          resizeEventScrollType.s = true;
           directionFunction = handleS;
         } else if (this.classList.contains('handle-e')) {
+          resizeEventScrollType.e = true;
           directionFunction = handleE;
         } else if (this.classList.contains('handle-nw')) {
+          resizeEventScrollType.n = true;
+          resizeEventScrollType.w = true;
           directionFunction = handleNW;
         } else if (this.classList.contains('handle-ne')) {
+          resizeEventScrollType.n = true;
+          resizeEventScrollType.e = true;
           directionFunction = handleNE;
         } else if (this.classList.contains('handle-sw')) {
+          resizeEventScrollType.s = true;
+          resizeEventScrollType.w = true;
           directionFunction = handleSW;
         } else if (this.classList.contains('handle-se')) {
+          resizeEventScrollType.s = true;
+          resizeEventScrollType.e = true;
           directionFunction = handleSE;
         }
       }
@@ -72,39 +82,18 @@
           touchEvent(e);
         }
 
-        if (directionFunction !== handleNW && directionFunction !== handleN && directionFunction !== handleNE) {
-          elemBottomOffset = scope.gridster.element[0].offsetHeight + scope.gridster.element[0].scrollTop - elemPosition[1] - elemPosition[3];
-          if (lastMouse[1] < e.pageY && elemBottomOffset < scrollSensitivity) {
-            scope.gridster.element[0].scrollTop += scrollSpeed;
-            elemPosition[3] += scrollSpeed - e.pageY + lastMouse[1];
-          } else if (lastMouse[1] > e.pageY && scope.gridster.element[0].scrollTop > 0 &&
-            elemPosition[1] - scope.gridster.element[0].scrollTop < scrollSensitivity) {
-            scope.gridster.element[0].scrollTop -= scrollSpeed;
-            elemPosition[3] -= scrollSpeed;
-          }
-        }
-
-        if (directionFunction !== handleW && directionFunction !== handleNW && directionFunction !== handleSW) {
-          elemRightOffset = scope.gridster.element[0].offsetWidth + scope.gridster.element[0].scrollLeft - elemPosition[0] - elemPosition[2];
-          if (lastMouse[0] < e.pageX && elemRightOffset < scrollSensitivity) {
-            scope.gridster.element[0].scrollLeft += scrollSpeed;
-            elemPosition[2] += scrollSpeed - e.pageX + lastMouse[0];
-          } else if (lastMouse[0] > e.pageX && scope.gridster.element[0].scrollLeft > 0 &&
-            elemPosition[2] - scope.gridster.element[0].scrollLeft < scrollSensitivity) {
-            scope.gridster.element[0].scrollLeft -= scrollSpeed;
-            elemPosition[2] -= scrollSpeed;
-          }
-        }
+        gridsterScroll.scroll(elemPosition, scope, e, lastMouse, directionFunction, true, resizeEventScrollType);
 
         directionFunction(e);
 
-        lastMouse[0] = e.pageX;
-        lastMouse[1] = e.pageY;
+        lastMouse.pageX = e.pageX;
+        lastMouse.pageY = e.pageY;
       }
 
       function dragStop(e) {
         e.preventDefault();
         e.stopPropagation();
+        gridsterScroll.cancelScroll();
         $document[0].removeEventListener('mousemove', dragMove);
         $document[0].removeEventListener('mouseup', dragStop);
         $document[0].removeEventListener('touchmove', dragMove);
@@ -153,8 +142,8 @@
       }
 
       function handleN(e) {
-        elemPosition[1] += e.pageY - lastMouse[1];
-        elemPosition[3] += lastMouse[1] - e.pageY;
+        elemPosition[1] += e.pageY - lastMouse.pageY;
+        elemPosition[3] += lastMouse.pageY - e.pageY;
         $element.css({'top': elemPosition[1] + 'px', 'height': elemPosition[3] + 'px'});
         position = scope.gridster.pixelsToPosition(elemPosition[0], elemPosition[1]);
         if (scope.gridsterItem.y !== position[1]) {
@@ -172,8 +161,8 @@
       }
 
       function handleW(e) {
-        elemPosition[0] += e.pageX - lastMouse[0];
-        elemPosition[2] += lastMouse[0] - e.pageX;
+        elemPosition[0] += e.pageX - lastMouse.pageX;
+        elemPosition[2] += lastMouse.pageX - e.pageX;
         $element.css({'left': elemPosition[0] + 'px', 'width': elemPosition[2] + 'px'});
         position = scope.gridster.pixelsToPosition(elemPosition[0], elemPosition[1]);
         if (scope.gridsterItem.x !== position[0]) {
@@ -191,7 +180,7 @@
       }
 
       function handleS(e) {
-        elemPosition[3] += e.pageY - lastMouse[1];
+        elemPosition[3] += e.pageY - lastMouse.pageY;
         $element.css({'height': elemPosition[3] + 'px'});
         position = scope.gridster.pixelsToPosition(elemPosition[0], elemPosition[1] + elemPosition[3]);
         if ((scope.gridsterItem.y + scope.gridsterItem.rows) !== position[1]) {
@@ -206,7 +195,7 @@
       }
 
       function handleE(e) {
-        elemPosition[2] += e.pageX - lastMouse[0];
+        elemPosition[2] += e.pageX - lastMouse.pageX;
         $element.css({'width': elemPosition[2] + 'px'});
         position = scope.gridster.pixelsToPosition(elemPosition[0] + elemPosition[2], elemPosition[1]);
         if ((scope.gridsterItem.x + scope.gridsterItem.cols) !== position[0]) {
@@ -240,7 +229,6 @@
         handleE(e);
       }
     }
-
 
     return GridsterResizable;
   }

@@ -14,16 +14,168 @@
 (function () {
   'use strict';
 
+  angular.module('angular-gridster2').factory('gridsterScroll', gridsterScroll);
+
+  /** @ngInject */
+  function gridsterScroll($interval) {
+    var scrollSensitivity, scrollSpeed, intervalDuration = 50, gridsterElement,
+      resizeEvent, resizeEventType, intervalE, intervalW, intervalN, intervalS;
+
+    function scroll(elemPosition, scope, e, lastMouse, calculateItemPosition, resize, resizeEventScrollType) {
+      scrollSensitivity = scope.gridster.scrollSensitivity;
+      scrollSpeed = scope.gridster.scrollSpeed;
+      gridsterElement = scope.gridster.element[0];
+      resizeEvent = resize;
+      resizeEventType = resizeEventScrollType;
+
+      var elemTopOffset = elemPosition[1] - gridsterElement.scrollTop;
+      var elemBottomOffset = gridsterElement.offsetHeight + gridsterElement.scrollTop - elemPosition[1] - elemPosition[3];
+      if (lastMouse.pageY < e.pageY && elemBottomOffset < scrollSensitivity) {
+        cancelN();
+        if ((resizeEvent && !resizeEventType.s) || intervalS) {
+          return;
+        }
+        intervalS = startVertical(1, elemPosition, calculateItemPosition, lastMouse, resizeEventType);
+      } else if (lastMouse.pageY > e.pageY && gridsterElement.scrollTop > 0 && elemTopOffset < scrollSensitivity) {
+        cancelS();
+        if ((resizeEvent && !resizeEventType.n) || intervalN) {
+          return;
+        }
+        intervalN = startVertical(-1, elemPosition, calculateItemPosition, lastMouse);
+      } else if (lastMouse.pageY !== e.pageY) {
+        cancelVertical();
+      }
+
+      var elemRightOffset = gridsterElement.offsetWidth + gridsterElement.scrollLeft - elemPosition[0] - elemPosition[2];
+      var elemLeftOffset = elemPosition[0] - gridsterElement.scrollLeft;
+      if (lastMouse.pageX < e.pageX && elemRightOffset < scrollSensitivity) {
+        cancelW();
+        if ((resizeEvent && !resizeEventType.e) || intervalE) {
+          return;
+        }
+        intervalE = startHorizontal(1, elemPosition, calculateItemPosition, lastMouse);
+      } else if (lastMouse.pageX > e.pageX && gridsterElement.scrollLeft > 0 && elemLeftOffset < scrollSensitivity) {
+        cancelE();
+        if ((resizeEvent && !resizeEventType.w) || intervalW) {
+          return;
+        }
+        intervalW = startHorizontal(-1, elemPosition, calculateItemPosition, lastMouse);
+      } else if (lastMouse.pageX !== e.pageX) {
+        cancelHorizontal();
+      }
+    }
+
+    function startVertical(sign, elemPosition, calculateItemPosition, lastMouse) {
+      return $interval(function () {
+        if (!gridsterElement || sign === -1 && gridsterElement.scrollTop - scrollSpeed < 0) {
+          cancelVertical();
+        }
+        gridsterElement.scrollTop += sign * scrollSpeed;
+        if (resizeEvent) {
+          if (resizeEventType.n) {
+            elemPosition[1] += sign * scrollSpeed;
+            elemPosition[3] -= sign * scrollSpeed;
+          } else {
+            elemPosition[3] += sign * scrollSpeed;
+          }
+        } else {
+          elemPosition[1] += sign * scrollSpeed;
+        }
+
+        calculateItemPosition(lastMouse);
+      }, intervalDuration, 0, false);
+    }
+
+    function startHorizontal(sign, elemPosition, calculateItemPosition, lastMouse) {
+      return $interval(function () {
+        if (!gridsterElement || sign === -1 && gridsterElement.scrollLeft - scrollSpeed < 0) {
+          cancelHorizontal();
+        }
+        gridsterElement.scrollLeft += sign * scrollSpeed;
+        if (resizeEvent) {
+          if (resizeEventType.w) {
+            elemPosition[0] += sign * scrollSpeed;
+            elemPosition[2] -= sign * scrollSpeed;
+          } else {
+            elemPosition[2] += sign * scrollSpeed;
+          }
+        } else {
+          elemPosition[0] += sign * scrollSpeed;
+        }
+
+        calculateItemPosition(lastMouse);
+      }, intervalDuration, 0, false);
+    }
+
+    function cancelScroll() {
+      cancelHorizontal();
+      cancelVertical();
+      scrollSensitivity = undefined;
+      scrollSpeed = undefined;
+      gridsterElement = undefined;
+      resizeEventType = undefined;
+    }
+
+    function cancelHorizontal() {
+      cancelE();
+      cancelW();
+    }
+
+    function cancelVertical() {
+      cancelN();
+      cancelS();
+    }
+
+    function cancelE() {
+      if (intervalE) {
+        $interval.cancel(intervalE);
+        intervalE = undefined;
+      }
+    }
+
+    function cancelW() {
+      if (intervalW) {
+        $interval.cancel(intervalW);
+        intervalW = undefined;
+      }
+    }
+
+    function cancelS() {
+      if (intervalS) {
+        $interval.cancel(intervalS);
+        intervalS = undefined;
+      }
+    }
+
+    function cancelN() {
+      if (intervalN) {
+        $interval.cancel(intervalN);
+        intervalN = undefined;
+      }
+    }
+
+    return {
+      scroll: scroll,
+      cancelScroll: cancelScroll
+    };
+
+  }
+  gridsterScroll.$inject = ["$interval"];
+})();
+
+(function () {
+  'use strict';
+
   angular.module('angular-gridster2').factory('gridsterResizable', gridsterResizable);
 
   /** @ngInject */
-  function gridsterResizable($document) {
+  function gridsterResizable($document, gridsterScroll) {
 
     function GridsterResizable($element, scope) {
 
-      var enabled, dragHandles = [], handlesIndex, dragHandleElement, scrollSensitivity, scrollSpeed, lastMouse = [0, 0],
-        elemPosition = [0, 0], directionFunction, position = [0, 0], itemBackup = [0, 0, 0, 0], elemBottomOffset,
-        elemRightOffset, itemCopy;
+      var enabled, dragHandles = [], handlesIndex, dragHandleElement, lastMouse = {},
+        elemPosition = [0, 0], directionFunction, position = [0, 0], itemBackup = [0, 0, 0, 0], itemCopy,
+        resizeEventScrollType;
 
       function dragStart(e) {
         switch (e.which) {
@@ -46,34 +198,44 @@
         $document[0].addEventListener('touchend', dragStop);
         $document[0].addEventListener('touchcancel', dragStop);
         $element.addClass('gridster-item-resizing');
-        lastMouse[0] = e.pageX;
-        lastMouse[1] = e.pageY;
-        elemPosition[0] = $element[0].offsetLeft;
-        elemPosition[1] = $element[0].offsetTop;
+        lastMouse.pageX = e.pageX;
+        lastMouse.pageY = e.pageY;
+        elemPosition[0] = parseInt($element[0].style.left, 10);
+        elemPosition[1] = parseInt($element[0].style.top, 10);
         elemPosition[2] = $element[0].offsetWidth;
         elemPosition[3] = $element[0].offsetHeight;
         itemCopy = angular.copy(scope.gridsterItem);
         scope.gridster.movingItem = scope.gridsterItem;
         scope.gridster.previewStyle();
 
-        scrollSensitivity = scope.gridster.scrollSensitivity;
-        scrollSpeed = scope.gridster.scrollSpeed;
-
+        resizeEventScrollType = {};
         if (this.classList.contains('handle-n')) {
+          resizeEventScrollType.n = true;
           directionFunction = handleN;
         } else if (this.classList.contains('handle-w')) {
+          resizeEventScrollType.w = true;
           directionFunction = handleW;
         } else if (this.classList.contains('handle-s')) {
+          resizeEventScrollType.s = true;
           directionFunction = handleS;
         } else if (this.classList.contains('handle-e')) {
+          resizeEventScrollType.e = true;
           directionFunction = handleE;
         } else if (this.classList.contains('handle-nw')) {
+          resizeEventScrollType.n = true;
+          resizeEventScrollType.w = true;
           directionFunction = handleNW;
         } else if (this.classList.contains('handle-ne')) {
+          resizeEventScrollType.n = true;
+          resizeEventScrollType.e = true;
           directionFunction = handleNE;
         } else if (this.classList.contains('handle-sw')) {
+          resizeEventScrollType.s = true;
+          resizeEventScrollType.w = true;
           directionFunction = handleSW;
         } else if (this.classList.contains('handle-se')) {
+          resizeEventScrollType.s = true;
+          resizeEventScrollType.e = true;
           directionFunction = handleSE;
         }
       }
@@ -85,39 +247,18 @@
           touchEvent(e);
         }
 
-        if (directionFunction !== handleNW && directionFunction !== handleN && directionFunction !== handleNE) {
-          elemBottomOffset = scope.gridster.element[0].offsetHeight + scope.gridster.element[0].scrollTop - elemPosition[1] - elemPosition[3];
-          if (lastMouse[1] < e.pageY && elemBottomOffset < scrollSensitivity) {
-            scope.gridster.element[0].scrollTop += scrollSpeed;
-            elemPosition[3] += scrollSpeed - e.pageY + lastMouse[1];
-          } else if (lastMouse[1] > e.pageY && scope.gridster.element[0].scrollTop > 0 &&
-            elemPosition[1] - scope.gridster.element[0].scrollTop < scrollSensitivity) {
-            scope.gridster.element[0].scrollTop -= scrollSpeed;
-            elemPosition[3] -= scrollSpeed;
-          }
-        }
-
-        if (directionFunction !== handleW && directionFunction !== handleNW && directionFunction !== handleSW) {
-          elemRightOffset = scope.gridster.element[0].offsetWidth + scope.gridster.element[0].scrollLeft - elemPosition[0] - elemPosition[2];
-          if (lastMouse[0] < e.pageX && elemRightOffset < scrollSensitivity) {
-            scope.gridster.element[0].scrollLeft += scrollSpeed;
-            elemPosition[2] += scrollSpeed - e.pageX + lastMouse[0];
-          } else if (lastMouse[0] > e.pageX && scope.gridster.element[0].scrollLeft > 0 &&
-            elemPosition[2] - scope.gridster.element[0].scrollLeft < scrollSensitivity) {
-            scope.gridster.element[0].scrollLeft -= scrollSpeed;
-            elemPosition[2] -= scrollSpeed;
-          }
-        }
+        gridsterScroll.scroll(elemPosition, scope, e, lastMouse, directionFunction, true, resizeEventScrollType);
 
         directionFunction(e);
 
-        lastMouse[0] = e.pageX;
-        lastMouse[1] = e.pageY;
+        lastMouse.pageX = e.pageX;
+        lastMouse.pageY = e.pageY;
       }
 
       function dragStop(e) {
         e.preventDefault();
         e.stopPropagation();
+        gridsterScroll.cancelScroll();
         $document[0].removeEventListener('mousemove', dragMove);
         $document[0].removeEventListener('mouseup', dragStop);
         $document[0].removeEventListener('touchmove', dragMove);
@@ -166,8 +307,8 @@
       }
 
       function handleN(e) {
-        elemPosition[1] += e.pageY - lastMouse[1];
-        elemPosition[3] += lastMouse[1] - e.pageY;
+        elemPosition[1] += e.pageY - lastMouse.pageY;
+        elemPosition[3] += lastMouse.pageY - e.pageY;
         $element.css({'top': elemPosition[1] + 'px', 'height': elemPosition[3] + 'px'});
         position = scope.gridster.pixelsToPosition(elemPosition[0], elemPosition[1]);
         if (scope.gridsterItem.y !== position[1]) {
@@ -185,8 +326,8 @@
       }
 
       function handleW(e) {
-        elemPosition[0] += e.pageX - lastMouse[0];
-        elemPosition[2] += lastMouse[0] - e.pageX;
+        elemPosition[0] += e.pageX - lastMouse.pageX;
+        elemPosition[2] += lastMouse.pageX - e.pageX;
         $element.css({'left': elemPosition[0] + 'px', 'width': elemPosition[2] + 'px'});
         position = scope.gridster.pixelsToPosition(elemPosition[0], elemPosition[1]);
         if (scope.gridsterItem.x !== position[0]) {
@@ -204,7 +345,7 @@
       }
 
       function handleS(e) {
-        elemPosition[3] += e.pageY - lastMouse[1];
+        elemPosition[3] += e.pageY - lastMouse.pageY;
         $element.css({'height': elemPosition[3] + 'px'});
         position = scope.gridster.pixelsToPosition(elemPosition[0], elemPosition[1] + elemPosition[3]);
         if ((scope.gridsterItem.y + scope.gridsterItem.rows) !== position[1]) {
@@ -219,7 +360,7 @@
       }
 
       function handleE(e) {
-        elemPosition[2] += e.pageX - lastMouse[0];
+        elemPosition[2] += e.pageX - lastMouse.pageX;
         $element.css({'width': elemPosition[2] + 'px'});
         position = scope.gridster.pixelsToPosition(elemPosition[0] + elemPosition[2], elemPosition[1]);
         if ((scope.gridsterItem.x + scope.gridsterItem.cols) !== position[0]) {
@@ -254,10 +395,9 @@
       }
     }
 
-
     return GridsterResizable;
   }
-  gridsterResizable.$inject = ["$document"];
+  gridsterResizable.$inject = ["$document", "gridsterScroll"];
 })();
 
 (function () {
@@ -303,24 +443,26 @@
   /** @ngInject */
   function gridsterItem(gridsterDraggable, gridsterResizable) {
     function link(scope, element, attributes) {
-      scope.gridsterItem = scope.$eval(attributes.gridsterItem);
-
-      scope.gridsterItem.drag = new gridsterDraggable(element, scope);
-      scope.gridsterItem.resize = new gridsterResizable(element, scope);
-
+      var item = scope.$eval(attributes.gridsterItem);
+      scope.gridsterItem = {
+        cols: item.cols,
+        rows: item.rows,
+        x: item.x,
+        y: item.y
+      };
       scope.gridster.addItem(scope.gridsterItem);
 
-      var itemTop, itemLeft, itemWidth, itemHeight, top, left, width, height, itemMarginBottom;
+      var itemTop, itemLeft, itemWidth, itemHeight, top, left, width, height, itemMargin;
 
       function setSize(noCheck) {
         if (scope.gridster.mobile) {
-          top = (scope.gridster.outerMargin ? scope.gridster.margin : 0);
-          left = (scope.gridster.outerMargin ? scope.gridster.margin : 0);
+          top = 0;
+          left = 0;
           width = scope.gridster.curWidth - (scope.gridster.outerMargin ? 2 * scope.gridster.margin : 0);
           height = width / 2;
         } else {
-          top = (scope.gridsterItem.y * scope.gridster.curRowHeight + (scope.gridster.outerMargin ? scope.gridster.margin : 0));
-          left = (scope.gridsterItem.x * scope.gridster.curColWidth + (scope.gridster.outerMargin ? scope.gridster.margin : 0));
+          top = scope.gridsterItem.y * scope.gridster.curRowHeight;
+          left = scope.gridsterItem.x * scope.gridster.curColWidth;
           width = scope.gridsterItem.cols * scope.gridster.curColWidth - scope.gridster.margin;
           height = scope.gridsterItem.rows * scope.gridster.curRowHeight - scope.gridster.margin;
         }
@@ -335,9 +477,9 @@
           itemWidth = width;
           itemHeight = height;
           if (scope.gridster.outerMargin) {
-            itemMarginBottom = scope.gridster.margin;
+            itemMargin = scope.gridster.margin;
           } else {
-            itemMarginBottom = 0;
+            itemMargin = 0;
           }
         }
         element.css({
@@ -346,11 +488,13 @@
           left: itemLeft + 'px',
           width: itemWidth + 'px',
           height: itemHeight + 'px',
-          marginBottom: itemMarginBottom + 'px'
+          margin: itemMargin + 'px'
         });
       }
 
       scope.gridsterItem.setSize = setSize;
+      scope.gridsterItem.drag = new gridsterDraggable(element, scope);
+      scope.gridsterItem.resize = new gridsterResizable(element, scope);
 
       scope.gridsterItem.checkItemChanges = function (newValue, oldValue) {
         if (newValue.rows === oldValue.rows && newValue.cols === oldValue.cols && newValue.x === oldValue.x && newValue.y === oldValue.y) {
@@ -363,6 +507,10 @@
           scope.gridsterItem.cols = oldValue.cols;
           scope.gridsterItem.rows = oldValue.rows;
         } else {
+          item.cols = scope.gridsterItem.cols;
+          item.rows = scope.gridsterItem.rows;
+          item.x = scope.gridsterItem.x;
+          item.y = scope.gridsterItem.y;
           scope.$broadcast('gridster-item-change');
           scope.gridster.calculateLayout();
           if (scope.gridster.itemChangeCallback) {
@@ -391,12 +539,11 @@
   angular.module('angular-gridster2').factory('gridsterDraggable', gridsterDraggable);
 
   /** @ngInject */
-  function gridsterDraggable($document) {
+  function gridsterDraggable($document, gridsterScroll) {
 
     function GridsterDraggable($element, scope) {
 
-      var enabled, lastMouse = [0, 0], elemPosition = [0, 0, 0, 0], position = [0, 0], positionBackup = [0, 0],
-        scrollSensitivity, scrollSpeed, elemBottomOffset, elemRightOffset, itemCopy;
+      var enabled, lastMouse = {}, elemPosition = [0, 0, 0, 0], position = [0, 0], positionBackup = [0, 0], itemCopy;
 
       function dragStart(e) {
         switch (e.which) {
@@ -419,18 +566,16 @@
         $document[0].addEventListener('touchend', dragStop);
         $document[0].addEventListener('touchcancel', dragStop);
         $element.addClass('gridster-item-moving');
-        lastMouse[0] = e.pageX;
-        lastMouse[1] = e.pageY;
-        elemPosition[0] = $element[0].offsetLeft;
-        elemPosition[1] = $element[0].offsetTop;
+        lastMouse.pageX = e.pageX;
+        lastMouse.pageY = e.pageY;
+        elemPosition[0] = parseInt($element[0].style.left, 10);
+        elemPosition[1] = parseInt($element[0].style.top, 10);
         elemPosition[2] = $element[0].offsetWidth;
         elemPosition[3] = $element[0].offsetHeight;
         itemCopy = angular.copy(scope.gridsterItem);
         scope.gridster.movingItem = scope.gridsterItem;
         scope.gridster.previewStyle();
 
-        scrollSensitivity = scope.gridster.scrollSensitivity;
-        scrollSpeed = scope.gridster.scrollSpeed;
       }
 
       function dragMove(e) {
@@ -439,54 +584,21 @@
         if (angular.isUndefined(e.pageX) && e.touches) {
           touchEvent(e);
         }
-        elemPosition[0] += e.pageX - lastMouse[0];
-        elemPosition[1] += e.pageY - lastMouse[1];
-        elemBottomOffset = scope.gridster.element[0].offsetHeight + scope.gridster.element[0].scrollTop - elemPosition[1] - elemPosition[3];
-        if (lastMouse[1] < e.pageY && elemBottomOffset < scrollSensitivity) {
-          scope.gridster.element[0].scrollTop += scrollSpeed;
-          elemPosition[1] += scrollSpeed - e.pageY + lastMouse[1];
-        } else if (lastMouse[1] > e.pageY && scope.gridster.element[0].scrollTop > 0 &&
-          elemPosition[1] - scope.gridster.element[0].scrollTop < scrollSensitivity) {
-          scope.gridster.element[0].scrollTop -= scrollSpeed;
-          elemPosition[1] -= scrollSpeed;
-        }
+        elemPosition[0] += e.pageX - lastMouse.pageX;
+        elemPosition[1] += e.pageY - lastMouse.pageY;
 
-        elemRightOffset = scope.gridster.element[0].offsetWidth + scope.gridster.element[0].scrollLeft - elemPosition[0] - elemPosition[2];
-        if (lastMouse[0] < e.pageX && elemRightOffset < scrollSensitivity) {
-          scope.gridster.element[0].scrollLeft += scrollSpeed;
-          elemPosition[0] += scrollSpeed - e.pageX + lastMouse[0];
-        } else if (lastMouse[0] > e.pageX && scope.gridster.element[0].scrollLeft > 0 &&
-          elemPosition[0] - scope.gridster.element[0].scrollLeft < scrollSensitivity) {
-          scope.gridster.element[0].scrollLeft -= scrollSpeed;
-          elemPosition[0] -= scrollSpeed;
-        }
-        lastMouse[0] = e.pageX;
-        lastMouse[1] = e.pageY;
+        gridsterScroll.scroll(elemPosition, scope, e, lastMouse, calculateItemPosition);
 
-        $element.css({
-          'left': elemPosition[0] + 'px',
-          'top': elemPosition[1] + 'px'
-        })
+        lastMouse.pageX = e.pageX;
+        lastMouse.pageY = e.pageY;
 
-        ;
-        position = scope.gridster.pixelsToPosition(elemPosition[0], elemPosition[1]);
-        if (position[0] !== scope.gridsterItem.x || position[1] !== scope.gridsterItem.y) {
-          positionBackup[0] = scope.gridsterItem.x;
-          positionBackup[1] = scope.gridsterItem.y;
-          scope.gridsterItem.x = position[0];
-          scope.gridsterItem.y = position[1];
-          if (scope.gridster.checkCollision(scope.gridsterItem)) {
-            scope.gridsterItem.x = positionBackup[0];
-            scope.gridsterItem.y = positionBackup[1];
-          } else {
-            scope.gridster.previewStyle();
-          }
-        }
+        calculateItemPosition();
       }
 
       function dragStop(e) {
         e.preventDefault();
         e.stopPropagation();
+        gridsterScroll.cancelScroll();
         $document[0].removeEventListener('mousemove', dragMove);
         $document[0].removeEventListener('mouseup', dragStop);
         $document[0].removeEventListener('touchmove', dragMove);
@@ -500,6 +612,27 @@
         if (scope.gridster.draggable.stop) {
           scope.gridster.draggable.stop(scope.gridsterItem, scope);
         }
+      }
+
+      function calculateItemPosition() {
+        $element.css({
+          'left': elemPosition[0] + 'px',
+          'top': elemPosition[1] + 'px'
+        });
+        position = scope.gridster.pixelsToPosition(elemPosition[0], elemPosition[1]);
+        if (position[0] !== scope.gridsterItem.x || position[1] !== scope.gridsterItem.y) {
+          positionBackup[0] = scope.gridsterItem.x;
+          positionBackup[1] = scope.gridsterItem.y;
+          scope.gridsterItem.x = position[0];
+          scope.gridsterItem.y = position[1];
+          if (scope.gridster.checkCollision(scope.gridsterItem)) {
+            scope.gridsterItem.x = positionBackup[0];
+            scope.gridsterItem.y = positionBackup[1];
+          } else {
+            scope.gridster.previewStyle();
+          }
+        }
+
       }
 
       this.toggle = function (enable) {
@@ -524,7 +657,7 @@
     return GridsterDraggable;
 
   }
-  gridsterDraggable.$inject = ["$document"];
+  gridsterDraggable.$inject = ["$document", "gridsterScroll"];
 })();
 
 (function () {
@@ -544,7 +677,7 @@
       }, true);
 
       function setGridSize() {
-        if (gridster.rowHeight === 'fit' && !gridster.mobile) {
+        if (gridster.gridType === 'fit' && !gridster.mobile) {
           gridster.curWidth = element[0].offsetWidth;
           gridster.curHeight = element[0].offsetHeight;
         } else {
@@ -567,6 +700,16 @@
           gridster.onResize();
         } else if (!scrollBarPresent && element[0].scrollHeight > element[0].offsetHeight &&
           element[0].offsetWidth - element[0].clientWidth < element[0].scrollHeight - element[0].offsetHeight) {
+          scrollBarPresent = !scrollBarPresent;
+          gridster.onResize();
+        }
+
+        if (scrollBarPresent && element[0].scrollWidth <= element[0].offsetWidth &&
+          element[0].offsetHeight - element[0].clientHeight >= element[0].scrollWidth - element[0].offsetWidth) {
+          scrollBarPresent = !scrollBarPresent;
+          gridster.onResize();
+        } else if (!scrollBarPresent && element[0].scrollWidth > element[0].offsetWidth &&
+          element[0].offsetHeight - element[0].clientHeight < element[0].scrollWidth - element[0].offsetWidth) {
           scrollBarPresent = !scrollBarPresent;
           gridster.onResize();
         }
@@ -627,32 +770,32 @@
 
     function calculateLayout() {
       setGridDimensions();
-      if (vm.colWidth === 'fit') {
+      if (vm.gridType === 'fit') {
         vm.curColWidth = Math.floor((vm.curWidth + (vm.outerMargin ? -vm.margin : vm.margin)) / vm.columns);
-      } else {
-        vm.curColWidth = vm.colWidth;
+        vm.curRowHeight = Math.floor((vm.curHeight + (vm.outerMargin ? -vm.margin : vm.margin)) / vm.rows);
+        vm.element.addClass('fit');
+        vm.element.removeClass('scrollVertical');
+        vm.element.removeClass('scrollHorizontal');
+      } else if (vm.gridType === 'scrollVertical') {
+        vm.curColWidth = Math.floor((vm.curWidth + (vm.outerMargin ? -vm.margin : vm.margin)) / vm.columns);
+        vm.curRowHeight = vm.curColWidth;
+        vm.element.addClass('scrollVertical');
+        vm.element.removeClass('fit');
+        vm.element.removeClass('scrollHorizontal');
+      } else if (vm.gridType === 'scrollHorizontal') {
+        vm.curRowHeight = Math.floor((vm.curHeight + (vm.outerMargin ? -vm.margin : vm.margin)) / vm.rows);
+        vm.curColWidth = vm.curRowHeight;
+        vm.element.addClass('scrollHorizontal');
+        vm.element.removeClass('fit');
+        vm.element.removeClass('scrollVertical');
       }
 
       if (!vm.mobile && vm.mobileBreakpoint > vm.curWidth) {
         vm.mobile = !vm.mobile;
         vm.element.addClass('mobile');
-        vm.element.addClass('scroll');
       } else if (vm.mobile && vm.mobileBreakpoint < vm.curWidth) {
         vm.mobile = !vm.mobile;
         vm.element.removeClass('mobile');
-        vm.element.removeClass('scroll');
-      }
-
-      if (vm.rowHeight === 'match') {
-        vm.element.addClass('scroll');
-        vm.element.removeClass('fit');
-        vm.curRowHeight = vm.curColWidth;
-      } else if (vm.rowHeight === 'fit' && !vm.mobile) {
-        vm.element.addClass('fit');
-        vm.element.removeClass('scroll');
-        vm.curRowHeight = Math.floor((vm.curHeight + (vm.outerMargin ? -vm.margin : vm.margin)) / vm.rows);
-      } else if (!vm.mobile) {
-        vm.curRowHeight = vm.rowHeight;
       }
 
       var widgetsIndex = vm.grid.length - 1;
@@ -726,7 +869,7 @@
           }
         }
       }
-      if (vm.rows > vm.columns) {
+      if (vm.rows >= vm.columns) {
         item.x = vm.columns;
         item.y = 0;
       } else {
@@ -752,8 +895,9 @@
 
   angular.module('angular-gridster2')
     .constant('gridsterConfig', {
-      colWidth: 'fit', // 'fit' will divide container width to the number of columns; number of pixels to set colWidth
-      rowHeight: 'fit', // 'match' will be equal to colWidth; 'fit' will divide container height to number of rows; number of pixels to set rowHeight
+      gridType: 'fit', // 'fit' will fit the items in the container without scroll;
+      // 'scrollVertical' will fit on width and height of the items will be the same as the width
+      // 'scrollHorizontal' will fit on height and width of the items will be the same as the height
       mobileBreakpoint: 640, // if the screen is not wider that this, remove the grid layout and stack the items
       minCols: 1,// minimum amount of columns in the grid
       maxCols: 100,// maximum amount of columns in the grid
@@ -765,7 +909,7 @@
       minItemRows: 1, // min item number of rows
       margin: 10, //margin between grid items
       outerMargin: true, //if margins will apply to the sides of the container
-      scrollSensitivity: 20, //margin of the dashboard where to start scrolling
+      scrollSensitivity: 10, //margin of the dashboard where to start scrolling
       scrollSpeed: 10, //how much to scroll each mouse move when in the scrollSensitivity zone
       itemChangeCallback: undefined, //callback to call for each item when is changes x, y, rows, cols. Arguments:gridsterItem, scope
       draggable: {

@@ -9,18 +9,13 @@ body {
   flex-direction: column;
 }
 
-[gridster] {
-  background: grey;
-}
-
-[gridster-item] {
-  background: white;
-}
-
-[gridster] button {
-  position: absolute;
-  right: 0;
-  top: 0;
+[gridster-item] div.button-holder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 
 .toolbar {

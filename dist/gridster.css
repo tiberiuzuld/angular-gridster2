@@ -12,7 +12,17 @@
   overflow-y: hidden;
 }
 
-[gridster].scroll {
+[gridster].scrollVertical {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+[gridster].scrollHorizontal {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+[gridster].mobile {
   overflow-x: hidden;
   overflow-y: auto;
 }
@@ -25,12 +35,14 @@
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
+  user-select: none;
   box-sizing: border-box;
   z-index: 1;
   position: absolute;
   overflow: hidden;
   transition: .3s;
   display: none;
+  background: white;
 }
 
 .gridster-preview-holder {

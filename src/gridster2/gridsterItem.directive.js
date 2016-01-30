@@ -6,24 +6,26 @@
   /** @ngInject */
   function gridsterItem(gridsterDraggable, gridsterResizable) {
     function link(scope, element, attributes) {
-      scope.gridsterItem = scope.$eval(attributes.gridsterItem);
-
-      scope.gridsterItem.drag = new gridsterDraggable(element, scope);
-      scope.gridsterItem.resize = new gridsterResizable(element, scope);
-
+      var item = scope.$eval(attributes.gridsterItem);
+      scope.gridsterItem = {
+        cols: item.cols,
+        rows: item.rows,
+        x: item.x,
+        y: item.y
+      };
       scope.gridster.addItem(scope.gridsterItem);
 
-      var itemTop, itemLeft, itemWidth, itemHeight, top, left, width, height, itemMarginBottom;
+      var itemTop, itemLeft, itemWidth, itemHeight, top, left, width, height, itemMargin;
 
       function setSize(noCheck) {
         if (scope.gridster.mobile) {
-          top = (scope.gridster.outerMargin ? scope.gridster.margin : 0);
-          left = (scope.gridster.outerMargin ? scope.gridster.margin : 0);
+          top = 0;
+          left = 0;
           width = scope.gridster.curWidth - (scope.gridster.outerMargin ? 2 * scope.gridster.margin : 0);
           height = width / 2;
         } else {
-          top = (scope.gridsterItem.y * scope.gridster.curRowHeight + (scope.gridster.outerMargin ? scope.gridster.margin : 0));
-          left = (scope.gridsterItem.x * scope.gridster.curColWidth + (scope.gridster.outerMargin ? scope.gridster.margin : 0));
+          top = scope.gridsterItem.y * scope.gridster.curRowHeight;
+          left = scope.gridsterItem.x * scope.gridster.curColWidth;
           width = scope.gridsterItem.cols * scope.gridster.curColWidth - scope.gridster.margin;
           height = scope.gridsterItem.rows * scope.gridster.curRowHeight - scope.gridster.margin;
         }
@@ -38,9 +40,9 @@
           itemWidth = width;
           itemHeight = height;
           if (scope.gridster.outerMargin) {
-            itemMarginBottom = scope.gridster.margin;
+            itemMargin = scope.gridster.margin;
           } else {
-            itemMarginBottom = 0;
+            itemMargin = 0;
           }
         }
         element.css({
@@ -49,11 +51,13 @@
           left: itemLeft + 'px',
           width: itemWidth + 'px',
           height: itemHeight + 'px',
-          marginBottom: itemMarginBottom + 'px'
+          margin: itemMargin + 'px'
         });
       }
 
       scope.gridsterItem.setSize = setSize;
+      scope.gridsterItem.drag = new gridsterDraggable(element, scope);
+      scope.gridsterItem.resize = new gridsterResizable(element, scope);
 
       scope.gridsterItem.checkItemChanges = function (newValue, oldValue) {
         if (newValue.rows === oldValue.rows && newValue.cols === oldValue.cols && newValue.x === oldValue.x && newValue.y === oldValue.y) {
@@ -66,6 +70,10 @@
           scope.gridsterItem.cols = oldValue.cols;
           scope.gridsterItem.rows = oldValue.rows;
         } else {
+          item.cols = scope.gridsterItem.cols;
+          item.rows = scope.gridsterItem.rows;
+          item.x = scope.gridsterItem.x;
+          item.y = scope.gridsterItem.y;
           scope.$broadcast('gridster-item-change');
           scope.gridster.calculateLayout();
           if (scope.gridster.itemChangeCallback) {

@@ -13,7 +13,7 @@ angular-gridster2 inspired by [angular-gridster](https://github.com/ManifestWebD
   bower install angular-gridster2 --save
 ```
 
-Then add a `<script>` to your `index.html`:
+Then import the following in your HTML:
 
 ```html
   <link rel="stylesheet" href="bower_components/angular-gridster2/dist/gridster.css"/>
@@ -41,20 +41,19 @@ Expects a scope setup(options object is optional):
 var vm = this;
 
 vm.options = {
-  colWidth: 'fit',
-  rowHeight: 'match',
-  itemChangeCallback: itemChange,
-  margin: 10,
-  outerMargin: true,
-  draggable: {
-    enabled: true,
-    stop: eventStop
-  },
-  resizable: {
-    enabled: true,
-    stop: eventStop
-  }
-};
+   gridType: 'fit',
+   itemChangeCallback: itemChange,
+   margin: 10,
+   outerMargin: true,
+   draggable: {
+     enabled: true,
+     stop: eventStop
+   },
+   resizable: {
+     enabled: true,
+     stop: eventStop
+   }
+ };
 
 vm.dashboard = [
   {cols: 2, rows: 1, y: 0, x: 0},
@@ -67,10 +66,13 @@ vm.dashboard = [
   {cols: 1, rows: 3, y: 2, x: 0},
   {cols: 2, rows: 1, y: 2, x: 1},
   {cols: 1, rows: 1, y: 2, x: 3},
-  {cols: 1, rows: 1, y: 3, x: 4, initCallback: function(){}}
+  {cols: 1, rows: 1, y: 3, x: 4, initCallback: function(item){}}
 ];
 ```
 
+Optional option ```initCallback``` for items after initialization.   
+All item options are optional. If any property is missing gridster will use the default options for rows, cols and   
+for x,y will auto position item where it fits
 
 ## Configuration
 
@@ -79,9 +81,10 @@ Simply pass your desired options to the gridster directive
 
 ```JavaScript
 $scope.options = {
-   colWidth: 'fit', // 'fit' will divide container width to the number of columns; number of pixels to set colWidth
-   rowHeight: 'fit', // 'match' will be equal to colWidth; 'fit' will divide container height to number of rows; number of pixels to set rowHeight
-   mobileBreakpoint: 640, // if the screen is not wider that this, remove the grid layout and stack the items
+   gridType: 'fit', // 'fit' will fit the items in the container without scroll;
+   // 'scrollVertical' will fit on width and height of the items will be the same as the width
+   // 'scrollHorizontal' will fit on height and width of the items will be the same as the height
+   mobileBreakpoint: 640, // if the screen is not wider than this, remove the grid layout and stack the items
    minCols: 1,// minimum amount of columns in the grid
    maxCols: 100,// maximum amount of columns in the grid
    minRows: 1,// minimum amount of rows in the grid
@@ -92,7 +95,7 @@ $scope.options = {
    minItemRows: 1, // min item number of rows
    margin: 10, //margin between grid items
    outerMargin: true, //if margins will apply to the sides of the container
-   scrollSensitivity: 20, //margin of the dashboard where to start scrolling
+   scrollSensitivity: 10, //margin of the dashboard where to start scrolling
    scrollSpeed: 10, //how much to scroll each mouse move when in the scrollSensitivity zone
    itemChangeCallback: undefined, //callback to call for each item when is changes x, y, rows, cols. Arguments:gridsterItem, scope
    draggable: {
@@ -112,14 +115,29 @@ You can also override the default configuration by modifying the ```gridsterConf
 
 ```js
 angular.module('app').run(['gridsterConfig', function(gridsterConfig) {
-	gridsterConfig.rowHeight = 'fit';
+	 gridsterConfig.gridType = 'fit';
 }]);
 ```
 
 ### Gridster Item Events
 
-broadcasts 'gridster-item-change' if item changes x ,y , cols, rows
-broadcasts 'gridster-item-resize' if item changes pixels height or width
+broadcasts ```'gridster-item-change'``` if item changes x ,y , cols, rows  
+broadcasts ```'gridster-item-resize'``` if item changes pixels height or width
+
+### Contributing
+
+#### Install dependencies
+```bash
+ npm install
+ bower install
+```
+
+Please respect the formatting in .editorconfig and .eslintrc
+
+#### Gulp task
+```bash
+ gulp serve
+```
 
 ### License
  The MIT License

@@ -15,7 +15,7 @@
       }, true);
 
       function setGridSize() {
-        if (gridster.rowHeight === 'fit' && !gridster.mobile) {
+        if (gridster.gridType === 'fit' && !gridster.mobile) {
           gridster.curWidth = element[0].offsetWidth;
           gridster.curHeight = element[0].offsetHeight;
         } else {
@@ -38,6 +38,16 @@
           gridster.onResize();
         } else if (!scrollBarPresent && element[0].scrollHeight > element[0].offsetHeight &&
           element[0].offsetWidth - element[0].clientWidth < element[0].scrollHeight - element[0].offsetHeight) {
+          scrollBarPresent = !scrollBarPresent;
+          gridster.onResize();
+        }
+
+        if (scrollBarPresent && element[0].scrollWidth <= element[0].offsetWidth &&
+          element[0].offsetHeight - element[0].clientHeight >= element[0].scrollWidth - element[0].offsetWidth) {
+          scrollBarPresent = !scrollBarPresent;
+          gridster.onResize();
+        } else if (!scrollBarPresent && element[0].scrollWidth > element[0].offsetWidth &&
+          element[0].offsetHeight - element[0].clientHeight < element[0].scrollWidth - element[0].offsetWidth) {
           scrollBarPresent = !scrollBarPresent;
           gridster.onResize();
         }

@@ -28,9 +28,14 @@
 <body ng-controller="IndexController as vm">
 <div class="toolbar">
   <button ng-click="vm.addItem()">Add widget</button>
-  <button ng-click="vm.toggleFitToScreen()">
-    <span ng-show="vm.options.rowHeight === 'match'">Fit to screen</span>
-    <span ng-show="vm.options.rowHeight === 'fit'">Scrollable</span>
+  <button ng-disable="vm.options.gridType === 'fit'" ng-click="vm.toggleFitToScreen('fit')">
+    <span>Fit to screen</span>
+  </button>
+  <button ng-disable="vm.options.gridType === 'scrollVertical'" ng-click="vm.toggleFitToScreen('scrollVertical')">
+    <span>Scroll Vertical</span>
+  </button>
+  <button ng-disable="vm.options.gridType === 'scrollHorizontal'" ng-click="vm.toggleFitToScreen('scrollHorizontal')">
+    <span>Scroll Horizontal</span>
   </button>
   <button ng-click="vm.toggleDrag()">
     <span ng-show="vm.options.draggable.enabled === false">Enable drag</span>
@@ -52,7 +57,9 @@
 
 <div gridster="vm.options">
   <div gridster-item="item" ng-repeat="item in vm.dashboard">
-    <button ng-click="vm.removeItem(item)">X</button>
+    <div class="button-holder">
+      <button ng-click="vm.removeItem(item)">X</button>
+    </div>
   </div>
 </div>
 

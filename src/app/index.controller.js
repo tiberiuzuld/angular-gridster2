@@ -7,17 +7,16 @@
   function IndexController($log) {
     var vm = this;
     vm.options = {
-      colWidth: 'fit',
-      rowHeight: 'fit',
+      gridType: 'fit',
       itemChangeCallback: itemChange,
       margin: 10,
       outerMargin: true,
       draggable: {
-        enabled: false,
+        enabled: true,
         stop: eventStop
       },
       resizable: {
-        enabled: false,
+        enabled: true,
         stop: eventStop
       }
     };
@@ -43,11 +42,9 @@
       vm.dashboard.push({});
     };
 
-    vm.toggleFitToScreen = function () {
-      if (vm.options.rowHeight === 'match') {
-        vm.options.rowHeight = 'fit';
-      } else {
-        vm.options.rowHeight = 'match';
+    vm.toggleFitToScreen = function (gridType) {
+      if (vm.options.gridType !== gridType) {
+        vm.options.gridType = gridType;
       }
     };
 

@@ -27,32 +27,32 @@
 
     function calculateLayout() {
       setGridDimensions();
-      if (vm.colWidth === 'fit') {
+      if (vm.gridType === 'fit') {
         vm.curColWidth = Math.floor((vm.curWidth + (vm.outerMargin ? -vm.margin : vm.margin)) / vm.columns);
-      } else {
-        vm.curColWidth = vm.colWidth;
+        vm.curRowHeight = Math.floor((vm.curHeight + (vm.outerMargin ? -vm.margin : vm.margin)) / vm.rows);
+        vm.element.addClass('fit');
+        vm.element.removeClass('scrollVertical');
+        vm.element.removeClass('scrollHorizontal');
+      } else if (vm.gridType === 'scrollVertical') {
+        vm.curColWidth = Math.floor((vm.curWidth + (vm.outerMargin ? -vm.margin : vm.margin)) / vm.columns);
+        vm.curRowHeight = vm.curColWidth;
+        vm.element.addClass('scrollVertical');
+        vm.element.removeClass('fit');
+        vm.element.removeClass('scrollHorizontal');
+      } else if (vm.gridType === 'scrollHorizontal') {
+        vm.curRowHeight = Math.floor((vm.curHeight + (vm.outerMargin ? -vm.margin : vm.margin)) / vm.rows);
+        vm.curColWidth = vm.curRowHeight;
+        vm.element.addClass('scrollHorizontal');
+        vm.element.removeClass('fit');
+        vm.element.removeClass('scrollVertical');
       }
 
       if (!vm.mobile && vm.mobileBreakpoint > vm.curWidth) {
         vm.mobile = !vm.mobile;
         vm.element.addClass('mobile');
-        vm.element.addClass('scroll');
       } else if (vm.mobile && vm.mobileBreakpoint < vm.curWidth) {
         vm.mobile = !vm.mobile;
         vm.element.removeClass('mobile');
-        vm.element.removeClass('scroll');
-      }
-
-      if (vm.rowHeight === 'match') {
-        vm.element.addClass('scroll');
-        vm.element.removeClass('fit');
-        vm.curRowHeight = vm.curColWidth;
-      } else if (vm.rowHeight === 'fit' && !vm.mobile) {
-        vm.element.addClass('fit');
-        vm.element.removeClass('scroll');
-        vm.curRowHeight = Math.floor((vm.curHeight + (vm.outerMargin ? -vm.margin : vm.margin)) / vm.rows);
-      } else if (!vm.mobile) {
-        vm.curRowHeight = vm.rowHeight;
       }
 
       var widgetsIndex = vm.grid.length - 1;
@@ -126,7 +126,7 @@
           }
         }
       }
-      if (vm.rows > vm.columns) {
+      if (vm.rows >= vm.columns) {
         item.x = vm.columns;
         item.y = 0;
       } else {
