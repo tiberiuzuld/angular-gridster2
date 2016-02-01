@@ -11,7 +11,8 @@
         cols: item.cols,
         rows: item.rows,
         x: item.x,
-        y: item.y
+        y: item.y,
+        initCallback: item.initCallback
       };
       scope.gridster.addItem(scope.gridsterItem);
 
