@@ -7,6 +7,7 @@
   <meta name="viewport" content="width=device-width">
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <!-- build:css({.tmp/serve,src}) styles/vendor.css -->
   <!-- bower:css -->
   <!-- run `gulp inject` to automatically populate bower styles dependencies -->
@@ -25,40 +26,39 @@
   <!-- endinject -->
   <!-- endbuild -->
 </head>
-<body ng-controller="IndexController as vm">
-<div class="toolbar">
-  <button ng-click="vm.addItem()">Add widget</button>
-  <button ng-disable="vm.options.gridType === 'fit'" ng-click="vm.toggleFitToScreen('fit')">
-    <span>Fit to screen</span>
-  </button>
-  <button ng-disable="vm.options.gridType === 'scrollVertical'" ng-click="vm.toggleFitToScreen('scrollVertical')">
-    <span>Scroll Vertical</span>
-  </button>
-  <button ng-disable="vm.options.gridType === 'scrollHorizontal'" ng-click="vm.toggleFitToScreen('scrollHorizontal')">
-    <span>Scroll Horizontal</span>
-  </button>
-  <button ng-click="vm.toggleDrag()">
-    <span ng-show="vm.options.draggable.enabled === false">Enable drag</span>
-    <span ng-show="vm.options.draggable.enabled === true">Disable drag</span>
-  </button>
-  <button ng-click="vm.toggleResize()">
-    <span ng-show="vm.options.resizable.enabled === false">Enable resize</span>
-    <span ng-show="vm.options.resizable.enabled === true">Disable resize</span>
-  </button>
-  <label>
-    Margin:
-  </label>
-  <input type="number" ng-model="vm.options.margin">
-  <label>
-    Outer Margin:
-  </label>
-  <input type="checkbox" ng-model="vm.options.outerMargin">
-</div>
+<body ng-controller="IndexController as vm" layout="column">
+<md-toolbar>
+  <div class="md-toolbar-tools" layout="row" layout-align="space-between center">
+    <md-button ng-click="vm.addItem()">
+      <md-icon>add</md-icon>
+      Add widget
+    </md-button>
+    <md-select aria-label="Grid type" ng-model="vm.options.gridType">
+      <md-option value="fit">Fit to screen</md-option>
+      <md-option value="scrollVertical">Scroll Vertical</md-option>
+      <md-option value="scrollHorizontal">Scroll Horizontal</md-option>
+    </md-select>
+    <md-checkbox ng-model="vm.options.draggable.enabled">
+      Drag Items
+    </md-checkbox>
+    <md-checkbox ng-model="vm.options.resizable.enabled">
+      Resize Items
+    </md-checkbox>
+    <div flex="30" layout="row" layout-align="center center">
+      <div><span>Margin</span></div>
+      <md-slider aria-label="Margin" flex min="0" max="30" ng-model="vm.options.margin"></md-slider>
+      <input type="number" min="0" max="30" ng-model="vm.options.margin">
+    </div>
+    <md-checkbox ng-model="vm.options.outerMargin">Outer Margin</md-checkbox>
+  </div>
+</md-toolbar>
 
 <div gridster="vm.options">
   <div gridster-item="item" ng-repeat="item in vm.dashboard">
     <div class="button-holder">
-      <button ng-click="vm.removeItem(item)">X</button>
+      <md-button class="md-fab md-primary md-mini" ng-click="vm.removeItem(item)">X
+        <md-tooltip>Remove</md-tooltip>
+      </md-button>
     </div>
   </div>
 </div>

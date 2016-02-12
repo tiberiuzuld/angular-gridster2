@@ -42,19 +42,6 @@
       vm.dashboard.push({});
     };
 
-    vm.toggleFitToScreen = function (gridType) {
-      if (vm.options.gridType !== gridType) {
-        vm.options.gridType = gridType;
-      }
-    };
-
-    vm.toggleDrag = function () {
-      vm.options.draggable.enabled = !vm.options.draggable.enabled;
-    };
-    vm.toggleResize = function () {
-      vm.options.resizable.enabled = !vm.options.resizable.enabled;
-    };
-
     function eventStop(item, scope) {
       $log.info('eventStop', item, scope);
     }
