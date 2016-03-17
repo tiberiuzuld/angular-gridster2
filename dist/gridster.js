@@ -14,6 +14,7 @@
 (function () {
   'use strict';
 
+  gridsterScroll.$inject = ["$interval"];
   angular.module('angular-gridster2').factory('gridsterScroll', gridsterScroll);
 
   /** @ngInject */
@@ -160,12 +161,12 @@
     };
 
   }
-  gridsterScroll.$inject = ["$interval"];
 })();
 
 (function () {
   'use strict';
 
+  gridsterResizable.$inject = ["$document", "gridsterScroll"];
   angular.module('angular-gridster2').factory('gridsterResizable', gridsterResizable);
 
   /** @ngInject */
@@ -397,7 +398,6 @@
 
     return GridsterResizable;
   }
-  gridsterResizable.$inject = ["$document", "gridsterScroll"];
 })();
 
 (function () {
@@ -438,6 +438,7 @@
 (function () {
   'use strict';
 
+  gridsterItem.$inject = ["gridsterDraggable", "gridsterResizable"];
   angular.module('angular-gridster2').directive('gridsterItem', gridsterItem);
 
   /** @ngInject */
@@ -469,28 +470,27 @@
         }
         if (!noCheck && top === itemTop && left === itemLeft && width === itemWidth && height === itemHeight) {
           return;
+        }
+        if (scope.gridster.outerMargin) {
+          itemMargin = scope.gridster.margin;
         } else {
-          if (width !== itemWidth || height !== itemHeight) {
-            scope.$broadcast('gridster-item-resize');
-          }
-          itemTop = top;
-          itemLeft = left;
-          itemWidth = width;
-          itemHeight = height;
-          if (scope.gridster.outerMargin) {
-            itemMargin = scope.gridster.margin;
-          } else {
-            itemMargin = 0;
-          }
+          itemMargin = 0;
         }
         element.css({
           display: 'block',
-          top: itemTop + 'px',
-          left: itemLeft + 'px',
-          width: itemWidth + 'px',
-          height: itemHeight + 'px',
+          top: top + 'px',
+          left: left + 'px',
+          width: width + 'px',
+          height: height + 'px',
           margin: itemMargin + 'px'
         });
+        if (width !== itemWidth || height !== itemHeight) {
+          scope.$broadcast('gridster-item-resize');
+        }
+        itemTop = top;
+        itemLeft = left;
+        itemWidth = width;
+        itemHeight = height;
       }
 
       scope.gridsterItem.setSize = setSize;
@@ -531,12 +531,12 @@
       link: link
     }
   }
-  gridsterItem.$inject = ["gridsterDraggable", "gridsterResizable"];
 })();
 
 (function () {
   'use strict';
 
+  gridsterDraggable.$inject = ["$document", "gridsterScroll"];
   angular.module('angular-gridster2').factory('gridsterDraggable', gridsterDraggable);
 
   /** @ngInject */
@@ -658,11 +658,11 @@
     return GridsterDraggable;
 
   }
-  gridsterDraggable.$inject = ["$document", "gridsterScroll"];
 })();
 
 (function () {
   'use strict';
+  gridster.$inject = ["$window", "$compile"];
   angular.module('angular-gridster2').directive('gridster', gridster);
 
   /** @ngInject */
@@ -739,11 +739,11 @@
       link: link
     };
   }
-  gridster.$inject = ["$window", "$compile"];
 })();
 
 (function () {
   'use strict';
+  gridsterController.$inject = ["$scope", "gridsterConfig"];
   angular.module('angular-gridster2')
     .controller('GridsterController', gridsterController);
 
@@ -888,7 +888,6 @@
       return [Math.round(x / vm.curColWidth), Math.round(y / vm.curRowHeight)];
     }
   }
-  gridsterController.$inject = ["$scope", "gridsterConfig"];
 })();
 
 (function () {
