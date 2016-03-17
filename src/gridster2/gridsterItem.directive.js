@@ -32,28 +32,27 @@
         }
         if (!noCheck && top === itemTop && left === itemLeft && width === itemWidth && height === itemHeight) {
           return;
+        }
+        if (scope.gridster.outerMargin) {
+          itemMargin = scope.gridster.margin;
         } else {
-          if (width !== itemWidth || height !== itemHeight) {
-            scope.$broadcast('gridster-item-resize');
-          }
-          itemTop = top;
-          itemLeft = left;
-          itemWidth = width;
-          itemHeight = height;
-          if (scope.gridster.outerMargin) {
-            itemMargin = scope.gridster.margin;
-          } else {
-            itemMargin = 0;
-          }
+          itemMargin = 0;
         }
         element.css({
           display: 'block',
-          top: itemTop + 'px',
-          left: itemLeft + 'px',
-          width: itemWidth + 'px',
-          height: itemHeight + 'px',
+          top: top + 'px',
+          left: left + 'px',
+          width: width + 'px',
+          height: height + 'px',
           margin: itemMargin + 'px'
         });
+        if (width !== itemWidth || height !== itemHeight) {
+          scope.$broadcast('gridster-item-resize');
+        }
+        itemTop = top;
+        itemLeft = left;
+        itemWidth = width;
+        itemHeight = height;
       }
 
       scope.gridsterItem.setSize = setSize;
