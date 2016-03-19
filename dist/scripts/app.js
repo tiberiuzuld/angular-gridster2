@@ -7,6 +7,7 @@
 (function () {
   'use strict';
 
+  IndexController.$inject = ["$log"];
   angular.module('gridster2App').controller('IndexController', IndexController);
 
   /** @ngInject */
@@ -73,12 +74,12 @@
       $log.info('itemInitialized', item);
     }
   }
-  IndexController.$inject = ["$log"];
 })();
 
 (function () {
   'use strict';
 
+  config.$inject = ["$logProvider", "$compileProvider"];
   angular.module('gridster2App').config(config);
 
   /** @ngInject */
@@ -88,6 +89,5 @@
     $compileProvider.debugInfoEnabled(true);
 
   }
-  config.$inject = ["$logProvider", "$compileProvider"];
 
 })();
