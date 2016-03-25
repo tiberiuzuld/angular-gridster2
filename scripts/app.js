@@ -1,12 +1,13 @@
 (function () {
   'use strict';
 
-  angular.module('gridster2App', ['angular-gridster2', 'ngMockE2E']);
+  angular.module('gridster2App', ['angular-gridster2', 'ngMockE2E', 'ngMaterial']);
 })();
 
 (function () {
   'use strict';
 
+  IndexController.$inject = ["$log"];
   angular.module('gridster2App').controller('IndexController', IndexController);
 
   /** @ngInject */
@@ -48,19 +49,6 @@
       vm.dashboard.push({});
     };
 
-    vm.toggleFitToScreen = function (gridType) {
-      if (vm.options.gridType !== gridType) {
-        vm.options.gridType = gridType;
-      }
-    };
-
-    vm.toggleDrag = function () {
-      vm.options.draggable.enabled = !vm.options.draggable.enabled;
-    };
-    vm.toggleResize = function () {
-      vm.options.resizable.enabled = !vm.options.resizable.enabled;
-    };
-
     function eventStop(item, scope) {
       $log.info('eventStop', item, scope);
     }
@@ -73,12 +61,12 @@
       $log.info('itemInitialized', item);
     }
   }
-  IndexController.$inject = ["$log"];
 })();
 
 (function () {
   'use strict';
 
+  config.$inject = ["$logProvider", "$compileProvider"];
   angular.module('gridster2App').config(config);
 
   /** @ngInject */
@@ -88,6 +76,5 @@
     $compileProvider.debugInfoEnabled(true);
 
   }
-  config.$inject = ["$logProvider", "$compileProvider"];
 
 })();
