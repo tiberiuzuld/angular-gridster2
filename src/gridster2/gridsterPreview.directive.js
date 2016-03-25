@@ -6,7 +6,7 @@
     return {
       restrict: 'A',
       replace: true,
-      template: '<div class="gridster-item gridster-preview-holder"></div>',
+      template: '<div class="gridster-preview-holder"></div>',
       link: function (scope, element) {
         scope.gridster.previewStyleString = {};
         /**

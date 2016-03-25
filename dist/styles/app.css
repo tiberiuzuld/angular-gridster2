@@ -18,28 +18,10 @@ body {
   align-items: center;
 }
 
-.toolbar {
-  height: 30px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-content: center;
+md-toolbar input[type='number'] {
+  width: 50px;
 }
 
-.toolbar label {
-  line-height: 30px;
-}
-
-.toolbar button {
-  margin-left: 5px;
-  margin-right: 5px;
-}
-
-.toolbar input[type='number'] {
-  width: 30px;
-}
-
-.toolbar input[type='checkbox'] {
-  height: 100%;
+md-toolbar md-checkbox {
   margin: 0;
 }

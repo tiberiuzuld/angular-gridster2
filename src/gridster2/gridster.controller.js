@@ -1,10 +1,10 @@
 (function () {
   'use strict';
   angular.module('angular-gridster2')
-    .controller('GridsterController', gridsterController);
+    .controller('GridsterController', GridsterController);
 
   /** @ngInject */
-  function gridsterController($scope, gridsterConfig) {
+  function GridsterController($scope, gridsterConfig) {
     var vm = this;
     vm.mobile = false;
 

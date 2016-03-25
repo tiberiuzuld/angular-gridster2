@@ -6,13 +6,13 @@
     "dist/gridster.css"
   ],
   "dependencies": {
-    "angular": "^1.x",
-    "lodash": "*",
+    "angular": "~1.x",
+    "lodash": "~4.x",
     "javascript-detect-element-resize": "~0.5.3"
   },
   "devDependencies": {
-    "angular-mocks": "^1.x",
-    "angular-material": "^1.0.5"
+    "angular-mocks": "~1.x",
+    "angular-material": "~1.0.6"
   },
   "homepage": "https://github.io/tiberiuzuld/angular-gridster2",
   "bugs": {

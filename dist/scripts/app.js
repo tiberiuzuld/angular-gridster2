@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  angular.module('gridster2App', ['angular-gridster2', 'ngMockE2E']);
+  angular.module('gridster2App', ['angular-gridster2', 'ngMockE2E', 'ngMaterial']);
 })();
 
 (function () {
@@ -47,19 +47,6 @@
 
     vm.addItem = function () {
       vm.dashboard.push({});
-    };
-
-    vm.toggleFitToScreen = function (gridType) {
-      if (vm.options.gridType !== gridType) {
-        vm.options.gridType = gridType;
-      }
-    };
-
-    vm.toggleDrag = function () {
-      vm.options.draggable.enabled = !vm.options.draggable.enabled;
-    };
-    vm.toggleResize = function () {
-      vm.options.resizable.enabled = !vm.options.resizable.enabled;
     };
 
     function eventStop(item, scope) {

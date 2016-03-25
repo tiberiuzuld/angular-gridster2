@@ -408,7 +408,7 @@
     return {
       restrict: 'A',
       replace: true,
-      template: '<div class="gridster-item gridster-preview-holder"></div>',
+      template: '<div class="gridster-preview-holder"></div>',
       link: function (scope, element) {
         scope.gridster.previewStyleString = {};
         /**
@@ -743,12 +743,12 @@
 
 (function () {
   'use strict';
-  gridsterController.$inject = ["$scope", "gridsterConfig"];
+  GridsterController.$inject = ["$scope", "gridsterConfig"];
   angular.module('angular-gridster2')
-    .controller('GridsterController', gridsterController);
+    .controller('GridsterController', GridsterController);
 
   /** @ngInject */
-  function gridsterController($scope, gridsterConfig) {
+  function GridsterController($scope, gridsterConfig) {
     var vm = this;
     vm.mobile = false;
 
