@@ -1,6 +1,6 @@
 {
   "name": "angular-gridster2",
-  "version": "0.0.1",
+  "version": "1.0.5",
   "dependencies": {},
   "devDependencies": {
     "browser-sync": "2.11.2",
