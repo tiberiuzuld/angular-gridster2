@@ -450,9 +450,12 @@
         rows: item.rows,
         x: item.x,
         y: item.y,
-        initCallback: item.initCallback
+        initCallback: item.initCallback,
+        setSize: setSize,
+        checkItemChanges: checkItemChanges,
+        drag: new gridsterDraggable(element, scope),
+        resize: new gridsterResizable(element, scope)
       };
-      scope.gridster.addItem(scope.gridsterItem);
 
       var itemTop, itemLeft, itemWidth, itemHeight, top, left, width, height, itemMargin;
 
@@ -493,11 +496,7 @@
         itemHeight = height;
       }
 
-      scope.gridsterItem.setSize = setSize;
-      scope.gridsterItem.drag = new gridsterDraggable(element, scope);
-      scope.gridsterItem.resize = new gridsterResizable(element, scope);
-
-      scope.gridsterItem.checkItemChanges = function (newValue, oldValue) {
+      function checkItemChanges(newValue, oldValue) {
         if (newValue.rows === oldValue.rows && newValue.cols === oldValue.cols && newValue.x === oldValue.x && newValue.y === oldValue.y) {
           return;
         }
@@ -518,12 +517,14 @@
             scope.gridster.itemChangeCallback(scope.gridsterItem, scope);
           }
         }
-      };
+      }
 
       scope.$on('$destroy', function () {
         scope.gridsterItem.drag.toggle(false);
         scope.gridster.removeItem(scope.gridsterItem);
       });
+
+      scope.gridster.addItem(scope.gridsterItem);
     }
 
     return {

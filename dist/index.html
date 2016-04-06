@@ -7,6 +7,12 @@
   <meta name="viewport" content="width=device-width">
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
+  <style>
+    [ng-cloak] {
+      display: none !important;
+    }
+  </style>
+
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="styles/vendor.css">
 
@@ -14,7 +20,7 @@
 
   <link rel="stylesheet" href="styles/app.css">
 </head>
-<body ng-controller="IndexController as vm" layout="column">
+<body ng-controller="IndexController as vm" layout="column" ng-cloak>
 <md-toolbar>
   <div class="md-toolbar-tools" layout="row" layout-align="space-between center">
     <md-button ng-click="vm.addItem()">
