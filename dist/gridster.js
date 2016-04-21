@@ -744,12 +744,12 @@
 
 (function () {
   'use strict';
-  GridsterController.$inject = ["$scope", "gridsterConfig"];
+  GridsterController.$inject = ["$scope", "gridsterConfig", "$log"];
   angular.module('angular-gridster2')
     .controller('GridsterController', GridsterController);
 
   /** @ngInject */
-  function GridsterController($scope, gridsterConfig) {
+  function GridsterController($scope, gridsterConfig, $log) {
     var vm = this;
     vm.mobile = false;
 
@@ -830,6 +830,9 @@
       }
       if (angular.isUndefined(item.x) || angular.isUndefined(item.y)) {
         vm.autoPositionItem(item);
+      } else if (vm.checkCollision(item)) {
+        $log.warn('Can\'t be placed in the bounds of the dashboard!', item);
+        return;
       }
       vm.grid.push(item);
       vm.calculateLayout();
@@ -871,12 +874,14 @@
           }
         }
       }
-      if (vm.rows >= vm.columns) {
+      if (vm.rows >= vm.columns && vm.maxCols > vm.columns) {
         item.x = vm.columns;
         item.y = 0;
-      } else {
+      } else if (vm.maxRows > vm.rows) {
         item.y = vm.rows;
         item.x = 0;
+      } else {
+        $log.warn('Can\'t be placed in the bounds of the dashboard!', item);
       }
     };
 
