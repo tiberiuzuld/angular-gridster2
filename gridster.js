@@ -14,6 +14,46 @@
 (function () {
   'use strict';
 
+  angular.module('angular-gridster2').factory('gridsterSwap', gridsterSwap);
+
+  /** @ngInject */
+  function gridsterSwap() {
+    function GridsterSwap(scope, elemPosition) {
+      var position = scope.gridster.pixelsToPosition(elemPosition[0], elemPosition[1]);
+      var x = scope.gridsterItem.x;
+      var y = scope.gridsterItem.y;
+      scope.gridsterItem.x = position[0];
+      scope.gridsterItem.y = position[1];
+      var swapItem = scope.gridster.findItemWithItem(scope.gridsterItem);
+      scope.gridsterItem.x = x;
+      scope.gridsterItem.y = y;
+      if (!swapItem) {
+        return;
+      }
+      x = swapItem.x;
+      y = swapItem.y;
+      swapItem.x = scope.gridsterItem.x;
+      swapItem.y = scope.gridsterItem.y;
+      scope.gridsterItem.x = position[0];
+      scope.gridsterItem.y = position[1];
+      if (scope.gridster.checkCollision(swapItem) || scope.gridster.checkCollision(scope.gridsterItem)) {
+        scope.gridsterItem.x = swapItem.x;
+        scope.gridsterItem.y = swapItem.y;
+        swapItem.x = x;
+        swapItem.y = y;
+      } else {
+        swapItem.setSize(true);
+        swapItem.checkItemChanges(swapItem, {x: x, y: y, cols: swapItem.cols, rows: swapItem.rows});
+      }
+    }
+
+    return GridsterSwap;
+  }
+})();
+
+(function () {
+  'use strict';
+
   gridsterScroll.$inject = ["$interval"];
   angular.module('angular-gridster2').factory('gridsterScroll', gridsterScroll);
 
@@ -537,11 +577,11 @@
 (function () {
   'use strict';
 
-  gridsterDraggable.$inject = ["$document", "gridsterScroll"];
+  gridsterDraggable.$inject = ["$document", "gridsterScroll", "gridsterSwap"];
   angular.module('angular-gridster2').factory('gridsterDraggable', gridsterDraggable);
 
   /** @ngInject */
-  function gridsterDraggable($document, gridsterScroll) {
+  function gridsterDraggable($document, gridsterScroll, gridsterSwap) {
 
     function GridsterDraggable($element, scope) {
 
@@ -600,6 +640,9 @@
       function dragStop(e) {
         e.preventDefault();
         e.stopPropagation();
+        if (scope.gridster.swap) {
+          gridsterSwap(scope, elemPosition);
+        }
         gridsterScroll.cancelScroll();
         $document[0].removeEventListener('mousemove', dragMove);
         $document[0].removeEventListener('mouseup', dragStop);
@@ -634,7 +677,6 @@
             scope.gridster.previewStyle();
           }
         }
-
       }
 
       this.toggle = function (enable) {
@@ -744,12 +786,12 @@
 
 (function () {
   'use strict';
-  GridsterController.$inject = ["$scope", "gridsterConfig"];
+  GridsterController.$inject = ["$scope", "gridsterConfig", "$log"];
   angular.module('angular-gridster2')
     .controller('GridsterController', GridsterController);
 
   /** @ngInject */
-  function GridsterController($scope, gridsterConfig) {
+  function GridsterController($scope, gridsterConfig, $log) {
     var vm = this;
     vm.mobile = false;
 
@@ -830,6 +872,9 @@
       }
       if (angular.isUndefined(item.x) || angular.isUndefined(item.y)) {
         vm.autoPositionItem(item);
+      } else if (vm.checkCollision(item)) {
+        $log.warn('Can\'t be placed in the bounds of the dashboard!', item);
+        return;
       }
       vm.grid.push(item);
       vm.calculateLayout();
@@ -847,16 +892,19 @@
       if (!(item.y > -1 && item.x > -1 && item.cols + item.x <= vm.maxCols && item.rows + item.y <= vm.maxRows)) {
         return true;
       }
+      return vm.findItemWithItem(item);
+    };
+
+    vm.findItemWithItem = function (item) {
       var widgetsIndex = vm.grid.length - 1, widget;
       for (; widgetsIndex >= 0; widgetsIndex--) {
         widget = vm.grid[widgetsIndex];
         if (widget !== item && widget.x < item.x + item.cols && widget.x + widget.cols > item.x &&
           widget.y < item.y + item.rows && widget.y + widget.rows > item.y) {
-          return true;
+          return widget;
         }
       }
     };
-
 
     vm.autoPositionItem = function (item) {
       setGridDimensions();
@@ -871,12 +919,14 @@
           }
         }
       }
-      if (vm.rows >= vm.columns) {
+      if (vm.rows >= vm.columns && vm.maxCols > vm.columns) {
         item.x = vm.columns;
         item.y = 0;
-      } else {
+      } else if (vm.maxRows > vm.rows) {
         item.y = vm.rows;
         item.x = 0;
+      } else {
+        $log.warn('Can\'t be placed in the bounds of the dashboard!', item);
       }
     };
 
@@ -886,7 +936,7 @@
         y -= 10;
       }
 
-      return [Math.round(x / vm.curColWidth), Math.round(y / vm.curRowHeight)];
+      return [Math.abs(Math.round(x / vm.curColWidth)), Math.abs(Math.round(y / vm.curRowHeight))];
     }
   }
 })();
@@ -921,6 +971,7 @@
         enabled: false, // enable/disable resizable items
         handles: ['s', 'e', 'n', 'w', 'se', 'ne', 'sw', 'nw'], // resizable edges of an item
         stop: undefined // callback when resizing an item stops. Arguments: gridsterItem, scope
-      }
+      },
+      swap: true
     });
 })();
