@@ -1,6 +1,6 @@
 {
   "name": "angular-gridster2",
-  "version": "1.0.6",
+  "version": "1.1.0",
   "main": [
     "dist/gridster.js",
     "dist/gridster.css"
@@ -12,7 +12,7 @@
   },
   "devDependencies": {
     "angular-mocks": "~1.x",
-    "angular-material": "~1.0.7"
+    "angular-material": "~1.0.8"
   },
   "homepage": "https://github.io/tiberiuzuld/angular-gridster2",
   "bugs": {

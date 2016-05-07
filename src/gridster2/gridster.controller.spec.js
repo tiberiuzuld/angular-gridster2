@@ -159,15 +159,15 @@
 
     it('check item collision', function () {
       var item = {cols: 5, rows: 3, x: -1, y: -1};
-      expect(vm.checkCollision(item)).toEqual(true);
+      expect(vm.checkCollision(item)).toBeTruthy();
 
       item.x = 0;
       item.y = 4;
       vm.grid.push({cols: 5, rows: 5, x: 0, y: 0});
-      expect(vm.checkCollision(item)).toEqual(true);
+      expect(vm.checkCollision(item)).toBeTruthy();
 
       item.y = 5;
-      expect(vm.checkCollision(item)).toEqual(undefined);
+      expect(vm.checkCollision(item)).toBeFalsy();
     });
 
     it('auto position item in grid', function () {

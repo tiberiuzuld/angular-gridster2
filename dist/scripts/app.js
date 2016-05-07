@@ -25,7 +25,8 @@
       resizable: {
         enabled: true,
         stop: eventStop
-      }
+      },
+      swap: true
     };
     vm.dashboard = [
       {cols: 2, rows: 1, y: 0, x: 0},

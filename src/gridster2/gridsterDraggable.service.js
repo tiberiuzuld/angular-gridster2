@@ -4,7 +4,7 @@
   angular.module('angular-gridster2').factory('gridsterDraggable', gridsterDraggable);
 
   /** @ngInject */
-  function gridsterDraggable($document, gridsterScroll) {
+  function gridsterDraggable($document, gridsterScroll, gridsterSwap) {
 
     function GridsterDraggable($element, scope) {
 
@@ -63,6 +63,9 @@
       function dragStop(e) {
         e.preventDefault();
         e.stopPropagation();
+        if (scope.gridster.swap) {
+          gridsterSwap(scope, elemPosition);
+        }
         gridsterScroll.cancelScroll();
         $document[0].removeEventListener('mousemove', dragMove);
         $document[0].removeEventListener('mouseup', dragStop);
@@ -97,7 +100,6 @@
             scope.gridster.previewStyle();
           }
         }
-
       }
 
       this.toggle = function (enable) {

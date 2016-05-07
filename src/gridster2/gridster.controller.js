@@ -105,16 +105,19 @@
       if (!(item.y > -1 && item.x > -1 && item.cols + item.x <= vm.maxCols && item.rows + item.y <= vm.maxRows)) {
         return true;
       }
+      return vm.findItemWithItem(item);
+    };
+
+    vm.findItemWithItem = function (item) {
       var widgetsIndex = vm.grid.length - 1, widget;
       for (; widgetsIndex >= 0; widgetsIndex--) {
         widget = vm.grid[widgetsIndex];
         if (widget !== item && widget.x < item.x + item.cols && widget.x + widget.cols > item.x &&
           widget.y < item.y + item.rows && widget.y + widget.rows > item.y) {
-          return true;
+          return widget;
         }
       }
     };
-
 
     vm.autoPositionItem = function (item) {
       setGridDimensions();
@@ -146,7 +149,7 @@
         y -= 10;
       }
 
-      return [Math.round(x / vm.curColWidth), Math.round(y / vm.curRowHeight)];
+      return [Math.abs(Math.round(x / vm.curColWidth)), Math.abs(Math.round(y / vm.curRowHeight))];
     }
   }
 })();

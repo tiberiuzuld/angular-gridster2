@@ -1,9 +1,9 @@
 /**
- * @license AngularJS v1.5.3
+ * @license AngularJS v1.5.5
  * (c) 2010-2016 Google, Inc. http://angularjs.org
  * License: MIT
  */
-(function(window, document, undefined) {'use strict';
+(function(window) {'use strict';
 
 /**
  * @description
@@ -57,7 +57,7 @@ function minErr(module, ErrorConstructor) {
       return match;
     });
 
-    message += '\nhttp://errors.angularjs.org/1.5.3/' +
+    message += '\nhttp://errors.angularjs.org/1.5.5/' +
       (module ? module + '/' : '') + code;
 
     for (i = SKIP_INDEXES, paramPrefix = '?'; i < templateArgs.length; i++, paramPrefix = '&') {
@@ -171,6 +171,7 @@ function minErr(module, ErrorConstructor) {
  * @ngdoc module
  * @name ng
  * @module ng
+ * @installation
  * @description
  *
  * # ng (core module)
@@ -237,7 +238,7 @@ var
  * documentMode is an IE-only property
  * http://msdn.microsoft.com/en-us/library/ie/cc196988(v=vs.85).aspx
  */
-msie = document.documentMode;
+msie = window.document.documentMode;
 
 
 /**
@@ -1047,6 +1048,41 @@ function shallowCopy(src, dst) {
  * @param {*} o1 Object or value to compare.
  * @param {*} o2 Object or value to compare.
  * @returns {boolean} True if arguments are equal.
+ *
+ * @example
+   <example module="equalsExample" name="equalsExample">
+     <file name="index.html">
+      <div ng-controller="ExampleController">
+        <form novalidate>
+          <h3>User 1</h3>
+          Name: <input type="text" ng-model="user1.name">
+          Age: <input type="number" ng-model="user1.age">
+
+          <h3>User 2</h3>
+          Name: <input type="text" ng-model="user2.name">
+          Age: <input type="number" ng-model="user2.age">
+
+          <div>
+            <br/>
+            <input type="button" value="Compare" ng-click="compare()">
+          </div>
+          User 1: <pre>{{user1 | json}}</pre>
+          User 2: <pre>{{user2 | json}}</pre>
+          Equal: <pre>{{result}}</pre>
+        </form>
+      </div>
+    </file>
+    <file name="script.js">
+        angular.module('equalsExample', []).controller('ExampleController', ['$scope', function($scope) {
+          $scope.user1 = {};
+          $scope.user2 = {};
+          $scope.result;
+          $scope.compare = function() {
+            $scope.result = angular.equals($scope.user1, $scope.user2);
+          };
+        }]);
+    </file>
+  </example>
  */
 function equals(o1, o2) {
   if (o1 === o2) return true;
@@ -1093,8 +1129,8 @@ var csp = function() {
   if (!isDefined(csp.rules)) {
 
 
-    var ngCspElement = (document.querySelector('[ng-csp]') ||
-                    document.querySelector('[data-ng-csp]'));
+    var ngCspElement = (window.document.querySelector('[ng-csp]') ||
+                    window.document.querySelector('[data-ng-csp]'));
 
     if (ngCspElement) {
       var ngCspAttribute = ngCspElement.getAttribute('ng-csp') ||
@@ -1169,7 +1205,7 @@ var jq = function() {
   var i, ii = ngAttrPrefixes.length, prefix, name;
   for (i = 0; i < ii; ++i) {
     prefix = ngAttrPrefixes[i];
-    if (el = document.querySelector('[' + prefix.replace(':', '\\:') + 'jq]')) {
+    if (el = window.document.querySelector('[' + prefix.replace(':', '\\:') + 'jq]')) {
       name = el.getAttribute(prefix + 'jq');
       break;
     }
@@ -1234,7 +1270,7 @@ function toJsonReplacer(key, value) {
     val = undefined;
   } else if (isWindow(value)) {
     val = '$WINDOW';
-  } else if (value &&  document === value) {
+  } else if (value &&  window.document === value) {
     val = '$DOCUMENT';
   } else if (isScope(value)) {
     val = '$SCOPE';
@@ -1686,11 +1722,11 @@ function bootstrap(element, modules, config) {
     element = jqLite(element);
 
     if (element.injector()) {
-      var tag = (element[0] === document) ? 'document' : startingTag(element);
+      var tag = (element[0] === window.document) ? 'document' : startingTag(element);
       //Encode angle brackets to prevent input from being sanitized to empty string #8683
       throw ngMinErr(
           'btstrpd',
-          "App Already Bootstrapped with this Element '{0}'",
+          "App already bootstrapped with this element '{0}'",
           tag.replace(/</,'&lt;').replace(/>/,'&gt;'));
     }
 
@@ -2137,9 +2173,9 @@ function setupModuleLoader(window) {
            * @ngdoc method
            * @name angular.Module#decorator
            * @module ng
-           * @param {string} The name of the service to decorate.
-           * @param {Function} This function will be invoked when the service needs to be
-           *                                    instantiated and should return the decorated service instance.
+           * @param {string} name The name of the service to decorate.
+           * @param {Function} decorFn This function will be invoked when the service needs to be
+           *                           instantiated and should return the decorated service instance.
            * @description
            * See {@link auto.$provide#decorator $provide.decorator()}.
            */
@@ -2443,11 +2479,11 @@ function toDebugString(obj) {
  * - `codeName` – `{string}` – Code name of the release, such as "jiggling-armfat".
  */
 var version = {
-  full: '1.5.3',    // all of these placeholder strings will be replaced by grunt's
+  full: '1.5.5',    // all of these placeholder strings will be replaced by grunt's
   major: 1,    // package task
   minor: 5,
-  dot: 3,
-  codeName: 'diplohaplontic-meiosis'
+  dot: 5,
+  codeName: 'material-conspiration'
 };
 
 
@@ -2704,6 +2740,9 @@ function publishExternalAPI(angular) {
  * - `inheritedData()` - same as `data()`, but walks up the DOM until a value is found or the top
  *   parent element is reached.
  *
+ * @knownIssue You cannot spy on `angular.element` if you are using Jasmine version 1.x. See
+ * https://github.com/angular/angular.js/issues/14251 for more information.
+ *
  * @param {string|DOMElement} element HTML string or DOMElement to be wrapped into jQuery.
  * @returns {Object} jQuery object.
  */
@@ -2830,7 +2869,7 @@ function jqLiteBuildFragment(html, context) {
 }
 
 function jqLiteParseHTML(html, context) {
-  context = context || document;
+  context = context || window.document;
   var parsed;
 
   if ((parsed = SINGLE_TAG_REGEXP.exec(html))) {
@@ -2856,7 +2895,7 @@ function jqLiteWrapNode(node, wrapper) {
 
 
 // IE9-11 has no method "contains" in SVG element and in Node.prototype. Bug #10259.
-var jqLiteContains = Node.prototype.contains || function(arg) {
+var jqLiteContains = window.Node.prototype.contains || function(arg) {
   // jshint bitwise: false
   return !!(this.compareDocumentPosition(arg) & 16);
   // jshint bitwise: true
@@ -3128,8 +3167,8 @@ var JQLitePrototype = JQLite.prototype = {
     }
 
     // check if document is already loaded
-    if (document.readyState === 'complete') {
-      setTimeout(trigger);
+    if (window.document.readyState === 'complete') {
+      window.setTimeout(trigger);
     } else {
       this.on('DOMContentLoaded', trigger); // works for modern browsers and IE9
       // we can not use jqLite since we are not done loading and jQuery could be loaded later.
@@ -3819,6 +3858,7 @@ var $$HashMapProvider = [function() {
 /**
  * @ngdoc module
  * @name auto
+ * @installation
  * @description
  *
  * Implicit module which gets automatically added to each {@link auto.$injector $injector}.
@@ -3832,7 +3872,7 @@ var STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
 var $injectorMinErr = minErr('$injector');
 
 function extractArgs(fn) {
-  var fnText = fn.toString().replace(STRIP_COMMENTS, ''),
+  var fnText = Function.prototype.toString.call(fn).replace(STRIP_COMMENTS, ''),
       args = fnText.match(ARROW_ARG) || fnText.match(FN_ARGS);
   return args;
 }
@@ -5252,6 +5292,9 @@ var $AnimateProvider = ['$provide', function($provide) {
        * // remove all the animation event listeners listening for `enter`
        * $animate.off('enter');
        *
+       * // remove listeners for all animation events from the container element
+       * $animate.off(container);
+       *
        * // remove all the animation event listeners listening for `enter` on the given element and its children
        * $animate.off('enter', container);
        *
@@ -5260,7 +5303,9 @@ var $AnimateProvider = ['$provide', function($provide) {
        * $animate.off('enter', container, callback);
        * ```
        *
-       * @param {string} event the animation event (e.g. enter, leave, move, addClass, removeClass, etc...)
+       * @param {string|DOMElement} event|container the animation event (e.g. enter, leave, move,
+       * addClass, removeClass, etc...), or the container element. If it is the element, all other
+       * arguments are ignored.
        * @param {DOMElement=} container the container element the event listener was placed on
        * @param {Function=} callback the callback function that was registered as the listener
        */
@@ -6833,8 +6878,8 @@ function $TemplateCacheProvider() {
  *   this element). This is a good place to put initialization code for your controller.
  * * `$onChanges(changesObj)` - Called whenever one-way (`<`) or interpolation (`@`) bindings are updated. The
  *   `changesObj` is a hash whose keys are the names of the bound properties that have changed, and the values are an
- *   object of the form `{ currentValue: ..., previousValue: ... }`. Use this hook to trigger updates within a component
- *   such as cloning the bound value to prevent accidental mutation of the outer value.
+ *   object of the form `{ currentValue, previousValue, isFirstChange() }`. Use this hook to trigger updates within a
+ *   component such as cloning the bound value to prevent accidental mutation of the outer value.
  * * `$onDestroy()` - Called on a controller when its containing scope is destroyed. Use this hook for releasing
  *   external resources, watches and event handlers. Note that components have their `$onDestroy()` hooks called in
  *   the same order as the `$scope.$broadcast` events are triggered, which is top down. This means that parent
@@ -7381,6 +7426,9 @@ function $TemplateCacheProvider() {
 
 var $compileMinErr = minErr('$compile');
 
+function UNINITIALIZED_VALUE() {}
+var _UNINITIALIZED_VALUE = new UNINITIALIZED_VALUE();
+
 /**
  * @ngdoc provider
  * @name $compileProvider
@@ -7405,7 +7453,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
   function parseIsolateBindings(scope, directiveName, isController) {
     var LOCAL_REGEXP = /^\s*([@&<]|=(\*?))(\??)\s*(\w*)\s*$/;
 
-    var bindings = {};
+    var bindings = createMap();
 
     forEach(scope, function(definition, scopeName) {
       if (definition in bindingCache) {
@@ -7579,6 +7627,9 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
    *      See {@link ng.$compile#-bindtocontroller- `bindToController`}.
    *    - `transclude` – `{boolean=}` – whether {@link $compile#transclusion content transclusion} is enabled.
    *      Disabled by default.
+   *    - `require` - `{Object<string, string>=}` - requires the controllers of other directives and binds them to
+   *      this component's controller. The object keys specify the property names under which the required
+   *      controllers (object values) will be bound. See {@link ng.$compile#-require- `require`}.
    *    - `$...` – additional properties to attach to the directive factory function and the controller
    *      constructor function. (This is used by the component router to annotate)
    *
@@ -7624,7 +7675,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
    * See also {@link ng.$compileProvider#directive $compileProvider.directive()}.
    */
   this.component = function registerComponent(name, options) {
-    var controller = options.controller || noop;
+    var controller = options.controller || function() {};
 
     function factory($injector) {
       function makeInjectable(fn) {
@@ -7638,7 +7689,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
       }
 
       var template = (!options.template && !options.templateUrl ? '' : options.template);
-      return {
+      var ddo = {
         controller: controller,
         controllerAs: identifierForController(options.controller) || options.controllerAs || '$ctrl',
         template: makeInjectable(template),
@@ -7649,14 +7700,27 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
         restrict: 'E',
         require: options.require
       };
+
+      // Copy annotations (starting with $) over to the DDO
+      forEach(options, function(val, key) {
+        if (key.charAt(0) === '$') ddo[key] = val;
+      });
+
+      return ddo;
     }
 
-    // Copy any annotation properties (starting with $) over to the factory function
+    // TODO(pete) remove the following `forEach` before we release 1.6.0
+    // The component-router@0.2.0 looks for the annotations on the controller constructor
+    // Nothing in Angular looks for annotations on the factory function but we can't remove
+    // it from 1.5.x yet.
+
+    // Copy any annotation properties (starting with $) over to the factory and controller constructor functions
     // These could be used by libraries such as the new component router
     forEach(options, function(val, key) {
       if (key.charAt(0) === '$') {
         factory[key] = val;
-        controller[key] = val;
+        // Don't try to copy over annotations to named controller
+        if (isFunction(controller)) controller[key] = val;
       }
     });
 
@@ -7793,7 +7857,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
              $controller,   $rootScope,   $sce,   $animate,   $$sanitizeUri) {
 
     var SIMPLE_ATTR_NAME = /^\w/;
-    var specialAttrHolder = document.createElement('div');
+    var specialAttrHolder = window.document.createElement('div');
 
 
 
@@ -8124,7 +8188,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
       if (debugInfoEnabled) {
         content = ' ' + (directiveName || '') + ': ' + (comment || '') + ' ';
       }
-      return document.createComment(content);
+      return window.document.createComment(content);
     };
 
     return compile;
@@ -8147,7 +8211,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
         var domNode = $compileNodes[i];
 
         if (domNode.nodeType === NODE_TYPE_TEXT && domNode.nodeValue.match(NOT_EMPTY) /* non-empty */) {
-          jqLiteWrapNode(domNode, $compileNodes[i] = document.createElement('span'));
+          jqLiteWrapNode(domNode, $compileNodes[i] = window.document.createElement('span'));
         }
       }
 
@@ -8840,7 +8904,9 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
             replaceDirective = directive;
           }
 
+          /* jshint -W021 */
           nodeLinkFn = compileTemplateUrl(directives.splice(i, directives.length - i), $compileNode,
+          /* jshint +W021 */
               templateAttrs, jqCollection, hasTranscludeDirective && childTranscludeFn, preLinkFns, postLinkFns, {
                 controllerDirectives: controllerDirectives,
                 newScopeDirective: (newScopeDirective !== directive) && newScopeDirective,
@@ -8904,7 +8970,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
 
       function nodeLinkFn(childLinkFn, scope, linkNode, $rootElement, boundTranscludeFn) {
         var i, ii, linkFn, isolateScope, controllerScope, elementControllers, transcludeFn, $element,
-            attrs, removeScopeBindingWatches, removeControllerBindingWatches;
+            attrs, scopeBindingInfo;
 
         if (compileNode === linkNode) {
           attrs = templateAttrs;
@@ -8943,11 +9009,11 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
           compile.$$addScopeClass($element, true);
           isolateScope.$$isolateBindings =
               newIsolateScopeDirective.$$isolateBindings;
-          removeScopeBindingWatches = initializeDirectiveBindings(scope, attrs, isolateScope,
+          scopeBindingInfo = initializeDirectiveBindings(scope, attrs, isolateScope,
                                         isolateScope.$$isolateBindings,
                                         newIsolateScopeDirective);
-          if (removeScopeBindingWatches) {
-            isolateScope.$on('$destroy', removeScopeBindingWatches);
+          if (scopeBindingInfo.removeWatches) {
+            isolateScope.$on('$destroy', scopeBindingInfo.removeWatches);
           }
         }
 
@@ -8958,8 +9024,10 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
           var bindings = controllerDirective.$$bindings.bindToController;
 
           if (controller.identifier && bindings) {
-            removeControllerBindingWatches =
+            controller.bindingInfo =
               initializeDirectiveBindings(controllerScope, attrs, controller.instance, bindings, controllerDirective);
+          } else {
+            controller.bindingInfo = {};
           }
 
           var controllerResult = controller();
@@ -8968,8 +9036,8 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
             // from setupControllers
             controller.instance = controllerResult;
             $element.data('$' + controllerDirective.name + 'Controller', controllerResult);
-            removeControllerBindingWatches && removeControllerBindingWatches();
-            removeControllerBindingWatches =
+            controller.bindingInfo.removeWatches && controller.bindingInfo.removeWatches();
+            controller.bindingInfo =
               initializeDirectiveBindings(controllerScope, attrs, controller.instance, bindings, controllerDirective);
           }
         }
@@ -8985,6 +9053,9 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
         // Handle the init and destroy lifecycle hooks on all controllers that have them
         forEach(elementControllers, function(controller) {
           var controllerInstance = controller.instance;
+          if (isFunction(controllerInstance.$onChanges)) {
+            controllerInstance.$onChanges(controller.bindingInfo.initialChanges);
+          }
           if (isFunction(controllerInstance.$onInit)) {
             controllerInstance.$onInit();
           }
@@ -9441,7 +9512,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
       switch (type) {
       case 'svg':
       case 'math':
-        var wrapper = document.createElement('div');
+        var wrapper = window.document.createElement('div');
         wrapper.innerHTML = '<' + type + '>' + template + '</' + type + '>';
         return wrapper.childNodes[0].childNodes;
       default:
@@ -9585,7 +9656,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
       // - remove them from the DOM
       // - allow them to still be traversed with .nextSibling
       // - allow a single fragment.qSA to fetch all elements being removed
-      var fragment = document.createDocumentFragment();
+      var fragment = window.document.createDocumentFragment();
       for (i = 0; i < removeCount; i++) {
         fragment.appendChild(elementsToRemove[i]);
       }
@@ -9631,6 +9702,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
     // only occurs for isolate scopes and new scopes with controllerAs.
     function initializeDirectiveBindings(scope, attrs, destination, bindings, directive) {
       var removeWatchCollection = [];
+      var initialChanges = {};
       var changes;
       forEach(bindings, function initializeBinding(definition, scopeName) {
         var attrName = definition.attrName,
@@ -9646,7 +9718,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
               destination[scopeName] = attrs[attrName] = void 0;
             }
             attrs.$observe(attrName, function(value) {
-              if (isString(value)) {
+              if (isString(value) || isBoolean(value)) {
                 var oldValue = destination[scopeName];
                 recordChanges(scopeName, value, oldValue);
                 destination[scopeName] = value;
@@ -9663,6 +9735,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
               // the value to boolean rather than a string, so we special case this situation
               destination[scopeName] = lastValue;
             }
+            initialChanges[scopeName] = new SimpleChange(_UNINITIALIZED_VALUE, destination[scopeName]);
             break;
 
           case '=':
@@ -9718,11 +9791,16 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
             parentGet = $parse(attrs[attrName]);
 
             destination[scopeName] = parentGet(scope);
+            initialChanges[scopeName] = new SimpleChange(_UNINITIALIZED_VALUE, destination[scopeName]);
 
-            removeWatch = scope.$watch(parentGet, function parentValueWatchAction(newParentValue) {
-              var oldValue = destination[scopeName];
-              recordChanges(scopeName, newParentValue, oldValue);
-              destination[scopeName] = newParentValue;
+            removeWatch = scope.$watch(parentGet, function parentValueWatchAction(newValue, oldValue) {
+              if (newValue === oldValue) {
+                // If the new and old values are identical then this is the first time the watch has been triggered
+                // So instead we use the current value on the destination as the old value
+                oldValue = destination[scopeName];
+              }
+              recordChanges(scopeName, newValue, oldValue);
+              destination[scopeName] = newValue;
             }, parentGet.literal);
 
             removeWatchCollection.push(removeWatch);
@@ -9759,7 +9837,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
             previousValue = changes[key].previousValue;
           }
           // Store this change
-          changes[key] = {previousValue: previousValue, currentValue: currentValue};
+          changes[key] = new SimpleChange(previousValue, currentValue);
         }
       }
 
@@ -9769,14 +9847,24 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
         changes = undefined;
       }
 
-      return removeWatchCollection.length && function removeWatches() {
-        for (var i = 0, ii = removeWatchCollection.length; i < ii; ++i) {
-          removeWatchCollection[i]();
+      return {
+        initialChanges: initialChanges,
+        removeWatches: removeWatchCollection.length && function removeWatches() {
+          for (var i = 0, ii = removeWatchCollection.length; i < ii; ++i) {
+            removeWatchCollection[i]();
+          }
         }
       };
     }
   }];
 }
+
+function SimpleChange(previous, current) {
+  this.previousValue = previous;
+  this.currentValue = current;
+}
+SimpleChange.prototype.isFirstChange = function() { return this.previousValue === _UNINITIALIZED_VALUE; };
+
 
 var PREFIX_REGEXP = /^((?:x|data)[\:\-_])/i;
 /**
@@ -10717,7 +10805,7 @@ function $HttpProvider() {
      * That means changes to the properties of `data` are not local to the transform function (since Javascript passes objects by reference).
      * For example, when calling `$http.get(url, $scope.myObject)`, modifications to the object's properties in a transformRequest
      * function will be reflected on the scope and in any templates where the object is data-bound.
-     * To prevent his, transform functions should have no side-effects.
+     * To prevent this, transform functions should have no side-effects.
      * If you need to modify properties, it is recommended to make a copy of the data, or create new object to return.
      * </div>
      *
@@ -10963,6 +11051,12 @@ function $HttpProvider() {
      *    - **headers** – `{Object}` – Map of strings or functions which return strings representing
      *      HTTP headers to send to the server. If the return value of a function is null, the
      *      header will not be sent. Functions accept a config object as an argument.
+     *    - **eventHandlers** - `{Object}` - Event listeners to be bound to the XMLHttpRequest object.
+     *      To bind events to the XMLHttpRequest upload object, use `uploadEventHandlers`.
+     *      The handler will be called in the context of a `$apply` block.
+     *    - **uploadEventHandlers** - `{Object}` - Event listeners to be bound to the XMLHttpRequest upload
+     *      object. To bind events to the XMLHttpRequest object, use `eventHandlers`.
+     *      The handler will be called in the context of a `$apply` block.
      *    - **xsrfHeaderName** – `{string}` – Name of HTTP header to populate with the XSRF token.
      *    - **xsrfCookieName** – `{string}` – Name of cookie containing the XSRF token.
      *    - **transformRequest** –
@@ -11421,10 +11515,34 @@ function $HttpProvider() {
         }
 
         $httpBackend(config.method, url, reqData, done, reqHeaders, config.timeout,
-            config.withCredentials, config.responseType);
+            config.withCredentials, config.responseType,
+            createApplyHandlers(config.eventHandlers),
+            createApplyHandlers(config.uploadEventHandlers));
       }
 
       return promise;
+
+      function createApplyHandlers(eventHandlers) {
+        if (eventHandlers) {
+          var applyHandlers = {};
+          forEach(eventHandlers, function(eventHandler, key) {
+            applyHandlers[key] = function(event) {
+              if (useApplyAsync) {
+                $rootScope.$applyAsync(callEventHandler);
+              } else if ($rootScope.$$phase) {
+                callEventHandler();
+              } else {
+                $rootScope.$apply(callEventHandler);
+              }
+
+              function callEventHandler() {
+                eventHandler(event);
+              }
+            };
+          });
+          return applyHandlers;
+        }
+      }
 
 
       /**
@@ -11546,7 +11664,7 @@ function $HttpBackendProvider() {
 
 function createHttpBackend($browser, createXhr, $browserDefer, callbacks, rawDocument) {
   // TODO(vojta): fix the signature
-  return function(method, url, post, callback, headers, timeout, withCredentials, responseType) {
+  return function(method, url, post, callback, headers, timeout, withCredentials, responseType, eventHandlers, uploadEventHandlers) {
     $browser.$$incOutstandingRequestCount();
     url = url || $browser.url();
 
@@ -11605,6 +11723,14 @@ function createHttpBackend($browser, createXhr, $browserDefer, callbacks, rawDoc
 
       xhr.onerror = requestError;
       xhr.onabort = requestError;
+
+      forEach(eventHandlers, function(value, key) {
+          xhr.addEventListener(key, value);
+      });
+
+      forEach(uploadEventHandlers, function(value, key) {
+        xhr.upload.addEventListener(key, value);
+      });
 
       if (withCredentials) {
         xhr.withCredentials = true;
@@ -13584,7 +13710,7 @@ Lexer.prototype = {
         this.readString(ch);
       } else if (this.isNumber(ch) || ch === '.' && this.isNumber(this.peek())) {
         this.readNumber();
-      } else if (this.isIdent(ch)) {
+      } else if (this.isIdentifierStart(this.peekMultichar())) {
         this.readIdent();
       } else if (this.is(ch, '(){}[].,;:?')) {
         this.tokens.push({index: this.index, text: ch});
@@ -13628,10 +13754,47 @@ Lexer.prototype = {
             ch === '\n' || ch === '\v' || ch === '\u00A0');
   },
 
-  isIdent: function(ch) {
+  isIdentifierStart: function(ch) {
+    return this.options.isIdentifierStart ?
+        this.options.isIdentifierStart(ch, this.codePointAt(ch)) :
+        this.isValidIdentifierStart(ch);
+  },
+
+  isValidIdentifierStart: function(ch) {
     return ('a' <= ch && ch <= 'z' ||
             'A' <= ch && ch <= 'Z' ||
             '_' === ch || ch === '$');
+  },
+
+  isIdentifierContinue: function(ch) {
+    return this.options.isIdentifierContinue ?
+        this.options.isIdentifierContinue(ch, this.codePointAt(ch)) :
+        this.isValidIdentifierContinue(ch);
+  },
+
+  isValidIdentifierContinue: function(ch, cp) {
+    return this.isValidIdentifierStart(ch, cp) || this.isNumber(ch);
+  },
+
+  codePointAt: function(ch) {
+    if (ch.length === 1) return ch.charCodeAt(0);
+    /*jshint bitwise: false*/
+    return (ch.charCodeAt(0) << 10) + ch.charCodeAt(1) - 0x35FDC00;
+    /*jshint bitwise: true*/
+  },
+
+  peekMultichar: function() {
+    var ch = this.text.charAt(this.index);
+    var peek = this.peek();
+    if (!peek) {
+      return ch;
+    }
+    var cp1 = ch.charCodeAt(0);
+    var cp2 = peek.charCodeAt(0);
+    if (cp1 >= 0xD800 && cp1 <= 0xDBFF && cp2 >= 0xDC00 && cp2 <= 0xDFFF) {
+      return ch + peek;
+    }
+    return ch;
   },
 
   isExpOperator: function(ch) {
@@ -13682,12 +13845,13 @@ Lexer.prototype = {
 
   readIdent: function() {
     var start = this.index;
+    this.index += this.peekMultichar().length;
     while (this.index < this.text.length) {
-      var ch = this.text.charAt(this.index);
-      if (!(this.isIdent(ch) || this.isNumber(ch))) {
+      var ch = this.peekMultichar();
+      if (!this.isIdentifierContinue(ch)) {
         break;
       }
-      this.index++;
+      this.index += ch.length;
     }
     this.tokens.push({
       index: start,
@@ -14617,7 +14781,13 @@ ASTCompiler.prototype = {
   },
 
   nonComputedMember: function(left, right) {
-    return left + '.' + right;
+    var SAFE_IDENTIFIER = /[$_a-zA-Z][$_a-zA-Z0-9]*/;
+    var UNSAFE_CHARACTERS = /[^$_a-zA-Z0-9]/g;
+    if (SAFE_IDENTIFIER.test(right)) {
+      return left + '.' + right;
+    } else {
+      return left  + '["' + right.replace(UNSAFE_CHARACTERS, this.stringEscapeFn) + '"]';
+    }
   },
 
   computedMember: function(left, right) {
@@ -15180,6 +15350,7 @@ function $ParseProvider() {
     'null': null,
     'undefined': undefined
   };
+  var identStart, identContinue;
 
   /**
    * @ngdoc method
@@ -15196,17 +15367,50 @@ function $ParseProvider() {
     literals[literalName] = literalValue;
   };
 
+ /**
+  * @ngdoc method
+  * @name $parseProvider#setIdentifierFns
+  * @description
+  *
+  * Allows defining the set of characters that are allowed in Angular expressions. The function
+  * `identifierStart` will get called to know if a given character is a valid character to be the
+  * first character for an identifier. The function `identifierContinue` will get called to know if
+  * a given character is a valid character to be a follow-up identifier character. The functions
+  * `identifierStart` and `identifierContinue` will receive as arguments the single character to be
+  * identifier and the character code point. These arguments will be `string` and `numeric`. Keep in
+  * mind that the `string` parameter can be two characters long depending on the character
+  * representation. It is expected for the function to return `true` or `false`, whether that
+  * character is allowed or not.
+  *
+  * Since this function will be called extensivelly, keep the implementation of these functions fast,
+  * as the performance of these functions have a direct impact on the expressions parsing speed.
+  *
+  * @param {function=} identifierStart The function that will decide whether the given character is
+  *   a valid identifier start character.
+  * @param {function=} identifierContinue The function that will decide whether the given character is
+  *   a valid identifier continue character.
+  */
+  this.setIdentifierFns = function(identifierStart, identifierContinue) {
+    identStart = identifierStart;
+    identContinue = identifierContinue;
+    return this;
+  };
+
   this.$get = ['$filter', function($filter) {
     var noUnsafeEval = csp().noUnsafeEval;
     var $parseOptions = {
           csp: noUnsafeEval,
           expensiveChecks: false,
-          literals: copy(literals)
+          literals: copy(literals),
+          isIdentifierStart: isFunction(identStart) && identStart,
+          isIdentifierContinue: isFunction(identContinue) && identContinue
         },
         $parseOptionsExpensive = {
           csp: noUnsafeEval,
           expensiveChecks: true,
-          literals: copy(literals)
+          literals: copy(literals),
+          isIdentifierStart: isFunction(identStart) && identStart,
+          isIdentifierContinue: isFunction(identContinue) && identContinue
         };
     var runningChecksEnabled = false;
 
@@ -19001,7 +19205,7 @@ function $TimeoutProvider() {
 // doesn't know about mocked locations and resolves URLs to the real document - which is
 // exactly the behavior needed here.  There is little value is mocking these out for this
 // service.
-var urlParsingNode = document.createElement("a");
+var urlParsingNode = window.document.createElement("a");
 var originUrl = urlResolve(window.location.href);
 
 
@@ -19701,7 +19905,9 @@ function currencyFilter($locale) {
  * @param {(number|string)=} fractionSize Number of decimal places to round the number to.
  * If this is not provided then the fraction size is computed from the current locale's number
  * formatting pattern. In the case of the default locale, it will be 3.
- * @returns {string} Number rounded to fractionSize and places a “,” after each third digit.
+ * @returns {string} Number rounded to `fractionSize` appropriately formatted based on the current
+ *                   locale (e.g., in the en_US locale it will have "." as the decimal separator and
+ *                   include "," group separators after each third digit).
  *
  * @example
    <example module="numberFilterExample">
@@ -23930,7 +24136,11 @@ function classDirective(name, selector) {
               updateClasses(oldClasses, newClasses);
             }
           }
-          oldVal = shallowCopy(newVal);
+          if (isArray(newVal)) {
+            oldVal = newVal.map(function(v) { return shallowCopy(v); });
+          } else {
+            oldVal = shallowCopy(newVal);
+          }
         }
       }
     };
@@ -25646,7 +25856,7 @@ var ngIncludeFillContentDirective = ['$compile',
           // support innerHTML, so detect this here and try to generate the contents
           // specially.
           $element.empty();
-          $compile(jqLiteBuildFragment(ctrl.template, document).childNodes)(scope,
+          $compile(jqLiteBuildFragment(ctrl.template, window.document).childNodes)(scope,
               function namespaceAdaptedClone(clone) {
             $element.append(clone);
           }, {futureParentElement: $element});
@@ -27560,7 +27770,7 @@ var NG_OPTIONS_REGEXP = /^\s*([\s\S]+?)(?:\s+as\s+([\s\S]+?))?(?:\s+group\s+by\s
 // jshint maxlen: 100
 
 
-var ngOptionsDirective = ['$compile', '$parse', function($compile, $parse) {
+var ngOptionsDirective = ['$compile', '$document', '$parse', function($compile, $document, $parse) {
 
   function parseOptionsExpression(optionsExp, selectElement, scope) {
 
@@ -27721,8 +27931,8 @@ var ngOptionsDirective = ['$compile', '$parse', function($compile, $parse) {
 
   // we can't just jqLite('<option>') since jqLite is not smart enough
   // to create it in <select> and IE barfs otherwise.
-  var optionTemplate = document.createElement('option'),
-      optGroupTemplate = document.createElement('optgroup');
+  var optionTemplate = window.document.createElement('option'),
+      optGroupTemplate = window.document.createElement('optgroup');
 
     function ngOptionsPostLink(scope, selectElement, attr, ctrls) {
 
@@ -27747,7 +27957,10 @@ var ngOptionsDirective = ['$compile', '$parse', function($compile, $parse) {
 
       var options;
       var ngOptions = parseOptionsExpression(attr.ngOptions, selectElement, scope);
-
+      // This stores the newly created options before they are appended to the select.
+      // Since the contents are removed from the fragment when it is appended,
+      // we only need to create it once.
+      var listFragment = $document[0].createDocumentFragment();
 
       var renderEmptyOption = function() {
         if (!providedEmptyOption) {
@@ -27782,7 +27995,7 @@ var ngOptionsDirective = ['$compile', '$parse', function($compile, $parse) {
         selectCtrl.writeValue = function writeNgOptionsValue(value) {
           var option = options.getOptionFromViewValue(value);
 
-          if (option && !option.disabled) {
+          if (option) {
             // Don't update the option when it is already selected.
             // For example, the browser will select the first option by default. In that case,
             // most properties are set automatically - except the `selected` attribute, which we
@@ -27844,7 +28057,7 @@ var ngOptionsDirective = ['$compile', '$parse', function($compile, $parse) {
           if (value) {
             value.forEach(function(item) {
               var option = options.getOptionFromViewValue(item);
-              if (option && !option.disabled) option.element.selected = true;
+              if (option) option.element.selected = true;
             });
           }
         };
@@ -27896,6 +28109,8 @@ var ngOptionsDirective = ['$compile', '$parse', function($compile, $parse) {
         emptyOption = jqLite(optionTemplate.cloneNode(false));
       }
 
+      selectElement.empty();
+
       // We need to do this here to ensure that the options object is defined
       // when we first hit it in writeNgOptionsValue
       updateOptions();
@@ -27904,6 +28119,12 @@ var ngOptionsDirective = ['$compile', '$parse', function($compile, $parse) {
       scope.$watchCollection(ngOptions.getWatchables, updateOptions);
 
       // ------------------------------------------------------------------ //
+
+      function addOptionElement(option, parent) {
+        var optionElement = optionTemplate.cloneNode(false);
+        parent.appendChild(optionElement);
+        updateOptionElement(option, optionElement);
+      }
 
 
       function updateOptionElement(option, element) {
@@ -27921,133 +28142,66 @@ var ngOptionsDirective = ['$compile', '$parse', function($compile, $parse) {
         if (option.value !== element.value) element.value = option.selectValue;
       }
 
-      function addOrReuseElement(parent, current, type, templateElement) {
-        var element;
-        // Check whether we can reuse the next element
-        if (current && lowercase(current.nodeName) === type) {
-          // The next element is the right type so reuse it
-          element = current;
-        } else {
-          // The next element is not the right type so create a new one
-          element = templateElement.cloneNode(false);
-          if (!current) {
-            // There are no more elements so just append it to the select
-            parent.appendChild(element);
-          } else {
-            // The next element is not a group so insert the new one
-            parent.insertBefore(element, current);
-          }
-        }
-        return element;
-      }
-
-
-      function removeExcessElements(current) {
-        var next;
-        while (current) {
-          next = current.nextSibling;
-          jqLiteRemove(current);
-          current = next;
-        }
-      }
-
-
-      function skipEmptyAndUnknownOptions(current) {
-        var emptyOption_ = emptyOption && emptyOption[0];
-        var unknownOption_ = unknownOption && unknownOption[0];
-
-        // We cannot rely on the extracted empty option being the same as the compiled empty option,
-        // because the compiled empty option might have been replaced by a comment because
-        // it had an "element" transclusion directive on it (such as ngIf)
-        if (emptyOption_ || unknownOption_) {
-          while (current &&
-                (current === emptyOption_ ||
-                current === unknownOption_ ||
-                current.nodeType === NODE_TYPE_COMMENT ||
-                (nodeName_(current) === 'option' && current.value === ''))) {
-            current = current.nextSibling;
-          }
-        }
-        return current;
-      }
-
-
       function updateOptions() {
-
         var previousValue = options && selectCtrl.readValue();
+
+        // We must remove all current options, but cannot simply set innerHTML = null
+        // since the providedEmptyOption might have an ngIf on it that inserts comments which we
+        // must preserve.
+        // Instead, iterate over the current option elements and remove them or their optgroup
+        // parents
+        if (options) {
+
+          for (var i = options.items.length - 1; i >= 0; i--) {
+            var option = options.items[i];
+            if (option.group) {
+              jqLiteRemove(option.element.parentNode);
+            } else {
+              jqLiteRemove(option.element);
+            }
+          }
+        }
 
         options = ngOptions.getOptions();
 
-        var groupMap = {};
-        var currentElement = selectElement[0].firstChild;
+        var groupElementMap = {};
 
         // Ensure that the empty option is always there if it was explicitly provided
         if (providedEmptyOption) {
           selectElement.prepend(emptyOption);
         }
 
-        currentElement = skipEmptyAndUnknownOptions(currentElement);
-
-        options.items.forEach(function updateOption(option) {
-          var group;
+        options.items.forEach(function addOption(option) {
           var groupElement;
-          var optionElement;
 
           if (isDefined(option.group)) {
 
             // This option is to live in a group
             // See if we have already created this group
-            group = groupMap[option.group];
+            groupElement = groupElementMap[option.group];
 
-            if (!group) {
+            if (!groupElement) {
 
-              // We have not already created this group
-              groupElement = addOrReuseElement(selectElement[0],
-                                               currentElement,
-                                               'optgroup',
-                                               optGroupTemplate);
-              // Move to the next element
-              currentElement = groupElement.nextSibling;
+              groupElement = optGroupTemplate.cloneNode(false);
+              listFragment.appendChild(groupElement);
 
               // Update the label on the group element
               groupElement.label = option.group;
 
               // Store it for use later
-              group = groupMap[option.group] = {
-                groupElement: groupElement,
-                currentOptionElement: groupElement.firstChild
-              };
-
+              groupElementMap[option.group] = groupElement;
             }
 
-            // So now we have a group for this option we add the option to the group
-            optionElement = addOrReuseElement(group.groupElement,
-                                              group.currentOptionElement,
-                                              'option',
-                                              optionTemplate);
-            updateOptionElement(option, optionElement);
-            // Move to the next element
-            group.currentOptionElement = optionElement.nextSibling;
+            addOptionElement(option, groupElement);
 
           } else {
 
             // This option is not in a group
-            optionElement = addOrReuseElement(selectElement[0],
-                                              currentElement,
-                                              'option',
-                                              optionTemplate);
-            updateOptionElement(option, optionElement);
-            // Move to the next element
-            currentElement = optionElement.nextSibling;
+            addOptionElement(option, listFragment);
           }
         });
 
-
-        // Now remove all excess options and group
-        Object.keys(groupMap).forEach(function(key) {
-          removeExcessElements(groupMap[key].currentOptionElement);
-        });
-        removeExcessElements(currentElement);
+        selectElement[0].appendChild(listFragment);
 
         ngModelCtrl.$render();
 
@@ -29742,7 +29896,7 @@ var SelectController =
   //
   // We can't just jqLite('<option>') since jqLite is not smart enough
   // to create it in <select> and IE barfs otherwise.
-  self.unknownOption = jqLite(document.createElement('option'));
+  self.unknownOption = jqLite(window.document.createElement('option'));
   self.renderUnknownOption = function(val) {
     var unknownVal = '? ' + hashKey(val) + ' ?';
     self.unknownOption.val(unknownVal);
@@ -30705,16 +30859,16 @@ $provide.value("$locale", {
 });
 }]);
 
-  jqLite(document).ready(function() {
-    angularInit(document, bootstrap);
+  jqLite(window.document).ready(function() {
+    angularInit(window.document, bootstrap);
   });
 
-})(window, document);
+})(window);
 
 !window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
 /**
  * @license
- * lodash 4.11.1 <https://lodash.com/>
+ * lodash 4.11.2 <https://lodash.com/>
  * Copyright jQuery Foundation and other contributors <https://jquery.org/>
  * Released under MIT license <https://lodash.com/license>
  * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
@@ -30726,7 +30880,7 @@ $provide.value("$locale", {
   var undefined;
 
   /** Used as the semantic version number. */
-  var VERSION = '4.11.1';
+  var VERSION = '4.11.2';
 
   /** Used as the size to enable large array optimizations. */
   var LARGE_ARRAY_SIZE = 200;
@@ -30894,11 +31048,11 @@ $provide.value("$locale", {
       rsLowerRange = 'a-z\\xdf-\\xf6\\xf8-\\xff',
       rsMathOpRange = '\\xac\\xb1\\xd7\\xf7',
       rsNonCharRange = '\\x00-\\x2f\\x3a-\\x40\\x5b-\\x60\\x7b-\\xbf',
-      rsQuoteRange = '\\u2018\\u2019\\u201c\\u201d',
+      rsPunctuationRange = '\\u2000-\\u206f',
       rsSpaceRange = ' \\t\\x0b\\f\\xa0\\ufeff\\n\\r\\u2028\\u2029\\u1680\\u180e\\u2000\\u2001\\u2002\\u2003\\u2004\\u2005\\u2006\\u2007\\u2008\\u2009\\u200a\\u202f\\u205f\\u3000',
       rsUpperRange = 'A-Z\\xc0-\\xd6\\xd8-\\xde',
       rsVarRange = '\\ufe0e\\ufe0f',
-      rsBreakRange = rsMathOpRange + rsNonCharRange + rsQuoteRange + rsSpaceRange;
+      rsBreakRange = rsMathOpRange + rsNonCharRange + rsPunctuationRange + rsSpaceRange;
 
   /** Used to compose unicode capture groups. */
   var rsApos = "['\u2019]",
@@ -31425,35 +31579,6 @@ $provide.value("$locale", {
   }
 
   /**
-   * The base implementation of methods like `_.max` and `_.min` which accepts a
-   * `comparator` to determine the extremum value.
-   *
-   * @private
-   * @param {Array} array The array to iterate over.
-   * @param {Function} iteratee The iteratee invoked per iteration.
-   * @param {Function} comparator The comparator used to compare values.
-   * @returns {*} Returns the extremum value.
-   */
-  function baseExtremum(array, iteratee, comparator) {
-    var index = -1,
-        length = array.length;
-
-    while (++index < length) {
-      var value = array[index],
-          current = iteratee(value);
-
-      if (current != null && (computed === undefined
-            ? current === current
-            : comparator(current, computed)
-          )) {
-        var computed = current,
-            result = value;
-      }
-    }
-    return result;
-  }
-
-  /**
    * The base implementation of methods like `_.find` and `_.findKey`, without
    * support for iteratee shorthands, which iterates over `collection` using
    * `eachFunc`.
@@ -31732,79 +31857,6 @@ $provide.value("$locale", {
   }
 
   /**
-   * Compares values to sort them in ascending order.
-   *
-   * @private
-   * @param {*} value The value to compare.
-   * @param {*} other The other value to compare.
-   * @returns {number} Returns the sort order indicator for `value`.
-   */
-  function compareAscending(value, other) {
-    if (value !== other) {
-      var valIsNull = value === null,
-          valIsUndef = value === undefined,
-          valIsReflexive = value === value;
-
-      var othIsNull = other === null,
-          othIsUndef = other === undefined,
-          othIsReflexive = other === other;
-
-      if ((value > other && !othIsNull) || !valIsReflexive ||
-          (valIsNull && !othIsUndef && othIsReflexive) ||
-          (valIsUndef && othIsReflexive)) {
-        return 1;
-      }
-      if ((value < other && !valIsNull) || !othIsReflexive ||
-          (othIsNull && !valIsUndef && valIsReflexive) ||
-          (othIsUndef && valIsReflexive)) {
-        return -1;
-      }
-    }
-    return 0;
-  }
-
-  /**
-   * Used by `_.orderBy` to compare multiple properties of a value to another
-   * and stable sort them.
-   *
-   * If `orders` is unspecified, all values are sorted in ascending order. Otherwise,
-   * specify an order of "desc" for descending or "asc" for ascending sort order
-   * of corresponding values.
-   *
-   * @private
-   * @param {Object} object The object to compare.
-   * @param {Object} other The other object to compare.
-   * @param {boolean[]|string[]} orders The order to sort by for each property.
-   * @returns {number} Returns the sort order indicator for `object`.
-   */
-  function compareMultiple(object, other, orders) {
-    var index = -1,
-        objCriteria = object.criteria,
-        othCriteria = other.criteria,
-        length = objCriteria.length,
-        ordersLength = orders.length;
-
-    while (++index < length) {
-      var result = compareAscending(objCriteria[index], othCriteria[index]);
-      if (result) {
-        if (index >= ordersLength) {
-          return result;
-        }
-        var order = orders[index];
-        return result * (order == 'desc' ? -1 : 1);
-      }
-    }
-    // Fixes an `Array#sort` bug in the JS engine embedded in Adobe applications
-    // that causes it, under certain circumstances, to provide the same value for
-    // `object` and `other`. See https://github.com/jashkenas/underscore/pull/1247
-    // for more details.
-    //
-    // This also ensures a stable sort in V8 and other engines.
-    // See https://bugs.chromium.org/p/v8/issues/detail?id=90 for more details.
-    return object.index - other.index;
-  }
-
-  /**
    * Gets the number of `placeholder` occurrences in `array`.
    *
    * @private
@@ -31822,29 +31874,6 @@ $provide.value("$locale", {
       }
     }
     return result;
-  }
-
-  /**
-   * Creates a function that performs a mathematical operation on two values.
-   *
-   * @private
-   * @param {Function} operator The function to perform the operation.
-   * @returns {Function} Returns the new mathematical operation function.
-   */
-  function createMathOperation(operator) {
-    return function(value, other) {
-      var result;
-      if (value === undefined && other === undefined) {
-        return 0;
-      }
-      if (value !== undefined) {
-        result = value;
-      }
-      if (other !== undefined) {
-        result = result === undefined ? other : operator(result, other);
-      }
-      return result;
-    };
   }
 
   /**
@@ -31919,20 +31948,6 @@ $provide.value("$locale", {
       } catch (e) {}
     }
     return result;
-  }
-
-  /**
-   * Checks if `value` is a valid array-like index.
-   *
-   * @private
-   * @param {*} value The value to check.
-   * @param {number} [length=MAX_SAFE_INTEGER] The upper bounds of a valid index.
-   * @returns {boolean} Returns `true` if `value` is a valid index, else `false`.
-   */
-  function isIndex(value, length) {
-    value = (typeof value == 'number' || reIsUint.test(value)) ? +value : -1;
-    length = length == null ? MAX_SAFE_INTEGER : length;
-    return value > -1 && value % 1 == 0 && value < length;
   }
 
   /**
@@ -33273,6 +33288,7 @@ $provide.value("$locale", {
         var value = array[index],
             computed = iteratee ? iteratee(value) : value;
 
+        value = (comparator || value !== 0) ? value : 0;
         if (isCommon && computed === computed) {
           var valuesIndex = valuesLength;
           while (valuesIndex--) {
@@ -33324,6 +33340,35 @@ $provide.value("$locale", {
         result = !!predicate(value, index, collection);
         return result;
       });
+      return result;
+    }
+
+    /**
+     * The base implementation of methods like `_.max` and `_.min` which accepts a
+     * `comparator` to determine the extremum value.
+     *
+     * @private
+     * @param {Array} array The array to iterate over.
+     * @param {Function} iteratee The iteratee invoked per iteration.
+     * @param {Function} comparator The comparator used to compare values.
+     * @returns {*} Returns the extremum value.
+     */
+    function baseExtremum(array, iteratee, comparator) {
+      var index = -1,
+          length = array.length;
+
+      while (++index < length) {
+        var value = array[index],
+            current = iteratee(value);
+
+        if (current != null && (computed === undefined
+              ? (current === current && !isSymbol(current))
+              : comparator(current, computed)
+            )) {
+          var computed = current,
+              result = value;
+        }
+      }
       return result;
     }
 
@@ -33486,7 +33531,7 @@ $provide.value("$locale", {
           length = path.length;
 
       while (object != null && index < length) {
-        object = object[path[index++]];
+        object = object[toKey(path[index++])];
       }
       return (index && index == length) ? object : undefined;
     }
@@ -33507,6 +33552,19 @@ $provide.value("$locale", {
       return isArray(object)
         ? result
         : arrayPush(result, symbolsFunc(object));
+    }
+
+    /**
+     * The base implementation of `_.gt` which doesn't coerce arguments to numbers.
+     *
+     * @private
+     * @param {*} value The value to compare.
+     * @param {*} other The other value to compare.
+     * @returns {boolean} Returns `true` if `value` is greater than `other`,
+     *  else `false`.
+     */
+    function baseGt(value, other) {
+      return value > other;
     }
 
     /**
@@ -33589,6 +33647,7 @@ $provide.value("$locale", {
         var value = array[index],
             computed = iteratee ? iteratee(value) : value;
 
+        value = (comparator || value !== 0) ? value : 0;
         if (!(seen
               ? cacheHas(seen, computed)
               : includes(result, computed, comparator)
@@ -33646,7 +33705,7 @@ $provide.value("$locale", {
         object = parent(object, path);
         path = last(path);
       }
-      var func = object == null ? object : object[path];
+      var func = object == null ? object : object[toKey(path)];
       return func == null ? undefined : apply(func, object, args);
     }
 
@@ -33849,6 +33908,19 @@ $provide.value("$locale", {
     }
 
     /**
+     * The base implementation of `_.lt` which doesn't coerce arguments to numbers.
+     *
+     * @private
+     * @param {*} value The value to compare.
+     * @param {*} other The other value to compare.
+     * @returns {boolean} Returns `true` if `value` is less than `other`,
+     *  else `false`.
+     */
+    function baseLt(value, other) {
+      return value < other;
+    }
+
+    /**
      * The base implementation of `_.map` without support for iteratee shorthands.
      *
      * @private
@@ -33893,7 +33965,7 @@ $provide.value("$locale", {
      */
     function baseMatchesProperty(path, srcValue) {
       if (isKey(path) && isStrictComparable(srcValue)) {
-        return matchesStrictComparable(path, srcValue);
+        return matchesStrictComparable(toKey(path), srcValue);
       }
       return function(object) {
         var objValue = get(object, path);
@@ -34175,7 +34247,7 @@ $provide.value("$locale", {
 
       while (length--) {
         var index = indexes[length];
-        if (lastIndex == length || index != previous) {
+        if (length == lastIndex || index !== previous) {
           var previous = index;
           if (isIndex(index)) {
             splice.call(array, index, 1);
@@ -34185,11 +34257,11 @@ $provide.value("$locale", {
                 object = parent(array, path);
 
             if (object != null) {
-              delete object[last(path)];
+              delete object[toKey(last(path))];
             }
           }
           else {
-            delete array[index];
+            delete array[toKey(index)];
           }
         }
       }
@@ -34279,7 +34351,7 @@ $provide.value("$locale", {
           nested = object;
 
       while (nested != null && ++index < length) {
-        var key = path[index];
+        var key = toKey(path[index]);
         if (isObject(nested)) {
           var newValue = value;
           if (index != lastIndex) {
@@ -34381,7 +34453,8 @@ $provide.value("$locale", {
           var mid = (low + high) >>> 1,
               computed = array[mid];
 
-          if ((retHighest ? (computed <= value) : (computed < value)) && computed !== null) {
+          if (computed !== null && !isSymbol(computed) &&
+              (retHighest ? (computed <= value) : (computed < value))) {
             low = mid + 1;
           } else {
             high = mid;
@@ -34412,21 +34485,26 @@ $provide.value("$locale", {
           high = array ? array.length : 0,
           valIsNaN = value !== value,
           valIsNull = value === null,
-          valIsUndef = value === undefined;
+          valIsSymbol = isSymbol(value),
+          valIsUndefined = value === undefined;
 
       while (low < high) {
         var mid = nativeFloor((low + high) / 2),
             computed = iteratee(array[mid]),
-            isDef = computed !== undefined,
-            isReflexive = computed === computed;
+            othIsDefined = computed !== undefined,
+            othIsNull = computed === null,
+            othIsReflexive = computed === computed,
+            othIsSymbol = isSymbol(computed);
 
         if (valIsNaN) {
-          var setLow = isReflexive || retHighest;
+          var setLow = retHighest || othIsReflexive;
+        } else if (valIsUndefined) {
+          setLow = othIsReflexive && (retHighest || othIsDefined);
         } else if (valIsNull) {
-          setLow = isReflexive && isDef && (retHighest || computed != null);
-        } else if (valIsUndef) {
-          setLow = isReflexive && (retHighest || isDef);
-        } else if (computed == null) {
+          setLow = othIsReflexive && othIsDefined && (retHighest || !othIsNull);
+        } else if (valIsSymbol) {
+          setLow = othIsReflexive && othIsDefined && !othIsNull && (retHighest || !othIsSymbol);
+        } else if (othIsNull || othIsSymbol) {
           setLow = false;
         } else {
           setLow = retHighest ? (computed <= value) : (computed < value);
@@ -34441,44 +34519,68 @@ $provide.value("$locale", {
     }
 
     /**
-     * The base implementation of `_.sortedUniq`.
-     *
-     * @private
-     * @param {Array} array The array to inspect.
-     * @returns {Array} Returns the new duplicate free array.
-     */
-    function baseSortedUniq(array) {
-      return baseSortedUniqBy(array);
-    }
-
-    /**
-     * The base implementation of `_.sortedUniqBy` without support for iteratee
-     * shorthands.
+     * The base implementation of `_.sortedUniq` and `_.sortedUniqBy` without
+     * support for iteratee shorthands.
      *
      * @private
      * @param {Array} array The array to inspect.
      * @param {Function} [iteratee] The iteratee invoked per element.
      * @returns {Array} Returns the new duplicate free array.
      */
-    function baseSortedUniqBy(array, iteratee) {
-      var index = 0,
+    function baseSortedUniq(array, iteratee) {
+      var index = -1,
           length = array.length,
-          value = array[0],
-          computed = iteratee ? iteratee(value) : value,
-          seen = computed,
-          resIndex = 1,
-          result = [value];
+          resIndex = 0,
+          result = [];
 
       while (++index < length) {
-        value = array[index],
-        computed = iteratee ? iteratee(value) : value;
+        var value = array[index],
+            computed = iteratee ? iteratee(value) : value;
 
-        if (!eq(computed, seen)) {
-          seen = computed;
-          result[resIndex++] = value;
+        if (!index || !eq(computed, seen)) {
+          var seen = computed;
+          result[resIndex++] = value === 0 ? 0 : value;
         }
       }
       return result;
+    }
+
+    /**
+     * The base implementation of `_.toNumber` which doesn't ensure correct
+     * conversions of binary, hexadecimal, or octal string values.
+     *
+     * @private
+     * @param {*} value The value to process.
+     * @returns {number} Returns the number.
+     */
+    function baseToNumber(value) {
+      if (typeof value == 'number') {
+        return value;
+      }
+      if (isSymbol(value)) {
+        return NAN;
+      }
+      return +value;
+    }
+
+    /**
+     * The base implementation of `_.toString` which doesn't convert nullish
+     * values to empty strings.
+     *
+     * @private
+     * @param {*} value The value to process.
+     * @returns {string} Returns the string.
+     */
+    function baseToString(value) {
+      // Exit early for strings to avoid a performance hit in some environments.
+      if (typeof value == 'string') {
+        return value;
+      }
+      if (isSymbol(value)) {
+        return symbolToString ? symbolToString.call(value) : '';
+      }
+      var result = (value + '');
+      return (result == '0' && (1 / value) == -INFINITY) ? '-0' : result;
     }
 
     /**
@@ -34519,6 +34621,7 @@ $provide.value("$locale", {
         var value = array[index],
             computed = iteratee ? iteratee(value) : value;
 
+        value = (comparator || value !== 0) ? value : 0;
         if (isCommon && computed === computed) {
           var seenIndex = seen.length;
           while (seenIndex--) {
@@ -34552,8 +34655,9 @@ $provide.value("$locale", {
     function baseUnset(object, path) {
       path = isKey(path, object) ? [path] : castPath(path);
       object = parent(object, path);
-      var key = last(path);
-      return (object != null && has(object, key)) ? delete object[key] : true;
+
+      var key = toKey(last(path));
+      return !(object != null && baseHas(object, key)) || delete object[key];
     }
 
     /**
@@ -34814,6 +34918,85 @@ $provide.value("$locale", {
     function cloneTypedArray(typedArray, isDeep) {
       var buffer = isDeep ? cloneArrayBuffer(typedArray.buffer) : typedArray.buffer;
       return new typedArray.constructor(buffer, typedArray.byteOffset, typedArray.length);
+    }
+
+    /**
+     * Compares values to sort them in ascending order.
+     *
+     * @private
+     * @param {*} value The value to compare.
+     * @param {*} other The other value to compare.
+     * @returns {number} Returns the sort order indicator for `value`.
+     */
+    function compareAscending(value, other) {
+      if (value !== other) {
+        var valIsDefined = value !== undefined,
+            valIsNull = value === null,
+            valIsReflexive = value === value,
+            valIsSymbol = isSymbol(value);
+
+        var othIsDefined = other !== undefined,
+            othIsNull = other === null,
+            othIsReflexive = other === other,
+            othIsSymbol = isSymbol(other);
+
+        if ((!othIsNull && !othIsSymbol && !valIsSymbol && value > other) ||
+            (valIsSymbol && othIsDefined && othIsReflexive && !othIsNull && !othIsSymbol) ||
+            (valIsNull && othIsDefined && othIsReflexive) ||
+            (!valIsDefined && othIsReflexive) ||
+            !valIsReflexive) {
+          return 1;
+        }
+        if ((!valIsNull && !valIsSymbol && !othIsSymbol && value < other) ||
+            (othIsSymbol && valIsDefined && valIsReflexive && !valIsNull && !valIsSymbol) ||
+            (othIsNull && valIsDefined && valIsReflexive) ||
+            (!othIsDefined && valIsReflexive) ||
+            !othIsReflexive) {
+          return -1;
+        }
+      }
+      return 0;
+    }
+
+    /**
+     * Used by `_.orderBy` to compare multiple properties of a value to another
+     * and stable sort them.
+     *
+     * If `orders` is unspecified, all values are sorted in ascending order. Otherwise,
+     * specify an order of "desc" for descending or "asc" for ascending sort order
+     * of corresponding values.
+     *
+     * @private
+     * @param {Object} object The object to compare.
+     * @param {Object} other The other object to compare.
+     * @param {boolean[]|string[]} orders The order to sort by for each property.
+     * @returns {number} Returns the sort order indicator for `object`.
+     */
+    function compareMultiple(object, other, orders) {
+      var index = -1,
+          objCriteria = object.criteria,
+          othCriteria = other.criteria,
+          length = objCriteria.length,
+          ordersLength = orders.length;
+
+      while (++index < length) {
+        var result = compareAscending(objCriteria[index], othCriteria[index]);
+        if (result) {
+          if (index >= ordersLength) {
+            return result;
+          }
+          var order = orders[index];
+          return result * (order == 'desc' ? -1 : 1);
+        }
+      }
+      // Fixes an `Array#sort` bug in the JS engine embedded in Adobe applications
+      // that causes it, under certain circumstances, to provide the same value for
+      // `object` and `other`. See https://github.com/jashkenas/underscore/pull/1247
+      // for more details.
+      //
+      // This also ensures a stable sort in V8 and other engines.
+      // See https://bugs.chromium.org/p/v8/issues/detail?id=90 for more details.
+      return object.index - other.index;
     }
 
     /**
@@ -35336,6 +35519,39 @@ $provide.value("$locale", {
     }
 
     /**
+     * Creates a function that performs a mathematical operation on two values.
+     *
+     * @private
+     * @param {Function} operator The function to perform the operation.
+     * @returns {Function} Returns the new mathematical operation function.
+     */
+    function createMathOperation(operator) {
+      return function(value, other) {
+        var result;
+        if (value === undefined && other === undefined) {
+          return 0;
+        }
+        if (value !== undefined) {
+          result = value;
+        }
+        if (other !== undefined) {
+          if (result === undefined) {
+            return other;
+          }
+          if (typeof value == 'string' || typeof other == 'string') {
+            value = baseToString(value);
+            other = baseToString(other);
+          } else {
+            value = baseToNumber(value);
+            other = baseToNumber(other);
+          }
+          result = operator(value, other);
+        }
+        return result;
+      };
+    }
+
+    /**
      * Creates a function like `_.over`.
      *
      * @private
@@ -35367,7 +35583,7 @@ $provide.value("$locale", {
      * @returns {string} Returns the padding for `string`.
      */
     function createPadding(length, chars) {
-      chars = chars === undefined ? ' ' : (chars + '');
+      chars = chars === undefined ? ' ' : baseToString(chars);
 
       var charsLength = chars.length;
       if (charsLength < 2) {
@@ -35438,6 +35654,23 @@ $provide.value("$locale", {
         }
         step = step === undefined ? (start < end ? 1 : -1) : (toNumber(step) || 0);
         return baseRange(start, end, step, fromRight);
+      };
+    }
+
+    /**
+     * Creates a function that performs a relational operation on two values.
+     *
+     * @private
+     * @param {Function} operator The function to perform the operation.
+     * @returns {Function} Returns the new relational operation function.
+     */
+    function createRelationalOperation(operator) {
+      return function(value, other) {
+        if (!(typeof value == 'string' && typeof other == 'string')) {
+          value = toNumber(value);
+          other = toNumber(other);
+        }
+        return operator(value, other);
       };
     }
 
@@ -35517,7 +35750,7 @@ $provide.value("$locale", {
      * @param {Array} values The values to add to the set.
      * @returns {Object} Returns the new set.
      */
-    var createSet = !(Set && new Set([1, 2]).size === 2) ? noop : function(values) {
+    var createSet = !(Set && (1 / setToArray(new Set([,-0]))[1]) == INFINITY) ? noop : function(values) {
       return new Set(values);
     };
 
@@ -36089,7 +36322,7 @@ $provide.value("$locale", {
           length = path.length;
 
       while (++index < length) {
-        var key = path[index];
+        var key = toKey(path[index]);
         if (!(result = object != null && hasFunc(object, key))) {
           break;
         }
@@ -36225,6 +36458,21 @@ $provide.value("$locale", {
     }
 
     /**
+     * Checks if `value` is a valid array-like index.
+     *
+     * @private
+     * @param {*} value The value to check.
+     * @param {number} [length=MAX_SAFE_INTEGER] The upper bounds of a valid index.
+     * @returns {boolean} Returns `true` if `value` is a valid index, else `false`.
+     */
+    function isIndex(value, length) {
+      length = length == null ? MAX_SAFE_INTEGER : length;
+      return !!length &&
+        (typeof value == 'number' || reIsUint.test(value)) &&
+        (value > -1 && value % 1 == 0 && value < length);
+    }
+
+    /**
      * Checks if the given arguments are from an iteratee call.
      *
      * @private
@@ -36257,13 +36505,16 @@ $provide.value("$locale", {
      * @returns {boolean} Returns `true` if `value` is a property name, else `false`.
      */
     function isKey(value, object) {
+      if (isArray(value)) {
+        return false;
+      }
       var type = typeof value;
-      if (type == 'number' || type == 'symbol') {
+      if (type == 'number' || type == 'symbol' || type == 'boolean' ||
+          value == null || isSymbol(value)) {
         return true;
       }
-      return !isArray(value) &&
-        (isSymbol(value) || reIsPlainProp.test(value) || !reIsDeepProp.test(value) ||
-          (object != null && value in Object(object)));
+      return reIsPlainProp.test(value) || !reIsDeepProp.test(value) ||
+        (object != null && value in Object(object));
     }
 
     /**
@@ -36275,8 +36526,9 @@ $provide.value("$locale", {
      */
     function isKeyable(value) {
       var type = typeof value;
-      return type == 'number' || type == 'boolean' ||
-        (type == 'string' && value != '__proto__') || value == null;
+      return (type == 'string' || type == 'number' || type == 'symbol' || type == 'boolean')
+        ? (value !== '__proto__')
+        : (value === null);
     }
 
     /**
@@ -36527,8 +36779,12 @@ $provide.value("$locale", {
      * @param {*} value The value to inspect.
      * @returns {string|symbol} Returns the key.
      */
-    function toKey(key) {
-      return (typeof key == 'string' || isSymbol(key)) ? key : (key + '');
+    function toKey(value) {
+      if (typeof value == 'string' || isSymbol(value)) {
+        return value;
+      }
+      var result = (value + '');
+      return (result == '0' && (1 / value) == -INFINITY) ? '-0' : result;
     }
 
     /**
@@ -36690,6 +36946,7 @@ $provide.value("$locale", {
      * @param {Array} array The array to inspect.
      * @param {...Array} [values] The values to exclude.
      * @returns {Array} Returns the new array of filtered values.
+     * @see _.without, _.xor
      * @example
      *
      * _.difference([3, 2, 1], [4, 2]);
@@ -37551,10 +37808,15 @@ $provide.value("$locale", {
      * // => [10, 20]
      */
     var pullAt = rest(function(array, indexes) {
-      indexes = arrayMap(baseFlatten(indexes, 1), String);
+      indexes = baseFlatten(indexes, 1);
 
-      var result = baseAt(array, indexes);
-      basePullAt(array, indexes.sort(compareAscending));
+      var length = array ? array.length : 0,
+          result = baseAt(array, indexes);
+
+      basePullAt(array, arrayMap(indexes, function(index) {
+        return isIndex(index, length) ? +index : index;
+      }).sort(compareAscending));
+
       return result;
     });
 
@@ -37861,7 +38123,7 @@ $provide.value("$locale", {
      */
     function sortedUniqBy(array, iteratee) {
       return (array && array.length)
-        ? baseSortedUniqBy(array, getIteratee(iteratee))
+        ? baseSortedUniq(array, getIteratee(iteratee))
         : [];
     }
 
@@ -38271,6 +38533,7 @@ $provide.value("$locale", {
      * @param {Array} array The array to filter.
      * @param {...*} [values] The values to exclude.
      * @returns {Array} Returns the new array of filtered values.
+     * @see _.difference, _.xor
      * @example
      *
      * _.without([1, 2, 1, 3], 1, 2);
@@ -38294,6 +38557,7 @@ $provide.value("$locale", {
      * @category Array
      * @param {...Array} [arrays] The arrays to inspect.
      * @returns {Array} Returns the new array of values.
+     * @see _.difference, _.without
      * @example
      *
      * _.xor([2, 1], [4, 2]);
@@ -38883,6 +39147,7 @@ $provide.value("$locale", {
      * @param {Array|Function|Object|string} [predicate=_.identity]
      *  The function invoked per iteration.
      * @returns {Array} Returns the new filtered array.
+     * @see _.reject
      * @example
      *
      * var users = [
@@ -39078,6 +39343,7 @@ $provide.value("$locale", {
      * @param {Array|Object} collection The collection to iterate over.
      * @param {Function} [iteratee=_.identity] The function invoked per iteration.
      * @returns {Array|Object} Returns `collection`.
+     * @see _.forEachRight
      * @example
      *
      * _([1, 2]).forEach(function(value) {
@@ -39108,6 +39374,7 @@ $provide.value("$locale", {
      * @param {Array|Object} collection The collection to iterate over.
      * @param {Function} [iteratee=_.identity] The function invoked per iteration.
      * @returns {Array|Object} Returns `collection`.
+     * @see _.forEach
      * @example
      *
      * _.forEachRight([1, 2], function(value) {
@@ -39420,6 +39687,7 @@ $provide.value("$locale", {
      * @param {Function} [iteratee=_.identity] The function invoked per iteration.
      * @param {*} [accumulator] The initial value.
      * @returns {*} Returns the accumulated value.
+     * @see _.reduceRight
      * @example
      *
      * _.reduce([1, 2], function(sum, n) {
@@ -39452,6 +39720,7 @@ $provide.value("$locale", {
      * @param {Function} [iteratee=_.identity] The function invoked per iteration.
      * @param {*} [accumulator] The initial value.
      * @returns {*} Returns the accumulated value.
+     * @see _.reduce
      * @example
      *
      * var array = [[0, 1], [2, 3], [4, 5]];
@@ -39480,6 +39749,7 @@ $provide.value("$locale", {
      * @param {Array|Function|Object|string} [predicate=_.identity]
      *  The function invoked per iteration.
      * @returns {Array} Returns the new filtered array.
+     * @see _.filter
      * @example
      *
      * var users = [
@@ -40811,6 +41081,7 @@ $provide.value("$locale", {
      * @category Lang
      * @param {*} value The value to clone.
      * @returns {*} Returns the cloned value.
+     * @see _.cloneDeep
      * @example
      *
      * var objects = [{ 'a': 1 }, { 'b': 2 }];
@@ -40836,6 +41107,7 @@ $provide.value("$locale", {
      * @param {*} value The value to clone.
      * @param {Function} [customizer] The function to customize cloning.
      * @returns {*} Returns the cloned value.
+     * @see _.cloneDeepWith
      * @example
      *
      * function customizer(value) {
@@ -40866,6 +41138,7 @@ $provide.value("$locale", {
      * @category Lang
      * @param {*} value The value to recursively clone.
      * @returns {*} Returns the deep cloned value.
+     * @see _.clone
      * @example
      *
      * var objects = [{ 'a': 1 }, { 'b': 2 }];
@@ -40888,6 +41161,7 @@ $provide.value("$locale", {
      * @param {*} value The value to recursively clone.
      * @param {Function} [customizer] The function to customize cloning.
      * @returns {*} Returns the deep cloned value.
+     * @see _.cloneWith
      * @example
      *
      * function customizer(value) {
@@ -40956,6 +41230,7 @@ $provide.value("$locale", {
      * @param {*} other The other value to compare.
      * @returns {boolean} Returns `true` if `value` is greater than `other`,
      *  else `false`.
+     * @see _.lt
      * @example
      *
      * _.gt(3, 1);
@@ -40967,9 +41242,7 @@ $provide.value("$locale", {
      * _.gt(1, 3);
      * // => false
      */
-    function gt(value, other) {
-      return value > other;
-    }
+    var gt = createRelationalOperation(baseGt);
 
     /**
      * Checks if `value` is greater than or equal to `other`.
@@ -40982,6 +41255,7 @@ $provide.value("$locale", {
      * @param {*} other The other value to compare.
      * @returns {boolean} Returns `true` if `value` is greater than or equal to
      *  `other`, else `false`.
+     * @see _.lte
      * @example
      *
      * _.gte(3, 1);
@@ -40993,9 +41267,9 @@ $provide.value("$locale", {
      * _.gte(1, 3);
      * // => false
      */
-    function gte(value, other) {
+    var gte = createRelationalOperation(function(value, other) {
       return value >= other;
-    }
+    });
 
     /**
      * Checks if `value` is likely an `arguments` object.
@@ -42034,6 +42308,7 @@ $provide.value("$locale", {
      * @param {*} other The other value to compare.
      * @returns {boolean} Returns `true` if `value` is less than `other`,
      *  else `false`.
+     * @see _.gt
      * @example
      *
      * _.lt(1, 3);
@@ -42045,9 +42320,7 @@ $provide.value("$locale", {
      * _.lt(3, 1);
      * // => false
      */
-    function lt(value, other) {
-      return value < other;
-    }
+    var lt = createRelationalOperation(baseLt);
 
     /**
      * Checks if `value` is less than or equal to `other`.
@@ -42060,6 +42333,7 @@ $provide.value("$locale", {
      * @param {*} other The other value to compare.
      * @returns {boolean} Returns `true` if `value` is less than or equal to
      *  `other`, else `false`.
+     * @see _.gte
      * @example
      *
      * _.lte(1, 3);
@@ -42071,9 +42345,9 @@ $provide.value("$locale", {
      * _.lte(3, 1);
      * // => false
      */
-    function lte(value, other) {
+    var lte = createRelationalOperation(function(value, other) {
       return value <= other;
-    }
+    });
 
     /**
      * Converts `value` to an array.
@@ -42306,18 +42580,7 @@ $provide.value("$locale", {
      * // => '1,2,3'
      */
     function toString(value) {
-      // Exit early for strings to avoid a performance hit in some environments.
-      if (typeof value == 'string') {
-        return value;
-      }
-      if (value == null) {
-        return '';
-      }
-      if (isSymbol(value)) {
-        return symbolToString ? symbolToString.call(value) : '';
-      }
-      var result = (value + '');
-      return (result == '0' && (1 / value) == -INFINITY) ? '-0' : result;
+      return value == null ? '' : baseToString(value);
     }
 
     /*------------------------------------------------------------------------*/
@@ -42337,6 +42600,7 @@ $provide.value("$locale", {
      * @param {Object} object The destination object.
      * @param {...Object} [sources] The source objects.
      * @returns {Object} Returns `object`.
+     * @see _.assignIn
      * @example
      *
      * function Foo() {
@@ -42379,6 +42643,7 @@ $provide.value("$locale", {
      * @param {Object} object The destination object.
      * @param {...Object} [sources] The source objects.
      * @returns {Object} Returns `object`.
+     * @see _.assign
      * @example
      *
      * function Foo() {
@@ -42422,6 +42687,7 @@ $provide.value("$locale", {
      * @param {...Object} sources The source objects.
      * @param {Function} [customizer] The function to customize assigned values.
      * @returns {Object} Returns `object`.
+     * @see _.assignWith
      * @example
      *
      * function customizer(objValue, srcValue) {
@@ -42453,6 +42719,7 @@ $provide.value("$locale", {
      * @param {...Object} sources The source objects.
      * @param {Function} [customizer] The function to customize assigned values.
      * @returns {Object} Returns `object`.
+     * @see _.assignInWith
      * @example
      *
      * function customizer(objValue, srcValue) {
@@ -42546,6 +42813,7 @@ $provide.value("$locale", {
      * @param {Object} object The destination object.
      * @param {...Object} [sources] The source objects.
      * @returns {Object} Returns `object`.
+     * @see _.defaultsDeep
      * @example
      *
      * _.defaults({ 'user': 'barney' }, { 'age': 36 }, { 'user': 'fred' });
@@ -42569,6 +42837,7 @@ $provide.value("$locale", {
      * @param {Object} object The destination object.
      * @param {...Object} [sources] The source objects.
      * @returns {Object} Returns `object`.
+     * @see _.defaults
      * @example
      *
      * _.defaultsDeep({ 'user': { 'name': 'barney' } }, { 'user': { 'name': 'fred', 'age': 36 } });
@@ -42673,6 +42942,7 @@ $provide.value("$locale", {
      * @param {Object} object The object to iterate over.
      * @param {Function} [iteratee=_.identity] The function invoked per iteration.
      * @returns {Object} Returns `object`.
+     * @see _.forInRight
      * @example
      *
      * function Foo() {
@@ -42704,6 +42974,7 @@ $provide.value("$locale", {
      * @param {Object} object The object to iterate over.
      * @param {Function} [iteratee=_.identity] The function invoked per iteration.
      * @returns {Object} Returns `object`.
+     * @see _.forIn
      * @example
      *
      * function Foo() {
@@ -42737,6 +43008,7 @@ $provide.value("$locale", {
      * @param {Object} object The object to iterate over.
      * @param {Function} [iteratee=_.identity] The function invoked per iteration.
      * @returns {Object} Returns `object`.
+     * @see _.forOwnRight
      * @example
      *
      * function Foo() {
@@ -42766,6 +43038,7 @@ $provide.value("$locale", {
      * @param {Object} object The object to iterate over.
      * @param {Function} [iteratee=_.identity] The function invoked per iteration.
      * @returns {Object} Returns `object`.
+     * @see _.forOwn
      * @example
      *
      * function Foo() {
@@ -42794,6 +43067,7 @@ $provide.value("$locale", {
      * @category Object
      * @param {Object} object The object to inspect.
      * @returns {Array} Returns the new array of property names.
+     * @see _.functionsIn
      * @example
      *
      * function Foo() {
@@ -42820,6 +43094,7 @@ $provide.value("$locale", {
      * @category Object
      * @param {Object} object The object to inspect.
      * @returns {Array} Returns the new array of property names.
+     * @see _.functions
      * @example
      *
      * function Foo() {
@@ -43109,6 +43384,7 @@ $provide.value("$locale", {
      * @param {Array|Function|Object|string} [iteratee=_.identity]
      *  The function invoked per iteration.
      * @returns {Object} Returns the new mapped object.
+     * @see _.mapValues
      * @example
      *
      * _.mapKeys({ 'a': 1, 'b': 2 }, function(value, key) {
@@ -43140,6 +43416,7 @@ $provide.value("$locale", {
      * @param {Array|Function|Object|string} [iteratee=_.identity]
      *  The function invoked per iteration.
      * @returns {Object} Returns the new mapped object.
+     * @see _.mapKeys
      * @example
      *
      * var users = {
@@ -43314,7 +43591,7 @@ $provide.value("$locale", {
      * // => { 'a': 1, 'c': 3 }
      */
     var pick = rest(function(object, props) {
-      return object == null ? {} : basePick(object, baseFlatten(props, 1));
+      return object == null ? {} : basePick(object, arrayMap(baseFlatten(props, 1), toKey));
     });
 
     /**
@@ -43381,7 +43658,7 @@ $provide.value("$locale", {
         length = 1;
       }
       while (++index < length) {
-        var value = object == null ? undefined : object[path[index]];
+        var value = object == null ? undefined : object[toKey(path[index])];
         if (value === undefined) {
           index = length;
           value = defaultValue;
@@ -43744,7 +44021,7 @@ $provide.value("$locale", {
     }
 
     /**
-     * Checks if `n` is between `start` and up to but not including, `end`. If
+     * Checks if `n` is between `start` and up to, but not including, `end`. If
      * `end` is not specified, it's set to `start` with `start` then set to `0`.
      * If `start` is greater than `end` the params are swapped to support
      * negative ranges.
@@ -43757,6 +44034,7 @@ $provide.value("$locale", {
      * @param {number} [start=0] The start of the range.
      * @param {number} end The end of the range.
      * @returns {boolean} Returns `true` if `number` is in the range, else `false`.
+     * @see _.range, _.rangeRight
      * @example
      *
      * _.inRange(3, 2, 4);
@@ -43955,7 +44233,7 @@ $provide.value("$locale", {
      */
     function endsWith(string, target, position) {
       string = toString(string);
-      target = typeof target == 'string' ? target : (target + '');
+      target = baseToString(target);
 
       var length = string.length;
       position = position === undefined
@@ -44352,7 +44630,7 @@ $provide.value("$locale", {
             typeof separator == 'string' ||
             (separator != null && !isRegExp(separator))
           )) {
-        separator += '';
+        separator = baseToString(separator);
         if (separator == '' && reHasComplexSymbol.test(string)) {
           return castSlice(stringToArray(string), 0, limit);
         }
@@ -44411,7 +44689,7 @@ $provide.value("$locale", {
     function startsWith(string, target, position) {
       string = toString(string);
       position = baseClamp(toInteger(position), 0, string.length);
-      return string.lastIndexOf(target, position) == position;
+      return string.lastIndexOf(baseToString(target), position) == position;
     }
 
     /**
@@ -44699,13 +44977,10 @@ $provide.value("$locale", {
      */
     function trim(string, chars, guard) {
       string = toString(string);
-      if (!string) {
-        return string;
-      }
-      if (guard || chars === undefined) {
+      if (string && (guard || chars === undefined)) {
         return string.replace(reTrim, '');
       }
-      if (!(chars += '')) {
+      if (!string || !(chars = baseToString(chars))) {
         return string;
       }
       var strSymbols = stringToArray(string),
@@ -44737,13 +45012,10 @@ $provide.value("$locale", {
      */
     function trimEnd(string, chars, guard) {
       string = toString(string);
-      if (!string) {
-        return string;
-      }
-      if (guard || chars === undefined) {
+      if (string && (guard || chars === undefined)) {
         return string.replace(reTrimEnd, '');
       }
-      if (!(chars += '')) {
+      if (!string || !(chars = baseToString(chars))) {
         return string;
       }
       var strSymbols = stringToArray(string),
@@ -44773,13 +45045,10 @@ $provide.value("$locale", {
      */
     function trimStart(string, chars, guard) {
       string = toString(string);
-      if (!string) {
-        return string;
-      }
-      if (guard || chars === undefined) {
+      if (string && (guard || chars === undefined)) {
         return string.replace(reTrimStart, '');
       }
-      if (!(chars += '')) {
+      if (!string || !(chars = baseToString(chars))) {
         return string;
       }
       var strSymbols = stringToArray(string),
@@ -44832,7 +45101,7 @@ $provide.value("$locale", {
       if (isObject(options)) {
         var separator = 'separator' in options ? options.separator : separator;
         length = 'length' in options ? toInteger(options.length) : length;
-        omission = 'omission' in options ? toString(options.omission) : omission;
+        omission = 'omission' in options ? baseToString(options.omission) : omission;
       }
       string = toString(string);
 
@@ -44872,7 +45141,7 @@ $provide.value("$locale", {
           }
           result = result.slice(0, newEnd === undefined ? end : newEnd);
         }
-      } else if (string.indexOf(separator, end) != end) {
+      } else if (string.indexOf(baseToString(separator), end) != end) {
         var index = result.lastIndexOf(separator);
         if (index > -1) {
           result = result.slice(0, index);
@@ -45039,6 +45308,7 @@ $provide.value("$locale", {
      */
     var bindAll = rest(function(object, methodNames) {
       arrayEach(baseFlatten(methodNames, 1), function(key) {
+        key = toKey(key);
         object[key] = bind(object[key], object);
       });
       return object;
@@ -45154,6 +45424,7 @@ $provide.value("$locale", {
      * @category Util
      * @param {...(Function|Function[])} [funcs] Functions to invoke.
      * @returns {Function} Returns the new function.
+     * @see _.flowRight
      * @example
      *
      * function square(n) {
@@ -45171,11 +45442,12 @@ $provide.value("$locale", {
      * invokes the given functions from right to left.
      *
      * @static
-     * @since 0.1.0
+     * @since 3.0.0
      * @memberOf _
      * @category Util
      * @param {...(Function|Function[])} [funcs] Functions to invoke.
      * @returns {Function} Returns the new function.
+     * @see _.flow
      * @example
      *
      * function square(n) {
@@ -45602,7 +45874,7 @@ $provide.value("$locale", {
      * // => [1, 2]
      */
     function property(path) {
-      return isKey(path) ? baseProperty(path) : basePropertyDeep(path);
+      return isKey(path) ? baseProperty(toKey(path)) : basePropertyDeep(path);
     }
 
     /**
@@ -45649,6 +45921,7 @@ $provide.value("$locale", {
      * @param {number} end The end of the range.
      * @param {number} [step=1] The value to increment or decrement by.
      * @returns {Array} Returns the new array of numbers.
+     * @see _.inRange, _.rangeRight
      * @example
      *
      * _.range(4);
@@ -45686,6 +45959,7 @@ $provide.value("$locale", {
      * @param {number} end The end of the range.
      * @param {number} [step=1] The value to increment or decrement by.
      * @returns {Array} Returns the new array of numbers.
+     * @see _.inRange, _.range
      * @example
      *
      * _.rangeRight(4);
@@ -45909,7 +46183,7 @@ $provide.value("$locale", {
      */
     function max(array) {
       return (array && array.length)
-        ? baseExtremum(array, identity, gt)
+        ? baseExtremum(array, identity, baseGt)
         : undefined;
     }
 
@@ -45939,7 +46213,7 @@ $provide.value("$locale", {
      */
     function maxBy(array, iteratee) {
       return (array && array.length)
-        ? baseExtremum(array, getIteratee(iteratee), gt)
+        ? baseExtremum(array, getIteratee(iteratee), baseGt)
         : undefined;
     }
 
@@ -46009,7 +46283,7 @@ $provide.value("$locale", {
      */
     function min(array) {
       return (array && array.length)
-        ? baseExtremum(array, identity, lt)
+        ? baseExtremum(array, identity, baseLt)
         : undefined;
     }
 
@@ -46039,7 +46313,7 @@ $provide.value("$locale", {
      */
     function minBy(array, iteratee) {
       return (array && array.length)
-        ? baseExtremum(array, getIteratee(iteratee), lt)
+        ? baseExtremum(array, getIteratee(iteratee), baseLt)
         : undefined;
     }
 
@@ -46711,9 +46985,11 @@ $provide.value("$locale", {
   // Export lodash.
   var _ = runInContext();
 
-  // Expose lodash on the free variable `window` or `self` when available. This
-  // prevents errors in cases where lodash is loaded by a script tag in the presence
-  // of an AMD loader. See http://requirejs.org/docs/errors.html#mismatch for more details.
+  // Expose Lodash on the free variable `window` or `self` when available so it's
+  // globally accessible, even when bundled with Browserify, Webpack, etc. This
+  // also prevents errors in cases where Lodash is loaded by a script tag in the
+  // presence of an AMD loader. See http://requirejs.org/docs/errors.html#mismatch
+  // for more details. Use `_.noConflict` to remove Lodash from the global object.
   (freeWindow || freeSelf || {})._ = _;
 
   // Some AMD build optimizers like r.js check for condition patterns like the following:
@@ -46887,11 +47163,11 @@ $provide.value("$locale", {
 	}
 })();
 /**
- * @license AngularJS v1.5.3
+ * @license AngularJS v1.5.5
  * (c) 2010-2016 Google, Inc. http://angularjs.org
  * License: MIT
  */
-(function(window, angular, undefined) {
+(function(window, angular) {
 
 'use strict';
 
@@ -48216,11 +48492,14 @@ function createHttpBackendMock($rootScope, $timeout, $delegate, $browser) {
   }
 
   // TODO(vojta): change params to: method, url, data, headers, callback
-  function $httpBackend(method, url, data, callback, headers, timeout, withCredentials, responseType) {
+  function $httpBackend(method, url, data, callback, headers, timeout, withCredentials, responseType, eventHandlers, uploadEventHandlers) {
 
     var xhr = new MockXhr(),
         expectation = expectations[0],
         wasExpected = false;
+
+    xhr.$$events = eventHandlers;
+    xhr.upload.$$events = uploadEventHandlers;
 
     function prettyPrint(data) {
       return (angular.isString(data) || angular.isFunction(data) || data instanceof RegExp)
@@ -48311,12 +48590,14 @@ function createHttpBackendMock($rootScope, $timeout, $delegate, $browser) {
    *   order to change how a matched request is handled.
    *
    *  - respond –
-   *      `{function([status,] data[, headers, statusText])
-   *      | function(function(method, url, data, headers, params)}`
+   *      ```js
+   *      {function([status,] data[, headers, statusText])
+   *      | function(function(method, url, data, headers, params)}
+   *      ```
    *    – The respond method takes a set of static data to be returned or a function that can
-   *    return an array containing response status (number), response data (string), response
-   *    headers (Object), and the text for the status (string). The respond method returns the
-   *    `requestHandler` object for possible overrides.
+   *    return an array containing response status (number), response data (Array|Object|string),
+   *    response headers (Object), and the text for the status (string). The respond method returns
+   *    the `requestHandler` object for possible overrides.
    */
   $httpBackend.when = function(method, url, data, headers, keys) {
     var definition = new MockHttpExpectation(method, url, data, headers, keys),
@@ -48501,12 +48782,14 @@ function createHttpBackendMock($rootScope, $timeout, $delegate, $browser) {
    *  order to change how a matched request is handled.
    *
    *  - respond –
-   *    `{function([status,] data[, headers, statusText])
-   *    | function(function(method, url, data, headers, params)}`
+   *    ```
+   *    { function([status,] data[, headers, statusText])
+   *    | function(function(method, url, data, headers, params)}
+   *    ```
    *    – The respond method takes a set of static data to be returned or a function that can
-   *    return an array containing response status (number), response data (string), response
-   *    headers (Object), and the text for the status (string). The respond method returns the
-   *    `requestHandler` object for possible overrides.
+   *    return an array containing response status (number), response data (Array|Object|string),
+   *    response headers (Object), and the text for the status (string). The respond method returns
+   *    the `requestHandler` object for possible overrides.
    */
   $httpBackend.expect = function(method, url, data, headers, keys) {
     var expectation = new MockHttpExpectation(method, url, data, headers, keys),
@@ -48900,6 +49183,20 @@ function MockXhr() {
   };
 
   this.abort = angular.noop;
+
+  // This section simulates the events on a real XHR object (and the upload object)
+  // When we are testing $httpBackend (inside the angular project) we make partial use of this
+  // but store the events directly ourselves on `$$events`, instead of going through the `addEventListener`
+  this.$$events = {};
+  this.addEventListener = function(name, listener) {
+    if (angular.isUndefined(this.$$events[name])) this.$$events[name] = [];
+    this.$$events[name].push(listener);
+  };
+
+  this.upload = {
+    $$events: {},
+    addEventListener: this.addEventListener
+  };
 }
 
 
@@ -49069,8 +49366,8 @@ angular.mock.$ControllerDecorator = ['$delegate', function($delegate) {
  * A service that can be used to create instances of component controllers.
  * <div class="alert alert-info">
  * Be aware that the controller will be instantiated and attached to the scope as specified in
- * the component definition object. That means that you must always provide a `$scope` object
- * in the `locals` param.
+ * the component definition object. If you do not provide a `$scope` object in the `locals` param
+ * then the helper will create a new isolated scope as a child of `$rootScope`.
  * </div>
  * @param {string} componentName the name of the component whose controller we want to instantiate
  * @param {Object} locals Injection locals for Controller.
@@ -49080,7 +49377,7 @@ angular.mock.$ControllerDecorator = ['$delegate', function($delegate) {
  * @return {Object} Instance of requested controller.
  */
 angular.mock.$ComponentControllerProvider = ['$compileProvider', function($compileProvider) {
-  this.$get = ['$controller','$injector', function($controller,$injector) {
+  this.$get = ['$controller','$injector', '$rootScope', function($controller, $injector, $rootScope) {
     return function $componentController(componentName, locals, bindings, ident) {
       // get all directives associated to the component name
       var directives = $injector.get(componentName + 'Directive');
@@ -49098,6 +49395,9 @@ angular.mock.$ComponentControllerProvider = ['$compileProvider', function($compi
       }
       // get the info of the component
       var directiveInfo = candidateDirectives[0];
+      // create a scope if needed
+      locals = locals || {};
+      locals.$scope = locals.$scope || $rootScope.$new(true);
       return $controller(directiveInfo.controller, locals, bindings, ident || directiveInfo.controllerAs);
     };
   }];
@@ -49221,11 +49521,13 @@ angular.module('ngMockE2E', ['ng']).config(['$provide', function($provide) {
  *   `respond` or `passThrough` again in order to change how a matched request is handled.
  *
  *  - respond –
- *    `{function([status,] data[, headers, statusText])
- *    | function(function(method, url, data, headers, params)}`
+ *    ```
+ *    { function([status,] data[, headers, statusText])
+ *    | function(function(method, url, data, headers, params)}
+ *    ```
  *    – The respond method takes a set of static data to be returned or a function that can return
- *    an array containing response status (number), response data (string), response headers
- *    (Object), and the text for the status (string).
+ *    an array containing response status (number), response data (Array|Object|string), response
+ *    headers (Object), and the text for the status (string).
  *  - passThrough – `{function()}` – Any request matching a backend definition with
  *    `passThrough` handler will be passed through to the real backend (an XHR request will be made
  *    to the server.)
@@ -49787,6 +50089,12 @@ angular.mock.$RootScopeDecorator = ['$delegate', function($delegate) {
   window.inject = angular.mock.inject = function() {
     var blockFns = Array.prototype.slice.call(arguments, 0);
     var errorForStack = new Error('Declaration Location');
+    // IE10+ and PhanthomJS do not set stack trace information, until the error is thrown
+    if (!errorForStack.stack) {
+      try {
+        throw errorForStack;
+      } catch (e) {}
+    }
     return wasInjectorCreated() ? workFn.call(currentSpec) : workFn;
     /////////////////////
     function workFn() {
@@ -49862,11 +50170,11 @@ angular.mock.$RootScopeDecorator = ['$delegate', function($delegate) {
 })(window, window.angular);
 
 /**
- * @license AngularJS v1.5.3
+ * @license AngularJS v1.5.5
  * (c) 2010-2016 Google, Inc. http://angularjs.org
  * License: MIT
  */
-(function(window, angular, undefined) {'use strict';
+(function(window, angular) {'use strict';
 
 /* jshint ignore:start */
 var noop        = angular.noop;
@@ -52180,7 +52488,7 @@ var $$AnimateQueueProvider = ['$animateProvider', function($animateProvider) {
     }
 
     // IE9-11 has no method "contains" in SVG element and in Node.prototype. Bug #10259.
-    var contains = Node.prototype.contains || function(arg) {
+    var contains = window.Node.prototype.contains || function(arg) {
       // jshint bitwise: false
       return this === arg || !!(this.compareDocumentPosition(arg) & 16);
       // jshint bitwise: true
@@ -52205,6 +52513,23 @@ var $$AnimateQueueProvider = ['$animateProvider', function($animateProvider) {
       return matches;
     }
 
+    function filterFromRegistry(list, matchContainer, matchCallback) {
+      var containerNode = extractElementNode(matchContainer);
+      return list.filter(function(entry) {
+        var isMatch = entry.node === containerNode &&
+                        (!matchCallback || entry.callback === matchCallback);
+        return !isMatch;
+      });
+    }
+
+    function cleanupEventListeners(phase, element) {
+      if (phase === 'close' && !element[0].parentNode) {
+        // If the element is not attached to a parentNode, it has been removed by
+        // the domOperation, and we can safely remove the event callbacks
+        $animate.off(element);
+      }
+    }
+
     var $animate = {
       on: function(event, container, callback) {
         var node = extractElementNode(container);
@@ -52216,26 +52541,33 @@ var $$AnimateQueueProvider = ['$animateProvider', function($animateProvider) {
 
         // Remove the callback when the element is removed from the DOM
         jqLite(container).on('$destroy', function() {
-          $animate.off(event, container, callback);
+          var animationDetails = activeAnimationsLookup.get(node);
+
+          if (!animationDetails) {
+            // If there's an animation ongoing, the callback calling code will remove
+            // the event listeners. If we'd remove here, the callbacks would be removed
+            // before the animation ends
+            $animate.off(event, container, callback);
+          }
         });
       },
 
       off: function(event, container, callback) {
+        if (arguments.length === 1 && !angular.isString(arguments[0])) {
+          container = arguments[0];
+          for (var eventType in callbackRegistry) {
+            callbackRegistry[eventType] = filterFromRegistry(callbackRegistry[eventType], container);
+          }
+
+          return;
+        }
+
         var entries = callbackRegistry[event];
         if (!entries) return;
 
         callbackRegistry[event] = arguments.length === 1
             ? null
             : filterFromRegistry(entries, container, callback);
-
-        function filterFromRegistry(list, matchContainer, matchCallback) {
-          var containerNode = extractElementNode(matchContainer);
-          return list.filter(function(entry) {
-            var isMatch = entry.node === containerNode &&
-                            (!matchCallback || entry.callback === matchCallback);
-            return !isMatch;
-          });
-        }
       },
 
       pin: function(element, parentElement) {
@@ -52349,12 +52681,14 @@ var $$AnimateQueueProvider = ['$animateProvider', function($animateProvider) {
 
       var isStructural = ['enter', 'move', 'leave'].indexOf(event) >= 0;
 
+      var documentHidden = $document[0].hidden;
+
       // this is a hard disable of all animations for the application or on
       // the element itself, therefore  there is no need to continue further
       // past this point if not enabled
       // Animations are also disabled if the document is currently hidden (page is not visible
       // to the user), because browsers slow down or do not flush calls to requestAnimationFrame
-      var skipAnimations = !animationsEnabled || $document[0].hidden || disabledElementsLookup.get(node);
+      var skipAnimations = !animationsEnabled || documentHidden || disabledElementsLookup.get(node);
       var existingAnimation = (!skipAnimations && activeAnimationsLookup.get(node)) || {};
       var hasExistingAnimation = !!existingAnimation.state;
 
@@ -52365,7 +52699,10 @@ var $$AnimateQueueProvider = ['$animateProvider', function($animateProvider) {
       }
 
       if (skipAnimations) {
+        // Callbacks should fire even if the document is hidden (regression fix for issue #14120)
+        if (documentHidden) notifyProgress(runner, event, 'start');
         close();
+        if (documentHidden) notifyProgress(runner, event, 'close');
         return runner;
       }
 
@@ -52515,6 +52852,11 @@ var $$AnimateQueueProvider = ['$animateProvider', function($animateProvider) {
         markElementAnimationState(element, RUNNING_STATE);
         var realRunner = $$animation(element, event, animationDetails.options);
 
+        // this will update the runner's flow-control events based on
+        // the `realRunner` object.
+        runner.setHost(realRunner);
+        notifyProgress(runner, event, 'start', {});
+
         realRunner.done(function(status) {
           close(!status);
           var animationDetails = activeAnimationsLookup.get(node);
@@ -52523,11 +52865,6 @@ var $$AnimateQueueProvider = ['$animateProvider', function($animateProvider) {
           }
           notifyProgress(runner, event, 'close', {});
         });
-
-        // this will update the runner's flow-control events based on
-        // the `realRunner` object.
-        runner.setHost(realRunner);
-        notifyProgress(runner, event, 'start', {});
       });
 
       return runner;
@@ -52544,7 +52881,10 @@ var $$AnimateQueueProvider = ['$animateProvider', function($animateProvider) {
               forEach(callbacks, function(callback) {
                 callback(element, phase, data);
               });
+              cleanupEventListeners(phase, element);
             });
+          } else {
+            cleanupEventListeners(phase, element);
           }
         });
         runner.progress(event, phase, data);
@@ -53349,7 +53689,7 @@ var ngAnimateSwapDirective = ['$animate', '$rootScope', function($animate, $root
  * <div ng-show="bool" class="fade">
  *   Show and hide me
  * </div>
- * <button ng-click="bool=true">Toggle</button>
+ * <button ng-click="bool=!bool">Toggle</button>
  *
  * <style>
  * .fade.ng-hide {
@@ -53978,11 +54318,11 @@ angular.module('ngAnimate', [])
 })(window, window.angular);
 
 /**
- * @license AngularJS v1.5.3
+ * @license AngularJS v1.5.5
  * (c) 2010-2016 Google, Inc. http://angularjs.org
  * License: MIT
  */
-(function(window, angular, undefined) {'use strict';
+(function(window, angular) {'use strict';
 
 /**
  * @ngdoc module
@@ -54000,7 +54340,7 @@ angular.module('ngAnimate', [])
  *
  * For ngAria to do its magic, simply include the module `ngAria` as a dependency. The following
  * directives are supported:
- * `ngModel`, `ngChecked`, `ngRequired`, `ngValue`, `ngDisabled`, `ngShow`, `ngHide`, `ngClick`,
+ * `ngModel`, `ngChecked`, `ngReadonly`, `ngRequired`, `ngValue`, `ngDisabled`, `ngShow`, `ngHide`, `ngClick`,
  * `ngDblClick`, and `ngMessages`.
  *
  * Below is a more detailed breakdown of the attributes handled by ngAria:
@@ -54009,8 +54349,9 @@ angular.module('ngAnimate', [])
  * |---------------------------------------------|----------------------------------------------------------------------------------------|
  * | {@link ng.directive:ngModel ngModel}        | aria-checked, aria-valuemin, aria-valuemax, aria-valuenow, aria-invalid, aria-required, input roles |
  * | {@link ng.directive:ngDisabled ngDisabled}  | aria-disabled                                                                          |
- * | {@link ng.directive:ngRequired ngRequired}  | aria-required                                                                          |
- * | {@link ng.directive:ngChecked ngChecked}    | aria-checked                                                                           |
+ * | {@link ng.directive:ngRequired ngRequired}  | aria-required
+ * | {@link ng.directive:ngChecked ngChecked}    | aria-checked
+ * | {@link ng.directive:ngReadonly ngReadonly}  | aria-readonly                                                                          ||
  * | {@link ng.directive:ngValue ngValue}        | aria-checked                                                                           |
  * | {@link ng.directive:ngShow ngShow}          | aria-hidden                                                                            |
  * | {@link ng.directive:ngHide ngHide}          | aria-hidden                                                                            |
@@ -54075,6 +54416,7 @@ function $AriaProvider() {
   var config = {
     ariaHidden: true,
     ariaChecked: true,
+    ariaReadonly: true,
     ariaDisabled: true,
     ariaRequired: true,
     ariaInvalid: true,
@@ -54092,6 +54434,7 @@ function $AriaProvider() {
    *
    *  - **ariaHidden** – `{boolean}` – Enables/disables aria-hidden tags
    *  - **ariaChecked** – `{boolean}` – Enables/disables aria-checked tags
+   *  - **ariaReadonly** – `{boolean}` – Enables/disables aria-readonly tags
    *  - **ariaDisabled** – `{boolean}` – Enables/disables aria-disabled tags
    *  - **ariaRequired** – `{boolean}` – Enables/disables aria-required tags
    *  - **ariaInvalid** – `{boolean}` – Enables/disables aria-invalid tags
@@ -54154,6 +54497,7 @@ function $AriaProvider() {
    * The full list of directives that interface with ngAria:
    * * **ngModel**
    * * **ngChecked**
+   * * **ngReadonly**
    * * **ngRequired**
    * * **ngDisabled**
    * * **ngValue**
@@ -54192,6 +54536,9 @@ ngAriaModule.directive('ngShow', ['$aria', function($aria) {
 }])
 .directive('ngChecked', ['$aria', function($aria) {
   return $aria.$$watchExpr('ngChecked', 'aria-checked', nodeBlackList, false);
+}])
+.directive('ngReadonly', ['$aria', function($aria) {
+  return $aria.$$watchExpr('ngReadonly', 'aria-readonly', nodeBlackList, false);
 }])
 .directive('ngRequired', ['$aria', function($aria) {
   return $aria.$$watchExpr('ngRequired', 'aria-required', nodeBlackList, false);
@@ -54377,11 +54724,11 @@ ngAriaModule.directive('ngShow', ['$aria', function($aria) {
 })(window, window.angular);
 
 /**
- * @license AngularJS v1.5.3
+ * @license AngularJS v1.5.5
  * (c) 2010-2016 Google, Inc. http://angularjs.org
  * License: MIT
  */
-(function(window, angular, undefined) {'use strict';
+(function(window, angular) {'use strict';
 
 /* jshint ignore:start */
 // this code is in the core, but not in angular-messages.js
@@ -55103,7 +55450,7 @@ function ngMessageDirectiveFactory() {
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v1.0.7
+ * v1.0.8
  */
 (function( window, angular, undefined ){
 "use strict";
@@ -55111,7 +55458,7 @@ function ngMessageDirectiveFactory() {
 (function(){
 "use strict";
 
-angular.module('ngMaterial', ["ng","ngAnimate","ngAria","material.core","material.core.gestures","material.core.layout","material.core.theming.palette","material.core.theming","material.core.animate","material.components.autocomplete","material.components.backdrop","material.components.button","material.components.bottomSheet","material.components.card","material.components.checkbox","material.components.content","material.components.chips","material.components.datepicker","material.components.dialog","material.components.divider","material.components.fabActions","material.components.fabShared","material.components.fabSpeedDial","material.components.fabToolbar","material.components.fabTrigger","material.components.gridList","material.components.icon","material.components.input","material.components.menu","material.components.list","material.components.menuBar","material.components.progressCircular","material.components.progressLinear","material.components.radioButton","material.components.showHide","material.components.select","material.components.sidenav","material.components.slider","material.components.sticky","material.components.subheader","material.components.swipe","material.components.switch","material.components.tabs","material.components.toast","material.components.toolbar","material.components.tooltip","material.components.virtualRepeat","material.components.whiteframe"]);
+angular.module('ngMaterial', ["ng","ngAnimate","ngAria","material.core","material.core.gestures","material.core.layout","material.core.theming.palette","material.core.theming","material.core.animate","material.components.autocomplete","material.components.backdrop","material.components.bottomSheet","material.components.button","material.components.card","material.components.checkbox","material.components.chips","material.components.content","material.components.datepicker","material.components.dialog","material.components.divider","material.components.fabActions","material.components.fabShared","material.components.fabSpeedDial","material.components.fabToolbar","material.components.fabTrigger","material.components.gridList","material.components.icon","material.components.input","material.components.list","material.components.menu","material.components.menuBar","material.components.progressCircular","material.components.progressLinear","material.components.radioButton","material.components.select","material.components.showHide","material.components.sidenav","material.components.slider","material.components.sticky","material.components.subheader","material.components.swipe","material.components.switch","material.components.tabs","material.components.toast","material.components.toolbar","material.components.tooltip","material.components.virtualRepeat","material.components.whiteframe"]);
 })();
 (function(){
 "use strict";
@@ -55307,7 +55654,7 @@ function postLink(scope, element, attrs) {
 
   // Setup a watcher on the proper attribute to update a class we can check for in $mdUtil
   scope.$watch(attr, function(canAutofocus) {
-    element.toggleClass('_md-autofocus', canAutofocus);
+    element.toggleClass('md-autofocus', canAutofocus);
   });
 }
 
@@ -55964,9 +56311,9 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
           items.length && angular.forEach(items, function(it) {
             it = angular.element(it);
 
-            // Check the element for the _md-autofocus class to ensure any associated expression
+            // Check the element for the md-autofocus class to ensure any associated expression
             // evaluated to true.
-            var isFocusable = it.hasClass('_md-autofocus');
+            var isFocusable = it.hasClass('md-autofocus');
             if (isFocusable) elFound = it;
           });
         }
@@ -58782,6 +59129,646 @@ function InterimElementProvider() {
 (function(){
 "use strict";
 
+(function() {
+  'use strict';
+
+  /**
+   * @ngdoc service
+   * @name $mdButtonInkRipple
+   * @module material.core
+   *
+   * @description
+   * Provides ripple effects for md-button.  See $mdInkRipple service for all possible configuration options.
+   *
+   * @param {object=} scope Scope within the current context
+   * @param {object=} element The element the ripple effect should be applied to
+   * @param {object=} options (Optional) Configuration options to override the default ripple configuration
+   */
+
+  angular.module('material.core')
+    .factory('$mdButtonInkRipple', MdButtonInkRipple);
+
+  function MdButtonInkRipple($mdInkRipple) {
+    return {
+      attach: function attachRipple(scope, element, options) {
+        options = angular.extend(optionsForElement(element), options);
+
+        return $mdInkRipple.attach(scope, element, options);
+      }
+    };
+
+    function optionsForElement(element) {
+      if (element.hasClass('md-icon-button')) {
+        return {
+          isMenuItem: element.hasClass('md-menu-item'),
+          fitRipple: true,
+          center: true
+        };
+      } else {
+        return {
+          isMenuItem: element.hasClass('md-menu-item'),
+          dimBackground: true
+        }
+      }
+    };
+  }
+  MdButtonInkRipple.$inject = ["$mdInkRipple"];;
+})();
+
+})();
+(function(){
+"use strict";
+
+(function() {
+  'use strict';
+
+    /**
+   * @ngdoc service
+   * @name $mdCheckboxInkRipple
+   * @module material.core
+   *
+   * @description
+   * Provides ripple effects for md-checkbox.  See $mdInkRipple service for all possible configuration options.
+   *
+   * @param {object=} scope Scope within the current context
+   * @param {object=} element The element the ripple effect should be applied to
+   * @param {object=} options (Optional) Configuration options to override the defaultripple configuration
+   */
+
+  angular.module('material.core')
+    .factory('$mdCheckboxInkRipple', MdCheckboxInkRipple);
+
+  function MdCheckboxInkRipple($mdInkRipple) {
+    return {
+      attach: attach
+    };
+
+    function attach(scope, element, options) {
+      return $mdInkRipple.attach(scope, element, angular.extend({
+        center: true,
+        dimBackground: false,
+        fitRipple: true
+      }, options));
+    };
+  }
+  MdCheckboxInkRipple.$inject = ["$mdInkRipple"];;
+})();
+
+})();
+(function(){
+"use strict";
+
+(function() {
+  'use strict';
+
+  /**
+   * @ngdoc service
+   * @name $mdListInkRipple
+   * @module material.core
+   *
+   * @description
+   * Provides ripple effects for md-list.  See $mdInkRipple service for all possible configuration options.
+   *
+   * @param {object=} scope Scope within the current context
+   * @param {object=} element The element the ripple effect should be applied to
+   * @param {object=} options (Optional) Configuration options to override the defaultripple configuration
+   */
+
+  angular.module('material.core')
+    .factory('$mdListInkRipple', MdListInkRipple);
+
+  function MdListInkRipple($mdInkRipple) {
+    return {
+      attach: attach
+    };
+
+    function attach(scope, element, options) {
+      return $mdInkRipple.attach(scope, element, angular.extend({
+        center: false,
+        dimBackground: true,
+        outline: false,
+        rippleSize: 'full'
+      }, options));
+    };
+  }
+  MdListInkRipple.$inject = ["$mdInkRipple"];;
+})();
+
+})();
+(function(){
+"use strict";
+
+/**
+ * @ngdoc module
+ * @name material.core.ripple
+ * @description
+ * Ripple
+ */
+angular.module('material.core')
+    .factory('$mdInkRipple', InkRippleService)
+    .directive('mdInkRipple', InkRippleDirective)
+    .directive('mdNoInk', attrNoDirective)
+    .directive('mdNoBar', attrNoDirective)
+    .directive('mdNoStretch', attrNoDirective);
+
+var DURATION = 450;
+
+/**
+ * @ngdoc directive
+ * @name mdInkRipple
+ * @module material.core.ripple
+ *
+ * @description
+ * The `md-ink-ripple` directive allows you to specify the ripple color or id a ripple is allowed.
+ *
+ * @param {string|boolean} md-ink-ripple A color string `#FF0000` or boolean (`false` or `0`) for preventing ripple
+ *
+ * @usage
+ * ### String values
+ * <hljs lang="html">
+ *   <ANY md-ink-ripple="#FF0000">
+ *     Ripples in red
+ *   </ANY>
+ *
+ *   <ANY md-ink-ripple="false">
+ *     Not rippling
+ *   </ANY>
+ * </hljs>
+ *
+ * ### Interpolated values
+ * <hljs lang="html">
+ *   <ANY md-ink-ripple="{{ randomColor() }}">
+ *     Ripples with the return value of 'randomColor' function
+ *   </ANY>
+ *
+ *   <ANY md-ink-ripple="{{ canRipple() }}">
+ *     Ripples if 'canRipple' function return value is not 'false' or '0'
+ *   </ANY>
+ * </hljs>
+ */
+function InkRippleDirective ($mdButtonInkRipple, $mdCheckboxInkRipple) {
+  return {
+    controller: angular.noop,
+    link:       function (scope, element, attr) {
+      attr.hasOwnProperty('mdInkRippleCheckbox')
+          ? $mdCheckboxInkRipple.attach(scope, element)
+          : $mdButtonInkRipple.attach(scope, element);
+    }
+  };
+}
+InkRippleDirective.$inject = ["$mdButtonInkRipple", "$mdCheckboxInkRipple"];
+
+/**
+ * @ngdoc service
+ * @name $mdInkRipple
+ * @module material.core.ripple
+ *
+ * @description
+ * `$mdInkRipple` is a service for adding ripples to any element
+ *
+ * @usage
+ * <hljs lang="js">
+ * app.factory('$myElementInkRipple', function($mdInkRipple) {
+ *   return {
+ *     attach: function (scope, element, options) {
+ *       return $mdInkRipple.attach(scope, element, angular.extend({
+ *         center: false,
+ *         dimBackground: true
+ *       }, options));
+ *     }
+ *   };
+ * });
+ *
+ * app.controller('myController', function ($scope, $element, $myElementInkRipple) {
+ *   $scope.onClick = function (ev) {
+ *     $myElementInkRipple.attach($scope, angular.element(ev.target), { center: true });
+ *   }
+ * });
+ * </hljs>
+ */
+
+/**
+ * @ngdoc method
+ * @name $mdInkRipple#attach
+ *
+ * @description
+ * Attaching given scope, element and options to inkRipple controller
+ *
+ * @param {object=} scope Scope within the current context
+ * @param {object=} element The element the ripple effect should be applied to
+ * @param {object=} options (Optional) Configuration options to override the defaultRipple configuration
+ * * `center` -  Whether the ripple should start from the center of the container element
+ * * `dimBackground` - Whether the background should be dimmed with the ripple color
+ * * `colorElement` - The element the ripple should take its color from, defined by css property `color`
+ * * `fitRipple` - Whether the ripple should fill the element
+ */
+function InkRippleService ($injector) {
+  return { attach: attach };
+  function attach (scope, element, options) {
+    if (element.controller('mdNoInk')) return angular.noop;
+    return $injector.instantiate(InkRippleCtrl, {
+      $scope:        scope,
+      $element:      element,
+      rippleOptions: options
+    });
+  }
+}
+InkRippleService.$inject = ["$injector"];
+
+/**
+ * Controller used by the ripple service in order to apply ripples
+ * @ngInject
+ */
+function InkRippleCtrl ($scope, $element, rippleOptions, $window, $timeout, $mdUtil) {
+  this.$window    = $window;
+  this.$timeout   = $timeout;
+  this.$mdUtil    = $mdUtil;
+  this.$scope     = $scope;
+  this.$element   = $element;
+  this.options    = rippleOptions;
+  this.mousedown  = false;
+  this.ripples    = [];
+  this.timeout    = null; // Stores a reference to the most-recent ripple timeout
+  this.lastRipple = null;
+
+  $mdUtil.valueOnUse(this, 'container', this.createContainer);
+
+  this.$element.addClass('md-ink-ripple');
+
+  // attach method for unit tests
+  ($element.controller('mdInkRipple') || {}).createRipple = angular.bind(this, this.createRipple);
+  ($element.controller('mdInkRipple') || {}).setColor = angular.bind(this, this.color);
+
+  this.bindEvents();
+}
+InkRippleCtrl.$inject = ["$scope", "$element", "rippleOptions", "$window", "$timeout", "$mdUtil"];
+
+
+/**
+ * Either remove or unlock any remaining ripples when the user mouses off of the element (either by
+ * mouseup or mouseleave event)
+ */
+function autoCleanup (self, cleanupFn) {
+
+  if ( self.mousedown || self.lastRipple ) {
+    self.mousedown = false;
+    self.$mdUtil.nextTick( angular.bind(self, cleanupFn), false);
+  }
+
+}
+
+
+/**
+ * Returns the color that the ripple should be (either based on CSS or hard-coded)
+ * @returns {string}
+ */
+InkRippleCtrl.prototype.color = function (value) {
+  var self = this;
+
+  // If assigning a color value, apply it to background and the ripple color
+  if (angular.isDefined(value)) {
+    self._color = self._parseColor(value);
+  }
+
+  // If color lookup, use assigned, defined, or inherited
+  return self._color || self._parseColor( self.inkRipple() ) || self._parseColor( getElementColor() );
+
+  /**
+   * Finds the color element and returns its text color for use as default ripple color
+   * @returns {string}
+   */
+  function getElementColor () {
+    var items = self.options && self.options.colorElement ? self.options.colorElement : [];
+    var elem =  items.length ? items[ 0 ] : self.$element[ 0 ];
+
+    return elem ? self.$window.getComputedStyle(elem).color : 'rgb(0,0,0)';
+  }
+};
+
+/**
+ * Updating the ripple colors based on the current inkRipple value
+ * or the element's computed style color
+ */
+InkRippleCtrl.prototype.calculateColor = function () {
+  return this.color();
+};
+
+
+/**
+ * Takes a string color and converts it to RGBA format
+ * @param color {string}
+ * @param [multiplier] {int}
+ * @returns {string}
+ */
+
+InkRippleCtrl.prototype._parseColor = function parseColor (color, multiplier) {
+  multiplier = multiplier || 1;
+
+  if (!color) return;
+  if (color.indexOf('rgba') === 0) return color.replace(/\d?\.?\d*\s*\)\s*$/, (0.1 * multiplier).toString() + ')');
+  if (color.indexOf('rgb') === 0) return rgbToRGBA(color);
+  if (color.indexOf('#') === 0) return hexToRGBA(color);
+
+  /**
+   * Converts hex value to RGBA string
+   * @param color {string}
+   * @returns {string}
+   */
+  function hexToRGBA (color) {
+    var hex   = color[ 0 ] === '#' ? color.substr(1) : color,
+      dig   = hex.length / 3,
+      red   = hex.substr(0, dig),
+      green = hex.substr(dig, dig),
+      blue  = hex.substr(dig * 2);
+    if (dig === 1) {
+      red += red;
+      green += green;
+      blue += blue;
+    }
+    return 'rgba(' + parseInt(red, 16) + ',' + parseInt(green, 16) + ',' + parseInt(blue, 16) + ',0.1)';
+  }
+
+  /**
+   * Converts an RGB color to RGBA
+   * @param color {string}
+   * @returns {string}
+   */
+  function rgbToRGBA (color) {
+    return color.replace(')', ', 0.1)').replace('(', 'a(');
+  }
+
+};
+
+/**
+ * Binds events to the root element for
+ */
+InkRippleCtrl.prototype.bindEvents = function () {
+  this.$element.on('mousedown', angular.bind(this, this.handleMousedown));
+  this.$element.on('mouseup touchend', angular.bind(this, this.handleMouseup));
+  this.$element.on('mouseleave', angular.bind(this, this.handleMouseup));
+  this.$element.on('touchmove', angular.bind(this, this.handleTouchmove));
+};
+
+/**
+ * Create a new ripple on every mousedown event from the root element
+ * @param event {MouseEvent}
+ */
+InkRippleCtrl.prototype.handleMousedown = function (event) {
+  if ( this.mousedown ) return;
+
+  // When jQuery is loaded, we have to get the original event
+  if (event.hasOwnProperty('originalEvent')) event = event.originalEvent;
+  this.mousedown = true;
+  if (this.options.center) {
+    this.createRipple(this.container.prop('clientWidth') / 2, this.container.prop('clientWidth') / 2);
+  } else {
+
+    // We need to calculate the relative coordinates if the target is a sublayer of the ripple element
+    if (event.srcElement !== this.$element[0]) {
+      var layerRect = this.$element[0].getBoundingClientRect();
+      var layerX = event.clientX - layerRect.left;
+      var layerY = event.clientY - layerRect.top;
+
+      this.createRipple(layerX, layerY);
+    } else {
+      this.createRipple(event.offsetX, event.offsetY);
+    }
+  }
+};
+
+/**
+ * Either remove or unlock any remaining ripples when the user mouses off of the element (either by
+ * mouseup, touchend or mouseleave event)
+ */
+InkRippleCtrl.prototype.handleMouseup = function () {
+  autoCleanup(this, this.clearRipples);
+};
+
+/**
+ * Either remove or unlock any remaining ripples when the user mouses off of the element (by
+ * touchmove)
+ */
+InkRippleCtrl.prototype.handleTouchmove = function () {
+  autoCleanup(this, this.deleteRipples);
+};
+
+/**
+ * Cycles through all ripples and attempts to remove them.
+ */
+InkRippleCtrl.prototype.deleteRipples = function () {
+  for (var i = 0; i < this.ripples.length; i++) {
+    this.ripples[ i ].remove();
+  }
+};
+
+/**
+ * Cycles through all ripples and attempts to remove them with fade.
+ * Depending on logic within `fadeInComplete`, some removals will be postponed.
+ */
+InkRippleCtrl.prototype.clearRipples = function () {
+  for (var i = 0; i < this.ripples.length; i++) {
+    this.fadeInComplete(this.ripples[ i ]);
+  }
+};
+
+/**
+ * Creates the ripple container element
+ * @returns {*}
+ */
+InkRippleCtrl.prototype.createContainer = function () {
+  var container = angular.element('<div class="md-ripple-container"></div>');
+  this.$element.append(container);
+  return container;
+};
+
+InkRippleCtrl.prototype.clearTimeout = function () {
+  if (this.timeout) {
+    this.$timeout.cancel(this.timeout);
+    this.timeout = null;
+  }
+};
+
+InkRippleCtrl.prototype.isRippleAllowed = function () {
+  var element = this.$element[0];
+  do {
+    if (!element.tagName || element.tagName === 'BODY') break;
+
+    if (element && angular.isFunction(element.hasAttribute)) {
+      if (element.hasAttribute('disabled')) return false;
+      if (this.inkRipple() === 'false' || this.inkRipple() === '0') return false;
+    }
+
+  } while (element = element.parentNode);
+  return true;
+};
+
+/**
+ * The attribute `md-ink-ripple` may be a static or interpolated
+ * color value OR a boolean indicator (used to disable ripples)
+ */
+InkRippleCtrl.prototype.inkRipple = function () {
+  return this.$element.attr('md-ink-ripple');
+};
+
+/**
+ * Creates a new ripple and adds it to the container.  Also tracks ripple in `this.ripples`.
+ * @param left
+ * @param top
+ */
+InkRippleCtrl.prototype.createRipple = function (left, top) {
+  if (!this.isRippleAllowed()) return;
+
+  var ctrl        = this;
+  var ripple      = angular.element('<div class="md-ripple"></div>');
+  var width       = this.$element.prop('clientWidth');
+  var height      = this.$element.prop('clientHeight');
+  var x           = Math.max(Math.abs(width - left), left) * 2;
+  var y           = Math.max(Math.abs(height - top), top) * 2;
+  var size        = getSize(this.options.fitRipple, x, y);
+  var color       = this.calculateColor();
+
+  ripple.css({
+    left:            left + 'px',
+    top:             top + 'px',
+    background:      'black',
+    width:           size + 'px',
+    height:          size + 'px',
+    backgroundColor: rgbaToRGB(color),
+    borderColor:     rgbaToRGB(color)
+  });
+  this.lastRipple = ripple;
+
+  // we only want one timeout to be running at a time
+  this.clearTimeout();
+  this.timeout    = this.$timeout(function () {
+    ctrl.clearTimeout();
+    if (!ctrl.mousedown) ctrl.fadeInComplete(ripple);
+  }, DURATION * 0.35, false);
+
+  if (this.options.dimBackground) this.container.css({ backgroundColor: color });
+  this.container.append(ripple);
+  this.ripples.push(ripple);
+  ripple.addClass('md-ripple-placed');
+
+  this.$mdUtil.nextTick(function () {
+
+    ripple.addClass('md-ripple-scaled md-ripple-active');
+    ctrl.$timeout(function () {
+      ctrl.clearRipples();
+    }, DURATION, false);
+
+  }, false);
+
+  function rgbaToRGB (color) {
+    return color
+        ? color.replace('rgba', 'rgb').replace(/,[^\),]+\)/, ')')
+        : 'rgb(0,0,0)';
+  }
+
+  function getSize (fit, x, y) {
+    return fit
+        ? Math.max(x, y)
+        : Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+  }
+};
+
+
+
+/**
+ * After fadeIn finishes, either kicks off the fade-out animation or queues the element for removal on mouseup
+ * @param ripple
+ */
+InkRippleCtrl.prototype.fadeInComplete = function (ripple) {
+  if (this.lastRipple === ripple) {
+    if (!this.timeout && !this.mousedown) {
+      this.removeRipple(ripple);
+    }
+  } else {
+    this.removeRipple(ripple);
+  }
+};
+
+/**
+ * Kicks off the animation for removing a ripple
+ * @param ripple {Element}
+ */
+InkRippleCtrl.prototype.removeRipple = function (ripple) {
+  var ctrl  = this;
+  var index = this.ripples.indexOf(ripple);
+  if (index < 0) return;
+  this.ripples.splice(this.ripples.indexOf(ripple), 1);
+  ripple.removeClass('md-ripple-active');
+  if (this.ripples.length === 0) this.container.css({ backgroundColor: '' });
+  // use a 2-second timeout in order to allow for the animation to finish
+  // we don't actually care how long the animation takes
+  this.$timeout(function () {
+    ctrl.fadeOutComplete(ripple);
+  }, DURATION, false);
+};
+
+/**
+ * Removes the provided ripple from the DOM
+ * @param ripple
+ */
+InkRippleCtrl.prototype.fadeOutComplete = function (ripple) {
+  ripple.remove();
+  this.lastRipple = null;
+};
+
+/**
+ * Used to create an empty directive.  This is used to track flag-directives whose children may have
+ * functionality based on them.
+ *
+ * Example: `md-no-ink` will potentially be used by all child directives.
+ */
+function attrNoDirective () {
+  return { controller: angular.noop };
+}
+
+})();
+(function(){
+"use strict";
+
+(function() {
+  'use strict';
+
+    /**
+   * @ngdoc service
+   * @name $mdTabInkRipple
+   * @module material.core
+   *
+   * @description
+   * Provides ripple effects for md-tabs.  See $mdInkRipple service for all possible configuration options.
+   *
+   * @param {object=} scope Scope within the current context
+   * @param {object=} element The element the ripple effect should be applied to
+   * @param {object=} options (Optional) Configuration options to override the defaultripple configuration
+   */
+
+  angular.module('material.core')
+    .factory('$mdTabInkRipple', MdTabInkRipple);
+
+  function MdTabInkRipple($mdInkRipple) {
+    return {
+      attach: attach
+    };
+
+    function attach(scope, element, options) {
+      return $mdInkRipple.attach(scope, element, angular.extend({
+        center: false,
+        dimBackground: true,
+        outline: false,
+        rippleSize: 'full'
+      }, options));
+    };
+  }
+  MdTabInkRipple.$inject = ["$mdInkRipple"];;
+})();
+
+})();
+(function(){
+"use strict";
+
 angular.module('material.core.theming.palette', [])
 .constant('$mdColorPalette', {
   'red': {
@@ -59846,646 +60833,6 @@ function rgba(rgbArray, opacity) {
 (function(){
 "use strict";
 
-(function() {
-  'use strict';
-
-  /**
-   * @ngdoc service
-   * @name $mdButtonInkRipple
-   * @module material.core
-   *
-   * @description
-   * Provides ripple effects for md-button.  See $mdInkRipple service for all possible configuration options.
-   *
-   * @param {object=} scope Scope within the current context
-   * @param {object=} element The element the ripple effect should be applied to
-   * @param {object=} options (Optional) Configuration options to override the default ripple configuration
-   */
-
-  angular.module('material.core')
-    .factory('$mdButtonInkRipple', MdButtonInkRipple);
-
-  function MdButtonInkRipple($mdInkRipple) {
-    return {
-      attach: function attachRipple(scope, element, options) {
-        options = angular.extend(optionsForElement(element), options);
-
-        return $mdInkRipple.attach(scope, element, options);
-      }
-    };
-
-    function optionsForElement(element) {
-      if (element.hasClass('md-icon-button')) {
-        return {
-          isMenuItem: element.hasClass('md-menu-item'),
-          fitRipple: true,
-          center: true
-        };
-      } else {
-        return {
-          isMenuItem: element.hasClass('md-menu-item'),
-          dimBackground: true
-        }
-      }
-    };
-  }
-  MdButtonInkRipple.$inject = ["$mdInkRipple"];;
-})();
-
-})();
-(function(){
-"use strict";
-
-(function() {
-  'use strict';
-
-    /**
-   * @ngdoc service
-   * @name $mdCheckboxInkRipple
-   * @module material.core
-   *
-   * @description
-   * Provides ripple effects for md-checkbox.  See $mdInkRipple service for all possible configuration options.
-   *
-   * @param {object=} scope Scope within the current context
-   * @param {object=} element The element the ripple effect should be applied to
-   * @param {object=} options (Optional) Configuration options to override the defaultripple configuration
-   */
-
-  angular.module('material.core')
-    .factory('$mdCheckboxInkRipple', MdCheckboxInkRipple);
-
-  function MdCheckboxInkRipple($mdInkRipple) {
-    return {
-      attach: attach
-    };
-
-    function attach(scope, element, options) {
-      return $mdInkRipple.attach(scope, element, angular.extend({
-        center: true,
-        dimBackground: false,
-        fitRipple: true
-      }, options));
-    };
-  }
-  MdCheckboxInkRipple.$inject = ["$mdInkRipple"];;
-})();
-
-})();
-(function(){
-"use strict";
-
-(function() {
-  'use strict';
-
-  /**
-   * @ngdoc service
-   * @name $mdListInkRipple
-   * @module material.core
-   *
-   * @description
-   * Provides ripple effects for md-list.  See $mdInkRipple service for all possible configuration options.
-   *
-   * @param {object=} scope Scope within the current context
-   * @param {object=} element The element the ripple effect should be applied to
-   * @param {object=} options (Optional) Configuration options to override the defaultripple configuration
-   */
-
-  angular.module('material.core')
-    .factory('$mdListInkRipple', MdListInkRipple);
-
-  function MdListInkRipple($mdInkRipple) {
-    return {
-      attach: attach
-    };
-
-    function attach(scope, element, options) {
-      return $mdInkRipple.attach(scope, element, angular.extend({
-        center: false,
-        dimBackground: true,
-        outline: false,
-        rippleSize: 'full'
-      }, options));
-    };
-  }
-  MdListInkRipple.$inject = ["$mdInkRipple"];;
-})();
-
-})();
-(function(){
-"use strict";
-
-/**
- * @ngdoc module
- * @name material.core.ripple
- * @description
- * Ripple
- */
-angular.module('material.core')
-    .factory('$mdInkRipple', InkRippleService)
-    .directive('mdInkRipple', InkRippleDirective)
-    .directive('mdNoInk', attrNoDirective)
-    .directive('mdNoBar', attrNoDirective)
-    .directive('mdNoStretch', attrNoDirective);
-
-var DURATION = 450;
-
-/**
- * @ngdoc directive
- * @name mdInkRipple
- * @module material.core.ripple
- *
- * @description
- * The `md-ink-ripple` directive allows you to specify the ripple color or id a ripple is allowed.
- *
- * @param {string|boolean} md-ink-ripple A color string `#FF0000` or boolean (`false` or `0`) for preventing ripple
- *
- * @usage
- * ### String values
- * <hljs lang="html">
- *   <ANY md-ink-ripple="#FF0000">
- *     Ripples in red
- *   </ANY>
- *
- *   <ANY md-ink-ripple="false">
- *     Not rippling
- *   </ANY>
- * </hljs>
- *
- * ### Interpolated values
- * <hljs lang="html">
- *   <ANY md-ink-ripple="{{ randomColor() }}">
- *     Ripples with the return value of 'randomColor' function
- *   </ANY>
- *
- *   <ANY md-ink-ripple="{{ canRipple() }}">
- *     Ripples if 'canRipple' function return value is not 'false' or '0'
- *   </ANY>
- * </hljs>
- */
-function InkRippleDirective ($mdButtonInkRipple, $mdCheckboxInkRipple) {
-  return {
-    controller: angular.noop,
-    link:       function (scope, element, attr) {
-      attr.hasOwnProperty('mdInkRippleCheckbox')
-          ? $mdCheckboxInkRipple.attach(scope, element)
-          : $mdButtonInkRipple.attach(scope, element);
-    }
-  };
-}
-InkRippleDirective.$inject = ["$mdButtonInkRipple", "$mdCheckboxInkRipple"];
-
-/**
- * @ngdoc service
- * @name $mdInkRipple
- * @module material.core.ripple
- *
- * @description
- * `$mdInkRipple` is a service for adding ripples to any element
- *
- * @usage
- * <hljs lang="js">
- * app.factory('$myElementInkRipple', function($mdInkRipple) {
- *   return {
- *     attach: function (scope, element, options) {
- *       return $mdInkRipple.attach(scope, element, angular.extend({
- *         center: false,
- *         dimBackground: true
- *       }, options));
- *     }
- *   };
- * });
- *
- * app.controller('myController', function ($scope, $element, $myElementInkRipple) {
- *   $scope.onClick = function (ev) {
- *     $myElementInkRipple.attach($scope, angular.element(ev.target), { center: true });
- *   }
- * });
- * </hljs>
- */
-
-/**
- * @ngdoc method
- * @name $mdInkRipple#attach
- *
- * @description
- * Attaching given scope, element and options to inkRipple controller
- *
- * @param {object=} scope Scope within the current context
- * @param {object=} element The element the ripple effect should be applied to
- * @param {object=} options (Optional) Configuration options to override the defaultRipple configuration
- * * `center` -  Whether the ripple should start from the center of the container element
- * * `dimBackground` - Whether the background should be dimmed with the ripple color
- * * `colorElement` - The element the ripple should take its color from, defined by css property `color`
- * * `fitRipple` - Whether the ripple should fill the element
- */
-function InkRippleService ($injector) {
-  return { attach: attach };
-  function attach (scope, element, options) {
-    if (element.controller('mdNoInk')) return angular.noop;
-    return $injector.instantiate(InkRippleCtrl, {
-      $scope:        scope,
-      $element:      element,
-      rippleOptions: options
-    });
-  }
-}
-InkRippleService.$inject = ["$injector"];
-
-/**
- * Controller used by the ripple service in order to apply ripples
- * @ngInject
- */
-function InkRippleCtrl ($scope, $element, rippleOptions, $window, $timeout, $mdUtil) {
-  this.$window    = $window;
-  this.$timeout   = $timeout;
-  this.$mdUtil    = $mdUtil;
-  this.$scope     = $scope;
-  this.$element   = $element;
-  this.options    = rippleOptions;
-  this.mousedown  = false;
-  this.ripples    = [];
-  this.timeout    = null; // Stores a reference to the most-recent ripple timeout
-  this.lastRipple = null;
-
-  $mdUtil.valueOnUse(this, 'container', this.createContainer);
-
-  this.$element.addClass('md-ink-ripple');
-
-  // attach method for unit tests
-  ($element.controller('mdInkRipple') || {}).createRipple = angular.bind(this, this.createRipple);
-  ($element.controller('mdInkRipple') || {}).setColor = angular.bind(this, this.color);
-
-  this.bindEvents();
-}
-InkRippleCtrl.$inject = ["$scope", "$element", "rippleOptions", "$window", "$timeout", "$mdUtil"];
-
-
-/**
- * Either remove or unlock any remaining ripples when the user mouses off of the element (either by
- * mouseup or mouseleave event)
- */
-function autoCleanup (self, cleanupFn) {
-
-  if ( self.mousedown || self.lastRipple ) {
-    self.mousedown = false;
-    self.$mdUtil.nextTick( angular.bind(self, cleanupFn), false);
-  }
-
-}
-
-
-/**
- * Returns the color that the ripple should be (either based on CSS or hard-coded)
- * @returns {string}
- */
-InkRippleCtrl.prototype.color = function (value) {
-  var self = this;
-
-  // If assigning a color value, apply it to background and the ripple color
-  if (angular.isDefined(value)) {
-    self._color = self._parseColor(value);
-  }
-
-  // If color lookup, use assigned, defined, or inherited
-  return self._color || self._parseColor( self.inkRipple() ) || self._parseColor( getElementColor() );
-
-  /**
-   * Finds the color element and returns its text color for use as default ripple color
-   * @returns {string}
-   */
-  function getElementColor () {
-    var items = self.options && self.options.colorElement ? self.options.colorElement : [];
-    var elem =  items.length ? items[ 0 ] : self.$element[ 0 ];
-
-    return elem ? self.$window.getComputedStyle(elem).color : 'rgb(0,0,0)';
-  }
-};
-
-/**
- * Updating the ripple colors based on the current inkRipple value
- * or the element's computed style color
- */
-InkRippleCtrl.prototype.calculateColor = function () {
-  return this.color();
-};
-
-
-/**
- * Takes a string color and converts it to RGBA format
- * @param color {string}
- * @param [multiplier] {int}
- * @returns {string}
- */
-
-InkRippleCtrl.prototype._parseColor = function parseColor (color, multiplier) {
-  multiplier = multiplier || 1;
-
-  if (!color) return;
-  if (color.indexOf('rgba') === 0) return color.replace(/\d?\.?\d*\s*\)\s*$/, (0.1 * multiplier).toString() + ')');
-  if (color.indexOf('rgb') === 0) return rgbToRGBA(color);
-  if (color.indexOf('#') === 0) return hexToRGBA(color);
-
-  /**
-   * Converts hex value to RGBA string
-   * @param color {string}
-   * @returns {string}
-   */
-  function hexToRGBA (color) {
-    var hex   = color[ 0 ] === '#' ? color.substr(1) : color,
-      dig   = hex.length / 3,
-      red   = hex.substr(0, dig),
-      green = hex.substr(dig, dig),
-      blue  = hex.substr(dig * 2);
-    if (dig === 1) {
-      red += red;
-      green += green;
-      blue += blue;
-    }
-    return 'rgba(' + parseInt(red, 16) + ',' + parseInt(green, 16) + ',' + parseInt(blue, 16) + ',0.1)';
-  }
-
-  /**
-   * Converts an RGB color to RGBA
-   * @param color {string}
-   * @returns {string}
-   */
-  function rgbToRGBA (color) {
-    return color.replace(')', ', 0.1)').replace('(', 'a(');
-  }
-
-};
-
-/**
- * Binds events to the root element for
- */
-InkRippleCtrl.prototype.bindEvents = function () {
-  this.$element.on('mousedown', angular.bind(this, this.handleMousedown));
-  this.$element.on('mouseup touchend', angular.bind(this, this.handleMouseup));
-  this.$element.on('mouseleave', angular.bind(this, this.handleMouseup));
-  this.$element.on('touchmove', angular.bind(this, this.handleTouchmove));
-};
-
-/**
- * Create a new ripple on every mousedown event from the root element
- * @param event {MouseEvent}
- */
-InkRippleCtrl.prototype.handleMousedown = function (event) {
-  if ( this.mousedown ) return;
-
-  // When jQuery is loaded, we have to get the original event
-  if (event.hasOwnProperty('originalEvent')) event = event.originalEvent;
-  this.mousedown = true;
-  if (this.options.center) {
-    this.createRipple(this.container.prop('clientWidth') / 2, this.container.prop('clientWidth') / 2);
-  } else {
-
-    // We need to calculate the relative coordinates if the target is a sublayer of the ripple element
-    if (event.srcElement !== this.$element[0]) {
-      var layerRect = this.$element[0].getBoundingClientRect();
-      var layerX = event.clientX - layerRect.left;
-      var layerY = event.clientY - layerRect.top;
-
-      this.createRipple(layerX, layerY);
-    } else {
-      this.createRipple(event.offsetX, event.offsetY);
-    }
-  }
-};
-
-/**
- * Either remove or unlock any remaining ripples when the user mouses off of the element (either by
- * mouseup, touchend or mouseleave event)
- */
-InkRippleCtrl.prototype.handleMouseup = function () {
-  autoCleanup(this, this.clearRipples);
-};
-
-/**
- * Either remove or unlock any remaining ripples when the user mouses off of the element (by
- * touchmove)
- */
-InkRippleCtrl.prototype.handleTouchmove = function () {
-  autoCleanup(this, this.deleteRipples);
-};
-
-/**
- * Cycles through all ripples and attempts to remove them.
- */
-InkRippleCtrl.prototype.deleteRipples = function () {
-  for (var i = 0; i < this.ripples.length; i++) {
-    this.ripples[ i ].remove();
-  }
-};
-
-/**
- * Cycles through all ripples and attempts to remove them with fade.
- * Depending on logic within `fadeInComplete`, some removals will be postponed.
- */
-InkRippleCtrl.prototype.clearRipples = function () {
-  for (var i = 0; i < this.ripples.length; i++) {
-    this.fadeInComplete(this.ripples[ i ]);
-  }
-};
-
-/**
- * Creates the ripple container element
- * @returns {*}
- */
-InkRippleCtrl.prototype.createContainer = function () {
-  var container = angular.element('<div class="md-ripple-container"></div>');
-  this.$element.append(container);
-  return container;
-};
-
-InkRippleCtrl.prototype.clearTimeout = function () {
-  if (this.timeout) {
-    this.$timeout.cancel(this.timeout);
-    this.timeout = null;
-  }
-};
-
-InkRippleCtrl.prototype.isRippleAllowed = function () {
-  var element = this.$element[0];
-  do {
-    if (!element.tagName || element.tagName === 'BODY') break;
-
-    if (element && angular.isFunction(element.hasAttribute)) {
-      if (element.hasAttribute('disabled')) return false;
-      if (this.inkRipple() === 'false' || this.inkRipple() === '0') return false;
-    }
-
-  } while (element = element.parentNode);
-  return true;
-};
-
-/**
- * The attribute `md-ink-ripple` may be a static or interpolated
- * color value OR a boolean indicator (used to disable ripples)
- */
-InkRippleCtrl.prototype.inkRipple = function () {
-  return this.$element.attr('md-ink-ripple');
-};
-
-/**
- * Creates a new ripple and adds it to the container.  Also tracks ripple in `this.ripples`.
- * @param left
- * @param top
- */
-InkRippleCtrl.prototype.createRipple = function (left, top) {
-  if (!this.isRippleAllowed()) return;
-
-  var ctrl        = this;
-  var ripple      = angular.element('<div class="md-ripple"></div>');
-  var width       = this.$element.prop('clientWidth');
-  var height      = this.$element.prop('clientHeight');
-  var x           = Math.max(Math.abs(width - left), left) * 2;
-  var y           = Math.max(Math.abs(height - top), top) * 2;
-  var size        = getSize(this.options.fitRipple, x, y);
-  var color       = this.calculateColor();
-
-  ripple.css({
-    left:            left + 'px',
-    top:             top + 'px',
-    background:      'black',
-    width:           size + 'px',
-    height:          size + 'px',
-    backgroundColor: rgbaToRGB(color),
-    borderColor:     rgbaToRGB(color)
-  });
-  this.lastRipple = ripple;
-
-  // we only want one timeout to be running at a time
-  this.clearTimeout();
-  this.timeout    = this.$timeout(function () {
-    ctrl.clearTimeout();
-    if (!ctrl.mousedown) ctrl.fadeInComplete(ripple);
-  }, DURATION * 0.35, false);
-
-  if (this.options.dimBackground) this.container.css({ backgroundColor: color });
-  this.container.append(ripple);
-  this.ripples.push(ripple);
-  ripple.addClass('md-ripple-placed');
-
-  this.$mdUtil.nextTick(function () {
-
-    ripple.addClass('md-ripple-scaled md-ripple-active');
-    ctrl.$timeout(function () {
-      ctrl.clearRipples();
-    }, DURATION, false);
-
-  }, false);
-
-  function rgbaToRGB (color) {
-    return color
-        ? color.replace('rgba', 'rgb').replace(/,[^\),]+\)/, ')')
-        : 'rgb(0,0,0)';
-  }
-
-  function getSize (fit, x, y) {
-    return fit
-        ? Math.max(x, y)
-        : Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
-  }
-};
-
-
-
-/**
- * After fadeIn finishes, either kicks off the fade-out animation or queues the element for removal on mouseup
- * @param ripple
- */
-InkRippleCtrl.prototype.fadeInComplete = function (ripple) {
-  if (this.lastRipple === ripple) {
-    if (!this.timeout && !this.mousedown) {
-      this.removeRipple(ripple);
-    }
-  } else {
-    this.removeRipple(ripple);
-  }
-};
-
-/**
- * Kicks off the animation for removing a ripple
- * @param ripple {Element}
- */
-InkRippleCtrl.prototype.removeRipple = function (ripple) {
-  var ctrl  = this;
-  var index = this.ripples.indexOf(ripple);
-  if (index < 0) return;
-  this.ripples.splice(this.ripples.indexOf(ripple), 1);
-  ripple.removeClass('md-ripple-active');
-  if (this.ripples.length === 0) this.container.css({ backgroundColor: '' });
-  // use a 2-second timeout in order to allow for the animation to finish
-  // we don't actually care how long the animation takes
-  this.$timeout(function () {
-    ctrl.fadeOutComplete(ripple);
-  }, DURATION, false);
-};
-
-/**
- * Removes the provided ripple from the DOM
- * @param ripple
- */
-InkRippleCtrl.prototype.fadeOutComplete = function (ripple) {
-  ripple.remove();
-  this.lastRipple = null;
-};
-
-/**
- * Used to create an empty directive.  This is used to track flag-directives whose children may have
- * functionality based on them.
- *
- * Example: `md-no-ink` will potentially be used by all child directives.
- */
-function attrNoDirective () {
-  return { controller: angular.noop };
-}
-
-})();
-(function(){
-"use strict";
-
-(function() {
-  'use strict';
-
-    /**
-   * @ngdoc service
-   * @name $mdTabInkRipple
-   * @module material.core
-   *
-   * @description
-   * Provides ripple effects for md-tabs.  See $mdInkRipple service for all possible configuration options.
-   *
-   * @param {object=} scope Scope within the current context
-   * @param {object=} element The element the ripple effect should be applied to
-   * @param {object=} options (Optional) Configuration options to override the defaultripple configuration
-   */
-
-  angular.module('material.core')
-    .factory('$mdTabInkRipple', MdTabInkRipple);
-
-  function MdTabInkRipple($mdInkRipple) {
-    return {
-      attach: attach
-    };
-
-    function attach(scope, element, options) {
-      return $mdInkRipple.attach(scope, element, angular.extend({
-        center: false,
-        dimBackground: true,
-        outline: false,
-        rippleSize: 'full'
-      }, options));
-    };
-  }
-  MdTabInkRipple.$inject = ["$mdInkRipple"];;
-})();
-
-})();
-(function(){
-"use strict";
-
 // Polyfill angular < 1.4 (provide $animateCss)
 angular
   .module('material.core')
@@ -61215,141 +61562,6 @@ angular
 
 /**
  * @ngdoc module
- * @name material.components.button
- * @description
- *
- * Button
- */
-angular
-    .module('material.components.button', [ 'material.core' ])
-    .directive('mdButton', MdButtonDirective);
-
-/**
- * @ngdoc directive
- * @name mdButton
- * @module material.components.button
- *
- * @restrict E
- *
- * @description
- * `<md-button>` is a button directive with optional ink ripples (default enabled).
- *
- * If you supply a `href` or `ng-href` attribute, it will become an `<a>` element. Otherwise, it will
- * become a `<button>` element. As per the [Material Design specifications](http://www.google.com/design/spec/style/color.html#color-ui-color-application)
- * the FAB button background is filled with the accent color [by default]. The primary color palette may be used with
- * the `md-primary` class.
- *
- * @param {boolean=} md-no-ink If present, disable ripple ink effects.
- * @param {expression=} ng-disabled En/Disable based on the expression
- * @param {string=} md-ripple-size Overrides the default ripple size logic. Options: `full`, `partial`, `auto`
- * @param {string=} aria-label Adds alternative text to button for accessibility, useful for icon buttons.
- * If no default text is found, a warning will be logged.
- *
- * @usage
- *
- * Regular buttons:
- *
- * <hljs lang="html">
- *  <md-button> Flat Button </md-button>
- *  <md-button href="http://google.com"> Flat link </md-button>
- *  <md-button class="md-raised"> Raised Button </md-button>
- *  <md-button ng-disabled="true"> Disabled Button </md-button>
- *  <md-button>
- *    <md-icon md-svg-src="your/icon.svg"></md-icon>
- *    Register Now
- *  </md-button>
- * </hljs>
- *
- * FAB buttons:
- *
- * <hljs lang="html">
- *  <md-button class="md-fab" aria-label="FAB">
- *    <md-icon md-svg-src="your/icon.svg"></md-icon>
- *  </md-button>
- *  <!-- mini-FAB -->
- *  <md-button class="md-fab md-mini" aria-label="Mini FAB">
- *    <md-icon md-svg-src="your/icon.svg"></md-icon>
- *  </md-button>
- *  <!-- Button with SVG Icon -->
- *  <md-button class="md-icon-button" aria-label="Custom Icon Button">
- *    <md-icon md-svg-icon="path/to/your.svg"></md-icon>
- *  </md-button>
- * </hljs>
- */
-function MdButtonDirective($mdButtonInkRipple, $mdTheming, $mdAria, $timeout) {
-
-  return {
-    restrict: 'EA',
-    replace: true,
-    transclude: true,
-    template: getTemplate,
-    link: postLink
-  };
-
-  function isAnchor(attr) {
-    return angular.isDefined(attr.href) || angular.isDefined(attr.ngHref) || angular.isDefined(attr.ngLink) || angular.isDefined(attr.uiSref);
-  }
-
-  function getTemplate(element, attr) {
-    if (isAnchor(attr)) {
-      return '<a class="md-button" ng-transclude></a>';
-    } else {
-      //If buttons don't have type="button", they will submit forms automatically.
-      var btnType = (typeof attr.type === 'undefined') ? 'button' : attr.type;
-      return '<button class="md-button" type="' + btnType + '" ng-transclude></button>';
-    }
-  }
-
-  function postLink(scope, element, attr) {
-    $mdTheming(element);
-    $mdButtonInkRipple.attach(scope, element);
-
-    // Use async expect to support possible bindings in the button label
-    $mdAria.expectWithText(element, 'aria-label');
-
-    // For anchor elements, we have to set tabindex manually when the
-    // element is disabled
-    if (isAnchor(attr) && angular.isDefined(attr.ngDisabled) ) {
-      scope.$watch(attr.ngDisabled, function(isDisabled) {
-        element.attr('tabindex', isDisabled ? -1 : 0);
-      });
-    }
-
-    // disabling click event when disabled is true
-    element.on('click', function(e){
-      if (attr.disabled === true) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-      }
-    });
-
-    // restrict focus styles to the keyboard
-    scope.mouseActive = false;
-    element.on('mousedown', function() {
-        scope.mouseActive = true;
-        $timeout(function(){
-          scope.mouseActive = false;
-        }, 100);
-      })
-      .on('focus', function() {
-        if (scope.mouseActive === false) {
-          element.addClass('md-focused');
-        }
-      })
-      .on('blur', function(ev) {
-        element.removeClass('md-focused');
-      });
-  }
-
-}
-MdButtonDirective.$inject = ["$mdButtonInkRipple", "$mdTheming", "$mdAria", "$timeout"];
-
-})();
-(function(){
-"use strict";
-
-/**
- * @ngdoc module
  * @name material.components.bottomSheet
  * @description
  * BottomSheet
@@ -61512,7 +61724,7 @@ function MdBottomSheetProvider($$interimElementProvider) {
 
       if (!options.disableBackdrop) {
         // Add a backdrop that will close on click
-        backdrop = $mdUtil.createBackdrop(scope, "_md-bottom-sheet-backdrop md-opaque");
+        backdrop = $mdUtil.createBackdrop(scope, "md-bottom-sheet-backdrop md-opaque");
 
         // Prevent mouse focus on backdrop; ONLY programatic focus allowed.
         // This allows clicks on backdrop to propogate to the $rootElement and
@@ -61628,6 +61840,141 @@ function MdBottomSheetProvider($$interimElementProvider) {
 
 }
 MdBottomSheetProvider.$inject = ["$$interimElementProvider"];
+
+})();
+(function(){
+"use strict";
+
+/**
+ * @ngdoc module
+ * @name material.components.button
+ * @description
+ *
+ * Button
+ */
+angular
+    .module('material.components.button', [ 'material.core' ])
+    .directive('mdButton', MdButtonDirective);
+
+/**
+ * @ngdoc directive
+ * @name mdButton
+ * @module material.components.button
+ *
+ * @restrict E
+ *
+ * @description
+ * `<md-button>` is a button directive with optional ink ripples (default enabled).
+ *
+ * If you supply a `href` or `ng-href` attribute, it will become an `<a>` element. Otherwise, it will
+ * become a `<button>` element. As per the [Material Design specifications](http://www.google.com/design/spec/style/color.html#color-ui-color-application)
+ * the FAB button background is filled with the accent color [by default]. The primary color palette may be used with
+ * the `md-primary` class.
+ *
+ * @param {boolean=} md-no-ink If present, disable ripple ink effects.
+ * @param {expression=} ng-disabled En/Disable based on the expression
+ * @param {string=} md-ripple-size Overrides the default ripple size logic. Options: `full`, `partial`, `auto`
+ * @param {string=} aria-label Adds alternative text to button for accessibility, useful for icon buttons.
+ * If no default text is found, a warning will be logged.
+ *
+ * @usage
+ *
+ * Regular buttons:
+ *
+ * <hljs lang="html">
+ *  <md-button> Flat Button </md-button>
+ *  <md-button href="http://google.com"> Flat link </md-button>
+ *  <md-button class="md-raised"> Raised Button </md-button>
+ *  <md-button ng-disabled="true"> Disabled Button </md-button>
+ *  <md-button>
+ *    <md-icon md-svg-src="your/icon.svg"></md-icon>
+ *    Register Now
+ *  </md-button>
+ * </hljs>
+ *
+ * FAB buttons:
+ *
+ * <hljs lang="html">
+ *  <md-button class="md-fab" aria-label="FAB">
+ *    <md-icon md-svg-src="your/icon.svg"></md-icon>
+ *  </md-button>
+ *  <!-- mini-FAB -->
+ *  <md-button class="md-fab md-mini" aria-label="Mini FAB">
+ *    <md-icon md-svg-src="your/icon.svg"></md-icon>
+ *  </md-button>
+ *  <!-- Button with SVG Icon -->
+ *  <md-button class="md-icon-button" aria-label="Custom Icon Button">
+ *    <md-icon md-svg-icon="path/to/your.svg"></md-icon>
+ *  </md-button>
+ * </hljs>
+ */
+function MdButtonDirective($mdButtonInkRipple, $mdTheming, $mdAria, $timeout) {
+
+  return {
+    restrict: 'EA',
+    replace: true,
+    transclude: true,
+    template: getTemplate,
+    link: postLink
+  };
+
+  function isAnchor(attr) {
+    return angular.isDefined(attr.href) || angular.isDefined(attr.ngHref) || angular.isDefined(attr.ngLink) || angular.isDefined(attr.uiSref);
+  }
+
+  function getTemplate(element, attr) {
+    if (isAnchor(attr)) {
+      return '<a class="md-button" ng-transclude></a>';
+    } else {
+      //If buttons don't have type="button", they will submit forms automatically.
+      var btnType = (typeof attr.type === 'undefined') ? 'button' : attr.type;
+      return '<button class="md-button" type="' + btnType + '" ng-transclude></button>';
+    }
+  }
+
+  function postLink(scope, element, attr) {
+    $mdTheming(element);
+    $mdButtonInkRipple.attach(scope, element);
+
+    // Use async expect to support possible bindings in the button label
+    $mdAria.expectWithText(element, 'aria-label');
+
+    // For anchor elements, we have to set tabindex manually when the
+    // element is disabled
+    if (isAnchor(attr) && angular.isDefined(attr.ngDisabled) ) {
+      scope.$watch(attr.ngDisabled, function(isDisabled) {
+        element.attr('tabindex', isDisabled ? -1 : 0);
+      });
+    }
+
+    // disabling click event when disabled is true
+    element.on('click', function(e){
+      if (attr.disabled === true) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+      }
+    });
+
+    // restrict focus styles to the keyboard
+    scope.mouseActive = false;
+    element.on('mousedown', function() {
+        scope.mouseActive = true;
+        $timeout(function(){
+          scope.mouseActive = false;
+        }, 100);
+      })
+      .on('focus', function() {
+        if (scope.mouseActive === false) {
+          element.addClass('md-focused');
+        }
+      })
+      .on('blur', function(ev) {
+        element.removeClass('md-focused');
+      });
+  }
+
+}
+MdButtonDirective.$inject = ["$mdButtonInkRipple", "$mdTheming", "$mdAria", "$timeout"];
 
 })();
 (function(){
@@ -61797,7 +62144,12 @@ angular
  * @param {string=} ng-change Angular expression to be executed when input changes due to user interaction with the input element.
  * @param {boolean=} md-no-ink Use of attribute indicates use of ripple ink effects
  * @param {string=} aria-label Adds label to checkbox for accessibility.
- * Defaults to checkbox's text. If no default text is found, a warning will be logged.
+ *     Defaults to checkbox's text. If no default text is found, a warning will be logged.
+ * @param {expression=} md-indeterminate This determines when the checkbox should be rendered as 'indeterminate'.
+ *     If a truthy expression or no value is passed in the checkbox renders in the md-indeterminate state.
+ *     If falsy expression is passed in it just looks like a normal unchecked checkbox.
+ *     The indeterminate, checked, and unchecked states are mutually exclusive. A box cannot be in any two states at the same time. 
+ *     When a checkbox is indeterminate that overrides any checked/unchecked rendering logic.
  *
  * @usage
  * <hljs lang="html">
@@ -61825,7 +62177,7 @@ function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $
     transclude: true,
     require: '?ngModel',
     priority: 210, // Run before ngAria
-    template: 
+    template:
       '<div class="md-container" md-ink-ripple md-ink-ripple-checkbox>' +
         '<div class="md-icon"></div>' +
       '</div>' +
@@ -61839,6 +62191,7 @@ function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $
 
   function compile (tElement, tAttrs) {
     var container = tElement.children();
+    var mdIndeterminateStateEnabled = tAttrs.hasOwnProperty('mdIndeterminate');
 
     tAttrs.type = 'checkbox';
     tAttrs.tabindex = tAttrs.tabindex || '0';
@@ -61859,8 +62212,13 @@ function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $
     });
 
     return function postLink(scope, element, attr, ngModelCtrl) {
+      var isIndeterminate;
       ngModelCtrl = ngModelCtrl || $mdUtil.fakeNgModel();
       $mdTheming(element);
+      if (mdIndeterminateStateEnabled) {
+        setIndeterminateState();
+        scope.$watch(attr.mdIndeterminate, setIndeterminateState);
+      }
 
       if (attr.ngChecked) {
         scope.$watch(
@@ -61926,6 +62284,7 @@ function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $
           listener(ev);
         }
       }
+
       function listener(ev) {
         if (element[0].hasAttribute('disabled')) {
           return;
@@ -61941,16 +62300,40 @@ function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $
       }
 
       function render() {
-        if(ngModelCtrl.$viewValue) {
+        if(ngModelCtrl.$viewValue && !isIndeterminate) {
           element.addClass(CHECKED_CSS);
         } else {
           element.removeClass(CHECKED_CSS);
         }
       }
+
+      function setIndeterminateState(newValue) {
+        isIndeterminate = newValue !== false;
+        if (isIndeterminate) {
+          element.attr('aria-checked', 'mixed');
+        }
+        element.toggleClass('md-indeterminate', isIndeterminate);
+      }
     };
   }
 }
 MdCheckboxDirective.$inject = ["inputDirective", "$mdAria", "$mdConstant", "$mdTheming", "$mdUtil", "$timeout"];
+
+})();
+(function(){
+"use strict";
+
+/**
+ * @ngdoc module
+ * @name material.components.chips
+ */
+/*
+ * @see js folder for chips implementation
+ */
+angular.module('material.components.chips', [
+  'material.core',
+  'material.components.autocomplete'
+]);
 
 })();
 (function(){
@@ -62030,22 +62413,6 @@ function iosScrollFix(node) {
     }
   });
 }
-
-})();
-(function(){
-"use strict";
-
-/**
- * @ngdoc module
- * @name material.components.chips
- */
-/*
- * @see js folder for chips implementation
- */
-angular.module('material.components.chips', [
-  'material.core',
-  'material.components.autocomplete'
-]);
 
 })();
 (function(){
@@ -64942,7 +65309,8 @@ function MdDialogProvider($$interimElementProvider) {
 
       var role = (options.$type === 'alert') ? 'alertdialog' : 'dialog';
       var dialogContent = element.find('md-dialog-content');
-      var dialogContentId = 'dialogContent_' + (element.attr('id') || $mdUtil.nextUid());
+      var existingDialogId = element.attr('id');
+      var dialogContentId = 'dialogContent_' + (existingDialogId || $mdUtil.nextUid());
 
       element.attr({
         'role': role,
@@ -64951,6 +65319,10 @@ function MdDialogProvider($$interimElementProvider) {
 
       if (dialogContent.length === 0) {
         dialogContent = element;
+        // If the dialog element already had an ID, don't clobber it.
+        if (existingDialogId) {
+          dialogContentId = existingDialogId;
+        }
       }
 
       dialogContent.attr('id', dialogContentId);
@@ -67621,20 +67993,6 @@ function getMessagesElement(element) {
 
 /**
  * @ngdoc module
- * @name material.components.menu
- */
-
-angular.module('material.components.menu', [
-  'material.core',
-  'material.components.backdrop'
-]);
-
-})();
-(function(){
-"use strict";
-
-/**
- * @ngdoc module
  * @name material.components.list
  * @description
  * List module
@@ -67944,6 +68302,20 @@ function MdListController($scope, $element, $mdListInkRipple) {
 }
 MdListController.$inject = ["$scope", "$element", "$mdListInkRipple"];
 
+
+})();
+(function(){
+"use strict";
+
+/**
+ * @ngdoc module
+ * @name material.components.menu
+ */
+
+angular.module('material.components.menu', [
+  'material.core',
+  'material.components.backdrop'
+]);
 
 })();
 (function(){
@@ -68781,49 +69153,6 @@ mdRadioButtonDirective.$inject = ["$mdAria", "$mdUtil", "$mdTheming"];
 
 /**
  * @ngdoc module
- * @name material.components.showHide
- */
-
-// Add additional handlers to ng-show and ng-hide that notify directives
-// contained within that they should recompute their size.
-// These run in addition to Angular's built-in ng-hide and ng-show directives.
-angular.module('material.components.showHide', [
-  'material.core'
-])
-  .directive('ngShow', createDirective('ngShow', true))
-  .directive('ngHide', createDirective('ngHide', false));
-
-
-function createDirective(name, targetValue) {
-  return ['$mdUtil', function($mdUtil) {
-    return {
-      restrict: 'A',
-      multiElement: true,
-      link: function($scope, $element, $attr) {
-        var unregister = $scope.$on('$md-resize-enable', function() {
-          unregister();
-
-          $scope.$watch($attr[name], function(value) {
-            if (!!value === targetValue) {
-              $mdUtil.nextTick(function() {
-                $scope.$broadcast('$md-resize');
-              });
-              $mdUtil.dom.animator.waitTransitionEnd($element).then(function() {
-                $scope.$broadcast('$md-resize');
-              });
-            }
-          });
-        });
-      }
-    };
-  }];
-}
-})();
-(function(){
-"use strict";
-
-/**
- * @ngdoc module
  * @name material.components.select
  */
 
@@ -68836,6 +69165,8 @@ function createDirective(name, targetValue) {
 
 var SELECT_EDGE_MARGIN = 8;
 var selectNextId = 0;
+var CHECKBOX_SELECTION_INDICATOR =
+  angular.element('<div class="md-container"><div class="md-icon"></div></div>');
 
 angular.module('material.components.select', [
     'material.core',
@@ -68845,6 +69176,7 @@ angular.module('material.components.select', [
   .directive('mdSelectMenu', SelectMenuDirective)
   .directive('mdOption', OptionDirective)
   .directive('mdOptgroup', OptgroupDirective)
+  .directive('mdSelectHeader', SelectHeaderDirective)
   .provider('$mdSelect', SelectProvider);
 
 /**
@@ -68860,6 +69192,8 @@ angular.module('material.components.select', [
  * @param {expression=} md-on-close Expression to be evaluated when the select is closed.
  * @param {expression=} md-on-open Expression to be evaluated when opening the select.
  * Will hide the select options and show a spinner until the evaluated promise resolves.
+ * @param {expression=} md-selected-text Expression to be evaluated that will return a string
+ * to be displayed as a placeholder in the select input box when it is closed.
  * @param {string=} placeholder Placeholder hint text.
  * @param {string=} aria-label Optional label for accessibility. Only necessary if no placeholder or
  * explicit label is present.
@@ -68884,6 +69218,27 @@ angular.module('material.components.select', [
  *     <label>State</label>
  *     <md-select
  *       ng-model="someModel">
+ *       <md-option ng-value="opt" ng-repeat="opt in neighborhoods2">{{ opt }}</md-option>
+ *     </md-select>
+ *   </md-input-container>
+ * </hljs>
+ *
+ * With a select-header
+ *
+ * When a developer needs to put more than just a text label in the
+ * md-select-menu, they should use the md-select-header.
+ * The user can put custom HTML inside of the header and style it to their liking.
+ * One common use case of this would be a sticky search bar.
+ *
+ * When using the md-select-header the labels that would previously be added to the
+ * OptGroupDirective are ignored.
+ *
+ * <hljs lang="html">
+ *   <md-input-container>
+ *     <md-select ng-model="someModel">
+ *       <md-select-header>
+ *         <span> Neighborhoods - </span>
+ *       </md-select-header>
  *       <md-option ng-value="opt" ng-repeat="opt in neighborhoods2">{{ opt }}</md-option>
  *     </md-select>
  *   </md-input-container>
@@ -69030,7 +69385,11 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
           };
 
         if (containerCtrl.input) {
-          throw new Error("<md-input-container> can only have *one* child <input>, <textarea> or <select> element!");
+          // We ignore inputs that are in the md-select-header (one
+          // case where this might be useful would be adding as searchbox)
+          if (element.find('md-select-header').find('input')[0] !== containerCtrl.input[0]) {
+            throw new Error("<md-input-container> can only have *one* child <input>, <textarea> or <select> element!");
+          }
         }
 
         containerCtrl.input = element;
@@ -69079,9 +69438,16 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
 
       mdSelectCtrl.setLabelText = function(text) {
         mdSelectCtrl.setIsPlaceholder(!text);
-        // Use placeholder attribute, otherwise fallback to the md-input-container label
-        var tmpPlaceholder = attr.placeholder || (containerCtrl && containerCtrl.label ? containerCtrl.label.text() : '');
-        text = text || tmpPlaceholder || '';
+
+        if (attr.mdSelectedText) {
+          text = $parse(attr.mdSelectedText)(scope);
+        } else {
+          // Use placeholder attribute, otherwise fallback to the md-input-container label
+          var tmpPlaceholder = attr.placeholder ||
+              (containerCtrl && containerCtrl.label ? containerCtrl.label.text() : '');
+          text = text || tmpPlaceholder || '';
+        }
+
         var target = valueEl.children().eq(0);
         target.html(text);
       };
@@ -69317,12 +69683,14 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
 SelectDirective.$inject = ["$mdSelect", "$mdUtil", "$mdTheming", "$mdAria", "$compile", "$parse"];
 
 function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
-
+  // We want the scope to be set to 'false' so an isolated scope is not created
+  // which would interfere with the md-select-header's access to the
+  // parent scope.
   SelectMenuController.$inject = ["$scope", "$attrs", "$element"];
   return {
     restrict: 'E',
     require: ['mdSelectMenu'],
-    scope: true,
+    scope: false,
     controller: SelectMenuController,
     link: {pre: preLink}
   };
@@ -69606,6 +69974,11 @@ function OptionDirective($mdButtonInkRipple, $mdUtil) {
     var optionCtrl = ctrls[0];
     var selectCtrl = ctrls[1];
 
+    if (selectCtrl.isMultiple) {
+      element.addClass('md-checkbox-enabled');
+      element.prepend(CHECKBOX_SELECTION_INDICATOR.clone());
+    }
+
     if (angular.isDefined(attr.ngValue)) {
       scope.$watch(attr.ngValue, setOptionValue);
     } else if (angular.isDefined(attr.value)) {
@@ -69704,14 +70077,32 @@ function OptgroupDirective() {
     compile: compile
   };
   function compile(el, attrs) {
-    var labelElement = el.find('label');
-    if (!labelElement.length) {
-      labelElement = angular.element('<label>');
-      el.prepend(labelElement);
+    // If we have a select header element, we don't want to add the normal label
+    // header.
+    if (!hasSelectHeader()) {
+      setupLabelElement();
     }
-    labelElement.addClass('md-container-ignore');
-    if (attrs.label) labelElement.text(attrs.label);
+
+    function hasSelectHeader() {
+      return el.parent().find('md-select-header').length;
+    }
+
+    function setupLabelElement() {
+      var labelElement = el.find('label');
+      if (!labelElement.length) {
+        labelElement = angular.element('<label>');
+        el.prepend(labelElement);
+      }
+      labelElement.addClass('md-container-ignore');
+      if (attrs.label) labelElement.text(attrs.label);
+    }
   }
+}
+
+function SelectHeaderDirective() {
+  return {
+    restrict: 'E',
+  };
 }
 
 function SelectProvider($$interimElementProvider) {
@@ -70055,6 +70446,7 @@ function SelectProvider($$interimElementProvider) {
             newOption = optionsArray[index];
             if (newOption.hasAttribute('disabled')) newOption = undefined;
           } while (!newOption && index < optionsArray.length - 1 && index > 0);
+
           newOption && newOption.focus();
           opts.focusedNode = newOption;
         }
@@ -70305,7 +70697,49 @@ function SelectProvider($$interimElementProvider) {
 }
 SelectProvider.$inject = ["$$interimElementProvider"];
 
+})();
+(function(){
+"use strict";
 
+/**
+ * @ngdoc module
+ * @name material.components.showHide
+ */
+
+// Add additional handlers to ng-show and ng-hide that notify directives
+// contained within that they should recompute their size.
+// These run in addition to Angular's built-in ng-hide and ng-show directives.
+angular.module('material.components.showHide', [
+  'material.core'
+])
+  .directive('ngShow', createDirective('ngShow', true))
+  .directive('ngHide', createDirective('ngHide', false));
+
+
+function createDirective(name, targetValue) {
+  return ['$mdUtil', function($mdUtil) {
+    return {
+      restrict: 'A',
+      multiElement: true,
+      link: function($scope, $element, $attr) {
+        var unregister = $scope.$on('$md-resize-enable', function() {
+          unregister();
+
+          $scope.$watch($attr[name], function(value) {
+            if (!!value === targetValue) {
+              $mdUtil.nextTick(function() {
+                $scope.$broadcast('$md-resize');
+              });
+              $mdUtil.dom.animator.waitTransitionEnd($element).then(function() {
+                $scope.$broadcast('$md-resize');
+              });
+            }
+          });
+        });
+      }
+    };
+  }];
+}
 })();
 (function(){
 "use strict";
@@ -73336,6 +73770,8 @@ function VirtualRepeatController($scope, $element, $attrs, $browser, $document, 
   this.blocks = {};
   /** @type {Array<!VirtualRepeatController.Block>} A pool of presently unused blocks. */
   this.pooledBlocks = [];
+
+  $scope.$on('$destroy', angular.bind(this, this.cleanupBlocks_));
 }
 VirtualRepeatController.$inject = ["$scope", "$element", "$attrs", "$browser", "$document", "$rootScope", "$$rAF"];
 
@@ -73369,6 +73805,14 @@ VirtualRepeatController.prototype.link_ =
   this.repeatListExpression = angular.bind(this, this.repeatListExpression_);
 
   this.container.register(this);
+};
+
+
+/** @private Cleans up unused blocks. */
+VirtualRepeatController.prototype.cleanupBlocks_ = function() {
+  angular.forEach(this.pooledBlocks, function cleanupBlock(block) {
+    block.element.remove();
+  });
 };
 
 
@@ -75396,7 +75840,7 @@ MdChipsCtrl.prototype.updateChipContents = function(chipIndex, chipContents){
  * @return {boolean}
  */
 MdChipsCtrl.prototype.isEditingChip = function(){
-  return !!this.$element[0].getElementsByClassName('_md-chip-editing').length;
+  return !!this.$element[0].getElementsByClassName('md-chip-editing').length;
 };
 
 
@@ -79955,8 +80399,8 @@ MdTabsTemplate.$inject = ["$compile", "$mdUtil"];
 
 })();
 (function(){ 
-angular.module("material.core").constant("$MD_THEME_CSS", "md-autocomplete.md-THEME_NAME-theme {  background: '{{background-50}}'; }  md-autocomplete.md-THEME_NAME-theme[disabled] {    background: '{{background-100}}'; }  md-autocomplete.md-THEME_NAME-theme button md-icon path {    fill: '{{background-600}}'; }  md-autocomplete.md-THEME_NAME-theme button:after {    background: '{{background-600-0.3}}'; }.md-autocomplete-suggestions-container.md-THEME_NAME-theme {  background: '{{background-50}}'; }  .md-autocomplete-suggestions-container.md-THEME_NAME-theme li {    color: '{{background-900}}'; }    .md-autocomplete-suggestions-container.md-THEME_NAME-theme li .highlight {      color: '{{background-600}}'; }    .md-autocomplete-suggestions-container.md-THEME_NAME-theme li:hover, .md-autocomplete-suggestions-container.md-THEME_NAME-theme li.selected {      background: '{{background-200}}'; }md-backdrop {  background-color: '{{background-900-0.0}}'; }  md-backdrop.md-opaque.md-THEME_NAME-theme {    background-color: '{{background-900-1.0}}'; }a.md-button.md-THEME_NAME-theme:not([disabled]):hover,.md-button.md-THEME_NAME-theme:not([disabled]):hover {  background-color: '{{background-500-0.2}}'; }a.md-button.md-THEME_NAME-theme:not([disabled]).md-focused,.md-button.md-THEME_NAME-theme:not([disabled]).md-focused {  background-color: '{{background-500-0.2}}'; }a.md-button.md-THEME_NAME-theme:not([disabled]).md-icon-button:hover,.md-button.md-THEME_NAME-theme:not([disabled]).md-icon-button:hover {  background-color: transparent; }a.md-button.md-THEME_NAME-theme.md-fab,.md-button.md-THEME_NAME-theme.md-fab {  background-color: '{{accent-color}}';  color: '{{accent-contrast}}'; }  a.md-button.md-THEME_NAME-theme.md-fab md-icon,  .md-button.md-THEME_NAME-theme.md-fab md-icon {    color: '{{accent-contrast}}'; }  a.md-button.md-THEME_NAME-theme.md-fab:not([disabled]):hover,  .md-button.md-THEME_NAME-theme.md-fab:not([disabled]):hover {    background-color: '{{accent-color}}'; }  a.md-button.md-THEME_NAME-theme.md-fab:not([disabled]).md-focused,  .md-button.md-THEME_NAME-theme.md-fab:not([disabled]).md-focused {    background-color: '{{accent-A700}}'; }a.md-button.md-THEME_NAME-theme.md-primary,.md-button.md-THEME_NAME-theme.md-primary {  color: '{{primary-color}}'; }  a.md-button.md-THEME_NAME-theme.md-primary.md-raised, a.md-button.md-THEME_NAME-theme.md-primary.md-fab,  .md-button.md-THEME_NAME-theme.md-primary.md-raised,  .md-button.md-THEME_NAME-theme.md-primary.md-fab {    color: '{{primary-contrast}}';    background-color: '{{primary-color}}'; }    a.md-button.md-THEME_NAME-theme.md-primary.md-raised:not([disabled]) md-icon, a.md-button.md-THEME_NAME-theme.md-primary.md-fab:not([disabled]) md-icon,    .md-button.md-THEME_NAME-theme.md-primary.md-raised:not([disabled]) md-icon,    .md-button.md-THEME_NAME-theme.md-primary.md-fab:not([disabled]) md-icon {      color: '{{primary-contrast}}'; }    a.md-button.md-THEME_NAME-theme.md-primary.md-raised:not([disabled]):hover, a.md-button.md-THEME_NAME-theme.md-primary.md-fab:not([disabled]):hover,    .md-button.md-THEME_NAME-theme.md-primary.md-raised:not([disabled]):hover,    .md-button.md-THEME_NAME-theme.md-primary.md-fab:not([disabled]):hover {      background-color: '{{primary-color}}'; }    a.md-button.md-THEME_NAME-theme.md-primary.md-raised:not([disabled]).md-focused, a.md-button.md-THEME_NAME-theme.md-primary.md-fab:not([disabled]).md-focused,    .md-button.md-THEME_NAME-theme.md-primary.md-raised:not([disabled]).md-focused,    .md-button.md-THEME_NAME-theme.md-primary.md-fab:not([disabled]).md-focused {      background-color: '{{primary-600}}'; }  a.md-button.md-THEME_NAME-theme.md-primary:not([disabled]) md-icon,  .md-button.md-THEME_NAME-theme.md-primary:not([disabled]) md-icon {    color: '{{primary-color}}'; }a.md-button.md-THEME_NAME-theme.md-fab,.md-button.md-THEME_NAME-theme.md-fab {  background-color: '{{accent-color}}';  color: '{{accent-contrast}}'; }  a.md-button.md-THEME_NAME-theme.md-fab:not([disabled]) .md-icon,  .md-button.md-THEME_NAME-theme.md-fab:not([disabled]) .md-icon {    color: '{{accent-contrast}}'; }  a.md-button.md-THEME_NAME-theme.md-fab:not([disabled]):hover,  .md-button.md-THEME_NAME-theme.md-fab:not([disabled]):hover {    background-color: '{{accent-color}}'; }  a.md-button.md-THEME_NAME-theme.md-fab:not([disabled]).md-focused,  .md-button.md-THEME_NAME-theme.md-fab:not([disabled]).md-focused {    background-color: '{{accent-A700}}'; }a.md-button.md-THEME_NAME-theme.md-raised,.md-button.md-THEME_NAME-theme.md-raised {  color: '{{background-900}}';  background-color: '{{background-50}}'; }  a.md-button.md-THEME_NAME-theme.md-raised:not([disabled]) md-icon,  .md-button.md-THEME_NAME-theme.md-raised:not([disabled]) md-icon {    color: '{{background-900}}'; }  a.md-button.md-THEME_NAME-theme.md-raised:not([disabled]):hover,  .md-button.md-THEME_NAME-theme.md-raised:not([disabled]):hover {    background-color: '{{background-50}}'; }  a.md-button.md-THEME_NAME-theme.md-raised:not([disabled]).md-focused,  .md-button.md-THEME_NAME-theme.md-raised:not([disabled]).md-focused {    background-color: '{{background-200}}'; }a.md-button.md-THEME_NAME-theme.md-warn,.md-button.md-THEME_NAME-theme.md-warn {  color: '{{warn-color}}'; }  a.md-button.md-THEME_NAME-theme.md-warn.md-raised, a.md-button.md-THEME_NAME-theme.md-warn.md-fab,  .md-button.md-THEME_NAME-theme.md-warn.md-raised,  .md-button.md-THEME_NAME-theme.md-warn.md-fab {    color: '{{warn-contrast}}';    background-color: '{{warn-color}}'; }    a.md-button.md-THEME_NAME-theme.md-warn.md-raised:not([disabled]) md-icon, a.md-button.md-THEME_NAME-theme.md-warn.md-fab:not([disabled]) md-icon,    .md-button.md-THEME_NAME-theme.md-warn.md-raised:not([disabled]) md-icon,    .md-button.md-THEME_NAME-theme.md-warn.md-fab:not([disabled]) md-icon {      color: '{{warn-contrast}}'; }    a.md-button.md-THEME_NAME-theme.md-warn.md-raised:not([disabled]):hover, a.md-button.md-THEME_NAME-theme.md-warn.md-fab:not([disabled]):hover,    .md-button.md-THEME_NAME-theme.md-warn.md-raised:not([disabled]):hover,    .md-button.md-THEME_NAME-theme.md-warn.md-fab:not([disabled]):hover {      background-color: '{{warn-color}}'; }    a.md-button.md-THEME_NAME-theme.md-warn.md-raised:not([disabled]).md-focused, a.md-button.md-THEME_NAME-theme.md-warn.md-fab:not([disabled]).md-focused,    .md-button.md-THEME_NAME-theme.md-warn.md-raised:not([disabled]).md-focused,    .md-button.md-THEME_NAME-theme.md-warn.md-fab:not([disabled]).md-focused {      background-color: '{{warn-700}}'; }  a.md-button.md-THEME_NAME-theme.md-warn:not([disabled]) md-icon,  .md-button.md-THEME_NAME-theme.md-warn:not([disabled]) md-icon {    color: '{{warn-color}}'; }a.md-button.md-THEME_NAME-theme.md-accent,.md-button.md-THEME_NAME-theme.md-accent {  color: '{{accent-color}}'; }  a.md-button.md-THEME_NAME-theme.md-accent.md-raised, a.md-button.md-THEME_NAME-theme.md-accent.md-fab,  .md-button.md-THEME_NAME-theme.md-accent.md-raised,  .md-button.md-THEME_NAME-theme.md-accent.md-fab {    color: '{{accent-contrast}}';    background-color: '{{accent-color}}'; }    a.md-button.md-THEME_NAME-theme.md-accent.md-raised:not([disabled]) md-icon, a.md-button.md-THEME_NAME-theme.md-accent.md-fab:not([disabled]) md-icon,    .md-button.md-THEME_NAME-theme.md-accent.md-raised:not([disabled]) md-icon,    .md-button.md-THEME_NAME-theme.md-accent.md-fab:not([disabled]) md-icon {      color: '{{accent-contrast}}'; }    a.md-button.md-THEME_NAME-theme.md-accent.md-raised:not([disabled]):hover, a.md-button.md-THEME_NAME-theme.md-accent.md-fab:not([disabled]):hover,    .md-button.md-THEME_NAME-theme.md-accent.md-raised:not([disabled]):hover,    .md-button.md-THEME_NAME-theme.md-accent.md-fab:not([disabled]):hover {      background-color: '{{accent-color}}'; }    a.md-button.md-THEME_NAME-theme.md-accent.md-raised:not([disabled]).md-focused, a.md-button.md-THEME_NAME-theme.md-accent.md-fab:not([disabled]).md-focused,    .md-button.md-THEME_NAME-theme.md-accent.md-raised:not([disabled]).md-focused,    .md-button.md-THEME_NAME-theme.md-accent.md-fab:not([disabled]).md-focused {      background-color: '{{accent-700}}'; }  a.md-button.md-THEME_NAME-theme.md-accent:not([disabled]) md-icon,  .md-button.md-THEME_NAME-theme.md-accent:not([disabled]) md-icon {    color: '{{accent-color}}'; }a.md-button.md-THEME_NAME-theme[disabled], a.md-button.md-THEME_NAME-theme.md-raised[disabled], a.md-button.md-THEME_NAME-theme.md-fab[disabled], a.md-button.md-THEME_NAME-theme.md-accent[disabled], a.md-button.md-THEME_NAME-theme.md-warn[disabled],.md-button.md-THEME_NAME-theme[disabled],.md-button.md-THEME_NAME-theme.md-raised[disabled],.md-button.md-THEME_NAME-theme.md-fab[disabled],.md-button.md-THEME_NAME-theme.md-accent[disabled],.md-button.md-THEME_NAME-theme.md-warn[disabled] {  color: '{{foreground-3}}' !important;  cursor: default; }  a.md-button.md-THEME_NAME-theme[disabled] md-icon, a.md-button.md-THEME_NAME-theme.md-raised[disabled] md-icon, a.md-button.md-THEME_NAME-theme.md-fab[disabled] md-icon, a.md-button.md-THEME_NAME-theme.md-accent[disabled] md-icon, a.md-button.md-THEME_NAME-theme.md-warn[disabled] md-icon,  .md-button.md-THEME_NAME-theme[disabled] md-icon,  .md-button.md-THEME_NAME-theme.md-raised[disabled] md-icon,  .md-button.md-THEME_NAME-theme.md-fab[disabled] md-icon,  .md-button.md-THEME_NAME-theme.md-accent[disabled] md-icon,  .md-button.md-THEME_NAME-theme.md-warn[disabled] md-icon {    color: '{{foreground-3}}'; }a.md-button.md-THEME_NAME-theme.md-raised[disabled], a.md-button.md-THEME_NAME-theme.md-fab[disabled],.md-button.md-THEME_NAME-theme.md-raised[disabled],.md-button.md-THEME_NAME-theme.md-fab[disabled] {  background-color: '{{foreground-4}}'; }a.md-button.md-THEME_NAME-theme[disabled],.md-button.md-THEME_NAME-theme[disabled] {  background-color: transparent; }md-bottom-sheet.md-THEME_NAME-theme {  background-color: '{{background-50}}';  border-top-color: '{{background-300}}'; }  md-bottom-sheet.md-THEME_NAME-theme.md-list md-list-item {    color: '{{foreground-1}}'; }  md-bottom-sheet.md-THEME_NAME-theme .md-subheader {    background-color: '{{background-50}}'; }  md-bottom-sheet.md-THEME_NAME-theme .md-subheader {    color: '{{foreground-1}}'; }md-card.md-THEME_NAME-theme {  background-color: '{{background-color}}';  border-radius: 2px; }  md-card.md-THEME_NAME-theme .md-card-image {    border-radius: 2px 2px 0 0; }  md-card.md-THEME_NAME-theme md-card-header md-card-avatar md-icon {    color: '{{background-color}}';    background-color: '{{foreground-3}}'; }  md-card.md-THEME_NAME-theme md-card-header md-card-header-text .md-subhead {    color: '{{foreground-2}}'; }  md-card.md-THEME_NAME-theme md-card-title md-card-title-text:not(:only-child) .md-subhead {    color: '{{foreground-2}}'; }md-checkbox.md-THEME_NAME-theme .md-ripple {  color: '{{accent-600}}'; }md-checkbox.md-THEME_NAME-theme.md-checked .md-ripple {  color: '{{background-600}}'; }md-checkbox.md-THEME_NAME-theme.md-checked.md-focused .md-container:before {  background-color: '{{accent-color-0.26}}'; }md-checkbox.md-THEME_NAME-theme .md-ink-ripple {  color: '{{foreground-2}}'; }md-checkbox.md-THEME_NAME-theme.md-checked .md-ink-ripple {  color: '{{accent-color-0.87}}'; }md-checkbox.md-THEME_NAME-theme .md-icon {  border-color: '{{foreground-2}}'; }md-checkbox.md-THEME_NAME-theme.md-checked .md-icon {  background-color: '{{accent-color-0.87}}'; }md-checkbox.md-THEME_NAME-theme.md-checked .md-icon:after {  border-color: '{{accent-contrast-0.87}}'; }md-checkbox.md-THEME_NAME-theme:not([disabled]).md-primary .md-ripple {  color: '{{primary-600}}'; }md-checkbox.md-THEME_NAME-theme:not([disabled]).md-primary.md-checked .md-ripple {  color: '{{background-600}}'; }md-checkbox.md-THEME_NAME-theme:not([disabled]).md-primary .md-ink-ripple {  color: '{{foreground-2}}'; }md-checkbox.md-THEME_NAME-theme:not([disabled]).md-primary.md-checked .md-ink-ripple {  color: '{{primary-color-0.87}}'; }md-checkbox.md-THEME_NAME-theme:not([disabled]).md-primary .md-icon {  border-color: '{{foreground-2}}'; }md-checkbox.md-THEME_NAME-theme:not([disabled]).md-primary.md-checked .md-icon {  background-color: '{{primary-color-0.87}}'; }md-checkbox.md-THEME_NAME-theme:not([disabled]).md-primary.md-checked.md-focused .md-container:before {  background-color: '{{primary-color-0.26}}'; }md-checkbox.md-THEME_NAME-theme:not([disabled]).md-primary.md-checked .md-icon:after {  border-color: '{{primary-contrast-0.87}}'; }md-checkbox.md-THEME_NAME-theme:not([disabled]).md-warn .md-ripple {  color: '{{warn-600}}'; }md-checkbox.md-THEME_NAME-theme:not([disabled]).md-warn .md-ink-ripple {  color: '{{foreground-2}}'; }md-checkbox.md-THEME_NAME-theme:not([disabled]).md-warn.md-checked .md-ink-ripple {  color: '{{warn-color-0.87}}'; }md-checkbox.md-THEME_NAME-theme:not([disabled]).md-warn .md-icon {  border-color: '{{foreground-2}}'; }md-checkbox.md-THEME_NAME-theme:not([disabled]).md-warn.md-checked .md-icon {  background-color: '{{warn-color-0.87}}'; }md-checkbox.md-THEME_NAME-theme:not([disabled]).md-warn.md-checked.md-focused:not([disabled]) .md-container:before {  background-color: '{{warn-color-0.26}}'; }md-checkbox.md-THEME_NAME-theme:not([disabled]).md-warn.md-checked .md-icon:after {  border-color: '{{background-200}}'; }md-checkbox.md-THEME_NAME-theme[disabled] .md-icon {  border-color: '{{foreground-3}}'; }md-checkbox.md-THEME_NAME-theme[disabled].md-checked .md-icon {  background-color: '{{foreground-3}}'; }md-checkbox.md-THEME_NAME-theme[disabled].md-checked .md-icon:after {  border-color: '{{background-200}}'; }md-checkbox.md-THEME_NAME-theme[disabled] .md-label {  color: '{{foreground-3}}'; }md-content.md-THEME_NAME-theme {  color: '{{foreground-1}}';  background-color: '{{background-color}}'; }md-chips.md-THEME_NAME-theme .md-chips {  box-shadow: 0 1px '{{background-300}}'; }  md-chips.md-THEME_NAME-theme .md-chips.md-focused {    box-shadow: 0 2px '{{primary-color}}'; }md-chips.md-THEME_NAME-theme .md-chip {  background: '{{background-300}}';  color: '{{background-800}}'; }  md-chips.md-THEME_NAME-theme .md-chip.md-focused {    background: '{{primary-color}}';    color: '{{primary-contrast}}'; }    md-chips.md-THEME_NAME-theme .md-chip.md-focused md-icon {      color: '{{primary-contrast}}'; }md-chips.md-THEME_NAME-theme md-chip-remove .md-button md-icon path {  fill: '{{background-500}}'; }.md-contact-suggestion span.md-contact-email {  color: '{{background-400}}'; }/** Theme styles for mdCalendar. */.md-calendar.md-THEME_NAME-theme {  color: '{{foreground-1}}'; }  .md-calendar.md-THEME_NAME-theme tr:last-child td {    border-bottom-color: '{{background-200}}'; }.md-THEME_NAME-theme .md-calendar-day-header {  background: '{{background-hue-1}}';  color: '{{foreground-1}}'; }.md-THEME_NAME-theme .md-calendar-date.md-calendar-date-today .md-calendar-date-selection-indicator {  border: 1px solid '{{primary-500}}'; }.md-THEME_NAME-theme .md-calendar-date.md-calendar-date-today.md-calendar-date-disabled {  color: '{{primary-500-0.6}}'; }.md-THEME_NAME-theme .md-calendar-date.md-focus .md-calendar-date-selection-indicator {  background: '{{background-hue-1}}'; }.md-THEME_NAME-theme .md-calendar-date-selection-indicator:hover {  background: '{{background-hue-1}}'; }.md-THEME_NAME-theme .md-calendar-date.md-calendar-selected-date .md-calendar-date-selection-indicator,.md-THEME_NAME-theme .md-calendar-date.md-focus.md-calendar-selected-date .md-calendar-date-selection-indicator {  background: '{{primary-500}}';  color: '{{primary-500-contrast}}';  border-color: transparent; }.md-THEME_NAME-theme .md-calendar-date-disabled,.md-THEME_NAME-theme .md-calendar-month-label-disabled {  color: '{{foreground-3}}'; }/** Theme styles for mdDatepicker. */md-datepicker.md-THEME_NAME-theme {  background: '{{background-color}}'; }.md-THEME_NAME-theme .md-datepicker-input {  color: '{{background-contrast}}';  background: '{{background-color}}'; }  .md-THEME_NAME-theme .md-datepicker-input::-webkit-input-placeholder, .md-THEME_NAME-theme .md-datepicker-input::-moz-placeholder, .md-THEME_NAME-theme .md-datepicker-input:-moz-placeholder, .md-THEME_NAME-theme .md-datepicker-input:-ms-input-placeholder {    color: \"{{foreground-3}}\"; }.md-THEME_NAME-theme .md-datepicker-input-container {  border-bottom-color: '{{background-300}}'; }  .md-THEME_NAME-theme .md-datepicker-input-container.md-datepicker-focused {    border-bottom-color: '{{primary-500}}'; }  .md-THEME_NAME-theme .md-datepicker-input-container.md-datepicker-invalid {    border-bottom-color: '{{warn-A700}}'; }.md-THEME_NAME-theme .md-datepicker-calendar-pane {  border-color: '{{background-300}}'; }.md-THEME_NAME-theme .md-datepicker-triangle-button .md-datepicker-expand-triangle {  border-top-color: '{{foreground-3}}'; }.md-THEME_NAME-theme .md-datepicker-triangle-button:hover .md-datepicker-expand-triangle {  border-top-color: '{{foreground-2}}'; }.md-THEME_NAME-theme .md-datepicker-open .md-datepicker-calendar-icon {  fill: '{{primary-500}}'; }.md-THEME_NAME-theme .md-datepicker-calendar,.md-THEME_NAME-theme .md-datepicker-input-mask-opaque {  background: '{{background-color}}'; }md-dialog.md-THEME_NAME-theme {  border-radius: 4px;  background-color: '{{background-color}}'; }  md-dialog.md-THEME_NAME-theme.md-content-overflow .md-actions, md-dialog.md-THEME_NAME-theme.md-content-overflow md-dialog-actions {    border-top-color: '{{foreground-4}}'; }md-divider.md-THEME_NAME-theme {  border-top-color: '{{foreground-4}}'; }.layout-row > md-divider.md-THEME_NAME-theme {  border-right-color: '{{foreground-4}}'; }md-icon.md-THEME_NAME-theme {  color: '{{foreground-2}}'; }  md-icon.md-THEME_NAME-theme.md-primary {    color: '{{primary-color}}'; }  md-icon.md-THEME_NAME-theme.md-accent {    color: '{{accent-color}}'; }  md-icon.md-THEME_NAME-theme.md-warn {    color: '{{warn-color}}'; }md-input-container.md-THEME_NAME-theme .md-input {  color: '{{foreground-1}}';  border-color: '{{foreground-4}}';  text-shadow: '{{foreground-shadow}}'; }  md-input-container.md-THEME_NAME-theme .md-input::-webkit-input-placeholder, md-input-container.md-THEME_NAME-theme .md-input::-moz-placeholder, md-input-container.md-THEME_NAME-theme .md-input:-moz-placeholder, md-input-container.md-THEME_NAME-theme .md-input:-ms-input-placeholder {    color: \"{{foreground-3}}\"; }md-input-container.md-THEME_NAME-theme > md-icon {  color: '{{foreground-1}}'; }md-input-container.md-THEME_NAME-theme label,md-input-container.md-THEME_NAME-theme .md-placeholder {  text-shadow: '{{foreground-shadow}}';  color: '{{foreground-3}}'; }md-input-container.md-THEME_NAME-theme ng-messages, md-input-container.md-THEME_NAME-theme [ng-messages],md-input-container.md-THEME_NAME-theme ng-message, md-input-container.md-THEME_NAME-theme data-ng-message, md-input-container.md-THEME_NAME-theme x-ng-message,md-input-container.md-THEME_NAME-theme [ng-message], md-input-container.md-THEME_NAME-theme [data-ng-message], md-input-container.md-THEME_NAME-theme [x-ng-message],md-input-container.md-THEME_NAME-theme [ng-message-exp], md-input-container.md-THEME_NAME-theme [data-ng-message-exp], md-input-container.md-THEME_NAME-theme [x-ng-message-exp] {  color: '{{warn-A700}}'; }  md-input-container.md-THEME_NAME-theme ng-messages .md-char-counter, md-input-container.md-THEME_NAME-theme [ng-messages] .md-char-counter,  md-input-container.md-THEME_NAME-theme ng-message .md-char-counter, md-input-container.md-THEME_NAME-theme data-ng-message .md-char-counter, md-input-container.md-THEME_NAME-theme x-ng-message .md-char-counter,  md-input-container.md-THEME_NAME-theme [ng-message] .md-char-counter, md-input-container.md-THEME_NAME-theme [data-ng-message] .md-char-counter, md-input-container.md-THEME_NAME-theme [x-ng-message] .md-char-counter,  md-input-container.md-THEME_NAME-theme [ng-message-exp] .md-char-counter, md-input-container.md-THEME_NAME-theme [data-ng-message-exp] .md-char-counter, md-input-container.md-THEME_NAME-theme [x-ng-message-exp] .md-char-counter {    color: '{{foreground-1}}'; }md-input-container.md-THEME_NAME-theme:not(.md-input-invalid).md-input-has-value label {  color: '{{foreground-2}}'; }md-input-container.md-THEME_NAME-theme:not(.md-input-invalid).md-input-focused .md-input {  border-color: '{{primary-500}}'; }md-input-container.md-THEME_NAME-theme:not(.md-input-invalid).md-input-focused label {  color: '{{primary-500}}'; }md-input-container.md-THEME_NAME-theme:not(.md-input-invalid).md-input-focused md-icon {  color: '{{primary-500}}'; }md-input-container.md-THEME_NAME-theme:not(.md-input-invalid).md-input-focused.md-accent .md-input {  border-color: '{{accent-500}}'; }md-input-container.md-THEME_NAME-theme:not(.md-input-invalid).md-input-focused.md-accent label {  color: '{{accent-500}}'; }md-input-container.md-THEME_NAME-theme:not(.md-input-invalid).md-input-focused.md-warn .md-input {  border-color: '{{warn-A700}}'; }md-input-container.md-THEME_NAME-theme:not(.md-input-invalid).md-input-focused.md-warn label {  color: '{{warn-A700}}'; }md-input-container.md-THEME_NAME-theme.md-input-invalid .md-input {  border-color: '{{warn-A700}}'; }md-input-container.md-THEME_NAME-theme.md-input-invalid.md-input-focused label {  color: '{{warn-A700}}'; }md-input-container.md-THEME_NAME-theme.md-input-invalid ng-message, md-input-container.md-THEME_NAME-theme.md-input-invalid data-ng-message, md-input-container.md-THEME_NAME-theme.md-input-invalid x-ng-message,md-input-container.md-THEME_NAME-theme.md-input-invalid [ng-message], md-input-container.md-THEME_NAME-theme.md-input-invalid [data-ng-message], md-input-container.md-THEME_NAME-theme.md-input-invalid [x-ng-message],md-input-container.md-THEME_NAME-theme.md-input-invalid [ng-message-exp], md-input-container.md-THEME_NAME-theme.md-input-invalid [data-ng-message-exp], md-input-container.md-THEME_NAME-theme.md-input-invalid [x-ng-message-exp],md-input-container.md-THEME_NAME-theme.md-input-invalid .md-char-counter {  color: '{{warn-A700}}'; }md-input-container.md-THEME_NAME-theme .md-input[disabled],md-input-container.md-THEME_NAME-theme .md-input [disabled] {  border-bottom-color: transparent;  color: '{{foreground-3}}';  background-image: linear-gradient(to right, \"{{foreground-3}}\" 0%, \"{{foreground-3}}\" 33%, transparent 0%);  background-image: -ms-linear-gradient(left, transparent 0%, \"{{foreground-3}}\" 100%); }md-menu-content.md-THEME_NAME-theme {  background-color: '{{background-color}}'; }  md-menu-content.md-THEME_NAME-theme md-menu-divider {    background-color: '{{foreground-4}}'; }md-list.md-THEME_NAME-theme md-list-item.md-2-line .md-list-item-text h3, md-list.md-THEME_NAME-theme md-list-item.md-2-line .md-list-item-text h4,md-list.md-THEME_NAME-theme md-list-item.md-3-line .md-list-item-text h3,md-list.md-THEME_NAME-theme md-list-item.md-3-line .md-list-item-text h4 {  color: '{{foreground-1}}'; }md-list.md-THEME_NAME-theme md-list-item.md-2-line .md-list-item-text p,md-list.md-THEME_NAME-theme md-list-item.md-3-line .md-list-item-text p {  color: '{{foreground-2}}'; }md-list.md-THEME_NAME-theme .md-proxy-focus.md-focused div.md-no-style {  background-color: '{{background-100}}'; }md-list.md-THEME_NAME-theme md-list-item > .md-avatar-icon {  background-color: '{{foreground-3}}';  color: '{{background-color}}'; }md-list.md-THEME_NAME-theme md-list-item > md-icon {  color: '{{foreground-2}}'; }  md-list.md-THEME_NAME-theme md-list-item > md-icon.md-highlight {    color: '{{primary-color}}'; }    md-list.md-THEME_NAME-theme md-list-item > md-icon.md-highlight.md-accent {      color: '{{accent-color}}'; }md-menu-bar.md-THEME_NAME-theme > button.md-button {  color: '{{foreground-2}}';  border-radius: 2px; }md-menu-bar.md-THEME_NAME-theme md-menu.md-open > button, md-menu-bar.md-THEME_NAME-theme md-menu > button:focus {  outline: none;  background: '{{background-200}}'; }md-menu-bar.md-THEME_NAME-theme.md-open:not(.md-keyboard-mode) md-menu:hover > button {  background-color: '{{ background-500-0.2}}'; }md-menu-bar.md-THEME_NAME-theme:not(.md-keyboard-mode):not(.md-open) md-menu button:hover,md-menu-bar.md-THEME_NAME-theme:not(.md-keyboard-mode):not(.md-open) md-menu button:focus {  background: transparent; }md-menu-content.md-THEME_NAME-theme .md-menu > .md-button:after {  color: '{{foreground-2}}'; }md-menu-content.md-THEME_NAME-theme .md-menu.md-open > .md-button {  background-color: '{{ background-500-0.2}}'; }md-toolbar.md-THEME_NAME-theme.md-menu-toolbar {  background-color: '{{background-color}}';  color: '{{foreground-1}}'; }  md-toolbar.md-THEME_NAME-theme.md-menu-toolbar md-toolbar-filler {    background-color: '{{primary-color}}';    color: '{{primary-contrast}}'; }    md-toolbar.md-THEME_NAME-theme.md-menu-toolbar md-toolbar-filler md-icon {      color: '{{primary-contrast}}'; }md-progress-circular.md-THEME_NAME-theme {  background-color: transparent; }  md-progress-circular.md-THEME_NAME-theme .md-inner .md-gap {    border-top-color: '{{primary-color}}';    border-bottom-color: '{{primary-color}}'; }  md-progress-circular.md-THEME_NAME-theme .md-inner .md-left .md-half-circle, md-progress-circular.md-THEME_NAME-theme .md-inner .md-right .md-half-circle {    border-top-color: '{{primary-color}}'; }  md-progress-circular.md-THEME_NAME-theme .md-inner .md-right .md-half-circle {    border-right-color: '{{primary-color}}'; }  md-progress-circular.md-THEME_NAME-theme .md-inner .md-left .md-half-circle {    border-left-color: '{{primary-color}}'; }  md-progress-circular.md-THEME_NAME-theme.md-warn .md-inner .md-gap {    border-top-color: '{{warn-color}}';    border-bottom-color: '{{warn-color}}'; }  md-progress-circular.md-THEME_NAME-theme.md-warn .md-inner .md-left .md-half-circle, md-progress-circular.md-THEME_NAME-theme.md-warn .md-inner .md-right .md-half-circle {    border-top-color: '{{warn-color}}'; }  md-progress-circular.md-THEME_NAME-theme.md-warn .md-inner .md-right .md-half-circle {    border-right-color: '{{warn-color}}'; }  md-progress-circular.md-THEME_NAME-theme.md-warn .md-inner .md-left .md-half-circle {    border-left-color: '{{warn-color}}'; }  md-progress-circular.md-THEME_NAME-theme.md-accent .md-inner .md-gap {    border-top-color: '{{accent-color}}';    border-bottom-color: '{{accent-color}}'; }  md-progress-circular.md-THEME_NAME-theme.md-accent .md-inner .md-left .md-half-circle, md-progress-circular.md-THEME_NAME-theme.md-accent .md-inner .md-right .md-half-circle {    border-top-color: '{{accent-color}}'; }  md-progress-circular.md-THEME_NAME-theme.md-accent .md-inner .md-right .md-half-circle {    border-right-color: '{{accent-color}}'; }  md-progress-circular.md-THEME_NAME-theme.md-accent .md-inner .md-left .md-half-circle {    border-left-color: '{{accent-color}}'; }md-progress-linear.md-THEME_NAME-theme .md-container {  background-color: '{{primary-100}}'; }md-progress-linear.md-THEME_NAME-theme .md-bar {  background-color: '{{primary-color}}'; }md-progress-linear.md-THEME_NAME-theme.md-warn .md-container {  background-color: '{{warn-100}}'; }md-progress-linear.md-THEME_NAME-theme.md-warn .md-bar {  background-color: '{{warn-color}}'; }md-progress-linear.md-THEME_NAME-theme.md-accent .md-container {  background-color: '{{accent-100}}'; }md-progress-linear.md-THEME_NAME-theme.md-accent .md-bar {  background-color: '{{accent-color}}'; }md-progress-linear.md-THEME_NAME-theme[md-mode=buffer].md-warn .md-bar1 {  background-color: '{{warn-100}}'; }md-progress-linear.md-THEME_NAME-theme[md-mode=buffer].md-warn .md-dashed:before {  background: radial-gradient(\"{{warn-100}}\" 0%, \"{{warn-100}}\" 16%, transparent 42%); }md-progress-linear.md-THEME_NAME-theme[md-mode=buffer].md-accent .md-bar1 {  background-color: '{{accent-100}}'; }md-progress-linear.md-THEME_NAME-theme[md-mode=buffer].md-accent .md-dashed:before {  background: radial-gradient(\"{{accent-100}}\" 0%, \"{{accent-100}}\" 16%, transparent 42%); }md-radio-button.md-THEME_NAME-theme .md-off {  border-color: '{{foreground-2}}'; }md-radio-button.md-THEME_NAME-theme .md-on {  background-color: '{{accent-color-0.87}}'; }md-radio-button.md-THEME_NAME-theme.md-checked .md-off {  border-color: '{{accent-color-0.87}}'; }md-radio-button.md-THEME_NAME-theme.md-checked .md-ink-ripple {  color: '{{accent-color-0.87}}'; }md-radio-button.md-THEME_NAME-theme .md-container .md-ripple {  color: '{{accent-600}}'; }md-radio-group.md-THEME_NAME-theme:not([disabled]) .md-primary .md-on, md-radio-group.md-THEME_NAME-theme:not([disabled]).md-primary .md-on,md-radio-button.md-THEME_NAME-theme:not([disabled]) .md-primary .md-on,md-radio-button.md-THEME_NAME-theme:not([disabled]).md-primary .md-on {  background-color: '{{primary-color-0.87}}'; }md-radio-group.md-THEME_NAME-theme:not([disabled]) .md-primary .md-checked .md-off, md-radio-group.md-THEME_NAME-theme:not([disabled]) .md-primary.md-checked .md-off, md-radio-group.md-THEME_NAME-theme:not([disabled]).md-primary .md-checked .md-off, md-radio-group.md-THEME_NAME-theme:not([disabled]).md-primary.md-checked .md-off,md-radio-button.md-THEME_NAME-theme:not([disabled]) .md-primary .md-checked .md-off,md-radio-button.md-THEME_NAME-theme:not([disabled]) .md-primary.md-checked .md-off,md-radio-button.md-THEME_NAME-theme:not([disabled]).md-primary .md-checked .md-off,md-radio-button.md-THEME_NAME-theme:not([disabled]).md-primary.md-checked .md-off {  border-color: '{{primary-color-0.87}}'; }md-radio-group.md-THEME_NAME-theme:not([disabled]) .md-primary .md-checked .md-ink-ripple, md-radio-group.md-THEME_NAME-theme:not([disabled]) .md-primary.md-checked .md-ink-ripple, md-radio-group.md-THEME_NAME-theme:not([disabled]).md-primary .md-checked .md-ink-ripple, md-radio-group.md-THEME_NAME-theme:not([disabled]).md-primary.md-checked .md-ink-ripple,md-radio-button.md-THEME_NAME-theme:not([disabled]) .md-primary .md-checked .md-ink-ripple,md-radio-button.md-THEME_NAME-theme:not([disabled]) .md-primary.md-checked .md-ink-ripple,md-radio-button.md-THEME_NAME-theme:not([disabled]).md-primary .md-checked .md-ink-ripple,md-radio-button.md-THEME_NAME-theme:not([disabled]).md-primary.md-checked .md-ink-ripple {  color: '{{primary-color-0.87}}'; }md-radio-group.md-THEME_NAME-theme:not([disabled]) .md-primary .md-container .md-ripple, md-radio-group.md-THEME_NAME-theme:not([disabled]).md-primary .md-container .md-ripple,md-radio-button.md-THEME_NAME-theme:not([disabled]) .md-primary .md-container .md-ripple,md-radio-button.md-THEME_NAME-theme:not([disabled]).md-primary .md-container .md-ripple {  color: '{{primary-600}}'; }md-radio-group.md-THEME_NAME-theme:not([disabled]) .md-warn .md-on, md-radio-group.md-THEME_NAME-theme:not([disabled]).md-warn .md-on,md-radio-button.md-THEME_NAME-theme:not([disabled]) .md-warn .md-on,md-radio-button.md-THEME_NAME-theme:not([disabled]).md-warn .md-on {  background-color: '{{warn-color-0.87}}'; }md-radio-group.md-THEME_NAME-theme:not([disabled]) .md-warn .md-checked .md-off, md-radio-group.md-THEME_NAME-theme:not([disabled]) .md-warn.md-checked .md-off, md-radio-group.md-THEME_NAME-theme:not([disabled]).md-warn .md-checked .md-off, md-radio-group.md-THEME_NAME-theme:not([disabled]).md-warn.md-checked .md-off,md-radio-button.md-THEME_NAME-theme:not([disabled]) .md-warn .md-checked .md-off,md-radio-button.md-THEME_NAME-theme:not([disabled]) .md-warn.md-checked .md-off,md-radio-button.md-THEME_NAME-theme:not([disabled]).md-warn .md-checked .md-off,md-radio-button.md-THEME_NAME-theme:not([disabled]).md-warn.md-checked .md-off {  border-color: '{{warn-color-0.87}}'; }md-radio-group.md-THEME_NAME-theme:not([disabled]) .md-warn .md-checked .md-ink-ripple, md-radio-group.md-THEME_NAME-theme:not([disabled]) .md-warn.md-checked .md-ink-ripple, md-radio-group.md-THEME_NAME-theme:not([disabled]).md-warn .md-checked .md-ink-ripple, md-radio-group.md-THEME_NAME-theme:not([disabled]).md-warn.md-checked .md-ink-ripple,md-radio-button.md-THEME_NAME-theme:not([disabled]) .md-warn .md-checked .md-ink-ripple,md-radio-button.md-THEME_NAME-theme:not([disabled]) .md-warn.md-checked .md-ink-ripple,md-radio-button.md-THEME_NAME-theme:not([disabled]).md-warn .md-checked .md-ink-ripple,md-radio-button.md-THEME_NAME-theme:not([disabled]).md-warn.md-checked .md-ink-ripple {  color: '{{warn-color-0.87}}'; }md-radio-group.md-THEME_NAME-theme:not([disabled]) .md-warn .md-container .md-ripple, md-radio-group.md-THEME_NAME-theme:not([disabled]).md-warn .md-container .md-ripple,md-radio-button.md-THEME_NAME-theme:not([disabled]) .md-warn .md-container .md-ripple,md-radio-button.md-THEME_NAME-theme:not([disabled]).md-warn .md-container .md-ripple {  color: '{{warn-600}}'; }md-radio-group.md-THEME_NAME-theme[disabled],md-radio-button.md-THEME_NAME-theme[disabled] {  color: '{{foreground-3}}'; }  md-radio-group.md-THEME_NAME-theme[disabled] .md-container .md-off,  md-radio-button.md-THEME_NAME-theme[disabled] .md-container .md-off {    border-color: '{{foreground-3}}'; }  md-radio-group.md-THEME_NAME-theme[disabled] .md-container .md-on,  md-radio-button.md-THEME_NAME-theme[disabled] .md-container .md-on {    border-color: '{{foreground-3}}'; }md-radio-group.md-THEME_NAME-theme .md-checked .md-ink-ripple {  color: '{{accent-color-0.26}}'; }md-radio-group.md-THEME_NAME-theme.md-primary .md-checked:not([disabled]) .md-ink-ripple, md-radio-group.md-THEME_NAME-theme .md-checked:not([disabled]).md-primary .md-ink-ripple {  color: '{{primary-color-0.26}}'; }md-radio-group.md-THEME_NAME-theme .md-checked.md-primary .md-ink-ripple {  color: '{{warn-color-0.26}}'; }md-radio-group.md-THEME_NAME-theme.md-focused:not(:empty) .md-checked .md-container:before {  background-color: '{{accent-color-0.26}}'; }md-radio-group.md-THEME_NAME-theme.md-focused:not(:empty).md-primary .md-checked .md-container:before,md-radio-group.md-THEME_NAME-theme.md-focused:not(:empty) .md-checked.md-primary .md-container:before {  background-color: '{{primary-color-0.26}}'; }md-radio-group.md-THEME_NAME-theme.md-focused:not(:empty).md-warn .md-checked .md-container:before,md-radio-group.md-THEME_NAME-theme.md-focused:not(:empty) .md-checked.md-warn .md-container:before {  background-color: '{{warn-color-0.26}}'; }md-select.md-THEME_NAME-theme[disabled] .md-select-value {  border-bottom-color: transparent;  background-image: linear-gradient(to right, \"{{foreground-3}}\" 0%, \"{{foreground-3}}\" 33%, transparent 0%);  background-image: -ms-linear-gradient(left, transparent 0%, \"{{foreground-3}}\" 100%); }md-select.md-THEME_NAME-theme .md-select-value {  border-bottom-color: '{{foreground-4}}'; }  md-select.md-THEME_NAME-theme .md-select-value.md-select-placeholder {    color: '{{foreground-3}}'; }md-select.md-THEME_NAME-theme.ng-invalid.ng-dirty .md-select-value {  color: '{{warn-A700}}' !important;  border-bottom-color: '{{warn-A700}}' !important; }md-select.md-THEME_NAME-theme:not([disabled]):focus .md-select-value {  border-bottom-color: '{{primary-color}}';  color: '{{ foreground-1 }}'; }  md-select.md-THEME_NAME-theme:not([disabled]):focus .md-select-value.md-select-placeholder {    color: '{{ foreground-1 }}'; }md-select.md-THEME_NAME-theme:not([disabled]):focus.md-accent .md-select-value {  border-bottom-color: '{{accent-color}}'; }md-select.md-THEME_NAME-theme:not([disabled]):focus.md-warn .md-select-value {  border-bottom-color: '{{warn-color}}'; }md-select.md-THEME_NAME-theme[disabled] .md-select-value {  color: '{{foreground-3}}'; }  md-select.md-THEME_NAME-theme[disabled] .md-select-value.md-select-placeholder {    color: '{{foreground-3}}'; }md-select-menu.md-THEME_NAME-theme md-option[disabled] {  color: '{{foreground-3}}'; }md-select-menu.md-THEME_NAME-theme md-optgroup {  color: '{{foreground-2}}'; }  md-select-menu.md-THEME_NAME-theme md-optgroup md-option {    color: '{{foreground-1}}'; }md-select-menu.md-THEME_NAME-theme md-option[selected] {  color: '{{primary-500}}'; }  md-select-menu.md-THEME_NAME-theme md-option[selected]:focus {    color: '{{primary-600}}'; }  md-select-menu.md-THEME_NAME-theme md-option[selected].md-accent {    color: '{{accent-500}}'; }    md-select-menu.md-THEME_NAME-theme md-option[selected].md-accent:focus {      color: '{{accent-600}}'; }md-select-menu.md-THEME_NAME-theme md-option:focus:not([disabled]):not([selected]) {  background: '{{background-200}}'; }md-sidenav.md-THEME_NAME-theme {  background-color: '{{background-color}}'; }md-slider.md-THEME_NAME-theme .md-track {  background-color: '{{foreground-3}}'; }md-slider.md-THEME_NAME-theme .md-track-ticks {  background-color: '{{foreground-4}}'; }md-slider.md-THEME_NAME-theme .md-focus-thumb {  background-color: '{{foreground-2}}'; }md-slider.md-THEME_NAME-theme .md-focus-ring {  background-color: '{{accent-color}}'; }md-slider.md-THEME_NAME-theme .md-disabled-thumb {  border-color: '{{background-color}}'; }md-slider.md-THEME_NAME-theme.md-min .md-thumb:after {  background-color: '{{background-color}}'; }md-slider.md-THEME_NAME-theme .md-track.md-track-fill {  background-color: '{{accent-color}}'; }md-slider.md-THEME_NAME-theme .md-thumb:after {  border-color: '{{accent-color}}';  background-color: '{{accent-color}}'; }md-slider.md-THEME_NAME-theme .md-sign {  background-color: '{{accent-color}}'; }  md-slider.md-THEME_NAME-theme .md-sign:after {    border-top-color: '{{accent-color}}'; }md-slider.md-THEME_NAME-theme .md-thumb-text {  color: '{{accent-contrast}}'; }md-slider.md-THEME_NAME-theme.md-warn .md-focus-ring {  background-color: '{{warn-color}}'; }md-slider.md-THEME_NAME-theme.md-warn .md-track.md-track-fill {  background-color: '{{warn-color}}'; }md-slider.md-THEME_NAME-theme.md-warn .md-thumb:after {  border-color: '{{warn-color}}';  background-color: '{{warn-color}}'; }md-slider.md-THEME_NAME-theme.md-warn .md-sign {  background-color: '{{warn-color}}'; }  md-slider.md-THEME_NAME-theme.md-warn .md-sign:after {    border-top-color: '{{warn-color}}'; }md-slider.md-THEME_NAME-theme.md-warn .md-thumb-text {  color: '{{warn-contrast}}'; }md-slider.md-THEME_NAME-theme.md-primary .md-focus-ring {  background-color: '{{primary-color}}'; }md-slider.md-THEME_NAME-theme.md-primary .md-track.md-track-fill {  background-color: '{{primary-color}}'; }md-slider.md-THEME_NAME-theme.md-primary .md-thumb:after {  border-color: '{{primary-color}}';  background-color: '{{primary-color}}'; }md-slider.md-THEME_NAME-theme.md-primary .md-sign {  background-color: '{{primary-color}}'; }  md-slider.md-THEME_NAME-theme.md-primary .md-sign:after {    border-top-color: '{{primary-color}}'; }md-slider.md-THEME_NAME-theme.md-primary .md-thumb-text {  color: '{{primary-contrast}}'; }md-slider.md-THEME_NAME-theme[disabled] .md-thumb:after {  border-color: '{{foreground-3}}'; }md-slider.md-THEME_NAME-theme[disabled]:not(.md-min) .md-thumb:after {  background-color: '{{foreground-3}}'; }.md-subheader.md-THEME_NAME-theme {  color: '{{ foreground-2-0.23 }}';  background-color: '{{background-color}}'; }  .md-subheader.md-THEME_NAME-theme.md-primary {    color: '{{primary-color}}'; }  .md-subheader.md-THEME_NAME-theme.md-accent {    color: '{{accent-color}}'; }  .md-subheader.md-THEME_NAME-theme.md-warn {    color: '{{warn-color}}'; }md-switch.md-THEME_NAME-theme .md-ink-ripple {  color: '{{background-500}}'; }md-switch.md-THEME_NAME-theme .md-thumb {  background-color: '{{background-50}}'; }md-switch.md-THEME_NAME-theme .md-bar {  background-color: '{{background-500}}'; }md-switch.md-THEME_NAME-theme.md-checked .md-ink-ripple {  color: '{{accent-color}}'; }md-switch.md-THEME_NAME-theme.md-checked .md-thumb {  background-color: '{{accent-color}}'; }md-switch.md-THEME_NAME-theme.md-checked .md-bar {  background-color: '{{accent-color-0.5}}'; }md-switch.md-THEME_NAME-theme.md-checked.md-focused .md-thumb:before {  background-color: '{{accent-color-0.26}}'; }md-switch.md-THEME_NAME-theme.md-checked.md-primary .md-ink-ripple {  color: '{{primary-color}}'; }md-switch.md-THEME_NAME-theme.md-checked.md-primary .md-thumb {  background-color: '{{primary-color}}'; }md-switch.md-THEME_NAME-theme.md-checked.md-primary .md-bar {  background-color: '{{primary-color-0.5}}'; }md-switch.md-THEME_NAME-theme.md-checked.md-primary.md-focused .md-thumb:before {  background-color: '{{primary-color-0.26}}'; }md-switch.md-THEME_NAME-theme.md-checked.md-warn .md-ink-ripple {  color: '{{warn-color}}'; }md-switch.md-THEME_NAME-theme.md-checked.md-warn .md-thumb {  background-color: '{{warn-color}}'; }md-switch.md-THEME_NAME-theme.md-checked.md-warn .md-bar {  background-color: '{{warn-color-0.5}}'; }md-switch.md-THEME_NAME-theme.md-checked.md-warn.md-focused .md-thumb:before {  background-color: '{{warn-color-0.26}}'; }md-switch.md-THEME_NAME-theme[disabled] .md-thumb {  background-color: '{{background-400}}'; }md-switch.md-THEME_NAME-theme[disabled] .md-bar {  background-color: '{{foreground-4}}'; }md-tabs.md-THEME_NAME-theme md-tabs-wrapper {  background-color: transparent;  border-color: '{{foreground-4}}'; }md-tabs.md-THEME_NAME-theme .md-paginator md-icon {  color: '{{primary-color}}'; }md-tabs.md-THEME_NAME-theme md-ink-bar {  color: '{{accent-color}}';  background: '{{accent-color}}'; }md-tabs.md-THEME_NAME-theme .md-tab {  color: '{{foreground-2}}'; }  md-tabs.md-THEME_NAME-theme .md-tab[disabled], md-tabs.md-THEME_NAME-theme .md-tab[disabled] md-icon {    color: '{{foreground-3}}'; }  md-tabs.md-THEME_NAME-theme .md-tab.md-active, md-tabs.md-THEME_NAME-theme .md-tab.md-active md-icon, md-tabs.md-THEME_NAME-theme .md-tab.md-focused, md-tabs.md-THEME_NAME-theme .md-tab.md-focused md-icon {    color: '{{primary-color}}'; }  md-tabs.md-THEME_NAME-theme .md-tab.md-focused {    background: '{{primary-color-0.1}}'; }  md-tabs.md-THEME_NAME-theme .md-tab .md-ripple-container {    color: '{{accent-100}}'; }md-tabs.md-THEME_NAME-theme.md-accent > md-tabs-wrapper {  background-color: '{{accent-color}}'; }  md-tabs.md-THEME_NAME-theme.md-accent > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]) {    color: '{{accent-100}}'; }    md-tabs.md-THEME_NAME-theme.md-accent > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-active, md-tabs.md-THEME_NAME-theme.md-accent > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-active md-icon, md-tabs.md-THEME_NAME-theme.md-accent > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused, md-tabs.md-THEME_NAME-theme.md-accent > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused md-icon {      color: '{{accent-contrast}}'; }    md-tabs.md-THEME_NAME-theme.md-accent > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused {      background: '{{accent-contrast-0.1}}'; }  md-tabs.md-THEME_NAME-theme.md-accent > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-ink-bar {    color: '{{primary-600-1}}';    background: '{{primary-600-1}}'; }md-tabs.md-THEME_NAME-theme.md-primary > md-tabs-wrapper {  background-color: '{{primary-color}}'; }  md-tabs.md-THEME_NAME-theme.md-primary > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]) {    color: '{{primary-100}}'; }    md-tabs.md-THEME_NAME-theme.md-primary > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-active, md-tabs.md-THEME_NAME-theme.md-primary > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-active md-icon, md-tabs.md-THEME_NAME-theme.md-primary > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused, md-tabs.md-THEME_NAME-theme.md-primary > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused md-icon {      color: '{{primary-contrast}}'; }    md-tabs.md-THEME_NAME-theme.md-primary > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused {      background: '{{primary-contrast-0.1}}'; }md-tabs.md-THEME_NAME-theme.md-warn > md-tabs-wrapper {  background-color: '{{warn-color}}'; }  md-tabs.md-THEME_NAME-theme.md-warn > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]) {    color: '{{warn-100}}'; }    md-tabs.md-THEME_NAME-theme.md-warn > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-active, md-tabs.md-THEME_NAME-theme.md-warn > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-active md-icon, md-tabs.md-THEME_NAME-theme.md-warn > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused, md-tabs.md-THEME_NAME-theme.md-warn > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused md-icon {      color: '{{warn-contrast}}'; }    md-tabs.md-THEME_NAME-theme.md-warn > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused {      background: '{{warn-contrast-0.1}}'; }md-toolbar > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper {  background-color: '{{primary-color}}'; }  md-toolbar > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]) {    color: '{{primary-100}}'; }    md-toolbar > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-active, md-toolbar > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-active md-icon, md-toolbar > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused, md-toolbar > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused md-icon {      color: '{{primary-contrast}}'; }    md-toolbar > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused {      background: '{{primary-contrast-0.1}}'; }md-toolbar.md-accent > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper {  background-color: '{{accent-color}}'; }  md-toolbar.md-accent > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]) {    color: '{{accent-100}}'; }    md-toolbar.md-accent > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-active, md-toolbar.md-accent > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-active md-icon, md-toolbar.md-accent > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused, md-toolbar.md-accent > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused md-icon {      color: '{{accent-contrast}}'; }    md-toolbar.md-accent > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused {      background: '{{accent-contrast-0.1}}'; }  md-toolbar.md-accent > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-ink-bar {    color: '{{primary-600-1}}';    background: '{{primary-600-1}}'; }md-toolbar.md-warn > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper {  background-color: '{{warn-color}}'; }  md-toolbar.md-warn > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]) {    color: '{{warn-100}}'; }    md-toolbar.md-warn > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-active, md-toolbar.md-warn > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-active md-icon, md-toolbar.md-warn > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused, md-toolbar.md-warn > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused md-icon {      color: '{{warn-contrast}}'; }    md-toolbar.md-warn > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused {      background: '{{warn-contrast-0.1}}'; }md-toast.md-THEME_NAME-theme .md-toast-content {  background-color: #323232;  color: '{{background-50}}'; }  md-toast.md-THEME_NAME-theme .md-toast-content .md-button {    color: '{{background-50}}'; }    md-toast.md-THEME_NAME-theme .md-toast-content .md-button.md-highlight {      color: '{{primary-A200}}'; }      md-toast.md-THEME_NAME-theme .md-toast-content .md-button.md-highlight.md-accent {        color: '{{accent-A200}}'; }      md-toast.md-THEME_NAME-theme .md-toast-content .md-button.md-highlight.md-warn {        color: '{{warn-A200}}'; }md-toolbar.md-THEME_NAME-theme:not(.md-menu-toolbar) {  background-color: '{{primary-color}}';  color: '{{primary-contrast}}'; }  md-toolbar.md-THEME_NAME-theme:not(.md-menu-toolbar) md-icon {    color: '{{primary-contrast}}'; }  md-toolbar.md-THEME_NAME-theme:not(.md-menu-toolbar) .md-button:not(.md-raised) {    color: '{{primary-contrast}}'; }  md-toolbar.md-THEME_NAME-theme:not(.md-menu-toolbar).md-accent {    background-color: '{{accent-color}}';    color: '{{accent-contrast}}'; }  md-toolbar.md-THEME_NAME-theme:not(.md-menu-toolbar).md-warn {    background-color: '{{warn-color}}';    color: '{{warn-contrast}}'; }md-tooltip.md-THEME_NAME-theme {  color: '{{background-A100}}'; }  md-tooltip.md-THEME_NAME-theme .md-content {    background-color: '{{foreground-2}}'; }"); 
+angular.module("material.core").constant("$MD_THEME_CSS", "/*  Only used with Theme processes */html.md-THEME_NAME-theme, body.md-THEME_NAME-theme {  color: '{{foreground-1}}';  background-color: '{{background-color}}'; }md-autocomplete.md-THEME_NAME-theme {  background: '{{background-50}}'; }  md-autocomplete.md-THEME_NAME-theme[disabled] {    background: '{{background-100}}'; }  md-autocomplete.md-THEME_NAME-theme button md-icon path {    fill: '{{background-600}}'; }  md-autocomplete.md-THEME_NAME-theme button:after {    background: '{{background-600-0.3}}'; }.md-autocomplete-suggestions-container.md-THEME_NAME-theme {  background: '{{background-50}}'; }  .md-autocomplete-suggestions-container.md-THEME_NAME-theme li {    color: '{{background-900}}'; }    .md-autocomplete-suggestions-container.md-THEME_NAME-theme li .highlight {      color: '{{background-600}}'; }    .md-autocomplete-suggestions-container.md-THEME_NAME-theme li:hover, .md-autocomplete-suggestions-container.md-THEME_NAME-theme li.selected {      background: '{{background-200}}'; }md-backdrop {  background-color: '{{background-900-0.0}}'; }  md-backdrop.md-opaque.md-THEME_NAME-theme {    background-color: '{{background-900-1.0}}'; }md-bottom-sheet.md-THEME_NAME-theme {  background-color: '{{background-50}}';  border-top-color: '{{background-300}}'; }  md-bottom-sheet.md-THEME_NAME-theme.md-list md-list-item {    color: '{{foreground-1}}'; }  md-bottom-sheet.md-THEME_NAME-theme .md-subheader {    background-color: '{{background-50}}'; }  md-bottom-sheet.md-THEME_NAME-theme .md-subheader {    color: '{{foreground-1}}'; }a.md-button.md-THEME_NAME-theme:not([disabled]):hover,.md-button.md-THEME_NAME-theme:not([disabled]):hover {  background-color: '{{background-500-0.2}}'; }a.md-button.md-THEME_NAME-theme:not([disabled]).md-focused,.md-button.md-THEME_NAME-theme:not([disabled]).md-focused {  background-color: '{{background-500-0.2}}'; }a.md-button.md-THEME_NAME-theme:not([disabled]).md-icon-button:hover,.md-button.md-THEME_NAME-theme:not([disabled]).md-icon-button:hover {  background-color: transparent; }a.md-button.md-THEME_NAME-theme.md-fab,.md-button.md-THEME_NAME-theme.md-fab {  background-color: '{{accent-color}}';  color: '{{accent-contrast}}'; }  a.md-button.md-THEME_NAME-theme.md-fab md-icon,  .md-button.md-THEME_NAME-theme.md-fab md-icon {    color: '{{accent-contrast}}'; }  a.md-button.md-THEME_NAME-theme.md-fab:not([disabled]):hover,  .md-button.md-THEME_NAME-theme.md-fab:not([disabled]):hover {    background-color: '{{accent-color}}'; }  a.md-button.md-THEME_NAME-theme.md-fab:not([disabled]).md-focused,  .md-button.md-THEME_NAME-theme.md-fab:not([disabled]).md-focused {    background-color: '{{accent-A700}}'; }a.md-button.md-THEME_NAME-theme.md-primary,.md-button.md-THEME_NAME-theme.md-primary {  color: '{{primary-color}}'; }  a.md-button.md-THEME_NAME-theme.md-primary.md-raised, a.md-button.md-THEME_NAME-theme.md-primary.md-fab,  .md-button.md-THEME_NAME-theme.md-primary.md-raised,  .md-button.md-THEME_NAME-theme.md-primary.md-fab {    color: '{{primary-contrast}}';    background-color: '{{primary-color}}'; }    a.md-button.md-THEME_NAME-theme.md-primary.md-raised:not([disabled]) md-icon, a.md-button.md-THEME_NAME-theme.md-primary.md-fab:not([disabled]) md-icon,    .md-button.md-THEME_NAME-theme.md-primary.md-raised:not([disabled]) md-icon,    .md-button.md-THEME_NAME-theme.md-primary.md-fab:not([disabled]) md-icon {      color: '{{primary-contrast}}'; }    a.md-button.md-THEME_NAME-theme.md-primary.md-raised:not([disabled]):hover, a.md-button.md-THEME_NAME-theme.md-primary.md-fab:not([disabled]):hover,    .md-button.md-THEME_NAME-theme.md-primary.md-raised:not([disabled]):hover,    .md-button.md-THEME_NAME-theme.md-primary.md-fab:not([disabled]):hover {      background-color: '{{primary-color}}'; }    a.md-button.md-THEME_NAME-theme.md-primary.md-raised:not([disabled]).md-focused, a.md-button.md-THEME_NAME-theme.md-primary.md-fab:not([disabled]).md-focused,    .md-button.md-THEME_NAME-theme.md-primary.md-raised:not([disabled]).md-focused,    .md-button.md-THEME_NAME-theme.md-primary.md-fab:not([disabled]).md-focused {      background-color: '{{primary-600}}'; }  a.md-button.md-THEME_NAME-theme.md-primary:not([disabled]) md-icon,  .md-button.md-THEME_NAME-theme.md-primary:not([disabled]) md-icon {    color: '{{primary-color}}'; }a.md-button.md-THEME_NAME-theme.md-fab,.md-button.md-THEME_NAME-theme.md-fab {  background-color: '{{accent-color}}';  color: '{{accent-contrast}}'; }  a.md-button.md-THEME_NAME-theme.md-fab:not([disabled]) .md-icon,  .md-button.md-THEME_NAME-theme.md-fab:not([disabled]) .md-icon {    color: '{{accent-contrast}}'; }  a.md-button.md-THEME_NAME-theme.md-fab:not([disabled]):hover,  .md-button.md-THEME_NAME-theme.md-fab:not([disabled]):hover {    background-color: '{{accent-color}}'; }  a.md-button.md-THEME_NAME-theme.md-fab:not([disabled]).md-focused,  .md-button.md-THEME_NAME-theme.md-fab:not([disabled]).md-focused {    background-color: '{{accent-A700}}'; }a.md-button.md-THEME_NAME-theme.md-raised,.md-button.md-THEME_NAME-theme.md-raised {  color: '{{background-900}}';  background-color: '{{background-50}}'; }  a.md-button.md-THEME_NAME-theme.md-raised:not([disabled]) md-icon,  .md-button.md-THEME_NAME-theme.md-raised:not([disabled]) md-icon {    color: '{{background-900}}'; }  a.md-button.md-THEME_NAME-theme.md-raised:not([disabled]):hover,  .md-button.md-THEME_NAME-theme.md-raised:not([disabled]):hover {    background-color: '{{background-50}}'; }  a.md-button.md-THEME_NAME-theme.md-raised:not([disabled]).md-focused,  .md-button.md-THEME_NAME-theme.md-raised:not([disabled]).md-focused {    background-color: '{{background-200}}'; }a.md-button.md-THEME_NAME-theme.md-warn,.md-button.md-THEME_NAME-theme.md-warn {  color: '{{warn-color}}'; }  a.md-button.md-THEME_NAME-theme.md-warn.md-raised, a.md-button.md-THEME_NAME-theme.md-warn.md-fab,  .md-button.md-THEME_NAME-theme.md-warn.md-raised,  .md-button.md-THEME_NAME-theme.md-warn.md-fab {    color: '{{warn-contrast}}';    background-color: '{{warn-color}}'; }    a.md-button.md-THEME_NAME-theme.md-warn.md-raised:not([disabled]) md-icon, a.md-button.md-THEME_NAME-theme.md-warn.md-fab:not([disabled]) md-icon,    .md-button.md-THEME_NAME-theme.md-warn.md-raised:not([disabled]) md-icon,    .md-button.md-THEME_NAME-theme.md-warn.md-fab:not([disabled]) md-icon {      color: '{{warn-contrast}}'; }    a.md-button.md-THEME_NAME-theme.md-warn.md-raised:not([disabled]):hover, a.md-button.md-THEME_NAME-theme.md-warn.md-fab:not([disabled]):hover,    .md-button.md-THEME_NAME-theme.md-warn.md-raised:not([disabled]):hover,    .md-button.md-THEME_NAME-theme.md-warn.md-fab:not([disabled]):hover {      background-color: '{{warn-color}}'; }    a.md-button.md-THEME_NAME-theme.md-warn.md-raised:not([disabled]).md-focused, a.md-button.md-THEME_NAME-theme.md-warn.md-fab:not([disabled]).md-focused,    .md-button.md-THEME_NAME-theme.md-warn.md-raised:not([disabled]).md-focused,    .md-button.md-THEME_NAME-theme.md-warn.md-fab:not([disabled]).md-focused {      background-color: '{{warn-700}}'; }  a.md-button.md-THEME_NAME-theme.md-warn:not([disabled]) md-icon,  .md-button.md-THEME_NAME-theme.md-warn:not([disabled]) md-icon {    color: '{{warn-color}}'; }a.md-button.md-THEME_NAME-theme.md-accent,.md-button.md-THEME_NAME-theme.md-accent {  color: '{{accent-color}}'; }  a.md-button.md-THEME_NAME-theme.md-accent.md-raised, a.md-button.md-THEME_NAME-theme.md-accent.md-fab,  .md-button.md-THEME_NAME-theme.md-accent.md-raised,  .md-button.md-THEME_NAME-theme.md-accent.md-fab {    color: '{{accent-contrast}}';    background-color: '{{accent-color}}'; }    a.md-button.md-THEME_NAME-theme.md-accent.md-raised:not([disabled]) md-icon, a.md-button.md-THEME_NAME-theme.md-accent.md-fab:not([disabled]) md-icon,    .md-button.md-THEME_NAME-theme.md-accent.md-raised:not([disabled]) md-icon,    .md-button.md-THEME_NAME-theme.md-accent.md-fab:not([disabled]) md-icon {      color: '{{accent-contrast}}'; }    a.md-button.md-THEME_NAME-theme.md-accent.md-raised:not([disabled]):hover, a.md-button.md-THEME_NAME-theme.md-accent.md-fab:not([disabled]):hover,    .md-button.md-THEME_NAME-theme.md-accent.md-raised:not([disabled]):hover,    .md-button.md-THEME_NAME-theme.md-accent.md-fab:not([disabled]):hover {      background-color: '{{accent-color}}'; }    a.md-button.md-THEME_NAME-theme.md-accent.md-raised:not([disabled]).md-focused, a.md-button.md-THEME_NAME-theme.md-accent.md-fab:not([disabled]).md-focused,    .md-button.md-THEME_NAME-theme.md-accent.md-raised:not([disabled]).md-focused,    .md-button.md-THEME_NAME-theme.md-accent.md-fab:not([disabled]).md-focused {      background-color: '{{accent-700}}'; }  a.md-button.md-THEME_NAME-theme.md-accent:not([disabled]) md-icon,  .md-button.md-THEME_NAME-theme.md-accent:not([disabled]) md-icon {    color: '{{accent-color}}'; }a.md-button.md-THEME_NAME-theme[disabled], a.md-button.md-THEME_NAME-theme.md-raised[disabled], a.md-button.md-THEME_NAME-theme.md-fab[disabled], a.md-button.md-THEME_NAME-theme.md-accent[disabled], a.md-button.md-THEME_NAME-theme.md-warn[disabled],.md-button.md-THEME_NAME-theme[disabled],.md-button.md-THEME_NAME-theme.md-raised[disabled],.md-button.md-THEME_NAME-theme.md-fab[disabled],.md-button.md-THEME_NAME-theme.md-accent[disabled],.md-button.md-THEME_NAME-theme.md-warn[disabled] {  color: '{{foreground-3}}' !important;  cursor: default; }  a.md-button.md-THEME_NAME-theme[disabled] md-icon, a.md-button.md-THEME_NAME-theme.md-raised[disabled] md-icon, a.md-button.md-THEME_NAME-theme.md-fab[disabled] md-icon, a.md-button.md-THEME_NAME-theme.md-accent[disabled] md-icon, a.md-button.md-THEME_NAME-theme.md-warn[disabled] md-icon,  .md-button.md-THEME_NAME-theme[disabled] md-icon,  .md-button.md-THEME_NAME-theme.md-raised[disabled] md-icon,  .md-button.md-THEME_NAME-theme.md-fab[disabled] md-icon,  .md-button.md-THEME_NAME-theme.md-accent[disabled] md-icon,  .md-button.md-THEME_NAME-theme.md-warn[disabled] md-icon {    color: '{{foreground-3}}'; }a.md-button.md-THEME_NAME-theme.md-raised[disabled], a.md-button.md-THEME_NAME-theme.md-fab[disabled],.md-button.md-THEME_NAME-theme.md-raised[disabled],.md-button.md-THEME_NAME-theme.md-fab[disabled] {  background-color: '{{foreground-4}}'; }a.md-button.md-THEME_NAME-theme[disabled],.md-button.md-THEME_NAME-theme[disabled] {  background-color: transparent; }md-card.md-THEME_NAME-theme {  background-color: '{{background-color}}';  border-radius: 2px; }  md-card.md-THEME_NAME-theme .md-card-image {    border-radius: 2px 2px 0 0; }  md-card.md-THEME_NAME-theme md-card-header md-card-avatar md-icon {    color: '{{background-color}}';    background-color: '{{foreground-3}}'; }  md-card.md-THEME_NAME-theme md-card-header md-card-header-text .md-subhead {    color: '{{foreground-2}}'; }  md-card.md-THEME_NAME-theme md-card-title md-card-title-text:not(:only-child) .md-subhead {    color: '{{foreground-2}}'; }md-checkbox.md-THEME_NAME-theme .md-ripple {  color: '{{accent-600}}'; }md-checkbox.md-THEME_NAME-theme.md-checked .md-ripple {  color: '{{background-600}}'; }md-checkbox.md-THEME_NAME-theme.md-checked.md-focused .md-container:before {  background-color: '{{accent-color-0.26}}'; }md-checkbox.md-THEME_NAME-theme .md-ink-ripple {  color: '{{foreground-2}}'; }md-checkbox.md-THEME_NAME-theme.md-checked .md-ink-ripple {  color: '{{accent-color-0.87}}'; }md-checkbox.md-THEME_NAME-theme .md-icon {  border-color: '{{foreground-2}}'; }md-checkbox.md-THEME_NAME-theme.md-checked .md-icon {  background-color: '{{accent-color-0.87}}'; }md-checkbox.md-THEME_NAME-theme.md-checked .md-icon:after {  border-color: '{{accent-contrast-0.87}}'; }md-checkbox.md-THEME_NAME-theme:not([disabled]).md-primary .md-ripple {  color: '{{primary-600}}'; }md-checkbox.md-THEME_NAME-theme:not([disabled]).md-primary.md-checked .md-ripple {  color: '{{background-600}}'; }md-checkbox.md-THEME_NAME-theme:not([disabled]).md-primary .md-ink-ripple {  color: '{{foreground-2}}'; }md-checkbox.md-THEME_NAME-theme:not([disabled]).md-primary.md-checked .md-ink-ripple {  color: '{{primary-color-0.87}}'; }md-checkbox.md-THEME_NAME-theme:not([disabled]).md-primary .md-icon {  border-color: '{{foreground-2}}'; }md-checkbox.md-THEME_NAME-theme:not([disabled]).md-primary.md-checked .md-icon {  background-color: '{{primary-color-0.87}}'; }md-checkbox.md-THEME_NAME-theme:not([disabled]).md-primary.md-checked.md-focused .md-container:before {  background-color: '{{primary-color-0.26}}'; }md-checkbox.md-THEME_NAME-theme:not([disabled]).md-primary.md-checked .md-icon:after {  border-color: '{{primary-contrast-0.87}}'; }md-checkbox.md-THEME_NAME-theme:not([disabled]).md-primary .md-indeterminate[disabled] .md-container {  color: '{{foreground-3}}'; }md-checkbox.md-THEME_NAME-theme:not([disabled]).md-warn .md-ripple {  color: '{{warn-600}}'; }md-checkbox.md-THEME_NAME-theme:not([disabled]).md-warn .md-ink-ripple {  color: '{{foreground-2}}'; }md-checkbox.md-THEME_NAME-theme:not([disabled]).md-warn.md-checked .md-ink-ripple {  color: '{{warn-color-0.87}}'; }md-checkbox.md-THEME_NAME-theme:not([disabled]).md-warn .md-icon {  border-color: '{{foreground-2}}'; }md-checkbox.md-THEME_NAME-theme:not([disabled]).md-warn.md-checked .md-icon {  background-color: '{{warn-color-0.87}}'; }md-checkbox.md-THEME_NAME-theme:not([disabled]).md-warn.md-checked.md-focused:not([disabled]) .md-container:before {  background-color: '{{warn-color-0.26}}'; }md-checkbox.md-THEME_NAME-theme:not([disabled]).md-warn.md-checked .md-icon:after {  border-color: '{{background-200}}'; }md-checkbox.md-THEME_NAME-theme[disabled] .md-icon {  border-color: '{{foreground-3}}'; }md-checkbox.md-THEME_NAME-theme[disabled].md-checked .md-icon {  background-color: '{{foreground-3}}'; }md-checkbox.md-THEME_NAME-theme[disabled].md-checked .md-icon:after {  border-color: '{{background-200}}'; }md-checkbox.md-THEME_NAME-theme[disabled] .md-label {  color: '{{foreground-3}}'; }md-chips.md-THEME_NAME-theme .md-chips {  box-shadow: 0 1px '{{background-300}}'; }  md-chips.md-THEME_NAME-theme .md-chips.md-focused {    box-shadow: 0 2px '{{primary-color}}'; }md-chips.md-THEME_NAME-theme .md-chip {  background: '{{background-300}}';  color: '{{background-800}}'; }  md-chips.md-THEME_NAME-theme .md-chip.md-focused {    background: '{{primary-color}}';    color: '{{primary-contrast}}'; }    md-chips.md-THEME_NAME-theme .md-chip.md-focused md-icon {      color: '{{primary-contrast}}'; }md-chips.md-THEME_NAME-theme md-chip-remove .md-button md-icon path {  fill: '{{background-500}}'; }.md-contact-suggestion span.md-contact-email {  color: '{{background-400}}'; }md-content.md-THEME_NAME-theme {  color: '{{foreground-1}}';  background-color: '{{background-color}}'; }/** Theme styles for mdCalendar. */.md-calendar.md-THEME_NAME-theme {  color: '{{foreground-1}}'; }  .md-calendar.md-THEME_NAME-theme tr:last-child td {    border-bottom-color: '{{background-200}}'; }.md-THEME_NAME-theme .md-calendar-day-header {  background: '{{background-hue-1}}';  color: '{{foreground-1}}'; }.md-THEME_NAME-theme .md-calendar-date.md-calendar-date-today .md-calendar-date-selection-indicator {  border: 1px solid '{{primary-500}}'; }.md-THEME_NAME-theme .md-calendar-date.md-calendar-date-today.md-calendar-date-disabled {  color: '{{primary-500-0.6}}'; }.md-THEME_NAME-theme .md-calendar-date.md-focus .md-calendar-date-selection-indicator {  background: '{{background-hue-1}}'; }.md-THEME_NAME-theme .md-calendar-date-selection-indicator:hover {  background: '{{background-hue-1}}'; }.md-THEME_NAME-theme .md-calendar-date.md-calendar-selected-date .md-calendar-date-selection-indicator,.md-THEME_NAME-theme .md-calendar-date.md-focus.md-calendar-selected-date .md-calendar-date-selection-indicator {  background: '{{primary-500}}';  color: '{{primary-500-contrast}}';  border-color: transparent; }.md-THEME_NAME-theme .md-calendar-date-disabled,.md-THEME_NAME-theme .md-calendar-month-label-disabled {  color: '{{foreground-3}}'; }/** Theme styles for mdDatepicker. */md-datepicker.md-THEME_NAME-theme {  background: '{{background-color}}'; }.md-THEME_NAME-theme .md-datepicker-input {  color: '{{background-contrast}}';  background: '{{background-color}}'; }  .md-THEME_NAME-theme .md-datepicker-input::-webkit-input-placeholder, .md-THEME_NAME-theme .md-datepicker-input::-moz-placeholder, .md-THEME_NAME-theme .md-datepicker-input:-moz-placeholder, .md-THEME_NAME-theme .md-datepicker-input:-ms-input-placeholder {    color: \"{{foreground-3}}\"; }.md-THEME_NAME-theme .md-datepicker-input-container {  border-bottom-color: '{{background-300}}'; }  .md-THEME_NAME-theme .md-datepicker-input-container.md-datepicker-focused {    border-bottom-color: '{{primary-500}}'; }  .md-THEME_NAME-theme .md-datepicker-input-container.md-datepicker-invalid {    border-bottom-color: '{{warn-A700}}'; }.md-THEME_NAME-theme .md-datepicker-calendar-pane {  border-color: '{{background-300}}'; }.md-THEME_NAME-theme .md-datepicker-triangle-button .md-datepicker-expand-triangle {  border-top-color: '{{foreground-3}}'; }.md-THEME_NAME-theme .md-datepicker-triangle-button:hover .md-datepicker-expand-triangle {  border-top-color: '{{foreground-2}}'; }.md-THEME_NAME-theme .md-datepicker-open .md-datepicker-calendar-icon {  fill: '{{primary-500}}'; }.md-THEME_NAME-theme .md-datepicker-calendar,.md-THEME_NAME-theme .md-datepicker-input-mask-opaque {  background: '{{background-color}}'; }md-dialog.md-THEME_NAME-theme {  border-radius: 4px;  background-color: '{{background-color}}'; }  md-dialog.md-THEME_NAME-theme.md-content-overflow .md-actions, md-dialog.md-THEME_NAME-theme.md-content-overflow md-dialog-actions {    border-top-color: '{{foreground-4}}'; }md-divider.md-THEME_NAME-theme {  border-top-color: '{{foreground-4}}'; }.layout-row > md-divider.md-THEME_NAME-theme {  border-right-color: '{{foreground-4}}'; }md-icon.md-THEME_NAME-theme {  color: '{{foreground-2}}'; }  md-icon.md-THEME_NAME-theme.md-primary {    color: '{{primary-color}}'; }  md-icon.md-THEME_NAME-theme.md-accent {    color: '{{accent-color}}'; }  md-icon.md-THEME_NAME-theme.md-warn {    color: '{{warn-color}}'; }md-input-container.md-THEME_NAME-theme .md-input {  color: '{{foreground-1}}';  border-color: '{{foreground-4}}';  text-shadow: '{{foreground-shadow}}'; }  md-input-container.md-THEME_NAME-theme .md-input::-webkit-input-placeholder, md-input-container.md-THEME_NAME-theme .md-input::-moz-placeholder, md-input-container.md-THEME_NAME-theme .md-input:-moz-placeholder, md-input-container.md-THEME_NAME-theme .md-input:-ms-input-placeholder {    color: \"{{foreground-3}}\"; }md-input-container.md-THEME_NAME-theme > md-icon {  color: '{{foreground-1}}'; }md-input-container.md-THEME_NAME-theme label,md-input-container.md-THEME_NAME-theme .md-placeholder {  text-shadow: '{{foreground-shadow}}';  color: '{{foreground-3}}'; }md-input-container.md-THEME_NAME-theme ng-messages, md-input-container.md-THEME_NAME-theme [ng-messages],md-input-container.md-THEME_NAME-theme ng-message, md-input-container.md-THEME_NAME-theme data-ng-message, md-input-container.md-THEME_NAME-theme x-ng-message,md-input-container.md-THEME_NAME-theme [ng-message], md-input-container.md-THEME_NAME-theme [data-ng-message], md-input-container.md-THEME_NAME-theme [x-ng-message],md-input-container.md-THEME_NAME-theme [ng-message-exp], md-input-container.md-THEME_NAME-theme [data-ng-message-exp], md-input-container.md-THEME_NAME-theme [x-ng-message-exp] {  color: '{{warn-A700}}'; }  md-input-container.md-THEME_NAME-theme ng-messages .md-char-counter, md-input-container.md-THEME_NAME-theme [ng-messages] .md-char-counter,  md-input-container.md-THEME_NAME-theme ng-message .md-char-counter, md-input-container.md-THEME_NAME-theme data-ng-message .md-char-counter, md-input-container.md-THEME_NAME-theme x-ng-message .md-char-counter,  md-input-container.md-THEME_NAME-theme [ng-message] .md-char-counter, md-input-container.md-THEME_NAME-theme [data-ng-message] .md-char-counter, md-input-container.md-THEME_NAME-theme [x-ng-message] .md-char-counter,  md-input-container.md-THEME_NAME-theme [ng-message-exp] .md-char-counter, md-input-container.md-THEME_NAME-theme [data-ng-message-exp] .md-char-counter, md-input-container.md-THEME_NAME-theme [x-ng-message-exp] .md-char-counter {    color: '{{foreground-1}}'; }md-input-container.md-THEME_NAME-theme:not(.md-input-invalid).md-input-has-value label {  color: '{{foreground-2}}'; }md-input-container.md-THEME_NAME-theme:not(.md-input-invalid).md-input-focused .md-input {  border-color: '{{primary-500}}'; }md-input-container.md-THEME_NAME-theme:not(.md-input-invalid).md-input-focused label {  color: '{{primary-500}}'; }md-input-container.md-THEME_NAME-theme:not(.md-input-invalid).md-input-focused md-icon {  color: '{{primary-500}}'; }md-input-container.md-THEME_NAME-theme:not(.md-input-invalid).md-input-focused.md-accent .md-input {  border-color: '{{accent-500}}'; }md-input-container.md-THEME_NAME-theme:not(.md-input-invalid).md-input-focused.md-accent label {  color: '{{accent-500}}'; }md-input-container.md-THEME_NAME-theme:not(.md-input-invalid).md-input-focused.md-warn .md-input {  border-color: '{{warn-A700}}'; }md-input-container.md-THEME_NAME-theme:not(.md-input-invalid).md-input-focused.md-warn label {  color: '{{warn-A700}}'; }md-input-container.md-THEME_NAME-theme.md-input-invalid .md-input {  border-color: '{{warn-A700}}'; }md-input-container.md-THEME_NAME-theme.md-input-invalid.md-input-focused label {  color: '{{warn-A700}}'; }md-input-container.md-THEME_NAME-theme.md-input-invalid ng-message, md-input-container.md-THEME_NAME-theme.md-input-invalid data-ng-message, md-input-container.md-THEME_NAME-theme.md-input-invalid x-ng-message,md-input-container.md-THEME_NAME-theme.md-input-invalid [ng-message], md-input-container.md-THEME_NAME-theme.md-input-invalid [data-ng-message], md-input-container.md-THEME_NAME-theme.md-input-invalid [x-ng-message],md-input-container.md-THEME_NAME-theme.md-input-invalid [ng-message-exp], md-input-container.md-THEME_NAME-theme.md-input-invalid [data-ng-message-exp], md-input-container.md-THEME_NAME-theme.md-input-invalid [x-ng-message-exp],md-input-container.md-THEME_NAME-theme.md-input-invalid .md-char-counter {  color: '{{warn-A700}}'; }md-input-container.md-THEME_NAME-theme .md-input[disabled],md-input-container.md-THEME_NAME-theme .md-input [disabled] {  border-bottom-color: transparent;  color: '{{foreground-3}}';  background-image: linear-gradient(to right, \"{{foreground-3}}\" 0%, \"{{foreground-3}}\" 33%, transparent 0%);  background-image: -ms-linear-gradient(left, transparent 0%, \"{{foreground-3}}\" 100%); }md-list.md-THEME_NAME-theme md-list-item.md-2-line .md-list-item-text h3, md-list.md-THEME_NAME-theme md-list-item.md-2-line .md-list-item-text h4,md-list.md-THEME_NAME-theme md-list-item.md-3-line .md-list-item-text h3,md-list.md-THEME_NAME-theme md-list-item.md-3-line .md-list-item-text h4 {  color: '{{foreground-1}}'; }md-list.md-THEME_NAME-theme md-list-item.md-2-line .md-list-item-text p,md-list.md-THEME_NAME-theme md-list-item.md-3-line .md-list-item-text p {  color: '{{foreground-2}}'; }md-list.md-THEME_NAME-theme .md-proxy-focus.md-focused div.md-no-style {  background-color: '{{background-100}}'; }md-list.md-THEME_NAME-theme md-list-item > .md-avatar-icon {  background-color: '{{foreground-3}}';  color: '{{background-color}}'; }md-list.md-THEME_NAME-theme md-list-item > md-icon {  color: '{{foreground-2}}'; }  md-list.md-THEME_NAME-theme md-list-item > md-icon.md-highlight {    color: '{{primary-color}}'; }    md-list.md-THEME_NAME-theme md-list-item > md-icon.md-highlight.md-accent {      color: '{{accent-color}}'; }md-menu-content.md-THEME_NAME-theme {  background-color: '{{background-color}}'; }  md-menu-content.md-THEME_NAME-theme md-menu-divider {    background-color: '{{foreground-4}}'; }md-menu-bar.md-THEME_NAME-theme > button.md-button {  color: '{{foreground-2}}';  border-radius: 2px; }md-menu-bar.md-THEME_NAME-theme md-menu.md-open > button, md-menu-bar.md-THEME_NAME-theme md-menu > button:focus {  outline: none;  background: '{{background-200}}'; }md-menu-bar.md-THEME_NAME-theme.md-open:not(.md-keyboard-mode) md-menu:hover > button {  background-color: '{{ background-500-0.2}}'; }md-menu-bar.md-THEME_NAME-theme:not(.md-keyboard-mode):not(.md-open) md-menu button:hover,md-menu-bar.md-THEME_NAME-theme:not(.md-keyboard-mode):not(.md-open) md-menu button:focus {  background: transparent; }md-menu-content.md-THEME_NAME-theme .md-menu > .md-button:after {  color: '{{foreground-2}}'; }md-menu-content.md-THEME_NAME-theme .md-menu.md-open > .md-button {  background-color: '{{ background-500-0.2}}'; }md-toolbar.md-THEME_NAME-theme.md-menu-toolbar {  background-color: '{{background-color}}';  color: '{{foreground-1}}'; }  md-toolbar.md-THEME_NAME-theme.md-menu-toolbar md-toolbar-filler {    background-color: '{{primary-color}}';    color: '{{primary-contrast}}'; }    md-toolbar.md-THEME_NAME-theme.md-menu-toolbar md-toolbar-filler md-icon {      color: '{{primary-contrast}}'; }md-progress-circular.md-THEME_NAME-theme {  background-color: transparent; }  md-progress-circular.md-THEME_NAME-theme .md-inner .md-gap {    border-top-color: '{{primary-color}}';    border-bottom-color: '{{primary-color}}'; }  md-progress-circular.md-THEME_NAME-theme .md-inner .md-left .md-half-circle, md-progress-circular.md-THEME_NAME-theme .md-inner .md-right .md-half-circle {    border-top-color: '{{primary-color}}'; }  md-progress-circular.md-THEME_NAME-theme .md-inner .md-right .md-half-circle {    border-right-color: '{{primary-color}}'; }  md-progress-circular.md-THEME_NAME-theme .md-inner .md-left .md-half-circle {    border-left-color: '{{primary-color}}'; }  md-progress-circular.md-THEME_NAME-theme.md-warn .md-inner .md-gap {    border-top-color: '{{warn-color}}';    border-bottom-color: '{{warn-color}}'; }  md-progress-circular.md-THEME_NAME-theme.md-warn .md-inner .md-left .md-half-circle, md-progress-circular.md-THEME_NAME-theme.md-warn .md-inner .md-right .md-half-circle {    border-top-color: '{{warn-color}}'; }  md-progress-circular.md-THEME_NAME-theme.md-warn .md-inner .md-right .md-half-circle {    border-right-color: '{{warn-color}}'; }  md-progress-circular.md-THEME_NAME-theme.md-warn .md-inner .md-left .md-half-circle {    border-left-color: '{{warn-color}}'; }  md-progress-circular.md-THEME_NAME-theme.md-accent .md-inner .md-gap {    border-top-color: '{{accent-color}}';    border-bottom-color: '{{accent-color}}'; }  md-progress-circular.md-THEME_NAME-theme.md-accent .md-inner .md-left .md-half-circle, md-progress-circular.md-THEME_NAME-theme.md-accent .md-inner .md-right .md-half-circle {    border-top-color: '{{accent-color}}'; }  md-progress-circular.md-THEME_NAME-theme.md-accent .md-inner .md-right .md-half-circle {    border-right-color: '{{accent-color}}'; }  md-progress-circular.md-THEME_NAME-theme.md-accent .md-inner .md-left .md-half-circle {    border-left-color: '{{accent-color}}'; }md-progress-linear.md-THEME_NAME-theme .md-container {  background-color: '{{primary-100}}'; }md-progress-linear.md-THEME_NAME-theme .md-bar {  background-color: '{{primary-color}}'; }md-progress-linear.md-THEME_NAME-theme.md-warn .md-container {  background-color: '{{warn-100}}'; }md-progress-linear.md-THEME_NAME-theme.md-warn .md-bar {  background-color: '{{warn-color}}'; }md-progress-linear.md-THEME_NAME-theme.md-accent .md-container {  background-color: '{{accent-100}}'; }md-progress-linear.md-THEME_NAME-theme.md-accent .md-bar {  background-color: '{{accent-color}}'; }md-progress-linear.md-THEME_NAME-theme[md-mode=buffer].md-warn .md-bar1 {  background-color: '{{warn-100}}'; }md-progress-linear.md-THEME_NAME-theme[md-mode=buffer].md-warn .md-dashed:before {  background: radial-gradient(\"{{warn-100}}\" 0%, \"{{warn-100}}\" 16%, transparent 42%); }md-progress-linear.md-THEME_NAME-theme[md-mode=buffer].md-accent .md-bar1 {  background-color: '{{accent-100}}'; }md-progress-linear.md-THEME_NAME-theme[md-mode=buffer].md-accent .md-dashed:before {  background: radial-gradient(\"{{accent-100}}\" 0%, \"{{accent-100}}\" 16%, transparent 42%); }md-radio-button.md-THEME_NAME-theme .md-off {  border-color: '{{foreground-2}}'; }md-radio-button.md-THEME_NAME-theme .md-on {  background-color: '{{accent-color-0.87}}'; }md-radio-button.md-THEME_NAME-theme.md-checked .md-off {  border-color: '{{accent-color-0.87}}'; }md-radio-button.md-THEME_NAME-theme.md-checked .md-ink-ripple {  color: '{{accent-color-0.87}}'; }md-radio-button.md-THEME_NAME-theme .md-container .md-ripple {  color: '{{accent-600}}'; }md-radio-group.md-THEME_NAME-theme:not([disabled]) .md-primary .md-on, md-radio-group.md-THEME_NAME-theme:not([disabled]).md-primary .md-on,md-radio-button.md-THEME_NAME-theme:not([disabled]) .md-primary .md-on,md-radio-button.md-THEME_NAME-theme:not([disabled]).md-primary .md-on {  background-color: '{{primary-color-0.87}}'; }md-radio-group.md-THEME_NAME-theme:not([disabled]) .md-primary .md-checked .md-off, md-radio-group.md-THEME_NAME-theme:not([disabled]) .md-primary.md-checked .md-off, md-radio-group.md-THEME_NAME-theme:not([disabled]).md-primary .md-checked .md-off, md-radio-group.md-THEME_NAME-theme:not([disabled]).md-primary.md-checked .md-off,md-radio-button.md-THEME_NAME-theme:not([disabled]) .md-primary .md-checked .md-off,md-radio-button.md-THEME_NAME-theme:not([disabled]) .md-primary.md-checked .md-off,md-radio-button.md-THEME_NAME-theme:not([disabled]).md-primary .md-checked .md-off,md-radio-button.md-THEME_NAME-theme:not([disabled]).md-primary.md-checked .md-off {  border-color: '{{primary-color-0.87}}'; }md-radio-group.md-THEME_NAME-theme:not([disabled]) .md-primary .md-checked .md-ink-ripple, md-radio-group.md-THEME_NAME-theme:not([disabled]) .md-primary.md-checked .md-ink-ripple, md-radio-group.md-THEME_NAME-theme:not([disabled]).md-primary .md-checked .md-ink-ripple, md-radio-group.md-THEME_NAME-theme:not([disabled]).md-primary.md-checked .md-ink-ripple,md-radio-button.md-THEME_NAME-theme:not([disabled]) .md-primary .md-checked .md-ink-ripple,md-radio-button.md-THEME_NAME-theme:not([disabled]) .md-primary.md-checked .md-ink-ripple,md-radio-button.md-THEME_NAME-theme:not([disabled]).md-primary .md-checked .md-ink-ripple,md-radio-button.md-THEME_NAME-theme:not([disabled]).md-primary.md-checked .md-ink-ripple {  color: '{{primary-color-0.87}}'; }md-radio-group.md-THEME_NAME-theme:not([disabled]) .md-primary .md-container .md-ripple, md-radio-group.md-THEME_NAME-theme:not([disabled]).md-primary .md-container .md-ripple,md-radio-button.md-THEME_NAME-theme:not([disabled]) .md-primary .md-container .md-ripple,md-radio-button.md-THEME_NAME-theme:not([disabled]).md-primary .md-container .md-ripple {  color: '{{primary-600}}'; }md-radio-group.md-THEME_NAME-theme:not([disabled]) .md-warn .md-on, md-radio-group.md-THEME_NAME-theme:not([disabled]).md-warn .md-on,md-radio-button.md-THEME_NAME-theme:not([disabled]) .md-warn .md-on,md-radio-button.md-THEME_NAME-theme:not([disabled]).md-warn .md-on {  background-color: '{{warn-color-0.87}}'; }md-radio-group.md-THEME_NAME-theme:not([disabled]) .md-warn .md-checked .md-off, md-radio-group.md-THEME_NAME-theme:not([disabled]) .md-warn.md-checked .md-off, md-radio-group.md-THEME_NAME-theme:not([disabled]).md-warn .md-checked .md-off, md-radio-group.md-THEME_NAME-theme:not([disabled]).md-warn.md-checked .md-off,md-radio-button.md-THEME_NAME-theme:not([disabled]) .md-warn .md-checked .md-off,md-radio-button.md-THEME_NAME-theme:not([disabled]) .md-warn.md-checked .md-off,md-radio-button.md-THEME_NAME-theme:not([disabled]).md-warn .md-checked .md-off,md-radio-button.md-THEME_NAME-theme:not([disabled]).md-warn.md-checked .md-off {  border-color: '{{warn-color-0.87}}'; }md-radio-group.md-THEME_NAME-theme:not([disabled]) .md-warn .md-checked .md-ink-ripple, md-radio-group.md-THEME_NAME-theme:not([disabled]) .md-warn.md-checked .md-ink-ripple, md-radio-group.md-THEME_NAME-theme:not([disabled]).md-warn .md-checked .md-ink-ripple, md-radio-group.md-THEME_NAME-theme:not([disabled]).md-warn.md-checked .md-ink-ripple,md-radio-button.md-THEME_NAME-theme:not([disabled]) .md-warn .md-checked .md-ink-ripple,md-radio-button.md-THEME_NAME-theme:not([disabled]) .md-warn.md-checked .md-ink-ripple,md-radio-button.md-THEME_NAME-theme:not([disabled]).md-warn .md-checked .md-ink-ripple,md-radio-button.md-THEME_NAME-theme:not([disabled]).md-warn.md-checked .md-ink-ripple {  color: '{{warn-color-0.87}}'; }md-radio-group.md-THEME_NAME-theme:not([disabled]) .md-warn .md-container .md-ripple, md-radio-group.md-THEME_NAME-theme:not([disabled]).md-warn .md-container .md-ripple,md-radio-button.md-THEME_NAME-theme:not([disabled]) .md-warn .md-container .md-ripple,md-radio-button.md-THEME_NAME-theme:not([disabled]).md-warn .md-container .md-ripple {  color: '{{warn-600}}'; }md-radio-group.md-THEME_NAME-theme[disabled],md-radio-button.md-THEME_NAME-theme[disabled] {  color: '{{foreground-3}}'; }  md-radio-group.md-THEME_NAME-theme[disabled] .md-container .md-off,  md-radio-button.md-THEME_NAME-theme[disabled] .md-container .md-off {    border-color: '{{foreground-3}}'; }  md-radio-group.md-THEME_NAME-theme[disabled] .md-container .md-on,  md-radio-button.md-THEME_NAME-theme[disabled] .md-container .md-on {    border-color: '{{foreground-3}}'; }md-radio-group.md-THEME_NAME-theme .md-checked .md-ink-ripple {  color: '{{accent-color-0.26}}'; }md-radio-group.md-THEME_NAME-theme.md-primary .md-checked:not([disabled]) .md-ink-ripple, md-radio-group.md-THEME_NAME-theme .md-checked:not([disabled]).md-primary .md-ink-ripple {  color: '{{primary-color-0.26}}'; }md-radio-group.md-THEME_NAME-theme .md-checked.md-primary .md-ink-ripple {  color: '{{warn-color-0.26}}'; }md-radio-group.md-THEME_NAME-theme.md-focused:not(:empty) .md-checked .md-container:before {  background-color: '{{accent-color-0.26}}'; }md-radio-group.md-THEME_NAME-theme.md-focused:not(:empty).md-primary .md-checked .md-container:before,md-radio-group.md-THEME_NAME-theme.md-focused:not(:empty) .md-checked.md-primary .md-container:before {  background-color: '{{primary-color-0.26}}'; }md-radio-group.md-THEME_NAME-theme.md-focused:not(:empty).md-warn .md-checked .md-container:before,md-radio-group.md-THEME_NAME-theme.md-focused:not(:empty) .md-checked.md-warn .md-container:before {  background-color: '{{warn-color-0.26}}'; }md-select.md-THEME_NAME-theme[disabled] .md-select-value {  border-bottom-color: transparent;  background-image: linear-gradient(to right, \"{{foreground-3}}\" 0%, \"{{foreground-3}}\" 33%, transparent 0%);  background-image: -ms-linear-gradient(left, transparent 0%, \"{{foreground-3}}\" 100%); }md-select.md-THEME_NAME-theme .md-select-value {  border-bottom-color: '{{foreground-4}}'; }  md-select.md-THEME_NAME-theme .md-select-value.md-select-placeholder {    color: '{{foreground-3}}'; }md-select.md-THEME_NAME-theme.ng-invalid.ng-dirty .md-select-value {  color: '{{warn-A700}}' !important;  border-bottom-color: '{{warn-A700}}' !important; }md-select.md-THEME_NAME-theme:not([disabled]):focus .md-select-value {  border-bottom-color: '{{primary-color}}';  color: '{{ foreground-1 }}'; }  md-select.md-THEME_NAME-theme:not([disabled]):focus .md-select-value.md-select-placeholder {    color: '{{ foreground-1 }}'; }md-select.md-THEME_NAME-theme:not([disabled]):focus.md-accent .md-select-value {  border-bottom-color: '{{accent-color}}'; }md-select.md-THEME_NAME-theme:not([disabled]):focus.md-warn .md-select-value {  border-bottom-color: '{{warn-color}}'; }md-select.md-THEME_NAME-theme[disabled] .md-select-value {  color: '{{foreground-3}}'; }  md-select.md-THEME_NAME-theme[disabled] .md-select-value.md-select-placeholder {    color: '{{foreground-3}}'; }md-select-menu.md-THEME_NAME-theme md-option[disabled] {  color: '{{foreground-3}}'; }md-select-menu.md-THEME_NAME-theme md-optgroup {  color: '{{foreground-2}}'; }  md-select-menu.md-THEME_NAME-theme md-optgroup md-option {    color: '{{foreground-1}}'; }md-select-menu.md-THEME_NAME-theme md-option[selected] {  color: '{{primary-500}}'; }  md-select-menu.md-THEME_NAME-theme md-option[selected]:focus {    color: '{{primary-600}}'; }  md-select-menu.md-THEME_NAME-theme md-option[selected].md-accent {    color: '{{accent-500}}'; }    md-select-menu.md-THEME_NAME-theme md-option[selected].md-accent:focus {      color: '{{accent-600}}'; }md-select-menu.md-THEME_NAME-theme md-option:focus:not([disabled]):not([selected]) {  background: '{{background-200}}'; }.md-checkbox-enabled.md-THEME_NAME-theme .md-ripple {  color: '{{primary-600}}'; }.md-checkbox-enabled.md-THEME_NAME-theme[selected] .md-ripple {  color: '{{background-600}}'; }.md-checkbox-enabled.md-THEME_NAME-theme .md-ink-ripple {  color: '{{foreground-2}}'; }.md-checkbox-enabled.md-THEME_NAME-theme[selected] .md-ink-ripple {  color: '{{primary-color-0.87}}'; }.md-checkbox-enabled.md-THEME_NAME-theme .md-icon {  border-color: '{{foreground-2}}'; }.md-checkbox-enabled.md-THEME_NAME-theme[selected] .md-icon {  background-color: '{{primary-color-0.87}}'; }.md-checkbox-enabled.md-THEME_NAME-theme[selected].md-focused .md-container:before {  background-color: '{{primary-color-0.26}}'; }.md-checkbox-enabled.md-THEME_NAME-theme[selected] .md-icon:after {  border-color: '{{primary-contrast-0.87}}'; }.md-checkbox-enabled.md-THEME_NAME-theme .md-indeterminate[disabled] .md-container {  color: '{{foreground-3}}'; }.md-checkbox-enabled.md-THEME_NAME-theme md-option .md-text {  color: '{{background-900-0.87}}'; }md-sidenav.md-THEME_NAME-theme {  background-color: '{{background-color}}'; }md-slider.md-THEME_NAME-theme .md-track {  background-color: '{{foreground-3}}'; }md-slider.md-THEME_NAME-theme .md-track-ticks {  background-color: '{{foreground-4}}'; }md-slider.md-THEME_NAME-theme .md-focus-thumb {  background-color: '{{foreground-2}}'; }md-slider.md-THEME_NAME-theme .md-focus-ring {  background-color: '{{accent-color}}'; }md-slider.md-THEME_NAME-theme .md-disabled-thumb {  border-color: '{{background-color}}'; }md-slider.md-THEME_NAME-theme.md-min .md-thumb:after {  background-color: '{{background-color}}'; }md-slider.md-THEME_NAME-theme .md-track.md-track-fill {  background-color: '{{accent-color}}'; }md-slider.md-THEME_NAME-theme .md-thumb:after {  border-color: '{{accent-color}}';  background-color: '{{accent-color}}'; }md-slider.md-THEME_NAME-theme .md-sign {  background-color: '{{accent-color}}'; }  md-slider.md-THEME_NAME-theme .md-sign:after {    border-top-color: '{{accent-color}}'; }md-slider.md-THEME_NAME-theme .md-thumb-text {  color: '{{accent-contrast}}'; }md-slider.md-THEME_NAME-theme.md-warn .md-focus-ring {  background-color: '{{warn-color}}'; }md-slider.md-THEME_NAME-theme.md-warn .md-track.md-track-fill {  background-color: '{{warn-color}}'; }md-slider.md-THEME_NAME-theme.md-warn .md-thumb:after {  border-color: '{{warn-color}}';  background-color: '{{warn-color}}'; }md-slider.md-THEME_NAME-theme.md-warn .md-sign {  background-color: '{{warn-color}}'; }  md-slider.md-THEME_NAME-theme.md-warn .md-sign:after {    border-top-color: '{{warn-color}}'; }md-slider.md-THEME_NAME-theme.md-warn .md-thumb-text {  color: '{{warn-contrast}}'; }md-slider.md-THEME_NAME-theme.md-primary .md-focus-ring {  background-color: '{{primary-color}}'; }md-slider.md-THEME_NAME-theme.md-primary .md-track.md-track-fill {  background-color: '{{primary-color}}'; }md-slider.md-THEME_NAME-theme.md-primary .md-thumb:after {  border-color: '{{primary-color}}';  background-color: '{{primary-color}}'; }md-slider.md-THEME_NAME-theme.md-primary .md-sign {  background-color: '{{primary-color}}'; }  md-slider.md-THEME_NAME-theme.md-primary .md-sign:after {    border-top-color: '{{primary-color}}'; }md-slider.md-THEME_NAME-theme.md-primary .md-thumb-text {  color: '{{primary-contrast}}'; }md-slider.md-THEME_NAME-theme[disabled] .md-thumb:after {  border-color: '{{foreground-3}}'; }md-slider.md-THEME_NAME-theme[disabled]:not(.md-min) .md-thumb:after {  background-color: '{{foreground-3}}'; }.md-subheader.md-THEME_NAME-theme {  color: '{{ foreground-2-0.23 }}';  background-color: '{{background-color}}'; }  .md-subheader.md-THEME_NAME-theme.md-primary {    color: '{{primary-color}}'; }  .md-subheader.md-THEME_NAME-theme.md-accent {    color: '{{accent-color}}'; }  .md-subheader.md-THEME_NAME-theme.md-warn {    color: '{{warn-color}}'; }md-switch.md-THEME_NAME-theme .md-ink-ripple {  color: '{{background-500}}'; }md-switch.md-THEME_NAME-theme .md-thumb {  background-color: '{{background-50}}'; }md-switch.md-THEME_NAME-theme .md-bar {  background-color: '{{background-500}}'; }md-switch.md-THEME_NAME-theme.md-checked .md-ink-ripple {  color: '{{accent-color}}'; }md-switch.md-THEME_NAME-theme.md-checked .md-thumb {  background-color: '{{accent-color}}'; }md-switch.md-THEME_NAME-theme.md-checked .md-bar {  background-color: '{{accent-color-0.5}}'; }md-switch.md-THEME_NAME-theme.md-checked.md-focused .md-thumb:before {  background-color: '{{accent-color-0.26}}'; }md-switch.md-THEME_NAME-theme.md-checked.md-primary .md-ink-ripple {  color: '{{primary-color}}'; }md-switch.md-THEME_NAME-theme.md-checked.md-primary .md-thumb {  background-color: '{{primary-color}}'; }md-switch.md-THEME_NAME-theme.md-checked.md-primary .md-bar {  background-color: '{{primary-color-0.5}}'; }md-switch.md-THEME_NAME-theme.md-checked.md-primary.md-focused .md-thumb:before {  background-color: '{{primary-color-0.26}}'; }md-switch.md-THEME_NAME-theme.md-checked.md-warn .md-ink-ripple {  color: '{{warn-color}}'; }md-switch.md-THEME_NAME-theme.md-checked.md-warn .md-thumb {  background-color: '{{warn-color}}'; }md-switch.md-THEME_NAME-theme.md-checked.md-warn .md-bar {  background-color: '{{warn-color-0.5}}'; }md-switch.md-THEME_NAME-theme.md-checked.md-warn.md-focused .md-thumb:before {  background-color: '{{warn-color-0.26}}'; }md-switch.md-THEME_NAME-theme[disabled] .md-thumb {  background-color: '{{background-400}}'; }md-switch.md-THEME_NAME-theme[disabled] .md-bar {  background-color: '{{foreground-4}}'; }md-tabs.md-THEME_NAME-theme md-tabs-wrapper {  background-color: transparent;  border-color: '{{foreground-4}}'; }md-tabs.md-THEME_NAME-theme .md-paginator md-icon {  color: '{{primary-color}}'; }md-tabs.md-THEME_NAME-theme md-ink-bar {  color: '{{accent-color}}';  background: '{{accent-color}}'; }md-tabs.md-THEME_NAME-theme .md-tab {  color: '{{foreground-2}}'; }  md-tabs.md-THEME_NAME-theme .md-tab[disabled], md-tabs.md-THEME_NAME-theme .md-tab[disabled] md-icon {    color: '{{foreground-3}}'; }  md-tabs.md-THEME_NAME-theme .md-tab.md-active, md-tabs.md-THEME_NAME-theme .md-tab.md-active md-icon, md-tabs.md-THEME_NAME-theme .md-tab.md-focused, md-tabs.md-THEME_NAME-theme .md-tab.md-focused md-icon {    color: '{{primary-color}}'; }  md-tabs.md-THEME_NAME-theme .md-tab.md-focused {    background: '{{primary-color-0.1}}'; }  md-tabs.md-THEME_NAME-theme .md-tab .md-ripple-container {    color: '{{accent-100}}'; }md-tabs.md-THEME_NAME-theme.md-accent > md-tabs-wrapper {  background-color: '{{accent-color}}'; }  md-tabs.md-THEME_NAME-theme.md-accent > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]) {    color: '{{accent-100}}'; }    md-tabs.md-THEME_NAME-theme.md-accent > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-active, md-tabs.md-THEME_NAME-theme.md-accent > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-active md-icon, md-tabs.md-THEME_NAME-theme.md-accent > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused, md-tabs.md-THEME_NAME-theme.md-accent > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused md-icon {      color: '{{accent-contrast}}'; }    md-tabs.md-THEME_NAME-theme.md-accent > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused {      background: '{{accent-contrast-0.1}}'; }  md-tabs.md-THEME_NAME-theme.md-accent > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-ink-bar {    color: '{{primary-600-1}}';    background: '{{primary-600-1}}'; }md-tabs.md-THEME_NAME-theme.md-primary > md-tabs-wrapper {  background-color: '{{primary-color}}'; }  md-tabs.md-THEME_NAME-theme.md-primary > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]) {    color: '{{primary-100}}'; }    md-tabs.md-THEME_NAME-theme.md-primary > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-active, md-tabs.md-THEME_NAME-theme.md-primary > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-active md-icon, md-tabs.md-THEME_NAME-theme.md-primary > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused, md-tabs.md-THEME_NAME-theme.md-primary > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused md-icon {      color: '{{primary-contrast}}'; }    md-tabs.md-THEME_NAME-theme.md-primary > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused {      background: '{{primary-contrast-0.1}}'; }md-tabs.md-THEME_NAME-theme.md-warn > md-tabs-wrapper {  background-color: '{{warn-color}}'; }  md-tabs.md-THEME_NAME-theme.md-warn > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]) {    color: '{{warn-100}}'; }    md-tabs.md-THEME_NAME-theme.md-warn > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-active, md-tabs.md-THEME_NAME-theme.md-warn > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-active md-icon, md-tabs.md-THEME_NAME-theme.md-warn > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused, md-tabs.md-THEME_NAME-theme.md-warn > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused md-icon {      color: '{{warn-contrast}}'; }    md-tabs.md-THEME_NAME-theme.md-warn > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused {      background: '{{warn-contrast-0.1}}'; }md-toolbar > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper {  background-color: '{{primary-color}}'; }  md-toolbar > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]) {    color: '{{primary-100}}'; }    md-toolbar > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-active, md-toolbar > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-active md-icon, md-toolbar > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused, md-toolbar > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused md-icon {      color: '{{primary-contrast}}'; }    md-toolbar > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused {      background: '{{primary-contrast-0.1}}'; }md-toolbar.md-accent > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper {  background-color: '{{accent-color}}'; }  md-toolbar.md-accent > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]) {    color: '{{accent-100}}'; }    md-toolbar.md-accent > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-active, md-toolbar.md-accent > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-active md-icon, md-toolbar.md-accent > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused, md-toolbar.md-accent > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused md-icon {      color: '{{accent-contrast}}'; }    md-toolbar.md-accent > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused {      background: '{{accent-contrast-0.1}}'; }  md-toolbar.md-accent > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-ink-bar {    color: '{{primary-600-1}}';    background: '{{primary-600-1}}'; }md-toolbar.md-warn > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper {  background-color: '{{warn-color}}'; }  md-toolbar.md-warn > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]) {    color: '{{warn-100}}'; }    md-toolbar.md-warn > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-active, md-toolbar.md-warn > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-active md-icon, md-toolbar.md-warn > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused, md-toolbar.md-warn > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused md-icon {      color: '{{warn-contrast}}'; }    md-toolbar.md-warn > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused {      background: '{{warn-contrast-0.1}}'; }md-toast.md-THEME_NAME-theme .md-toast-content {  background-color: #323232;  color: '{{background-50}}'; }  md-toast.md-THEME_NAME-theme .md-toast-content .md-button {    color: '{{background-50}}'; }    md-toast.md-THEME_NAME-theme .md-toast-content .md-button.md-highlight {      color: '{{primary-A200}}'; }      md-toast.md-THEME_NAME-theme .md-toast-content .md-button.md-highlight.md-accent {        color: '{{accent-A200}}'; }      md-toast.md-THEME_NAME-theme .md-toast-content .md-button.md-highlight.md-warn {        color: '{{warn-A200}}'; }md-toolbar.md-THEME_NAME-theme:not(.md-menu-toolbar) {  background-color: '{{primary-color}}';  color: '{{primary-contrast}}'; }  md-toolbar.md-THEME_NAME-theme:not(.md-menu-toolbar) md-icon {    color: '{{primary-contrast}}'; }  md-toolbar.md-THEME_NAME-theme:not(.md-menu-toolbar) .md-button:not(.md-raised) {    color: '{{primary-contrast}}'; }  md-toolbar.md-THEME_NAME-theme:not(.md-menu-toolbar).md-accent {    background-color: '{{accent-color}}';    color: '{{accent-contrast}}'; }  md-toolbar.md-THEME_NAME-theme:not(.md-menu-toolbar).md-warn {    background-color: '{{warn-color}}';    color: '{{warn-contrast}}'; }md-tooltip.md-THEME_NAME-theme {  color: '{{background-A100}}'; }  md-tooltip.md-THEME_NAME-theme .md-content {    background-color: '{{foreground-2}}'; }"); 
 })();
 
 
-})(window, window.angular);;window.ngMaterial={version:{full: "1.0.7"}};
+})(window, window.angular);;window.ngMaterial={version:{full: "1.0.8"}};
