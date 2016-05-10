@@ -1,6 +1,6 @@
 {
   "name": "angular-gridster2",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "main": [
     "dist/gridster.js",
     "dist/gridster.css"

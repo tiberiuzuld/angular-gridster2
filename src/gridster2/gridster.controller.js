@@ -145,8 +145,8 @@
 
     vm.pixelsToPosition = function (x, y) {
       if (vm.outerMargin) {
-        x -= 10;
-        y -= 10;
+        x -= vm.margin;
+        y -= vm.margin;
       }
 
       return [Math.abs(Math.round(x / vm.curColWidth)), Math.abs(Math.round(y / vm.curRowHeight))];
