@@ -10,6 +10,7 @@
       element.append($compile(gridsterPreview)(scope));
       var scrollBarPresent;
 
+      gridster.setOptions(scope.$eval(attributes.gridster));
       scope.$watch(attributes.gridster, function (options) {
         gridster.setOptions(options);
       }, true);
