@@ -874,8 +874,10 @@
       if (angular.isUndefined(item.x) || angular.isUndefined(item.y)) {
         vm.autoPositionItem(item);
       } else if (vm.checkCollision(item)) {
-        $log.warn('Can\'t be placed in the bounds of the dashboard!', item);
-        return;
+        item.x = undefined;
+        item.y = undefined;
+        $log.warn('Can\'t be placed in the bounds of the dashboard, trying to auto position!', item);
+        vm.autoPositionItem(item);
       }
       vm.grid.push(item);
       vm.calculateLayout();

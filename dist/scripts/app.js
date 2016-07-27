@@ -34,7 +34,7 @@
       {cols: 1, rows: 1, y: 0, x: 4},
       {cols: 1, rows: 1, y: 0, x: 5},
       {cols: 2, rows: 1, y: 1, x: 0},
-      {cols: 1, rows: 1, y: 1, x: 4},
+      {cols: 1, rows: 1, y: undefined, x: undefined},
       {cols: 1, rows: 2, y: 1, x: 5},
       {cols: 1, rows: 3, y: 2, x: 0},
       {cols: 2, rows: 1, y: 2, x: 1},
