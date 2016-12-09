@@ -1,6 +1,6 @@
 'use strict';
 
-var paths = require('./.yo-rc.json')['generator-gulp-angular'].props.paths;
+var paths = require('./gulp/conf').paths;
 
 // An example configuration file.
 exports.config = {

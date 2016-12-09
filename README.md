@@ -12,6 +12,10 @@ angular-gridster2 inspired by [angular-gridster](https://github.com/ManifestWebD
 ```bash
   bower install angular-gridster2 --save
 ```
+#### Install with npm
+```bash
+  npm install angular-gridster2 --save
+```
 
 Then import the following in your HTML:
 

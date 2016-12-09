@@ -13,7 +13,7 @@ gulp.task('partials', function () {
       path.join(conf.paths.src, '/app/**/*.html'),
       path.join(conf.paths.tmp, '/serve/app/**/*.html')
     ])
-    .pipe($.htmlmin({
+    .pipe($.minifyHtml({
       removeComments: true,
       removeAttributeQuotes: true,
       collapseBooleanAttributes: true,
@@ -50,13 +50,13 @@ gulp.task('html', ['inject', 'partials'], function () {
     .pipe(jsFilter.restore)
     //.pipe(cssFilter)
     //.pipe($.sourcemaps.init())
-    //.pipe($.cleanCss({ processImport: false }))
+    //.pipe($.minifyCss({ processImport: false }))
     //.pipe($.rev())
     //.pipe($.sourcemaps.write('maps'))
     //.pipe(cssFilter.restore)
     //.pipe($.revReplace())
     //.pipe(htmlFilter)
-    // .pipe($.htmlmin({
+    // .pipe($.minifyHtml({
     //   removeComments: true,
     //   removeAttributeQuotes: true,
     //   collapseBooleanAttributes: true,

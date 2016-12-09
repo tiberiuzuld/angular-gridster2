@@ -1,18 +1,18 @@
 {
   "name": "angular-gridster2",
-  "version": "1.1.2",
+  "version": "1.1.4",
   "main": [
     "dist/gridster.js",
     "dist/gridster.css"
   ],
   "dependencies": {
-    "angular": "~1.x",
-    "lodash": "~4.x",
-    "javascript-detect-element-resize": "~0.5.3"
+    "angular": "^1.x",
+    "lodash": "^4.x",
+    "javascript-detect-element-resize": "^0.5.3"
   },
   "devDependencies": {
-    "angular-mocks": "~1.x",
-    "angular-material": "~1.0.8"
+    "angular-mocks": "^1.x",
+    "angular-material": "^1.1.1"
   },
   "homepage": "https://github.io/tiberiuzuld/angular-gridster2",
   "bugs": {
@@ -23,7 +23,16 @@
     "url": "https://github.com/tiberiuzuld/angular-girdster2.git"
   },
   "description": "Angular gridster 2",
-  "keywords": "angular, angularjs, dashboard, gridster, gridster2, resize, drag&drop, widgets",
+  "keywords": [
+    "angular",
+    "angularjs",
+    "dashboard",
+    "gridster",
+    "gridster2",
+    "resize",
+    "drag&drop",
+    "widgets"
+  ],
   "authors": [
     "Tiberiu Zuld"
   ],
@@ -38,7 +47,6 @@
     ".editorconfig",
     ".eslintrc",
     ".gitignore",
-    ".yo-rc.json",
     "gulpfile.js",
     "karma.conf.js",
     "protractor.conf.js"
