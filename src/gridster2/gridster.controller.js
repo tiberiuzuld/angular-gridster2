@@ -26,6 +26,10 @@
     }
 
     function calculateLayout() {
+      //check to compact up
+      vm.checkCompactUp();
+      //check to compact left
+      vm.checkCompactLeft();
       setGridDimensions();
       if (vm.gridType === 'fit') {
         vm.curColWidth = Math.floor((vm.curWidth + (vm.outerMargin ? -vm.margin : vm.margin)) / vm.columns);
@@ -152,6 +156,66 @@
       }
 
       return [Math.abs(Math.round(x / vm.curColWidth)), Math.abs(Math.round(y / vm.curRowHeight))];
+    };
+
+    vm.checkCompactUp = function () {
+      if (vm.compactUp) {
+        var widgetMovedUp = false;
+        var l = vm.grid.length;
+        for (var i = 0; i < l; i++) {
+          var widget = vm.grid[i];
+          var moved = moveUpTillCollision(widget);
+          if (moved) {
+            widgetMovedUp = true;
+            widget.itemChanged();
+          }
+        }
+        if (widgetMovedUp) {
+          vm.checkCompactUp();
+          return widgetMovedUp;
+        }
+      }
+    };
+
+    function moveUpTillCollision(widget) {
+      widget.y -= 1;
+      if (vm.checkCollision(widget)) {
+        widget.y += 1;
+        return false;
+      } else {
+        moveUpTillCollision(widget);
+        return true;
+      }
+    }
+
+    vm.checkCompactLeft = function () {
+      if (vm.compactLeft) {
+        var widgetMovedUp = false;
+        var l = vm.grid.length;
+        for (var i = 0; i < l; i++) {
+          var widget = vm.grid[i];
+          var moved = moveLeftTillCollision(widget);
+          if (moved) {
+            widgetMovedUp = true;
+            widget.itemChanged();
+          }
+        }
+        if (widgetMovedUp) {
+          vm.checkCompactLeft();
+          return widgetMovedUp;
+        }
+      }
+    };
+
+    function moveLeftTillCollision(widget) {
+      widget.x -= 1;
+      if (vm.checkCollision(widget)) {
+        widget.x += 1;
+        return false;
+      } else {
+        moveUpTillCollision(widget);
+        return true;
+      }
     }
   }
 })();

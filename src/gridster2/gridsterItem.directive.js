@@ -15,6 +15,7 @@
         initCallback: item.initCallback,
         setSize: setSize,
         checkItemChanges: checkItemChanges,
+        itemChanged: itemChanged,
         drag: new gridsterDraggable(element, scope),
         resize: new gridsterResizable(element, scope)
       };
@@ -58,6 +59,13 @@
         itemHeight = height;
       }
 
+      function itemChanged() {
+        scope.$broadcast('gridster-item-change');
+        if (scope.gridster.itemChangeCallback) {
+          scope.gridster.itemChangeCallback(scope.gridsterItem, scope);
+        }
+      }
+
       function checkItemChanges(newValue, oldValue) {
         if (newValue.rows === oldValue.rows && newValue.cols === oldValue.cols && newValue.x === oldValue.x && newValue.y === oldValue.y) {
           return;
@@ -73,11 +81,8 @@
           item.rows = scope.gridsterItem.rows;
           item.x = scope.gridsterItem.x;
           item.y = scope.gridsterItem.y;
-          scope.$broadcast('gridster-item-change');
           scope.gridster.calculateLayout();
-          if (scope.gridster.itemChangeCallback) {
-            scope.gridster.itemChangeCallback(scope.gridsterItem, scope);
-          }
+          itemChanged();
         }
       }
 

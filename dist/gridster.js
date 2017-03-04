@@ -493,6 +493,7 @@
         initCallback: item.initCallback,
         setSize: setSize,
         checkItemChanges: checkItemChanges,
+        itemChanged: itemChanged,
         drag: new gridsterDraggable(element, scope),
         resize: new gridsterResizable(element, scope)
       };
@@ -536,6 +537,13 @@
         itemHeight = height;
       }
 
+      function itemChanged() {
+        scope.$broadcast('gridster-item-change');
+        if (scope.gridster.itemChangeCallback) {
+          scope.gridster.itemChangeCallback(scope.gridsterItem, scope);
+        }
+      }
+
       function checkItemChanges(newValue, oldValue) {
         if (newValue.rows === oldValue.rows && newValue.cols === oldValue.cols && newValue.x === oldValue.x && newValue.y === oldValue.y) {
           return;
@@ -551,11 +559,8 @@
           item.rows = scope.gridsterItem.rows;
           item.x = scope.gridsterItem.x;
           item.y = scope.gridsterItem.y;
-          scope.$broadcast('gridster-item-change');
           scope.gridster.calculateLayout();
-          if (scope.gridster.itemChangeCallback) {
-            scope.gridster.itemChangeCallback(scope.gridsterItem, scope);
-          }
+          itemChanged();
         }
       }
 
@@ -814,6 +819,10 @@
     }
 
     function calculateLayout() {
+      //check to compact up
+      vm.checkCompactUp();
+      //check to compact left
+      vm.checkCompactLeft();
       setGridDimensions();
       if (vm.gridType === 'fit') {
         vm.curColWidth = Math.floor((vm.curWidth + (vm.outerMargin ? -vm.margin : vm.margin)) / vm.columns);
@@ -940,6 +949,66 @@
       }
 
       return [Math.abs(Math.round(x / vm.curColWidth)), Math.abs(Math.round(y / vm.curRowHeight))];
+    };
+
+    vm.checkCompactUp = function () {
+      if (vm.compactUp) {
+        var widgetMovedUp = false;
+        var l = vm.grid.length;
+        for (var i = 0; i < l; i++) {
+          var widget = vm.grid[i];
+          var moved = moveUpTillCollision(widget);
+          if (moved) {
+            widgetMovedUp = true;
+            widget.itemChanged();
+          }
+        }
+        if (widgetMovedUp) {
+          vm.checkCompactUp();
+          return widgetMovedUp;
+        }
+      }
+    };
+
+    function moveUpTillCollision(widget) {
+      widget.y -= 1;
+      if (vm.checkCollision(widget)) {
+        widget.y += 1;
+        return false;
+      } else {
+        moveUpTillCollision(widget);
+        return true;
+      }
+    }
+
+    vm.checkCompactLeft = function () {
+      if (vm.compactLeft) {
+        var widgetMovedUp = false;
+        var l = vm.grid.length;
+        for (var i = 0; i < l; i++) {
+          var widget = vm.grid[i];
+          var moved = moveLeftTillCollision(widget);
+          if (moved) {
+            widgetMovedUp = true;
+            widget.itemChanged();
+          }
+        }
+        if (widgetMovedUp) {
+          vm.checkCompactLeft();
+          return widgetMovedUp;
+        }
+      }
+    };
+
+    function moveLeftTillCollision(widget) {
+      widget.x -= 1;
+      if (vm.checkCollision(widget)) {
+        widget.x += 1;
+        return false;
+      } else {
+        moveUpTillCollision(widget);
+        return true;
+      }
     }
   }
 })();
@@ -952,6 +1021,8 @@
       gridType: 'fit', // 'fit' will fit the items in the container without scroll;
       // 'scrollVertical' will fit on width and height of the items will be the same as the width
       // 'scrollHorizontal' will fit on height and width of the items will be the same as the height
+      compactUp: false, // compact items up if there is room
+      compactLeft: false, // compact items left if there is room
       mobileBreakpoint: 640, // if the screen is not wider that this, remove the grid layout and stack the items
       minCols: 1,// minimum amount of columns in the grid
       maxCols: 100,// maximum amount of columns in the grid
@@ -964,7 +1035,7 @@
       margin: 10, //margin between grid items
       outerMargin: true, //if margins will apply to the sides of the container
       scrollSensitivity: 10, //margin of the dashboard where to start scrolling
-      scrollSpeed: 10, //how much to scroll each mouse move when in the scrollSensitivity zone
+      scrollSpeed: 20, //how much to scroll each mouse move when in the scrollSensitivity zone
       itemChangeCallback: undefined, //callback to call for each item when is changes x, y, rows, cols. Arguments:gridsterItem, scope
       draggable: {
         enabled: false, // enable/disable draggable items

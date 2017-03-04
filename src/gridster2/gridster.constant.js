@@ -6,6 +6,8 @@
       gridType: 'fit', // 'fit' will fit the items in the container without scroll;
       // 'scrollVertical' will fit on width and height of the items will be the same as the width
       // 'scrollHorizontal' will fit on height and width of the items will be the same as the height
+      compactUp: false, // compact items up if there is room
+      compactLeft: false, // compact items left if there is room
       mobileBreakpoint: 640, // if the screen is not wider that this, remove the grid layout and stack the items
       minCols: 1,// minimum amount of columns in the grid
       maxCols: 100,// maximum amount of columns in the grid
@@ -18,7 +20,7 @@
       margin: 10, //margin between grid items
       outerMargin: true, //if margins will apply to the sides of the container
       scrollSensitivity: 10, //margin of the dashboard where to start scrolling
-      scrollSpeed: 10, //how much to scroll each mouse move when in the scrollSensitivity zone
+      scrollSpeed: 20, //how much to scroll each mouse move when in the scrollSensitivity zone
       itemChangeCallback: undefined, //callback to call for each item when is changes x, y, rows, cols. Arguments:gridsterItem, scope
       draggable: {
         enabled: false, // enable/disable draggable items
