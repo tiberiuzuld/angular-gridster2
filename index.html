@@ -20,45 +20,8 @@
 
   <link rel="stylesheet" href="styles/app.css">
 </head>
-<body ng-controller="IndexController as vm" layout="column" ng-cloak>
-<md-toolbar>
-  <div class="md-toolbar-tools" layout="row" layout-align="space-between center">
-    <md-button ng-click="vm.addItem()">
-      <md-icon>add</md-icon>
-      Add widget
-    </md-button>
-    <md-select aria-label="Grid type" ng-model="vm.options.gridType">
-      <md-option value="fit">Fit to screen</md-option>
-      <md-option value="scrollVertical">Scroll Vertical</md-option>
-      <md-option value="scrollHorizontal">Scroll Horizontal</md-option>
-    </md-select>
-    <md-checkbox ng-model="vm.options.swap">
-      Swap Items
-    </md-checkbox>
-    <md-checkbox ng-model="vm.options.draggable.enabled">
-      Drag Items
-    </md-checkbox>
-    <md-checkbox ng-model="vm.options.resizable.enabled">
-      Resize Items
-    </md-checkbox>
-    <div flex="30" layout="row" layout-align="center center">
-      <div><span>Margin</span></div>
-      <md-slider aria-label="Margin" flex min="0" max="30" ng-model="vm.options.margin"></md-slider>
-      <input type="number" min="0" max="30" ng-model="vm.options.margin">
-    </div>
-    <md-checkbox ng-model="vm.options.outerMargin">Outer Margin</md-checkbox>
-  </div>
-</md-toolbar>
-
-<div gridster="vm.options">
-  <div gridster-item="item" ng-repeat="item in vm.dashboard">
-    <div class="button-holder">
-      <md-button class="md-fab md-primary md-mini" ng-click="vm.removeItem(item)">X
-        <md-tooltip>Remove</md-tooltip>
-      </md-button>
-    </div>
-  </div>
-</div>
+<body class="layout-column" ng-cloak>
+<main class="flex layout-column"></main>
 
 <script src="scripts/vendor.js"></script>
 
