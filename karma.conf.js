@@ -1,93 +1,44 @@
-'use strict';
-
-var path = require('path');
-var conf = require('./gulp/conf');
-
-var _ = require('lodash');
-var wiredep = require('wiredep');
-
-var pathSrcHtml = [
-  path.join(conf.paths.src, '/**/*.html')
-];
-
-function listFiles() {
-  var wiredepOptions = _.extend({}, conf.wiredep, {
-    dependencies: true,
-    devDependencies: true
-  });
-
-  return wiredep(wiredepOptions).js
-    .concat([
-      path.join(conf.paths.src, '/**/**/*.module.js'),
-      path.join(conf.paths.src, '/**/**/*.js'),
-      path.join(conf.paths.src, '/**/*.spec.js')
-      // path.join(conf.paths.src, '/**/*.mock.js')
-    ])
-    .concat(pathSrcHtml);
-}
+// Karma configuration file, see link for more information
+// https://karma-runner.github.io/0.13/config/configuration-file.html
 
 module.exports = function (config) {
-
-  var configuration = {
-    files: listFiles(),
-
-    singleRun: true,
-
-    autoWatch: false,
-
-    ngHtml2JsPreprocessor: {
-      stripPrefix: conf.paths.src + '/',
-      moduleName: 'gridster2App'
-    },
-
-    logLevel: 'WARN',
-
-    frameworks: ['jasmine', 'angular-filesort'],
-
-    angularFilesort: {
-      whitelist: [path.join(conf.paths.src, '/**/!(*.html|*.spec|*.mock).js')]
-    },
-
-    browsers: ['PhantomJS'],
-
+  config.set({
+    basePath: '',
+    frameworks: ['jasmine', '@angular/cli'],
     plugins: [
-      'karma-phantomjs-launcher',
-      'karma-angular-filesort',
-      'karma-coverage',
-      'karma-jasmine',
-      'karma-ng-html2js-preprocessor'
+      require('karma-jasmine'),
+      require('karma-chrome-launcher'),
+      require('karma-jasmine-html-reporter'),
+      require('karma-coverage-istanbul-reporter'),
+      require('@angular/cli/plugins/karma')
     ],
-
-    coverageReporter: {
-      type: 'html',
-      dir: 'coverage/'
+    client:{
+      clearContext: false // leave Jasmine Spec Runner output visible in browser
     },
-
-    reporters: ['progress']
-  };
-
-  // This is the default preprocessors configuration for a usage with Karma cli
-  // The coverage preprocessor is added in gulp/unit-test.js only for single tests
-  // It was not possible to do it there because karma doesn't let us now if we are
-  // running a single test or not
-  configuration.preprocessors = {};
-  pathSrcHtml.forEach(function (path) {
-    configuration.preprocessors[path] = ['ng-html2js'];
+    files: [
+      { pattern: './src/test.ts', watched: false }
+    ],
+    preprocessors: {
+      './src/test.ts': ['@angular/cli']
+    },
+    mime: {
+      'text/x-typescript': ['ts','tsx']
+    },
+    coverageIstanbulReporter: {
+      reports: [ 'html', 'lcovonly' ],
+      fixWebpackSourcePaths: true
+    },
+    angularCli: {
+      environment: 'dev'
+    },
+    reporters: config.angularCli && config.angularCli.codeCoverage
+              ? ['progress', 'coverage-istanbul']
+              : ['progress', 'kjhtml'],
+    port: 9876,
+    colors: true,
+    logLevel: config.LOG_INFO,
+    autoWatch: true,
+    browsers: ['Chrome'],
+    singleRun: false
   });
-
-  // This block is needed to execute Chrome on Travis
-  // If you ever plan to use Chrome and Travis, you can keep it
-  // If not, you can safely remove it
-  // https://github.com/karma-runner/karma/issues/1144#issuecomment-53633076
-  if (configuration.browsers[0] === 'Chrome' && process.env.TRAVIS) {
-    configuration.customLaunchers = {
-      'chrome-travis-ci': {
-        base: 'Chrome',
-        flags: ['--no-sandbox']
-      }
-    };
-    configuration.browsers = ['chrome-travis-ci'];
-  }
-
-  config.set(configuration);
 };
