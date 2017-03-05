@@ -1,4 +1,23 @@
-# Gridster2
+
+angular-gridster2
+==============
+
+### Angularjs 1.x library is [here](https://github.com/tiberiuzuld/angular-gridster2/tree/1.x)
+
+### Angular 2 library work in progress
+ 
+## Description
+ 
+angular-gridster2 inspired by [angular-gridster](https://github.com/ManifestWebDesign/angular-gridster) 
+ 
+#### [Demo](http://tiberiuzuld.github.io/angular-gridster2)
+ 
+
+### License
+ The MIT License
+ 
+ Copyright (c) 2017 Tiberiu Zuld
+
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.0.0-rc.1.
 
