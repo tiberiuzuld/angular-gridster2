@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 
 @Component({
-  selector: 'app-root',
+  selector: 'tz-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
@@ -44,11 +44,11 @@ export class AppComponent implements OnInit {
   }
 
 
-  removeItem = function (item) {
+  removeItem(item) {
     this.dashboard.splice(this.dashboard.indexOf(item), 1);
   };
 
-  addItem = function () {
+  addItem() {
     this.dashboard.push({});
   };
 

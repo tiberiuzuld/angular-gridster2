@@ -22,7 +22,9 @@
         "styles.css",
         "theme.scss"
       ],
-      "scripts": [],
+      "scripts": [
+        "../node_modules/javascript-detect-element-resize/detect-element-resize.js"
+      ],
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",
