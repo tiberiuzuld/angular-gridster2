@@ -3,38 +3,38 @@
     <button md-mini-fab (click)="addItem()" mdTooltip="Add widget">
       <md-icon>add</md-icon>
     </button>
-    <md-select aria-label="Grid type" [(ngModel)]="options.gridType">
+    <md-select aria-label="Grid type" [(ngModel)]="options.gridType" (ngModelChange)="changedOptions()">
       <md-option value="fit">Fit to screen</md-option>
       <md-option value="scrollVertical">Scroll Vertical</md-option>
       <md-option value="scrollHorizontal">Scroll Horizontal</md-option>
     </md-select>
-    <md-checkbox [(ngModel)]="options.compactUp">
+    <md-checkbox [(ngModel)]="options.compactUp" (ngModelChange)="changedOptions()">
       Compact Up
     </md-checkbox>
-    <md-checkbox [(ngModel)]="options.compactLeft">
+    <md-checkbox [(ngModel)]="options.compactLeft" (ngModelChange)="changedOptions()">
       Compact Left
     </md-checkbox>
-    <md-checkbox [(ngModel)]="options.swap">
+    <md-checkbox [(ngModel)]="options.swap" (ngModelChange)="changedOptions()">
       Swap Items
     </md-checkbox>
-    <md-checkbox [(ngModel)]="options.draggable.enabled">
+    <md-checkbox [(ngModel)]="options.draggable.enabled" (ngModelChange)="changedOptions()">
       Drag Items
     </md-checkbox>
-    <md-checkbox [(ngModel)]="options.resizable.enabled">
+    <md-checkbox [(ngModel)]="options.resizable.enabled" (ngModelChange)="changedOptions()">
       Resize Items
     </md-checkbox>
     <div class="margin-slider">
       <div><span>Margin</span></div>
       <md-slider aria-label="Margin" thumbLabel
-                 min="0" max="30" step="1"
-                 [value]="options.margin"></md-slider>
+                 min="0" max="30" step="1" (input)="changedOptions()"
+                 [(ngModel)]="options.margin"></md-slider>
     </div>
-    <md-checkbox [(ngModel)]="options.outerMargin">Outer Margin</md-checkbox>
+    <md-checkbox [(ngModel)]="options.outerMargin" (ngModelChange)="changedOptions()">Outer Margin</md-checkbox>
   </div>
 </md-toolbar>
 
 <tz-gridster [options]="options">
-  <tz-gridster-item item="item" *ngFor="let item of dashboard">
+  <tz-gridster-item [item]="item" *ngFor="let item of dashboard">
     <div class="button-holder">
       <button md-mini-fab (click)="removeItem(item)" mdTooltip="Remove">
         <md-icon>clear</md-icon>

@@ -3,6 +3,7 @@ import _ from 'lodash';
 import {isUndefined} from 'util';
 import {GridsterConfigService} from './gridsterConfig.service';
 import {GridsterConfig} from './gridsterConfig.interface';
+import {GridsterItem} from './gridsterItem.interface';
 
 @Component({
   selector: 'tz-gridster',
@@ -20,19 +21,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
     curHeight: number,
     options: GridsterConfig,
     scrollBarPresent: boolean,
-    grid: Array<{ // TODO replace with gridsterItem definition
-      x: number,
-      y: number,
-      rows: number,
-      cols: number,
-      setSize: Function,
-      drag: {
-        toggle: Function
-      },
-      resize: {
-        toggle: Function
-      }
-    }>,
+    grid: Array<GridsterItem>,
     columns: number,
     rows: number,
     curColWidth: number,
@@ -56,14 +45,20 @@ export class GridsterComponent implements OnInit, OnDestroy {
   };
 
   ngOnInit() {
+    this.options.optionsChanged = this.optionsChanged.bind(this);
     this.state.options = _.merge(this.state.options, this.options);
     this.setGridSize();
-    this.detectScrollBarLayout = _.debounce(this.detectScrollBar, 10);
-    this.calculateLayoutDebounce = _.debounce(this.calculateLayout, 5);
+    this.detectScrollBarLayout = _.debounce(this.detectScrollBar.bind(this), 10);
+    this.calculateLayoutDebounce = _.debounce(this.calculateLayout.bind(this), 5);
     this.state.element.addEventListener('transitionend', this.detectScrollBarLayout);
     this.calculateLayoutDebounce();
     addResizeListener(this.state.element, this.onResize.bind(this));
   };
+
+  optionsChanged() {
+    this.state.options = _.merge(this.state.options, this.options);
+    this.calculateLayout();
+  }
 
   ngOnDestroy() {
     removeResizeListener(this.state.element, this.onResize.bind(this));
@@ -165,14 +160,14 @@ export class GridsterComponent implements OnInit, OnDestroy {
     let widgetsIndex = this.state.grid.length - 1;
     for (; widgetsIndex >= 0; widgetsIndex--) {
       this.state.grid[widgetsIndex].setSize();
-      this.state.grid[widgetsIndex].drag.toggle(this.state.options.draggable.enabled);
-      this.state.grid[widgetsIndex].resize.toggle(this.state.options.resizable.enabled);
+      // this.state.grid[widgetsIndex].drag.toggle(this.state.options.draggable.enabled);
+      // this.state.grid[widgetsIndex].resize.toggle(this.state.options.resizable.enabled);
     }
 
     this.detectScrollBarLayout();
   };
 
-  addItem(item) {
+  addItem(item: GridsterItem) {
     if (isUndefined(item.cols)) {
       item.cols = this.state.options.defaultItemCols;
     }
@@ -192,22 +187,22 @@ export class GridsterComponent implements OnInit, OnDestroy {
     if (item.initCallback) {
       item.initCallback(item);
     }
-  };
+  }
 
-  removeItem = function (item) {
+  removeItem(item: GridsterItem) {
     this.state.grid.splice(this.state.grid.indexOf(item), 1);
     this.calculateLayoutDebounce();
-  };
+  }
 
-  checkCollision = function (item) {
+  checkCollision(item: GridsterItem) {
     if (!(item.y > -1 && item.x > -1 && item.cols + item.x <= this.state.options.maxCols &&
       item.rows + item.y <= this.state.options.maxRows)) {
       return true;
     }
     return this.findItemWithItem(item);
-  };
+  }
 
-  findItemWithItem = function (item) {
+  findItemWithItem(item: GridsterItem) {
     let widgetsIndex = this.state.grid.length - 1, widget;
     for (; widgetsIndex >= 0; widgetsIndex--) {
       widget = this.state.grid[widgetsIndex];
@@ -218,7 +213,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
     }
   };
 
-  autoPositionItem = function (item) {
+  autoPositionItem(item: GridsterItem) {
     this.setGridDimensions();
     let rowsIndex = 0, colsIndex;
     for (; rowsIndex < this.state.rows; rowsIndex++) {
@@ -231,18 +226,18 @@ export class GridsterComponent implements OnInit, OnDestroy {
         }
       }
     }
-    if (this.rows >= this.columns && this.maxCols > this.columns) {
-      item.x = this.columns;
+    if (this.state.rows >= this.state.columns && this.state.options.maxCols > this.state.columns) {
+      item.x = this.state.columns;
       item.y = 0;
-    } else if (this.maxRows > this.rows) {
-      item.y = this.rows;
+    } else if (this.state.options.maxRows > this.state.rows) {
+      item.y = this.state.rows;
       item.x = 0;
     } else {
       // $log.warn('Can\'t be placed in the bounds of the dashboard!', item);
     }
-  };
+  }
 
-  pixelsToPosition = function (x, y) {
+  pixelsToPosition(x, y) {
     if (this.state.options.outerMargin) {
       x -= this.state.options.margin;
       y -= this.state.options.margin;
@@ -251,7 +246,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
     return [Math.abs(Math.round(x / this.state.curColWidth)), Math.abs(Math.round(y / this.state.curRowHeight))];
   };
 
-  checkCompactUp = function () {
+  checkCompactUp() {
     if (this.state.options.compactUp) {
       let widgetMovedUp = false, widget, moved;
       const l = this.state.grid.length;
@@ -268,20 +263,20 @@ export class GridsterComponent implements OnInit, OnDestroy {
         return widgetMovedUp;
       }
     }
-  };
+  }
 
-  moveUpTillCollision(widget) {
-    widget.y -= 1;
-    if (this.checkCollision(widget)) {
-      widget.y += 1;
+  moveUpTillCollision(item: GridsterItem) {
+    item.y -= 1;
+    if (this.checkCollision(item)) {
+      item.y += 1;
       return false;
     } else {
-      this.moveUpTillCollision(widget);
+      this.moveUpTillCollision(item);
       return true;
     }
-  };
+  }
 
-  checkCompactLeft = function () {
+  checkCompactLeft() {
     if (this.state.options.compactLeft) {
       let widgetMovedUp = false, widget, moved;
       const l = this.state.grid.length;
@@ -298,16 +293,16 @@ export class GridsterComponent implements OnInit, OnDestroy {
         return widgetMovedUp;
       }
     }
-  };
+  }
 
-  moveLeftTillCollision(widget) {
-    widget.x -= 1;
-    if (this.checkCollision(widget)) {
-      widget.x += 1;
+  moveLeftTillCollision(item: GridsterItem) {
+    item.x -= 1;
+    if (this.checkCollision(item)) {
+      item.x += 1;
       return false;
     } else {
-      this.moveUpTillCollision(widget);
+      this.moveUpTillCollision(item);
       return true;
     }
-  };
+  }
 }
