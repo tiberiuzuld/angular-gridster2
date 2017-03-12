@@ -1,9 +1,8 @@
 import {Component, OnInit, ElementRef, Input, OnDestroy} from '@angular/core';
-import {GridsterConfigService, GridsterConfig} from './gridsterConfig.service';
 import _ from 'lodash';
 import {isUndefined} from 'util';
-// import * as detectElementResize from 'javascript-detect-element-resize';
-
+import {GridsterConfigService} from './gridsterConfig.service';
+import {GridsterConfig} from './gridsterConfig.interface';
 
 @Component({
   selector: 'tz-gridster',
@@ -12,7 +11,7 @@ import {isUndefined} from 'util';
 })
 export class GridsterComponent implements OnInit, OnDestroy {
   @Input() options: GridsterConfig;
-  detectScrollBarLayout: Function;
+  detectScrollBarLayout: () => void;
   calculateLayoutDebounce: Function;
   state: {
     element: HTMLDivElement
@@ -61,18 +60,18 @@ export class GridsterComponent implements OnInit, OnDestroy {
     this.setGridSize();
     this.detectScrollBarLayout = _.debounce(this.detectScrollBar, 10);
     this.calculateLayoutDebounce = _.debounce(this.calculateLayout, 5);
-    // this.state.element.addEventListener('transitionend', this.detectScrollBarLayout);
+    this.state.element.addEventListener('transitionend', this.detectScrollBarLayout);
     this.calculateLayoutDebounce();
-    // detectElementResize.addResizeListener(this.element, this.onResize);
+    addResizeListener(this.state.element, this.onResize.bind(this));
   };
 
   ngOnDestroy() {
-    // detectElementResize.removeResizeListener(this.element, this.onResize);
+    removeResizeListener(this.state.element, this.onResize.bind(this));
   };
 
   onResize() {
     this.setGridSize();
-    // gridster.calculateLayout();
+    this.calculateLayoutDebounce();
   };
 
   detectScrollBar() {
@@ -189,7 +188,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
       this.autoPositionItem(item);
     }
     this.state.grid.push(item);
-    this.calculateLayout();
+    this.calculateLayoutDebounce();
     if (item.initCallback) {
       item.initCallback(item);
     }
@@ -197,7 +196,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
 
   removeItem = function (item) {
     this.state.grid.splice(this.state.grid.indexOf(item), 1);
-    this.calculateLayout();
+    this.calculateLayoutDebounce();
   };
 
   checkCollision = function (item) {
