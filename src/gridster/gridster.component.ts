@@ -1,7 +1,7 @@
 import {Component, OnInit, ElementRef, Input, OnDestroy} from '@angular/core';
 import _ from 'lodash';
-import {isUndefined} from 'util';
-import {GridsterConfigService} from './gridsterConfig.service';
+import {isUndefined, log} from 'util';
+import {GridsterConfigService} from './gridsterConfig.constant';
 import {GridsterConfig} from './gridsterConfig.interface';
 import {GridsterItem} from './gridsterItem.interface';
 
@@ -14,6 +14,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
   @Input() options: GridsterConfig;
   detectScrollBarLayout: () => void;
   calculateLayoutDebounce: Function;
+  onResizeFunction: EventListenerObject;
   state: {
     element: HTMLDivElement
     mobile: boolean
@@ -52,7 +53,8 @@ export class GridsterComponent implements OnInit, OnDestroy {
     this.calculateLayoutDebounce = _.debounce(this.calculateLayout.bind(this), 5);
     this.state.element.addEventListener('transitionend', this.detectScrollBarLayout);
     this.calculateLayoutDebounce();
-    addResizeListener(this.state.element, this.onResize.bind(this));
+    this.onResizeFunction = this.onResize.bind(this);
+    addResizeListener(this.state.element, this.onResizeFunction);
   };
 
   optionsChanged() {
@@ -61,7 +63,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    removeResizeListener(this.state.element, this.onResize.bind(this));
+    removeResizeListener(this.state.element, this.onResizeFunction);
   };
 
   onResize() {
@@ -160,7 +162,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
     let widgetsIndex = this.state.grid.length - 1;
     for (; widgetsIndex >= 0; widgetsIndex--) {
       this.state.grid[widgetsIndex].setSize();
-      // this.state.grid[widgetsIndex].drag.toggle(this.state.options.draggable.enabled);
+      this.state.grid[widgetsIndex].drag.toggle(this.state.options.draggable.enabled);
       // this.state.grid[widgetsIndex].resize.toggle(this.state.options.resizable.enabled);
     }
 
@@ -179,7 +181,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
     } else if (this.checkCollision(item)) {
       item.x = undefined;
       item.y = undefined;
-      // $log.warn('Can\'t be placed in the bounds of the dashboard, trying to auto position!', item);
+      log('Can\'t be placed in the bounds of the dashboard, trying to auto position!/n' + JSON.stringify(item));
       this.autoPositionItem(item);
     }
     this.state.grid.push(item);
@@ -194,7 +196,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
     this.calculateLayoutDebounce();
   }
 
-  checkCollision(item: GridsterItem) {
+  checkCollision(item: GridsterItem): GridsterItem {
     if (!(item.y > -1 && item.x > -1 && item.cols + item.x <= this.state.options.maxCols &&
       item.rows + item.y <= this.state.options.maxRows)) {
       return true;
@@ -202,7 +204,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
     return this.findItemWithItem(item);
   }
 
-  findItemWithItem(item: GridsterItem) {
+  findItemWithItem(item: GridsterItem): GridsterItem {
     let widgetsIndex = this.state.grid.length - 1, widget;
     for (; widgetsIndex >= 0; widgetsIndex--) {
       widget = this.state.grid[widgetsIndex];
@@ -233,11 +235,11 @@ export class GridsterComponent implements OnInit, OnDestroy {
       item.y = this.state.rows;
       item.x = 0;
     } else {
-      // $log.warn('Can\'t be placed in the bounds of the dashboard!', item);
+      log('Can\'t be placed in the bounds of the dashboard!/n' + JSON.stringify(item));
     }
   }
 
-  pixelsToPosition(x, y) {
+  pixelsToPosition(x, y): [number, number] {
     if (this.state.options.outerMargin) {
       x -= this.state.options.margin;
       y -= this.state.options.margin;
@@ -246,7 +248,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
     return [Math.abs(Math.round(x / this.state.curColWidth)), Math.abs(Math.round(y / this.state.curRowHeight))];
   };
 
-  checkCompactUp() {
+  checkCompactUp(): Boolean {
     if (this.state.options.compactUp) {
       let widgetMovedUp = false, widget, moved;
       const l = this.state.grid.length;
@@ -265,7 +267,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
     }
   }
 
-  moveUpTillCollision(item: GridsterItem) {
+  moveUpTillCollision(item: GridsterItem): Boolean {
     item.y -= 1;
     if (this.checkCollision(item)) {
       item.y += 1;
@@ -276,7 +278,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
     }
   }
 
-  checkCompactLeft() {
+  checkCompactLeft(): Boolean {
     if (this.state.options.compactLeft) {
       let widgetMovedUp = false, widget, moved;
       const l = this.state.grid.length;
@@ -295,7 +297,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
     }
   }
 
-  moveLeftTillCollision(item: GridsterItem) {
+  moveLeftTillCollision(item: GridsterItem): Boolean {
     item.x -= 1;
     if (this.checkCollision(item)) {
       item.x += 1;
