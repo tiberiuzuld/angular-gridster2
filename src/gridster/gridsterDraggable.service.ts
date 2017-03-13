@@ -111,9 +111,9 @@ export class GridsterDraggable {
     this.gridsterItem.setSize(true);
     // gridsterItem.gridster.previewStyle();
     this.gridsterItem.checkItemChanges(this.gridsterItem.state.item, this.itemCopy);
-    // if (gridsterItem.gridster.state.draggable.stop) {
-    //   gridsterItem.gridster.state.draggable.stop(gridsterItem.state.item, gridsterItem);
-    // }
+    if (this.gridsterItem.gridster.state.options.draggable.stop) {
+      this.gridsterItem.gridster.state.options.draggable.stop(this.gridsterItem.state.item, this.gridsterItem);
+    }
   }
 
   calculateItemPosition() {

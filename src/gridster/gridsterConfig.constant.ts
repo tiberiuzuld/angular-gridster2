@@ -26,7 +26,16 @@ export const GridsterConfigService: GridsterConfig = {
   },
   resizable: {
     enabled: false, // enable/disable resizable items
-    handles: ['s', 'e', 'n', 'w', 'se', 'ne', 'sw', 'nw'], // resizable edges of an item
+    handles: {
+      s: true,
+      e: true,
+      n: true,
+      w: true,
+      se: true,
+      ne: true,
+      sw: true,
+      nw: true
+    }, // resizable edges of an item
     stop: undefined // callback when resizing an item stops. Arguments: gridsterItem, scope
   },
   swap: true

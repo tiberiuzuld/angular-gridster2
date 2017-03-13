@@ -1,3 +1,5 @@
+import {GridsterResizable} from './gridsterResizable.service';
+import {GridsterDraggable} from './gridsterDraggable.service';
 export interface GridsterItem {
   x?: number;
   y?: number;
@@ -7,10 +9,6 @@ export interface GridsterItem {
   setSize?: Function;
   checkItemChanges?: Function;
   itemChanged?: Function;
-  drag?: {
-    toggle: Function
-  };
-  resize?: {
-    toggle: Function
-  };
+  drag?: GridsterDraggable;
+  resize?: GridsterResizable;
 }

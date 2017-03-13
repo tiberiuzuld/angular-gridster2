@@ -3,6 +3,7 @@ import {GridsterItem} from './gridsterItem.interface';
 import _ from 'lodash';
 import {GridsterComponent} from './gridster.component';
 import {GridsterDraggable} from './gridsterDraggable.service';
+import {GridsterResizable} from './gridsterResizable.service';
 
 @Component({
   selector: 'tz-gridster-item',
@@ -42,7 +43,7 @@ export class GridsterItemComponent implements OnInit, OnDestroy {
         itemChanged: this.itemChanged.bind(this),
         checkItemChanges: this.checkItemChanges.bind(this),
         drag: new GridsterDraggable(el.nativeElement, this),
-        // resize: new gridsterResizable(element, scope)
+        resize: new GridsterResizable(el.nativeElement, this)
       }
     };
 

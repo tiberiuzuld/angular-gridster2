@@ -1,5 +1,4 @@
 type GridType = 'fit' | 'scrollVertical' | 'scrollHorizontal';
-type ResizableHandles = 's'| 'e'| 'n'| 'w'| 'se'| 'ne'| 'sw'| 'nw';
 
 export interface GridsterConfig {
   gridType?: GridType;
@@ -31,5 +30,14 @@ interface Draggable {
 }
 
 interface Resizable extends Draggable {
-  handles?: ResizableHandles[];
+  handles?: {
+    s: boolean,
+    e: boolean,
+    n: boolean,
+    w: boolean,
+    se: boolean,
+    ne: boolean,
+    sw: boolean,
+    nw: boolean
+  };
 }
