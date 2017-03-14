@@ -18,7 +18,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
   movingItem: GridsterItem;
   previewStyle: Function;
   state: {
-    element: HTMLDivElement
+    element: HTMLElement
     mobile: boolean
     curWidth: number
     curHeight: number,

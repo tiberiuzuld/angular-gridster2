@@ -15,7 +15,7 @@ export class GridsterItemComponent implements OnInit, OnDestroy {
   @Output() itemChange: EventEmitter<GridsterItem> = new EventEmitter();
   @Output() itemResize: EventEmitter<GridsterItem> = new EventEmitter();
   state: {
-    element: HTMLDivElement,
+    element: HTMLElement,
     item: GridsterItem
   };
   gridster: GridsterComponent;

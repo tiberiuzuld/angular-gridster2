@@ -6,7 +6,7 @@ import {GridsterComponent} from './gridster.component';
   template: ''
 })
 export class GridsterPreviewComponent {
-  element: HTMLDivElement;
+  element: HTMLElement;
   gridster: GridsterComponent;
 
   constructor(el: ElementRef, @Host() gridster: GridsterComponent) {

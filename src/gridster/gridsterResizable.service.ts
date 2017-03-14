@@ -8,7 +8,7 @@ import {GridsterResizeEventType} from './gridsterResizeEventType.interface';
 
 @Injectable()
 export class GridsterResizable {
-  element: HTMLDivElement;
+  element: HTMLElement;
   gridsterScroll: GridsterScroll;
   gridsterItem: GridsterItemComponent;
   itemCopy: GridsterItem;
@@ -30,7 +30,7 @@ export class GridsterResizable {
     e.pageY = e.touches[0].pageY;
   }
 
-  constructor(element: HTMLDivElement, gridsterItem: GridsterItemComponent) {
+  constructor(element: HTMLElement, gridsterItem: GridsterItemComponent) {
     this.gridsterScroll = new GridsterScroll();
     this.element = element;
     this.gridsterItem = gridsterItem;

@@ -9,7 +9,7 @@ import {GridsterItem} from './gridsterItem.interface';
 @Injectable()
 export class GridsterDraggable {
   gridsterScroll: GridsterScroll;
-  element: HTMLDivElement;
+  element: HTMLElement;
   gridsterItem: GridsterItemComponent;
   itemCopy: GridsterItem;
   lastMouse: {
@@ -29,7 +29,7 @@ export class GridsterDraggable {
     e.pageY = e.touches[0].pageY;
   }
 
-  constructor(element: HTMLDivElement, gridsterItem: GridsterItemComponent) {
+  constructor(element: HTMLElement, gridsterItem: GridsterItemComponent) {
     this.gridsterScroll = new GridsterScroll();
     this.element = element;
     this.gridsterItem = gridsterItem;

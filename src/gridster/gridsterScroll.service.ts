@@ -7,7 +7,7 @@ export class GridsterScroll {
   scrollSensitivity: number;
   scrollSpeed: number;
   intervalDuration: number;
-  gridsterElement: HTMLDivElement;
+  gridsterElement: HTMLElement;
   resizeEvent: boolean;
   resizeEventType: GridsterResizeEventType;
   intervalE: number;
