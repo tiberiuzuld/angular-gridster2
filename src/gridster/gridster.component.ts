@@ -15,6 +15,8 @@ export class GridsterComponent implements OnInit, OnDestroy {
   detectScrollBarLayout: () => void;
   calculateLayoutDebounce: Function;
   onResizeFunction: EventListenerObject;
+  movingItem: GridsterItem;
+  previewStyle: Function;
   state: {
     element: HTMLDivElement
     mobile: boolean

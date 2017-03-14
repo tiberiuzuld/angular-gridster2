@@ -73,8 +73,8 @@ export class GridsterDraggable {
     this.elemPosition[2] = this.element.offsetWidth;
     this.elemPosition[3] = this.element.offsetHeight;
     this.itemCopy = _.clone(this.gridsterItem.state.item);
-    // gridsterItem.gridster.movingItem = gridsterItem.state.item;
-    // gridsterItem.gridster.previewStyle();
+    this.gridsterItem.gridster.movingItem = this.gridsterItem.state.item;
+    this.gridsterItem.gridster.previewStyle();
   }
 
   dragMove(e) {
@@ -107,9 +107,9 @@ export class GridsterDraggable {
     document.removeEventListener('touchend', this.dragStopFunction);
     document.removeEventListener('touchcancel', this.dragStopFunction);
     this.element.classList.remove('gridster-item-moving');
-    // gridsterItem.gridster.movingItem = null;
+    this.gridsterItem.gridster.movingItem = null;
     this.gridsterItem.setSize(true);
-    // gridsterItem.gridster.previewStyle();
+    this.gridsterItem.gridster.previewStyle();
     this.gridsterItem.checkItemChanges(this.gridsterItem.state.item, this.itemCopy);
     if (this.gridsterItem.gridster.state.options.draggable.stop) {
       this.gridsterItem.gridster.state.options.draggable.stop(this.gridsterItem.state.item, this.gridsterItem);
@@ -130,7 +130,7 @@ export class GridsterDraggable {
         this.gridsterItem.state.item.x = this.positionBackup[0];
         this.gridsterItem.state.item.y = this.positionBackup[1];
       } else {
-        // gridsterItem.gridster.previewStyle();
+        this.gridsterItem.gridster.previewStyle();
       }
     }
   }

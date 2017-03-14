@@ -3,11 +3,13 @@ import {NgModule} from '@angular/core';
 
 import {GridsterComponent} from './gridster.component';
 import {GridsterItemComponent} from './gridsterItem.component';
+import {GridsterPreviewComponent} from './gridsterPreview.component';
 
 @NgModule({
   declarations: [
     GridsterComponent,
-    GridsterItemComponent
+    GridsterItemComponent,
+    GridsterPreviewComponent
   ],
   imports: [
     BrowserModule

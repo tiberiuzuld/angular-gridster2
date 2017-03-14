@@ -74,8 +74,8 @@ export class GridsterResizable {
     this.elemPosition[2] = this.element.offsetWidth;
     this.elemPosition[3] = this.element.offsetHeight;
     this.itemCopy = _.clone(this.gridsterItem.state.item);
-    // gridsterItem.gridster.movingItem = gridsterItem.state.item;
-    // gridsterItem.gridster.previewStyle();
+    this.gridsterItem.gridster.movingItem = this.gridsterItem.state.item;
+    this.gridsterItem.gridster.previewStyle();
 
     if (e.srcElement.classList.contains('handle-n')) {
       this.resizeEventScrollType.n = true;
@@ -134,8 +134,8 @@ export class GridsterResizable {
     document.removeEventListener('touchend', this.dragStopFunction);
     document.removeEventListener('touchcancel', this.dragStopFunction);
     this.element.classList.remove('gridster-item-resizing');
-    // gridsterItem.gridster.movingItem = null;
-    // gridsterItem.gridster.previewStyle();
+    this.gridsterItem.gridster.movingItem = null;
+    this.gridsterItem.gridster.previewStyle();
     this.gridsterItem.state.item.setSize(true);
     this.gridsterItem.state.item.checkItemChanges(this.gridsterItem.state.item, this.itemCopy);
     if (this.gridsterItem.gridster.state.options.resizable.stop) {
@@ -159,7 +159,7 @@ export class GridsterResizable {
         this.gridsterItem.state.item.y = this.itemBackup[1];
         this.gridsterItem.state.item.rows = this.itemBackup[3];
       } else {
-        // gridsterItem.gridster.previewStyle();
+        this.gridsterItem.gridster.previewStyle();
       }
     }
   }
@@ -180,7 +180,7 @@ export class GridsterResizable {
         this.gridsterItem.state.item.x = this.itemBackup[0];
         this.gridsterItem.state.item.cols = this.itemBackup[2];
       } else {
-        // gridsterItem.gridster.previewStyle();
+        this.gridsterItem.gridster.previewStyle();
       }
     }
   }
@@ -195,7 +195,7 @@ export class GridsterResizable {
       if (this.gridsterItem.state.item.rows < 1 || this.gridsterItem.gridster.checkCollision(this.gridsterItem.state.item)) {
         this.gridsterItem.state.item.rows = this.itemBackup[3];
       } else {
-        // gridsterItem.gridster.previewStyle();
+        this.gridsterItem.gridster.previewStyle();
       }
     }
   }
@@ -210,7 +210,7 @@ export class GridsterResizable {
       if (this.gridsterItem.state.item.cols < 1 || this.gridsterItem.gridster.checkCollision(this.gridsterItem.state.item)) {
         this.gridsterItem.state.item.cols = this.itemBackup[2];
       } else {
-        // gridsterItem.gridster.previewStyle();
+        this.gridsterItem.gridster.previewStyle();
       }
     }
   }
