@@ -1,6 +1,6 @@
 angular-gridster2
 ==============
- 
+# Angularjs 1.x version
  
 ## Description
  
@@ -10,11 +10,11 @@ angular-gridster2 inspired by [angular-gridster](https://github.com/ManifestWebD
  
 #### Install with Bower
 ```bash
-  bower install angular-gridster2 --save
+  bower install angular-gridster2@1.x --save
 ```
 #### Install with npm
 ```bash
-  npm install angular-gridster2 --save
+  npm install angular-gridster2@1.x --save
 ```
 
 Then import the following in your HTML:
