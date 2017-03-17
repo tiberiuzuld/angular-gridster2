@@ -25,7 +25,7 @@ import {GridsterModule} from 'angular-gridster2';
 ```html
 <gridster [options]="options">
   <gridster-item [item]="item" *ngFor="let item of dashboard">
-    <!-- your content here --->
+    <!-- your content here -->
   </gridster-item>
 </gridster>
 ```
