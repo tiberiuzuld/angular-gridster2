@@ -1,16 +1,23 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "outDir": "./dist/out-tsc",
+    "target": "es5",
+    "module": "commonjs",
     "sourceMap": true,
-    "declaration": false,
-    "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es5",
+    "stripInternal": true,
+    "declaration": true,
+    "outDir": "./dist",
     "lib": [
       "es2016",
       "dom"
     ]
+  },
+  "files": [
+    "./lib/gridster.module.ts"
+  ],
+  "angularCompilerOptions": {
+    "skipTemplateCodegen": true
   }
 }

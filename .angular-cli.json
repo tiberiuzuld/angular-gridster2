@@ -6,7 +6,7 @@
   "apps": [
     {
       "root": "src",
-      "outDir": "dist",
+      "outDir": "demo",
       "assets": [
         "assets",
         "favicon.ico"
@@ -17,13 +17,13 @@
       "test": "test.ts",
       "tsconfig": "tsconfig.app.json",
       "testTsconfig": "tsconfig.spec.json",
-      "prefix": "app",
+      "prefix": "gridster",
       "styles": [
         "styles.css",
         "theme.scss"
       ],
       "scripts": [
-        "../node_modules/javascript-detect-element-resize/detect-element-resize.js"
+        "../node_modules/lodash/lodash.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {

@@ -1,12 +1,11 @@
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import 'hammerjs';
 import {MaterialModule} from '@angular/material';
 
 import {AppComponent} from './app.component';
-import {GridsterModule} from '../gridster/gridster.module';
+import {GridsterModule} from '../../lib/gridster.module';
 
 @NgModule({
   declarations: [
@@ -14,7 +13,6 @@ import {GridsterModule} from '../gridster/gridster.module';
   ],
   imports: [
     BrowserModule,
-    BrowserAnimationsModule,
     FormsModule,
     MaterialModule,
     GridsterModule

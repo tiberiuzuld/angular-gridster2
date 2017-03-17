@@ -1,51 +1,86 @@
 {
   "name": "angular-gridster2",
-  "version": "0.0.0",
+  "version": "2.0.0",
   "license": "MIT",
+  "main": "dist/gridster.module.js",
+  "jsnext:main": "dist/gridster.module.js",
+  "module": "dist/gridster.module.js",
+  "types": "dist/gridster.module.d.ts",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "build-demo": "ng build --prod --aot=false",
+    "build-npm": "ngc -p tsconfig.json && copyfiles -u 1 lib/*.html dist && copyfiles -u 1 lib/*.css dist"
   },
-  "private": true,
+  "homepage": "https://github.io/tiberiuzuld/angular-gridster2",
+  "bugs": {
+    "url": "https://github.com/tiberiuzuld/angular-gridster2/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tiberiuzuld/angular-girdster2.git"
+  },
+  "description": "Angular gridster 2",
+  "keywords": [
+    "angular",
+    "angular2",
+    "typescript",
+    "dashboard",
+    "gridster",
+    "gridster2",
+    "resize",
+    "drag&drop",
+    "widgets"
+  ],
+  "authors": [
+    "Tiberiu Zuld"
+  ],
+  "files": [
+    "dist/*"
+  ],
   "dependencies": {
-    "@angular/animations": "4.0.0-rc.3",
-    "@angular/common": "4.0.0-rc.3",
-    "@angular/compiler": "4.0.0-rc.3",
-    "@angular/compiler-cli": "4.0.0-rc.3",
-    "@angular/core": "4.0.0-rc.3",
-    "@angular/forms": "4.0.0-rc.3",
-    "@angular/http": "4.0.0-rc.3",
-    "@angular/material": "2.0.0-beta.2",
-    "@angular/platform-browser": "4.0.0-rc.3",
-    "@angular/platform-browser-dynamic": "4.0.0-rc.3",
-    "@angular/platform-server": "4.0.0-rc.3",
-    "@angular/router": "4.0.0-rc.3",
-    "core-js": "2.4.1",
-    "hammerjs": "2.0.8",
-    "javascript-detect-element-resize": "0.5.3",
-    "rxjs": "5.2.0",
-    "zone.js": "0.8.1"
+    "@angular/core": "^2.4.10",
+    "@angular/platform-browser": "^2.4.10",
+    "core-js": "^2.4.1",
+    "lodash": "^4.17.4",
+    "zone.js": "^0.8.4"
   },
   "devDependencies": {
-    "@angular/cli": "1.0.0-rc.2",
-    "@types/jasmine": "2.5.45",
+    "@angular/cli": "^1.0.0-rc.2",
+    "@angular/common": "^2.4.10",
+    "@angular/compiler": "^2.4.10",
+    "@angular/compiler-cli": "^2.4.10",
+    "@angular/forms": "^2.4.10",
+    "@angular/http": "^2.4.10",
+    "@angular/material": "2.0.0-beta.2",
+    "@angular/platform-browser-dynamic": "^2.4.10",
+    "@angular/platform-server": "^2.4.10",
+    "@angular/router": "^3.4.10",
+    "@types/jasmine": "2.5.46",
+    "@types/lodash": "^4.14.55",
     "@types/node": "7.0.8",
     "codelyzer": "2.0.1",
+    "copyfiles": "^1.2.0",
+    "hammerjs": "2.0.8",
     "jasmine-core": "2.5.2",
     "jasmine-spec-reporter": "3.2.0",
     "karma": "1.5.0",
     "karma-chrome-launcher": "2.0.0",
     "karma-cli": "1.0.1",
+    "karma-coverage-istanbul-reporter": "0.3.0",
     "karma-jasmine": "1.1.0",
     "karma-jasmine-html-reporter": "0.2.2",
-    "karma-coverage-istanbul-reporter": "0.3.0",
     "protractor": "5.1.1",
+    "rxjs": "^5.1.0",
+    "systemjs": "^0.20.10",
+    "ts-helpers": "^1.1.2",
     "ts-node": "2.1.0",
+    "tslib": "^1.6.0",
     "tslint": "4.5.1",
-    "typescript": "2.2.1"
+    "typescript": "^2.2.1"
   }
 }

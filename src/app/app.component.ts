@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {GridsterConfig} from '../gridster/gridsterConfig.interface';
+import {GridsterConfig} from '../../lib/gridsterConfig.interface';
 
 @Component({
-  selector: 'tz-root',
+  selector: 'gridster-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })

@@ -98,8 +98,8 @@
       "check-type"
     ],
 
-    "directive-selector": [true, "attribute", "tz", "camelCase"],
-    "component-selector": [true, "element", "tz", "kebab-case"],
+    "directive-selector": [true, "attribute", "gridster", "camelCase"],
+    "component-selector": [true, "element", "gridster", "kebab-case"],
     "use-input-property-decorator": true,
     "use-output-property-decorator": true,
     "use-host-property-decorator": true,

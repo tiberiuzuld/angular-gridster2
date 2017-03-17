@@ -1,0 +1,25 @@
+<ng-content></ng-content>
+<div (mousedown)="state.item.resize.dragStart($event)" (touchstart)="state.item.resize.dragStart($event)"
+     [hidden]="!gridster.state.options.resizable.handles.s || !gridster.state.options.resizable.enabled"
+     class="gridster-item-resizable-handler handle-s"></div>
+<div (mousedown)="state.item.resize.dragStart($event)" (touchstart)="state.item.resize.dragStart($event)"
+     [hidden]="!gridster.state.options.resizable.handles.e || !gridster.state.options.resizable.enabled"
+     class="gridster-item-resizable-handler handle-e"></div>
+<div (mousedown)="state.item.resize.dragStart($event)" (touchstart)="state.item.resize.dragStart($event)"
+     [hidden]="!gridster.state.options.resizable.handles.n || !gridster.state.options.resizable.enabled"
+     class="gridster-item-resizable-handler handle-n"></div>
+<div (mousedown)="state.item.resize.dragStart($event)" (touchstart)="state.item.resize.dragStart($event)"
+     [hidden]="!gridster.state.options.resizable.handles.w || !gridster.state.options.resizable.enabled"
+     class="gridster-item-resizable-handler handle-w"></div>
+<div (mousedown)="state.item.resize.dragStart($event)" (touchstart)="state.item.resize.dragStart($event)"
+     [hidden]="!gridster.state.options.resizable.handles.se || !gridster.state.options.resizable.enabled"
+     class="gridster-item-resizable-handler handle-se"></div>
+<div (mousedown)="state.item.resize.dragStart($event)" (touchstart)="state.item.resize.dragStart($event)"
+     [hidden]="!gridster.state.options.resizable.handles.ne || !gridster.state.options.resizable.enabled"
+     class="gridster-item-resizable-handler handle-ne"></div>
+<div (mousedown)="state.item.resize.dragStart($event)" (touchstart)="state.item.resize.dragStart($event)"
+     [hidden]="!gridster.state.options.resizable.handles.sw || !gridster.state.options.resizable.enabled"
+     class="gridster-item-resizable-handler handle-sw"></div>
+<div (mousedown)="state.item.resize.dragStart($event)" (touchstart)="state.item.resize.dragStart($event)"
+     [hidden]="!gridster.state.options.resizable.handles.nw || !gridster.state.options.resizable.enabled"
+     class="gridster-item-resizable-handler handle-nw"></div>

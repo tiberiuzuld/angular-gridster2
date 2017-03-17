@@ -1,0 +1,99 @@
+:host {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  box-sizing: border-box;
+  z-index: 1;
+  position: absolute;
+  overflow: hidden;
+  transition: .3s;
+  display: none;
+  background: white;
+}
+
+:host(.gridster-item-moving) {
+  cursor: move;
+}
+
+:host(.gridster-item-resizing), :host(.gridster-item-moving) {
+  transition: 0s;
+  z-index: 2;
+  box-shadow: 0 0 5px 5px rgba(0, 0, 0, .2), 0 6px 10px 0 rgba(0, 0, 0, .14), 0 1px 18px 0 rgba(0, 0, 0, .12);
+}
+
+.gridster-item-resizable-handler {
+  position: absolute;
+  z-index: 2;
+}
+
+.gridster-item-resizable-handler.handle-n {
+  cursor: n-resize;
+  height: 10px;
+  right: 0;
+  top: 0;
+  left: 0;
+}
+
+.gridster-item-resizable-handler.handle-e {
+  cursor: e-resize;
+  width: 10px;
+  bottom: 0;
+  right: 0;
+  top: 0;
+}
+
+.gridster-item-resizable-handler.handle-s {
+  cursor: s-resize;
+  height: 10px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.gridster-item-resizable-handler.handle-w {
+  cursor: w-resize;
+  width: 10px;
+  left: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.gridster-item-resizable-handler.handle-ne {
+  cursor: ne-resize;
+  width: 10px;
+  height: 10px;
+  right: 0;
+  top: 0;
+}
+
+.gridster-item-resizable-handler.handle-nw {
+  cursor: nw-resize;
+  width: 10px;
+  height: 10px;
+  left: 0;
+  top: 0;
+}
+
+.gridster-item-resizable-handler.handle-se {
+  cursor: se-resize;
+  width: 0;
+  height: 0;
+  right: 0;
+  bottom: 0;
+  border-style: solid;
+  border-width: 0 0 10px 10px;
+  border-color: transparent;
+}
+
+.gridster-item-resizable-handler.handle-sw {
+  cursor: sw-resize;
+  width: 10px;
+  height: 10px;
+  left: 0;
+  bottom: 0;
+}
+
+:host(:hover) .gridster-item-resizable-handler.handle-se {
+  border-color: transparent transparent #ccc
+}

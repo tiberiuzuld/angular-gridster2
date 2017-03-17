@@ -1,46 +1,139 @@
 
 angular-gridster2
 ==============
+### Angular2 implementation of angular-gridster [Demo](http://tiberiuzuld.github.io/angular-gridster2/angular)
 
 ### Angularjs 1.x library is [here](https://github.com/tiberiuzuld/angular-gridster2/tree/1.x)
 
-### Angular 2 library work in progress
- 
-## Description
- 
-angular-gridster2 inspired by [angular-gridster](https://github.com/ManifestWebDesign/angular-gridster) 
- 
-#### [Demo](http://tiberiuzuld.github.io/angular-gridster2)
- 
+## Install
 
+``npm install angular-gridster2 --save``
+
+Should work out of the box with webpack, respectively angular-cli.
+
+```javascript
+import {GridsterModule} from 'angular-gridster2';
+
+@NgModule({
+  imports: [GridsterModule],
+  ...
+})
+```
+
+## How to use
+
+```html
+<gridster [options]="options">
+  <gridster-item [item]="item" *ngFor="let item of dashboard">
+    <!-- your content here --->
+  </gridster-item>
+</gridster>
+```
+
+Initialize the demo dashboard
+```typescript
+   options: GridsterConfig;
+   dashboard: Array<Object>;
+  
+    ngOnInit() {
+      this.options = {
+        gridType: 'fit',
+        compactUp: true,
+        compactLeft: true,
+        itemChangeCallback: this.itemChange.bind(this),
+        margin: 10,
+        outerMargin: true,
+        draggable: {
+          enabled: true,
+          stop: this.eventStop.bind(this)
+        },
+        resizable: {
+          enabled: true,
+          stop: this.eventStop.bind(this)
+        },
+        swap: true
+      };
+  
+      this.dashboard = [
+        {cols: 2, rows: 1, y: 0, x: 0},
+        {cols: 2, rows: 2, y: 0, x: 2},
+        {cols: 1, rows: 1, y: 0, x: 4},
+        {cols: 1, rows: 1, y: 0, x: 5},
+        {cols: 2, rows: 1, y: 1, x: 0},
+        {cols: 1, rows: 1, y: undefined, x: undefined},
+        {cols: 1, rows: 2, y: 1, x: 5},
+        {cols: 1, rows: 3, y: 2, x: 0},
+        {cols: 2, rows: 1, y: 2, x: 1},
+        {cols: 1, rows: 1, y: 2, x: 3},
+        {cols: 1, rows: 1, y: 3, x: 4, initCallback: this.itemInit.bind(this)}
+      ];
+    }
+    // if you make changes to the options after initialization let the gridster know
+    changedOptions() {
+      this.options.optionsChanged();
+    }
+    
+    eventStop(item, scope) {
+      console.info('eventStop', item, scope);
+    }
+  
+    itemChange(item, scope) {
+      console.info('itemChanged', item, scope);
+    }
+  
+    itemInit(item) {
+      console.info('itemInitialized', item);
+    }
+```
+
+Default Options:
+```typescript
+import {GridsterConfig} from './gridsterConfig.interface';
+const GridsterConfigService: GridsterConfig = {
+  gridType: 'fit', // 'fit' will fit the items in the container without scroll;
+  // 'scrollVertical' will fit on width and height of the items will be the same as the width
+  // 'scrollHorizontal' will fit on height and width of the items will be the same as the height
+  compactUp: false, // compact items up if there is room
+  compactLeft: false, // compact items left if there is room
+  mobileBreakpoint: 640, // if the screen is not wider that this, remove the grid layout and stack the items
+  minCols: 1, // minimum amount of columns in the grid
+  maxCols: 100, // maximum amount of columns in the grid
+  minRows: 1, // minimum amount of rows in the grid
+  maxRows: 100, // maximum amount of rows in the grid
+  defaultItemCols: 1, // default width of an item in columns
+  defaultItemRows: 1, // default height of an item in rows
+  minItemCols: 1, // min item number of columns
+  minItemRows: 1, // min item number of rows
+  margin: 10,  // margin between grid items
+  outerMargin: true,  // if margins will apply to the sides of the container
+  scrollSensitivity: 10,  // margin of the dashboard where to start scrolling
+  scrollSpeed: 20,  // how much to scroll each mouse move when in the scrollSensitivity zone
+  itemChangeCallback: undefined,  // callback to call for each item when is changes x, y, rows, cols. Arguments:gridsterItem, scope
+  draggable: {
+    enabled: false, // enable/disable draggable items
+    stop: undefined // callback when dragging an item stops. Arguments: gridsterItem, scope
+  },
+  resizable: {
+    enabled: false, // enable/disable resizable items
+    handles: {
+      s: true,
+      e: true,
+      n: true,
+      w: true,
+      se: true,
+      ne: true,
+      sw: true,
+      nw: true
+    }, // resizable edges of an item
+    stop: undefined // callback when resizing an item stops. Arguments: gridsterItem, scope
+  },
+  swap: true // allow items to switch position if drop on top of another
+};
+```
+
+
+##### angular-gridster2 inspired by [angular-gridster](https://github.com/ManifestWebDesign/angular-gridster) 
 ### License
  The MIT License
  
  Copyright (c) 2017 Tiberiu Zuld
-
-
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.0.0-rc.1.
-
-## Development server
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive/pipe/service/class/module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-Before running the tests make sure you are serving the app via `ng serve`.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).

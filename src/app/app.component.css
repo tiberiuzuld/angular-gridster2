@@ -13,7 +13,7 @@
   flex: 1 auto;
 }
 
-tz-gridster-item div.button-holder {
+gridster-item div.button-holder {
   width: 100%;
   height: 100%;
   display: flex;

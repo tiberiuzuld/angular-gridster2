@@ -33,12 +33,12 @@
   </div>
 </md-toolbar>
 
-<tz-gridster [options]="options">
-  <tz-gridster-item [item]="item" *ngFor="let item of dashboard">
+<gridster [options]="options">
+  <gridster-item [item]="item" *ngFor="let item of dashboard">
     <div class="button-holder">
       <button md-mini-fab (click)="removeItem(item)" mdTooltip="Remove">
         <md-icon>clear</md-icon>
       </button>
     </div>
-  </tz-gridster-item>
-</tz-gridster>
+  </gridster-item>
+</gridster>
