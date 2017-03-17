@@ -6,7 +6,7 @@ angular-gridster2
  
 angular-gridster2 inspired by [angular-gridster](https://github.com/ManifestWebDesign/angular-gridster) 
  
-#### [Demo](http://tiberiuzuld.github.io/angular-gridster2)
+#### [Demo](http://tiberiuzuld.github.io/angular-gridster2/angularjs)
  
 #### Install with Bower
 ```bash
