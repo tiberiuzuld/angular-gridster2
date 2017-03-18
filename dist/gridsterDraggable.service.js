@@ -16,7 +16,6 @@ var gridsterSwap_service_1 = require("./gridsterSwap.service");
 var gridsterScroll_service_1 = require("./gridsterScroll.service");
 var GridsterDraggable = GridsterDraggable_1 = (function () {
     function GridsterDraggable(element, gridsterItem) {
-        this.gridsterScroll = new gridsterScroll_service_1.GridsterScroll();
         this.element = element;
         this.gridsterItem = gridsterItem;
         this.lastMouse = {
@@ -72,7 +71,7 @@ var GridsterDraggable = GridsterDraggable_1 = (function () {
         }
         this.elemPosition[0] += e.pageX - this.lastMouse.pageX;
         this.elemPosition[1] += e.pageY - this.lastMouse.pageY;
-        this.gridsterScroll.scroll(this.elemPosition, this.gridsterItem, e, this.lastMouse, this.calculateItemPosition.bind(this));
+        gridsterScroll_service_1.scroll(this.elemPosition, this.gridsterItem, e, this.lastMouse, this.calculateItemPosition.bind(this));
         this.lastMouse.pageX = e.pageX;
         this.lastMouse.pageY = e.pageY;
         this.calculateItemPosition();
@@ -83,7 +82,7 @@ var GridsterDraggable = GridsterDraggable_1 = (function () {
         if (this.gridsterItem.gridster.state.options.swap) {
             gridsterSwap_service_1.GridsterSwap.GridsterSwap(this.gridsterItem, this.elemPosition);
         }
-        this.gridsterScroll.cancelScroll();
+        gridsterScroll_service_1.cancelScroll();
         document.removeEventListener('mousemove', this.dragFunction);
         document.removeEventListener('mouseup', this.dragStopFunction);
         document.removeEventListener('touchmove', this.dragFunction);

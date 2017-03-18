@@ -9,7 +9,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-///<reference path="../src/typings.d.ts"/>
 var core_1 = require("@angular/core");
 var _ = require("lodash");
 var gridsterConfig_constant_1 = require("./gridsterConfig.constant");

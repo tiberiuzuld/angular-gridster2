@@ -1,8 +1,6 @@
 import { GridsterItemComponent } from './gridsterItem.component';
-import { GridsterScroll } from './gridsterScroll.service';
 import { GridsterItem } from './gridsterItem.interface';
 export declare class GridsterDraggable {
-    gridsterScroll: GridsterScroll;
     element: HTMLElement;
     gridsterItem: GridsterItemComponent;
     itemCopy: GridsterItem;

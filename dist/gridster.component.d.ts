@@ -1,4 +1,3 @@
-/// <reference path="../src/typings.d.ts" />
 import { OnInit, ElementRef, OnDestroy } from '@angular/core';
 import { GridsterConfig } from './gridsterConfig.interface';
 import { GridsterItem } from './gridsterItem.interface';

@@ -98,7 +98,7 @@ function createStyles() {
             'div { background: #eee; overflow: auto; } .contract-trigger:before { width: 200%; height: 200%; }', head = document.head || document.getElementsByTagName('head')[0], style = document.createElement('style');
         style.type = 'text/css';
         if (style.styleSheet) {
-            style.styleSheet.cssText = css; // tslint:disable-line
+            style.styleSheet.cssText = css;
         }
         else {
             style.appendChild(document.createTextNode(css));
@@ -107,7 +107,7 @@ function createStyles() {
         stylesCreated = true;
     }
 }
-exports.addResizeListener = function (element, fn) {
+function addResizeListener(element, fn) {
     if (attachEvent) {
         element.attachEvent('onresize', fn);
     }
@@ -134,8 +134,9 @@ exports.addResizeListener = function (element, fn) {
         }
         element.__resizeListeners__.push(fn);
     }
-};
-exports.removeResizeListener = function (element, fn) {
+}
+exports.addResizeListener = addResizeListener;
+function removeResizeListener(element, fn) {
     if (attachEvent) {
         element.detachEvent('onresize', fn);
     }
@@ -146,5 +147,6 @@ exports.removeResizeListener = function (element, fn) {
             element.__resizeTriggers__ = !element.removeChild(element.__resizeTriggers__);
         }
     }
-};
+}
+exports.removeResizeListener = removeResizeListener;
 //# sourceMappingURL=detectElementResize.js.map

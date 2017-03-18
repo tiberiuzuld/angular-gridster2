@@ -2,12 +2,11 @@ import {Injectable} from '@angular/core';
 import {GridsterItemComponent} from './gridsterItem.component';
 import * as _ from 'lodash';
 import {GridsterSwap} from './gridsterSwap.service';
-import {GridsterScroll} from './gridsterScroll.service';
+import {scroll, cancelScroll} from './gridsterScroll.service';
 import {GridsterItem} from './gridsterItem.interface';
 
 @Injectable()
 export class GridsterDraggable {
-  gridsterScroll: GridsterScroll;
   element: HTMLElement;
   gridsterItem: GridsterItemComponent;
   itemCopy: GridsterItem;
@@ -29,7 +28,6 @@ export class GridsterDraggable {
   }
 
   constructor(element: HTMLElement, gridsterItem: GridsterItemComponent) {
-    this.gridsterScroll = new GridsterScroll();
     this.element = element;
     this.gridsterItem = gridsterItem;
     this.lastMouse = {
@@ -85,7 +83,7 @@ export class GridsterDraggable {
     this.elemPosition[0] += e.pageX - this.lastMouse.pageX;
     this.elemPosition[1] += e.pageY - this.lastMouse.pageY;
 
-    this.gridsterScroll.scroll(this.elemPosition, this.gridsterItem, e, this.lastMouse, this.calculateItemPosition.bind(this));
+    scroll(this.elemPosition, this.gridsterItem, e, this.lastMouse, this.calculateItemPosition.bind(this));
 
     this.lastMouse.pageX = e.pageX;
     this.lastMouse.pageY = e.pageY;
@@ -99,7 +97,7 @@ export class GridsterDraggable {
     if (this.gridsterItem.gridster.state.options.swap) {
       GridsterSwap.GridsterSwap(this.gridsterItem, this.elemPosition);
     }
-    this.gridsterScroll.cancelScroll();
+    cancelScroll();
     document.removeEventListener('mousemove', this.dragFunction);
     document.removeEventListener('mouseup', this.dragStopFunction);
     document.removeEventListener('touchmove', this.dragFunction);

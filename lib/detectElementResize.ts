@@ -112,8 +112,8 @@ function createStyles() {
       style: any = document.createElement('style');
 
     style.type = 'text/css';
-    if (style.styleSheet) { // tslint:disable-line
-      style.styleSheet.cssText = css; // tslint:disable-line
+    if (style.styleSheet) {
+      style.styleSheet.cssText = css;
     } else {
       style.appendChild(document.createTextNode(css));
     }
@@ -123,7 +123,7 @@ function createStyles() {
   }
 }
 
-export const addResizeListener = function (element, fn) {
+export function addResizeListener(element, fn) {
   if (attachEvent) {
     element.attachEvent('onresize', fn);
   } else {
@@ -150,9 +150,9 @@ export const addResizeListener = function (element, fn) {
     }
     element.__resizeListeners__.push(fn);
   }
-};
+}
 
-export const removeResizeListener = function (element, fn) {
+export function removeResizeListener(element, fn) {
   if (attachEvent) {
     element.detachEvent('onresize', fn);
   } else {
@@ -162,4 +162,4 @@ export const removeResizeListener = function (element, fn) {
       element.__resizeTriggers__ = !element.removeChild(element.__resizeTriggers__);
     }
   }
-};
+}

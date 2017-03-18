@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {GridsterItemComponent} from './gridsterItem.component';
-import {GridsterScroll} from './gridsterScroll.service';
+import {scroll, cancelScroll} from './gridsterScroll.service';
 import * as _ from 'lodash';
 import {GridsterItem} from './gridsterItem.interface';
 import {GridsterResizeEventType} from './gridsterResizeEventType.interface';
@@ -8,7 +8,6 @@ import {GridsterResizeEventType} from './gridsterResizeEventType.interface';
 @Injectable()
 export class GridsterResizable {
   element: HTMLElement;
-  gridsterScroll: GridsterScroll;
   gridsterItem: GridsterItemComponent;
   itemCopy: GridsterItem;
   lastMouse: {
@@ -30,7 +29,6 @@ export class GridsterResizable {
   }
 
   constructor(element: HTMLElement, gridsterItem: GridsterItemComponent) {
-    this.gridsterScroll = new GridsterScroll();
     this.element = element;
     this.gridsterItem = gridsterItem;
     this.lastMouse = {
@@ -114,7 +112,7 @@ export class GridsterResizable {
       GridsterResizable.touchEvent(e);
     }
 
-    this.gridsterScroll.scroll(this.elemPosition, this.gridsterItem, e, this.lastMouse, this.directionFunction, true,
+    scroll(this.elemPosition, this.gridsterItem, e, this.lastMouse, this.directionFunction, true,
       this.resizeEventScrollType);
 
     this.directionFunction(e);
@@ -126,7 +124,7 @@ export class GridsterResizable {
   dragStop(e) {
     e.preventDefault();
     e.stopPropagation();
-    this.gridsterScroll.cancelScroll();
+    cancelScroll();
     document.removeEventListener('mousemove', this.dragFunction);
     document.removeEventListener('mouseup', this.dragStopFunction);
     document.removeEventListener('touchmove', this.dragFunction);

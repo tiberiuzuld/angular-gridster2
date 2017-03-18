@@ -15,7 +15,6 @@ var gridsterScroll_service_1 = require("./gridsterScroll.service");
 var _ = require("lodash");
 var GridsterResizable = GridsterResizable_1 = (function () {
     function GridsterResizable(element, gridsterItem) {
-        this.gridsterScroll = new gridsterScroll_service_1.GridsterScroll();
         this.element = element;
         this.gridsterItem = gridsterItem;
         this.lastMouse = {
@@ -106,7 +105,7 @@ var GridsterResizable = GridsterResizable_1 = (function () {
         if (e.pageX === undefined && e.touches) {
             GridsterResizable_1.touchEvent(e);
         }
-        this.gridsterScroll.scroll(this.elemPosition, this.gridsterItem, e, this.lastMouse, this.directionFunction, true, this.resizeEventScrollType);
+        gridsterScroll_service_1.scroll(this.elemPosition, this.gridsterItem, e, this.lastMouse, this.directionFunction, true, this.resizeEventScrollType);
         this.directionFunction(e);
         this.lastMouse.pageX = e.pageX;
         this.lastMouse.pageY = e.pageY;
@@ -114,7 +113,7 @@ var GridsterResizable = GridsterResizable_1 = (function () {
     GridsterResizable.prototype.dragStop = function (e) {
         e.preventDefault();
         e.stopPropagation();
-        this.gridsterScroll.cancelScroll();
+        gridsterScroll_service_1.cancelScroll();
         document.removeEventListener('mousemove', this.dragFunction);
         document.removeEventListener('mouseup', this.dragStopFunction);
         document.removeEventListener('touchmove', this.dragFunction);

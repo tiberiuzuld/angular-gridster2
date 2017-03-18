@@ -1,10 +1,8 @@
 import { GridsterItemComponent } from './gridsterItem.component';
-import { GridsterScroll } from './gridsterScroll.service';
 import { GridsterItem } from './gridsterItem.interface';
 import { GridsterResizeEventType } from './gridsterResizeEventType.interface';
 export declare class GridsterResizable {
     element: HTMLElement;
-    gridsterScroll: GridsterScroll;
     gridsterItem: GridsterItemComponent;
     itemCopy: GridsterItem;
     lastMouse: {

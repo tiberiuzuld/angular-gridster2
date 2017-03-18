@@ -1,4 +1,3 @@
-///<reference path="../src/typings.d.ts"/>
 import {Component, OnInit, ElementRef, Input, OnDestroy, Renderer} from '@angular/core';
 import * as _ from 'lodash';
 import {GridsterConfigService} from './gridsterConfig.constant';

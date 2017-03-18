@@ -1,6 +1,6 @@
 {
   "name": "angular-gridster2",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "license": "MIT",
   "main": "dist/gridster.module.js",
   "jsnext:main": "dist/gridster.module.js",
@@ -13,7 +13,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "build-demo": "ng build --prod --aot=false",
+    "build-demo": "ng build --prod --aot=false --base-href=./",
     "build-npm": "ngc -p tsconfig.json && copyfiles -u 1 lib/*.html dist && copyfiles -u 1 lib/*.css dist"
   },
   "homepage": "https://github.io/tiberiuzuld/angular-gridster2",
