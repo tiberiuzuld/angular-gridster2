@@ -9,10 +9,12 @@
     "experimentalDecorators": true,
     "stripInternal": true,
     "declaration": true,
+    "allowSyntheticDefaultImports": true,
     "outDir": "./dist",
     "types": [
       "node"
     ],
+    "typeRoots": [ "node_modules/@types" ],
     "lib": [
       "es2016",
       "dom"
