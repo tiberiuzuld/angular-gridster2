@@ -6,7 +6,6 @@ import {GridsterItem} from './gridsterItem.interface';
 import {addResizeListener, removeResizeListener} from './detectElementResize';
 
 @Component({
-  moduleId: module.id,
   selector: 'gridster',
   template: '<ng-content></ng-content><gridster-preview></gridster-preview>',
   styleUrls: ['./gridster.css']

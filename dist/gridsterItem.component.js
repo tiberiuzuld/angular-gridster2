@@ -124,7 +124,6 @@ __decorate([
 ], GridsterItemComponent.prototype, "itemResize", void 0);
 GridsterItemComponent = __decorate([
     core_1.Component({
-        moduleId: module.id,
         selector: 'gridster-item',
         templateUrl: './gridsterItem.html',
         styleUrls: ['./gridsterItem.css']

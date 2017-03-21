@@ -298,7 +298,6 @@ __decorate([
 ], GridsterComponent.prototype, "options", void 0);
 GridsterComponent = __decorate([
     core_1.Component({
-        moduleId: module.id,
         selector: 'gridster',
         template: '<ng-content></ng-content><gridster-preview></gridster-preview>',
         styleUrls: ['./gridster.css']

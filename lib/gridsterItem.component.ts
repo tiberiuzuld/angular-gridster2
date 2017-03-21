@@ -6,7 +6,6 @@ import {GridsterDraggable} from './gridsterDraggable.service';
 import {GridsterResizable} from './gridsterResizable.service';
 
 @Component({
-  moduleId: module.id,
   selector: 'gridster-item',
   templateUrl: './gridsterItem.html',
   styleUrls: ['./gridsterItem.css']

@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {GridsterConfig} from '../../lib/gridsterConfig.interface';
 
 @Component({
-  moduleId: module.id,
   selector: 'gridster-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
