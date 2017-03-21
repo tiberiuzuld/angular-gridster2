@@ -1,6 +1,6 @@
 {
   "name": "angular-gridster2",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "license": "MIT",
   "main": "dist/gridster.module.js",
   "jsnext:main": "dist/gridster.module.js",
@@ -43,15 +43,16 @@
     "dist/*"
   ],
   "dependencies": {
+    "@angular/common": ">2.4.0",
     "@angular/core": ">2.4.0",
     "@angular/platform-browser": ">2.4.0",
     "core-js": "^2.4.1",
     "lodash": "^4.17.4",
+    "rxjs": "^5.1.0",
     "zone.js": "^0.8.4"
   },
   "devDependencies": {
     "@angular/cli": "^1.0.0-rc.2",
-    "@angular/common": ">2.4.0",
     "@angular/compiler": ">2.4.0",
     "@angular/compiler-cli": ">2.4.0",
     "@angular/forms": ">2.4.0",
@@ -76,7 +77,6 @@
     "karma-jasmine": "1.1.0",
     "karma-jasmine-html-reporter": "0.2.2",
     "protractor": "5.1.1",
-    "rxjs": "^5.1.0",
     "systemjs": "^0.20.10",
     "ts-helpers": "^1.1.2",
     "ts-node": "2.1.0",
