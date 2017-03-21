@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "sourceMap": true,
-    "declaration": false,
+    "declaration": true,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -13,6 +13,6 @@
     "target": "es5",
     "module": "es2015",
     "baseUrl": "",
-    "types": []
+    "typeRoots": [ "../node_modules/@types" ]
   }
 }
