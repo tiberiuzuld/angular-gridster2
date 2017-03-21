@@ -300,7 +300,7 @@ GridsterComponent = __decorate([
     core_1.Component({
         selector: 'gridster',
         template: '<ng-content></ng-content><gridster-preview></gridster-preview>',
-        styleUrls: ['./gridster.css']
+        styles: [require('./gridster.css')]
     }),
     __metadata("design:paramtypes", [core_1.ElementRef])
 ], GridsterComponent);

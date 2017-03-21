@@ -125,8 +125,8 @@ __decorate([
 GridsterItemComponent = __decorate([
     core_1.Component({
         selector: 'gridster-item',
-        templateUrl: './gridsterItem.html',
-        styleUrls: ['./gridsterItem.css']
+        template: require('./gridsterItem.html'),
+        styles: [require('./gridsterItem.css')]
     }),
     __param(1, core_1.Host()),
     __metadata("design:paramtypes", [core_1.ElementRef, gridster_component_1.GridsterComponent])
