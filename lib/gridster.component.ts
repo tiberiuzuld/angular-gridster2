@@ -184,9 +184,10 @@ export class GridsterComponent implements OnInit, OnDestroy {
     if (item.x === undefined || item.y === undefined) {
       this.autoPositionItem(item);
     } else if (this.checkCollision(item)) {
+      console.warn('Can\'t be placed in the bounds of the dashboard, trying to auto position!/n' +
+        JSON.stringify(item, ['cols', 'rows', 'x', 'y', 'id']));
       item.x = undefined;
       item.y = undefined;
-      console.log('Can\'t be placed in the bounds of the dashboard, trying to auto position!/n' + JSON.stringify(item));
       this.autoPositionItem(item);
     }
     this.state.grid.push(item);
@@ -240,7 +241,8 @@ export class GridsterComponent implements OnInit, OnDestroy {
       item.y = this.state.rows;
       item.x = 0;
     } else {
-      console.log('Can\'t be placed in the bounds of the dashboard!/n' + JSON.stringify(item));
+      console.warn('Can\'t be placed in the bounds of the dashboard!/n' +
+        JSON.stringify(item, ['cols', 'rows', 'x', 'y', 'id']));
     }
   }
 
