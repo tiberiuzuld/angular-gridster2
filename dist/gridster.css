@@ -7,27 +7,28 @@
   -webkit-user-select: none;
 }
 
-:host.fit {
+:host(.fit) {
   overflow-x: hidden;
   overflow-y: hidden;
 }
 
-:host.scrollVertical {
+:host(.scrollVertical) {
   overflow-x: hidden;
   overflow-y: auto;
 }
 
-:host.scrollHorizontal {
+:host(.scrollHorizontal) {
   overflow-x: auto;
   overflow-y: hidden;
 }
 
-:host.mobile {
+:host(.mobile) {
   overflow-x: hidden;
   overflow-y: auto;
+  display: block;
 }
 
-:host.mobile gridster-item {
+:host(.mobile) /deep/ gridster-item {
   position: relative;
 }
 

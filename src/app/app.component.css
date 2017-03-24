@@ -9,8 +9,19 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
   flex: 1 auto;
+  flex-wrap: wrap;
+  width: 100%;
+  height: 100%;
+}
+
+:host /deep/ .mat-toolbar-row {
+  height: initial !important;
+}
+
+md-toolbar {
+  flex: 0 0 auto;
 }
 
 gridster-item div.button-holder {
