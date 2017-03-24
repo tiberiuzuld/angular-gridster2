@@ -22,6 +22,7 @@ export class GridsterResizable {
   directionFunction: Function;
   dragFunction: EventListenerObject;
   dragStopFunction: EventListenerObject;
+  resizeEnabled: boolean;
 
   static touchEvent(e) {
     e.pageX = e.touches[0].pageX;
@@ -230,5 +231,10 @@ export class GridsterResizable {
   handleSE(e) {
     this.handleS(e);
     this.handleE(e);
+  }
+
+  toggle(enabled) {
+    this.resizeEnabled = (this.gridsterItem.state.item.resizeEnabled === undefined ?
+      enabled : this.gridsterItem.state.item.resizeEnabled);
   }
 }

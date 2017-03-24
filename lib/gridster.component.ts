@@ -169,6 +169,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
     for (; widgetsIndex >= 0; widgetsIndex--) {
       this.state.grid[widgetsIndex].setSize();
       this.state.grid[widgetsIndex].drag.toggle(this.state.options.draggable.enabled);
+      this.state.grid[widgetsIndex].resize.toggle(this.state.options.resizable.enabled);
     }
 
     this.detectScrollBarLayout();

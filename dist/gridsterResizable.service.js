@@ -216,6 +216,10 @@ var GridsterResizable = GridsterResizable_1 = (function () {
         this.handleS(e);
         this.handleE(e);
     };
+    GridsterResizable.prototype.toggle = function (enabled) {
+        this.resizeEnabled = (this.gridsterItem.state.item.resizeEnabled === undefined ?
+            enabled : this.gridsterItem.state.item.resizeEnabled);
+    };
     return GridsterResizable;
 }());
 GridsterResizable = GridsterResizable_1 = __decorate([

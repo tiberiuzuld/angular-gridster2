@@ -17,6 +17,7 @@ export declare class GridsterResizable {
     directionFunction: Function;
     dragFunction: EventListenerObject;
     dragStopFunction: EventListenerObject;
+    resizeEnabled: boolean;
     static touchEvent(e: any): void;
     constructor(element: HTMLElement, gridsterItem: GridsterItemComponent);
     dragStart(e: any): void;
@@ -30,4 +31,5 @@ export declare class GridsterResizable {
     handleNE(e: any): void;
     handleSW(e: any): void;
     handleSE(e: any): void;
+    toggle(enabled: any): void;
 }

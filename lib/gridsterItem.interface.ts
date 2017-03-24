@@ -6,6 +6,8 @@ export interface GridsterItem {
   rows?: number;
   cols?: number;
   initCallback?: Function;
+  dragEnabled?: boolean;
+  resizeEnabled?: boolean;
   setSize?: Function;
   checkItemChanges?: Function;
   itemChanged?: Function;

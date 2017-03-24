@@ -29,6 +29,8 @@ var GridsterItemComponent = (function () {
                 x: undefined,
                 y: undefined,
                 initCallback: undefined,
+                dragEnabled: undefined,
+                resizeEnabled: undefined,
                 setSize: this.setSize.bind(this),
                 itemChanged: this.itemChanged.bind(this),
                 checkItemChanges: this.checkItemChanges.bind(this),

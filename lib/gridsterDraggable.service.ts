@@ -133,12 +133,13 @@ export class GridsterDraggable {
   }
 
   toggle(enable: boolean) {
-    if (enable && !this.enabled) {
+    const enableDrag = this.gridsterItem.state.item.dragEnabled === undefined ? enable : this.gridsterItem.state.item.dragEnabled;
+    if (!this.enabled && enableDrag) {
       this.enabled = !this.enabled;
       this.dragStartFunction = this.dragStart.bind(this);
       this.element.addEventListener('mousedown', this.dragStartFunction);
       this.element.addEventListener('touchstart', this.dragStartFunction);
-    } else if (!enable && this.enabled) {
+    } else if (this.enabled && !enableDrag) {
       this.enabled = !this.enabled;
       this.element.removeEventListener('mousedown', this.dragStartFunction);
       this.element.removeEventListener('touchstart', this.dragStartFunction);

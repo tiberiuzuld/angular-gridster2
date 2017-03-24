@@ -60,11 +60,11 @@ Initialize the demo dashboard
         {cols: 1, rows: 1, y: 0, x: 4},
         {cols: 1, rows: 1, y: 0, x: 5},
         {cols: 2, rows: 1, y: 1, x: 0},
-        {cols: 1, rows: 1, y: undefined, x: undefined},
+        {cols: 1, rows: 1, y: undefined, x: undefined}, // items without position will be auto-positioned if possible
         {cols: 1, rows: 2, y: 1, x: 5},
         {cols: 1, rows: 3, y: 2, x: 0},
-        {cols: 2, rows: 1, y: 2, x: 1},
-        {cols: 1, rows: 1, y: 2, x: 3},
+        {cols: 2, rows: 1, y: 2, x: 1, dragEnabled: true, resizeEnabled: true}, // override the grid option
+        {cols: 1, rows: 1, y: 2, x: 3, dragEnabled: false, resizeEnabled: false}, // so you can/not always drag or resize
         {cols: 1, rows: 1, y: 3, x: 4, initCallback: this.itemInit.bind(this)}
       ];
     }
