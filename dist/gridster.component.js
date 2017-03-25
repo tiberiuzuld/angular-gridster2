@@ -116,18 +116,29 @@ var GridsterComponent = (function () {
             this.state.element.classList.add('fit');
             this.state.element.classList.remove('scrollVertical');
             this.state.element.classList.remove('scrollHorizontal');
+            this.state.element.classList.remove('fixed');
         }
         else if (this.state.options.gridType === 'scrollVertical') {
             this.state.curRowHeight = this.state.curColWidth;
             this.state.element.classList.add('scrollVertical');
             this.state.element.classList.remove('fit');
             this.state.element.classList.remove('scrollHorizontal');
+            this.state.element.classList.remove('fixed');
         }
         else if (this.state.options.gridType === 'scrollHorizontal') {
             this.state.curColWidth = this.state.curRowHeight;
             this.state.element.classList.add('scrollHorizontal');
             this.state.element.classList.remove('fit');
             this.state.element.classList.remove('scrollVertical');
+            this.state.element.classList.remove('fixed');
+        }
+        else if (this.state.options.gridType === 'fixed') {
+            this.state.curColWidth = this.state.options.fixedColWidth;
+            this.state.curRowHeight = this.state.options.fixedRowHeight;
+            this.state.element.classList.add('fixed');
+            this.state.element.classList.remove('fit');
+            this.state.element.classList.remove('scrollVertical');
+            this.state.element.classList.remove('scrollHorizontal');
         }
         if (!this.state.mobile && this.state.options.mobileBreakpoint > this.state.curWidth) {
             this.state.mobile = !this.state.mobile;

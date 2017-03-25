@@ -4,6 +4,9 @@ export const GridsterConfigService: GridsterConfig = {
   gridType: 'fit', // 'fit' will fit the items in the container without scroll;
   // 'scrollVertical' will fit on width and height of the items will be the same as the width
   // 'scrollHorizontal' will fit on height and width of the items will be the same as the height
+  // 'fixed' will set the rows and columns dimensions based on fixedColWidth and fixedRowHeight options
+  fixedColWidth: 250, // fixed col width for gridType: 'fixed'
+  fixedRowHeight: 250, // fixed row height for gridType: 'fixed'
   compactUp: false, // compact items up if there is room
   compactLeft: false, // compact items left if there is room
   mobileBreakpoint: 640, // if the screen is not wider that this, remove the grid layout and stack the items

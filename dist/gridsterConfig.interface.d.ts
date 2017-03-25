@@ -1,6 +1,8 @@
-export declare type GridType = 'fit' | 'scrollVertical' | 'scrollHorizontal';
+export declare type GridType = 'fit' | 'scrollVertical' | 'scrollHorizontal' | 'fixed';
 export interface GridsterConfig {
     gridType?: GridType;
+    fixedColWidth?: number;
+    fixedRowHeight?: number;
     compactUp?: boolean;
     compactLeft?: boolean;
     mobileBreakpoint?: number;

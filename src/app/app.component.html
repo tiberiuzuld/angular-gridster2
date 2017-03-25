@@ -7,6 +7,7 @@
       <md-option value="fit">Fit to screen</md-option>
       <md-option value="scrollVertical">Scroll Vertical</md-option>
       <md-option value="scrollHorizontal">Scroll Horizontal</md-option>
+      <md-option value="fixed">Fixed</md-option>
     </md-select>
     <md-checkbox [(ngModel)]="options.compactUp" (ngModelChange)="changedOptions()">
       Compact Up
@@ -52,6 +53,14 @@
     </md-input-container>
     <md-input-container>
       <input mdInput [(ngModel)]="options.defaultItemCols" type="number" placeholder="Default Item Cols"
+             (ngModelChange)="changedOptions()">
+    </md-input-container>
+    <md-input-container>
+      <input mdInput [(ngModel)]="options.fixedColWidth" type="number" placeholder="Fixed Col Width"
+             (ngModelChange)="changedOptions()">
+    </md-input-container>
+    <md-input-container>
+      <input mdInput [(ngModel)]="options.fixedRowHeight" type="number" placeholder="Fixed Row Height"
              (ngModelChange)="changedOptions()">
     </md-input-container>
   </div>

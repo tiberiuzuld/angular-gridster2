@@ -24,6 +24,8 @@ export class AppComponent implements OnInit {
       minItemRows: 1,
       defaultItemCols: 1,
       defaultItemRows: 1,
+      fixedColWidth: 250,
+      fixedRowHeight: 250,
       draggable: {
         enabled: true,
         stop: this.eventStop.bind(this)

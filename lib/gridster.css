@@ -22,6 +22,10 @@
   overflow-y: hidden;
 }
 
+:host(.fixed) {
+  overflow: auto;
+}
+
 :host(.mobile) {
   overflow-x: hidden;
   overflow-y: auto;

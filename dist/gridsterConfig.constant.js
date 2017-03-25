@@ -4,6 +4,9 @@ exports.GridsterConfigService = {
     gridType: 'fit',
     // 'scrollVertical' will fit on width and height of the items will be the same as the width
     // 'scrollHorizontal' will fit on height and width of the items will be the same as the height
+    // 'fixed' will set the rows and columns dimensions based on fixedColWidth and fixedRowHeight options
+    fixedColWidth: 250,
+    fixedRowHeight: 250,
     compactUp: false,
     compactLeft: false,
     mobileBreakpoint: 640,
