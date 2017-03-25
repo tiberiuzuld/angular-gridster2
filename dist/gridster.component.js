@@ -60,27 +60,17 @@ var GridsterComponent = (function () {
     };
     ;
     GridsterComponent.prototype.detectScrollBar = function () {
-        if (this.state.scrollBarPresent && this.state.element.scrollHeight <= this.state.element.offsetHeight &&
-            this.state.element.offsetWidth - this.state.element.clientWidth >=
-                this.state.element.scrollHeight - this.state.element.offsetHeight) {
-            this.state.scrollBarPresent = !this.state.scrollBarPresent;
-            this.onResize();
-        }
-        else if (!this.state.scrollBarPresent && this.state.element.scrollHeight > this.state.element.offsetHeight &&
-            this.state.element.offsetWidth - this.state.element.clientWidth <
-                this.state.element.scrollHeight - this.state.element.offsetHeight) {
-            this.state.scrollBarPresent = !this.state.scrollBarPresent;
-            this.onResize();
-        }
-        if (this.state.scrollBarPresent && this.state.element.scrollWidth <= this.state.element.offsetWidth &&
-            this.state.element.offsetHeight - this.state.element.clientHeight >=
-                this.state.element.scrollWidth - this.state.element.offsetWidth) {
-            this.state.scrollBarPresent = !this.state.scrollBarPresent;
-            this.onResize();
-        }
-        else if (!this.state.scrollBarPresent && this.state.element.scrollWidth > this.state.element.offsetWidth &&
+        var verticalScrollPresent = this.state.element.clientWidth < this.state.element.offsetWidth &&
             this.state.element.offsetHeight - this.state.element.clientHeight <
-                this.state.element.scrollWidth - this.state.element.offsetWidth) {
+                this.state.element.scrollWidth - this.state.element.offsetWidth;
+        var horizontalScrollPresent = this.state.element.clientHeight < this.state.element.offsetHeight &&
+            this.state.element.offsetWidth - this.state.element.clientWidth <
+                this.state.element.scrollHeight - this.state.element.offsetHeight;
+        if (this.state.scrollBarPresent && !verticalScrollPresent && !horizontalScrollPresent) {
+            this.state.scrollBarPresent = !this.state.scrollBarPresent;
+            this.onResize();
+        }
+        else if (!this.state.scrollBarPresent && (verticalScrollPresent || horizontalScrollPresent)) {
             this.state.scrollBarPresent = !this.state.scrollBarPresent;
             this.onResize();
         }
@@ -150,6 +140,7 @@ var GridsterComponent = (function () {
         var widgetsIndex = this.state.grid.length - 1;
         for (; widgetsIndex >= 0; widgetsIndex--) {
             this.state.grid[widgetsIndex].setSize();
+            console.log(this.state.mobile);
             this.state.grid[widgetsIndex].drag.toggle(this.state.options.draggable.enabled);
             this.state.grid[widgetsIndex].resize.toggle(this.state.options.resizable.enabled);
         }
@@ -184,8 +175,16 @@ var GridsterComponent = (function () {
         this.calculateLayoutDebounce();
     };
     GridsterComponent.prototype.checkCollision = function (item) {
-        if (!(item.y > -1 && item.x > -1 && item.cols + item.x <= this.state.options.maxCols &&
-            item.rows + item.y <= this.state.options.maxRows)) {
+        var noNegativePosition = item.y > -1 && item.x > -1;
+        var maxGridCols = item.cols + item.x <= this.state.options.maxCols;
+        var maxGridRows = item.rows + item.y <= this.state.options.maxRows;
+        var maxItemCols = item.maxItemCols === undefined ? this.state.options.maxItemCols : item.maxItemCols;
+        var minItemCols = item.minItemCols === undefined ? this.state.options.minItemCols : item.minItemCols;
+        var maxItemRows = item.maxItemRows === undefined ? this.state.options.maxItemRows : item.maxItemRows;
+        var minItemRows = item.minItemRows === undefined ? this.state.options.minItemRows : item.minItemRows;
+        var inColsLimits = item.cols <= maxItemCols && item.cols >= minItemCols;
+        var inRowsLimits = item.rows <= maxItemRows && item.rows >= minItemRows;
+        if (!(noNegativePosition && maxGridCols && maxGridRows && inColsLimits && inRowsLimits)) {
             return true;
         }
         return this.findItemWithItem(item);
@@ -227,14 +226,16 @@ var GridsterComponent = (function () {
                 JSON.stringify(item, ['cols', 'rows', 'x', 'y', 'id']));
         }
     };
-    GridsterComponent.prototype.pixelsToPosition = function (x, y) {
-        if (this.state.options.outerMargin) {
-            x -= this.state.options.margin;
-            y -= this.state.options.margin;
-        }
-        return [Math.abs(Math.round(x / this.state.curColWidth)), Math.abs(Math.round(y / this.state.curRowHeight))];
+    GridsterComponent.prototype.pixelsToPosition = function (x, y, roundingMethod) {
+        return [roundingMethod(Math.abs(x) / this.state.curColWidth), roundingMethod(Math.abs(y) / this.state.curRowHeight)];
     };
     ;
+    GridsterComponent.prototype.positionXToPixels = function (x) {
+        return x * this.state.curColWidth;
+    };
+    GridsterComponent.prototype.positionYToPixels = function (y) {
+        return y * this.state.curRowHeight;
+    };
     GridsterComponent.prototype.checkCompactUp = function () {
         if (this.state.options.compactUp) {
             var widgetMovedUp = false, widget = void 0, moved = void 0;

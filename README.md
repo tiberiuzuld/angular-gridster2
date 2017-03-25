@@ -59,13 +59,13 @@ Initialize the demo dashboard
         {cols: 2, rows: 2, y: 0, x: 2},
         {cols: 1, rows: 1, y: 0, x: 4},
         {cols: 1, rows: 1, y: 0, x: 5},
-        {cols: 2, rows: 1, y: 1, x: 0},
+        {cols: undefined, rows: undefined, y: 1, x: 0}, // items without cols & rows will receive the defaults from grid options
         {cols: 1, rows: 1, y: undefined, x: undefined}, // items without position will be auto-positioned if possible
-        {cols: 1, rows: 2, y: 1, x: 5},
-        {cols: 1, rows: 3, y: 2, x: 0},
-        {cols: 2, rows: 1, y: 2, x: 1, dragEnabled: true, resizeEnabled: true}, // override the grid option
-        {cols: 1, rows: 1, y: 2, x: 3, dragEnabled: false, resizeEnabled: false}, // so you can/not always drag or resize
-        {cols: 1, rows: 1, y: 3, x: 4, initCallback: this.itemInit.bind(this)}
+        {cols: 2, rows: 2, y: 1, x: 5, minItemRows: 2, minItemCols: 2}, // set min rows & cols a item can be resize overrides grid option
+        {cols: 2, rows: 2, y: 2, x: 0, maxItemRows: 2, maxItemCols: 2}, // set max rows & cols a item can be resize overrides grid option
+        {cols: 2, rows: 1, y: 2, x: 2, dragEnabled: true, resizeEnabled: true}, // override the grid option
+        {cols: 1, rows: 1, y: 2, x: 4, dragEnabled: false, resizeEnabled: false}, // so you can/not always drag or resize
+        {cols: 1, rows: 1, y: 3, x: 4, initCallback: this.itemInit.bind(this)} // callback to be called when item is initialized
       ];
     }
     // if you make changes to the options after initialization let the gridster know
@@ -102,6 +102,8 @@ const GridsterConfigService: GridsterConfig = {
   maxRows: 100, // maximum amount of rows in the grid
   defaultItemCols: 1, // default width of an item in columns
   defaultItemRows: 1, // default height of an item in rows
+  maxItemCols: 50, // max item number of cols
+  maxItemRows: 50, // max item number of rows
   minItemCols: 1, // min item number of columns
   minItemRows: 1, // min item number of rows
   margin: 10,  // margin between grid items

@@ -10,6 +10,8 @@ export interface GridsterConfig {
     maxRows?: number;
     defaultItemCols?: number;
     defaultItemRows?: number;
+    maxItemCols?: number;
+    maxItemRows?: number;
     minItemCols?: number;
     minItemRows?: number;
     margin?: number;

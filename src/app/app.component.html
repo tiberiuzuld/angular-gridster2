@@ -26,10 +26,34 @@
     <div class="margin-slider">
       <div><span>Margin</span></div>
       <md-slider aria-label="Margin" thumbLabel
-                 min="0" max="30" step="1" (input)="changedOptions()"
+                 min="0" max="30" step="1" (ngModelChange)="changedOptions()"
                  [(ngModel)]="options.margin"></md-slider>
     </div>
     <md-checkbox [(ngModel)]="options.outerMargin" (ngModelChange)="changedOptions()">Outer Margin</md-checkbox>
+    <md-input-container>
+      <input mdInput [(ngModel)]="options.maxItemCols" type="number" placeholder="Max Item Cols"
+             (ngModelChange)="changedOptions()">
+    </md-input-container>
+    <md-input-container>
+      <input mdInput [(ngModel)]="options.minItemCols" type="number" placeholder="Min Item Cols"
+             (ngModelChange)="changedOptions()">
+    </md-input-container>
+    <md-input-container>
+      <input mdInput [(ngModel)]="options.maxItemRows" type="number" placeholder="Max Item Rows"
+             (ngModelChange)="changedOptions()">
+    </md-input-container>
+    <md-input-container>
+      <input mdInput [(ngModel)]="options.minItemRows" type="number" placeholder="Min Item Rows"
+             (ngModelChange)="changedOptions()">
+    </md-input-container>
+    <md-input-container>
+      <input mdInput [(ngModel)]="options.defaultItemRows" type="number" placeholder="Default Item Rows"
+             (ngModelChange)="changedOptions()">
+    </md-input-container>
+    <md-input-container>
+      <input mdInput [(ngModel)]="options.defaultItemCols" type="number" placeholder="Default Item Cols"
+             (ngModelChange)="changedOptions()">
+    </md-input-container>
   </div>
 </md-toolbar>
 

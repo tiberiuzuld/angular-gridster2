@@ -11,6 +11,10 @@ export interface GridsterItem {
     setSize?: Function;
     checkItemChanges?: Function;
     itemChanged?: Function;
+    maxItemRows?: number;
+    minItemRows?: number;
+    maxItemCols?: number;
+    minItemCols?: number;
     drag?: GridsterDraggable;
     resize?: GridsterResizable;
 }

@@ -13,6 +13,8 @@ exports.GridsterConfigService = {
     maxRows: 100,
     defaultItemCols: 1,
     defaultItemRows: 1,
+    maxItemCols: 50,
+    maxItemRows: 50,
     minItemCols: 1,
     minItemRows: 1,
     margin: 10,

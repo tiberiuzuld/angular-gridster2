@@ -13,11 +13,17 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.options = {
       gridType: 'fit',
-      compactUp: true,
-      compactLeft: true,
+      compactUp: false,
+      compactLeft: false,
       itemChangeCallback: this.itemChange.bind(this),
       margin: 10,
       outerMargin: true,
+      maxItemCols: 50,
+      minItemCols: 1,
+      maxItemRows: 50,
+      minItemRows: 1,
+      defaultItemCols: 1,
+      defaultItemRows: 1,
       draggable: {
         enabled: true,
         stop: this.eventStop.bind(this)
@@ -26,7 +32,7 @@ export class AppComponent implements OnInit {
         enabled: true,
         stop: this.eventStop.bind(this)
       },
-      swap: true
+      swap: false
     };
 
     this.dashboard = [
@@ -34,13 +40,13 @@ export class AppComponent implements OnInit {
       {cols: 2, rows: 2, y: 0, x: 2},
       {cols: 1, rows: 1, y: 0, x: 4},
       {cols: 1, rows: 1, y: 0, x: 5},
-      {cols: 2, rows: 1, y: 1, x: 0},
+      {cols: undefined, rows: undefined, y: 1, x: 0},
       {cols: 1, rows: 1, y: undefined, x: undefined},
-      {cols: 1, rows: 2, y: 1, x: 5},
-      {cols: 1, rows: 3, y: 2, x: 0},
-      {cols: 2, rows: 1, y: 2, x: 1, dragEnabled: true, resizeEnabled: true, label: 'Drag&Resize Enabled'},
-      {cols: 1, rows: 1, y: 2, x: 3, dragEnabled: false, resizeEnabled: false, label: 'Drag&Resize Disabled'},
-      {cols: 1, rows: 1, y: 3, x: 4, initCallback: this.itemInit.bind(this)}
+      {cols: 2, rows: 2, y: 1, x: 5, minItemRows: 2, minItemCols: 2, label: 'Min rows & cols = 2'},
+      {cols: 2, rows: 2, y: 2, x: 0, maxItemRows: 2, maxItemCols: 2, label: 'Max rows & cols = 2'},
+      {cols: 2, rows: 1, y: 2, x: 2, dragEnabled: true, resizeEnabled: true, label: 'Drag&Resize Enabled'},
+      {cols: 1, rows: 1, y: 2, x: 4, dragEnabled: false, resizeEnabled: false, label: 'Drag&Resize Disabled'},
+      {cols: 1, rows: 1, y: 0, x: 6, initCallback: this.itemInit.bind(this)}
     ];
   }
 

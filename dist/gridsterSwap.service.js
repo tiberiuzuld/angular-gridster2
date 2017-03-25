@@ -11,7 +11,7 @@ var GridsterSwap = (function () {
     function GridsterSwap() {
     }
     GridsterSwap.GridsterSwap = function (gridsterItem, elemPosition) {
-        var position = gridsterItem.gridster.pixelsToPosition(elemPosition[0], elemPosition[1]);
+        var position = gridsterItem.gridster.pixelsToPosition(elemPosition[0], elemPosition[1], Math.round);
         var x = gridsterItem.state.item.x;
         var y = gridsterItem.state.item.y;
         gridsterItem.state.item.x = position[0];

@@ -94,8 +94,7 @@ var GridsterItemComponent = (function () {
         if (newValue.rows === oldValue.rows && newValue.cols === oldValue.cols && newValue.x === oldValue.x && newValue.y === oldValue.y) {
             return;
         }
-        if (newValue.rows < this.gridster.state.options.minItemRows || newValue.cols < this.gridster.state.options.minItemCols ||
-            this.gridster.checkCollision(this.state.item)) {
+        if (this.gridster.checkCollision(this.state.item)) {
             this.state.item.x = oldValue.x;
             this.state.item.y = oldValue.y;
             this.state.item.cols = oldValue.cols;

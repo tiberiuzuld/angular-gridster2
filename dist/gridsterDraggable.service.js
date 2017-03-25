@@ -100,7 +100,7 @@ var GridsterDraggable = GridsterDraggable_1 = (function () {
     GridsterDraggable.prototype.calculateItemPosition = function () {
         this.element.style.left = this.elemPosition[0] + 'px';
         this.element.style.top = this.elemPosition[1] + 'px';
-        this.position = this.gridsterItem.gridster.pixelsToPosition(this.elemPosition[0], this.elemPosition[1]);
+        this.position = this.gridsterItem.gridster.pixelsToPosition(this.elemPosition[0], this.elemPosition[1], Math.round);
         if (this.position[0] !== this.gridsterItem.state.item.x || this.position[1] !== this.gridsterItem.state.item.y) {
             this.positionBackup[0] = this.gridsterItem.state.item.x;
             this.positionBackup[1] = this.gridsterItem.state.item.y;
@@ -116,7 +116,8 @@ var GridsterDraggable = GridsterDraggable_1 = (function () {
         }
     };
     GridsterDraggable.prototype.toggle = function (enable) {
-        var enableDrag = this.gridsterItem.state.item.dragEnabled === undefined ? enable : this.gridsterItem.state.item.dragEnabled;
+        var enableDrag = !this.gridsterItem.gridster.state.mobile &&
+            (this.gridsterItem.state.item.dragEnabled === undefined ? enable : this.gridsterItem.state.item.dragEnabled);
         if (!this.enabled && enableDrag) {
             this.enabled = !this.enabled;
             this.dragStartFunction = this.dragStart.bind(this);

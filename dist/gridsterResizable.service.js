@@ -131,9 +131,7 @@ var GridsterResizable = GridsterResizable_1 = (function () {
     GridsterResizable.prototype.handleN = function (e) {
         this.elemPosition[1] += e.pageY - this.lastMouse.pageY;
         this.elemPosition[3] += this.lastMouse.pageY - e.pageY;
-        this.element.style.top = this.elemPosition[1] + 'px';
-        this.element.style.height = this.elemPosition[3] + 'px';
-        this.position = this.gridsterItem.gridster.pixelsToPosition(this.elemPosition[0], this.elemPosition[1]);
+        this.position = this.gridsterItem.gridster.pixelsToPosition(this.elemPosition[0], this.elemPosition[1], Math.floor);
         if (this.gridsterItem.state.item.y !== this.position[1]) {
             this.itemBackup[1] = this.gridsterItem.state.item.y;
             this.itemBackup[3] = this.gridsterItem.state.item.rows;
@@ -143,18 +141,22 @@ var GridsterResizable = GridsterResizable_1 = (function () {
                 this.gridsterItem.gridster.checkCollision(this.gridsterItem.state.item)) {
                 this.gridsterItem.state.item.y = this.itemBackup[1];
                 this.gridsterItem.state.item.rows = this.itemBackup[3];
+                this.element.style.top = this.gridsterItem.gridster.positionYToPixels(this.gridsterItem.state.item.y) + 'px';
+                this.element.style.height = this.gridsterItem.gridster.positionYToPixels(this.gridsterItem.state.item.rows)
+                    - this.gridsterItem.gridster.state.options.margin + 'px';
+                return;
             }
             else {
                 this.gridsterItem.gridster.previewStyle();
             }
         }
+        this.element.style.top = this.elemPosition[1] + 'px';
+        this.element.style.height = this.elemPosition[3] + 'px';
     };
     GridsterResizable.prototype.handleW = function (e) {
         this.elemPosition[0] += e.pageX - this.lastMouse.pageX;
         this.elemPosition[2] += this.lastMouse.pageX - e.pageX;
-        this.element.style.left = this.elemPosition[0] + 'px';
-        this.element.style.width = this.elemPosition[2] + 'px';
-        this.position = this.gridsterItem.gridster.pixelsToPosition(this.elemPosition[0], this.elemPosition[1]);
+        this.position = this.gridsterItem.gridster.pixelsToPosition(this.elemPosition[0], this.elemPosition[1], Math.floor);
         if (this.gridsterItem.state.item.x !== this.position[0]) {
             this.itemBackup[0] = this.gridsterItem.state.item.x;
             this.itemBackup[2] = this.gridsterItem.state.item.cols;
@@ -164,41 +166,53 @@ var GridsterResizable = GridsterResizable_1 = (function () {
                 this.gridsterItem.gridster.checkCollision(this.gridsterItem.state.item)) {
                 this.gridsterItem.state.item.x = this.itemBackup[0];
                 this.gridsterItem.state.item.cols = this.itemBackup[2];
+                this.element.style.left = this.gridsterItem.gridster.positionXToPixels(this.gridsterItem.state.item.x) + 'px';
+                this.element.style.width = this.gridsterItem.gridster.positionXToPixels(this.gridsterItem.state.item.cols)
+                    - this.gridsterItem.gridster.state.options.margin + 'px';
+                return;
             }
             else {
                 this.gridsterItem.gridster.previewStyle();
             }
         }
+        this.element.style.left = this.elemPosition[0] + 'px';
+        this.element.style.width = this.elemPosition[2] + 'px';
     };
     GridsterResizable.prototype.handleS = function (e) {
         this.elemPosition[3] += e.pageY - this.lastMouse.pageY;
-        this.element.style.height = this.elemPosition[3] + 'px';
-        this.position = this.gridsterItem.gridster.pixelsToPosition(this.elemPosition[0], this.elemPosition[1] + this.elemPosition[3]);
+        this.position = this.gridsterItem.gridster.pixelsToPosition(this.elemPosition[0], this.elemPosition[1] + this.elemPosition[3], Math.ceil);
         if ((this.gridsterItem.state.item.y + this.gridsterItem.state.item.rows) !== this.position[1]) {
             this.itemBackup[3] = this.gridsterItem.state.item.rows;
             this.gridsterItem.state.item.rows = this.position[1] - this.gridsterItem.state.item.y;
             if (this.gridsterItem.state.item.rows < 1 || this.gridsterItem.gridster.checkCollision(this.gridsterItem.state.item)) {
                 this.gridsterItem.state.item.rows = this.itemBackup[3];
+                this.element.style.height = this.gridsterItem.gridster.positionYToPixels(this.gridsterItem.state.item.rows)
+                    - this.gridsterItem.gridster.state.options.margin + 'px';
+                return;
             }
             else {
                 this.gridsterItem.gridster.previewStyle();
             }
         }
+        this.element.style.height = this.elemPosition[3] + 'px';
     };
     GridsterResizable.prototype.handleE = function (e) {
         this.elemPosition[2] += e.pageX - this.lastMouse.pageX;
-        this.element.style.width = this.elemPosition[2] + 'px';
-        this.position = this.gridsterItem.gridster.pixelsToPosition(this.elemPosition[0] + this.elemPosition[2], this.elemPosition[1]);
+        this.position = this.gridsterItem.gridster.pixelsToPosition(this.elemPosition[0] + this.elemPosition[2], this.elemPosition[1], Math.ceil);
         if ((this.gridsterItem.state.item.x + this.gridsterItem.state.item.cols) !== this.position[0]) {
             this.itemBackup[2] = this.gridsterItem.state.item.cols;
             this.gridsterItem.state.item.cols = this.position[0] - this.gridsterItem.state.item.x;
             if (this.gridsterItem.state.item.cols < 1 || this.gridsterItem.gridster.checkCollision(this.gridsterItem.state.item)) {
                 this.gridsterItem.state.item.cols = this.itemBackup[2];
+                this.element.style.width = this.gridsterItem.gridster.positionXToPixels(this.gridsterItem.state.item.cols)
+                    - this.gridsterItem.gridster.state.options.margin + 'px';
+                return;
             }
             else {
                 this.gridsterItem.gridster.previewStyle();
             }
         }
+        this.element.style.width = this.elemPosition[2] + 'px';
     };
     GridsterResizable.prototype.handleNW = function (e) {
         this.handleN(e);
@@ -217,8 +231,8 @@ var GridsterResizable = GridsterResizable_1 = (function () {
         this.handleE(e);
     };
     GridsterResizable.prototype.toggle = function (enabled) {
-        this.resizeEnabled = (this.gridsterItem.state.item.resizeEnabled === undefined ?
-            enabled : this.gridsterItem.state.item.resizeEnabled);
+        this.resizeEnabled = !this.gridsterItem.gridster.state.mobile &&
+            (this.gridsterItem.state.item.resizeEnabled === undefined ? enabled : this.gridsterItem.state.item.resizeEnabled);
     };
     return GridsterResizable;
 }());

@@ -4,7 +4,7 @@ import {GridsterItemComponent} from './gridsterItem.component';
 @Injectable()
 export class GridsterSwap {
   static GridsterSwap(gridsterItem: GridsterItemComponent, elemPosition) {
-    const position = gridsterItem.gridster.pixelsToPosition(elemPosition[0], elemPosition[1]);
+    const position = gridsterItem.gridster.pixelsToPosition(elemPosition[0], elemPosition[1], Math.round);
     let x = gridsterItem.state.item.x;
     let y = gridsterItem.state.item.y;
     gridsterItem.state.item.x = position[0];

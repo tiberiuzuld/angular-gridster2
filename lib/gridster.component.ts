@@ -78,28 +78,16 @@ export class GridsterComponent implements OnInit, OnDestroy {
   };
 
   detectScrollBar() {
-    if (this.state.scrollBarPresent && this.state.element.scrollHeight <= this.state.element.offsetHeight &&
-      this.state.element.offsetWidth - this.state.element.clientWidth >=
-      this.state.element.scrollHeight - this.state.element.offsetHeight) {
-      this.state.scrollBarPresent = !this.state.scrollBarPresent;
-      this.onResize();
-    } else if (!this.state.scrollBarPresent && this.state.element.scrollHeight > this.state.element.offsetHeight &&
-      this.state.element.offsetWidth - this.state.element.clientWidth <
-      this.state.element.scrollHeight - this.state.element.offsetHeight) {
-
-      this.state.scrollBarPresent = !this.state.scrollBarPresent;
-      this.onResize();
-    }
-
-    if (this.state.scrollBarPresent && this.state.element.scrollWidth <= this.state.element.offsetWidth &&
-      this.state.element.offsetHeight - this.state.element.clientHeight >=
-      this.state.element.scrollWidth - this.state.element.offsetWidth) {
-
-      this.state.scrollBarPresent = !this.state.scrollBarPresent;
-      this.onResize();
-    } else if (!this.state.scrollBarPresent && this.state.element.scrollWidth > this.state.element.offsetWidth &&
+    const verticalScrollPresent = this.state.element.clientWidth < this.state.element.offsetWidth &&
       this.state.element.offsetHeight - this.state.element.clientHeight <
-      this.state.element.scrollWidth - this.state.element.offsetWidth) {
+      this.state.element.scrollWidth - this.state.element.offsetWidth;
+    const horizontalScrollPresent = this.state.element.clientHeight < this.state.element.offsetHeight &&
+      this.state.element.offsetWidth - this.state.element.clientWidth <
+      this.state.element.scrollHeight - this.state.element.offsetHeight;
+    if (this.state.scrollBarPresent && !verticalScrollPresent && !horizontalScrollPresent) {
+      this.state.scrollBarPresent = !this.state.scrollBarPresent;
+      this.onResize();
+    } else if (!this.state.scrollBarPresent && (verticalScrollPresent || horizontalScrollPresent)) {
       this.state.scrollBarPresent = !this.state.scrollBarPresent;
       this.onResize();
     }
@@ -168,6 +156,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
     let widgetsIndex = this.state.grid.length - 1;
     for (; widgetsIndex >= 0; widgetsIndex--) {
       this.state.grid[widgetsIndex].setSize();
+      console.log(this.state.mobile);
       this.state.grid[widgetsIndex].drag.toggle(this.state.options.draggable.enabled);
       this.state.grid[widgetsIndex].resize.toggle(this.state.options.resizable.enabled);
     }
@@ -204,8 +193,16 @@ export class GridsterComponent implements OnInit, OnDestroy {
   }
 
   checkCollision(item: GridsterItem): GridsterItem {
-    if (!(item.y > -1 && item.x > -1 && item.cols + item.x <= this.state.options.maxCols &&
-      item.rows + item.y <= this.state.options.maxRows)) {
+    const noNegativePosition = item.y > -1 && item.x > -1;
+    const maxGridCols = item.cols + item.x <= this.state.options.maxCols;
+    const maxGridRows = item.rows + item.y <= this.state.options.maxRows;
+    const maxItemCols = item.maxItemCols === undefined ? this.state.options.maxItemCols : item.maxItemCols;
+    const minItemCols = item.minItemCols === undefined ? this.state.options.minItemCols : item.minItemCols;
+    const maxItemRows = item.maxItemRows === undefined ? this.state.options.maxItemRows : item.maxItemRows;
+    const minItemRows = item.minItemRows === undefined ? this.state.options.minItemRows : item.minItemRows;
+    const inColsLimits = item.cols <= maxItemCols && item.cols >= minItemCols;
+    const inRowsLimits = item.rows <= maxItemRows && item.rows >= minItemRows;
+    if (!(noNegativePosition && maxGridCols && maxGridRows && inColsLimits && inRowsLimits)) {
       return true;
     }
     return this.findItemWithItem(item);
@@ -247,14 +244,17 @@ export class GridsterComponent implements OnInit, OnDestroy {
     }
   }
 
-  pixelsToPosition(x, y): [number, number] {
-    if (this.state.options.outerMargin) {
-      x -= this.state.options.margin;
-      y -= this.state.options.margin;
-    }
-
-    return [Math.abs(Math.round(x / this.state.curColWidth)), Math.abs(Math.round(y / this.state.curRowHeight))];
+  pixelsToPosition(x: number, y: number, roundingMethod: Function): [number, number] {
+    return [roundingMethod(Math.abs(x) / this.state.curColWidth), roundingMethod(Math.abs(y) / this.state.curRowHeight)];
   };
+
+  positionXToPixels(x: number): number {
+    return x * this.state.curColWidth;
+  }
+
+  positionYToPixels(y: number): number {
+    return y * this.state.curRowHeight;
+  }
 
   checkCompactUp(): Boolean {
     if (this.state.options.compactUp) {
