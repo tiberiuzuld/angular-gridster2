@@ -158,7 +158,7 @@ const GridsterConfigService: GridsterConfig = {
 };
 ```
 
-###Events 
+### Events 
 
 ##### Gridster Item
 ```typescript
