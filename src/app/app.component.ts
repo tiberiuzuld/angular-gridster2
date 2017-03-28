@@ -10,12 +10,29 @@ export class AppComponent implements OnInit {
   options: GridsterConfig;
   dashboard: Array<Object>;
 
+  static eventStop(item, scope) {
+    console.info('eventStop', item, scope);
+  }
+
+  static itemChange(item, scope) {
+    console.info('itemChanged', item, scope);
+  }
+
+  static itemResize(item, scope) {
+    console.info('itemResized', item, scope);
+  }
+
+  static itemInit(item) {
+    console.info('itemInitialized', item);
+  }
+
   ngOnInit() {
     this.options = {
       gridType: 'fit',
       compactUp: false,
       compactLeft: false,
-      itemChangeCallback: this.itemChange.bind(this),
+      itemChangeCallback: AppComponent.itemChange,
+      itemResizeCallback: AppComponent.itemResize,
       margin: 10,
       outerMargin: true,
       maxItemCols: 50,
@@ -28,11 +45,11 @@ export class AppComponent implements OnInit {
       fixedRowHeight: 250,
       draggable: {
         enabled: true,
-        stop: this.eventStop.bind(this)
+        stop: AppComponent.eventStop
       },
       resizable: {
         enabled: true,
-        stop: this.eventStop.bind(this)
+        stop: AppComponent.eventStop
       },
       swap: false
     };
@@ -48,7 +65,7 @@ export class AppComponent implements OnInit {
       {cols: 2, rows: 2, y: 2, x: 0, maxItemRows: 2, maxItemCols: 2, label: 'Max rows & cols = 2'},
       {cols: 2, rows: 1, y: 2, x: 2, dragEnabled: true, resizeEnabled: true, label: 'Drag&Resize Enabled'},
       {cols: 1, rows: 1, y: 2, x: 4, dragEnabled: false, resizeEnabled: false, label: 'Drag&Resize Disabled'},
-      {cols: 1, rows: 1, y: 0, x: 6, initCallback: this.itemInit.bind(this)}
+      {cols: 1, rows: 1, y: 0, x: 6, initCallback: AppComponent.itemInit}
     ];
   }
 
@@ -63,16 +80,4 @@ export class AppComponent implements OnInit {
   addItem() {
     this.dashboard.push({});
   };
-
-  eventStop(item, scope) {
-    console.info('eventStop', item, scope);
-  }
-
-  itemChange(item, scope) {
-    console.info('itemChanged', item, scope);
-  }
-
-  itemInit(item) {
-    console.info('itemInitialized', item);
-  }
 }

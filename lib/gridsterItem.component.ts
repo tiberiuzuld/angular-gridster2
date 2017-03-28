@@ -91,6 +91,9 @@ export class GridsterItemComponent implements OnInit, OnDestroy {
     this.state.element.style.margin = this.itemMargin + 'px';
     if (this.width !== this.itemWidth || this.height !== this.itemHeight) {
       this.itemResize.emit(this.state.item);
+      if (this.gridster.state.options.itemResizeCallback) {
+        this.gridster.state.options.itemResizeCallback(this.state.item, this);
+      }
     }
     this.itemTop = this.top;
     this.itemLeft = this.left;

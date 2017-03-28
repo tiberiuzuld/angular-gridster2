@@ -151,7 +151,6 @@ var GridsterComponent = (function () {
         var widgetsIndex = this.state.grid.length - 1;
         for (; widgetsIndex >= 0; widgetsIndex--) {
             this.state.grid[widgetsIndex].setSize();
-            console.log(this.state.mobile);
             this.state.grid[widgetsIndex].drag.toggle(this.state.options.draggable.enabled);
             this.state.grid[widgetsIndex].resize.toggle(this.state.options.resizable.enabled);
         }

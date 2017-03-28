@@ -21,6 +21,7 @@ export interface GridsterConfig {
     scrollSensitivity?: number;
     scrollSpeed?: number;
     itemChangeCallback?: Function;
+    itemResizeCallback?: Function;
     optionsChanged?: Function;
     draggable?: Draggable;
     resizable?: Resizable;

@@ -25,6 +25,7 @@ exports.GridsterConfigService = {
     scrollSensitivity: 10,
     scrollSpeed: 20,
     itemChangeCallback: undefined,
+    itemResizeCallback: undefined,
     draggable: {
         enabled: false,
         stop: undefined // callback when dragging an item stops. Arguments: gridsterItem, scope
