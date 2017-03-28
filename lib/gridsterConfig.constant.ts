@@ -24,11 +24,11 @@ export const GridsterConfigService: GridsterConfig = {
   outerMargin: true,  // if margins will apply to the sides of the container
   scrollSensitivity: 10,  // margin of the dashboard where to start scrolling
   scrollSpeed: 20,  // how much to scroll each mouse move when in the scrollSensitivity zone
-  itemChangeCallback: undefined,  // callback to call for each item when is changes x, y, rows, cols. Arguments:gridsterItem
-  itemResizeCallback: undefined,  // callback to call for each item when width/height changes. Arguments:gridsterItem
+  itemChangeCallback: undefined,  // callback to call for each item when is changes x, y, rows, cols. Arguments: gridsterItem
+  itemResizeCallback: undefined,  // callback to call for each item when width/height changes. Arguments: gridsterItem
   draggable: {
     enabled: false, // enable/disable draggable items
-    stop: undefined // callback when dragging an item stops. Arguments: gridsterItem, scope
+    stop: undefined // callback when dragging an item stops. Arguments: gridsterItem
   },
   resizable: {
     enabled: false, // enable/disable resizable items
@@ -42,7 +42,7 @@ export const GridsterConfigService: GridsterConfig = {
       sw: true,
       nw: true
     }, // resizable edges of an item
-    stop: undefined // callback when resizing an item stops. Arguments: gridsterItem, scope
+    stop: undefined // callback when resizing an item stops. Arguments: gridsterItem
   },
   swap: true // allow items to switch position if drop on top of another
 };
