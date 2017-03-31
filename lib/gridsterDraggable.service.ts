@@ -94,9 +94,7 @@ export class GridsterDraggable {
   dragStop(e) {
     e.preventDefault();
     e.stopPropagation();
-    if (this.gridsterItem.gridster.state.options.swap) {
-      GridsterSwap.GridsterSwap(this.gridsterItem, this.elemPosition);
-    }
+
     cancelScroll();
     document.removeEventListener('mousemove', this.dragFunction);
     document.removeEventListener('mouseup', this.dragStopFunction);
@@ -105,12 +103,27 @@ export class GridsterDraggable {
     document.removeEventListener('touchcancel', this.dragStopFunction);
     this.element.classList.remove('gridster-item-moving');
     this.gridsterItem.gridster.movingItem = null;
-    this.gridsterItem.setSize(true);
     this.gridsterItem.gridster.previewStyle();
-    this.gridsterItem.checkItemChanges(this.gridsterItem.state.item, this.itemCopy);
     if (this.gridsterItem.gridster.state.options.draggable.stop) {
-      this.gridsterItem.gridster.state.options.draggable.stop(this.gridsterItem.state.item, this.gridsterItem);
+      Promise.resolve(this.gridsterItem.gridster.state.options.draggable.stop(this.gridsterItem.state.item, this.gridsterItem, e))
+        .then(this.makeDrag.bind(this), this.cancelDrag.bind(this));
+    } else {
+      this.makeDrag();
     }
+  }
+
+  cancelDrag() {
+    this.gridsterItem.state.item.x = this.itemCopy.x;
+    this.gridsterItem.state.item.y = this.itemCopy.y;
+    this.gridsterItem.state.item.setSize(true);
+  }
+
+  makeDrag() {
+    if (this.gridsterItem.gridster.state.options.swap) {
+      GridsterSwap.GridsterSwap(this.gridsterItem, this.elemPosition);
+    }
+    this.gridsterItem.state.item.setSize(true);
+    this.gridsterItem.checkItemChanges(this.gridsterItem.state.item, this.itemCopy);
   }
 
   calculateItemPosition() {

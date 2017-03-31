@@ -28,7 +28,8 @@ exports.GridsterConfigService = {
     itemResizeCallback: undefined,
     draggable: {
         enabled: false,
-        stop: undefined // callback when dragging an item stops. Arguments: gridsterItem, scope
+        stop: undefined // callback when dragging an item stops.  Accepts Promise return to cancel/approve drag.
+        // Arguments: item, gridsterItem, event
     },
     resizable: {
         enabled: false,
@@ -42,7 +43,8 @@ exports.GridsterConfigService = {
             sw: true,
             nw: true
         },
-        stop: undefined // callback when resizing an item stops. Arguments: gridsterItem, scope
+        stop: undefined // callback when resizing an item stops. Accepts Promise return to cancel/approve resize.
+        // Arguments: item, gridsterItem, event
     },
     swap: true // allow items to switch position if drop on top of another
 };

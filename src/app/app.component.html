@@ -70,7 +70,7 @@
   <gridster-item [item]="item" *ngFor="let item of dashboard">
     <div class="button-holder">
       <label>{{item.label}}</label>
-      <button md-mini-fab (click)="removeItem(item)" mdTooltip="Remove">
+      <button md-mini-fab (click)="removeItem($event, item)" mdTooltip="Remove">
         <md-icon>clear</md-icon>
       </button>
     </div>

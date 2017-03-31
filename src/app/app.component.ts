@@ -10,7 +10,7 @@ export class AppComponent implements OnInit {
   options: GridsterConfig;
   dashboard: Array<Object>;
 
-  static eventStop(item, scope) {
+  static eventStop(item, scope, event) {
     console.info('eventStop', item, scope);
   }
 
@@ -73,7 +73,9 @@ export class AppComponent implements OnInit {
     this.options.optionsChanged();
   }
 
-  removeItem(item) {
+  removeItem($event, item) {
+    $event.preventDefault();
+    $event.stopPropagation();
     this.dashboard.splice(this.dashboard.indexOf(item), 1);
   };
 

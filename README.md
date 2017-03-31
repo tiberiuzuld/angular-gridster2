@@ -138,7 +138,8 @@ const GridsterConfigService: GridsterConfig = {
   itemResizeCallback: undefined,  // callback to call for each item when width/height changes. Arguments:gridsterItem
   draggable: {
     enabled: false, // enable/disable draggable items
-    stop: undefined // callback when dragging an item stops. Arguments: gridsterItem
+    stop: undefined // callback when dragging an item stops.  Accepts Promise return to cancel/approve drag.
+    // Arguments: item, gridsterItem, event
   },
   resizable: {
     enabled: false, // enable/disable resizable items
@@ -152,7 +153,8 @@ const GridsterConfigService: GridsterConfig = {
       sw: true,
       nw: true
     }, // resizable edges of an item
-    stop: undefined // callback when resizing an item stops. Arguments: gridsterItem
+    stop: undefined // callback when resizing an item stops. Accepts Promise return to cancel/approve resize.
+    // Arguments: item, gridsterItem, event
   },
   swap: true // allow items to switch position if drop on top of another
 };

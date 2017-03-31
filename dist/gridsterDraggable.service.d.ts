@@ -20,6 +20,8 @@ export declare class GridsterDraggable {
     dragStart(e: any): void;
     dragMove(e: any): void;
     dragStop(e: any): void;
+    cancelDrag(): void;
+    makeDrag(): void;
     calculateItemPosition(): void;
     toggle(enable: boolean): void;
 }

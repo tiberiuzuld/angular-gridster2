@@ -23,6 +23,8 @@ export declare class GridsterResizable {
     dragStart(e: any): void;
     dragMove(e: any): void;
     dragStop(e: any): void;
+    cancelResize(): void;
+    makeResize(): void;
     handleN(e: any): void;
     handleW(e: any): void;
     handleS(e: any): void;

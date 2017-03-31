@@ -134,11 +134,25 @@ export class GridsterResizable {
     this.element.classList.remove('gridster-item-resizing');
     this.gridsterItem.gridster.movingItem = null;
     this.gridsterItem.gridster.previewStyle();
+    if (this.gridsterItem.gridster.state.options.resizable.stop) {
+      Promise.resolve(this.gridsterItem.gridster.state.options.resizable.stop(this.gridsterItem.state.item, this.gridsterItem, e))
+        .then(this.makeResize.bind(this), this.cancelResize.bind(this));
+    } else {
+      this.makeResize();
+    }
+  }
+
+  cancelResize() {
+    this.gridsterItem.state.item.cols = this.itemCopy.cols;
+    this.gridsterItem.state.item.rows = this.itemCopy.rows;
+    this.gridsterItem.state.item.x = this.itemCopy.x;
+    this.gridsterItem.state.item.y = this.itemCopy.y;
+    this.gridsterItem.state.item.setSize(true);
+  }
+
+  makeResize() {
     this.gridsterItem.state.item.setSize(true);
     this.gridsterItem.state.item.checkItemChanges(this.gridsterItem.state.item, this.itemCopy);
-    if (this.gridsterItem.gridster.state.options.resizable.stop) {
-      this.gridsterItem.gridster.state.options.resizable.stop(this.gridsterItem.state.item, this.gridsterItem);
-    }
   }
 
   handleN(e) {

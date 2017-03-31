@@ -79,9 +79,6 @@ var GridsterDraggable = GridsterDraggable_1 = (function () {
     GridsterDraggable.prototype.dragStop = function (e) {
         e.preventDefault();
         e.stopPropagation();
-        if (this.gridsterItem.gridster.state.options.swap) {
-            gridsterSwap_service_1.GridsterSwap.GridsterSwap(this.gridsterItem, this.elemPosition);
-        }
         gridsterScroll_service_1.cancelScroll();
         document.removeEventListener('mousemove', this.dragFunction);
         document.removeEventListener('mouseup', this.dragStopFunction);
@@ -90,12 +87,26 @@ var GridsterDraggable = GridsterDraggable_1 = (function () {
         document.removeEventListener('touchcancel', this.dragStopFunction);
         this.element.classList.remove('gridster-item-moving');
         this.gridsterItem.gridster.movingItem = null;
-        this.gridsterItem.setSize(true);
         this.gridsterItem.gridster.previewStyle();
-        this.gridsterItem.checkItemChanges(this.gridsterItem.state.item, this.itemCopy);
         if (this.gridsterItem.gridster.state.options.draggable.stop) {
-            this.gridsterItem.gridster.state.options.draggable.stop(this.gridsterItem.state.item, this.gridsterItem);
+            Promise.resolve(this.gridsterItem.gridster.state.options.draggable.stop(this.gridsterItem.state.item, this.gridsterItem, e))
+                .then(this.makeDrag.bind(this), this.cancelDrag.bind(this));
         }
+        else {
+            this.makeDrag();
+        }
+    };
+    GridsterDraggable.prototype.cancelDrag = function () {
+        this.gridsterItem.state.item.x = this.itemCopy.x;
+        this.gridsterItem.state.item.y = this.itemCopy.y;
+        this.gridsterItem.state.item.setSize(true);
+    };
+    GridsterDraggable.prototype.makeDrag = function () {
+        if (this.gridsterItem.gridster.state.options.swap) {
+            gridsterSwap_service_1.GridsterSwap.GridsterSwap(this.gridsterItem, this.elemPosition);
+        }
+        this.gridsterItem.state.item.setSize(true);
+        this.gridsterItem.checkItemChanges(this.gridsterItem.state.item, this.itemCopy);
     };
     GridsterDraggable.prototype.calculateItemPosition = function () {
         this.element.style.left = this.elemPosition[0] + 'px';

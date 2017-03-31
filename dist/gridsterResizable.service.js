@@ -122,11 +122,24 @@ var GridsterResizable = GridsterResizable_1 = (function () {
         this.element.classList.remove('gridster-item-resizing');
         this.gridsterItem.gridster.movingItem = null;
         this.gridsterItem.gridster.previewStyle();
+        if (this.gridsterItem.gridster.state.options.resizable.stop) {
+            Promise.resolve(this.gridsterItem.gridster.state.options.resizable.stop(this.gridsterItem.state.item, this.gridsterItem, e))
+                .then(this.makeResize.bind(this), this.cancelResize.bind(this));
+        }
+        else {
+            this.makeResize();
+        }
+    };
+    GridsterResizable.prototype.cancelResize = function () {
+        this.gridsterItem.state.item.cols = this.itemCopy.cols;
+        this.gridsterItem.state.item.rows = this.itemCopy.rows;
+        this.gridsterItem.state.item.x = this.itemCopy.x;
+        this.gridsterItem.state.item.y = this.itemCopy.y;
+        this.gridsterItem.state.item.setSize(true);
+    };
+    GridsterResizable.prototype.makeResize = function () {
         this.gridsterItem.state.item.setSize(true);
         this.gridsterItem.state.item.checkItemChanges(this.gridsterItem.state.item, this.itemCopy);
-        if (this.gridsterItem.gridster.state.options.resizable.stop) {
-            this.gridsterItem.gridster.state.options.resizable.stop(this.gridsterItem.state.item, this.gridsterItem);
-        }
     };
     GridsterResizable.prototype.handleN = function (e) {
         this.elemPosition[1] += e.pageY - this.lastMouse.pageY;
