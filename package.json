@@ -1,9 +1,9 @@
 {
   "name": "angular-gridster2",
-  "version": "2.4.2",
+  "version": "2.4.3",
   "license": "MIT",
-  "main": "dist/gridster.module.js",
-  "jsnext:main": "dist/gridster.module.js",
+  "main": "dist/index.js",
+  "jsnext:main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
