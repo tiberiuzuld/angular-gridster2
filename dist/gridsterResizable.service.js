@@ -1,19 +1,10 @@
 "use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var gridsterItem_component_1 = require("./gridsterItem.component");
 var gridsterScroll_service_1 = require("./gridsterScroll.service");
 var _ = require("lodash");
-var GridsterResizable = GridsterResizable_1 = (function () {
+var GridsterResizable = (function () {
     function GridsterResizable(element, gridsterItem) {
         this.element = element;
         this.gridsterItem = gridsterItem;
@@ -43,7 +34,7 @@ var GridsterResizable = GridsterResizable_1 = (function () {
         e.preventDefault();
         e.stopPropagation();
         if (e.pageX === undefined && e.touches) {
-            GridsterResizable_1.touchEvent(e);
+            GridsterResizable.touchEvent(e);
         }
         this.dragFunction = this.dragMove.bind(this);
         this.dragStopFunction = this.dragStop.bind(this);
@@ -103,7 +94,7 @@ var GridsterResizable = GridsterResizable_1 = (function () {
         e.preventDefault();
         e.stopPropagation();
         if (e.pageX === undefined && e.touches) {
-            GridsterResizable_1.touchEvent(e);
+            GridsterResizable.touchEvent(e);
         }
         gridsterScroll_service_1.scroll(this.elemPosition, this.gridsterItem, e, this.lastMouse, this.directionFunction, true, this.resizeEventScrollType);
         this.directionFunction(e);
@@ -249,10 +240,13 @@ var GridsterResizable = GridsterResizable_1 = (function () {
     };
     return GridsterResizable;
 }());
-GridsterResizable = GridsterResizable_1 = __decorate([
-    core_1.Injectable(),
-    __metadata("design:paramtypes", [HTMLElement, gridsterItem_component_1.GridsterItemComponent])
-], GridsterResizable);
+GridsterResizable.decorators = [
+    { type: core_1.Injectable },
+];
+/** @nocollapse */
+GridsterResizable.ctorParameters = function () { return [
+    { type: HTMLElement, },
+    { type: gridsterItem_component_1.GridsterItemComponent, },
+]; };
 exports.GridsterResizable = GridsterResizable;
-var GridsterResizable_1;
 //# sourceMappingURL=gridsterResizable.service.js.map

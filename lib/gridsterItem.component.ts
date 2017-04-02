@@ -7,8 +7,8 @@ import {GridsterResizable} from './gridsterResizable.service';
 
 @Component({
   selector: 'gridster-item',
-  template: require('./gridsterItem.html'),
-  styles: [require('./gridsterItem.css')]
+  template: require('./gridsterItem.html').toString(),
+  styles: [require('./gridsterItem.css').toString()]
 })
 export class GridsterItemComponent implements OnInit, OnDestroy {
   @Input() item: GridsterItem;
