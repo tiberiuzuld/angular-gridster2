@@ -17,7 +17,7 @@
     ]
   },
   "files": [
-    "./lib/gridster.module.ts"
+    "./lib/index.ts"
   ],
   "angularCompilerOptions": {
     "skipTemplateCodegen": true
