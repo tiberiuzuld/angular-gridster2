@@ -17,7 +17,7 @@
     ]
   },
   "files": [
-    "./lib/index.ts"
+    "./.tmp/index.ts"
   ],
   "angularCompilerOptions": {
     "skipTemplateCodegen": true

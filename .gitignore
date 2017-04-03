@@ -2,7 +2,7 @@
 
 # compiled output
 /demo
-/tmp
+/.tmp
 
 # dependencies
 /node_modules

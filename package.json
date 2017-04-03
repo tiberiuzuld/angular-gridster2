@@ -1,6 +1,6 @@
 {
   "name": "angular-gridster2",
-  "version": "2.4.3",
+  "version": "2.4.4",
   "license": "MIT",
   "main": "dist/index.js",
   "jsnext:main": "dist/index.js",
@@ -15,7 +15,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "build-demo": "ng build --prod --aot=false --base-href=./",
-    "build-npm": "ngc -p tsconfig.json && copyfiles -u 1 lib/*.html dist && copyfiles -u 1 lib/*.css dist"
+    "build-npm": "gulp inline-templates && ngc -p tsconfig.json"
   },
   "homepage": "https://github.io/tiberiuzuld/angular-gridster2",
   "bugs": {
@@ -50,7 +50,7 @@
     "@angular/platform-browser": ">2.4.0",
     "core-js": "^2.4.1",
     "lodash": "^4.17.4",
-    "rxjs": "^5.1.0",
+    "rxjs": "^5.2.0",
     "zone.js": "^0.8.4"
   },
   "devDependencies": {
@@ -64,11 +64,14 @@
     "@angular/platform-browser-dynamic": ">2.4.0",
     "@angular/platform-server": ">2.4.0",
     "@angular/router": ">3.4.0",
-    "@types/jasmine": "2.5.46",
+    "@types/jasmine": "2.5.47",
     "@types/lodash": "^4.14.55",
-    "@types/node": "7.0.8",
-    "codelyzer": "2.0.1",
+    "@types/node": "7.0.12",
+    "codelyzer": "2.1.1",
     "copyfiles": "^1.2.0",
+    "gulp": "^3.9.1",
+    "gulp-clean": "^0.3.2",
+    "gulp-inline-ng2-template": "^4.0.0",
     "hammerjs": "2.0.8",
     "jasmine-core": "2.5.2",
     "jasmine-spec-reporter": "3.2.0",
@@ -81,9 +84,9 @@
     "protractor": "5.1.1",
     "systemjs": "^0.20.10",
     "ts-helpers": "^1.1.2",
-    "ts-node": "2.1.0",
+    "ts-node": "3.0.2",
     "tslib": "^1.6.0",
-    "tslint": "4.5.1",
+    "tslint": "5.0.0",
     "typescript": "^2.2.1"
   }
 }

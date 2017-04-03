@@ -8,7 +8,7 @@ import {addResizeListener, removeResizeListener} from './detectElementResize';
 @Component({
   selector: 'gridster',
   template: '<ng-content></ng-content><gridster-preview></gridster-preview>',
-  styles: [require('./gridster.css').toString()]
+  styleUrls: ['./gridster.css']
 })
 export class GridsterComponent implements OnInit, OnDestroy {
   @Input() options: GridsterConfig;
