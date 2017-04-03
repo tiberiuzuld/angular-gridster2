@@ -1,6 +1,7 @@
-
 angular-gridster2
 ==============
+[![npm version](https://badge.fury.io/js/angular-gridster2.svg)](https://badge.fury.io/js/angular-gridster2)  
+
 ### Angular2 implementation of angular-gridster [Demo](http://tiberiuzuld.github.io/angular-gridster2/angular)
 
 ### Angularjs 1.x library is [here](https://github.com/tiberiuzuld/angular-gridster2/tree/1.x)
