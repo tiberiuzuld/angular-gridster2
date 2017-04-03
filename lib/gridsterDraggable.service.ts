@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {GridsterItemComponent} from './gridsterItem.component';
-import * as _ from 'lodash';
 import {GridsterSwap} from './gridsterSwap.service';
 import {scroll, cancelScroll} from './gridsterScroll.service';
 import {GridsterItem} from './gridsterItem.interface';
@@ -49,7 +48,6 @@ export class GridsterDraggable {
         // right or middle mouse button
         return;
     }
-    e.preventDefault();
     e.stopPropagation();
     if (e.pageX === undefined && e.touches) {
       GridsterDraggable.touchEvent(e);
@@ -69,13 +67,12 @@ export class GridsterDraggable {
     this.elemPosition[1] = parseInt(this.element.style.top, 10);
     this.elemPosition[2] = this.element.offsetWidth;
     this.elemPosition[3] = this.element.offsetHeight;
-    this.itemCopy = _.clone(this.gridsterItem.state.item);
+    this.itemCopy = JSON.parse(JSON.stringify(this.gridsterItem.state.item, ['rows', 'cols', 'x', 'y']));
     this.gridsterItem.gridster.movingItem = this.gridsterItem.state.item;
     this.gridsterItem.gridster.previewStyle();
   }
 
   dragMove(e) {
-    e.preventDefault();
     e.stopPropagation();
     if (e.pageX === undefined && e.touches) {
       GridsterDraggable.touchEvent(e);
@@ -92,7 +89,6 @@ export class GridsterDraggable {
   }
 
   dragStop(e) {
-    e.preventDefault();
     e.stopPropagation();
 
     cancelScroll();

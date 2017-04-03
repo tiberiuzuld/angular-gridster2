@@ -1,4 +1,5 @@
 {
+  "extends": "../tsconfig.json",
   "compilerOptions": {
     "sourceMap": true,
     "declaration": true,
@@ -9,10 +10,19 @@
       "es2016",
       "dom"
     ],
-    "outDir": "../out-tsc/app",
+    "outDir": "../demo",
     "target": "es5",
     "module": "es2015",
     "baseUrl": "",
-    "typeRoots": [ "../node_modules/@types" ]
-  }
+    "typeRoots": [
+      "../node_modules/@types"
+    ]
+  },
+  "files": [
+    "./app/app.module.ts"
+  ],
+  "exclude": [
+    "test.ts",
+    "**/*.spec.ts"
+  ]
 }

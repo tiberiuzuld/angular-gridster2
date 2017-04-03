@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var gridsterItem_component_1 = require("./gridsterItem.component");
-var _ = require("lodash");
 var gridsterSwap_service_1 = require("./gridsterSwap.service");
 var gridsterScroll_service_1 = require("./gridsterScroll.service");
 var GridsterDraggable = (function () {
@@ -31,7 +30,6 @@ var GridsterDraggable = (function () {
                 // right or middle mouse button
                 return;
         }
-        e.preventDefault();
         e.stopPropagation();
         if (e.pageX === undefined && e.touches) {
             GridsterDraggable.touchEvent(e);
@@ -50,12 +48,11 @@ var GridsterDraggable = (function () {
         this.elemPosition[1] = parseInt(this.element.style.top, 10);
         this.elemPosition[2] = this.element.offsetWidth;
         this.elemPosition[3] = this.element.offsetHeight;
-        this.itemCopy = _.clone(this.gridsterItem.state.item);
+        this.itemCopy = JSON.parse(JSON.stringify(this.gridsterItem.state.item, ['rows', 'cols', 'x', 'y']));
         this.gridsterItem.gridster.movingItem = this.gridsterItem.state.item;
         this.gridsterItem.gridster.previewStyle();
     };
     GridsterDraggable.prototype.dragMove = function (e) {
-        e.preventDefault();
         e.stopPropagation();
         if (e.pageX === undefined && e.touches) {
             GridsterDraggable.touchEvent(e);
@@ -68,7 +65,6 @@ var GridsterDraggable = (function () {
         this.calculateItemPosition();
     };
     GridsterDraggable.prototype.dragStop = function (e) {
-        e.preventDefault();
         e.stopPropagation();
         gridsterScroll_service_1.cancelScroll();
         document.removeEventListener('mousemove', this.dragFunction);

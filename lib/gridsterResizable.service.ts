@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {GridsterItemComponent} from './gridsterItem.component';
 import {scroll, cancelScroll} from './gridsterScroll.service';
-import * as _ from 'lodash';
 import {GridsterItem} from './gridsterItem.interface';
 import {GridsterResizeEventType} from './gridsterResizeEventType.interface';
 
@@ -52,7 +51,6 @@ export class GridsterResizable {
         // right or middle mouse button
         return;
     }
-    e.preventDefault();
     e.stopPropagation();
     if (e.pageX === undefined && e.touches) {
       GridsterResizable.touchEvent(e);
@@ -71,7 +69,7 @@ export class GridsterResizable {
     this.elemPosition[1] = parseInt(this.element.style.top, 10);
     this.elemPosition[2] = this.element.offsetWidth;
     this.elemPosition[3] = this.element.offsetHeight;
-    this.itemCopy = _.clone(this.gridsterItem.state.item);
+    this.itemCopy = JSON.parse(JSON.stringify(this.gridsterItem.state.item, ['rows', 'cols', 'x', 'y']));
     this.gridsterItem.gridster.movingItem = this.gridsterItem.state.item;
     this.gridsterItem.gridster.previewStyle();
 
@@ -107,7 +105,6 @@ export class GridsterResizable {
   }
 
   dragMove(e) {
-    e.preventDefault();
     e.stopPropagation();
     if (e.pageX === undefined && e.touches) {
       GridsterResizable.touchEvent(e);
@@ -123,7 +120,6 @@ export class GridsterResizable {
   }
 
   dragStop(e) {
-    e.preventDefault();
     e.stopPropagation();
     cancelScroll();
     document.removeEventListener('mousemove', this.dragFunction);

@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var gridsterItem_component_1 = require("./gridsterItem.component");
 var gridsterScroll_service_1 = require("./gridsterScroll.service");
-var _ = require("lodash");
 var GridsterResizable = (function () {
     function GridsterResizable(element, gridsterItem) {
         this.element = element;
@@ -31,7 +30,6 @@ var GridsterResizable = (function () {
                 // right or middle mouse button
                 return;
         }
-        e.preventDefault();
         e.stopPropagation();
         if (e.pageX === undefined && e.touches) {
             GridsterResizable.touchEvent(e);
@@ -50,7 +48,7 @@ var GridsterResizable = (function () {
         this.elemPosition[1] = parseInt(this.element.style.top, 10);
         this.elemPosition[2] = this.element.offsetWidth;
         this.elemPosition[3] = this.element.offsetHeight;
-        this.itemCopy = _.clone(this.gridsterItem.state.item);
+        this.itemCopy = JSON.parse(JSON.stringify(this.gridsterItem.state.item, ['rows', 'cols', 'x', 'y']));
         this.gridsterItem.gridster.movingItem = this.gridsterItem.state.item;
         this.gridsterItem.gridster.previewStyle();
         if (e.srcElement.classList.contains('handle-n')) {
@@ -91,7 +89,6 @@ var GridsterResizable = (function () {
         }
     };
     GridsterResizable.prototype.dragMove = function (e) {
-        e.preventDefault();
         e.stopPropagation();
         if (e.pageX === undefined && e.touches) {
             GridsterResizable.touchEvent(e);
@@ -102,7 +99,6 @@ var GridsterResizable = (function () {
         this.lastMouse.pageY = e.pageY;
     };
     GridsterResizable.prototype.dragStop = function (e) {
-        e.preventDefault();
         e.stopPropagation();
         gridsterScroll_service_1.cancelScroll();
         document.removeEventListener('mousemove', this.dragFunction);

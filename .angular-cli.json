@@ -22,9 +22,7 @@
         "styles.css",
         "theme.scss"
       ],
-      "scripts": [
-        "../node_modules/lodash/lodash.js"
-      ],
+      "scripts": [],
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",

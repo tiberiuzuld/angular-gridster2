@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
-var _ = require("lodash");
 var gridsterConfig_constant_1 = require("./gridsterConfig.constant");
+var gridsterUtils_service_1 = require("./gridsterUtils.service");
 var detectElementResize_1 = require("./detectElementResize");
 var GridsterComponent = (function () {
     function GridsterComponent(el) {
@@ -12,7 +12,7 @@ var GridsterComponent = (function () {
             mobile: false,
             curWidth: 0,
             curHeight: 0,
-            options: _.merge({}, gridsterConfig_constant_1.GridsterConfigService),
+            options: JSON.parse(JSON.stringify(gridsterConfig_constant_1.GridsterConfigService)),
             scrollBarPresent: false,
             grid: [],
             columns: gridsterConfig_constant_1.GridsterConfigService.minCols,
@@ -24,10 +24,10 @@ var GridsterComponent = (function () {
     ;
     GridsterComponent.prototype.ngOnInit = function () {
         this.options.optionsChanged = this.optionsChanged.bind(this);
-        this.state.options = _.merge(this.state.options, this.options);
+        this.state.options = gridsterUtils_service_1.GridsterUtils.merge(this.state.options, this.options);
         this.setGridSize();
-        this.detectScrollBarLayout = _.debounce(this.detectScrollBar.bind(this), 10);
-        this.calculateLayoutDebounce = _.debounce(this.calculateLayout.bind(this), 5);
+        this.detectScrollBarLayout = gridsterUtils_service_1.GridsterUtils.debounce(this.detectScrollBar.bind(this), 50);
+        this.calculateLayoutDebounce = gridsterUtils_service_1.GridsterUtils.debounce(this.calculateLayout.bind(this), 5);
         this.state.element.addEventListener('transitionend', this.detectScrollBarLayout);
         this.calculateLayoutDebounce();
         this.onResizeFunction = this.onResize.bind(this);
@@ -35,7 +35,7 @@ var GridsterComponent = (function () {
     };
     ;
     GridsterComponent.prototype.optionsChanged = function () {
-        this.state.options = _.merge(this.state.options, this.options);
+        this.state.options = gridsterUtils_service_1.GridsterUtils.merge(this.state.options, this.options);
         this.calculateLayout();
     };
     GridsterComponent.prototype.ngOnDestroy = function () {
@@ -301,7 +301,7 @@ GridsterComponent.decorators = [
     { type: core_1.Component, args: [{
                 selector: 'gridster',
                 template: '<ng-content></ng-content><gridster-preview></gridster-preview>',
-                styles: [":host {   position: relative;   display: flex;   overflow: auto;   flex: 1 auto;   background: grey;   -webkit-user-select: none; }  :host(.fit) {   overflow-x: hidden;   overflow-y: hidden; }  :host(.scrollVertical) {   overflow-x: hidden;   overflow-y: auto; }  :host(.scrollHorizontal) {   overflow-x: auto;   overflow-y: hidden; }  :host(.fixed) {   overflow: auto; }  :host(.mobile) {   overflow-x: hidden;   overflow-y: auto;   display: block; }  :host(.mobile) /deep/ gridster-item {   position: relative; }  :host gridster-preview {   background: rgba(0, 0, 0, 0.15);   position: absolute; }"]
+                styles: [":host {   position: relative;   display: flex;   overflow: auto;   flex: 1 auto;   background: grey;   -webkit-user-select: none;   width: 100%;   height: 100%; }  :host(.fit) {   overflow-x: hidden;   overflow-y: hidden; }  :host(.scrollVertical) {   overflow-x: hidden;   overflow-y: auto; }  :host(.scrollHorizontal) {   overflow-x: auto;   overflow-y: hidden; }  :host(.fixed) {   overflow: auto; }  :host(.mobile) {   overflow-x: hidden;   overflow-y: auto;   display: block; }  :host(.mobile) /deep/ gridster-item {   position: relative; }  :host gridster-preview {   background: rgba(0, 0, 0, 0.15);   position: absolute; }"]
             },] },
 ];
 /** @nocollapse */

@@ -1,7 +1,7 @@
-import {Component, OnInit, ElementRef, Input, OnDestroy, Renderer} from '@angular/core';
-import * as _ from 'lodash';
+import {Component, OnInit, ElementRef, Input, OnDestroy} from '@angular/core';
 import {GridsterConfigService} from './gridsterConfig.constant';
 import {GridsterConfig} from './gridsterConfig.interface';
+import {GridsterUtils} from './gridsterUtils.service';
 import {GridsterItem} from './gridsterItem.interface';
 import {addResizeListener, removeResizeListener} from './detectElementResize';
 
@@ -38,7 +38,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
       mobile: false,
       curWidth: 0,
       curHeight: 0,
-      options: _.merge({}, GridsterConfigService),
+      options: JSON.parse(JSON.stringify(GridsterConfigService)),
       scrollBarPresent: false,
       grid: [],
       columns: GridsterConfigService.minCols,
@@ -50,10 +50,10 @@ export class GridsterComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.options.optionsChanged = this.optionsChanged.bind(this);
-    this.state.options = _.merge(this.state.options, this.options);
+    this.state.options = GridsterUtils.merge(this.state.options, this.options);
     this.setGridSize();
-    this.detectScrollBarLayout = _.debounce(this.detectScrollBar.bind(this), 10);
-    this.calculateLayoutDebounce = _.debounce(this.calculateLayout.bind(this), 5);
+    this.detectScrollBarLayout = GridsterUtils.debounce(this.detectScrollBar.bind(this), 50);
+    this.calculateLayoutDebounce = GridsterUtils.debounce(this.calculateLayout.bind(this), 5);
     this.state.element.addEventListener('transitionend', this.detectScrollBarLayout);
     this.calculateLayoutDebounce();
     this.onResizeFunction = this.onResize.bind(this);
@@ -61,7 +61,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
   };
 
   optionsChanged() {
-    this.state.options = _.merge(this.state.options, this.options);
+    this.state.options = GridsterUtils.merge(this.state.options, this.options);
     this.calculateLayout();
   }
 

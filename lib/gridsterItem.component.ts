@@ -1,9 +1,9 @@
 import {Component, OnInit, ElementRef, Input, Host, OnDestroy, Output, EventEmitter} from '@angular/core';
 import {GridsterItem} from './gridsterItem.interface';
-import * as _ from 'lodash';
 import {GridsterComponent} from './gridster.component';
 import {GridsterDraggable} from './gridsterDraggable.service';
 import {GridsterResizable} from './gridsterResizable.service';
+import {GridsterUtils} from './gridsterUtils.service';
 
 @Component({
   selector: 'gridster-item',
@@ -53,7 +53,7 @@ export class GridsterItemComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.state.item = _.merge(this.state.item, this.item);
+    this.state.item = GridsterUtils.merge(this.state.item, this.item);
     this.gridster.addItem(this.state.item);
   }
 

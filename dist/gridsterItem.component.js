@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
-var _ = require("lodash");
 var gridster_component_1 = require("./gridster.component");
 var gridsterDraggable_service_1 = require("./gridsterDraggable.service");
 var gridsterResizable_service_1 = require("./gridsterResizable.service");
+var gridsterUtils_service_1 = require("./gridsterUtils.service");
 var GridsterItemComponent = (function () {
     function GridsterItemComponent(el, gridster) {
         this.itemChange = new core_1.EventEmitter();
@@ -29,7 +29,7 @@ var GridsterItemComponent = (function () {
         this.gridster = gridster;
     }
     GridsterItemComponent.prototype.ngOnInit = function () {
-        this.state.item = _.merge(this.state.item, this.item);
+        this.state.item = gridsterUtils_service_1.GridsterUtils.merge(this.state.item, this.item);
         this.gridster.addItem(this.state.item);
     };
     GridsterItemComponent.prototype.ngOnDestroy = function () {
