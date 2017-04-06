@@ -1,16 +1,16 @@
-import { OnInit, ElementRef, OnDestroy } from '@angular/core';
+import { OnInit, ElementRef, OnDestroy, Renderer2 } from '@angular/core';
 import { GridsterConfig } from './gridsterConfig.interface';
 import { GridsterItem } from './gridsterItem.interface';
 export declare class GridsterComponent implements OnInit, OnDestroy {
-    private el;
+    renderer: Renderer2;
     options: GridsterConfig;
     detectScrollBarLayout: () => void;
     calculateLayoutDebounce: Function;
-    onResizeFunction: EventListenerObject;
+    onResizeFunction: (event: any) => void;
     movingItem: GridsterItem;
     previewStyle: Function;
+    el: any;
     state: {
-        element: HTMLElement;
         mobile: boolean;
         curWidth: number;
         curHeight: number;
@@ -22,9 +22,12 @@ export declare class GridsterComponent implements OnInit, OnDestroy {
         curColWidth: number;
         curRowHeight: number;
     };
+    transitionend: Function;
+    windowResize: Function;
     private cleanCallback;
-    constructor(el: ElementRef);
+    constructor(el: ElementRef, renderer: Renderer2);
     ngOnInit(): void;
+    ngDoCheck(): void;
     optionsChanged(): void;
     ngOnDestroy(): void;
     onResize(): void;

@@ -6,11 +6,12 @@ var gridsterDraggable_service_1 = require("./gridsterDraggable.service");
 var gridsterResizable_service_1 = require("./gridsterResizable.service");
 var gridsterUtils_service_1 = require("./gridsterUtils.service");
 var GridsterItemComponent = (function () {
-    function GridsterItemComponent(el, gridster) {
+    function GridsterItemComponent(el, gridster, renderer) {
+        this.renderer = renderer;
         this.itemChange = new core_1.EventEmitter();
         this.itemResize = new core_1.EventEmitter();
+        this.el = el.nativeElement;
         this.state = {
-            element: el.nativeElement,
             item: {
                 cols: undefined,
                 rows: undefined,
@@ -22,8 +23,8 @@ var GridsterItemComponent = (function () {
                 setSize: this.setSize.bind(this),
                 itemChanged: this.itemChanged.bind(this),
                 checkItemChanges: this.checkItemChanges.bind(this),
-                drag: new gridsterDraggable_service_1.GridsterDraggable(el.nativeElement, this),
-                resize: new gridsterResizable_service_1.GridsterResizable(el.nativeElement, this)
+                drag: new gridsterDraggable_service_1.GridsterDraggable(this),
+                resize: new gridsterResizable_service_1.GridsterResizable(this)
             }
         };
         this.gridster = gridster;
@@ -58,12 +59,12 @@ var GridsterItemComponent = (function () {
         else {
             this.itemMargin = 0;
         }
-        this.state.element.style.display = 'block';
-        this.state.element.style.top = this.top + 'px';
-        this.state.element.style.left = this.left + 'px';
-        this.state.element.style.width = this.width + 'px';
-        this.state.element.style.height = this.height + 'px';
-        this.state.element.style.margin = this.itemMargin + 'px';
+        this.renderer.setStyle(this.el, 'display', 'block');
+        this.renderer.setStyle(this.el, 'top', this.top + 'px');
+        this.renderer.setStyle(this.el, 'left', this.left + 'px');
+        this.renderer.setStyle(this.el, 'width', this.width + 'px');
+        this.renderer.setStyle(this.el, 'height', this.height + 'px');
+        this.renderer.setStyle(this.el, 'margin', this.itemMargin + 'px');
         if (this.width !== this.itemWidth || this.height !== this.itemHeight) {
             this.itemResize.emit(this.state.item);
             if (this.gridster.state.options.itemResizeCallback) {
@@ -113,6 +114,7 @@ GridsterItemComponent.decorators = [
 GridsterItemComponent.ctorParameters = function () { return [
     { type: core_1.ElementRef, },
     { type: gridster_component_1.GridsterComponent, decorators: [{ type: core_1.Host },] },
+    { type: core_1.Renderer2, },
 ]; };
 GridsterItemComponent.propDecorators = {
     'item': [{ type: core_1.Input },],

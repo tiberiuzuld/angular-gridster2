@@ -1,4 +1,4 @@
-import {Component, OnInit, ElementRef, Input, Host, OnDestroy, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, ElementRef, Input, Host, OnDestroy, Output, EventEmitter, Renderer2} from '@angular/core';
 import {GridsterItem} from './gridsterItem.interface';
 import {GridsterComponent} from './gridster.component';
 import {GridsterDraggable} from './gridsterDraggable.service';
@@ -15,9 +15,9 @@ export class GridsterItemComponent implements OnInit, OnDestroy {
   @Output() itemChange: EventEmitter<GridsterItem> = new EventEmitter();
   @Output() itemResize: EventEmitter<GridsterItem> = new EventEmitter();
   state: {
-    element: HTMLElement,
     item: GridsterItem
   };
+  el: any;
   gridster: GridsterComponent;
   itemTop: number;
   itemLeft: number;
@@ -30,9 +30,9 @@ export class GridsterItemComponent implements OnInit, OnDestroy {
   itemMargin: number;
 
 
-  constructor(el: ElementRef, @Host() gridster: GridsterComponent) {
+  constructor(el: ElementRef, @Host() gridster: GridsterComponent, public renderer: Renderer2) {
+    this.el = el.nativeElement;
     this.state = {
-      element: el.nativeElement,
       item: {
         cols: undefined,
         rows: undefined,
@@ -44,8 +44,8 @@ export class GridsterItemComponent implements OnInit, OnDestroy {
         setSize: this.setSize.bind(this),
         itemChanged: this.itemChanged.bind(this),
         checkItemChanges: this.checkItemChanges.bind(this),
-        drag: new GridsterDraggable(el.nativeElement, this),
-        resize: new GridsterResizable(el.nativeElement, this)
+        drag: new GridsterDraggable(this),
+        resize: new GridsterResizable(this)
       }
     };
 
@@ -83,12 +83,12 @@ export class GridsterItemComponent implements OnInit, OnDestroy {
       this.itemMargin = 0;
     }
 
-    this.state.element.style.display = 'block';
-    this.state.element.style.top = this.top + 'px';
-    this.state.element.style.left = this.left + 'px';
-    this.state.element.style.width = this.width + 'px';
-    this.state.element.style.height = this.height + 'px';
-    this.state.element.style.margin = this.itemMargin + 'px';
+    this.renderer.setStyle(this.el, 'display', 'block');
+    this.renderer.setStyle(this.el, 'top', this.top + 'px');
+    this.renderer.setStyle(this.el, 'left', this.left + 'px');
+    this.renderer.setStyle(this.el, 'width', this.width + 'px');
+    this.renderer.setStyle(this.el, 'height', this.height + 'px');
+    this.renderer.setStyle(this.el, 'margin', this.itemMargin + 'px');
     if (this.width !== this.itemWidth || this.height !== this.itemHeight) {
       this.itemResize.emit(this.state.item);
       if (this.gridster.state.options.itemResizeCallback) {

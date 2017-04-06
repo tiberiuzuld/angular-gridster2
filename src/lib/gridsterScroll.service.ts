@@ -4,7 +4,9 @@ import {GridsterResizeEventType} from './gridsterResizeEventType.interface';
 let scrollSensitivity: number;
 let scrollSpeed: number;
 let intervalDuration: number = 50;
-let gridsterElement: HTMLElement;
+let gridsterElement: any;
+let scrollTop: number;
+let scrollLeft: number;
 let resizeEvent: boolean;
 let resizeEventType: GridsterResizeEventType;
 let intervalE: number;
@@ -16,19 +18,23 @@ export function scroll(elemPosition: Array<number>, gridsterItem: GridsterItemCo
                        calculateItemPosition: Function, resize?: boolean, resizeEventScrollType?: GridsterResizeEventType) {
   scrollSensitivity = gridsterItem.gridster.state.options.scrollSensitivity;
   scrollSpeed = gridsterItem.gridster.state.options.scrollSpeed;
-  gridsterElement = gridsterItem.gridster.state.element;
+  gridsterElement = gridsterItem.gridster.el;
   resizeEvent = resize;
   resizeEventType = resizeEventScrollType;
 
-  const elemTopOffset = elemPosition[1] - gridsterElement.scrollTop;
-  const elemBottomOffset = gridsterElement.offsetHeight + gridsterElement.scrollTop - elemPosition[1] - elemPosition[3];
+  scrollTop = gridsterElement.scrollTop;
+  scrollLeft = gridsterElement.scrollLeft;
+  const offsetWidth = gridsterElement.offsetWidth;
+  const offsetHeight = gridsterElement.offsetHeight;
+  const elemTopOffset = elemPosition[1] - scrollTop;
+  const elemBottomOffset = offsetHeight + scrollTop - elemPosition[1] - elemPosition[3];
   if (lastMouse.pageY < e.pageY && elemBottomOffset < scrollSensitivity) {
     cancelN();
     if ((resizeEvent && !resizeEventType.s) || intervalS) {
       return;
     }
     intervalS = startVertical(1, elemPosition, calculateItemPosition, lastMouse);
-  } else if (lastMouse.pageY > e.pageY && gridsterElement.scrollTop > 0 && elemTopOffset < scrollSensitivity) {
+  } else if (lastMouse.pageY > e.pageY && scrollTop > 0 && elemTopOffset < scrollSensitivity) {
     cancelS();
     if ((resizeEvent && !resizeEventType.n) || intervalN) {
       return;
@@ -38,15 +44,15 @@ export function scroll(elemPosition: Array<number>, gridsterItem: GridsterItemCo
     cancelVertical();
   }
 
-  const elemRightOffset = gridsterElement.offsetWidth + gridsterElement.scrollLeft - elemPosition[0] - elemPosition[2];
-  const elemLeftOffset = elemPosition[0] - gridsterElement.scrollLeft;
+  const elemRightOffset = offsetWidth + scrollLeft - elemPosition[0] - elemPosition[2];
+  const elemLeftOffset = elemPosition[0] - scrollLeft;
   if (lastMouse.pageX < e.pageX && elemRightOffset < scrollSensitivity) {
     cancelW();
     if ((resizeEvent && !resizeEventType.e) || intervalE) {
       return;
     }
     intervalE = startHorizontal(1, elemPosition, calculateItemPosition, lastMouse);
-  } else if (lastMouse.pageX > e.pageX && gridsterElement.scrollLeft > 0 && elemLeftOffset < scrollSensitivity) {
+  } else if (lastMouse.pageX > e.pageX && scrollLeft > 0 && elemLeftOffset < scrollSensitivity) {
     cancelE();
     if ((resizeEvent && !resizeEventType.w) || intervalW) {
       return;
@@ -57,9 +63,9 @@ export function scroll(elemPosition: Array<number>, gridsterItem: GridsterItemCo
   }
 }
 
-function startVertical(sign: number, elemPosition: Array < number >, calculateItemPosition: Function, lastMouse): number {
+function startVertical(sign: number, elemPosition: Array<number>, calculateItemPosition: Function, lastMouse): any {
   return setInterval(function () {
-    if (!gridsterElement || sign === -1 && gridsterElement.scrollTop - scrollSpeed < 0) {
+    if (!gridsterElement || sign === -1 && scrollTop - scrollSpeed < 0) {
       cancelVertical();
     }
     gridsterElement.scrollTop += sign * scrollSpeed;
@@ -78,9 +84,9 @@ function startVertical(sign: number, elemPosition: Array < number >, calculateIt
   }.bind(this), intervalDuration);
 }
 
-function startHorizontal(sign: number, elemPosition: Array < number >, calculateItemPosition: Function, lastMouse): number {
+function startHorizontal(sign: number, elemPosition: Array<number>, calculateItemPosition: Function, lastMouse): any {
   return setInterval(function () {
-    if (!gridsterElement || sign === -1 && gridsterElement.scrollLeft - scrollSpeed < 0) {
+    if (!gridsterElement || sign === -1 && scrollLeft - scrollSpeed < 0) {
       cancelHorizontal();
     }
     gridsterElement.scrollLeft += sign * scrollSpeed;

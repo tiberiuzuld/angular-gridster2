@@ -1,25 +1,20 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "outDir": "./demo/out-tsc",
+    "baseUrl": "src",
     "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "stripInternal": true,
-    "declaration": true,
-    "allowSyntheticDefaultImports": true,
-    "outDir": "./dist",
+    "target": "es5",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
     "lib": [
       "es2016",
       "dom"
     ]
-  },
-  "files": [
-    "./.tmp/index.ts"
-  ],
-  "angularCompilerOptions": {
-    "skipTemplateCodegen": true
   }
 }

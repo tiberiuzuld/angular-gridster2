@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {GridsterConfig} from '../../lib/gridsterConfig.interface';
+import {GridsterConfig} from '../lib/gridsterConfig.interface';
 
 @Component({
   selector: 'gridster-root',

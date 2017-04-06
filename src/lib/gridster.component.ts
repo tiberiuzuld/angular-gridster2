@@ -1,9 +1,8 @@
-import {Component, OnInit, ElementRef, Input, OnDestroy} from '@angular/core';
+import {Component, OnInit, ElementRef, Input, OnDestroy, Renderer2} from '@angular/core';
 import {GridsterConfigService} from './gridsterConfig.constant';
 import {GridsterConfig} from './gridsterConfig.interface';
 import {GridsterUtils} from './gridsterUtils.service';
 import {GridsterItem} from './gridsterItem.interface';
-import {addResizeListener, removeResizeListener} from './detectElementResize';
 
 @Component({
   selector: 'gridster',
@@ -14,11 +13,11 @@ export class GridsterComponent implements OnInit, OnDestroy {
   @Input() options: GridsterConfig;
   detectScrollBarLayout: () => void;
   calculateLayoutDebounce: Function;
-  onResizeFunction: EventListenerObject;
+  onResizeFunction: (event: any) => void;
   movingItem: GridsterItem;
   previewStyle: Function;
+  el: any;
   state: {
-    element: HTMLElement
     mobile: boolean
     curWidth: number
     curHeight: number,
@@ -30,11 +29,13 @@ export class GridsterComponent implements OnInit, OnDestroy {
     curColWidth: number,
     curRowHeight: number
   };
+  transitionend: Function;
+  windowResize: Function;
   private cleanCallback: any;
 
-  constructor(private el: ElementRef) {
+  constructor(el: ElementRef, public renderer: Renderer2) {
+    this.el = el.nativeElement;
     this.state = {
-      element: el.nativeElement,
       mobile: false,
       curWidth: 0,
       curHeight: 0,
@@ -54,11 +55,19 @@ export class GridsterComponent implements OnInit, OnDestroy {
     this.setGridSize();
     this.detectScrollBarLayout = GridsterUtils.debounce(this.detectScrollBar.bind(this), 50);
     this.calculateLayoutDebounce = GridsterUtils.debounce(this.calculateLayout.bind(this), 5);
-    this.state.element.addEventListener('transitionend', this.detectScrollBarLayout);
+    this.transitionend = this.renderer.listen(this.el, 'transitionend', this.detectScrollBarLayout);
     this.calculateLayoutDebounce();
     this.onResizeFunction = this.onResize.bind(this);
-    addResizeListener(this.state.element, this.onResizeFunction);
+    this.windowResize = this.renderer.listen('window', 'resize', this.onResizeFunction);
   };
+
+  ngDoCheck() {
+    const clientWidth = this.el.clientWidth;
+    const clientHeight = this.el.clientHeight;
+    if (clientWidth !== this.state.curWidth || clientHeight !== this.state.curHeight) {
+      this.onResize();
+    }
+  }
 
   optionsChanged() {
     this.state.options = GridsterUtils.merge(this.state.options, this.options);
@@ -66,7 +75,8 @@ export class GridsterComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    removeResizeListener(this.state.element, this.onResizeFunction);
+    this.windowResize();
+    this.transitionend();
     if (typeof this.cleanCallback === 'function') {
       this.cleanCallback();
     }
@@ -78,12 +88,18 @@ export class GridsterComponent implements OnInit, OnDestroy {
   };
 
   detectScrollBar() {
-    const verticalScrollPresent = this.state.element.clientWidth < this.state.element.offsetWidth &&
-      this.state.element.offsetHeight - this.state.element.clientHeight <
-      this.state.element.scrollWidth - this.state.element.offsetWidth;
-    const horizontalScrollPresent = this.state.element.clientHeight < this.state.element.offsetHeight &&
-      this.state.element.offsetWidth - this.state.element.clientWidth <
-      this.state.element.scrollHeight - this.state.element.offsetHeight;
+    const clientWidth = this.el.clientWidth;
+    const offsetWidth = this.el.offsetWidth;
+    const scrollWidth = this.el.scrollWidth;
+    const clientHeight = this.el.clientHeight;
+    const offsetHeight = this.el.offsetHeight;
+    const scrollHeight = this.el.scrollHeight;
+    const verticalScrollPresent = clientWidth < offsetWidth &&
+      offsetHeight - clientHeight <
+      scrollWidth - offsetWidth;
+    const horizontalScrollPresent = clientHeight < offsetHeight &&
+      offsetWidth - clientWidth <
+      scrollHeight - offsetHeight;
     if (this.state.scrollBarPresent && !verticalScrollPresent && !horizontalScrollPresent) {
       this.state.scrollBarPresent = !this.state.scrollBarPresent;
       this.onResize();
@@ -94,13 +110,10 @@ export class GridsterComponent implements OnInit, OnDestroy {
   };
 
   setGridSize() {
-    if (this.state.options.gridType === 'fit' && !this.state.mobile) {
-      this.state.curWidth = this.state.element.offsetWidth;
-      this.state.curHeight = this.state.element.offsetHeight;
-    } else {
-      this.state.curWidth = this.state.element.clientWidth;
-      this.state.curHeight = this.state.element.clientHeight;
-    }
+    const clientWidth = this.el.clientWidth;
+    const clientHeight = this.el.clientHeight;
+    this.state.curWidth = clientWidth;
+    this.state.curHeight = clientHeight;
   };
 
   setGridDimensions() {
@@ -129,38 +142,47 @@ export class GridsterComponent implements OnInit, OnDestroy {
       this.state.curColWidth = Math.floor((this.state.curWidth + this.state.options.margin) / this.state.columns);
       this.state.curRowHeight = Math.floor((this.state.curHeight + this.state.options.margin) / this.state.rows);
     }
+    let addClass: string;
+    let removeClass1: string;
+    let removeClass2: string;
+    let removeClass3: string;
     if (this.state.options.gridType === 'fit') {
-      this.state.element.classList.add('fit');
-      this.state.element.classList.remove('scrollVertical');
-      this.state.element.classList.remove('scrollHorizontal');
-      this.state.element.classList.remove('fixed');
+      addClass = 'fit';
+      removeClass1 = 'scrollVertical';
+      removeClass2 = 'scrollHorizontal';
+      removeClass3 = 'fixed';
     } else if (this.state.options.gridType === 'scrollVertical') {
       this.state.curRowHeight = this.state.curColWidth;
-      this.state.element.classList.add('scrollVertical');
-      this.state.element.classList.remove('fit');
-      this.state.element.classList.remove('scrollHorizontal');
-      this.state.element.classList.remove('fixed');
+      addClass = 'scrollVertical';
+      removeClass1 = 'fit';
+      removeClass2 = 'scrollHorizontal';
+      removeClass3 = 'fixed';
     } else if (this.state.options.gridType === 'scrollHorizontal') {
       this.state.curColWidth = this.state.curRowHeight;
-      this.state.element.classList.add('scrollHorizontal');
-      this.state.element.classList.remove('fit');
-      this.state.element.classList.remove('scrollVertical');
-      this.state.element.classList.remove('fixed');
+      addClass = 'scrollHorizontal';
+      removeClass1 = 'fit';
+      removeClass2 = 'scrollVertical';
+      removeClass3 = 'fixed';
     } else if (this.state.options.gridType === 'fixed') {
       this.state.curColWidth = this.state.options.fixedColWidth;
       this.state.curRowHeight = this.state.options.fixedRowHeight;
-      this.state.element.classList.add('fixed');
-      this.state.element.classList.remove('fit');
-      this.state.element.classList.remove('scrollVertical');
-      this.state.element.classList.remove('scrollHorizontal');
+      addClass = 'fixed';
+      removeClass1 = 'fit';
+      removeClass2 = 'scrollVertical';
+      removeClass3 = 'scrollHorizontal';
     }
+
+    this.renderer.addClass(this.el, addClass);
+    this.renderer.removeClass(this.el, removeClass1);
+    this.renderer.removeClass(this.el, removeClass2);
+    this.renderer.removeClass(this.el, removeClass3);
 
     if (!this.state.mobile && this.state.options.mobileBreakpoint > this.state.curWidth) {
       this.state.mobile = !this.state.mobile;
-      this.state.element.classList.add('mobile');
+      this.renderer.addClass(this.el, 'mobile');
     } else if (this.state.mobile && this.state.options.mobileBreakpoint < this.state.curWidth) {
       this.state.mobile = !this.state.mobile;
-      this.state.element.classList.remove('mobile');
+      this.renderer.removeClass(this.el, 'mobile');
     }
 
     let widgetsIndex = this.state.grid.length - 1;

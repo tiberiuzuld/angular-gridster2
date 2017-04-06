@@ -8,7 +8,7 @@ gulp.task('clean', function () {
 });
 
 gulp.task('inline-templates', ['clean'], function () {
-  return gulp.src('./lib/*.ts')
-    .pipe(inlineNg2Template({base: '/lib', UseRelativePaths: true, indent: 0, removeLineBreaks: true}))
+  return gulp.src('./src/lib/*.ts')
+    .pipe(inlineNg2Template({base: 'src/lib', UseRelativePaths: true, indent: 0, removeLineBreaks: true}))
     .pipe(gulp.dest('.tmp'));
 });

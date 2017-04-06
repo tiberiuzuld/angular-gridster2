@@ -1,7 +1,6 @@
 import { GridsterItemComponent } from './gridsterItem.component';
 import { GridsterItem } from './gridsterItem.interface';
 export declare class GridsterDraggable {
-    element: HTMLElement;
     gridsterItem: GridsterItemComponent;
     itemCopy: GridsterItem;
     lastMouse: {
@@ -12,11 +11,18 @@ export declare class GridsterDraggable {
     position: Array<number>;
     positionBackup: Array<number>;
     enabled: boolean;
-    dragStartFunction: EventListenerObject;
-    dragFunction: EventListenerObject;
-    dragStopFunction: EventListenerObject;
+    dragStartFunction: (event: any) => void;
+    dragFunction: (event: any) => void;
+    dragStopFunction: (event: any) => void;
+    mousemove: Function;
+    mouseup: Function;
+    touchmove: Function;
+    touchend: Function;
+    touchcancel: Function;
+    mousedown: Function;
+    touchstart: Function;
     static touchEvent(e: any): void;
-    constructor(element: HTMLElement, gridsterItem: GridsterItemComponent);
+    constructor(gridsterItem: GridsterItemComponent);
     dragStart(e: any): void;
     dragMove(e: any): void;
     dragStop(e: any): void;
