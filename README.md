@@ -7,7 +7,7 @@ angular-gridster2
 
 ### Angular2 implementation of angular-gridster [Demo](http://tiberiuzuld.github.io/angular-gridster2/angular)
 
-### Angularjs 1.x library is [here](https://github.com/tiberiuzuld/angular-gridster2/tree/1.x)
+### AngularJS 1.x library is [here](https://github.com/tiberiuzuld/angular-gridster2/tree/1.x)
 
 ## Install
 
