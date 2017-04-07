@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var platform_browser_1 = require("@angular/platform-browser");
+var common_1 = require("@angular/common");
 var core_1 = require("@angular/core");
 var gridster_component_1 = require("./gridster.component");
 var gridsterItem_component_1 = require("./gridsterItem.component");
@@ -18,7 +18,7 @@ GridsterModule.decorators = [
                     gridsterPreview_component_1.GridsterPreviewComponent
                 ],
                 imports: [
-                    platform_browser_1.BrowserModule
+                    common_1.CommonModule
                 ],
                 exports: [gridster_component_1.GridsterComponent, gridsterItem_component_1.GridsterItemComponent],
                 providers: [],

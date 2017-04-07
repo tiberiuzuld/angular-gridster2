@@ -1,4 +1,4 @@
-import {BrowserModule} from '@angular/platform-browser';
+import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 
 import {GridsterComponent} from './gridster.component';
@@ -12,7 +12,7 @@ import {GridsterPreviewComponent} from './gridsterPreview.component';
     GridsterPreviewComponent
   ],
   imports: [
-    BrowserModule
+    CommonModule
   ],
   exports: [GridsterComponent, GridsterItemComponent],
   providers: [],
