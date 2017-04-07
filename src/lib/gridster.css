@@ -4,7 +4,6 @@
   overflow: auto;
   flex: 1 auto;
   background: grey;
-  -webkit-user-select: none;
   width: 100%;
   height: 100%;
 }

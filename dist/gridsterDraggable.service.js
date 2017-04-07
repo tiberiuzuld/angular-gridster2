@@ -29,6 +29,15 @@ var GridsterDraggable = (function () {
                 // right or middle mouse button
                 return;
         }
+        var path = e.path;
+        var i = 0;
+        var l = path.length;
+        var contentClass = this.gridsterItem.gridster.state.options.draggable.ignoreContentClass;
+        for (; i < l; i++) {
+            if (path[i].classList && path[i].classList.contains(contentClass)) {
+                return;
+            }
+        }
         e.stopPropagation();
         if (e.pageX === undefined && e.touches) {
             GridsterDraggable.touchEvent(e);

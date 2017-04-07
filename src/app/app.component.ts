@@ -56,7 +56,7 @@ export class AppComponent implements OnInit {
 
     this.dashboard = [
       {cols: 2, rows: 1, y: 0, x: 0},
-      {cols: 2, rows: 2, y: 0, x: 2},
+      {cols: 2, rows: 2, y: 0, x: 2, hasContent: true},
       {cols: 1, rows: 1, y: 0, x: 4},
       {cols: 1, rows: 1, y: 0, x: 5},
       {cols: undefined, rows: undefined, y: 1, x: 0},

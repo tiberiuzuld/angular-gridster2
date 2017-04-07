@@ -53,6 +53,16 @@ export class GridsterDraggable {
         // right or middle mouse button
         return;
     }
+    const path = e.path;
+    let i = 0;
+    const l = path.length;
+    const contentClass = this.gridsterItem.gridster.state.options.draggable.ignoreContentClass;
+    for (; i < l; i++) {
+      if (path[i].classList && path[i].classList.contains(contentClass)) {
+        return;
+      }
+    }
+
     e.stopPropagation();
     if (e.pageX === undefined && e.touches) {
       GridsterDraggable.touchEvent(e);

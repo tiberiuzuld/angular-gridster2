@@ -69,8 +69,23 @@
 <gridster [options]="options">
   <gridster-item [item]="item" *ngFor="let item of dashboard">
     <div class="button-holder">
-      <label>{{item.label}}</label>
-      <button md-mini-fab (click)="removeItem($event, item)" (touchstart)="removeItem($event, item)" mdTooltip="Remove">
+      <div class="gridster-item-content" *ngIf="item.hasContent">
+        <div class="stuff">
+          Some content to select and click without dragging the widget
+        </div>
+      </div>
+      <div class="item-buttons" *ngIf="item.hasContent">
+        <button md-icon-button md-raised-button class="drag-handler">
+          <md-icon>open_with</md-icon>
+        </button>
+        <button md-icon-button md-raised-button class="remove-button" (click)="removeItem($event, item)"
+                (touchstart)="removeItem($event, item)" mdTooltip="Remove">
+          <md-icon>clear</md-icon>
+        </button>
+      </div>
+      <label *ngIf="!item.hasContent">{{item.label}}</label>
+      <button md-mini-fab *ngIf="!item.hasContent" (click)="removeItem($event, item)"
+              (touchstart)="removeItem($event, item)" mdTooltip="Remove">
         <md-icon>clear</md-icon>
       </button>
     </div>

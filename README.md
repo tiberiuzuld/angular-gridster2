@@ -142,6 +142,7 @@ const GridsterConfigService: GridsterConfig = {
   itemResizeCallback: undefined,  // callback to call for each item when width/height changes. Arguments:gridsterItem
   draggable: {
     enabled: false, // enable/disable draggable items
+    ignoreContentClass: 'gridster-item-content', // default content class to ignore the drag event from 
     stop: undefined // callback when dragging an item stops.  Accepts Promise return to cancel/approve drag.
     // Arguments: item, gridsterItem, event
   },
@@ -175,6 +176,45 @@ const GridsterConfigService: GridsterConfig = {
   this.itemResize.emit(this.state.item); // triggered when a item width/height changed
 ```
 Note: When a item changes cols/rows both events get triggered
+
+
+### Interact with content without dragging
+
+Option 1 (without text selection):
+```html
+<gridster-item>
+   <div (mousedown)="$event.stopPropagation()" (touchstart)="$event.stopPropagation()">
+     Some content to click without dragging the widget
+   </div>
+   <div class="item-buttons">
+     <button md-icon-button md-raised-button class="drag-handler">
+         <md-icon>open_with</md-icon>
+     </button>
+     <button md-icon-button md-raised-button class="remove-button" (click)="removeItem($event, item)"
+             (touchstart)="removeItem($event, item)" mdTooltip="Remove">
+       <md-icon>clear</md-icon>
+     </button>
+   </div>
+</gridster-item>
+```
+
+Option 2 (with text selection):
+```html
+<gridster-item>
+  <div class="gridster-item-content">
+      Some content to select and click without dragging the widget
+  </div>
+  <div class="item-buttons">
+    <button md-icon-button md-raised-button class="drag-handler">
+      <md-icon>open_with</md-icon>
+    </button>
+    <button md-icon-button md-raised-button class="remove-button" (click)="removeItem($event, item)"
+            (touchstart)="removeItem($event, item)" mdTooltip="Remove">
+      <md-icon>clear</md-icon>
+    </button>
+  </div>
+</gridster-item>
+```
 
 ##### angular-gridster2 inspired by [angular-gridster](https://github.com/ManifestWebDesign/angular-gridster) 
 ### License

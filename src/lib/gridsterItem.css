@@ -94,6 +94,13 @@
   bottom: 0;
 }
 
+:host /deep/ .gridster-item-content {
+  -webkit-user-select: auto;
+  -moz-user-select: auto;
+  -ms-user-select: auto;
+  user-select: auto;
+}
+
 :host(:hover) .gridster-item-resizable-handler.handle-se {
   border-color: transparent transparent #ccc
 }

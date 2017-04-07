@@ -28,6 +28,7 @@ exports.GridsterConfigService = {
     itemResizeCallback: undefined,
     draggable: {
         enabled: false,
+        ignoreContentClass: 'gridster-item-content',
         stop: undefined // callback when dragging an item stops.  Accepts Promise return to cancel/approve drag.
         // Arguments: item, gridsterItem, event
     },

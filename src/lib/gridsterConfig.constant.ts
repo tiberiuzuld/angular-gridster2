@@ -28,6 +28,7 @@ export const GridsterConfigService: GridsterConfig = {
   itemResizeCallback: undefined,  // callback to call for each item when width/height changes. Arguments: gridsterItem
   draggable: {
     enabled: false, // enable/disable draggable items
+    ignoreContentClass: 'gridster-item-content', // default content class to ignore the drag event from
     stop: undefined // callback when dragging an item stops.  Accepts Promise return to cancel/approve drag.
     // Arguments: item, gridsterItem, event
   },
