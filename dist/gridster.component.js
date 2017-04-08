@@ -25,18 +25,24 @@ var GridsterComponent = (function () {
         this.options.optionsChanged = this.optionsChanged.bind(this);
         this.state.options = gridsterUtils_service_1.GridsterUtils.merge(this.state.options, this.options);
         this.setGridSize();
-        this.detectScrollBarLayout = gridsterUtils_service_1.GridsterUtils.debounce(this.detectScrollBar.bind(this), 50);
         this.calculateLayoutDebounce = gridsterUtils_service_1.GridsterUtils.debounce(this.calculateLayout.bind(this), 5);
-        this.transitionend = this.renderer.listen(this.el, 'transitionend', this.detectScrollBarLayout);
         this.calculateLayoutDebounce();
         this.onResizeFunction = this.onResize.bind(this);
         this.windowResize = this.renderer.listen('window', 'resize', this.onResizeFunction);
     };
     ;
     GridsterComponent.prototype.ngDoCheck = function () {
-        var clientWidth = this.el.clientWidth;
-        var clientHeight = this.el.clientHeight;
-        if (clientWidth !== this.state.curWidth || clientHeight !== this.state.curHeight) {
+        var height;
+        var width;
+        if (this.state.options.gridType === 'fit' && !this.state.mobile) {
+            width = this.el.offsetWidth;
+            height = this.el.offsetHeight;
+        }
+        else {
+            width = this.el.clientWidth;
+            height = this.el.clientHeight;
+        }
+        if ((width !== this.state.curWidth || height !== this.state.curHeight) && this.checkIfToResize()) {
             this.onResize();
         }
     };
@@ -46,7 +52,6 @@ var GridsterComponent = (function () {
     };
     GridsterComponent.prototype.ngOnDestroy = function () {
         this.windowResize();
-        this.transitionend();
         if (typeof this.cleanCallback === 'function') {
             this.cleanCallback();
         }
@@ -57,34 +62,34 @@ var GridsterComponent = (function () {
         this.calculateLayoutDebounce();
     };
     ;
-    GridsterComponent.prototype.detectScrollBar = function () {
+    GridsterComponent.prototype.checkIfToResize = function () {
         var clientWidth = this.el.clientWidth;
         var offsetWidth = this.el.offsetWidth;
         var scrollWidth = this.el.scrollWidth;
         var clientHeight = this.el.clientHeight;
         var offsetHeight = this.el.offsetHeight;
         var scrollHeight = this.el.scrollHeight;
-        var verticalScrollPresent = clientWidth < offsetWidth &&
-            offsetHeight - clientHeight <
-                scrollWidth - offsetWidth;
-        var horizontalScrollPresent = clientHeight < offsetHeight &&
-            offsetWidth - clientWidth <
-                scrollHeight - offsetHeight;
-        if (this.state.scrollBarPresent && !verticalScrollPresent && !horizontalScrollPresent) {
-            this.state.scrollBarPresent = !this.state.scrollBarPresent;
-            this.onResize();
+        var verticalScrollPresent = clientWidth < offsetWidth && scrollHeight > offsetHeight && scrollHeight - offsetHeight < offsetWidth - clientWidth;
+        var horizontalScrollPresent = clientHeight < offsetHeight && scrollWidth > offsetWidth && scrollWidth - offsetWidth < offsetHeight - clientHeight;
+        if (verticalScrollPresent) {
+            return false;
         }
-        else if (!this.state.scrollBarPresent && (verticalScrollPresent || horizontalScrollPresent)) {
-            this.state.scrollBarPresent = !this.state.scrollBarPresent;
-            this.onResize();
-        }
+        return !horizontalScrollPresent;
     };
     ;
     GridsterComponent.prototype.setGridSize = function () {
-        var clientWidth = this.el.clientWidth;
-        var clientHeight = this.el.clientHeight;
-        this.state.curWidth = clientWidth;
-        this.state.curHeight = clientHeight;
+        var width = this.el.clientWidth;
+        var height = this.el.clientHeight;
+        if (this.state.options.gridType === 'fit' && !this.state.mobile) {
+            width = this.el.offsetWidth;
+            height = this.el.offsetHeight;
+        }
+        else {
+            width = this.el.clientWidth;
+            height = this.el.clientHeight;
+        }
+        this.state.curWidth = width;
+        this.state.curHeight = height;
     };
     ;
     GridsterComponent.prototype.setGridDimensions = function () {
@@ -162,7 +167,7 @@ var GridsterComponent = (function () {
             this.state.grid[widgetsIndex].drag.toggle(this.state.options.draggable.enabled);
             this.state.grid[widgetsIndex].resize.toggle(this.state.options.resizable.enabled);
         }
-        this.detectScrollBarLayout();
+        setTimeout(this.ngDoCheck.bind(this), 100);
     };
     ;
     GridsterComponent.prototype.addItem = function (item) {

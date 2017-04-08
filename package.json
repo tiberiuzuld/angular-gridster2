@@ -1,6 +1,6 @@
 {
   "name": "angular-gridster2",
-  "version": "2.7.0",
+  "version": "2.7.1",
   "license": "MIT",
   "main": "dist/index.js",
   "jsnext:main": "dist/index.js",
@@ -10,6 +10,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "serve": "ng serve",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -55,7 +56,7 @@
     "@angular/forms": "4.0.1",
     "@angular/http": "4.0.1",
     "@angular/language-service": "4.0.1",
-    "@angular/material": "2.0.0-beta.2",
+    "@angular/material": "2.0.0-beta.3",
     "@angular/platform-browser": "4.0.1",
     "@angular/platform-browser-dynamic": "4.0.1",
     "@angular/platform-server": "4.0.1",

@@ -4,7 +4,6 @@ import { GridsterItem } from './gridsterItem.interface';
 export declare class GridsterComponent implements OnInit, OnDestroy {
     renderer: Renderer2;
     options: GridsterConfig;
-    detectScrollBarLayout: () => void;
     calculateLayoutDebounce: Function;
     onResizeFunction: (event: any) => void;
     movingItem: GridsterItem;
@@ -22,7 +21,6 @@ export declare class GridsterComponent implements OnInit, OnDestroy {
         curColWidth: number;
         curRowHeight: number;
     };
-    transitionend: Function;
     windowResize: Function;
     private cleanCallback;
     constructor(el: ElementRef, renderer: Renderer2);
@@ -31,7 +29,7 @@ export declare class GridsterComponent implements OnInit, OnDestroy {
     optionsChanged(): void;
     ngOnDestroy(): void;
     onResize(): void;
-    detectScrollBar(): void;
+    checkIfToResize(): boolean;
     setGridSize(): void;
     setGridDimensions(): void;
     calculateLayout(): void;

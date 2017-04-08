@@ -11,7 +11,6 @@ import {GridsterItem} from './gridsterItem.interface';
 })
 export class GridsterComponent implements OnInit, OnDestroy {
   @Input() options: GridsterConfig;
-  detectScrollBarLayout: () => void;
   calculateLayoutDebounce: Function;
   onResizeFunction: (event: any) => void;
   movingItem: GridsterItem;
@@ -29,7 +28,6 @@ export class GridsterComponent implements OnInit, OnDestroy {
     curColWidth: number,
     curRowHeight: number
   };
-  transitionend: Function;
   windowResize: Function;
   private cleanCallback: any;
 
@@ -53,18 +51,23 @@ export class GridsterComponent implements OnInit, OnDestroy {
     this.options.optionsChanged = this.optionsChanged.bind(this);
     this.state.options = GridsterUtils.merge(this.state.options, this.options);
     this.setGridSize();
-    this.detectScrollBarLayout = GridsterUtils.debounce(this.detectScrollBar.bind(this), 50);
     this.calculateLayoutDebounce = GridsterUtils.debounce(this.calculateLayout.bind(this), 5);
-    this.transitionend = this.renderer.listen(this.el, 'transitionend', this.detectScrollBarLayout);
     this.calculateLayoutDebounce();
     this.onResizeFunction = this.onResize.bind(this);
     this.windowResize = this.renderer.listen('window', 'resize', this.onResizeFunction);
   };
 
   ngDoCheck() {
-    const clientWidth = this.el.clientWidth;
-    const clientHeight = this.el.clientHeight;
-    if (clientWidth !== this.state.curWidth || clientHeight !== this.state.curHeight) {
+    let height;
+    let width;
+    if (this.state.options.gridType === 'fit' && !this.state.mobile) {
+      width = this.el.offsetWidth;
+      height = this.el.offsetHeight;
+    } else {
+      width = this.el.clientWidth;
+      height = this.el.clientHeight;
+    }
+    if ((width !== this.state.curWidth || height !== this.state.curHeight) && this.checkIfToResize()) {
       this.onResize();
     }
   }
@@ -76,7 +79,6 @@ export class GridsterComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.windowResize();
-    this.transitionend();
     if (typeof this.cleanCallback === 'function') {
       this.cleanCallback();
     }
@@ -87,33 +89,33 @@ export class GridsterComponent implements OnInit, OnDestroy {
     this.calculateLayoutDebounce();
   };
 
-  detectScrollBar() {
+  checkIfToResize() {
     const clientWidth = this.el.clientWidth;
     const offsetWidth = this.el.offsetWidth;
     const scrollWidth = this.el.scrollWidth;
     const clientHeight = this.el.clientHeight;
     const offsetHeight = this.el.offsetHeight;
     const scrollHeight = this.el.scrollHeight;
-    const verticalScrollPresent = clientWidth < offsetWidth &&
-      offsetHeight - clientHeight <
-      scrollWidth - offsetWidth;
-    const horizontalScrollPresent = clientHeight < offsetHeight &&
-      offsetWidth - clientWidth <
-      scrollHeight - offsetHeight;
-    if (this.state.scrollBarPresent && !verticalScrollPresent && !horizontalScrollPresent) {
-      this.state.scrollBarPresent = !this.state.scrollBarPresent;
-      this.onResize();
-    } else if (!this.state.scrollBarPresent && (verticalScrollPresent || horizontalScrollPresent)) {
-      this.state.scrollBarPresent = !this.state.scrollBarPresent;
-      this.onResize();
+    const verticalScrollPresent = clientWidth < offsetWidth && scrollHeight > offsetHeight && scrollHeight - offsetHeight < offsetWidth - clientWidth;
+    const horizontalScrollPresent = clientHeight < offsetHeight && scrollWidth > offsetWidth && scrollWidth - offsetWidth < offsetHeight - clientHeight;
+    if (verticalScrollPresent) {
+      return false;
     }
+    return !horizontalScrollPresent;
   };
 
   setGridSize() {
-    const clientWidth = this.el.clientWidth;
-    const clientHeight = this.el.clientHeight;
-    this.state.curWidth = clientWidth;
-    this.state.curHeight = clientHeight;
+    let width = this.el.clientWidth;
+    let height = this.el.clientHeight;
+    if (this.state.options.gridType === 'fit' && !this.state.mobile) {
+      width = this.el.offsetWidth;
+      height = this.el.offsetHeight;
+    } else {
+      width = this.el.clientWidth;
+      height = this.el.clientHeight;
+    }
+    this.state.curWidth = width;
+    this.state.curHeight = height;
   };
 
   setGridDimensions() {
@@ -192,7 +194,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
       this.state.grid[widgetsIndex].resize.toggle(this.state.options.resizable.enabled);
     }
 
-    this.detectScrollBarLayout();
+    setTimeout(this.ngDoCheck.bind(this), 100);
   };
 
   addItem(item: GridsterItem) {
