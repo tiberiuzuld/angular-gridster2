@@ -23,6 +23,7 @@ export declare class GridsterDraggable {
     touchstart: Function;
     static touchEvent(e: any): void;
     constructor(gridsterItem: GridsterItemComponent);
+    checkContentClass(target: any, current: any, contentClass: any): any;
     dragStart(e: any): void;
     dragMove(e: any): void;
     dragStop(e: any): void;

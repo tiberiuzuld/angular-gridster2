@@ -19,6 +19,17 @@ var GridsterDraggable = (function () {
         e.pageX = e.touches[0].pageX;
         e.pageY = e.touches[0].pageY;
     };
+    GridsterDraggable.prototype.checkContentClass = function (target, current, contentClass) {
+        if (target === current) {
+            return false;
+        }
+        if (target.classList && target.classList.contains(contentClass)) {
+            return true;
+        }
+        else {
+            return this.checkContentClass(target.parentNode, current, contentClass);
+        }
+    };
     GridsterDraggable.prototype.dragStart = function (e) {
         switch (e.which) {
             case 1:
@@ -29,14 +40,9 @@ var GridsterDraggable = (function () {
                 // right or middle mouse button
                 return;
         }
-        var path = e.path;
-        var i = 0;
-        var l = path.length;
         var contentClass = this.gridsterItem.gridster.state.options.draggable.ignoreContentClass;
-        for (; i < l; i++) {
-            if (path[i].classList && path[i].classList.contains(contentClass)) {
-                return;
-            }
+        if (this.checkContentClass(e.target, e.currentTarget, contentClass)) {
+            return;
         }
         e.stopPropagation();
         if (e.pageX === undefined && e.touches) {

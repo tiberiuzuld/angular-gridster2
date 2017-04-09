@@ -43,6 +43,17 @@ export class GridsterDraggable {
     this.positionBackup = [0, 0];
   }
 
+  checkContentClass(target, current, contentClass) {
+    if (target === current) {
+      return false;
+    }
+    if (target.classList && target.classList.contains(contentClass)) {
+      return true;
+    } else {
+      return this.checkContentClass(target.parentNode, current, contentClass);
+    }
+  }
+
   dragStart(e) {
     switch (e.which) {
       case 1:
@@ -53,14 +64,10 @@ export class GridsterDraggable {
         // right or middle mouse button
         return;
     }
-    const path = e.path;
-    let i = 0;
-    const l = path.length;
+
     const contentClass = this.gridsterItem.gridster.state.options.draggable.ignoreContentClass;
-    for (; i < l; i++) {
-      if (path[i].classList && path[i].classList.contains(contentClass)) {
-        return;
-      }
+    if (this.checkContentClass(e.target, e.currentTarget, contentClass)) {
+      return;
     }
 
     e.stopPropagation();
