@@ -1,6 +1,6 @@
 {
   "name": "angular-gridster2",
-  "version": "2.7.2",
+  "version": "2.7.3",
   "license": "MIT",
   "main": "dist/index.js",
   "jsnext:main": "dist/index.js",
@@ -18,7 +18,7 @@
     "build-demo": "ng build --prod --base-href=./",
     "build-npm": "gulp inline-templates && ngc -p tsconfig-lib.json"
   },
-  "homepage": "https://github.io/tiberiuzuld/angular-gridster2",
+  "homepage": "https://tiberiuzuld.github.io/angular-gridster2/angular",
   "bugs": {
     "url": "https://github.com/tiberiuzuld/angular-gridster2/issues"
   },
