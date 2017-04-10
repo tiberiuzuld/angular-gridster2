@@ -1,8 +1,8 @@
-import { OnInit, ElementRef, OnDestroy, EventEmitter, Renderer2 } from '@angular/core';
+import { OnInit, ElementRef, OnDestroy, EventEmitter, Renderer } from '@angular/core';
 import { GridsterItem } from './gridsterItem.interface';
 import { GridsterComponent } from './gridster.component';
 export declare class GridsterItemComponent implements OnInit, OnDestroy {
-    renderer: Renderer2;
+    renderer: Renderer;
     item: GridsterItem;
     itemChange: EventEmitter<GridsterItem>;
     itemResize: EventEmitter<GridsterItem>;
@@ -20,7 +20,7 @@ export declare class GridsterItemComponent implements OnInit, OnDestroy {
     width: number;
     height: number;
     itemMargin: number;
-    constructor(el: ElementRef, gridster: GridsterComponent, renderer: Renderer2);
+    constructor(el: ElementRef, gridster: GridsterComponent, renderer: Renderer);
     ngOnInit(): void;
     ngOnDestroy(): void;
     setSize(noCheck: Boolean): void;

@@ -149,17 +149,17 @@ var GridsterComponent = (function () {
             removeClass2 = 'scrollVertical';
             removeClass3 = 'scrollHorizontal';
         }
-        this.renderer.addClass(this.el, addClass);
-        this.renderer.removeClass(this.el, removeClass1);
-        this.renderer.removeClass(this.el, removeClass2);
-        this.renderer.removeClass(this.el, removeClass3);
+        this.renderer.setElementClass(this.el, addClass, true);
+        this.renderer.setElementClass(this.el, removeClass1, false);
+        this.renderer.setElementClass(this.el, removeClass2, false);
+        this.renderer.setElementClass(this.el, removeClass3, false);
         if (!this.state.mobile && this.state.options.mobileBreakpoint > this.state.curWidth) {
             this.state.mobile = !this.state.mobile;
-            this.renderer.addClass(this.el, 'mobile');
+            this.renderer.setElementClass(this.el, 'mobile', true);
         }
         else if (this.state.mobile && this.state.options.mobileBreakpoint < this.state.curWidth) {
             this.state.mobile = !this.state.mobile;
-            this.renderer.removeClass(this.el, 'mobile');
+            this.renderer.setElementClass(this.el, 'mobile', false);
         }
         var widgetsIndex = this.state.grid.length - 1;
         for (; widgetsIndex >= 0; widgetsIndex--) {
@@ -329,7 +329,7 @@ GridsterComponent.decorators = [
 /** @nocollapse */
 GridsterComponent.ctorParameters = function () { return [
     { type: core_1.ElementRef, },
-    { type: core_1.Renderer2, },
+    { type: core_1.Renderer, },
 ]; };
 GridsterComponent.propDecorators = {
     'options': [{ type: core_1.Input },],

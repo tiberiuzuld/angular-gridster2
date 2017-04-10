@@ -11,7 +11,7 @@ var GridsterPreviewComponent = (function () {
     }
     GridsterPreviewComponent.prototype.previewStyle = function () {
         if (!this.gridster.movingItem) {
-            this.renderer.setStyle(this.el, 'display', 'none');
+            this.renderer.setElementStyle(this.el, 'display', 'none');
         }
         else {
             var margin = 0;
@@ -20,12 +20,12 @@ var GridsterPreviewComponent = (function () {
             if (this.gridster.options.outerMargin) {
                 margin = this.gridster.state.options.margin;
             }
-            this.renderer.setStyle(this.el, 'display', 'block');
-            this.renderer.setStyle(this.el, 'height', (this.gridster.movingItem.rows * curRowHeight - margin) + 'px');
-            this.renderer.setStyle(this.el, 'width', (this.gridster.movingItem.cols * curColWidth - margin) + 'px');
-            this.renderer.setStyle(this.el, 'top', (this.gridster.movingItem.y * curRowHeight + margin) + 'px');
-            this.renderer.setStyle(this.el, 'left', (this.gridster.movingItem.x * curColWidth + margin) + 'px');
-            this.renderer.setStyle(this.el, 'marginBottom', margin + 'px');
+            this.renderer.setElementStyle(this.el, 'display', 'block');
+            this.renderer.setElementStyle(this.el, 'height', (this.gridster.movingItem.rows * curRowHeight - margin) + 'px');
+            this.renderer.setElementStyle(this.el, 'width', (this.gridster.movingItem.cols * curColWidth - margin) + 'px');
+            this.renderer.setElementStyle(this.el, 'top', (this.gridster.movingItem.y * curRowHeight + margin) + 'px');
+            this.renderer.setElementStyle(this.el, 'left', (this.gridster.movingItem.x * curColWidth + margin) + 'px');
+            this.renderer.setElementStyle(this.el, 'marginBottom', margin + 'px');
         }
     };
     return GridsterPreviewComponent;
@@ -40,7 +40,7 @@ GridsterPreviewComponent.decorators = [
 GridsterPreviewComponent.ctorParameters = function () { return [
     { type: core_1.ElementRef, },
     { type: gridster_component_1.GridsterComponent, decorators: [{ type: core_1.Host },] },
-    { type: core_1.Renderer2, },
+    { type: core_1.Renderer, },
 ]; };
 exports.GridsterPreviewComponent = GridsterPreviewComponent;
 //# sourceMappingURL=gridsterPreview.component.js.map

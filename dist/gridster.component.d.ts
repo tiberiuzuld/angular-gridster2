@@ -1,8 +1,8 @@
-import { OnInit, ElementRef, OnDestroy, Renderer2 } from '@angular/core';
+import { OnInit, ElementRef, OnDestroy, Renderer } from '@angular/core';
 import { GridsterConfig } from './gridsterConfig.interface';
 import { GridsterItem } from './gridsterItem.interface';
 export declare class GridsterComponent implements OnInit, OnDestroy {
-    renderer: Renderer2;
+    renderer: Renderer;
     options: GridsterConfig;
     calculateLayoutDebounce: Function;
     onResizeFunction: (event: any) => void;
@@ -23,7 +23,7 @@ export declare class GridsterComponent implements OnInit, OnDestroy {
     };
     windowResize: Function;
     private cleanCallback;
-    constructor(el: ElementRef, renderer: Renderer2);
+    constructor(el: ElementRef, renderer: Renderer);
     ngOnInit(): void;
     ngDoCheck(): void;
     optionsChanged(): void;

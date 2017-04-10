@@ -1,9 +1,9 @@
-import { ElementRef, Renderer2 } from '@angular/core';
+import { ElementRef, Renderer } from '@angular/core';
 import { GridsterComponent } from './gridster.component';
 export declare class GridsterPreviewComponent {
-    renderer: Renderer2;
+    renderer: Renderer;
     el: any;
     gridster: GridsterComponent;
-    constructor(el: ElementRef, gridster: GridsterComponent, renderer: Renderer2);
+    constructor(el: ElementRef, gridster: GridsterComponent, renderer: Renderer);
     previewStyle(): void;
 }

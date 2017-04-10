@@ -40,7 +40,7 @@ var GridsterResizable = (function () {
         this.touchmove = this.gridsterItem.renderer.listen('document', 'touchmove', this.dragFunction);
         this.touchend = this.gridsterItem.renderer.listen('document', 'touchend', this.dragStopFunction);
         this.touchcancel = this.gridsterItem.renderer.listen('document', 'touchcancel', this.dragStopFunction);
-        this.gridsterItem.renderer.addClass(this.gridsterItem.el, 'gridster-item-resizing');
+        this.gridsterItem.renderer.setElementClass(this.gridsterItem.el, 'gridster-item-resizing', true);
         this.lastMouse.pageX = e.pageX;
         this.lastMouse.pageY = e.pageY;
         this.elemPosition[0] = this.gridsterItem.left;
@@ -105,7 +105,7 @@ var GridsterResizable = (function () {
         this.touchmove();
         this.touchend();
         this.touchcancel();
-        this.gridsterItem.renderer.removeClass(this.gridsterItem.el, 'gridster-item-resizing');
+        this.gridsterItem.renderer.setElementClass(this.gridsterItem.el, 'gridster-item-resizing', false);
         this.gridsterItem.gridster.movingItem = null;
         this.gridsterItem.gridster.previewStyle();
         if (this.gridsterItem.gridster.state.options.resizable.stop) {
@@ -140,8 +140,8 @@ var GridsterResizable = (function () {
                 this.gridsterItem.gridster.checkCollision(this.gridsterItem.state.item)) {
                 this.gridsterItem.state.item.y = this.itemBackup[1];
                 this.gridsterItem.state.item.rows = this.itemBackup[3];
-                this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'top', this.gridsterItem.gridster.positionYToPixels(this.gridsterItem.state.item.y) + 'px');
-                this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'height', this.gridsterItem.gridster.positionYToPixels(this.gridsterItem.state.item.rows)
+                this.gridsterItem.renderer.setElementStyle(this.gridsterItem.el, 'top', this.gridsterItem.gridster.positionYToPixels(this.gridsterItem.state.item.y) + 'px');
+                this.gridsterItem.renderer.setElementStyle(this.gridsterItem.el, 'height', this.gridsterItem.gridster.positionYToPixels(this.gridsterItem.state.item.rows)
                     - this.gridsterItem.gridster.state.options.margin + 'px');
                 return;
             }
@@ -149,8 +149,8 @@ var GridsterResizable = (function () {
                 this.gridsterItem.gridster.previewStyle();
             }
         }
-        this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'top', this.elemPosition[1] + 'px');
-        this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'height', this.elemPosition[3] + 'px');
+        this.gridsterItem.renderer.setElementStyle(this.gridsterItem.el, 'top', this.elemPosition[1] + 'px');
+        this.gridsterItem.renderer.setElementStyle(this.gridsterItem.el, 'height', this.elemPosition[3] + 'px');
     };
     GridsterResizable.prototype.handleW = function (e) {
         this.elemPosition[0] += e.pageX - this.lastMouse.pageX;
@@ -165,8 +165,8 @@ var GridsterResizable = (function () {
                 this.gridsterItem.gridster.checkCollision(this.gridsterItem.state.item)) {
                 this.gridsterItem.state.item.x = this.itemBackup[0];
                 this.gridsterItem.state.item.cols = this.itemBackup[2];
-                this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'left', this.gridsterItem.gridster.positionXToPixels(this.gridsterItem.state.item.x) + 'px');
-                this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'width', this.gridsterItem.gridster.positionXToPixels(this.gridsterItem.state.item.cols)
+                this.gridsterItem.renderer.setElementStyle(this.gridsterItem.el, 'left', this.gridsterItem.gridster.positionXToPixels(this.gridsterItem.state.item.x) + 'px');
+                this.gridsterItem.renderer.setElementStyle(this.gridsterItem.el, 'width', this.gridsterItem.gridster.positionXToPixels(this.gridsterItem.state.item.cols)
                     - this.gridsterItem.gridster.state.options.margin + 'px');
                 return;
             }
@@ -174,8 +174,8 @@ var GridsterResizable = (function () {
                 this.gridsterItem.gridster.previewStyle();
             }
         }
-        this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'left', this.elemPosition[0] + 'px');
-        this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'width', this.elemPosition[2] + 'px');
+        this.gridsterItem.renderer.setElementStyle(this.gridsterItem.el, 'left', this.elemPosition[0] + 'px');
+        this.gridsterItem.renderer.setElementStyle(this.gridsterItem.el, 'width', this.elemPosition[2] + 'px');
     };
     GridsterResizable.prototype.handleS = function (e) {
         this.elemPosition[3] += e.pageY - this.lastMouse.pageY;
@@ -185,7 +185,7 @@ var GridsterResizable = (function () {
             this.gridsterItem.state.item.rows = this.position[1] - this.gridsterItem.state.item.y;
             if (this.gridsterItem.state.item.rows < 1 || this.gridsterItem.gridster.checkCollision(this.gridsterItem.state.item)) {
                 this.gridsterItem.state.item.rows = this.itemBackup[3];
-                this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'height', this.gridsterItem.gridster.positionYToPixels(this.gridsterItem.state.item.rows)
+                this.gridsterItem.renderer.setElementStyle(this.gridsterItem.el, 'height', this.gridsterItem.gridster.positionYToPixels(this.gridsterItem.state.item.rows)
                     - this.gridsterItem.gridster.state.options.margin + 'px');
                 return;
             }
@@ -193,7 +193,7 @@ var GridsterResizable = (function () {
                 this.gridsterItem.gridster.previewStyle();
             }
         }
-        this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'height', this.elemPosition[3] + 'px');
+        this.gridsterItem.renderer.setElementStyle(this.gridsterItem.el, 'height', this.elemPosition[3] + 'px');
     };
     GridsterResizable.prototype.handleE = function (e) {
         this.elemPosition[2] += e.pageX - this.lastMouse.pageX;
@@ -203,7 +203,7 @@ var GridsterResizable = (function () {
             this.gridsterItem.state.item.cols = this.position[0] - this.gridsterItem.state.item.x;
             if (this.gridsterItem.state.item.cols < 1 || this.gridsterItem.gridster.checkCollision(this.gridsterItem.state.item)) {
                 this.gridsterItem.state.item.cols = this.itemBackup[2];
-                this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'width', this.gridsterItem.gridster.positionXToPixels(this.gridsterItem.state.item.cols)
+                this.gridsterItem.renderer.setElementStyle(this.gridsterItem.el, 'width', this.gridsterItem.gridster.positionXToPixels(this.gridsterItem.state.item.cols)
                     - this.gridsterItem.gridster.state.options.margin + 'px');
                 return;
             }
@@ -211,7 +211,7 @@ var GridsterResizable = (function () {
                 this.gridsterItem.gridster.previewStyle();
             }
         }
-        this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'width', this.elemPosition[2] + 'px');
+        this.gridsterItem.renderer.setElementStyle(this.gridsterItem.el, 'width', this.elemPosition[2] + 'px');
     };
     GridsterResizable.prototype.handleNW = function (e) {
         this.handleN(e);

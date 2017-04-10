@@ -1,4 +1,4 @@
-import {Component, OnInit, ElementRef, Input, OnDestroy, Renderer2} from '@angular/core';
+import {Component, OnInit, ElementRef, Input, OnDestroy, Renderer} from '@angular/core';
 import {GridsterConfigService} from './gridsterConfig.constant';
 import {GridsterConfig} from './gridsterConfig.interface';
 import {GridsterUtils} from './gridsterUtils.service';
@@ -31,7 +31,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
   windowResize: Function;
   private cleanCallback: any;
 
-  constructor(el: ElementRef, public renderer: Renderer2) {
+  constructor(el: ElementRef, public renderer: Renderer) {
     this.el = el.nativeElement;
     this.state = {
       mobile: false,
@@ -174,17 +174,17 @@ export class GridsterComponent implements OnInit, OnDestroy {
       removeClass3 = 'scrollHorizontal';
     }
 
-    this.renderer.addClass(this.el, addClass);
-    this.renderer.removeClass(this.el, removeClass1);
-    this.renderer.removeClass(this.el, removeClass2);
-    this.renderer.removeClass(this.el, removeClass3);
+    this.renderer.setElementClass(this.el, addClass, true);
+    this.renderer.setElementClass(this.el, removeClass1, false);
+    this.renderer.setElementClass(this.el, removeClass2, false);
+    this.renderer.setElementClass(this.el, removeClass3, false);
 
     if (!this.state.mobile && this.state.options.mobileBreakpoint > this.state.curWidth) {
       this.state.mobile = !this.state.mobile;
-      this.renderer.addClass(this.el, 'mobile');
+      this.renderer.setElementClass(this.el, 'mobile', true);
     } else if (this.state.mobile && this.state.options.mobileBreakpoint < this.state.curWidth) {
       this.state.mobile = !this.state.mobile;
-      this.renderer.removeClass(this.el, 'mobile');
+      this.renderer.setElementClass(this.el, 'mobile', false);
     }
 
     let widgetsIndex = this.state.grid.length - 1;

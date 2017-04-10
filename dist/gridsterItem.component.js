@@ -59,12 +59,12 @@ var GridsterItemComponent = (function () {
         else {
             this.itemMargin = 0;
         }
-        this.renderer.setStyle(this.el, 'display', 'block');
-        this.renderer.setStyle(this.el, 'top', this.top + 'px');
-        this.renderer.setStyle(this.el, 'left', this.left + 'px');
-        this.renderer.setStyle(this.el, 'width', this.width + 'px');
-        this.renderer.setStyle(this.el, 'height', this.height + 'px');
-        this.renderer.setStyle(this.el, 'margin', this.itemMargin + 'px');
+        this.renderer.setElementStyle(this.el, 'display', 'block');
+        this.renderer.setElementStyle(this.el, 'top', this.top + 'px');
+        this.renderer.setElementStyle(this.el, 'left', this.left + 'px');
+        this.renderer.setElementStyle(this.el, 'width', this.width + 'px');
+        this.renderer.setElementStyle(this.el, 'height', this.height + 'px');
+        this.renderer.setElementStyle(this.el, 'margin', this.itemMargin + 'px');
         if (this.width !== this.itemWidth || this.height !== this.itemHeight) {
             this.itemResize.emit(this.state.item);
             if (this.gridster.state.options.itemResizeCallback) {
@@ -114,7 +114,7 @@ GridsterItemComponent.decorators = [
 GridsterItemComponent.ctorParameters = function () { return [
     { type: core_1.ElementRef, },
     { type: gridster_component_1.GridsterComponent, decorators: [{ type: core_1.Host },] },
-    { type: core_1.Renderer2, },
+    { type: core_1.Renderer, },
 ]; };
 GridsterItemComponent.propDecorators = {
     'item': [{ type: core_1.Input },],
