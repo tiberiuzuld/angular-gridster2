@@ -50,11 +50,11 @@ var GridsterDraggable = (function () {
         }
         this.dragFunction = this.dragMove.bind(this);
         this.dragStopFunction = this.dragStop.bind(this);
-        this.mousemove = this.gridsterItem.renderer.listen('document', 'mousemove', this.dragFunction);
-        this.mouseup = this.gridsterItem.renderer.listen('document', 'mouseup', this.dragStopFunction);
-        this.touchmove = this.gridsterItem.renderer.listen('document', 'touchmove', this.dragFunction);
-        this.touchend = this.gridsterItem.renderer.listen('document', 'touchend', this.dragStopFunction);
-        this.touchcancel = this.gridsterItem.renderer.listen('document', 'touchcancel', this.dragStopFunction);
+        this.mousemove = this.gridsterItem.renderer.listenGlobal('document', 'mousemove', this.dragFunction);
+        this.mouseup = this.gridsterItem.renderer.listenGlobal('document', 'mouseup', this.dragStopFunction);
+        this.touchmove = this.gridsterItem.renderer.listenGlobal('document', 'touchmove', this.dragFunction);
+        this.touchend = this.gridsterItem.renderer.listenGlobal('document', 'touchend', this.dragStopFunction);
+        this.touchcancel = this.gridsterItem.renderer.listenGlobal('document', 'touchcancel', this.dragStopFunction);
         this.gridsterItem.renderer.setElementClass(this.gridsterItem.el, 'gridster-item-moving', true);
         this.lastMouse.pageX = e.pageX;
         this.lastMouse.pageY = e.pageY;

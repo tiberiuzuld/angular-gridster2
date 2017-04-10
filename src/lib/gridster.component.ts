@@ -54,7 +54,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
     this.calculateLayoutDebounce = GridsterUtils.debounce(this.calculateLayout.bind(this), 5);
     this.calculateLayoutDebounce();
     this.onResizeFunction = this.onResize.bind(this);
-    this.windowResize = this.renderer.listen('window', 'resize', this.onResizeFunction);
+    this.windowResize = this.renderer.listenGlobal('window', 'resize', this.onResizeFunction);
   };
 
   ngDoCheck() {
