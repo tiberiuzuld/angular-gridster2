@@ -3,11 +3,11 @@ import {Injectable} from '@angular/core';
 @Injectable()
 export class GridsterUtils {
 
-  static merge(obj1, obj2) {
+  static merge(obj1, obj2, properties) {
     for (let p in obj2) {
-      if (obj2.hasOwnProperty(p)) {
+      if (obj2.hasOwnProperty(p) && properties.hasOwnProperty(p)) {
         if (typeof obj2[p] === 'object') {
-          obj1[p] = GridsterUtils.merge(obj1[p], obj2[p]);
+          obj1[p] = GridsterUtils.merge(obj1[p], obj2[p], properties);
         } else {
           obj1[p] = obj2[p];
         }

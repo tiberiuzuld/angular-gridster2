@@ -27,6 +27,7 @@ export interface GridsterConfig {
   draggable?: Draggable;
   resizable?: Resizable;
   swap?: boolean;
+  [propName: string]: any;
 }
 
 export interface Draggable {
