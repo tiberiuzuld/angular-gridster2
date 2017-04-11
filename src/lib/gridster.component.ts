@@ -49,7 +49,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.options.optionsChanged = this.optionsChanged.bind(this);
-    this.state.options = GridsterUtils.merge(this.state.options, this.options);
+    this.state.options = GridsterUtils.merge(this.state.options, this.options, this.state.options);
     this.setGridSize();
     this.calculateLayoutDebounce = GridsterUtils.debounce(this.calculateLayout.bind(this), 5);
     this.calculateLayoutDebounce();
@@ -73,7 +73,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
   }
 
   optionsChanged() {
-    this.state.options = GridsterUtils.merge(this.state.options, this.options);
+    this.state.options = GridsterUtils.merge(this.state.options, this.options, this.state.options);
     this.calculateLayout();
   }
 
@@ -208,7 +208,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
       this.autoPositionItem(item);
     } else if (this.checkCollision(item)) {
       console.warn('Can\'t be placed in the bounds of the dashboard, trying to auto position!/n' +
-        JSON.stringify(item, ['cols', 'rows', 'x', 'y', 'id']));
+        JSON.stringify(item, ['cols', 'rows', 'x', 'y']));
       item.x = undefined;
       item.y = undefined;
       this.autoPositionItem(item);
@@ -225,7 +225,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
     this.calculateLayoutDebounce();
   }
 
-  checkCollision(item: GridsterItem): GridsterItem {
+  checkCollision(item: GridsterItem): GridsterItem | boolean {
     const noNegativePosition = item.y > -1 && item.x > -1;
     const maxGridCols = item.cols + item.x <= this.state.options.maxCols;
     const maxGridRows = item.rows + item.y <= this.state.options.maxRows;
@@ -273,7 +273,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
       item.x = 0;
     } else {
       console.warn('Can\'t be placed in the bounds of the dashboard!/n' +
-        JSON.stringify(item, ['cols', 'rows', 'x', 'y', 'id']));
+        JSON.stringify(item, ['cols', 'rows', 'x', 'y']));
     }
   }
 

@@ -4,11 +4,11 @@ var core_1 = require("@angular/core");
 var GridsterUtils = (function () {
     function GridsterUtils() {
     }
-    GridsterUtils.merge = function (obj1, obj2) {
+    GridsterUtils.merge = function (obj1, obj2, properties) {
         for (var p in obj2) {
-            if (obj2.hasOwnProperty(p)) {
+            if (obj2.hasOwnProperty(p) && properties.hasOwnProperty(p)) {
                 if (typeof obj2[p] === 'object') {
-                    obj1[p] = GridsterUtils.merge(obj1[p], obj2[p]);
+                    obj1[p] = GridsterUtils.merge(obj1[p], obj2[p], properties[p]);
                 }
                 else {
                     obj1[p] = obj2[p];

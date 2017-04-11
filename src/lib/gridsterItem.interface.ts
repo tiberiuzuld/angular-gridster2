@@ -17,4 +17,5 @@ export interface GridsterItem {
   minItemCols?: number;
   drag?: GridsterDraggable;
   resize?: GridsterResizable;
+  [propName: string]: any;
 }

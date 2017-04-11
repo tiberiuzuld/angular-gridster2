@@ -23,7 +23,7 @@ var GridsterComponent = (function () {
     ;
     GridsterComponent.prototype.ngOnInit = function () {
         this.options.optionsChanged = this.optionsChanged.bind(this);
-        this.state.options = gridsterUtils_service_1.GridsterUtils.merge(this.state.options, this.options);
+        this.state.options = gridsterUtils_service_1.GridsterUtils.merge(this.state.options, this.options, this.state.options);
         this.setGridSize();
         this.calculateLayoutDebounce = gridsterUtils_service_1.GridsterUtils.debounce(this.calculateLayout.bind(this), 5);
         this.calculateLayoutDebounce();
@@ -47,7 +47,7 @@ var GridsterComponent = (function () {
         }
     };
     GridsterComponent.prototype.optionsChanged = function () {
-        this.state.options = gridsterUtils_service_1.GridsterUtils.merge(this.state.options, this.options);
+        this.state.options = gridsterUtils_service_1.GridsterUtils.merge(this.state.options, this.options, this.state.options);
         this.calculateLayout();
     };
     GridsterComponent.prototype.ngOnDestroy = function () {
@@ -182,7 +182,7 @@ var GridsterComponent = (function () {
         }
         else if (this.checkCollision(item)) {
             console.warn('Can\'t be placed in the bounds of the dashboard, trying to auto position!/n' +
-                JSON.stringify(item, ['cols', 'rows', 'x', 'y', 'id']));
+                JSON.stringify(item, ['cols', 'rows', 'x', 'y']));
             item.x = undefined;
             item.y = undefined;
             this.autoPositionItem(item);
@@ -246,7 +246,7 @@ var GridsterComponent = (function () {
         }
         else {
             console.warn('Can\'t be placed in the bounds of the dashboard!/n' +
-                JSON.stringify(item, ['cols', 'rows', 'x', 'y', 'id']));
+                JSON.stringify(item, ['cols', 'rows', 'x', 'y']));
         }
     };
     GridsterComponent.prototype.pixelsToPosition = function (x, y, roundingMethod) {

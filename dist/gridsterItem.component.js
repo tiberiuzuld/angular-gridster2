@@ -30,7 +30,7 @@ var GridsterItemComponent = (function () {
         this.gridster = gridster;
     }
     GridsterItemComponent.prototype.ngOnInit = function () {
-        this.state.item = gridsterUtils_service_1.GridsterUtils.merge(this.state.item, this.item);
+        this.state.item = gridsterUtils_service_1.GridsterUtils.merge(this.state.item, this.item, this.state.item);
         this.gridster.addItem(this.state.item);
     };
     GridsterItemComponent.prototype.ngOnDestroy = function () {
