@@ -8,7 +8,7 @@ var GridsterUtils = (function () {
         for (var p in obj2) {
             if (obj2.hasOwnProperty(p) && properties.hasOwnProperty(p)) {
                 if (typeof obj2[p] === 'object') {
-                    obj1[p] = GridsterUtils.merge(obj1[p], obj2[p], properties);
+                    obj1[p] = GridsterUtils.merge(obj1[p], obj2[p], properties[p]);
                 }
                 else {
                     obj1[p] = obj2[p];
