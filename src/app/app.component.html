@@ -63,6 +63,22 @@
       <input mdInput [(ngModel)]="options.fixedRowHeight" type="number" placeholder="Fixed Row Height"
              (ngModelChange)="changedOptions()">
     </md-input-container>
+    <md-input-container>
+      <input mdInput [(ngModel)]="options.minCols" type="number" placeholder="Min Grid Cols"
+             (ngModelChange)="changedOptions()">
+    </md-input-container>
+    <md-input-container>
+      <input mdInput [(ngModel)]="options.maxCols" type="number" placeholder="Max Grid Cols"
+             (ngModelChange)="changedOptions()">
+    </md-input-container>
+    <md-input-container>
+      <input mdInput [(ngModel)]="options.minRows" type="number" placeholder="Min Grid Rows"
+             (ngModelChange)="changedOptions()">
+    </md-input-container>
+    <md-input-container>
+      <input mdInput [(ngModel)]="options.maxRows" type="number" placeholder="Max Grid Rows"
+             (ngModelChange)="changedOptions()">
+    </md-input-container>
   </div>
 </md-toolbar>
 
