@@ -45,6 +45,10 @@ export class GridsterComponent implements OnInit, OnDestroy {
       curColWidth: 0,
       curRowHeight: 0
     };
+    this.state.options.draggable.stop = undefined;
+    this.state.options.resizable.stop = undefined;
+    this.state.options.itemChangeCallback = undefined;
+    this.state.options.itemResizeCallback = undefined;
   };
 
   ngOnInit() {

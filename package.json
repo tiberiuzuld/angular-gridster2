@@ -1,6 +1,6 @@
 {
   "name": "angular-gridster2",
-  "version": "2.7.5",
+  "version": "2.7.6",
   "license": "MIT",
   "main": "dist/index.js",
   "jsnext:main": "dist/index.js",
@@ -70,7 +70,7 @@
     "gulp-inline-ng2-template": "4.0.0",
     "hammerjs": "2.0.8",
     "jasmine-core": "2.5.2",
-    "jasmine-spec-reporter": "3.2.0",
+    "jasmine-spec-reporter": "3.3.0",
     "karma": "1.6.0",
     "karma-chrome-launcher": "2.0.0",
     "karma-cli": "1.0.1",
