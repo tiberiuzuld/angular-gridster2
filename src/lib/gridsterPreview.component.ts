@@ -20,16 +20,16 @@ export class GridsterPreviewComponent {
       this.renderer.setStyle(this.el, 'display', 'none');
     } else {
       let margin = 0;
-      const curRowHeight = this.gridster.state.curRowHeight;
-      const curColWidth = this.gridster.state.curColWidth;
-      if (this.gridster.options.outerMargin) {
-        margin = this.gridster.state.options.margin;
+      const curRowHeight = this.gridster.curRowHeight;
+      const curColWidth = this.gridster.curColWidth;
+      if (this.gridster.$options.outerMargin) {
+        margin = this.gridster.$options.margin;
       }
       this.renderer.setStyle(this.el, 'display', 'block');
-      this.renderer.setStyle(this.el, 'height', (this.gridster.movingItem.rows * curRowHeight - margin) + 'px');
-      this.renderer.setStyle(this.el, 'width', (this.gridster.movingItem.cols * curColWidth - margin) + 'px');
-      this.renderer.setStyle(this.el, 'top', (this.gridster.movingItem.y * curRowHeight + margin) + 'px');
-      this.renderer.setStyle(this.el, 'left', (this.gridster.movingItem.x * curColWidth + margin) + 'px');
+      this.renderer.setStyle(this.el, 'height', (this.gridster.movingItem.$item.rows * curRowHeight - margin) + 'px');
+      this.renderer.setStyle(this.el, 'width', (this.gridster.movingItem.$item.cols * curColWidth - margin) + 'px');
+      this.renderer.setStyle(this.el, 'top', (this.gridster.movingItem.$item.y * curRowHeight + margin) + 'px');
+      this.renderer.setStyle(this.el, 'left', (this.gridster.movingItem.$item.x * curColWidth + margin) + 'px');
       this.renderer.setStyle(this.el, 'marginBottom', margin + 'px');
     }
   }

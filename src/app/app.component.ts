@@ -55,7 +55,8 @@ export class AppComponent implements OnInit {
         enabled: true,
         stop: AppComponent.eventStop
       },
-      swap: false
+      swap: false,
+      pushItems: true
     };
 
     this.dashboard = [
