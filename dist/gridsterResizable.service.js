@@ -30,6 +30,7 @@ var GridsterResizable = (function () {
                 return;
         }
         e.stopPropagation();
+        e.preventDefault();
         if (e.pageX === undefined && e.touches) {
             GridsterResizable.touchEvent(e);
         }
@@ -50,38 +51,38 @@ var GridsterResizable = (function () {
         this.itemCopy = JSON.parse(JSON.stringify(this.gridsterItem.state.item, ['rows', 'cols', 'x', 'y']));
         this.gridsterItem.gridster.movingItem = this.gridsterItem.state.item;
         this.gridsterItem.gridster.previewStyle();
-        if (e.srcElement.classList.contains('handle-n')) {
+        if (e.currentTarget.classList.contains('handle-n')) {
             this.resizeEventScrollType.n = true;
             this.directionFunction = this.handleN.bind(this);
         }
-        else if (e.srcElement.classList.contains('handle-w')) {
+        else if (e.currentTarget.classList.contains('handle-w')) {
             this.resizeEventScrollType.w = true;
             this.directionFunction = this.handleW.bind(this);
         }
-        else if (e.srcElement.classList.contains('handle-s')) {
+        else if (e.currentTarget.classList.contains('handle-s')) {
             this.resizeEventScrollType.s = true;
             this.directionFunction = this.handleS.bind(this);
         }
-        else if (e.srcElement.classList.contains('handle-e')) {
+        else if (e.currentTarget.classList.contains('handle-e')) {
             this.resizeEventScrollType.e = true;
             this.directionFunction = this.handleE.bind(this);
         }
-        else if (e.srcElement.classList.contains('handle-nw')) {
+        else if (e.currentTarget.classList.contains('handle-nw')) {
             this.resizeEventScrollType.n = true;
             this.resizeEventScrollType.w = true;
             this.directionFunction = this.handleNW.bind(this);
         }
-        else if (e.srcElement.classList.contains('handle-ne')) {
+        else if (e.currentTarget.classList.contains('handle-ne')) {
             this.resizeEventScrollType.n = true;
             this.resizeEventScrollType.e = true;
             this.directionFunction = this.handleNE.bind(this);
         }
-        else if (e.srcElement.classList.contains('handle-sw')) {
+        else if (e.currentTarget.classList.contains('handle-sw')) {
             this.resizeEventScrollType.s = true;
             this.resizeEventScrollType.w = true;
             this.directionFunction = this.handleSW.bind(this);
         }
-        else if (e.srcElement.classList.contains('handle-se')) {
+        else if (e.currentTarget.classList.contains('handle-se')) {
             this.resizeEventScrollType.s = true;
             this.resizeEventScrollType.e = true;
             this.directionFunction = this.handleSE.bind(this);
@@ -89,6 +90,7 @@ var GridsterResizable = (function () {
     };
     GridsterResizable.prototype.dragMove = function (e) {
         e.stopPropagation();
+        e.preventDefault();
         if (e.pageX === undefined && e.touches) {
             GridsterResizable.touchEvent(e);
         }
@@ -99,6 +101,7 @@ var GridsterResizable = (function () {
     };
     GridsterResizable.prototype.dragStop = function (e) {
         e.stopPropagation();
+        e.preventDefault();
         gridsterScroll_service_1.cancelScroll();
         this.mousemove();
         this.mouseup();

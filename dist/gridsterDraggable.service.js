@@ -45,6 +45,7 @@ var GridsterDraggable = (function () {
             return;
         }
         e.stopPropagation();
+        e.preventDefault();
         if (e.pageX === undefined && e.touches) {
             GridsterDraggable.touchEvent(e);
         }
@@ -68,6 +69,7 @@ var GridsterDraggable = (function () {
     };
     GridsterDraggable.prototype.dragMove = function (e) {
         e.stopPropagation();
+        e.preventDefault();
         if (e.pageX === undefined && e.touches) {
             GridsterDraggable.touchEvent(e);
         }
@@ -80,6 +82,7 @@ var GridsterDraggable = (function () {
     };
     GridsterDraggable.prototype.dragStop = function (e) {
         e.stopPropagation();
+        e.preventDefault();
         gridsterScroll_service_1.cancelScroll();
         this.mousemove();
         this.mouseup();
