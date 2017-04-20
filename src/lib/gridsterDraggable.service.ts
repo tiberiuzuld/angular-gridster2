@@ -3,10 +3,12 @@ import {GridsterSwap} from './gridsterSwap.service';
 import {scroll, cancelScroll} from './gridsterScroll.service';
 import {GridsterItemComponent} from './gridsterItem.component';
 import {GridsterItem} from './gridsterItem.interface';
+import {GridsterComponent} from './gridster.component';
 
 @Injectable()
 export class GridsterDraggable {
   gridsterItem: GridsterItemComponent;
+  gridster: GridsterComponent;
   itemCopy: GridsterItem;
   lastMouse: {
     pageX: number,
@@ -32,8 +34,9 @@ export class GridsterDraggable {
     e.pageY = e.touches[0].pageY;
   }
 
-  constructor(gridsterItem: GridsterItemComponent) {
+  constructor(gridsterItem: GridsterItemComponent, gridster: GridsterComponent) {
     this.gridsterItem = gridsterItem;
+    this.gridster = gridster;
     this.lastMouse = {
       pageX: 0,
       pageY: 0
@@ -65,7 +68,7 @@ export class GridsterDraggable {
         return;
     }
 
-    const contentClass = this.gridsterItem.gridster.$options.draggable.ignoreContentClass;
+    const contentClass = this.gridster.$options.draggable.ignoreContentClass;
     if (this.checkContentClass(e.target, e.currentTarget, contentClass)) {
       return;
     }
@@ -91,8 +94,8 @@ export class GridsterDraggable {
     this.elemPosition[2] = this.gridsterItem.width;
     this.elemPosition[3] = this.gridsterItem.height;
     this.itemCopy = JSON.parse(JSON.stringify(this.gridsterItem.$item, ['rows', 'cols', 'x', 'y']));
-    this.gridsterItem.gridster.movingItem = this.gridsterItem;
-    this.gridsterItem.gridster.previewStyle();
+    this.gridster.movingItem = this.gridsterItem;
+    this.gridster.previewStyle();
   }
 
   dragMove(e): void {
@@ -123,10 +126,10 @@ export class GridsterDraggable {
     this.touchend();
     this.touchcancel();
     this.gridsterItem.renderer.removeClass(this.gridsterItem.el, 'gridster-item-moving');
-    this.gridsterItem.gridster.movingItem = null;
-    this.gridsterItem.gridster.previewStyle();
-    if (this.gridsterItem.gridster.$options.draggable.stop) {
-      Promise.resolve(this.gridsterItem.gridster.$options.draggable.stop(this.gridsterItem.item, this.gridsterItem, e))
+    this.gridster.movingItem = null;
+    this.gridster.previewStyle();
+    if (this.gridster.$options.draggable.stop) {
+      Promise.resolve(this.gridster.$options.draggable.stop(this.gridsterItem.item, this.gridsterItem, e))
         .then(this.makeDrag.bind(this), this.cancelDrag.bind(this));
     } else {
       this.makeDrag();
@@ -140,7 +143,7 @@ export class GridsterDraggable {
   }
 
   makeDrag() {
-    if (this.gridsterItem.gridster.$options.swap) {
+    if (this.gridster.$options.swap) {
       GridsterSwap.GridsterSwap(this.gridsterItem, this.elemPosition);
     }
     this.gridsterItem.setSize(true);
@@ -151,23 +154,23 @@ export class GridsterDraggable {
     this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'left', this.elemPosition[0] + 'px');
     this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'top', this.elemPosition[1] + 'px');
 
-    this.position = this.gridsterItem.gridster.pixelsToPosition(this.elemPosition[0], this.elemPosition[1], Math.round);
+    this.position = this.gridster.pixelsToPosition(this.elemPosition[0], this.elemPosition[1], Math.round);
     if (this.position[0] !== this.gridsterItem.$item.x || this.position[1] !== this.gridsterItem.$item.y) {
       this.positionBackup[0] = this.gridsterItem.$item.x;
       this.positionBackup[1] = this.gridsterItem.$item.y;
       this.gridsterItem.$item.x = this.position[0];
       this.gridsterItem.$item.y = this.position[1];
-      if (this.gridsterItem.gridster.checkCollision(this.gridsterItem)) {
+      if (this.gridster.checkCollision(this.gridsterItem)) {
         this.gridsterItem.$item.x = this.positionBackup[0];
         this.gridsterItem.$item.y = this.positionBackup[1];
       } else {
-        this.gridsterItem.gridster.previewStyle();
+        this.gridster.previewStyle();
       }
     }
   }
 
   toggle(enable: boolean) {
-    const enableDrag = !this.gridsterItem.gridster.mobile &&
+    const enableDrag = !this.gridster.mobile &&
       (this.gridsterItem.$item.dragEnabled === undefined ? enable : this.gridsterItem.$item.dragEnabled);
     if (!this.enabled && enableDrag) {
       this.enabled = !this.enabled;

@@ -201,9 +201,13 @@ export class GridsterComponent implements OnInit, OnDestroy {
   addItem(itemComponent: GridsterItemComponent): void {
     if (itemComponent.$item.cols === undefined) {
       itemComponent.$item.cols = this.$options.defaultItemCols;
+      itemComponent.item.cols = itemComponent.$item.cols;
+      itemComponent.itemChanged();
     }
     if (itemComponent.$item.rows === undefined) {
       itemComponent.$item.rows = this.$options.defaultItemRows;
+      itemComponent.item.rows = itemComponent.$item.rows;
+      itemComponent.itemChanged();
     }
     if (itemComponent.$item.x === undefined || itemComponent.$item.y === undefined) {
       this.autoPositionItem(itemComponent);
@@ -226,7 +230,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
     this.calculateLayoutDebounce();
   }
 
-  checkCollision(itemComponent: GridsterItemComponent): GridsterItemComponent | boolean {
+  checkCollision(itemComponent: GridsterItemComponent, ignoreItem?: GridsterItemComponent): GridsterItemComponent | boolean {
     const noNegativePosition = itemComponent.$item.y > -1 && itemComponent.$item.x > -1;
     const maxGridCols = itemComponent.$item.cols + itemComponent.$item.x <= this.$options.maxCols;
     const maxGridRows = itemComponent.$item.rows + itemComponent.$item.y <= this.$options.maxRows;
@@ -239,14 +243,14 @@ export class GridsterComponent implements OnInit, OnDestroy {
     if (!(noNegativePosition && maxGridCols && maxGridRows && inColsLimits && inRowsLimits)) {
       return true;
     }
-    return this.findItemWithItem(itemComponent);
+    return this.findItemWithItem(itemComponent, ignoreItem);
   }
 
-  findItemWithItem(itemComponent: GridsterItemComponent): GridsterItemComponent {
+  findItemWithItem(itemComponent: GridsterItemComponent, ignoreItem?: GridsterItemComponent): GridsterItemComponent {
     let widgetsIndex: number = this.grid.length - 1, widget: GridsterItemComponent;
     for (; widgetsIndex >= 0; widgetsIndex--) {
       widget = this.grid[widgetsIndex];
-      if (widget !== itemComponent
+      if (widget !== itemComponent && widget !== ignoreItem
         && widget.$item.x < itemComponent.$item.x + itemComponent.$item.cols
         && widget.$item.x + widget.$item.cols > itemComponent.$item.x
         && widget.$item.y < itemComponent.$item.y + itemComponent.$item.rows
@@ -265,6 +269,9 @@ export class GridsterComponent implements OnInit, OnDestroy {
       for (; colsIndex < this.columns; colsIndex++) {
         itemComponent.$item.x = colsIndex;
         if (!this.checkCollision(itemComponent)) {
+          itemComponent.item.x = itemComponent.$item.x;
+          itemComponent.item.y = itemComponent.$item.y;
+          itemComponent.itemChanged();
           return;
         }
       }
@@ -272,9 +279,15 @@ export class GridsterComponent implements OnInit, OnDestroy {
     if (this.rows >= this.columns && this.$options.maxCols > this.columns) {
       itemComponent.$item.x = this.columns;
       itemComponent.$item.y = 0;
+      itemComponent.item.x = itemComponent.$item.x;
+      itemComponent.item.y = itemComponent.$item.y;
+      itemComponent.itemChanged();
     } else if (this.$options.maxRows > this.rows) {
       itemComponent.$item.y = this.rows;
       itemComponent.$item.x = 0;
+      itemComponent.item.x = itemComponent.$item.x;
+      itemComponent.item.y = itemComponent.$item.y;
+      itemComponent.itemChanged();
     } else {
       console.warn('Can\'t be placed in the bounds of the dashboard!/n' +
         JSON.stringify(itemComponent.item, ['cols', 'rows', 'x', 'y']));

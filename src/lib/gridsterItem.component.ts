@@ -45,9 +45,9 @@ export class GridsterItemComponent implements OnInit, OnDestroy {
       minItemCols: undefined
     };
 
-    this.drag = new GridsterDraggable(this);
-    this.resize = new GridsterResizable(this);
     this.gridster = gridster;
+    this.drag = new GridsterDraggable(this, gridster);
+    this.resize = new GridsterResizable(this, gridster);
   }
 
   ngOnInit(): void {
