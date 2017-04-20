@@ -29,6 +29,7 @@ export class GridsterResizable {
   touchcancel: Function;
   mousedown: Function;
   touchstart: Function;
+  push: GridsterPush;
 
   static touchEvent(e) {
     e.pageX = e.touches[0].pageX;
@@ -78,6 +79,7 @@ export class GridsterResizable {
     this.itemCopy = JSON.parse(JSON.stringify(this.gridsterItem.$item, ['rows', 'cols', 'x', 'y']));
     this.gridsterItem.gridster.movingItem = this.gridsterItem;
     this.gridsterItem.gridster.previewStyle();
+    this.push = new GridsterPush();
 
     if (e.srcElement.classList.contains('handle-n')) {
       this.resizeEventScrollType.n = true;
@@ -150,11 +152,13 @@ export class GridsterResizable {
     this.gridsterItem.$item.x = this.itemCopy.x;
     this.gridsterItem.$item.y = this.itemCopy.y;
     this.gridsterItem.setSize(true);
+    this.push.restoreItems();
   }
 
   makeResize(): void {
     this.gridsterItem.setSize(true);
     this.gridsterItem.checkItemChanges(this.gridsterItem.$item, this.itemCopy);
+    this.push.setPushedItems();
   }
 
   handleN(e): void {
@@ -214,7 +218,7 @@ export class GridsterResizable {
     if ((this.gridsterItem.$item.y + this.gridsterItem.$item.rows) !== this.position[1]) {
       this.itemBackup[3] = this.gridsterItem.$item.rows;
       this.gridsterItem.$item.rows = this.position[1] - this.gridsterItem.$item.y;
-      GridsterPush.pushItems(this.gridsterItem);
+      this.push.pushItems(this.gridsterItem);
       if (this.gridsterItem.$item.rows < 1 || this.gridsterItem.gridster.checkCollision(this.gridsterItem)) {
         this.gridsterItem.$item.rows = this.itemBackup[3];
         this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'height', this.gridsterItem.gridster.positionYToPixels(this.gridsterItem.$item.rows)
