@@ -71,6 +71,7 @@ export class GridsterDraggable {
     }
 
     e.stopPropagation();
+    e.preventDefault();
     if (e.pageX === undefined && e.touches) {
       GridsterDraggable.touchEvent(e);
     }
@@ -96,6 +97,8 @@ export class GridsterDraggable {
 
   dragMove(e) {
     e.stopPropagation();
+    e.preventDefault();
+
     if (e.pageX === undefined && e.touches) {
       GridsterDraggable.touchEvent(e);
     }
@@ -112,6 +115,7 @@ export class GridsterDraggable {
 
   dragStop(e) {
     e.stopPropagation();
+    e.preventDefault();
 
     cancelScroll();
     this.mousemove();
