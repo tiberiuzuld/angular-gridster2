@@ -47,20 +47,20 @@
   "dependencies": {
   },
   "devDependencies": {
-    "@angular/animations": "4.0.2",
+    "@angular/animations": "4.0.3",
     "@angular/cli": "1.0.0",
-    "@angular/common": "4.0.2",
-    "@angular/compiler": "4.0.2",
-    "@angular/compiler-cli": "4.0.2",
-    "@angular/core": "4.0.2",
-    "@angular/forms": "4.0.2",
-    "@angular/http": "4.0.2",
-    "@angular/language-service": "4.0.2",
+    "@angular/common": "4.0.3",
+    "@angular/compiler": "4.0.3",
+    "@angular/compiler-cli": "4.0.3",
+    "@angular/core": "4.0.3",
+    "@angular/forms": "4.0.3",
+    "@angular/http": "4.0.3",
+    "@angular/language-service": "4.0.3",
     "@angular/material": "2.0.0-beta.3",
-    "@angular/platform-browser": "4.0.2",
-    "@angular/platform-browser-dynamic": "4.0.2",
-    "@angular/platform-server": "4.0.2",
-    "@angular/router": "4.0.2",
+    "@angular/platform-browser": "4.0.3",
+    "@angular/platform-browser-dynamic": "4.0.3",
+    "@angular/platform-server": "4.0.3",
+    "@angular/router": "4.0.3",
     "@types/jasmine": "2.5.47",
     "@types/node": "7.0.13",
     "codelyzer": "2.1.1",
@@ -85,6 +85,6 @@
     "tslib": "1.6.1",
     "tslint": "5.1.0",
     "typescript": "2.2.2",
-    "zone.js": "0.8.5"
+    "zone.js": "0.8.8"
   }
 }
