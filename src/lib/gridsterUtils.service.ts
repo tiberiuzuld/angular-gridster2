@@ -21,12 +21,12 @@ export class GridsterUtils {
     let timeout;
     return function () {
       const context = this, args = arguments;
-      let later = function () {
+      const later = function () {
         timeout = null;
         func.apply(context, args);
       };
       clearTimeout(timeout);
       timeout = setTimeout(later, wait);
     };
-  };
+  }
 }

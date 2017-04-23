@@ -30,9 +30,8 @@
     "member-access": false,
     "member-ordering": [
       true,
-      {
-        "order": "fields-first"
-      }
+      "static-before-instance",
+      "variables-before-functions"
     ],
     "no-arg": true,
     "no-bitwise": true,

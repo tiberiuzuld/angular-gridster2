@@ -3,7 +3,7 @@ import {GridsterResizeEventType} from './gridsterResizeEventType.interface';
 
 let scrollSensitivity: number;
 let scrollSpeed: number;
-let intervalDuration: number = 50;
+const intervalDuration = 50;
 let gridsterElement: any;
 let scrollTop: number;
 let scrollLeft: number;
@@ -16,8 +16,8 @@ let intervalS: number;
 
 export function scroll(elemPosition: Array<number>, gridsterItem: GridsterItemComponent, e: MouseEvent, lastMouse,
                        calculateItemPosition: Function, resize?: boolean, resizeEventScrollType?: GridsterResizeEventType) {
-  scrollSensitivity = gridsterItem.gridster.state.options.scrollSensitivity;
-  scrollSpeed = gridsterItem.gridster.state.options.scrollSpeed;
+  scrollSensitivity = gridsterItem.gridster.$options.scrollSensitivity;
+  scrollSpeed = gridsterItem.gridster.$options.scrollSpeed;
   gridsterElement = gridsterItem.gridster.el;
   resizeEvent = resize;
   resizeEventType = resizeEventScrollType;

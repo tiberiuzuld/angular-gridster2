@@ -111,10 +111,11 @@ Initialize the demo dashboard
    };
 ```
 
-Default Options:
+##### Default Grid Options:
 ```typescript
 import {GridsterConfig} from './gridsterConfig.interface';
-const GridsterConfigService: GridsterConfig = {
+
+export const GridsterConfigService: GridsterConfig = {
   gridType: 'fit', // 'fit' will fit the items in the container without scroll;
   // 'scrollVertical' will fit on width and height of the items will be the same as the width
   // 'scrollHorizontal' will fit on height and width of the items will be the same as the height
@@ -138,11 +139,11 @@ const GridsterConfigService: GridsterConfig = {
   outerMargin: true,  // if margins will apply to the sides of the container
   scrollSensitivity: 10,  // margin of the dashboard where to start scrolling
   scrollSpeed: 20,  // how much to scroll each mouse move when in the scrollSensitivity zone
-  itemChangeCallback: undefined,  // callback to call for each item when is changes x, y, rows, cols. Arguments:gridsterItem
-  itemResizeCallback: undefined,  // callback to call for each item when width/height changes. Arguments:gridsterItem
+  itemChangeCallback: undefined,  // callback to call for each item when is changes x, y, rows, cols. Arguments: gridsterItem
+  itemResizeCallback: undefined,  // callback to call for each item when width/height changes. Arguments: gridsterItem
   draggable: {
     enabled: false, // enable/disable draggable items
-    ignoreContentClass: 'gridster-item-content', // default content class to ignore the drag event from Warning: the class should have user-select: auto;
+    ignoreContentClass: 'gridster-item-content', // default content class to ignore the drag event from
     stop: undefined // callback when dragging an item stops.  Accepts Promise return to cancel/approve drag.
     // Arguments: item, gridsterItem, event
   },
@@ -161,8 +162,26 @@ const GridsterConfigService: GridsterConfig = {
     stop: undefined // callback when resizing an item stops. Accepts Promise return to cancel/approve resize.
     // Arguments: item, gridsterItem, event
   },
-  swap: true // allow items to switch position if drop on top of another
+  swap: true, // allow items to switch position if drop on top of another
+  pushItems: false // push items when resizing and dragging
 };
+```
+
+##### Gridster item options:
+```typescript
+export interface GridsterItem {
+  x?: number; // x position if missing will auto position
+  y?: number; // y position if missing will auto position
+  rows?: number; // number of rows if missing will use grid option defaultItemRows
+  cols?: number; // number of columns if missing will use grid option defaultItemCols
+  initCallback?: Function; // initialization callback
+  dragEnabled?: boolean; // override grid option draggable.enabled
+  resizeEnabled?: boolean; // override grid option resizable.enabled
+  maxItemRows?: number; // override grid option maxItemRows
+  minItemRows?: number; // override grid option minItemRows
+  maxItemCols?: number; // override grid option maxItemCols
+  minItemCols?: number; // override grid option minItemCols
+}
 ```
 
 ### Events 

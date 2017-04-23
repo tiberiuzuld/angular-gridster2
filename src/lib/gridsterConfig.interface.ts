@@ -27,12 +27,13 @@ export interface GridsterConfig {
   draggable?: Draggable;
   resizable?: Resizable;
   swap?: boolean;
+  pushItems?: boolean;
   [propName: string]: any;
 }
 
 export interface Draggable {
   enabled?: boolean;
-  ignoreContentClass?: string
+  ignoreContentClass?: string;
   stop?: Function;
 }
 
