@@ -1,4 +1,5 @@
 export type GridType = 'fit' | 'scrollVertical' | 'scrollHorizontal' | 'fixed';
+export type displayGrid = 'always' | 'onDrag&Resize' | 'none';
 
 export interface GridsterConfig {
   gridType?: GridType;
@@ -28,6 +29,7 @@ export interface GridsterConfig {
   resizable?: Resizable;
   swap?: boolean;
   pushItems?: boolean;
+  displayGrid?: displayGrid;
   [propName: string]: any;
 }
 

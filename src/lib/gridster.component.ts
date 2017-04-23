@@ -3,10 +3,11 @@ import {GridsterConfigService} from './gridsterConfig.constant';
 import {GridsterConfig} from './gridsterConfig.interface';
 import {GridsterUtils} from './gridsterUtils.service';
 import {GridsterItemComponent} from './gridsterItem.component';
+import {GridsterGridComponent} from './gridsterGrid.component';
 
 @Component({
   selector: 'gridster',
-  template: '<ng-content></ng-content><gridster-preview></gridster-preview>',
+  templateUrl: './gridster.html',
   styleUrls: ['./gridster.css']
 })
 export class GridsterComponent implements OnInit, OnDestroy, DoCheck {
@@ -27,6 +28,7 @@ export class GridsterComponent implements OnInit, OnDestroy, DoCheck {
   curColWidth: number;
   curRowHeight: number;
   windowResize: Function;
+  gridLines: GridsterGridComponent;
   private cleanCallback: any;
 
   constructor(el: ElementRef, public renderer: Renderer2) {
@@ -188,6 +190,7 @@ export class GridsterComponent implements OnInit, OnDestroy, DoCheck {
       this.mobile = !this.mobile;
       this.renderer.removeClass(this.el, 'mobile');
     }
+    this.gridLines.updateGrid();
 
     let widgetsIndex: number = this.grid.length - 1, widget: GridsterItemComponent;
     for (; widgetsIndex >= 0; widgetsIndex--) {
