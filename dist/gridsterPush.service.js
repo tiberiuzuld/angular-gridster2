@@ -12,7 +12,7 @@ var GridsterPush = (function () {
     GridsterPush.prototype.pushItems = function () {
         if (this.gridster.$options.pushItems) {
             this.checkPushBack();
-            this.push(this.gridsterItem);
+            this.push(this.gridsterItem, this.gridsterItem);
         }
     };
     GridsterPush.prototype.restoreItems = function () {
@@ -37,41 +37,41 @@ var GridsterPush = (function () {
         }
         this.pushedItems = undefined;
     };
-    GridsterPush.prototype.push = function (gridsterItem) {
-        var gridsterItemCollision = this.gridster.checkCollision(gridsterItem, this.gridsterItem);
+    GridsterPush.prototype.push = function (gridsterItem, pushedBy) {
+        var gridsterItemCollision = this.gridster.checkCollision(gridsterItem, pushedBy);
         if (gridsterItemCollision && gridsterItemCollision !== true) {
             var gridsterItemCollide = gridsterItemCollision;
             if (gridsterItem.item.y < gridsterItem.$item.y ||
                 (gridsterItem.item.y === gridsterItem.$item.y && gridsterItem.item.rows < gridsterItem.$item.rows)) {
-                if (this.trySouth(gridsterItemCollide, gridsterItem)) {
+                if (this.trySouth(gridsterItemCollide, gridsterItem, pushedBy)) {
                     return true;
                 }
-                else if (this.tryEast(gridsterItemCollide, gridsterItem)) {
+                else if (this.tryEast(gridsterItemCollide, gridsterItem, pushedBy)) {
                     return true;
                 }
             }
             else if (gridsterItem.item.y > gridsterItem.$item.y) {
-                if (this.tryNorth(gridsterItemCollide, gridsterItem)) {
+                if (this.tryNorth(gridsterItemCollide, gridsterItem, pushedBy)) {
                     return true;
                 }
-                else if (this.tryEast(gridsterItemCollide, gridsterItem)) {
+                else if (this.tryEast(gridsterItemCollide, gridsterItem, pushedBy)) {
                     return true;
                 }
             }
             if (gridsterItem.item.x < gridsterItem.$item.x ||
                 (gridsterItem.item.x === gridsterItem.$item.x && gridsterItem.item.cols < gridsterItem.$item.cols)) {
-                if (this.tryEast(gridsterItemCollide, gridsterItem)) {
+                if (this.tryEast(gridsterItemCollide, gridsterItem, pushedBy)) {
                     return true;
                 }
-                else if (this.trySouth(gridsterItemCollide, gridsterItem)) {
+                else if (this.trySouth(gridsterItemCollide, gridsterItem, pushedBy)) {
                     return true;
                 }
             }
             else if (gridsterItem.item.x > gridsterItem.$item.x) {
-                if (this.tryWest(gridsterItemCollide, gridsterItem)) {
+                if (this.tryWest(gridsterItemCollide, gridsterItem, pushedBy)) {
                     return true;
                 }
-                else if (this.trySouth(gridsterItemCollide, gridsterItem)) {
+                else if (this.trySouth(gridsterItemCollide, gridsterItem, pushedBy)) {
                     return true;
                 }
             }
@@ -80,11 +80,11 @@ var GridsterPush = (function () {
             return true;
         }
     };
-    GridsterPush.prototype.trySouth = function (gridsterItemCollide, gridsterItem) {
+    GridsterPush.prototype.trySouth = function (gridsterItemCollide, gridsterItem, pushedBy) {
         gridsterItemCollide.$item.y += 1;
-        if (this.push(gridsterItemCollide)) {
+        if (this.push(gridsterItemCollide, gridsterItem)) {
             gridsterItemCollide.setSize(true);
-            this.push(gridsterItem);
+            this.push(gridsterItem, pushedBy);
             this.addToPushed(gridsterItemCollide);
             return true;
         }
@@ -92,11 +92,11 @@ var GridsterPush = (function () {
             gridsterItemCollide.$item.y -= 1;
         }
     };
-    GridsterPush.prototype.tryNorth = function (gridsterItemCollide, gridsterItem) {
+    GridsterPush.prototype.tryNorth = function (gridsterItemCollide, gridsterItem, pushedBy) {
         gridsterItemCollide.$item.y -= 1;
-        if (this.push(gridsterItemCollide)) {
+        if (this.push(gridsterItemCollide, gridsterItem)) {
             gridsterItemCollide.setSize(true);
-            this.push(gridsterItem);
+            this.push(gridsterItem, pushedBy);
             this.addToPushed(gridsterItemCollide);
             return true;
         }
@@ -104,11 +104,11 @@ var GridsterPush = (function () {
             gridsterItemCollide.$item.y += 1;
         }
     };
-    GridsterPush.prototype.tryEast = function (gridsterItemCollide, gridsterItem) {
+    GridsterPush.prototype.tryEast = function (gridsterItemCollide, gridsterItem, pushedBy) {
         gridsterItemCollide.$item.x += 1;
-        if (this.push(gridsterItemCollide)) {
+        if (this.push(gridsterItemCollide, gridsterItem)) {
             gridsterItemCollide.setSize(true);
-            this.push(gridsterItem);
+            this.push(gridsterItem, pushedBy);
             this.addToPushed(gridsterItemCollide);
             return true;
         }
@@ -116,11 +116,11 @@ var GridsterPush = (function () {
             gridsterItemCollide.$item.x -= 1;
         }
     };
-    GridsterPush.prototype.tryWest = function (gridsterItemCollide, gridsterItem) {
+    GridsterPush.prototype.tryWest = function (gridsterItemCollide, gridsterItem, pushedBy) {
         gridsterItemCollide.$item.x -= 1;
-        if (this.push(gridsterItemCollide)) {
+        if (this.push(gridsterItemCollide, gridsterItem)) {
             gridsterItemCollide.setSize(true);
-            this.push(gridsterItem);
+            this.push(gridsterItem, pushedBy);
             this.addToPushed(gridsterItemCollide);
             return true;
         }

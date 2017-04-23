@@ -8,11 +8,11 @@ export declare class GridsterPush {
     pushItems(): void;
     restoreItems(): void;
     setPushedItems(): void;
-    private push(gridsterItem);
-    private trySouth(gridsterItemCollide, gridsterItem);
-    private tryNorth(gridsterItemCollide, gridsterItem);
-    private tryEast(gridsterItemCollide, gridsterItem);
-    private tryWest(gridsterItemCollide, gridsterItem);
+    private push(gridsterItem, pushedBy);
+    private trySouth(gridsterItemCollide, gridsterItem, pushedBy);
+    private tryNorth(gridsterItemCollide, gridsterItem, pushedBy);
+    private tryEast(gridsterItemCollide, gridsterItem, pushedBy);
+    private tryWest(gridsterItemCollide, gridsterItem, pushedBy);
     private addToPushed(gridsterItem);
     private removeFromPushed(gridsterItem);
     private checkPushBack();
