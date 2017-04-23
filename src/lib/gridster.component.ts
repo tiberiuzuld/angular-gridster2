@@ -1,4 +1,4 @@
-import {Component, OnInit, ElementRef, Input, OnDestroy, Renderer2} from '@angular/core';
+import {Component, OnInit, ElementRef, Input, OnDestroy, Renderer2, DoCheck} from '@angular/core';
 import {GridsterConfigService} from './gridsterConfig.constant';
 import {GridsterConfig} from './gridsterConfig.interface';
 import {GridsterUtils} from './gridsterUtils.service';
@@ -9,7 +9,7 @@ import {GridsterItemComponent} from './gridsterItem.component';
   template: '<ng-content></ng-content><gridster-preview></gridster-preview>',
   styleUrls: ['./gridster.css']
 })
-export class GridsterComponent implements OnInit, OnDestroy {
+export class GridsterComponent implements OnInit, OnDestroy, DoCheck {
   @Input() options: GridsterConfig;
   calculateLayoutDebounce: Function;
   onResizeFunction: (event: any) => void;
@@ -43,7 +43,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
     this.$options.resizable.stop = undefined;
     this.$options.itemChangeCallback = undefined;
     this.$options.itemResizeCallback = undefined;
-  };
+  }
 
   ngOnInit(): void {
     this.options.optionsChanged = this.optionsChanged.bind(this);
@@ -55,7 +55,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
     this.calculateLayoutDebounce();
     this.onResizeFunction = this.onResize.bind(this);
     this.windowResize = this.renderer.listen('window', 'resize', this.onResizeFunction);
-  };
+  }
 
   ngDoCheck(): void {
     let height;
@@ -82,12 +82,12 @@ export class GridsterComponent implements OnInit, OnDestroy {
     if (typeof this.cleanCallback === 'function') {
       this.cleanCallback();
     }
-  };
+  }
 
   onResize(): void {
     this.setGridSize();
     this.calculateLayoutDebounce();
-  };
+  }
 
   checkIfToResize(): boolean {
     const clientWidth = this.el.clientWidth;
@@ -96,13 +96,15 @@ export class GridsterComponent implements OnInit, OnDestroy {
     const clientHeight = this.el.clientHeight;
     const offsetHeight = this.el.offsetHeight;
     const scrollHeight = this.el.scrollHeight;
-    const verticalScrollPresent = clientWidth < offsetWidth && scrollHeight > offsetHeight && scrollHeight - offsetHeight < offsetWidth - clientWidth;
-    const horizontalScrollPresent = clientHeight < offsetHeight && scrollWidth > offsetWidth && scrollWidth - offsetWidth < offsetHeight - clientHeight;
+    const verticalScrollPresent = clientWidth < offsetWidth && scrollHeight > offsetHeight
+      && scrollHeight - offsetHeight < offsetWidth - clientWidth;
+    const horizontalScrollPresent = clientHeight < offsetHeight
+      && scrollWidth > offsetWidth && scrollWidth - offsetWidth < offsetHeight - clientHeight;
     if (verticalScrollPresent) {
       return false;
     }
     return !horizontalScrollPresent;
-  };
+  }
 
   setGridSize(): void {
     let width = this.el.clientWidth;
@@ -116,7 +118,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
     }
     this.curWidth = width;
     this.curHeight = height;
-  };
+  }
 
   setGridDimensions(): void {
     let rows = this.$options.minRows, columns = this.$options.minCols;
@@ -129,7 +131,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
 
     this.columns = columns;
     this.rows = rows;
-  };
+  }
 
   calculateLayout(): void {
     // check to compact up
@@ -196,7 +198,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
     }
 
     setTimeout(this.ngDoCheck.bind(this), 100);
-  };
+  }
 
   addItem(itemComponent: GridsterItemComponent): void {
     if (itemComponent.$item.cols === undefined) {
@@ -258,7 +260,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
         return widget;
       }
     }
-  };
+  }
 
   autoPositionItem(itemComponent: GridsterItemComponent): void {
     this.setGridDimensions();
@@ -296,7 +298,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
 
   pixelsToPosition(x: number, y: number, roundingMethod: Function): [number, number] {
     return [roundingMethod(Math.abs(x) / this.curColWidth), roundingMethod(Math.abs(y) / this.curRowHeight)];
-  };
+  }
 
   positionXToPixels(x: number): number {
     return x * this.curColWidth;
@@ -308,7 +310,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
 
   checkCompactUp(): boolean {
     if (this.$options.compactUp) {
-      let widgetMovedUp: boolean = false, widget: GridsterItemComponent, moved: boolean;
+      let widgetMovedUp = false, widget: GridsterItemComponent, moved: boolean;
       const l = this.grid.length;
       for (let i = 0; i < l; i++) {
         widget = this.grid[i];
@@ -338,7 +340,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
 
   checkCompactLeft(): boolean {
     if (this.$options.compactLeft) {
-      let widgetMovedUp: boolean = false, widget: GridsterItemComponent, moved: boolean;
+      let widgetMovedUp = false, widget: GridsterItemComponent, moved: boolean;
       const l = this.grid.length;
       for (let i = 0; i < l; i++) {
         widget = this.grid[i];

@@ -3,7 +3,7 @@ import {GridsterResizeEventType} from './gridsterResizeEventType.interface';
 
 let scrollSensitivity: number;
 let scrollSpeed: number;
-let intervalDuration: number = 50;
+const intervalDuration = 50;
 let gridsterElement: any;
 let scrollTop: number;
 let scrollLeft: number;

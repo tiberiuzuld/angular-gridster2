@@ -4,6 +4,7 @@ import {scroll, cancelScroll} from './gridsterScroll.service';
 import {GridsterItemComponent} from './gridsterItem.component';
 import {GridsterItem} from './gridsterItem.interface';
 import {GridsterComponent} from './gridster.component';
+import {GridsterPush} from './gridsterPush.service';
 
 @Injectable()
 export class GridsterDraggable {
@@ -28,6 +29,7 @@ export class GridsterDraggable {
   touchcancel: Function;
   mousedown: Function;
   touchstart: Function;
+  push: GridsterPush;
 
   static touchEvent(e) {
     e.pageX = e.touches[0].pageX;
@@ -96,6 +98,7 @@ export class GridsterDraggable {
     this.itemCopy = JSON.parse(JSON.stringify(this.gridsterItem.$item, ['rows', 'cols', 'x', 'y']));
     this.gridster.movingItem = this.gridsterItem;
     this.gridster.previewStyle();
+    this.push = new GridsterPush(this.gridsterItem, this.gridster);
   }
 
   dragMove(e): void {
@@ -140,6 +143,8 @@ export class GridsterDraggable {
     this.gridsterItem.$item.x = this.itemCopy.x;
     this.gridsterItem.$item.y = this.itemCopy.y;
     this.gridsterItem.setSize(true);
+    this.push.restoreItems();
+    this.push = undefined;
   }
 
   makeDrag() {
@@ -148,6 +153,8 @@ export class GridsterDraggable {
     }
     this.gridsterItem.setSize(true);
     this.gridsterItem.checkItemChanges(this.gridsterItem.$item, this.itemCopy);
+    this.push.setPushedItems();
+    this.push = undefined;
   }
 
   calculateItemPosition() {
@@ -160,6 +167,7 @@ export class GridsterDraggable {
       this.positionBackup[1] = this.gridsterItem.$item.y;
       this.gridsterItem.$item.x = this.position[0];
       this.gridsterItem.$item.y = this.position[1];
+      this.push.pushItems();
       if (this.gridster.checkCollision(this.gridsterItem)) {
         this.gridsterItem.$item.x = this.positionBackup[0];
         this.gridsterItem.$item.y = this.positionBackup[1];

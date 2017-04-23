@@ -33,7 +33,7 @@ export interface GridsterConfig {
 
 export interface Draggable {
   enabled?: boolean;
-  ignoreContentClass?: string
+  ignoreContentClass?: string;
   stop?: Function;
 }
 

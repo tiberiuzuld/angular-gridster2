@@ -21,35 +21,116 @@ export class GridsterPush {
     }
   }
 
-  private push(gridsterItem: GridsterItemComponent) {
+  restoreItems() {
+    let i = 0;
+    const l: number = this.pushedItems.length;
+    let pushedItem: GridsterItemComponent;
+    for (; i < l; i++) {
+      pushedItem = this.pushedItems[i];
+      pushedItem.$item.x = pushedItem.item.x;
+      pushedItem.$item.y = pushedItem.item.y;
+      pushedItem.setSize(true);
+    }
+    this.pushedItems = undefined;
+  }
+
+  setPushedItems() {
+    let i = 0;
+    const l: number = this.pushedItems.length;
+    let pushedItem: GridsterItemComponent;
+    for (; i < l; i++) {
+      pushedItem = this.pushedItems[i];
+      pushedItem.checkItemChanges(pushedItem.$item, pushedItem.item);
+    }
+    this.pushedItems = undefined;
+  }
+
+  private push(gridsterItem: GridsterItemComponent): boolean {
     const gridsterItemCollision: any = this.gridster.checkCollision(gridsterItem, this.gridsterItem);
     if (gridsterItemCollision && gridsterItemCollision !== true) {
       const gridsterItemCollide: GridsterItemComponent = gridsterItemCollision;
-      if (gridsterItemCollide.$item.y < gridsterItem.$item.y + gridsterItem.$item.rows) {
-        gridsterItemCollide.$item.y += 1;
-        if (this.push(gridsterItemCollide)) {
-          gridsterItemCollide.setSize(true);
-          this.push(gridsterItem);
-          this.addToPushed(gridsterItemCollide);
+      if (gridsterItem.item.y < gridsterItem.$item.y ||
+        (gridsterItem.item.y === gridsterItem.$item.y && gridsterItem.item.rows < gridsterItem.$item.rows)) {
+        if (this.trySouth(gridsterItemCollide, gridsterItem)) {
           return true;
-        } else {
-          gridsterItemCollide.$item.y -= 1;
+        } else if (this.tryEast(gridsterItemCollide, gridsterItem)) {
+          return true;
         }
-      } else if (gridsterItemCollide.$item.y + gridsterItemCollide.$item.rows > gridsterItem.$item.y) {
-        gridsterItemCollide.$item.y -= 1;
-        if (this.push(gridsterItemCollide)) {
-          gridsterItemCollide.setSize(true);
-          this.push(gridsterItem);
-          this.addToPushed(gridsterItemCollide);
+      } else if (gridsterItem.item.y > gridsterItem.$item.y) {
+        if (this.tryNorth(gridsterItemCollide, gridsterItem)) {
           return true;
-        } else {
-          gridsterItemCollide.$item.y += 1;
+        } else if (this.tryEast(gridsterItemCollide, gridsterItem)) {
+          return true;
+        }
+      }
+
+      if (gridsterItem.item.x < gridsterItem.$item.x ||
+        (gridsterItem.item.x === gridsterItem.$item.x && gridsterItem.item.cols < gridsterItem.$item.cols)) {
+        if (this.tryEast(gridsterItemCollide, gridsterItem)) {
+          return true;
+        } else if (this.trySouth(gridsterItemCollide, gridsterItem)) {
+          return true;
+        }
+      } else if (gridsterItem.item.x > gridsterItem.$item.x) {
+        if (this.tryWest(gridsterItemCollide, gridsterItem)) {
+          return true;
+        } else if (this.trySouth(gridsterItemCollide, gridsterItem)) {
+          return true;
         }
       }
     } else if (gridsterItemCollision === undefined) {
       return true;
     }
   }
+
+  private trySouth(gridsterItemCollide: GridsterItemComponent, gridsterItem: GridsterItemComponent): boolean {
+    gridsterItemCollide.$item.y += 1;
+    if (this.push(gridsterItemCollide)) {
+      gridsterItemCollide.setSize(true);
+      this.push(gridsterItem);
+      this.addToPushed(gridsterItemCollide);
+      return true;
+    } else {
+      gridsterItemCollide.$item.y -= 1;
+    }
+  }
+
+  private tryNorth(gridsterItemCollide: GridsterItemComponent, gridsterItem: GridsterItemComponent): boolean {
+    gridsterItemCollide.$item.y -= 1;
+    if (this.push(gridsterItemCollide)) {
+      gridsterItemCollide.setSize(true);
+      this.push(gridsterItem);
+      this.addToPushed(gridsterItemCollide);
+      return true;
+    } else {
+      gridsterItemCollide.$item.y += 1;
+    }
+  }
+
+  private tryEast(gridsterItemCollide: GridsterItemComponent, gridsterItem: GridsterItemComponent): boolean {
+    gridsterItemCollide.$item.x += 1;
+    if (this.push(gridsterItemCollide)) {
+      gridsterItemCollide.setSize(true);
+      this.push(gridsterItem);
+      this.addToPushed(gridsterItemCollide);
+      return true;
+    } else {
+      gridsterItemCollide.$item.x -= 1;
+    }
+  }
+
+  private tryWest(gridsterItemCollide: GridsterItemComponent, gridsterItem: GridsterItemComponent): boolean {
+    gridsterItemCollide.$item.x -= 1;
+    if (this.push(gridsterItemCollide)) {
+      gridsterItemCollide.setSize(true);
+      this.push(gridsterItem);
+      this.addToPushed(gridsterItemCollide);
+      return true;
+    } else {
+      gridsterItemCollide.$item.x += 1;
+    }
+  }
+
 
   private addToPushed(gridsterItem: GridsterItemComponent) {
     if (this.pushedItems.indexOf(gridsterItem) < 0) {
@@ -62,19 +143,6 @@ export class GridsterPush {
     if (i > -1) {
       this.pushedItems.splice(i, 1);
     }
-  }
-
-  restoreItems() {
-    let i: number = 0;
-    const l: number = this.pushedItems.length;
-    let pushedItem: GridsterItemComponent;
-    for (; i < l; i++) {
-      pushedItem = this.pushedItems[i];
-      pushedItem.$item.x = pushedItem.item.x;
-      pushedItem.$item.y = pushedItem.item.y;
-      pushedItem.setSize(true);
-    }
-    this.pushedItems = undefined;
   }
 
   private checkPushBack() {
@@ -91,6 +159,7 @@ export class GridsterPush {
         pushedItem.$item.y += 1;
       } else {
         pushedItem.setSize(true);
+        this.checkPushedItem(pushedItem);
       }
     } else if (pushedItem.$item.y < pushedItem.item.y) {
       pushedItem.$item.y += 1;
@@ -98,6 +167,7 @@ export class GridsterPush {
         pushedItem.$item.y -= 1;
       } else {
         pushedItem.setSize(true);
+        this.checkPushedItem(pushedItem);
       }
     }
 
@@ -107,6 +177,7 @@ export class GridsterPush {
         pushedItem.$item.x += 1;
       } else {
         pushedItem.setSize(true);
+        this.checkPushedItem(pushedItem);
       }
     } else if (pushedItem.$item.x < pushedItem.item.x) {
       pushedItem.$item.x += 1;
@@ -114,6 +185,7 @@ export class GridsterPush {
         pushedItem.$item.x -= 1;
       } else {
         pushedItem.setSize(true);
+        this.checkPushedItem(pushedItem);
       }
     }
 
@@ -122,14 +194,4 @@ export class GridsterPush {
     }
   }
 
-  setPushedItems() {
-    let i: number = 0;
-    const l: number = this.pushedItems.length;
-    let pushedItem: GridsterItemComponent;
-    for (; i < l; i++) {
-      pushedItem = this.pushedItems[i];
-      pushedItem.checkItemChanges(pushedItem.$item, pushedItem.item);
-    }
-    this.pushedItems = undefined;
-  }
 }
