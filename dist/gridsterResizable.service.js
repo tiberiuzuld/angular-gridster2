@@ -3,9 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var gridsterItem_component_1 = require("./gridsterItem.component");
 var gridsterScroll_service_1 = require("./gridsterScroll.service");
+var gridsterPush_service_1 = require("./gridsterPush.service");
+var gridster_component_1 = require("./gridster.component");
 var GridsterResizable = (function () {
-    function GridsterResizable(gridsterItem) {
+    function GridsterResizable(gridsterItem, gridster) {
         this.gridsterItem = gridsterItem;
+        this.gridster = gridster;
         this.lastMouse = {
             pageX: 0,
             pageY: 0
@@ -48,9 +51,10 @@ var GridsterResizable = (function () {
         this.elemPosition[1] = this.gridsterItem.top;
         this.elemPosition[2] = this.gridsterItem.width;
         this.elemPosition[3] = this.gridsterItem.height;
-        this.itemCopy = JSON.parse(JSON.stringify(this.gridsterItem.state.item, ['rows', 'cols', 'x', 'y']));
-        this.gridsterItem.gridster.movingItem = this.gridsterItem.state.item;
-        this.gridsterItem.gridster.previewStyle();
+        this.itemCopy = JSON.parse(JSON.stringify(this.gridsterItem.$item, ['rows', 'cols', 'x', 'y']));
+        this.gridster.movingItem = this.gridsterItem;
+        this.gridster.previewStyle();
+        this.push = new gridsterPush_service_1.GridsterPush(this.gridsterItem, this.gridster);
         if (e.currentTarget.classList.contains('handle-n')) {
             this.resizeEventScrollType.n = true;
             this.directionFunction = this.handleN.bind(this);
@@ -109,10 +113,10 @@ var GridsterResizable = (function () {
         this.touchend();
         this.touchcancel();
         this.gridsterItem.renderer.removeClass(this.gridsterItem.el, 'gridster-item-resizing');
-        this.gridsterItem.gridster.movingItem = null;
-        this.gridsterItem.gridster.previewStyle();
-        if (this.gridsterItem.gridster.state.options.resizable.stop) {
-            Promise.resolve(this.gridsterItem.gridster.state.options.resizable.stop(this.gridsterItem.state.item, this.gridsterItem, e))
+        this.gridster.movingItem = null;
+        this.gridster.previewStyle();
+        if (this.gridster.$options.resizable.stop) {
+            Promise.resolve(this.gridster.$options.resizable.stop(this.gridsterItem.item, this.gridsterItem, e))
                 .then(this.makeResize.bind(this), this.cancelResize.bind(this));
         }
         else {
@@ -120,36 +124,41 @@ var GridsterResizable = (function () {
         }
     };
     GridsterResizable.prototype.cancelResize = function () {
-        this.gridsterItem.state.item.cols = this.itemCopy.cols;
-        this.gridsterItem.state.item.rows = this.itemCopy.rows;
-        this.gridsterItem.state.item.x = this.itemCopy.x;
-        this.gridsterItem.state.item.y = this.itemCopy.y;
-        this.gridsterItem.state.item.setSize(true);
+        this.gridsterItem.$item.cols = this.itemCopy.cols;
+        this.gridsterItem.$item.rows = this.itemCopy.rows;
+        this.gridsterItem.$item.x = this.itemCopy.x;
+        this.gridsterItem.$item.y = this.itemCopy.y;
+        this.gridsterItem.setSize(true);
+        this.push.restoreItems();
+        this.push = undefined;
     };
     GridsterResizable.prototype.makeResize = function () {
-        this.gridsterItem.state.item.setSize(true);
-        this.gridsterItem.state.item.checkItemChanges(this.gridsterItem.state.item, this.itemCopy);
+        this.gridsterItem.setSize(true);
+        this.gridsterItem.checkItemChanges(this.gridsterItem.$item, this.itemCopy);
+        this.push.setPushedItems();
+        this.push = undefined;
     };
     GridsterResizable.prototype.handleN = function (e) {
         this.elemPosition[1] += e.pageY - this.lastMouse.pageY;
         this.elemPosition[3] += this.lastMouse.pageY - e.pageY;
-        this.position = this.gridsterItem.gridster.pixelsToPosition(this.elemPosition[0], this.elemPosition[1], Math.floor);
-        if (this.gridsterItem.state.item.y !== this.position[1]) {
-            this.itemBackup[1] = this.gridsterItem.state.item.y;
-            this.itemBackup[3] = this.gridsterItem.state.item.rows;
-            this.gridsterItem.state.item.rows += this.gridsterItem.state.item.y - this.position[1];
-            this.gridsterItem.state.item.y = this.position[1];
-            if (this.gridsterItem.state.item.y < 0 || this.gridsterItem.state.item.rows < 1 ||
-                this.gridsterItem.gridster.checkCollision(this.gridsterItem.state.item)) {
-                this.gridsterItem.state.item.y = this.itemBackup[1];
-                this.gridsterItem.state.item.rows = this.itemBackup[3];
-                this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'top', this.gridsterItem.gridster.positionYToPixels(this.gridsterItem.state.item.y) + 'px');
-                this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'height', this.gridsterItem.gridster.positionYToPixels(this.gridsterItem.state.item.rows)
-                    - this.gridsterItem.gridster.state.options.margin + 'px');
+        this.position = this.gridster.pixelsToPosition(this.elemPosition[0], this.elemPosition[1], Math.floor);
+        if (this.gridsterItem.$item.y !== this.position[1]) {
+            this.itemBackup[1] = this.gridsterItem.$item.y;
+            this.itemBackup[3] = this.gridsterItem.$item.rows;
+            this.gridsterItem.$item.rows += this.gridsterItem.$item.y - this.position[1];
+            this.gridsterItem.$item.y = this.position[1];
+            this.push.pushItems();
+            if (this.gridsterItem.$item.y < 0 || this.gridsterItem.$item.rows < 1 ||
+                this.gridster.checkCollision(this.gridsterItem)) {
+                this.gridsterItem.$item.y = this.itemBackup[1];
+                this.gridsterItem.$item.rows = this.itemBackup[3];
+                this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'top', this.gridster.positionYToPixels(this.gridsterItem.$item.y) + 'px');
+                this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'height', this.gridster.positionYToPixels(this.gridsterItem.$item.rows)
+                    - this.gridster.$options.margin + 'px');
                 return;
             }
             else {
-                this.gridsterItem.gridster.previewStyle();
+                this.gridster.previewStyle();
             }
         }
         this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'top', this.elemPosition[1] + 'px');
@@ -158,23 +167,24 @@ var GridsterResizable = (function () {
     GridsterResizable.prototype.handleW = function (e) {
         this.elemPosition[0] += e.pageX - this.lastMouse.pageX;
         this.elemPosition[2] += this.lastMouse.pageX - e.pageX;
-        this.position = this.gridsterItem.gridster.pixelsToPosition(this.elemPosition[0], this.elemPosition[1], Math.floor);
-        if (this.gridsterItem.state.item.x !== this.position[0]) {
-            this.itemBackup[0] = this.gridsterItem.state.item.x;
-            this.itemBackup[2] = this.gridsterItem.state.item.cols;
-            this.gridsterItem.state.item.cols += this.gridsterItem.state.item.x - this.position[0];
-            this.gridsterItem.state.item.x = this.position[0];
-            if (this.gridsterItem.state.item.x < 0 || this.gridsterItem.state.item.cols < 1 ||
-                this.gridsterItem.gridster.checkCollision(this.gridsterItem.state.item)) {
-                this.gridsterItem.state.item.x = this.itemBackup[0];
-                this.gridsterItem.state.item.cols = this.itemBackup[2];
-                this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'left', this.gridsterItem.gridster.positionXToPixels(this.gridsterItem.state.item.x) + 'px');
-                this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'width', this.gridsterItem.gridster.positionXToPixels(this.gridsterItem.state.item.cols)
-                    - this.gridsterItem.gridster.state.options.margin + 'px');
+        this.position = this.gridster.pixelsToPosition(this.elemPosition[0], this.elemPosition[1], Math.floor);
+        if (this.gridsterItem.$item.x !== this.position[0]) {
+            this.itemBackup[0] = this.gridsterItem.$item.x;
+            this.itemBackup[2] = this.gridsterItem.$item.cols;
+            this.gridsterItem.$item.cols += this.gridsterItem.$item.x - this.position[0];
+            this.gridsterItem.$item.x = this.position[0];
+            this.push.pushItems();
+            if (this.gridsterItem.$item.x < 0 || this.gridsterItem.$item.cols < 1 ||
+                this.gridster.checkCollision(this.gridsterItem)) {
+                this.gridsterItem.$item.x = this.itemBackup[0];
+                this.gridsterItem.$item.cols = this.itemBackup[2];
+                this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'left', this.gridster.positionXToPixels(this.gridsterItem.$item.x) + 'px');
+                this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'width', this.gridster.positionXToPixels(this.gridsterItem.$item.cols)
+                    - this.gridster.$options.margin + 'px');
                 return;
             }
             else {
-                this.gridsterItem.gridster.previewStyle();
+                this.gridster.previewStyle();
             }
         }
         this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'left', this.elemPosition[0] + 'px');
@@ -182,36 +192,38 @@ var GridsterResizable = (function () {
     };
     GridsterResizable.prototype.handleS = function (e) {
         this.elemPosition[3] += e.pageY - this.lastMouse.pageY;
-        this.position = this.gridsterItem.gridster.pixelsToPosition(this.elemPosition[0], this.elemPosition[1] + this.elemPosition[3], Math.ceil);
-        if ((this.gridsterItem.state.item.y + this.gridsterItem.state.item.rows) !== this.position[1]) {
-            this.itemBackup[3] = this.gridsterItem.state.item.rows;
-            this.gridsterItem.state.item.rows = this.position[1] - this.gridsterItem.state.item.y;
-            if (this.gridsterItem.state.item.rows < 1 || this.gridsterItem.gridster.checkCollision(this.gridsterItem.state.item)) {
-                this.gridsterItem.state.item.rows = this.itemBackup[3];
-                this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'height', this.gridsterItem.gridster.positionYToPixels(this.gridsterItem.state.item.rows)
-                    - this.gridsterItem.gridster.state.options.margin + 'px');
+        this.position = this.gridster.pixelsToPosition(this.elemPosition[0], this.elemPosition[1] + this.elemPosition[3], Math.ceil);
+        if ((this.gridsterItem.$item.y + this.gridsterItem.$item.rows) !== this.position[1]) {
+            this.itemBackup[3] = this.gridsterItem.$item.rows;
+            this.gridsterItem.$item.rows = this.position[1] - this.gridsterItem.$item.y;
+            this.push.pushItems();
+            if (this.gridsterItem.$item.rows < 1 || this.gridster.checkCollision(this.gridsterItem)) {
+                this.gridsterItem.$item.rows = this.itemBackup[3];
+                this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'height', this.gridster.positionYToPixels(this.gridsterItem.$item.rows)
+                    - this.gridster.$options.margin + 'px');
                 return;
             }
             else {
-                this.gridsterItem.gridster.previewStyle();
+                this.gridster.previewStyle();
             }
         }
         this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'height', this.elemPosition[3] + 'px');
     };
     GridsterResizable.prototype.handleE = function (e) {
         this.elemPosition[2] += e.pageX - this.lastMouse.pageX;
-        this.position = this.gridsterItem.gridster.pixelsToPosition(this.elemPosition[0] + this.elemPosition[2], this.elemPosition[1], Math.ceil);
-        if ((this.gridsterItem.state.item.x + this.gridsterItem.state.item.cols) !== this.position[0]) {
-            this.itemBackup[2] = this.gridsterItem.state.item.cols;
-            this.gridsterItem.state.item.cols = this.position[0] - this.gridsterItem.state.item.x;
-            if (this.gridsterItem.state.item.cols < 1 || this.gridsterItem.gridster.checkCollision(this.gridsterItem.state.item)) {
-                this.gridsterItem.state.item.cols = this.itemBackup[2];
-                this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'width', this.gridsterItem.gridster.positionXToPixels(this.gridsterItem.state.item.cols)
-                    - this.gridsterItem.gridster.state.options.margin + 'px');
+        this.position = this.gridster.pixelsToPosition(this.elemPosition[0] + this.elemPosition[2], this.elemPosition[1], Math.ceil);
+        if ((this.gridsterItem.$item.x + this.gridsterItem.$item.cols) !== this.position[0]) {
+            this.itemBackup[2] = this.gridsterItem.$item.cols;
+            this.gridsterItem.$item.cols = this.position[0] - this.gridsterItem.$item.x;
+            this.push.pushItems();
+            if (this.gridsterItem.$item.cols < 1 || this.gridster.checkCollision(this.gridsterItem)) {
+                this.gridsterItem.$item.cols = this.itemBackup[2];
+                this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'width', this.gridster.positionXToPixels(this.gridsterItem.$item.cols)
+                    - this.gridster.$options.margin + 'px');
                 return;
             }
             else {
-                this.gridsterItem.gridster.previewStyle();
+                this.gridster.previewStyle();
             }
         }
         this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'width', this.elemPosition[2] + 'px');
@@ -233,8 +245,8 @@ var GridsterResizable = (function () {
         this.handleE(e);
     };
     GridsterResizable.prototype.toggle = function (enabled) {
-        this.resizeEnabled = !this.gridsterItem.gridster.state.mobile &&
-            (this.gridsterItem.state.item.resizeEnabled === undefined ? enabled : this.gridsterItem.state.item.resizeEnabled);
+        this.resizeEnabled = !this.gridster.mobile &&
+            (this.gridsterItem.$item.resizeEnabled === undefined ? enabled : this.gridsterItem.$item.resizeEnabled);
     };
     return GridsterResizable;
 }());
@@ -244,6 +256,7 @@ GridsterResizable.decorators = [
 /** @nocollapse */
 GridsterResizable.ctorParameters = function () { return [
     { type: gridsterItem_component_1.GridsterItemComponent, },
+    { type: gridster_component_1.GridsterComponent, },
 ]; };
 exports.GridsterResizable = GridsterResizable;
 //# sourceMappingURL=gridsterResizable.service.js.map

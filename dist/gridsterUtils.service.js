@@ -29,7 +29,6 @@ var GridsterUtils = (function () {
             timeout = setTimeout(later, wait);
         };
     };
-    ;
     return GridsterUtils;
 }());
 GridsterUtils.decorators = [

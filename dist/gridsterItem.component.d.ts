@@ -1,14 +1,14 @@
 import { OnInit, ElementRef, OnDestroy, EventEmitter, Renderer2 } from '@angular/core';
 import { GridsterItem } from './gridsterItem.interface';
 import { GridsterComponent } from './gridster.component';
+import { GridsterDraggable } from './gridsterDraggable.service';
+import { GridsterResizable } from './gridsterResizable.service';
 export declare class GridsterItemComponent implements OnInit, OnDestroy {
     renderer: Renderer2;
     item: GridsterItem;
     itemChange: EventEmitter<GridsterItem>;
     itemResize: EventEmitter<GridsterItem>;
-    state: {
-        item: GridsterItem;
-    };
+    $item: GridsterItem;
     el: any;
     gridster: GridsterComponent;
     itemTop: number;
@@ -20,10 +20,12 @@ export declare class GridsterItemComponent implements OnInit, OnDestroy {
     width: number;
     height: number;
     itemMargin: number;
+    drag: GridsterDraggable;
+    resize: GridsterResizable;
     constructor(el: ElementRef, gridster: GridsterComponent, renderer: Renderer2);
     ngOnInit(): void;
     ngOnDestroy(): void;
     setSize(noCheck: Boolean): void;
     itemChanged(): void;
-    checkItemChanges(newValue: any, oldValue: any): void;
+    checkItemChanges(newValue: GridsterItem, oldValue: GridsterItem): void;
 }

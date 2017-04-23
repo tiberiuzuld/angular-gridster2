@@ -13,8 +13,8 @@ var intervalW;
 var intervalN;
 var intervalS;
 function scroll(elemPosition, gridsterItem, e, lastMouse, calculateItemPosition, resize, resizeEventScrollType) {
-    scrollSensitivity = gridsterItem.gridster.state.options.scrollSensitivity;
-    scrollSpeed = gridsterItem.gridster.state.options.scrollSpeed;
+    scrollSensitivity = gridsterItem.gridster.$options.scrollSensitivity;
+    scrollSpeed = gridsterItem.gridster.$options.scrollSpeed;
     gridsterElement = gridsterItem.gridster.el;
     resizeEvent = resize;
     resizeEventType = resizeEventScrollType;

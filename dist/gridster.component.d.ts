@@ -1,26 +1,24 @@
-import { OnInit, ElementRef, OnDestroy, Renderer2 } from '@angular/core';
+import { OnInit, ElementRef, OnDestroy, Renderer2, DoCheck } from '@angular/core';
 import { GridsterConfig } from './gridsterConfig.interface';
-import { GridsterItem } from './gridsterItem.interface';
-export declare class GridsterComponent implements OnInit, OnDestroy {
+import { GridsterItemComponent } from './gridsterItem.component';
+export declare class GridsterComponent implements OnInit, OnDestroy, DoCheck {
     renderer: Renderer2;
     options: GridsterConfig;
     calculateLayoutDebounce: Function;
     onResizeFunction: (event: any) => void;
-    movingItem: GridsterItem;
+    movingItem: GridsterItemComponent;
     previewStyle: Function;
     el: any;
-    state: {
-        mobile: boolean;
-        curWidth: number;
-        curHeight: number;
-        options: GridsterConfig;
-        scrollBarPresent: boolean;
-        grid: Array<GridsterItem>;
-        columns: number;
-        rows: number;
-        curColWidth: number;
-        curRowHeight: number;
-    };
+    $options: GridsterConfig;
+    mobile: boolean;
+    curWidth: number;
+    curHeight: number;
+    scrollBarPresent: boolean;
+    grid: Array<GridsterItemComponent>;
+    columns: number;
+    rows: number;
+    curColWidth: number;
+    curRowHeight: number;
     windowResize: Function;
     private cleanCallback;
     constructor(el: ElementRef, renderer: Renderer2);
@@ -33,16 +31,16 @@ export declare class GridsterComponent implements OnInit, OnDestroy {
     setGridSize(): void;
     setGridDimensions(): void;
     calculateLayout(): void;
-    addItem(item: GridsterItem): void;
-    removeItem(item: GridsterItem): void;
-    checkCollision(item: GridsterItem): GridsterItem | boolean;
-    findItemWithItem(item: GridsterItem): GridsterItem;
-    autoPositionItem(item: GridsterItem): void;
+    addItem(itemComponent: GridsterItemComponent): void;
+    removeItem(itemComponent: GridsterItemComponent): void;
+    checkCollision(itemComponent: GridsterItemComponent, ignoreItem?: GridsterItemComponent): GridsterItemComponent | boolean;
+    findItemWithItem(itemComponent: GridsterItemComponent, ignoreItem?: GridsterItemComponent): GridsterItemComponent;
+    autoPositionItem(itemComponent: GridsterItemComponent): void;
     pixelsToPosition(x: number, y: number, roundingMethod: Function): [number, number];
     positionXToPixels(x: number): number;
     positionYToPixels(y: number): number;
-    checkCompactUp(): Boolean;
-    moveUpTillCollision(item: GridsterItem): Boolean;
-    checkCompactLeft(): Boolean;
-    moveLeftTillCollision(item: GridsterItem): Boolean;
+    checkCompactUp(): boolean;
+    moveUpTillCollision(itemComponent: GridsterItemComponent): boolean;
+    checkCompactLeft(): boolean;
+    moveLeftTillCollision(itemComponent: GridsterItemComponent): boolean;
 }

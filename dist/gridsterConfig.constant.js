@@ -47,6 +47,7 @@ exports.GridsterConfigService = {
         stop: undefined // callback when resizing an item stops. Accepts Promise return to cancel/approve resize.
         // Arguments: item, gridsterItem, event
     },
-    swap: true // allow items to switch position if drop on top of another
+    swap: true,
+    pushItems: false // push items when resizing and dragging
 };
 //# sourceMappingURL=gridsterConfig.constant.js.map

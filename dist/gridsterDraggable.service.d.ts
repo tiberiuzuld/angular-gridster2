@@ -1,7 +1,10 @@
 import { GridsterItemComponent } from './gridsterItem.component';
 import { GridsterItem } from './gridsterItem.interface';
+import { GridsterComponent } from './gridster.component';
+import { GridsterPush } from './gridsterPush.service';
 export declare class GridsterDraggable {
     gridsterItem: GridsterItemComponent;
+    gridster: GridsterComponent;
     itemCopy: GridsterItem;
     lastMouse: {
         pageX: number;
@@ -21,9 +24,10 @@ export declare class GridsterDraggable {
     touchcancel: Function;
     mousedown: Function;
     touchstart: Function;
+    push: GridsterPush;
     static touchEvent(e: any): void;
-    constructor(gridsterItem: GridsterItemComponent);
-    checkContentClass(target: any, current: any, contentClass: any): any;
+    constructor(gridsterItem: GridsterItemComponent, gridster: GridsterComponent);
+    checkContentClass(target: any, current: any, contentClass: any): boolean;
     dragStart(e: any): void;
     dragMove(e: any): void;
     dragStop(e: any): void;
