@@ -1,4 +1,4 @@
-import {Component, ElementRef, Host, OnDestroy, OnInit, Renderer2} from '@angular/core';
+import {Component, ElementRef, Host, OnInit, Renderer2} from '@angular/core';
 import {GridsterComponent} from './gridster.component';
 @Component({
   selector: 'gridster-grid',
@@ -29,14 +29,14 @@ export class GridsterGridComponent implements OnInit {
     this.updateGrid();
   }
 
-  updateGrid() {
-    console.log('update', this.gridster, this.gridster.curRowHeight, this.gridster.curColWidth);
+  updateGrid(dragOn?: boolean): void {
     if (this.gridster.$options.displayGrid === 'always') {
       this.renderer.setStyle(this.el, 'display', 'block');
-    } else if (this.gridster.$options.displayGrid === 'onDrag&Resize') {
-      this.renderer.setStyle(this.el, 'display', 'block'); // TODO display only when drag/resize enabled
-    } else if (this.gridster.$options.displayGrid === 'none') {
+    } else if (this.gridster.$options.displayGrid === 'onDrag&Resize' && dragOn) {
+      this.renderer.setStyle(this.el, 'display', 'block');
+    } else if (this.gridster.$options.displayGrid === 'none' || !dragOn) {
       this.renderer.setStyle(this.el, 'display', 'none');
+      return;
     }
     this.columns.length = this.gridster.columns;
     this.rows.length = this.gridster.rows;

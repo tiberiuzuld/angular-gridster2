@@ -3,7 +3,8 @@
     <button md-mini-fab (click)="addItem()" mdTooltip="Add widget">
       <md-icon>add</md-icon>
     </button>
-    <md-select aria-label="Grid type" [(ngModel)]="options.gridType" (ngModelChange)="changedOptions()">
+    <md-select aria-label="Grid type" [(ngModel)]="options.gridType" (ngModelChange)="changedOptions()"
+               placeholder="Grid Type">
       <md-option value="fit">Fit to screen</md-option>
       <md-option value="scrollVertical">Scroll Vertical</md-option>
       <md-option value="scrollHorizontal">Scroll Horizontal</md-option>
@@ -82,6 +83,13 @@
       <input mdInput [(ngModel)]="options.maxRows" type="number" placeholder="Max Grid Rows"
              (ngModelChange)="changedOptions()">
     </md-input-container>
+    <md-select aria-label="Display grid lines" [(ngModel)]="options.displayGrid"
+               placeholder="Display grid lines"
+               (ngModelChange)="changedOptions()">
+      <md-option value="always">Always</md-option>
+      <md-option value="onDrag&Resize">On Drag & Resize</md-option>
+      <md-option value="none">None</md-option>
+    </md-select>
   </div>
 </md-toolbar>
 
