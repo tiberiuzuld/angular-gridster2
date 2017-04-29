@@ -55,6 +55,7 @@ var GridsterResizable = (function () {
         this.gridster.movingItem = this.gridsterItem;
         this.gridster.previewStyle();
         this.push = new gridsterPush_service_1.GridsterPush(this.gridsterItem, this.gridster);
+        this.gridster.gridLines.updateGrid(true);
         if (e.currentTarget.classList.contains('handle-n')) {
             this.resizeEventScrollType.n = true;
             this.directionFunction = this.handleN.bind(this);
@@ -115,6 +116,7 @@ var GridsterResizable = (function () {
         this.gridsterItem.renderer.removeClass(this.gridsterItem.el, 'gridster-item-resizing');
         this.gridster.movingItem = null;
         this.gridster.previewStyle();
+        this.gridster.gridLines.updateGrid(false);
         if (this.gridster.$options.resizable.stop) {
             Promise.resolve(this.gridster.$options.resizable.stop(this.gridsterItem.item, this.gridsterItem, e))
                 .then(this.makeResize.bind(this), this.cancelResize.bind(this));

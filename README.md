@@ -164,7 +164,8 @@ export const GridsterConfigService: GridsterConfig = {
     // Arguments: item, gridsterItem, event
   },
   swap: true, // allow items to switch position if drop on top of another
-  pushItems: false // push items when resizing and dragging
+  pushItems: false, // push items when resizing and dragging
+  displayGrid: 'onDrag&Resize' // display background grid of rows and columns
 };
 ```
 

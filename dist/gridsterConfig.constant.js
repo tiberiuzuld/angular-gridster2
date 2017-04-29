@@ -48,6 +48,7 @@ exports.GridsterConfigService = {
         // Arguments: item, gridsterItem, event
     },
     swap: true,
-    pushItems: false // push items when resizing and dragging
+    pushItems: false,
+    displayGrid: 'onDrag&Resize' // display background grid of rows and columns
 };
 //# sourceMappingURL=gridsterConfig.constant.js.map
