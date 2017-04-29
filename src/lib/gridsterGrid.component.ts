@@ -1,4 +1,4 @@
-import {Component, ElementRef, Host, OnInit, Renderer2} from '@angular/core';
+import {Component, ElementRef, Host, Renderer2} from '@angular/core';
 import {GridsterComponent} from './gridster.component';
 @Component({
   selector: 'gridster-grid',
@@ -6,7 +6,7 @@ import {GridsterComponent} from './gridster.component';
   styleUrls: ['./gridsterGrid.css']
 })
 
-export class GridsterGridComponent implements OnInit {
+export class GridsterGridComponent {
   el: any;
   gridster: GridsterComponent;
   columns: Array<any>;
@@ -14,6 +14,8 @@ export class GridsterGridComponent implements OnInit {
   height: number;
   width: number;
   margin: number;
+  columnsHeight: number;
+  rowsWidth: number;
 
   constructor(el: ElementRef, @Host() gridster: GridsterComponent, public renderer: Renderer2) {
     this.el = el.nativeElement;
@@ -23,10 +25,8 @@ export class GridsterGridComponent implements OnInit {
     this.rows = [];
     this.height = 0;
     this.width = 0;
-  }
-
-  ngOnInit() {
-    this.updateGrid();
+    this.columnsHeight = 0;
+    this.rowsWidth = 0;
   }
 
   updateGrid(dragOn?: boolean): void {
@@ -38,10 +38,12 @@ export class GridsterGridComponent implements OnInit {
       this.renderer.setStyle(this.el, 'display', 'none');
       return;
     }
-    this.columns.length = this.gridster.columns;
-    this.rows.length = this.gridster.rows;
     this.margin = this.gridster.$options.margin;
     this.height = this.gridster.curRowHeight - this.margin;
     this.width = this.gridster.curColWidth - this.margin;
+    this.columns.length = Math.max(this.gridster.columns, Math.floor(this.gridster.curWidth / this.gridster.curColWidth));
+    this.rows.length = Math.max(this.gridster.rows, Math.floor(this.gridster.curHeight / this.gridster.curRowHeight));
+    this.columnsHeight = this.gridster.curRowHeight * this.rows.length;
+    this.rowsWidth = this.gridster.curColWidth * this.columns.length;
   }
 }
