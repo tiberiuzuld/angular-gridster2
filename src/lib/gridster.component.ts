@@ -300,7 +300,15 @@ export class GridsterComponent implements OnInit, OnDestroy, DoCheck {
   }
 
   pixelsToPosition(x: number, y: number, roundingMethod: Function): [number, number] {
-    return [roundingMethod(Math.abs(x) / this.curColWidth), roundingMethod(Math.abs(y) / this.curRowHeight)];
+    return [this.pixelsToPositionX(x, roundingMethod), this.pixelsToPositionY(y, roundingMethod)];
+  }
+
+  pixelsToPositionX(x: number, roundingMethod: Function): number {
+    return roundingMethod(Math.abs(x) / this.curColWidth);
+  }
+
+  pixelsToPositionY(y: number, roundingMethod: Function): number {
+    return roundingMethod(Math.abs(y) / this.curRowHeight);
   }
 
   positionXToPixels(x: number): number {

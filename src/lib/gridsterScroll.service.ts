@@ -95,7 +95,8 @@ function startHorizontal(sign: number, elemPosition: Array<number>, calculateIte
         elemPosition[0] += sign * scrollSpeed;
         elemPosition[2] -= sign * scrollSpeed;
       } else {
-        elemPosition[2] += sign * scrollSpeed;
+        lastMouse.pageX += sign * scrollSpeed;
+        console.log(lastMouse.pageX);
       }
     } else {
       elemPosition[0] += sign * scrollSpeed;
