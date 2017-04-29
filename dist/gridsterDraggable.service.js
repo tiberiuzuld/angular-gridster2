@@ -70,6 +70,7 @@ var GridsterDraggable = (function () {
         this.gridster.movingItem = this.gridsterItem;
         this.gridster.previewStyle();
         this.push = new gridsterPush_service_1.GridsterPush(this.gridsterItem, this.gridster);
+        this.gridster.gridLines.updateGrid(true);
     };
     GridsterDraggable.prototype.dragMove = function (e) {
         e.stopPropagation();
@@ -96,6 +97,7 @@ var GridsterDraggable = (function () {
         this.gridsterItem.renderer.removeClass(this.gridsterItem.el, 'gridster-item-moving');
         this.gridster.movingItem = null;
         this.gridster.previewStyle();
+        this.gridster.gridLines.updateGrid(false);
         if (this.gridster.$options.draggable.stop) {
             Promise.resolve(this.gridster.$options.draggable.stop(this.gridsterItem.item, this.gridsterItem, e))
                 .then(this.makeDrag.bind(this), this.cancelDrag.bind(this));

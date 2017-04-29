@@ -99,6 +99,7 @@ export class GridsterDraggable {
     this.gridster.movingItem = this.gridsterItem;
     this.gridster.previewStyle();
     this.push = new GridsterPush(this.gridsterItem, this.gridster);
+    this.gridster.gridLines.updateGrid(true);
   }
 
   dragMove(e): void {
@@ -131,6 +132,7 @@ export class GridsterDraggable {
     this.gridsterItem.renderer.removeClass(this.gridsterItem.el, 'gridster-item-moving');
     this.gridster.movingItem = null;
     this.gridster.previewStyle();
+    this.gridster.gridLines.updateGrid(false);
     if (this.gridster.$options.draggable.stop) {
       Promise.resolve(this.gridster.$options.draggable.stop(this.gridsterItem.item, this.gridsterItem, e))
         .then(this.makeDrag.bind(this), this.cancelDrag.bind(this));
