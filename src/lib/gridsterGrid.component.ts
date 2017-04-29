@@ -30,11 +30,11 @@ export class GridsterGridComponent {
   }
 
   updateGrid(dragOn?: boolean): void {
-    if (this.gridster.$options.displayGrid === 'always') {
+    if (this.gridster.$options.displayGrid === 'always' && !this.gridster.mobile) {
       this.renderer.setStyle(this.el, 'display', 'block');
     } else if (this.gridster.$options.displayGrid === 'onDrag&Resize' && dragOn) {
       this.renderer.setStyle(this.el, 'display', 'block');
-    } else if (this.gridster.$options.displayGrid === 'none' || !dragOn) {
+    } else if (this.gridster.$options.displayGrid === 'none' || !dragOn || this.gridster.mobile) {
       this.renderer.setStyle(this.el, 'display', 'none');
       return;
     }
