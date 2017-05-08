@@ -76,6 +76,11 @@ export class GridsterComponent implements OnInit, OnDestroy, DoCheck {
 
   optionsChanged(): void {
     this.$options = GridsterUtils.merge(this.$options, this.options, this.$options);
+    let widgetsIndex: number = this.grid.length - 1, widget: GridsterItemComponent;
+    for (; widgetsIndex >= 0; widgetsIndex--) {
+      widget = this.grid[widgetsIndex];
+      widget.updateOptions();
+    }
     this.calculateLayout();
   }
 

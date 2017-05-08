@@ -51,8 +51,12 @@ export class GridsterItemComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.$item = GridsterUtils.merge(this.$item, this.item, this.$item);
+    this.updateOptions();
     this.gridster.addItem(this);
+  }
+
+  updateOptions(): void {
+    this.$item = GridsterUtils.merge(this.$item, this.item, this.$item);
   }
 
   ngOnDestroy(): void {

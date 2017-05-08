@@ -48,6 +48,11 @@ var GridsterComponent = (function () {
     };
     GridsterComponent.prototype.optionsChanged = function () {
         this.$options = gridsterUtils_service_1.GridsterUtils.merge(this.$options, this.options, this.$options);
+        var widgetsIndex = this.grid.length - 1, widget;
+        for (; widgetsIndex >= 0; widgetsIndex--) {
+            widget = this.grid[widgetsIndex];
+            widget.updateOptions();
+        }
         this.calculateLayout();
     };
     GridsterComponent.prototype.ngOnDestroy = function () {
