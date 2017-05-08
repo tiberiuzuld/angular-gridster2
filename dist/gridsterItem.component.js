@@ -29,8 +29,11 @@ var GridsterItemComponent = (function () {
         this.resize = new gridsterResizable_service_1.GridsterResizable(this, gridster);
     }
     GridsterItemComponent.prototype.ngOnInit = function () {
-        this.$item = gridsterUtils_service_1.GridsterUtils.merge(this.$item, this.item, this.$item);
+        this.updateOptions();
         this.gridster.addItem(this);
+    };
+    GridsterItemComponent.prototype.updateOptions = function () {
+        this.$item = gridsterUtils_service_1.GridsterUtils.merge(this.$item, this.item, this.$item);
     };
     GridsterItemComponent.prototype.ngOnDestroy = function () {
         this.gridster.removeItem(this);

@@ -56,7 +56,7 @@ export class AppComponent implements OnInit {
         stop: AppComponent.eventStop
       },
       swap: false,
-      displayGrid: 'always'
+      displayGrid: 'onDrag&Resize'
     };
 
     this.dashboard = [

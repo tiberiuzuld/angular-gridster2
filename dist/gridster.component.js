@@ -48,6 +48,11 @@ var GridsterComponent = (function () {
     };
     GridsterComponent.prototype.optionsChanged = function () {
         this.$options = gridsterUtils_service_1.GridsterUtils.merge(this.$options, this.options, this.$options);
+        var widgetsIndex = this.grid.length - 1, widget;
+        for (; widgetsIndex >= 0; widgetsIndex--) {
+            widget = this.grid[widgetsIndex];
+            widget.updateOptions();
+        }
         this.calculateLayout();
     };
     GridsterComponent.prototype.ngOnDestroy = function () {
@@ -158,6 +163,7 @@ var GridsterComponent = (function () {
             this.mobile = !this.mobile;
             this.renderer.removeClass(this.el, 'mobile');
         }
+        this.gridLines.updateGrid();
         var widgetsIndex = this.grid.length - 1, widget;
         for (; widgetsIndex >= 0; widgetsIndex--) {
             widget = this.grid[widgetsIndex];
@@ -333,7 +339,7 @@ var GridsterComponent = (function () {
 GridsterComponent.decorators = [
     { type: core_1.Component, args: [{
                 selector: 'gridster',
-                template: '<ng-content></ng-content><gridster-preview></gridster-preview>',
+                template: "<gridster-grid></gridster-grid> <ng-content></ng-content> <gridster-preview></gridster-preview>",
                 styles: [":host {   position: relative;   display: flex;   overflow: auto;   flex: 1 auto;   background: grey;   width: 100%;   height: 100%; }  :host(.fit) {   overflow-x: hidden;   overflow-y: hidden; }  :host(.scrollVertical) {   overflow-x: hidden;   overflow-y: auto; }  :host(.scrollHorizontal) {   overflow-x: auto;   overflow-y: hidden; }  :host(.fixed) {   overflow: auto; }  :host(.mobile) {   overflow-x: hidden;   overflow-y: auto;   display: block; }  :host(.mobile) /deep/ gridster-item {   position: relative; }  :host gridster-preview {   background: rgba(0, 0, 0, 0.15);   position: absolute; }"]
             },] },
 ];

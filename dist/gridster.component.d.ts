@@ -1,6 +1,7 @@
 import { OnInit, ElementRef, OnDestroy, Renderer2, DoCheck } from '@angular/core';
 import { GridsterConfig } from './gridsterConfig.interface';
 import { GridsterItemComponent } from './gridsterItem.component';
+import { GridsterGridComponent } from './gridsterGrid.component';
 export declare class GridsterComponent implements OnInit, OnDestroy, DoCheck {
     renderer: Renderer2;
     options: GridsterConfig;
@@ -20,6 +21,7 @@ export declare class GridsterComponent implements OnInit, OnDestroy, DoCheck {
     curColWidth: number;
     curRowHeight: number;
     windowResize: Function;
+    gridLines: GridsterGridComponent;
     private cleanCallback;
     constructor(el: ElementRef, renderer: Renderer2);
     ngOnInit(): void;

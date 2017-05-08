@@ -24,6 +24,7 @@ export declare class GridsterItemComponent implements OnInit, OnDestroy {
     resize: GridsterResizable;
     constructor(el: ElementRef, gridster: GridsterComponent, renderer: Renderer2);
     ngOnInit(): void;
+    updateOptions(): void;
     ngOnDestroy(): void;
     setSize(noCheck: Boolean): void;
     itemChanged(): void;
