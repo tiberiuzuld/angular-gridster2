@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {GridsterItemComponent} from './gridsterItem.component';
 import {scroll, cancelScroll} from './gridsterScroll.service';
-import {GridsterItem} from './gridsterItem.interface';
 import {GridsterResizeEventType} from './gridsterResizeEventType.interface';
 import {GridsterPush} from './gridsterPush.service';
 import {GridsterComponent} from './gridster.component';
@@ -10,7 +9,6 @@ import {GridsterComponent} from './gridster.component';
 export class GridsterResizable {
   gridsterItem: GridsterItemComponent;
   gridster: GridsterComponent;
-  itemCopy: GridsterItem;
   lastMouse: {
     pageX: number,
     pageY: number
@@ -34,6 +32,7 @@ export class GridsterResizable {
   minWidth: number;
   offsetTop: number;
   offsetLeft: number;
+  margin: number;
   top: number;
   left: number;
   bottom: number;
@@ -89,13 +88,11 @@ export class GridsterResizable {
     this.height = this.gridsterItem.height;
     this.bottom = this.gridsterItem.top + this.gridsterItem.height;
     this.right = this.gridsterItem.left + this.gridsterItem.width;
-    this.offsetTop = this.gridster.el.offsetTop + this.gridster.$options.margin;
-    this.offsetLeft = this.gridster.el.offsetLeft + this.gridster.$options.margin;
+    this.margin = this.gridster.$options.margin;
     this.minHeight = this.gridster.positionYToPixels(this.gridsterItem.$item.minItemRows || this.gridster.$options.minItemRows)
       - this.gridster.$options.margin;
     this.minWidth = this.gridster.positionXToPixels(this.gridsterItem.$item.minItemCols || this.gridster.$options.minItemCols)
       - this.gridster.$options.margin;
-    this.itemCopy = JSON.parse(JSON.stringify(this.gridsterItem.$item, ['rows', 'cols', 'x', 'y']));
     this.gridster.movingItem = this.gridsterItem;
     this.gridster.previewStyle();
     this.push = new GridsterPush(this.gridsterItem, this.gridster);
@@ -138,10 +135,9 @@ export class GridsterResizable {
     if (e.pageX === undefined && e.touches) {
       GridsterResizable.touchEvent(e);
     }
-
-    scroll([this.left, this.top, this.width, this.height], this.gridsterItem, e, this.lastMouse, this.directionFunction, true,
-      this.resizeEventScrollType);
-
+    this.offsetTop = this.gridster.el.scrollTop - this.gridster.el.offsetTop;
+    this.offsetLeft = this.gridster.el.scrollLeft - this.gridster.el.offsetLeft;
+    scroll(this.gridsterItem, e, this.lastMouse, this.directionFunction, true, this.resizeEventScrollType);
     this.directionFunction(e);
 
     this.lastMouse.pageX = e.pageX;
@@ -170,10 +166,10 @@ export class GridsterResizable {
   }
 
   cancelResize(): void {
-    this.gridsterItem.$item.cols = this.itemCopy.cols;
-    this.gridsterItem.$item.rows = this.itemCopy.rows;
-    this.gridsterItem.$item.x = this.itemCopy.x;
-    this.gridsterItem.$item.y = this.itemCopy.y;
+    this.gridsterItem.$item.cols = this.gridsterItem.item.cols;
+    this.gridsterItem.$item.rows = this.gridsterItem.item.rows;
+    this.gridsterItem.$item.x = this.gridsterItem.item.x;
+    this.gridsterItem.$item.y = this.gridsterItem.item.y;
     this.gridsterItem.setSize(true);
     this.push.restoreItems();
     this.push = undefined;
@@ -181,13 +177,13 @@ export class GridsterResizable {
 
   makeResize(): void {
     this.gridsterItem.setSize(true);
-    this.gridsterItem.checkItemChanges(this.gridsterItem.$item, this.itemCopy);
+    this.gridsterItem.checkItemChanges(this.gridsterItem.$item, this.gridsterItem.item);
     this.push.setPushedItems();
     this.push = undefined;
   }
 
   handleN(e): void {
-    this.top = e.pageY - this.offsetTop;
+    this.top = e.pageY + this.offsetTop - this.margin;
     this.height = this.bottom - this.top;
     if (this.minHeight > this.height) {
       this.height = this.minHeight;
@@ -216,7 +212,7 @@ export class GridsterResizable {
   }
 
   handleW(e): void {
-    this.left = e.pageX - this.offsetLeft;
+    this.left = e.pageX + this.offsetLeft - this.margin;
     this.width = this.right - this.left;
     if (this.minWidth > this.width) {
       this.width = this.minWidth;
@@ -246,7 +242,7 @@ export class GridsterResizable {
   }
 
   handleS(e): void {
-    this.height = e.pageY - this.gridster.el.offsetTop - this.gridster.$options.margin - this.gridsterItem.top;
+    this.height = e.pageY + this.offsetTop - this.margin - this.gridsterItem.top;
     if (this.minHeight > this.height) {
       this.height = this.minHeight;
     }
@@ -269,8 +265,7 @@ export class GridsterResizable {
   }
 
   handleE(e): void {
-    console.log(e.pageX);
-    this.width = e.pageX - this.offsetLeft - this.gridsterItem.left;
+    this.width = e.pageX + this.offsetLeft - this.margin - this.gridsterItem.left;
     if (this.minWidth > this.width) {
       this.width = this.minWidth;
     }
