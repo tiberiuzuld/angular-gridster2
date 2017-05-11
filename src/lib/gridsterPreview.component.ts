@@ -3,7 +3,8 @@ import {GridsterComponent} from './gridster.component';
 
 @Component({
   selector: 'gridster-preview',
-  template: ''
+  template: '',
+  styleUrls: ['./gridsterPreview.css']
 })
 export class GridsterPreviewComponent {
   el: any;
