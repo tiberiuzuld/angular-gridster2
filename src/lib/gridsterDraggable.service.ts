@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {GridsterSwap} from './gridsterSwap.service';
 import {scroll, cancelScroll} from './gridsterScroll.service';
 import {GridsterItemComponent} from './gridsterItem.component';
-import {GridsterItem} from './gridsterItem.interface';
 import {GridsterComponent} from './gridster.component';
 import {GridsterPush} from './gridsterPush.service';
 
@@ -39,6 +38,7 @@ export class GridsterDraggable {
   mousedown: Function;
   touchstart: Function;
   push: GridsterPush;
+  swap: GridsterSwap;
 
   static touchEvent(e) {
     e.pageX = e.touches[0].pageX;
@@ -107,6 +107,7 @@ export class GridsterDraggable {
     this.gridster.movingItem = this.gridsterItem;
     this.gridster.previewStyle();
     this.push = new GridsterPush(this.gridsterItem, this.gridster);
+    this.swap = new GridsterSwap(this.gridsterItem, this.gridster);
     this.gridster.gridLines.updateGrid(true);
   }
 
@@ -160,16 +161,17 @@ export class GridsterDraggable {
     this.gridsterItem.setSize(true);
     this.push.restoreItems();
     this.push = undefined;
+    this.swap.restoreSwapItem();
+    this.swap = undefined;
   }
 
   makeDrag() {
-    if (this.gridster.$options.swap) {
-      // GridsterSwap.GridsterSwap(this.gridsterItem, this.elemPosition);
-    }
     this.gridsterItem.setSize(true);
     this.gridsterItem.checkItemChanges(this.gridsterItem.$item, this.gridsterItem.item);
     this.push.setPushedItems();
     this.push = undefined;
+    this.swap.setSwapItem();
+    this.swap = undefined;
   }
 
   calculateItemPosition() {
@@ -184,6 +186,7 @@ export class GridsterDraggable {
       this.gridsterItem.$item.x = this.positionX;
       this.gridsterItem.$item.y = this.positionY;
       this.push.pushItems();
+      this.swap.swapItems();
       if (this.gridster.checkCollision(this.gridsterItem)) {
         this.gridsterItem.$item.x = this.positionXBackup;
         this.gridsterItem.$item.y = this.positionYBackup;
