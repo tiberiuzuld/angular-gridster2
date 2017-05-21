@@ -14,6 +14,11 @@ export class GridsterDraggable {
     pageX: number,
     pageY: number
   };
+  offsetLeft: number;
+  offsetTop: number;
+  margin: number;
+  diffTop: number;
+  diffLeft: number;
   top: number;
   left: number;
   height: number;
@@ -90,12 +95,15 @@ export class GridsterDraggable {
     this.touchend = this.gridsterItem.renderer.listen('document', 'touchend', this.dragStopFunction);
     this.touchcancel = this.gridsterItem.renderer.listen('document', 'touchcancel', this.dragStopFunction);
     this.gridsterItem.renderer.addClass(this.gridsterItem.el, 'gridster-item-moving');
-    this.lastMouse.pageX = e.pageX;
-    this.lastMouse.pageY = e.pageY;
+    this.margin = this.gridster.$options.margin;
+    this.offsetLeft = this.gridster.el.scrollLeft - this.gridster.el.offsetLeft;
+    this.offsetTop = this.gridster.el.scrollTop - this.gridster.el.offsetTop;
     this.left = this.gridsterItem.left;
     this.top = this.gridsterItem.top;
     this.width = this.gridsterItem.width;
     this.height = this.gridsterItem.height;
+    this.diffLeft = e.pageX + this.offsetLeft - this.margin - this.left;
+    this.diffTop = e.pageY + this.offsetTop - this.margin - this.top;
     this.gridster.movingItem = this.gridsterItem;
     this.gridster.previewStyle();
     this.push = new GridsterPush(this.gridsterItem, this.gridster);
@@ -108,14 +116,19 @@ export class GridsterDraggable {
     if (e.pageX === undefined && e.touches) {
       GridsterDraggable.touchEvent(e);
     }
-    this.left += e.pageX - this.lastMouse.pageX;
-    this.top += e.pageY - this.lastMouse.pageY;
+    this.offsetLeft = this.gridster.el.scrollLeft - this.gridster.el.offsetLeft;
+    this.offsetTop = this.gridster.el.scrollTop - this.gridster.el.offsetTop;
+    scroll(this.gridsterItem, e, this.lastMouse, this.calculateItemPositionFromMousePosition.bind(this));
 
-    scroll(this.gridsterItem, e, this.lastMouse, this.calculateItemPosition.bind(this));
+    this.calculateItemPositionFromMousePosition(e);
 
     this.lastMouse.pageX = e.pageX;
     this.lastMouse.pageY = e.pageY;
+  }
 
+  calculateItemPositionFromMousePosition(e): void {
+    this.left = e.pageX + this.offsetLeft - this.margin - this.diffLeft;
+    this.top = e.pageY + this.offsetTop - this.margin - this.diffTop;
     this.calculateItemPosition();
   }
 
