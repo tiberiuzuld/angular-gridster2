@@ -24,7 +24,8 @@ import {GridsterModule} from 'angular-gridster2';
   ...
 })
 ```
-
+## Browser support
+  What Angular supports [here](https://github.com/angular/angular)
 ## How to use
 
 ```html

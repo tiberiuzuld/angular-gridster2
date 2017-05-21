@@ -339,8 +339,8 @@ var GridsterComponent = (function () {
 GridsterComponent.decorators = [
     { type: core_1.Component, args: [{
                 selector: 'gridster',
-                template: "<gridster-grid></gridster-grid> <ng-content></ng-content> <gridster-preview></gridster-preview>",
-                styles: [":host {   position: relative;   display: flex;   overflow: auto;   flex: 1 auto;   background: grey;   width: 100%;   height: 100%; }  :host(.fit) {   overflow-x: hidden;   overflow-y: hidden; }  :host(.scrollVertical) {   overflow-x: hidden;   overflow-y: auto; }  :host(.scrollHorizontal) {   overflow-x: auto;   overflow-y: hidden; }  :host(.fixed) {   overflow: auto; }  :host(.mobile) {   overflow-x: hidden;   overflow-y: auto;   display: block; }  :host(.mobile) /deep/ gridster-item {   position: relative; }  :host gridster-preview {   background: rgba(0, 0, 0, 0.15);   position: absolute; }"]
+                template: "<gridster-grid class=\"gridster-grid\"></gridster-grid> <ng-content></ng-content> <gridster-preview class=\"gridster-preview\"></gridster-preview>",
+                styles: [":host {   position: relative;   display: flex;   overflow: auto;   flex: 1 auto;   background: grey;   width: 100%;   height: 100%; }  :host(.fit) {   overflow-x: hidden;   overflow-y: hidden; }  :host(.scrollVertical) {   overflow-x: hidden;   overflow-y: auto; }  :host(.scrollHorizontal) {   overflow-x: auto;   overflow-y: hidden; }  :host(.fixed) {   overflow: auto; }  :host(.mobile) {   overflow-x: hidden;   overflow-y: auto;   display: block; }  :host(.mobile) /deep/ gridster-item {   position: relative; }"]
             },] },
 ];
 /** @nocollapse */

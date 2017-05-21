@@ -36,8 +36,3 @@
 :host(.mobile) /deep/ gridster-item {
   position: relative;
 }
-
-:host gridster-preview {
-  background: rgba(0, 0, 0, 0.15);
-  position: absolute;
-}

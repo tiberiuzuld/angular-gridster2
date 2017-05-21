@@ -33,7 +33,8 @@ var GridsterPreviewComponent = (function () {
 GridsterPreviewComponent.decorators = [
     { type: core_1.Component, args: [{
                 selector: 'gridster-preview',
-                template: ''
+                template: '',
+                styles: [":host {   background: rgba(0, 0, 0, 0.15);   position: absolute; }"]
             },] },
 ];
 /** @nocollapse */
