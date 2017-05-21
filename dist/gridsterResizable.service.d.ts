@@ -1,18 +1,14 @@
 import { GridsterItemComponent } from './gridsterItem.component';
-import { GridsterItem } from './gridsterItem.interface';
 import { GridsterResizeEventType } from './gridsterResizeEventType.interface';
 import { GridsterPush } from './gridsterPush.service';
 import { GridsterComponent } from './gridster.component';
 export declare class GridsterResizable {
     gridsterItem: GridsterItemComponent;
     gridster: GridsterComponent;
-    itemCopy: GridsterItem;
     lastMouse: {
         pageX: number;
         pageY: number;
     };
-    elemPosition: Array<number>;
-    position: Array<number>;
     itemBackup: Array<number>;
     enabled: boolean;
     resizeEventScrollType: GridsterResizeEventType;
@@ -28,6 +24,18 @@ export declare class GridsterResizable {
     mousedown: Function;
     touchstart: Function;
     push: GridsterPush;
+    minHeight: number;
+    minWidth: number;
+    offsetTop: number;
+    offsetLeft: number;
+    margin: number;
+    top: number;
+    left: number;
+    bottom: number;
+    right: number;
+    width: number;
+    height: number;
+    newPosition: number;
     static touchEvent(e: any): void;
     constructor(gridsterItem: GridsterItemComponent, gridster: GridsterComponent);
     dragStart(e: any): void;

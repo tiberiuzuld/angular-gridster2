@@ -14,9 +14,6 @@ var GridsterDraggable = (function () {
             pageX: 0,
             pageY: 0
         };
-        this.elemPosition = [0, 0, 0, 0];
-        this.position = [0, 0];
-        this.positionBackup = [0, 0];
     }
     GridsterDraggable.touchEvent = function (e) {
         e.pageX = e.touches[0].pageX;
@@ -60,16 +57,19 @@ var GridsterDraggable = (function () {
         this.touchend = this.gridsterItem.renderer.listen('document', 'touchend', this.dragStopFunction);
         this.touchcancel = this.gridsterItem.renderer.listen('document', 'touchcancel', this.dragStopFunction);
         this.gridsterItem.renderer.addClass(this.gridsterItem.el, 'gridster-item-moving');
-        this.lastMouse.pageX = e.pageX;
-        this.lastMouse.pageY = e.pageY;
-        this.elemPosition[0] = this.gridsterItem.left;
-        this.elemPosition[1] = this.gridsterItem.top;
-        this.elemPosition[2] = this.gridsterItem.width;
-        this.elemPosition[3] = this.gridsterItem.height;
-        this.itemCopy = JSON.parse(JSON.stringify(this.gridsterItem.$item, ['rows', 'cols', 'x', 'y']));
+        this.margin = this.gridster.$options.margin;
+        this.offsetLeft = this.gridster.el.scrollLeft - this.gridster.el.offsetLeft;
+        this.offsetTop = this.gridster.el.scrollTop - this.gridster.el.offsetTop;
+        this.left = this.gridsterItem.left;
+        this.top = this.gridsterItem.top;
+        this.width = this.gridsterItem.width;
+        this.height = this.gridsterItem.height;
+        this.diffLeft = e.pageX + this.offsetLeft - this.margin - this.left;
+        this.diffTop = e.pageY + this.offsetTop - this.margin - this.top;
         this.gridster.movingItem = this.gridsterItem;
         this.gridster.previewStyle();
         this.push = new gridsterPush_service_1.GridsterPush(this.gridsterItem, this.gridster);
+        this.swap = new gridsterSwap_service_1.GridsterSwap(this.gridsterItem, this.gridster);
         this.gridster.gridLines.updateGrid(true);
     };
     GridsterDraggable.prototype.dragMove = function (e) {
@@ -78,11 +78,16 @@ var GridsterDraggable = (function () {
         if (e.pageX === undefined && e.touches) {
             GridsterDraggable.touchEvent(e);
         }
-        this.elemPosition[0] += e.pageX - this.lastMouse.pageX;
-        this.elemPosition[1] += e.pageY - this.lastMouse.pageY;
-        gridsterScroll_service_1.scroll(this.elemPosition, this.gridsterItem, e, this.lastMouse, this.calculateItemPosition.bind(this));
+        this.offsetLeft = this.gridster.el.scrollLeft - this.gridster.el.offsetLeft;
+        this.offsetTop = this.gridster.el.scrollTop - this.gridster.el.offsetTop;
+        gridsterScroll_service_1.scroll(this.gridsterItem, e, this.lastMouse, this.calculateItemPositionFromMousePosition.bind(this));
+        this.calculateItemPositionFromMousePosition(e);
         this.lastMouse.pageX = e.pageX;
         this.lastMouse.pageY = e.pageY;
+    };
+    GridsterDraggable.prototype.calculateItemPositionFromMousePosition = function (e) {
+        this.left = e.pageX + this.offsetLeft - this.margin - this.diffLeft;
+        this.top = e.pageY + this.offsetTop - this.margin - this.diffTop;
         this.calculateItemPosition();
     };
     GridsterDraggable.prototype.dragStop = function (e) {
@@ -107,34 +112,37 @@ var GridsterDraggable = (function () {
         }
     };
     GridsterDraggable.prototype.cancelDrag = function () {
-        this.gridsterItem.$item.x = this.itemCopy.x;
-        this.gridsterItem.$item.y = this.itemCopy.y;
+        this.gridsterItem.$item.x = this.gridsterItem.item.x;
+        this.gridsterItem.$item.y = this.gridsterItem.item.y;
         this.gridsterItem.setSize(true);
         this.push.restoreItems();
         this.push = undefined;
+        this.swap.restoreSwapItem();
+        this.swap = undefined;
     };
     GridsterDraggable.prototype.makeDrag = function () {
-        if (this.gridster.$options.swap) {
-            gridsterSwap_service_1.GridsterSwap.GridsterSwap(this.gridsterItem, this.elemPosition);
-        }
         this.gridsterItem.setSize(true);
-        this.gridsterItem.checkItemChanges(this.gridsterItem.$item, this.itemCopy);
+        this.gridsterItem.checkItemChanges(this.gridsterItem.$item, this.gridsterItem.item);
         this.push.setPushedItems();
         this.push = undefined;
+        this.swap.setSwapItem();
+        this.swap = undefined;
     };
     GridsterDraggable.prototype.calculateItemPosition = function () {
-        this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'left', this.elemPosition[0] + 'px');
-        this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'top', this.elemPosition[1] + 'px');
-        this.position = this.gridster.pixelsToPosition(this.elemPosition[0], this.elemPosition[1], Math.round);
-        if (this.position[0] !== this.gridsterItem.$item.x || this.position[1] !== this.gridsterItem.$item.y) {
-            this.positionBackup[0] = this.gridsterItem.$item.x;
-            this.positionBackup[1] = this.gridsterItem.$item.y;
-            this.gridsterItem.$item.x = this.position[0];
-            this.gridsterItem.$item.y = this.position[1];
+        this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'left', this.left + 'px');
+        this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'top', this.top + 'px');
+        this.positionX = this.gridster.pixelsToPositionX(this.left, Math.round);
+        this.positionY = this.gridster.pixelsToPositionY(this.top, Math.round);
+        if (this.positionX !== this.gridsterItem.$item.x || this.positionY !== this.gridsterItem.$item.y) {
+            this.positionXBackup = this.gridsterItem.$item.x;
+            this.positionYBackup = this.gridsterItem.$item.y;
+            this.gridsterItem.$item.x = this.positionX;
+            this.gridsterItem.$item.y = this.positionY;
             this.push.pushItems();
+            this.swap.swapItems();
             if (this.gridster.checkCollision(this.gridsterItem)) {
-                this.gridsterItem.$item.x = this.positionBackup[0];
-                this.gridsterItem.$item.y = this.positionBackup[1];
+                this.gridsterItem.$item.x = this.positionXBackup;
+                this.gridsterItem.$item.y = this.positionYBackup;
             }
             else {
                 this.gridster.previewStyle();

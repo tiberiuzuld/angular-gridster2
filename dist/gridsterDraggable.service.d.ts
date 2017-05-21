@@ -1,18 +1,27 @@
+import { GridsterSwap } from './gridsterSwap.service';
 import { GridsterItemComponent } from './gridsterItem.component';
-import { GridsterItem } from './gridsterItem.interface';
 import { GridsterComponent } from './gridster.component';
 import { GridsterPush } from './gridsterPush.service';
 export declare class GridsterDraggable {
     gridsterItem: GridsterItemComponent;
     gridster: GridsterComponent;
-    itemCopy: GridsterItem;
     lastMouse: {
         pageX: number;
         pageY: number;
     };
-    elemPosition: Array<number>;
-    position: Array<number>;
-    positionBackup: Array<number>;
+    offsetLeft: number;
+    offsetTop: number;
+    margin: number;
+    diffTop: number;
+    diffLeft: number;
+    top: number;
+    left: number;
+    height: number;
+    width: number;
+    positionX: number;
+    positionY: number;
+    positionXBackup: number;
+    positionYBackup: number;
     enabled: boolean;
     dragStartFunction: (event: any) => void;
     dragFunction: (event: any) => void;
@@ -25,11 +34,13 @@ export declare class GridsterDraggable {
     mousedown: Function;
     touchstart: Function;
     push: GridsterPush;
+    swap: GridsterSwap;
     static touchEvent(e: any): void;
     constructor(gridsterItem: GridsterItemComponent, gridster: GridsterComponent);
     checkContentClass(target: any, current: any, contentClass: any): boolean;
     dragStart(e: any): void;
     dragMove(e: any): void;
+    calculateItemPositionFromMousePosition(e: any): void;
     dragStop(e: any): void;
     cancelDrag(): void;
     makeDrag(): void;

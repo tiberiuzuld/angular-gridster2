@@ -268,7 +268,13 @@ var GridsterComponent = (function () {
         }
     };
     GridsterComponent.prototype.pixelsToPosition = function (x, y, roundingMethod) {
-        return [roundingMethod(Math.abs(x) / this.curColWidth), roundingMethod(Math.abs(y) / this.curRowHeight)];
+        return [this.pixelsToPositionX(x, roundingMethod), this.pixelsToPositionY(y, roundingMethod)];
+    };
+    GridsterComponent.prototype.pixelsToPositionX = function (x, roundingMethod) {
+        return roundingMethod(Math.abs(x) / this.curColWidth);
+    };
+    GridsterComponent.prototype.pixelsToPositionY = function (y, roundingMethod) {
+        return roundingMethod(Math.abs(y) / this.curRowHeight);
     };
     GridsterComponent.prototype.positionXToPixels = function (x) {
         return x * this.curColWidth;
