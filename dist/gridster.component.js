@@ -163,7 +163,7 @@ var GridsterComponent = (function () {
             this.mobile = !this.mobile;
             this.renderer.removeClass(this.el, 'mobile');
         }
-        this.gridLines.updateGrid();
+        this.gridLines.updateGrid(!!this.movingItem);
         var widgetsIndex = this.grid.length - 1, widget;
         for (; widgetsIndex >= 0; widgetsIndex--) {
             widget = this.grid[widgetsIndex];
