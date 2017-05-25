@@ -6,9 +6,11 @@ angular-gridster2
 [![downloads](https://img.shields.io/npm/dm/angular-gridster2.svg)](https://www.npmjs.com/package/angular-gridster2)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=AARLN6N6WY85E&lc=RO&item_name=Angular%2dgridster2&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted)
 
-### Angular2 implementation of angular-gridster [Demo](http://tiberiuzuld.github.io/angular-gridster2/angular)
+### Angular implementation of angular-gridster [Demo](http://tiberiuzuld.github.io/angular-gridster2/angular)
 
-### AngularJS 1.x library is [here](https://github.com/tiberiuzuld/angular-gridster2/tree/1.x)
+### Angular 4.x library is [master branch](https://github.com/tiberiuzuld/angular-gridster2/tree/master) 
+### Angular 2.x library is [2.4.x branch](https://github.com/tiberiuzuld/angular-gridster2/tree/2.4.x)  
+### AngularJS 1.x library is [1.x branch](https://github.com/tiberiuzuld/angular-gridster2/tree/1.x)
 
 ## Install
 
