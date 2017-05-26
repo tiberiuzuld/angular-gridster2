@@ -30,7 +30,6 @@ import {GridsterModule} from '../lib/gridster.module';
   providers: [],
   bootstrap: [AppComponent]
 })
-
 export class AppModule {
 
 }
