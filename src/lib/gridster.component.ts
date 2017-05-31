@@ -257,7 +257,6 @@ export class GridsterComponent implements OnInit, OnDestroy, DoCheck {
     const minItemRows = itemComponent.$item.minItemRows === undefined ? this.$options.minItemRows : itemComponent.$item.minItemRows;
     const inColsLimits = itemComponent.$item.cols <= maxItemCols && itemComponent.$item.cols >= minItemCols;
     const inRowsLimits = itemComponent.$item.rows <= maxItemRows && itemComponent.$item.rows >= minItemRows;
-    console.log(noNegativePosition, itemComponent.$item.y);
     return !(noNegativePosition && maxGridCols && maxGridRows && inColsLimits && inRowsLimits);
   }
 

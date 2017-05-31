@@ -220,7 +220,6 @@ var GridsterComponent = (function () {
         var minItemRows = itemComponent.$item.minItemRows === undefined ? this.$options.minItemRows : itemComponent.$item.minItemRows;
         var inColsLimits = itemComponent.$item.cols <= maxItemCols && itemComponent.$item.cols >= minItemCols;
         var inRowsLimits = itemComponent.$item.rows <= maxItemRows && itemComponent.$item.rows >= minItemRows;
-        console.log(noNegativePosition, itemComponent.$item.y);
         return !(noNegativePosition && maxGridCols && maxGridRows && inColsLimits && inRowsLimits);
     };
     GridsterComponent.prototype.findItemWithItem = function (itemComponent, ignoreItem) {
