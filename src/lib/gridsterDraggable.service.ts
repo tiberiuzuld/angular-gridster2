@@ -190,11 +190,7 @@ export class GridsterDraggable {
     this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'left', this.left + 'px');
     this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'top', this.top + 'px');
 
-    if (this.positionX !== this.gridsterItem.$item.x || this.positionY !== this.gridsterItem.$item.y) {
-      this.positionXBackup = this.gridsterItem.$item.x;
-      this.positionYBackup = this.gridsterItem.$item.y;
-      this.gridsterItem.$item.x = this.positionX;
-      this.gridsterItem.$item.y = this.positionY;
+    if (this.positionXBackup !== this.gridsterItem.$item.x || this.positionYBackup !== this.gridsterItem.$item.y) {
       this.push.pushItems();
       this.swap.swapItems();
       if (this.gridster.checkCollision(this.gridsterItem)) {
