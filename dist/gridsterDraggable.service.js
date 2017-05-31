@@ -129,10 +129,19 @@ var GridsterDraggable = (function () {
         this.swap = undefined;
     };
     GridsterDraggable.prototype.calculateItemPosition = function () {
-        this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'left', this.left + 'px');
-        this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'top', this.top + 'px');
         this.positionX = this.gridster.pixelsToPositionX(this.left, Math.round);
         this.positionY = this.gridster.pixelsToPositionY(this.top, Math.round);
+        this.positionXBackup = this.gridsterItem.$item.x;
+        this.positionYBackup = this.gridsterItem.$item.y;
+        this.gridsterItem.$item.x = this.positionX;
+        this.gridsterItem.$item.y = this.positionY;
+        if (this.gridster.checkGridCollision(this.gridsterItem)) {
+            this.gridsterItem.$item.x = this.positionXBackup;
+            this.gridsterItem.$item.y = this.positionYBackup;
+            return;
+        }
+        this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'left', this.left + 'px');
+        this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'top', this.top + 'px');
         if (this.positionX !== this.gridsterItem.$item.x || this.positionY !== this.gridsterItem.$item.y) {
             this.positionXBackup = this.gridsterItem.$item.x;
             this.positionYBackup = this.gridsterItem.$item.y;

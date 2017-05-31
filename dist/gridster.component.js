@@ -205,6 +205,12 @@ var GridsterComponent = (function () {
         this.calculateLayoutDebounce();
     };
     GridsterComponent.prototype.checkCollision = function (itemComponent, ignoreItem) {
+        if (this.checkGridCollision(itemComponent)) {
+            return true;
+        }
+        return this.findItemWithItem(itemComponent, ignoreItem);
+    };
+    GridsterComponent.prototype.checkGridCollision = function (itemComponent) {
         var noNegativePosition = itemComponent.$item.y > -1 && itemComponent.$item.x > -1;
         var maxGridCols = itemComponent.$item.cols + itemComponent.$item.x <= this.$options.maxCols;
         var maxGridRows = itemComponent.$item.rows + itemComponent.$item.y <= this.$options.maxRows;
@@ -214,10 +220,8 @@ var GridsterComponent = (function () {
         var minItemRows = itemComponent.$item.minItemRows === undefined ? this.$options.minItemRows : itemComponent.$item.minItemRows;
         var inColsLimits = itemComponent.$item.cols <= maxItemCols && itemComponent.$item.cols >= minItemCols;
         var inRowsLimits = itemComponent.$item.rows <= maxItemRows && itemComponent.$item.rows >= minItemRows;
-        if (!(noNegativePosition && maxGridCols && maxGridRows && inColsLimits && inRowsLimits)) {
-            return true;
-        }
-        return this.findItemWithItem(itemComponent, ignoreItem);
+        console.log(noNegativePosition, itemComponent.$item.y);
+        return !(noNegativePosition && maxGridCols && maxGridRows && inColsLimits && inRowsLimits);
     };
     GridsterComponent.prototype.findItemWithItem = function (itemComponent, ignoreItem) {
         var widgetsIndex = this.grid.length - 1, widget;
@@ -271,10 +275,10 @@ var GridsterComponent = (function () {
         return [this.pixelsToPositionX(x, roundingMethod), this.pixelsToPositionY(y, roundingMethod)];
     };
     GridsterComponent.prototype.pixelsToPositionX = function (x, roundingMethod) {
-        return roundingMethod(Math.abs(x) / this.curColWidth);
+        return roundingMethod(x / this.curColWidth);
     };
     GridsterComponent.prototype.pixelsToPositionY = function (y, roundingMethod) {
-        return roundingMethod(Math.abs(y) / this.curRowHeight);
+        return roundingMethod(y / this.curRowHeight);
     };
     GridsterComponent.prototype.positionXToPixels = function (x) {
         return x * this.curColWidth;

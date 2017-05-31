@@ -241,6 +241,13 @@ export class GridsterComponent implements OnInit, OnDestroy, DoCheck {
   }
 
   checkCollision(itemComponent: GridsterItemComponent, ignoreItem?: GridsterItemComponent): GridsterItemComponent | boolean {
+    if (this.checkGridCollision(itemComponent)) {
+      return true;
+    }
+    return this.findItemWithItem(itemComponent, ignoreItem);
+  }
+
+  checkGridCollision(itemComponent: GridsterItemComponent): boolean {
     const noNegativePosition = itemComponent.$item.y > -1 && itemComponent.$item.x > -1;
     const maxGridCols = itemComponent.$item.cols + itemComponent.$item.x <= this.$options.maxCols;
     const maxGridRows = itemComponent.$item.rows + itemComponent.$item.y <= this.$options.maxRows;
@@ -250,10 +257,8 @@ export class GridsterComponent implements OnInit, OnDestroy, DoCheck {
     const minItemRows = itemComponent.$item.minItemRows === undefined ? this.$options.minItemRows : itemComponent.$item.minItemRows;
     const inColsLimits = itemComponent.$item.cols <= maxItemCols && itemComponent.$item.cols >= minItemCols;
     const inRowsLimits = itemComponent.$item.rows <= maxItemRows && itemComponent.$item.rows >= minItemRows;
-    if (!(noNegativePosition && maxGridCols && maxGridRows && inColsLimits && inRowsLimits)) {
-      return true;
-    }
-    return this.findItemWithItem(itemComponent, ignoreItem);
+    console.log(noNegativePosition, itemComponent.$item.y);
+    return !(noNegativePosition && maxGridCols && maxGridRows && inColsLimits && inRowsLimits);
   }
 
   findItemWithItem(itemComponent: GridsterItemComponent, ignoreItem?: GridsterItemComponent): GridsterItemComponent {
@@ -309,11 +314,11 @@ export class GridsterComponent implements OnInit, OnDestroy, DoCheck {
   }
 
   pixelsToPositionX(x: number, roundingMethod: Function): number {
-    return roundingMethod(Math.abs(x) / this.curColWidth);
+    return roundingMethod(x / this.curColWidth);
   }
 
   pixelsToPositionY(y: number, roundingMethod: Function): number {
-    return roundingMethod(Math.abs(y) / this.curRowHeight);
+    return roundingMethod(y / this.curRowHeight);
   }
 
   positionXToPixels(x: number): number {

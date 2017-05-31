@@ -36,6 +36,7 @@ export declare class GridsterComponent implements OnInit, OnDestroy, DoCheck {
     addItem(itemComponent: GridsterItemComponent): void;
     removeItem(itemComponent: GridsterItemComponent): void;
     checkCollision(itemComponent: GridsterItemComponent, ignoreItem?: GridsterItemComponent): GridsterItemComponent | boolean;
+    checkGridCollision(itemComponent: GridsterItemComponent): boolean;
     findItemWithItem(itemComponent: GridsterItemComponent, ignoreItem?: GridsterItemComponent): GridsterItemComponent;
     autoPositionItem(itemComponent: GridsterItemComponent): void;
     pixelsToPosition(x: number, y: number, roundingMethod: Function): [number, number];

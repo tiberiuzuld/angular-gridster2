@@ -26,6 +26,8 @@ var GridsterSwap = (function () {
             }
             else {
                 this.swapedItem.setSize(true);
+                this.gridsterItem.$item.x = this.gridsterItem.item.x;
+                this.gridsterItem.$item.y = this.gridsterItem.item.y;
                 this.swapedItem = undefined;
             }
         }
