@@ -39,7 +39,7 @@ var GridsterGridComponent = (function () {
 GridsterGridComponent.decorators = [
     { type: core_1.Component, args: [{
                 selector: 'gridster-grid',
-                template: "<div class=\"columns\" [style.height.px]=\"columnsHeight\">   <div class=\"column\" *ngFor=\"let column of columns\" [style.width.px]=\"width\" [style.margin-left.px]=\"margin\"></div> </div> <div class=\"rows\" [style.width.px]=\"rowsWidth\">   <div class=\"row\" *ngFor=\"let row of rows\" [style.height.px]=\"height\" [style.margin-top.px]=\"margin\"></div> </div>",
+                template: "<div class=\"columns\" [style.height.px]=\"columnsHeight\">   <div class=\"column\" *ngFor=\"let column of columns\" [style.min-width.px]=\"width\" [style.margin-left.px]=\"margin\"></div> </div> <div class=\"rows\" [style.width.px]=\"rowsWidth\">   <div class=\"row\" *ngFor=\"let row of rows\" [style.height.px]=\"height\" [style.margin-top.px]=\"margin\"></div> </div>",
                 styles: [":host {   display: none;   position: absolute; }  .rows, .columns {   position: absolute; }  .columns {   display: flex;   flex-direction: row; }  .column, .row {   transition: .3s;   box-sizing: border-box; }  .column {   height: 100%;   border-left: 1px solid white;   border-right: 1px solid white; }  .row {   width: 100%;   border-top: 1px solid white;   border-bottom: 1px solid white; }"]
             },] },
 ];
