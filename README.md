@@ -201,6 +201,9 @@ export interface GridsterItem {
 ```
 Note: When a item changes cols/rows both events get triggered
 
+### Load dynamic components inside the `gridster-item`
+
+You can load dynamic components in Angular4+ with the help of [`ng-dynamic-component` library](https://www.npmjs.com/package/ng-dynamic-component) 
 
 ### Interact with content without dragging
 
