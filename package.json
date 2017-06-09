@@ -1,6 +1,6 @@
 {
   "name": "angular-gridster2",
-  "version": "2.10.4",
+  "version": "2.10.5",
   "license": "MIT",
   "main": "dist/index.js",
   "jsnext:main": "dist/index.js",
@@ -47,7 +47,7 @@
   "dependencies": {},
   "devDependencies": {
     "@angular/animations": "4.1.3",
-    "@angular/cli": "1.1.0",
+    "@angular/cli": "1.1.1",
     "@angular/common": "4.1.3",
     "@angular/compiler": "4.1.3",
     "@angular/compiler-cli": "4.1.3",
@@ -61,14 +61,14 @@
     "@angular/platform-server": "4.1.3",
     "@angular/router": "4.1.3",
     "@types/jasmine": "2.5.51",
-    "@types/node": "7.0.27",
+    "@types/node": "7.0.29",
     "codelyzer": "3.0.1",
     "core-js": "2.4.1",
     "gulp": "3.9.1",
     "gulp-clean": "0.3.2",
     "gulp-inline-ng2-template": "4.0.0",
     "hammerjs": "2.0.8",
-    "jasmine-core": "2.6.2",
+    "jasmine-core": "2.6.3",
     "jasmine-spec-reporter": "4.1.0",
     "karma": "1.7.0",
     "karma-chrome-launcher": "2.1.1",
@@ -80,10 +80,10 @@
     "systemjs": "0.20.13",
     "rxjs": "5.4.0",
     "ts-helpers": "1.1.2",
-    "ts-node": "3.0.4",
+    "ts-node": "3.0.6",
     "tslib": "1.7.1",
-    "tslint": "5.4.2",
+    "tslint": "5.4.3",
     "typescript": "2.3.4",
-    "zone.js": "0.8.11"
+    "zone.js": "0.8.12"
   }
 }

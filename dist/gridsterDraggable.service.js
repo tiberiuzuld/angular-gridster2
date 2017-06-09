@@ -14,6 +14,7 @@ var GridsterDraggable = (function () {
             pageX: 0,
             pageY: 0
         };
+        this.path = [];
     }
     GridsterDraggable.touchEvent = function (e) {
         e.pageX = e.touches[0].pageX;
@@ -71,6 +72,7 @@ var GridsterDraggable = (function () {
         this.push = new gridsterPush_service_1.GridsterPush(this.gridsterItem, this.gridster);
         this.swap = new gridsterSwap_service_1.GridsterSwap(this.gridsterItem, this.gridster);
         this.gridster.gridLines.updateGrid(true);
+        this.path.push({ x: this.gridsterItem.item.x, y: this.gridsterItem.item.y });
     };
     GridsterDraggable.prototype.dragMove = function (e) {
         e.stopPropagation();
@@ -103,6 +105,7 @@ var GridsterDraggable = (function () {
         this.gridster.movingItem = null;
         this.gridster.previewStyle();
         this.gridster.gridLines.updateGrid(false);
+        this.path = [];
         if (this.gridster.$options.draggable.stop) {
             Promise.resolve(this.gridster.$options.draggable.stop(this.gridsterItem.item, this.gridsterItem, e))
                 .then(this.makeDrag.bind(this), this.cancelDrag.bind(this));
@@ -143,13 +146,28 @@ var GridsterDraggable = (function () {
         this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'left', this.left + 'px');
         this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'top', this.top + 'px');
         if (this.positionXBackup !== this.gridsterItem.$item.x || this.positionYBackup !== this.gridsterItem.$item.y) {
-            this.push.pushItems();
+            var lastPosition = this.path[this.path.length - 1];
+            var direction = void 0;
+            if (lastPosition.x < this.gridsterItem.$item.x) {
+                direction = this.push.fromWest;
+            }
+            else if (lastPosition.x > this.gridsterItem.$item.x) {
+                direction = this.push.fromEast;
+            }
+            else if (lastPosition.y < this.gridsterItem.$item.y) {
+                direction = this.push.fromNorth;
+            }
+            else if (lastPosition.y > this.gridsterItem.$item.y) {
+                direction = this.push.fromSouth;
+            }
+            this.push.pushItems(direction);
             this.swap.swapItems();
             if (this.gridster.checkCollision(this.gridsterItem)) {
                 this.gridsterItem.$item.x = this.positionXBackup;
                 this.gridsterItem.$item.y = this.positionYBackup;
             }
             else {
+                this.path.push({ x: this.gridsterItem.$item.x, y: this.gridsterItem.$item.y });
                 this.gridster.previewStyle();
             }
         }

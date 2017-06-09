@@ -39,6 +39,7 @@ export class GridsterDraggable {
   touchstart: Function;
   push: GridsterPush;
   swap: GridsterSwap;
+  path: Array<{ x: number, y: number }>;
 
   static touchEvent(e) {
     e.pageX = e.touches[0].pageX;
@@ -52,6 +53,7 @@ export class GridsterDraggable {
       pageX: 0,
       pageY: 0
     };
+    this.path = [];
   }
 
   checkContentClass(target, current, contentClass): boolean {
@@ -109,6 +111,7 @@ export class GridsterDraggable {
     this.push = new GridsterPush(this.gridsterItem, this.gridster);
     this.swap = new GridsterSwap(this.gridsterItem, this.gridster);
     this.gridster.gridLines.updateGrid(true);
+    this.path.push({x: this.gridsterItem.item.x, y: this.gridsterItem.item.y});
   }
 
   dragMove(e): void {
@@ -147,6 +150,7 @@ export class GridsterDraggable {
     this.gridster.movingItem = null;
     this.gridster.previewStyle();
     this.gridster.gridLines.updateGrid(false);
+    this.path = [];
     if (this.gridster.$options.draggable.stop) {
       Promise.resolve(this.gridster.$options.draggable.stop(this.gridsterItem.item, this.gridsterItem, e))
         .then(this.makeDrag.bind(this), this.cancelDrag.bind(this));
@@ -191,12 +195,24 @@ export class GridsterDraggable {
     this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'top', this.top + 'px');
 
     if (this.positionXBackup !== this.gridsterItem.$item.x || this.positionYBackup !== this.gridsterItem.$item.y) {
-      this.push.pushItems();
+      const lastPosition = this.path[this.path.length - 1];
+      let direction;
+      if (lastPosition.x < this.gridsterItem.$item.x) {
+        direction = this.push.fromWest;
+      } else if (lastPosition.x > this.gridsterItem.$item.x) {
+        direction = this.push.fromEast;
+      } else if (lastPosition.y < this.gridsterItem.$item.y) {
+        direction = this.push.fromNorth;
+      } else if (lastPosition.y > this.gridsterItem.$item.y) {
+        direction = this.push.fromSouth;
+      }
+      this.push.pushItems(direction);
       this.swap.swapItems();
       if (this.gridster.checkCollision(this.gridsterItem)) {
         this.gridsterItem.$item.x = this.positionXBackup;
         this.gridsterItem.$item.y = this.positionYBackup;
       } else {
+        this.path.push({x: this.gridsterItem.$item.x, y: this.gridsterItem.$item.y});
         this.gridster.previewStyle();
       }
     }
