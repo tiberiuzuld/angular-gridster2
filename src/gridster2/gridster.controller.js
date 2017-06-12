@@ -1,12 +1,13 @@
 (function () {
   'use strict';
   angular.module('angular-gridster2')
-    .controller('GridsterController', GridsterController);
+         .controller('GridsterController', GridsterController);
 
   /** @ngInject */
   function GridsterController($scope, gridsterConfig, $log) {
     var vm = this;
     vm.mobile = false;
+    vm.init = true;
 
     angular.extend(vm, gridsterConfig);
 
@@ -65,7 +66,10 @@
         vm.grid[widgetsIndex].drag.toggle(vm.draggable.enabled);
         vm.grid[widgetsIndex].resize.toggle(vm.resizable.enabled);
       }
-
+      if (vm.init && vm.initCallback) {
+        vm.init = false;
+        vm.initCallback();
+      }
       $scope.$applyAsync(vm.detectScrollBarLayout);
     }
 
@@ -119,7 +123,7 @@
       for (; widgetsIndex >= 0; widgetsIndex--) {
         widget = vm.grid[widgetsIndex];
         if (widget !== item && widget.x < item.x + item.cols && widget.x + widget.cols > item.x &&
-          widget.y < item.y + item.rows && widget.y + widget.rows > item.y) {
+            widget.y < item.y + item.rows && widget.y + widget.rows > item.y) {
           return widget;
         }
       }

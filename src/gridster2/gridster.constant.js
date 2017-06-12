@@ -22,6 +22,7 @@
       scrollSensitivity: 10, //margin of the dashboard where to start scrolling
       scrollSpeed: 20, //how much to scroll each mouse move when in the scrollSensitivity zone
       itemChangeCallback: undefined, //callback to call for each item when is changes x, y, rows, cols. Arguments:gridsterItem, scope
+      initCallback: undefined, //callback to call after first initialization
       draggable: {
         enabled: false, // enable/disable draggable items
         stop: undefined // callback when dragging an item stops. Arguments: gridsterItem, scope
