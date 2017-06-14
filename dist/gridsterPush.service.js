@@ -10,10 +10,10 @@ var GridsterPush = (function () {
         this.gridsterItem = gridsterItem;
         this.gridster = gridster;
         this.tryPattern = {
-            fromEast: [this.tryWest, this.trySouth, this.tryNorth],
-            fromWest: [this.tryEast, this.trySouth, this.tryNorth],
-            fromNorth: [this.trySouth, this.tryEast, this.tryWest],
-            fromSouth: [this.tryNorth, this.tryEast, this.tryWest],
+            fromEast: [this.tryWest, this.trySouth, this.tryNorth, this.tryEast],
+            fromWest: [this.tryEast, this.trySouth, this.tryNorth, this.tryWest],
+            fromNorth: [this.trySouth, this.tryEast, this.tryWest, this.tryNorth],
+            fromSouth: [this.tryNorth, this.tryEast, this.tryWest, this.trySouth],
         };
         this.fromSouth = 'fromSouth';
         this.fromNorth = 'fromNorth';
@@ -23,7 +23,6 @@ var GridsterPush = (function () {
     GridsterPush.prototype.pushItems = function (direction) {
         if (this.gridster.$options.pushItems) {
             this.push(this.gridsterItem, direction, this.gridsterItem);
-            this.checkPushBack();
         }
     };
     GridsterPush.prototype.restoreItems = function () {
@@ -64,6 +63,9 @@ var GridsterPush = (function () {
             else if (this.tryPattern[direction][2].call(this, gridsterItemCollide, gridsterItem, direction, pushedBy)) {
                 return true;
             }
+            else if (this.tryPattern[direction][3].call(this, gridsterItemCollide, gridsterItem, direction, pushedBy)) {
+                return true;
+            }
         }
         else if (gridsterItemCollision === undefined) {
             return true;
@@ -71,10 +73,11 @@ var GridsterPush = (function () {
     };
     GridsterPush.prototype.trySouth = function (gridsterItemCollide, gridsterItem, direction, pushedBy) {
         gridsterItemCollide.$item.y += 1;
-        if (this.push(gridsterItemCollide, this.fromNorth, gridsterItem)) {
+        if (!gridster_component_1.GridsterComponent.checkCollisionTwoItems(gridsterItemCollide, gridsterItem)
+            && this.push(gridsterItemCollide, this.fromNorth, gridsterItem)) {
             gridsterItemCollide.setSize(true);
-            this.push(gridsterItem, direction, pushedBy);
             this.addToPushed(gridsterItemCollide);
+            this.push(gridsterItem, direction, pushedBy);
             return true;
         }
         else {
@@ -83,10 +86,11 @@ var GridsterPush = (function () {
     };
     GridsterPush.prototype.tryNorth = function (gridsterItemCollide, gridsterItem, direction, pushedBy) {
         gridsterItemCollide.$item.y -= 1;
-        if (this.push(gridsterItemCollide, this.fromSouth, gridsterItem)) {
+        if (!gridster_component_1.GridsterComponent.checkCollisionTwoItems(gridsterItemCollide, gridsterItem)
+            && this.push(gridsterItemCollide, this.fromSouth, gridsterItem)) {
             gridsterItemCollide.setSize(true);
-            this.push(gridsterItem, direction, pushedBy);
             this.addToPushed(gridsterItemCollide);
+            this.push(gridsterItem, direction, pushedBy);
             return true;
         }
         else {
@@ -95,10 +99,11 @@ var GridsterPush = (function () {
     };
     GridsterPush.prototype.tryEast = function (gridsterItemCollide, gridsterItem, direction, pushedBy) {
         gridsterItemCollide.$item.x += 1;
-        if (this.push(gridsterItemCollide, this.fromWest, gridsterItem)) {
+        if (!gridster_component_1.GridsterComponent.checkCollisionTwoItems(gridsterItemCollide, gridsterItem)
+            && this.push(gridsterItemCollide, this.fromWest, gridsterItem)) {
             gridsterItemCollide.setSize(true);
-            this.push(gridsterItem, direction, pushedBy);
             this.addToPushed(gridsterItemCollide);
+            this.push(gridsterItem, direction, pushedBy);
             return true;
         }
         else {
@@ -107,10 +112,11 @@ var GridsterPush = (function () {
     };
     GridsterPush.prototype.tryWest = function (gridsterItemCollide, gridsterItem, direction, pushedBy) {
         gridsterItemCollide.$item.x -= 1;
-        if (this.push(gridsterItemCollide, this.fromEast, gridsterItem)) {
+        if (!gridster_component_1.GridsterComponent.checkCollisionTwoItems(gridsterItemCollide, gridsterItem)
+            && this.push(gridsterItemCollide, this.fromEast, gridsterItem)) {
             gridsterItemCollide.setSize(true);
-            this.push(gridsterItem, direction, pushedBy);
             this.addToPushed(gridsterItemCollide);
+            this.push(gridsterItem, direction, pushedBy);
             return true;
         }
         else {
@@ -141,23 +147,26 @@ var GridsterPush = (function () {
     };
     GridsterPush.prototype.checkPushedItem = function (pushedItem, i) {
         var path = this.pushedItemsPath[i];
-        var lastPosition = path[path.length - 2];
-        pushedItem.$item.x = lastPosition.x;
-        pushedItem.$item.y = lastPosition.y;
-        if (this.gridster.findItemWithItem(pushedItem)) {
+        var j = path.length - 2;
+        var change = false;
+        var lastPosition;
+        for (; j > -1; j--) {
+            lastPosition = path[j];
+            pushedItem.$item.x = lastPosition.x;
+            pushedItem.$item.y = lastPosition.y;
+            if (!this.gridster.findItemWithItem(pushedItem)) {
+                change = true;
+                pushedItem.setSize(true);
+                path.splice(j + 1, path.length - 1 - j);
+            }
+        }
+        if (path.length < 2) {
+            this.removeFromPushed(i);
+        }
+        if (!change) {
             lastPosition = path[path.length - 1];
             pushedItem.$item.x = lastPosition.x;
             pushedItem.$item.y = lastPosition.y;
-        }
-        else {
-            pushedItem.setSize(true);
-            path.pop();
-            if (path.length < 2) {
-                this.removeFromPushed(i);
-            }
-            else {
-                this.checkPushedItem(pushedItem, i);
-            }
         }
     };
     return GridsterPush;

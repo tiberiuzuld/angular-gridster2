@@ -215,6 +215,7 @@ export class GridsterDraggable {
         this.path.push({x: this.gridsterItem.$item.x, y: this.gridsterItem.$item.y});
         this.gridster.previewStyle();
       }
+      this.push.checkPushBack();
     }
   }
 

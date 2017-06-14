@@ -23,6 +23,7 @@ export declare class GridsterComponent implements OnInit, OnDestroy, DoCheck {
     windowResize: Function;
     gridLines: GridsterGridComponent;
     private cleanCallback;
+    static checkCollisionTwoItems(item: GridsterItemComponent, item2: GridsterItemComponent): boolean;
     constructor(el: ElementRef, renderer: Renderer2);
     ngOnInit(): void;
     ngDoCheck(): void;

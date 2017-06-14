@@ -20,6 +20,12 @@ var GridsterComponent = (function () {
         this.$options.itemChangeCallback = undefined;
         this.$options.itemResizeCallback = undefined;
     }
+    GridsterComponent.checkCollisionTwoItems = function (item, item2) {
+        return item.$item.x < item2.$item.x + item2.$item.cols
+            && item.$item.x + item.$item.cols > item2.$item.x
+            && item.$item.y < item2.$item.y + item2.$item.rows
+            && item.$item.y + item.$item.rows > item2.$item.y;
+    };
     GridsterComponent.prototype.ngOnInit = function () {
         this.options.optionsChanged = this.optionsChanged.bind(this);
         this.$options = gridsterUtils_service_1.GridsterUtils.merge(this.$options, this.options, this.$options);
@@ -227,10 +233,7 @@ var GridsterComponent = (function () {
         for (; widgetsIndex >= 0; widgetsIndex--) {
             widget = this.grid[widgetsIndex];
             if (widget !== itemComponent && widget !== ignoreItem
-                && widget.$item.x < itemComponent.$item.x + itemComponent.$item.cols
-                && widget.$item.x + widget.$item.cols > itemComponent.$item.x
-                && widget.$item.y < itemComponent.$item.y + itemComponent.$item.rows
-                && widget.$item.y + widget.$item.rows > itemComponent.$item.y) {
+                && GridsterComponent.checkCollisionTwoItems(widget, itemComponent)) {
                 return widget;
             }
         }

@@ -31,6 +31,13 @@ export class GridsterComponent implements OnInit, OnDestroy, DoCheck {
   gridLines: GridsterGridComponent;
   private cleanCallback: any;
 
+  static checkCollisionTwoItems(item: GridsterItemComponent, item2: GridsterItemComponent): boolean {
+    return item.$item.x < item2.$item.x + item2.$item.cols
+      && item.$item.x + item.$item.cols > item2.$item.x
+      && item.$item.y < item2.$item.y + item2.$item.rows
+      && item.$item.y + item.$item.rows > item2.$item.y;
+  }
+
   constructor(el: ElementRef, public renderer: Renderer2) {
     this.el = el.nativeElement;
     this.$options = JSON.parse(JSON.stringify(GridsterConfigService));
@@ -265,10 +272,7 @@ export class GridsterComponent implements OnInit, OnDestroy, DoCheck {
     for (; widgetsIndex >= 0; widgetsIndex--) {
       widget = this.grid[widgetsIndex];
       if (widget !== itemComponent && widget !== ignoreItem
-        && widget.$item.x < itemComponent.$item.x + itemComponent.$item.cols
-        && widget.$item.x + widget.$item.cols > itemComponent.$item.x
-        && widget.$item.y < itemComponent.$item.y + itemComponent.$item.rows
-        && widget.$item.y + widget.$item.rows > itemComponent.$item.y) {
+        && GridsterComponent.checkCollisionTwoItems(widget, itemComponent)) {
         return widget;
       }
     }

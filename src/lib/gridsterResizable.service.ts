@@ -206,6 +206,7 @@ export class GridsterResizable {
       } else {
         this.gridster.previewStyle();
       }
+      this.push.checkPushBack();
     }
     this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'top', this.top + 'px');
     this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'height', this.height + 'px');
@@ -236,6 +237,7 @@ export class GridsterResizable {
       } else {
         this.gridster.previewStyle();
       }
+      this.push.checkPushBack();
     }
     this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'left', this.left + 'px');
     this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'width', this.width + 'px');
@@ -260,6 +262,7 @@ export class GridsterResizable {
       } else {
         this.gridster.previewStyle();
       }
+      this.push.checkPushBack();
     }
     this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'height', this.height + 'px');
   }
@@ -283,6 +286,7 @@ export class GridsterResizable {
       } else {
         this.gridster.previewStyle();
       }
+      this.push.checkPushBack();
     }
     this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'width', this.width + 'px');
   }

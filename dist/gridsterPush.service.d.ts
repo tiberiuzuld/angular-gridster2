@@ -21,6 +21,6 @@ export declare class GridsterPush {
     private tryWest(gridsterItemCollide, gridsterItem, direction, pushedBy);
     private addToPushed(gridsterItem);
     private removeFromPushed(i);
-    private checkPushBack();
+    checkPushBack(): void;
     private checkPushedItem(pushedItem, i);
 }
