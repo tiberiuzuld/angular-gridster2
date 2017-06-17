@@ -27,8 +27,11 @@ var GridsterComponent = (function () {
             && item.$item.y + item.$item.rows > item2.$item.y;
     };
     GridsterComponent.prototype.ngOnInit = function () {
-        this.options.optionsChanged = this.optionsChanged.bind(this);
         this.$options = gridsterUtils_service_1.GridsterUtils.merge(this.$options, this.options, this.$options);
+        this.options.api = {
+            optionsChanged: this.optionsChanged.bind(this),
+            resize: this.resize.bind(this)
+        };
         this.columns = gridsterConfig_constant_1.GridsterConfigService.minCols;
         this.rows = gridsterConfig_constant_1.GridsterConfigService.minRows;
         this.setGridSize();
@@ -36,8 +39,11 @@ var GridsterComponent = (function () {
         this.calculateLayoutDebounce();
         this.onResizeFunction = this.onResize.bind(this);
         this.windowResize = this.renderer.listen('window', 'resize', this.onResizeFunction);
+        if (this.options.initCallback) {
+            this.options.initCallback();
+        }
     };
-    GridsterComponent.prototype.ngDoCheck = function () {
+    GridsterComponent.prototype.resize = function () {
         var height;
         var width;
         if (this.$options.gridType === 'fit' && !this.mobile) {
@@ -112,10 +118,8 @@ var GridsterComponent = (function () {
         this.rows = rows;
     };
     GridsterComponent.prototype.calculateLayout = function () {
-        // check to compact up
-        this.checkCompactUp();
-        // check to compact left
-        this.checkCompactLeft();
+        // check to compact
+        this.checkCompact();
         this.setGridDimensions();
         if (this.$options.outerMargin) {
             this.curColWidth = Math.floor((this.curWidth - this.$options.margin) / this.columns);
@@ -177,7 +181,7 @@ var GridsterComponent = (function () {
             widget.drag.toggle(this.$options.draggable.enabled);
             widget.resize.toggle(this.$options.resizable.enabled);
         }
-        setTimeout(this.ngDoCheck.bind(this), 100);
+        setTimeout(this.resize.bind(this), 100);
     };
     GridsterComponent.prototype.addItem = function (itemComponent) {
         if (itemComponent.$item.cols === undefined) {
@@ -288,22 +292,39 @@ var GridsterComponent = (function () {
     GridsterComponent.prototype.positionYToPixels = function (y) {
         return y * this.curRowHeight;
     };
-    GridsterComponent.prototype.checkCompactUp = function () {
-        if (this.$options.compactUp) {
-            var widgetMovedUp = false, widget = void 0, moved = void 0;
-            var l = this.grid.length;
-            for (var i = 0; i < l; i++) {
-                widget = this.grid[i];
-                moved = this.moveUpTillCollision(widget);
-                if (moved) {
-                    widgetMovedUp = true;
-                    widget.itemChanged();
-                }
-            }
-            if (widgetMovedUp) {
+    GridsterComponent.prototype.checkCompact = function () {
+        if (this.$options.compactType !== 'none') {
+            if (this.$options.compactType === 'compactUp') {
                 this.checkCompactUp();
-                return widgetMovedUp;
             }
+            else if (this.$options.compactType === 'compactLeft') {
+                this.checkCompactLeft();
+            }
+            else if (this.$options.compactType === 'compactUp&Left') {
+                this.checkCompactUp();
+                this.checkCompactLeft();
+            }
+            else if (this.$options.compactType === 'compactLeft&Up') {
+                this.checkCompactLeft();
+                this.checkCompactUp();
+            }
+        }
+    };
+    GridsterComponent.prototype.checkCompactUp = function () {
+        var widgetMovedUp = false, widget, moved;
+        var l = this.grid.length;
+        for (var i = 0; i < l; i++) {
+            widget = this.grid[i];
+            moved = this.moveUpTillCollision(widget);
+            if (moved) {
+                widgetMovedUp = true;
+                widget.item.y = widget.$item.y;
+                widget.itemChanged();
+            }
+        }
+        if (widgetMovedUp) {
+            this.checkCompactUp();
+            return widgetMovedUp;
         }
     };
     GridsterComponent.prototype.moveUpTillCollision = function (itemComponent) {
@@ -318,21 +339,20 @@ var GridsterComponent = (function () {
         }
     };
     GridsterComponent.prototype.checkCompactLeft = function () {
-        if (this.$options.compactLeft) {
-            var widgetMovedUp = false, widget = void 0, moved = void 0;
-            var l = this.grid.length;
-            for (var i = 0; i < l; i++) {
-                widget = this.grid[i];
-                moved = this.moveLeftTillCollision(widget);
-                if (moved) {
-                    widgetMovedUp = true;
-                    widget.itemChanged();
-                }
+        var widgetMovedUp = false, widget, moved;
+        var l = this.grid.length;
+        for (var i = 0; i < l; i++) {
+            widget = this.grid[i];
+            moved = this.moveLeftTillCollision(widget);
+            if (moved) {
+                widgetMovedUp = true;
+                widget.item.x = widget.$item.x;
+                widget.itemChanged();
             }
-            if (widgetMovedUp) {
-                this.checkCompactLeft();
-                return widgetMovedUp;
-            }
+        }
+        if (widgetMovedUp) {
+            this.checkCompactLeft();
+            return widgetMovedUp;
         }
     };
     GridsterComponent.prototype.moveLeftTillCollision = function (itemComponent) {

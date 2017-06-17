@@ -103,7 +103,7 @@ Initialize the demo dashboard
    }
  
    changedOptions() {
-     this.options.optionsChanged();
+     this.options.api.optionsChanged();
    }
  
    removeItem(item) {
@@ -126,8 +126,7 @@ export const GridsterConfigService: GridsterConfig = {
   // 'fixed' will set the rows and columns dimensions based on fixedColWidth and fixedRowHeight options
   fixedColWidth: 250, // fixed col width for gridType: 'fixed'
   fixedRowHeight: 250, // fixed row height for gridType: 'fixed'
-  compactUp: false, // compact items up if there is room
-  compactLeft: false, // compact items left if there is room
+  compactType: 'none', // compact items: 'none' | 'compactUp' | 'compactLeft' | 'compactUp&Left' | 'compactLeft&Up'
   mobileBreakpoint: 640, // if the screen is not wider that this, remove the grid layout and stack the items
   minCols: 1, // minimum amount of columns in the grid
   maxCols: 100, // maximum amount of columns in the grid
@@ -143,6 +142,7 @@ export const GridsterConfigService: GridsterConfig = {
   outerMargin: true,  // if margins will apply to the sides of the container
   scrollSensitivity: 10,  // margin of the dashboard where to start scrolling
   scrollSpeed: 20,  // how much to scroll each mouse move when in the scrollSensitivity zone
+  initCallback: undefined, // callback to call after grid has initialized
   itemChangeCallback: undefined,  // callback to call for each item when is changes x, y, rows, cols. Arguments: gridsterItem
   itemResizeCallback: undefined,  // callback to call for each item when width/height changes. Arguments: gridsterItem
   draggable: {
@@ -170,6 +170,12 @@ export const GridsterConfigService: GridsterConfig = {
   pushItems: false, // push items when resizing and dragging
   displayGrid: 'onDrag&Resize' // display background grid of rows and columns
 };
+```
+
+##### Gridster options api
+```typescript
+    this.options.api.resize(); // call if size of container changes. Grid will auto resize on window resize.
+    this.options.api.optionsChanged(); // call after change of options after initialization
 ```
 
 ##### Gridster item options:

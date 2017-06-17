@@ -1,12 +1,12 @@
 export type GridType = 'fit' | 'scrollVertical' | 'scrollHorizontal' | 'fixed';
 export type displayGrid = 'always' | 'onDrag&Resize' | 'none';
+export type compactType = 'none' | 'compactUp' | 'compactLeft' | 'compactUp&Left' | 'compactLeft&Up';
 
 export interface GridsterConfig {
   gridType?: GridType;
   fixedColWidth?: number;
   fixedRowHeight?: number;
-  compactUp?: boolean;
-  compactLeft?: boolean;
+  compactType?: compactType;
   mobileBreakpoint?: number;
   minCols?: number;
   maxCols?: number;
@@ -22,6 +22,7 @@ export interface GridsterConfig {
   outerMargin?: boolean;
   scrollSensitivity?: number;
   scrollSpeed?: number;
+  initCallback?: Function;
   itemChangeCallback?: Function;
   itemResizeCallback?: Function;
   optionsChanged?: Function;
@@ -30,6 +31,10 @@ export interface GridsterConfig {
   swap?: boolean;
   pushItems?: boolean;
   displayGrid?: displayGrid;
+  api?: {
+    resize?: Function,
+    optionsChanged?: Function
+  };
   [propName: string]: any;
 }
 

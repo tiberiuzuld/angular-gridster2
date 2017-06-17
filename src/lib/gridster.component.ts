@@ -1,4 +1,4 @@
-import {Component, OnInit, ElementRef, Input, OnDestroy, Renderer2, DoCheck} from '@angular/core';
+import {Component, OnInit, ElementRef, Input, OnDestroy, Renderer2} from '@angular/core';
 import {GridsterConfigService} from './gridsterConfig.constant';
 import {GridsterConfig} from './gridsterConfig.interface';
 import {GridsterUtils} from './gridsterUtils.service';
@@ -10,7 +10,7 @@ import {GridsterGridComponent} from './gridsterGrid.component';
   templateUrl: './gridster.html',
   styleUrls: ['./gridster.css']
 })
-export class GridsterComponent implements OnInit, OnDestroy, DoCheck {
+export class GridsterComponent implements OnInit, OnDestroy {
   @Input() options: GridsterConfig;
   calculateLayoutDebounce: Function;
   onResizeFunction: (event: any) => void;
@@ -55,8 +55,11 @@ export class GridsterComponent implements OnInit, OnDestroy, DoCheck {
   }
 
   ngOnInit(): void {
-    this.options.optionsChanged = this.optionsChanged.bind(this);
     this.$options = GridsterUtils.merge(this.$options, this.options, this.$options);
+    this.options.api = {
+      optionsChanged: this.optionsChanged.bind(this),
+      resize: this.resize.bind(this)
+    };
     this.columns = GridsterConfigService.minCols;
     this.rows = GridsterConfigService.minRows;
     this.setGridSize();
@@ -64,9 +67,12 @@ export class GridsterComponent implements OnInit, OnDestroy, DoCheck {
     this.calculateLayoutDebounce();
     this.onResizeFunction = this.onResize.bind(this);
     this.windowResize = this.renderer.listen('window', 'resize', this.onResizeFunction);
+    if (this.options.initCallback) {
+      this.options.initCallback();
+    }
   }
 
-  ngDoCheck(): void {
+  resize(): void {
     let height;
     let width;
     if (this.$options.gridType === 'fit' && !this.mobile) {
@@ -148,10 +154,9 @@ export class GridsterComponent implements OnInit, OnDestroy, DoCheck {
   }
 
   calculateLayout(): void {
-    // check to compact up
-    this.checkCompactUp();
-    // check to compact left
-    this.checkCompactLeft();
+    // check to compact
+    this.checkCompact();
+
     this.setGridDimensions();
     if (this.$options.outerMargin) {
       this.curColWidth = Math.floor((this.curWidth - this.$options.margin) / this.columns);
@@ -212,7 +217,7 @@ export class GridsterComponent implements OnInit, OnDestroy, DoCheck {
       widget.resize.toggle(this.$options.resizable.enabled);
     }
 
-    setTimeout(this.ngDoCheck.bind(this), 100);
+    setTimeout(this.resize.bind(this), 100);
   }
 
   addItem(itemComponent: GridsterItemComponent): void {
@@ -332,22 +337,37 @@ export class GridsterComponent implements OnInit, OnDestroy, DoCheck {
     return y * this.curRowHeight;
   }
 
-  checkCompactUp(): boolean {
-    if (this.$options.compactUp) {
-      let widgetMovedUp = false, widget: GridsterItemComponent, moved: boolean;
-      const l = this.grid.length;
-      for (let i = 0; i < l; i++) {
-        widget = this.grid[i];
-        moved = this.moveUpTillCollision(widget);
-        if (moved) {
-          widgetMovedUp = true;
-          widget.itemChanged();
-        }
-      }
-      if (widgetMovedUp) {
+  checkCompact(): void {
+    if (this.$options.compactType !== 'none') {
+      if (this.$options.compactType === 'compactUp') {
         this.checkCompactUp();
-        return widgetMovedUp;
+      } else if (this.$options.compactType === 'compactLeft') {
+        this.checkCompactLeft();
+      } else if (this.$options.compactType === 'compactUp&Left') {
+        this.checkCompactUp();
+        this.checkCompactLeft();
+      } else if (this.$options.compactType === 'compactLeft&Up') {
+        this.checkCompactLeft();
+        this.checkCompactUp();
       }
+    }
+  }
+
+  checkCompactUp(): boolean {
+    let widgetMovedUp = false, widget: GridsterItemComponent, moved: boolean;
+    const l = this.grid.length;
+    for (let i = 0; i < l; i++) {
+      widget = this.grid[i];
+      moved = this.moveUpTillCollision(widget);
+      if (moved) {
+        widgetMovedUp = true;
+        widget.item.y = widget.$item.y;
+        widget.itemChanged();
+      }
+    }
+    if (widgetMovedUp) {
+      this.checkCompactUp();
+      return widgetMovedUp;
     }
   }
 
@@ -363,21 +383,20 @@ export class GridsterComponent implements OnInit, OnDestroy, DoCheck {
   }
 
   checkCompactLeft(): boolean {
-    if (this.$options.compactLeft) {
-      let widgetMovedUp = false, widget: GridsterItemComponent, moved: boolean;
-      const l = this.grid.length;
-      for (let i = 0; i < l; i++) {
-        widget = this.grid[i];
-        moved = this.moveLeftTillCollision(widget);
-        if (moved) {
-          widgetMovedUp = true;
-          widget.itemChanged();
-        }
+    let widgetMovedUp = false, widget: GridsterItemComponent, moved: boolean;
+    const l = this.grid.length;
+    for (let i = 0; i < l; i++) {
+      widget = this.grid[i];
+      moved = this.moveLeftTillCollision(widget);
+      if (moved) {
+        widgetMovedUp = true;
+        widget.item.x = widget.$item.x;
+        widget.itemChanged();
       }
-      if (widgetMovedUp) {
-        this.checkCompactLeft();
-        return widgetMovedUp;
-      }
+    }
+    if (widgetMovedUp) {
+      this.checkCompactLeft();
+      return widgetMovedUp;
     }
   }
 

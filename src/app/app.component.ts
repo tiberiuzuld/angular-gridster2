@@ -29,8 +29,7 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.options = {
       gridType: 'fit',
-      compactUp: false,
-      compactLeft: false,
+      compactType: 'none',
       itemChangeCallback: AppComponent.itemChange,
       itemResizeCallback: AppComponent.itemResize,
       margin: 10,
@@ -75,7 +74,7 @@ export class AppComponent implements OnInit {
   }
 
   changedOptions() {
-    this.options.optionsChanged();
+    this.options.api.optionsChanged();
   }
 
   removeItem($event, item) {

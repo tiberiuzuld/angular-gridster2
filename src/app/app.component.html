@@ -10,12 +10,14 @@
       <md-option value="scrollHorizontal">Scroll Horizontal</md-option>
       <md-option value="fixed">Fixed</md-option>
     </md-select>
-    <md-checkbox [(ngModel)]="options.compactUp" (ngModelChange)="changedOptions()">
-      Compact Up
-    </md-checkbox>
-    <md-checkbox [(ngModel)]="options.compactLeft" (ngModelChange)="changedOptions()">
-      Compact Left
-    </md-checkbox>
+    <md-select aria-label="Compact type" [(ngModel)]="options.compactType" (ngModelChange)="changedOptions()"
+               placeholder="Compact Type">
+      <md-option value="none">None</md-option>
+      <md-option value="compactUp">Compact Up</md-option>
+      <md-option value="compactLeft">Compact Left</md-option>
+      <md-option value="compactLeft&Up">Compact Left & Up</md-option>
+      <md-option value="compactUp&Left">Compact Up & Left</md-option>
+    </md-select>
     <md-checkbox [(ngModel)]="options.swap" (ngModelChange)="changedOptions()">
       Swap Items
     </md-checkbox>

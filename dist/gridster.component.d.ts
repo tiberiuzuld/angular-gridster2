@@ -1,8 +1,8 @@
-import { OnInit, ElementRef, OnDestroy, Renderer2, DoCheck } from '@angular/core';
+import { OnInit, ElementRef, OnDestroy, Renderer2 } from '@angular/core';
 import { GridsterConfig } from './gridsterConfig.interface';
 import { GridsterItemComponent } from './gridsterItem.component';
 import { GridsterGridComponent } from './gridsterGrid.component';
-export declare class GridsterComponent implements OnInit, OnDestroy, DoCheck {
+export declare class GridsterComponent implements OnInit, OnDestroy {
     renderer: Renderer2;
     options: GridsterConfig;
     calculateLayoutDebounce: Function;
@@ -26,7 +26,7 @@ export declare class GridsterComponent implements OnInit, OnDestroy, DoCheck {
     static checkCollisionTwoItems(item: GridsterItemComponent, item2: GridsterItemComponent): boolean;
     constructor(el: ElementRef, renderer: Renderer2);
     ngOnInit(): void;
-    ngDoCheck(): void;
+    resize(): void;
     optionsChanged(): void;
     ngOnDestroy(): void;
     onResize(): void;
@@ -45,6 +45,7 @@ export declare class GridsterComponent implements OnInit, OnDestroy, DoCheck {
     pixelsToPositionY(y: number, roundingMethod: Function): number;
     positionXToPixels(x: number): number;
     positionYToPixels(y: number): number;
+    checkCompact(): void;
     checkCompactUp(): boolean;
     moveUpTillCollision(itemComponent: GridsterItemComponent): boolean;
     checkCompactLeft(): boolean;
