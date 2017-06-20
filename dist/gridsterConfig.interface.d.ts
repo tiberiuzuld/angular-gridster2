@@ -24,7 +24,6 @@ export interface GridsterConfig {
     initCallback?: Function;
     itemChangeCallback?: Function;
     itemResizeCallback?: Function;
-    optionsChanged?: Function;
     draggable?: Draggable;
     resizable?: Resizable;
     swap?: boolean;
