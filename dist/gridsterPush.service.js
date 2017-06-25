@@ -72,7 +72,8 @@ var GridsterPush = (function () {
         }
     };
     GridsterPush.prototype.trySouth = function (gridsterItemCollide, gridsterItem, direction, pushedBy) {
-        gridsterItemCollide.$item.y += 1;
+        var backUpY = gridsterItemCollide.$item.y;
+        gridsterItemCollide.$item.y = gridsterItem.$item.y + gridsterItem.$item.rows;
         if (!gridster_component_1.GridsterComponent.checkCollisionTwoItems(gridsterItemCollide, gridsterItem)
             && this.push(gridsterItemCollide, this.fromNorth, gridsterItem)) {
             gridsterItemCollide.setSize(true);
@@ -81,24 +82,25 @@ var GridsterPush = (function () {
             return true;
         }
         else {
-            gridsterItemCollide.$item.y -= 1;
+            gridsterItemCollide.$item.y = backUpY;
         }
     };
     GridsterPush.prototype.tryNorth = function (gridsterItemCollide, gridsterItem, direction, pushedBy) {
-        gridsterItemCollide.$item.y -= 1;
-        if (!gridster_component_1.GridsterComponent.checkCollisionTwoItems(gridsterItemCollide, gridsterItem)
-            && this.push(gridsterItemCollide, this.fromSouth, gridsterItem)) {
+        var backUpY = gridsterItemCollide.$item.y;
+        gridsterItemCollide.$item.y = gridsterItem.$item.y - gridsterItemCollide.$item.rows;
+        if (this.push(gridsterItemCollide, this.fromSouth, gridsterItem)) {
             gridsterItemCollide.setSize(true);
             this.addToPushed(gridsterItemCollide);
             this.push(gridsterItem, direction, pushedBy);
             return true;
         }
         else {
-            gridsterItemCollide.$item.y += 1;
+            gridsterItemCollide.$item.y = backUpY;
         }
     };
     GridsterPush.prototype.tryEast = function (gridsterItemCollide, gridsterItem, direction, pushedBy) {
-        gridsterItemCollide.$item.x += 1;
+        var backUpX = gridsterItemCollide.$item.x;
+        gridsterItemCollide.$item.x = gridsterItem.$item.x + gridsterItem.$item.cols;
         if (!gridster_component_1.GridsterComponent.checkCollisionTwoItems(gridsterItemCollide, gridsterItem)
             && this.push(gridsterItemCollide, this.fromWest, gridsterItem)) {
             gridsterItemCollide.setSize(true);
@@ -107,11 +109,12 @@ var GridsterPush = (function () {
             return true;
         }
         else {
-            gridsterItemCollide.$item.x -= 1;
+            gridsterItemCollide.$item.x = backUpX;
         }
     };
     GridsterPush.prototype.tryWest = function (gridsterItemCollide, gridsterItem, direction, pushedBy) {
-        gridsterItemCollide.$item.x -= 1;
+        var backUpX = gridsterItemCollide.$item.x;
+        gridsterItemCollide.$item.x = gridsterItem.$item.x - gridsterItemCollide.$item.cols;
         if (!gridster_component_1.GridsterComponent.checkCollisionTwoItems(gridsterItemCollide, gridsterItem)
             && this.push(gridsterItemCollide, this.fromEast, gridsterItem)) {
             gridsterItemCollide.setSize(true);
@@ -120,7 +123,7 @@ var GridsterPush = (function () {
             return true;
         }
         else {
-            gridsterItemCollide.$item.x += 1;
+            gridsterItemCollide.$item.x = backUpX;
         }
     };
     GridsterPush.prototype.addToPushed = function (gridsterItem) {
@@ -148,25 +151,23 @@ var GridsterPush = (function () {
     GridsterPush.prototype.checkPushedItem = function (pushedItem, i) {
         var path = this.pushedItemsPath[i];
         var j = path.length - 2;
-        var change = false;
         var lastPosition;
         for (; j > -1; j--) {
             lastPosition = path[j];
             pushedItem.$item.x = lastPosition.x;
             pushedItem.$item.y = lastPosition.y;
             if (!this.gridster.findItemWithItem(pushedItem)) {
-                change = true;
                 pushedItem.setSize(true);
                 path.splice(j + 1, path.length - 1 - j);
+            }
+            else {
+                lastPosition = path[path.length - 1];
+                pushedItem.$item.x = lastPosition.x;
+                pushedItem.$item.y = lastPosition.y;
             }
         }
         if (path.length < 2) {
             this.removeFromPushed(i);
-        }
-        if (!change) {
-            lastPosition = path[path.length - 1];
-            pushedItem.$item.x = lastPosition.x;
-            pushedItem.$item.y = lastPosition.y;
         }
     };
     return GridsterPush;
