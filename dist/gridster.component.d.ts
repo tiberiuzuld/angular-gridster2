@@ -2,6 +2,7 @@ import { OnInit, ElementRef, OnDestroy, Renderer2 } from '@angular/core';
 import { GridsterConfig } from './gridsterConfig.interface';
 import { GridsterItemComponent } from './gridsterItem.component';
 import { GridsterGridComponent } from './gridsterGrid.component';
+import { GridsterItem } from './gridsterItem.interface';
 export declare class GridsterComponent implements OnInit, OnDestroy {
     renderer: Renderer2;
     options: GridsterConfig;
@@ -23,7 +24,7 @@ export declare class GridsterComponent implements OnInit, OnDestroy {
     windowResize: Function;
     gridLines: GridsterGridComponent;
     private cleanCallback;
-    static checkCollisionTwoItems(item: GridsterItemComponent, item2: GridsterItemComponent): boolean;
+    static checkCollisionTwoItems(item: GridsterItem, item2: GridsterItem): boolean;
     constructor(el: ElementRef, renderer: Renderer2);
     ngOnInit(): void;
     resize(): void;
@@ -36,10 +37,11 @@ export declare class GridsterComponent implements OnInit, OnDestroy {
     calculateLayout(): void;
     addItem(itemComponent: GridsterItemComponent): void;
     removeItem(itemComponent: GridsterItemComponent): void;
-    checkCollision(itemComponent: GridsterItemComponent, ignoreItem?: GridsterItemComponent): GridsterItemComponent | boolean;
-    checkGridCollision(itemComponent: GridsterItemComponent): boolean;
-    findItemWithItem(itemComponent: GridsterItemComponent, ignoreItem?: GridsterItemComponent): GridsterItemComponent;
+    checkCollision(itemComponent: GridsterItem, ignoreItem?: GridsterItem): GridsterItemComponent | boolean;
+    checkGridCollision(itemComponent: GridsterItem): boolean;
+    findItemWithItem(itemComponent: GridsterItem, ignoreItem?: GridsterItem): GridsterItemComponent;
     autoPositionItem(itemComponent: GridsterItemComponent): void;
+    getNextPossiblePosition(newItem: GridsterItem): boolean;
     pixelsToPosition(x: number, y: number, roundingMethod: Function): [number, number];
     pixelsToPositionX(x: number, roundingMethod: Function): number;
     pixelsToPositionY(y: number, roundingMethod: Function): number;

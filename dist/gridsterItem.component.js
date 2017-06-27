@@ -61,7 +61,7 @@ var GridsterItemComponent = (function () {
         else {
             this.itemMargin = 0;
         }
-        this.renderer.setStyle(this.el, 'display', 'block');
+        this.renderer.setStyle(this.el, 'display', this.notPlaced ? 'none' : 'block');
         this.renderer.setStyle(this.el, 'top', this.top + 'px');
         this.renderer.setStyle(this.el, 'left', this.left + 'px');
         this.renderer.setStyle(this.el, 'width', this.width + 'px');
@@ -88,7 +88,7 @@ var GridsterItemComponent = (function () {
         if (newValue.rows === oldValue.rows && newValue.cols === oldValue.cols && newValue.x === oldValue.x && newValue.y === oldValue.y) {
             return;
         }
-        if (this.gridster.checkCollision(this)) {
+        if (this.gridster.checkCollision(this.$item)) {
             this.$item.x = oldValue.x;
             this.$item.y = oldValue.y;
             this.$item.cols = oldValue.cols;

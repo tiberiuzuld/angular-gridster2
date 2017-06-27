@@ -4,6 +4,7 @@ import {GridsterConfig} from './gridsterConfig.interface';
 import {GridsterUtils} from './gridsterUtils.service';
 import {GridsterItemComponent} from './gridsterItem.component';
 import {GridsterGridComponent} from './gridsterGrid.component';
+import {GridsterItem} from './gridsterItem.interface';
 
 @Component({
   selector: 'gridster',
@@ -31,11 +32,11 @@ export class GridsterComponent implements OnInit, OnDestroy {
   gridLines: GridsterGridComponent;
   private cleanCallback: any;
 
-  static checkCollisionTwoItems(item: GridsterItemComponent, item2: GridsterItemComponent): boolean {
-    return item.$item.x < item2.$item.x + item2.$item.cols
-      && item.$item.x + item.$item.cols > item2.$item.x
-      && item.$item.y < item2.$item.y + item2.$item.rows
-      && item.$item.y + item.$item.rows > item2.$item.y;
+  static checkCollisionTwoItems(item: GridsterItem, item2: GridsterItem): boolean {
+    return item.x < item2.x + item2.cols
+      && item.x + item.cols > item2.x
+      && item.y < item2.y + item2.rows
+      && item.y + item.rows > item2.y;
   }
 
   constructor(el: ElementRef, public renderer: Renderer2) {
@@ -58,7 +59,8 @@ export class GridsterComponent implements OnInit, OnDestroy {
     this.$options = GridsterUtils.merge(this.$options, this.options, this.$options);
     this.options.api = {
       optionsChanged: this.optionsChanged.bind(this),
-      resize: this.resize.bind(this)
+      resize: this.resize.bind(this),
+      getNextPossiblePosition: this.getNextPossiblePosition.bind(this)
     };
     this.columns = GridsterConfigService.minCols;
     this.rows = GridsterConfigService.minRows;
@@ -233,7 +235,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
     }
     if (itemComponent.$item.x === undefined || itemComponent.$item.y === undefined) {
       this.autoPositionItem(itemComponent);
-    } else if (this.checkCollision(itemComponent)) {
+    } else if (this.checkCollision(itemComponent.$item)) {
       console.warn('Can\'t be placed in the bounds of the dashboard, trying to auto position!/n' +
         JSON.stringify(itemComponent.item, ['cols', 'rows', 'x', 'y']));
       itemComponent.$item.x = undefined;
@@ -252,68 +254,76 @@ export class GridsterComponent implements OnInit, OnDestroy {
     this.calculateLayoutDebounce();
   }
 
-  checkCollision(itemComponent: GridsterItemComponent, ignoreItem?: GridsterItemComponent): GridsterItemComponent | boolean {
+  checkCollision(itemComponent: GridsterItem, ignoreItem?: GridsterItem): GridsterItemComponent | boolean {
     if (this.checkGridCollision(itemComponent)) {
       return true;
     }
     return this.findItemWithItem(itemComponent, ignoreItem);
   }
 
-  checkGridCollision(itemComponent: GridsterItemComponent): boolean {
-    const noNegativePosition = itemComponent.$item.y > -1 && itemComponent.$item.x > -1;
-    const maxGridCols = itemComponent.$item.cols + itemComponent.$item.x <= this.$options.maxCols;
-    const maxGridRows = itemComponent.$item.rows + itemComponent.$item.y <= this.$options.maxRows;
-    const maxItemCols = itemComponent.$item.maxItemCols === undefined ? this.$options.maxItemCols : itemComponent.$item.maxItemCols;
-    const minItemCols = itemComponent.$item.minItemCols === undefined ? this.$options.minItemCols : itemComponent.$item.minItemCols;
-    const maxItemRows = itemComponent.$item.maxItemRows === undefined ? this.$options.maxItemRows : itemComponent.$item.maxItemRows;
-    const minItemRows = itemComponent.$item.minItemRows === undefined ? this.$options.minItemRows : itemComponent.$item.minItemRows;
-    const inColsLimits = itemComponent.$item.cols <= maxItemCols && itemComponent.$item.cols >= minItemCols;
-    const inRowsLimits = itemComponent.$item.rows <= maxItemRows && itemComponent.$item.rows >= minItemRows;
+  checkGridCollision(itemComponent: GridsterItem): boolean {
+    const noNegativePosition = itemComponent.y > -1 && itemComponent.x > -1;
+    const maxGridCols = itemComponent.cols + itemComponent.x <= this.$options.maxCols;
+    const maxGridRows = itemComponent.rows + itemComponent.y <= this.$options.maxRows;
+    const maxItemCols = itemComponent.maxItemCols === undefined ? this.$options.maxItemCols : itemComponent.maxItemCols;
+    const minItemCols = itemComponent.minItemCols === undefined ? this.$options.minItemCols : itemComponent.minItemCols;
+    const maxItemRows = itemComponent.maxItemRows === undefined ? this.$options.maxItemRows : itemComponent.maxItemRows;
+    const minItemRows = itemComponent.minItemRows === undefined ? this.$options.minItemRows : itemComponent.minItemRows;
+    const inColsLimits = itemComponent.cols <= maxItemCols && itemComponent.cols >= minItemCols;
+    const inRowsLimits = itemComponent.rows <= maxItemRows && itemComponent.rows >= minItemRows;
     return !(noNegativePosition && maxGridCols && maxGridRows && inColsLimits && inRowsLimits);
   }
 
-  findItemWithItem(itemComponent: GridsterItemComponent, ignoreItem?: GridsterItemComponent): GridsterItemComponent {
+  findItemWithItem(itemComponent: GridsterItem, ignoreItem?: GridsterItem): GridsterItemComponent {
     let widgetsIndex: number = this.grid.length - 1, widget: GridsterItemComponent;
     for (; widgetsIndex >= 0; widgetsIndex--) {
       widget = this.grid[widgetsIndex];
-      if (widget !== itemComponent && widget !== ignoreItem
-        && GridsterComponent.checkCollisionTwoItems(widget, itemComponent)) {
+      if (widget.$item !== itemComponent && widget.$item !== ignoreItem
+        && GridsterComponent.checkCollisionTwoItems(widget.$item, itemComponent)) {
         return widget;
       }
     }
   }
 
   autoPositionItem(itemComponent: GridsterItemComponent): void {
-    this.setGridDimensions();
-    let rowsIndex = 0, colsIndex;
-    for (; rowsIndex < this.rows; rowsIndex++) {
-      itemComponent.$item.y = rowsIndex;
-      colsIndex = 0;
-      for (; colsIndex < this.columns; colsIndex++) {
-        itemComponent.$item.x = colsIndex;
-        if (!this.checkCollision(itemComponent)) {
-          itemComponent.item.x = itemComponent.$item.x;
-          itemComponent.item.y = itemComponent.$item.y;
-          itemComponent.itemChanged();
-          return;
-        }
-      }
-    }
-    if (this.rows >= this.columns && this.$options.maxCols > this.columns) {
-      itemComponent.$item.x = this.columns;
-      itemComponent.$item.y = 0;
-      itemComponent.item.x = itemComponent.$item.x;
-      itemComponent.item.y = itemComponent.$item.y;
-      itemComponent.itemChanged();
-    } else if (this.$options.maxRows > this.rows) {
-      itemComponent.$item.y = this.rows;
-      itemComponent.$item.x = 0;
+    if (this.getNextPossiblePosition(itemComponent.$item)) {
       itemComponent.item.x = itemComponent.$item.x;
       itemComponent.item.y = itemComponent.$item.y;
       itemComponent.itemChanged();
     } else {
+      itemComponent.notPlaced = true;
       console.warn('Can\'t be placed in the bounds of the dashboard!/n' +
         JSON.stringify(itemComponent.item, ['cols', 'rows', 'x', 'y']));
+    }
+  }
+
+  getNextPossiblePosition(newItem: GridsterItem): boolean {
+    if (newItem.cols === undefined) {
+      newItem.cols = this.$options.defaultItemCols;
+    }
+    if (newItem.rows === undefined) {
+      newItem.rows = this.$options.defaultItemRows;
+    }
+    this.setGridDimensions();
+    let rowsIndex = 0, colsIndex;
+    for (; rowsIndex < this.rows; rowsIndex++) {
+      newItem.y = rowsIndex;
+      colsIndex = 0;
+      for (; colsIndex < this.columns; colsIndex++) {
+        newItem.x = colsIndex;
+        if (!this.checkCollision(newItem)) {
+          return true;
+        }
+      }
+    }
+    if (this.rows >= this.columns && this.$options.maxCols > this.columns) {
+      newItem.x = this.columns;
+      newItem.y = 0;
+      return true;
+    } else if (this.$options.maxRows > this.rows) {
+      newItem.y = this.rows;
+      newItem.x = 0;
+      return true;
     }
   }
 
@@ -373,7 +383,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
 
   moveUpTillCollision(itemComponent: GridsterItemComponent): boolean {
     itemComponent.$item.y -= 1;
-    if (this.checkCollision(itemComponent)) {
+    if (this.checkCollision(itemComponent.$item)) {
       itemComponent.$item.y += 1;
       return false;
     } else {
@@ -402,7 +412,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
 
   moveLeftTillCollision(itemComponent: GridsterItemComponent): boolean {
     itemComponent.$item.x -= 1;
-    if (this.checkCollision(itemComponent)) {
+    if (this.checkCollision(itemComponent.$item)) {
       itemComponent.$item.x += 1;
       return false;
     } else {

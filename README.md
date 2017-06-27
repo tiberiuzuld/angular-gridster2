@@ -176,6 +176,7 @@ export const GridsterConfigService: GridsterConfig = {
 ```typescript
     this.options.api.resize(); // call if size of container changes. Grid will auto resize on window resize.
     this.options.api.optionsChanged(); // call on change of options after initialization
+    this.options.api.getNextPossiblePosition(item: GridsterItem); // call to get a viable position for item. Returns true if found
 ```
 
 ##### Gridster item options:

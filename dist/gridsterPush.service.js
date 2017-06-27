@@ -50,7 +50,7 @@ var GridsterPush = (function () {
         this.pushedItemsPath = undefined;
     };
     GridsterPush.prototype.push = function (gridsterItem, direction, pushedBy) {
-        var gridsterItemCollision = this.gridster.checkCollision(gridsterItem, pushedBy);
+        var gridsterItemCollision = this.gridster.checkCollision(gridsterItem.$item, pushedBy.$item);
         if (gridsterItemCollision && gridsterItemCollision !== true &&
             gridsterItemCollision !== this.gridsterItem) {
             var gridsterItemCollide = gridsterItemCollision;
@@ -74,7 +74,7 @@ var GridsterPush = (function () {
     GridsterPush.prototype.trySouth = function (gridsterItemCollide, gridsterItem, direction, pushedBy) {
         var backUpY = gridsterItemCollide.$item.y;
         gridsterItemCollide.$item.y = gridsterItem.$item.y + gridsterItem.$item.rows;
-        if (!gridster_component_1.GridsterComponent.checkCollisionTwoItems(gridsterItemCollide, gridsterItem)
+        if (!gridster_component_1.GridsterComponent.checkCollisionTwoItems(gridsterItemCollide.$item, gridsterItem.$item)
             && this.push(gridsterItemCollide, this.fromNorth, gridsterItem)) {
             gridsterItemCollide.setSize(true);
             this.addToPushed(gridsterItemCollide);
@@ -88,7 +88,8 @@ var GridsterPush = (function () {
     GridsterPush.prototype.tryNorth = function (gridsterItemCollide, gridsterItem, direction, pushedBy) {
         var backUpY = gridsterItemCollide.$item.y;
         gridsterItemCollide.$item.y = gridsterItem.$item.y - gridsterItemCollide.$item.rows;
-        if (this.push(gridsterItemCollide, this.fromSouth, gridsterItem)) {
+        if (!gridster_component_1.GridsterComponent.checkCollisionTwoItems(gridsterItemCollide.$item, gridsterItem.$item)
+            && this.push(gridsterItemCollide, this.fromSouth, gridsterItem)) {
             gridsterItemCollide.setSize(true);
             this.addToPushed(gridsterItemCollide);
             this.push(gridsterItem, direction, pushedBy);
@@ -101,7 +102,7 @@ var GridsterPush = (function () {
     GridsterPush.prototype.tryEast = function (gridsterItemCollide, gridsterItem, direction, pushedBy) {
         var backUpX = gridsterItemCollide.$item.x;
         gridsterItemCollide.$item.x = gridsterItem.$item.x + gridsterItem.$item.cols;
-        if (!gridster_component_1.GridsterComponent.checkCollisionTwoItems(gridsterItemCollide, gridsterItem)
+        if (!gridster_component_1.GridsterComponent.checkCollisionTwoItems(gridsterItemCollide.$item, gridsterItem.$item)
             && this.push(gridsterItemCollide, this.fromWest, gridsterItem)) {
             gridsterItemCollide.setSize(true);
             this.addToPushed(gridsterItemCollide);
@@ -115,7 +116,7 @@ var GridsterPush = (function () {
     GridsterPush.prototype.tryWest = function (gridsterItemCollide, gridsterItem, direction, pushedBy) {
         var backUpX = gridsterItemCollide.$item.x;
         gridsterItemCollide.$item.x = gridsterItem.$item.x - gridsterItemCollide.$item.cols;
-        if (!gridster_component_1.GridsterComponent.checkCollisionTwoItems(gridsterItemCollide, gridsterItem)
+        if (!gridster_component_1.GridsterComponent.checkCollisionTwoItems(gridsterItemCollide.$item, gridsterItem.$item)
             && this.push(gridsterItemCollide, this.fromEast, gridsterItem)) {
             gridsterItemCollide.setSize(true);
             this.addToPushed(gridsterItemCollide);
@@ -156,7 +157,7 @@ var GridsterPush = (function () {
             lastPosition = path[j];
             pushedItem.$item.x = lastPosition.x;
             pushedItem.$item.y = lastPosition.y;
-            if (!this.gridster.findItemWithItem(pushedItem)) {
+            if (!this.gridster.findItemWithItem(pushedItem.$item)) {
                 pushedItem.setSize(true);
                 path.splice(j + 1, path.length - 1 - j);
             }

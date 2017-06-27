@@ -22,6 +22,7 @@ export declare class GridsterItemComponent implements OnInit, OnDestroy {
     itemMargin: number;
     drag: GridsterDraggable;
     resize: GridsterResizable;
+    notPlaced: boolean;
     constructor(el: ElementRef, gridster: GridsterComponent, renderer: Renderer2);
     ngOnInit(): void;
     updateOptions(): void;

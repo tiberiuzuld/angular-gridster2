@@ -32,6 +32,7 @@ export interface GridsterConfig {
     api?: {
         resize?: Function;
         optionsChanged?: Function;
+        getNextPossiblePosition?: Function;
     };
     [propName: string]: any;
 }

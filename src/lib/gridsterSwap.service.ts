@@ -26,7 +26,7 @@ export class GridsterSwap {
       const y: number = this.swapedItem.$item.y;
       this.swapedItem.$item.x = this.swapedItem.item.x;
       this.swapedItem.$item.y = this.swapedItem.item.y;
-      if (this.gridster.checkCollision(this.swapedItem)) {
+      if (this.gridster.checkCollision(this.swapedItem.$item)) {
         this.swapedItem.$item.x = x;
         this.swapedItem.$item.y = y;
       } else {
@@ -56,14 +56,14 @@ export class GridsterSwap {
   }
 
   checkSwap(pushedBy: GridsterItemComponent): void {
-    const gridsterItemCollision: any = this.gridster.checkCollision(pushedBy);
+    const gridsterItemCollision: any = this.gridster.checkCollision(pushedBy.$item);
     if (gridsterItemCollision && gridsterItemCollision !== true) {
       const gridsterItemCollide: GridsterItemComponent = gridsterItemCollision;
       gridsterItemCollide.$item.x = pushedBy.item.x;
       gridsterItemCollide.$item.y = pushedBy.item.y;
       pushedBy.$item.x = gridsterItemCollide.item.x;
       pushedBy.$item.y = gridsterItemCollide.item.y;
-      if (this.gridster.checkCollision(gridsterItemCollide) || this.gridster.checkCollision(pushedBy)) {
+      if (this.gridster.checkCollision(gridsterItemCollide.$item) || this.gridster.checkCollision(pushedBy.$item)) {
         pushedBy.$item.x = gridsterItemCollide.$item.x;
         pushedBy.$item.y = gridsterItemCollide.$item.y;
         gridsterItemCollide.$item.x = gridsterItemCollide.item.x;

@@ -138,7 +138,7 @@ var GridsterDraggable = (function () {
         this.positionYBackup = this.gridsterItem.$item.y;
         this.gridsterItem.$item.x = this.positionX;
         this.gridsterItem.$item.y = this.positionY;
-        if (this.gridster.checkGridCollision(this.gridsterItem)) {
+        if (this.gridster.checkGridCollision(this.gridsterItem.$item)) {
             this.gridsterItem.$item.x = this.positionXBackup;
             this.gridsterItem.$item.y = this.positionYBackup;
             return;
@@ -162,7 +162,7 @@ var GridsterDraggable = (function () {
             }
             this.push.pushItems(direction);
             this.swap.swapItems();
-            if (this.gridster.checkCollision(this.gridsterItem)) {
+            if (this.gridster.checkCollision(this.gridsterItem.$item)) {
                 this.gridsterItem.$item.x = this.positionXBackup;
                 this.gridsterItem.$item.y = this.positionYBackup;
             }

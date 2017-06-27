@@ -160,7 +160,7 @@ var GridsterResizable = (function () {
             this.gridsterItem.$item.rows += this.gridsterItem.$item.y - this.newPosition;
             this.gridsterItem.$item.y = this.newPosition;
             this.push.pushItems(this.push.fromSouth);
-            if (this.gridster.checkCollision(this.gridsterItem)) {
+            if (this.gridster.checkCollision(this.gridsterItem.$item)) {
                 this.gridsterItem.$item.y = this.itemBackup[1];
                 this.gridsterItem.$item.rows = this.itemBackup[3];
                 this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'top', this.gridster.positionYToPixels(this.gridsterItem.$item.y) + 'px');
@@ -190,7 +190,7 @@ var GridsterResizable = (function () {
             this.gridsterItem.$item.cols += this.gridsterItem.$item.x - this.newPosition;
             this.gridsterItem.$item.x = this.newPosition;
             this.push.pushItems(this.push.fromEast);
-            if (this.gridster.checkCollision(this.gridsterItem)) {
+            if (this.gridster.checkCollision(this.gridsterItem.$item)) {
                 this.gridsterItem.$item.x = this.itemBackup[0];
                 this.gridsterItem.$item.cols = this.itemBackup[2];
                 this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'left', this.gridster.positionXToPixels(this.gridsterItem.$item.x) + 'px');
@@ -217,7 +217,7 @@ var GridsterResizable = (function () {
             this.itemBackup[3] = this.gridsterItem.$item.rows;
             this.gridsterItem.$item.rows = this.newPosition - this.gridsterItem.$item.y;
             this.push.pushItems(this.push.fromNorth);
-            if (this.gridster.checkCollision(this.gridsterItem)) {
+            if (this.gridster.checkCollision(this.gridsterItem.$item)) {
                 this.gridsterItem.$item.rows = this.itemBackup[3];
                 this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'height', this.gridster.positionYToPixels(this.gridsterItem.$item.rows)
                     - this.gridster.$options.margin + 'px');
@@ -241,7 +241,7 @@ var GridsterResizable = (function () {
             this.itemBackup[2] = this.gridsterItem.$item.cols;
             this.gridsterItem.$item.cols = this.newPosition - this.gridsterItem.$item.x;
             this.push.pushItems(this.push.fromWest);
-            if (this.gridsterItem.$item.cols < 1 || this.gridster.checkCollision(this.gridsterItem)) {
+            if (this.gridsterItem.$item.cols < 1 || this.gridster.checkCollision(this.gridsterItem.$item)) {
                 this.gridsterItem.$item.cols = this.itemBackup[2];
                 this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'width', this.gridster.positionXToPixels(this.gridsterItem.$item.cols)
                     - this.gridster.$options.margin + 'px');
