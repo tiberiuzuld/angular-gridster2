@@ -78,9 +78,14 @@ export class GridsterDraggable {
         return;
     }
 
-    const contentClass = this.gridster.$options.draggable.ignoreContentClass;
-    if (this.checkContentClass(e.target, e.currentTarget, contentClass)) {
-      return;
+    if (this.gridster.$options.draggable.ignoreContent) {
+      if (!this.checkContentClass(e.target, e.currentTarget, this.gridster.$options.draggable.dragHandleClass)) {
+        return;
+      }
+    } else {
+      if (this.checkContentClass(e.target, e.currentTarget, this.gridster.$options.draggable.ignoreContentClass)) {
+        return;
+      }
     }
 
     e.stopPropagation();
