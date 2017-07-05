@@ -43,8 +43,8 @@ export interface Draggable {
   ignoreContentClass?: string;
   ignoreContent?: boolean;
   dragHandleClass?: string;
-  start?: Function;
   stop?: Function;
+  start?: Function;
 }
 
 export interface Resizable extends Draggable {

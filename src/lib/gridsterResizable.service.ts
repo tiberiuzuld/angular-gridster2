@@ -79,6 +79,9 @@ export class GridsterResizable {
         // right or middle mouse button
         return;
     }
+    if (this.gridster.$options.resizable.start) {
+      this.gridster.$options.resizable.start(this.gridsterItem.item, this.gridsterItem, e);
+    }
     e.stopPropagation();
     e.preventDefault();
     if (e.pageX === undefined && e.touches) {
@@ -123,7 +126,6 @@ export class GridsterResizable {
       this.resizeEventScrollType.e = true;
       this.directionFunction = this.handleE.bind(this);
     } else if (e.currentTarget.classList.contains('handle-nw')) {
-
       this.resizeEventScrollType.n = true;
       this.resizeEventScrollType.w = true;
       this.directionFunction = this.handleNW.bind(this);
@@ -150,7 +152,7 @@ export class GridsterResizable {
     }
     this.offsetTop = this.gridster.el.scrollTop - this.gridster.el.offsetTop;
     this.offsetLeft = this.gridster.el.scrollLeft - this.gridster.el.offsetLeft;
-    scroll(this.gridsterItem, e, this.lastMouse, this.directionFunction, true, this.resizeEventScrollType);
+    //scroll(this.gridsterItem, e, this.lastMouse, this.directionFunction, true, this.resizeEventScrollType);
     this.directionFunction(e);
 
     this.lastMouse.pageX = e.pageX;
@@ -196,9 +198,9 @@ export class GridsterResizable {
   }
 
   getRealCords(e) {
-    const gridsterOffsets = GridsterResizable.getOffsetSum(this.gridster.el);
-    const pageY = e.pageY - gridsterOffsets.top;
-    const pageX = e.pageX - gridsterOffsets.left;
+    let gridsterOffsets = GridsterResizable.getOffsetSum(this.gridster.el);
+    let pageY = e.pageY - gridsterOffsets.top;
+    let pageX = e.pageX - gridsterOffsets.left;
     return {pageY, pageX};
   }
 

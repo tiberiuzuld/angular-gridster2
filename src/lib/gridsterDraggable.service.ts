@@ -77,10 +77,8 @@ export class GridsterDraggable {
         // right or middle mouse button
         return;
     }
-
     if (this.gridster.$options.draggable.start) {
-      Promise.resolve(this.gridster.$options.draggable.start(this.gridsterItem.item, this.gridsterItem, e))
-        .then(this.makeDrag.bind(this), this.cancelDrag.bind(this));
+      this.gridster.$options.draggable.start(this.gridsterItem.item, this.gridsterItem, e);
     }
 
     if (this.gridster.$options.draggable.ignoreContent) {
