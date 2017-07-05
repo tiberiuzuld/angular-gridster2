@@ -43,6 +43,7 @@ export interface Draggable {
   ignoreContentClass?: string;
   ignoreContent?: boolean;
   dragHandleClass?: string;
+  start?: Function;
   stop?: Function;
 }
 

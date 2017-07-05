@@ -78,6 +78,11 @@ export class GridsterDraggable {
         return;
     }
 
+    if (this.gridster.$options.draggable.start) {
+      Promise.resolve(this.gridster.$options.draggable.start(this.gridsterItem.item, this.gridsterItem, e))
+        .then(this.makeDrag.bind(this), this.cancelDrag.bind(this));
+    }
+
     if (this.gridster.$options.draggable.ignoreContent) {
       if (!this.checkContentClass(e.target, e.currentTarget, this.gridster.$options.draggable.dragHandleClass)) {
         return;
