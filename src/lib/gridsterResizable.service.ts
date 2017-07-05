@@ -152,7 +152,7 @@ export class GridsterResizable {
     }
     this.offsetTop = this.gridster.el.scrollTop - this.gridster.el.offsetTop;
     this.offsetLeft = this.gridster.el.scrollLeft - this.gridster.el.offsetLeft;
-    //scroll(this.gridsterItem, e, this.lastMouse, this.directionFunction, true, this.resizeEventScrollType);
+    scroll(this.gridsterItem, e, this.lastMouse, this.directionFunction, true, this.resizeEventScrollType);
     this.directionFunction(e);
 
     this.lastMouse.pageX = e.pageX;
