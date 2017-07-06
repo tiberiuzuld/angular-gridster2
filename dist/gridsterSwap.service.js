@@ -66,15 +66,15 @@ var GridsterSwap = (function () {
             }
         }
     };
+    GridsterSwap.decorators = [
+        { type: core_1.Injectable },
+    ];
+    /** @nocollapse */
+    GridsterSwap.ctorParameters = function () { return [
+        { type: gridsterItem_component_1.GridsterItemComponent, },
+        { type: gridster_component_1.GridsterComponent, },
+    ]; };
     return GridsterSwap;
 }());
-GridsterSwap.decorators = [
-    { type: core_1.Injectable },
-];
-/** @nocollapse */
-GridsterSwap.ctorParameters = function () { return [
-    { type: gridsterItem_component_1.GridsterItemComponent, },
-    { type: gridster_component_1.GridsterComponent, },
-]; };
 exports.GridsterSwap = GridsterSwap;
 //# sourceMappingURL=gridsterSwap.service.js.map

@@ -28,20 +28,20 @@ var GridsterPreviewComponent = (function () {
             this.renderer.setStyle(this.el, 'marginBottom', margin + 'px');
         }
     };
+    GridsterPreviewComponent.decorators = [
+        { type: core_1.Component, args: [{
+                    selector: 'gridster-preview',
+                    template: '',
+                    styles: [":host {   background: rgba(0, 0, 0, 0.15);   position: absolute; }"]
+                },] },
+    ];
+    /** @nocollapse */
+    GridsterPreviewComponent.ctorParameters = function () { return [
+        { type: core_1.ElementRef, },
+        { type: gridster_component_1.GridsterComponent, decorators: [{ type: core_1.Host },] },
+        { type: core_1.Renderer2, },
+    ]; };
     return GridsterPreviewComponent;
 }());
-GridsterPreviewComponent.decorators = [
-    { type: core_1.Component, args: [{
-                selector: 'gridster-preview',
-                template: '',
-                styles: [":host {   background: rgba(0, 0, 0, 0.15);   position: absolute; }"]
-            },] },
-];
-/** @nocollapse */
-GridsterPreviewComponent.ctorParameters = function () { return [
-    { type: core_1.ElementRef, },
-    { type: gridster_component_1.GridsterComponent, decorators: [{ type: core_1.Host },] },
-    { type: core_1.Renderer2, },
-]; };
 exports.GridsterPreviewComponent = GridsterPreviewComponent;
 //# sourceMappingURL=gridsterPreview.component.js.map

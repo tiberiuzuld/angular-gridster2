@@ -171,15 +171,15 @@ var GridsterPush = (function () {
             this.removeFromPushed(i);
         }
     };
+    GridsterPush.decorators = [
+        { type: core_1.Injectable },
+    ];
+    /** @nocollapse */
+    GridsterPush.ctorParameters = function () { return [
+        { type: gridsterItem_component_1.GridsterItemComponent, },
+        { type: gridster_component_1.GridsterComponent, },
+    ]; };
     return GridsterPush;
 }());
-GridsterPush.decorators = [
-    { type: core_1.Injectable },
-];
-/** @nocollapse */
-GridsterPush.ctorParameters = function () { return [
-    { type: gridsterItem_component_1.GridsterItemComponent, },
-    { type: gridster_component_1.GridsterComponent, },
-]; };
 exports.GridsterPush = GridsterPush;
 //# sourceMappingURL=gridsterPush.service.js.map

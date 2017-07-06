@@ -69,6 +69,9 @@
       <input mdInput [(ngModel)]="options.fixedRowHeight" type="number" placeholder="Fixed Row Height"
              (ngModelChange)="changedOptions()">
     </md-input-container>
+    <md-checkbox [(ngModel)]="options.keepFixedHeightInMobile" (ngModelChange)="changedOptions()">
+      Keep Fixed Height In Mobile
+    </md-checkbox>
     <md-input-container>
       <input mdInput [(ngModel)]="options.minCols" type="number" placeholder="Min Grid Cols"
              (ngModelChange)="changedOptions()">

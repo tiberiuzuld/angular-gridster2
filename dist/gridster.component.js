@@ -374,22 +374,22 @@ var GridsterComponent = (function () {
             return true;
         }
     };
+    GridsterComponent.decorators = [
+        { type: core_1.Component, args: [{
+                    selector: 'gridster',
+                    template: "<gridster-grid class=\"gridster-grid\"></gridster-grid> <ng-content></ng-content> <gridster-preview class=\"gridster-preview\"></gridster-preview>",
+                    styles: [":host {   position: relative;   display: flex;   overflow: auto;   flex: 1 auto;   background: grey;   width: 100%;   height: 100%; }  :host(.fit) {   overflow-x: hidden;   overflow-y: hidden; }  :host(.scrollVertical) {   overflow-x: hidden;   overflow-y: auto; }  :host(.scrollHorizontal) {   overflow-x: auto;   overflow-y: hidden; }  :host(.fixed) {   overflow: auto; }  :host(.mobile) {   overflow-x: hidden;   overflow-y: auto;   display: block; }  :host(.mobile) /deep/ gridster-item {   position: relative; }"]
+                },] },
+    ];
+    /** @nocollapse */
+    GridsterComponent.ctorParameters = function () { return [
+        { type: core_1.ElementRef, },
+        { type: core_1.Renderer2, },
+    ]; };
+    GridsterComponent.propDecorators = {
+        'options': [{ type: core_1.Input },],
+    };
     return GridsterComponent;
 }());
-GridsterComponent.decorators = [
-    { type: core_1.Component, args: [{
-                selector: 'gridster',
-                template: "<gridster-grid class=\"gridster-grid\"></gridster-grid> <ng-content></ng-content> <gridster-preview class=\"gridster-preview\"></gridster-preview>",
-                styles: [":host {   position: relative;   display: flex;   overflow: auto;   flex: 1 auto;   background: grey;   width: 100%;   height: 100%; }  :host(.fit) {   overflow-x: hidden;   overflow-y: hidden; }  :host(.scrollVertical) {   overflow-x: hidden;   overflow-y: auto; }  :host(.scrollHorizontal) {   overflow-x: auto;   overflow-y: hidden; }  :host(.fixed) {   overflow: auto; }  :host(.mobile) {   overflow-x: hidden;   overflow-y: auto;   display: block; }  :host(.mobile) /deep/ gridster-item {   position: relative; }"]
-            },] },
-];
-/** @nocollapse */
-GridsterComponent.ctorParameters = function () { return [
-    { type: core_1.ElementRef, },
-    { type: core_1.Renderer2, },
-]; };
-GridsterComponent.propDecorators = {
-    'options': [{ type: core_1.Input },],
-};
 exports.GridsterComponent = GridsterComponent;
 //# sourceMappingURL=gridster.component.js.map

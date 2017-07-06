@@ -7,6 +7,7 @@ exports.GridsterConfigService = {
     // 'fixed' will set the rows and columns dimensions based on fixedColWidth and fixedRowHeight options
     fixedColWidth: 250,
     fixedRowHeight: 250,
+    keepFixedHeightInMobile: false,
     compactType: 'none',
     mobileBreakpoint: 640,
     minCols: 1,

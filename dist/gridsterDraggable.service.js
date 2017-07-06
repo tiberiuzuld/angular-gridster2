@@ -194,15 +194,15 @@ var GridsterDraggable = (function () {
             this.touchstart();
         }
     };
+    GridsterDraggable.decorators = [
+        { type: core_1.Injectable },
+    ];
+    /** @nocollapse */
+    GridsterDraggable.ctorParameters = function () { return [
+        { type: gridsterItem_component_1.GridsterItemComponent, },
+        { type: gridster_component_1.GridsterComponent, },
+    ]; };
     return GridsterDraggable;
 }());
-GridsterDraggable.decorators = [
-    { type: core_1.Injectable },
-];
-/** @nocollapse */
-GridsterDraggable.ctorParameters = function () { return [
-    { type: gridsterItem_component_1.GridsterItemComponent, },
-    { type: gridster_component_1.GridsterComponent, },
-]; };
 exports.GridsterDraggable = GridsterDraggable;
 //# sourceMappingURL=gridsterDraggable.service.js.map

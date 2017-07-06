@@ -274,15 +274,15 @@ var GridsterResizable = (function () {
         this.resizeEnabled = !this.gridster.mobile &&
             (this.gridsterItem.$item.resizeEnabled === undefined ? enabled : this.gridsterItem.$item.resizeEnabled);
     };
+    GridsterResizable.decorators = [
+        { type: core_1.Injectable },
+    ];
+    /** @nocollapse */
+    GridsterResizable.ctorParameters = function () { return [
+        { type: gridsterItem_component_1.GridsterItemComponent, },
+        { type: gridster_component_1.GridsterComponent, },
+    ]; };
     return GridsterResizable;
 }());
-GridsterResizable.decorators = [
-    { type: core_1.Injectable },
-];
-/** @nocollapse */
-GridsterResizable.ctorParameters = function () { return [
-    { type: gridsterItem_component_1.GridsterItemComponent, },
-    { type: gridster_component_1.GridsterComponent, },
-]; };
 exports.GridsterResizable = GridsterResizable;
 //# sourceMappingURL=gridsterResizable.service.js.map

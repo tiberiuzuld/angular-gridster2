@@ -29,12 +29,12 @@ var GridsterUtils = (function () {
             timeout = setTimeout(later, wait);
         };
     };
+    GridsterUtils.decorators = [
+        { type: core_1.Injectable },
+    ];
+    /** @nocollapse */
+    GridsterUtils.ctorParameters = function () { return []; };
     return GridsterUtils;
 }());
-GridsterUtils.decorators = [
-    { type: core_1.Injectable },
-];
-/** @nocollapse */
-GridsterUtils.ctorParameters = function () { return []; };
 exports.GridsterUtils = GridsterUtils;
 //# sourceMappingURL=gridsterUtils.service.js.map

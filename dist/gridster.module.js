@@ -9,25 +9,25 @@ var gridsterGrid_component_1 = require("./gridsterGrid.component");
 var GridsterModule = (function () {
     function GridsterModule() {
     }
+    GridsterModule.decorators = [
+        { type: core_1.NgModule, args: [{
+                    declarations: [
+                        gridster_component_1.GridsterComponent,
+                        gridsterItem_component_1.GridsterItemComponent,
+                        gridsterGrid_component_1.GridsterGridComponent,
+                        gridsterPreview_component_1.GridsterPreviewComponent
+                    ],
+                    imports: [
+                        common_1.CommonModule
+                    ],
+                    exports: [gridster_component_1.GridsterComponent, gridsterItem_component_1.GridsterItemComponent],
+                    providers: [],
+                    bootstrap: []
+                },] },
+    ];
+    /** @nocollapse */
+    GridsterModule.ctorParameters = function () { return []; };
     return GridsterModule;
 }());
-GridsterModule.decorators = [
-    { type: core_1.NgModule, args: [{
-                declarations: [
-                    gridster_component_1.GridsterComponent,
-                    gridsterItem_component_1.GridsterItemComponent,
-                    gridsterGrid_component_1.GridsterGridComponent,
-                    gridsterPreview_component_1.GridsterPreviewComponent
-                ],
-                imports: [
-                    common_1.CommonModule
-                ],
-                exports: [gridster_component_1.GridsterComponent, gridsterItem_component_1.GridsterItemComponent],
-                providers: [],
-                bootstrap: []
-            },] },
-];
-/** @nocollapse */
-GridsterModule.ctorParameters = function () { return []; };
 exports.GridsterModule = GridsterModule;
 //# sourceMappingURL=gridster.module.js.map
