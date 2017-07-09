@@ -46,6 +46,30 @@ export class GridsterResizable {
     e.pageY = e.touches[0].pageY;
   }
 
+  static getOffsetSum(originalElement) {
+    let top = 0;
+    let left = 0;
+    let element = originalElement;
+    while (element) {
+      top = top + parseFloat(element.offsetTop);
+      left = left + parseFloat(element.offsetLeft);
+      element = element.offsetParent;
+    }
+    return {top: Math.round(top), left: Math.round(left)};
+  }
+
+  static getScrollSum(originalElement) {
+    let top = 0;
+    let left = 0;
+    let element = originalElement;
+    while (element) {
+      top = top + parseFloat(element.scrollTop);
+      left = left + parseFloat(element.scrollLeft);
+      element = element.offsetParent;
+    }
+    return {scrollTop: Math.round(top), scrollLeft: Math.round(left)};
+  }
+
   constructor(gridsterItem: GridsterItemComponent, gridster: GridsterComponent) {
     this.gridsterItem = gridsterItem;
     this.gridster = gridster;
@@ -66,6 +90,9 @@ export class GridsterResizable {
       case 3:
         // right or middle mouse button
         return;
+    }
+    if (this.gridster.$options.resizable.start) {
+      this.gridster.$options.resizable.start(this.gridsterItem.item, this.gridsterItem, e);
     }
     e.stopPropagation();
     e.preventDefault();
@@ -182,8 +209,15 @@ export class GridsterResizable {
     this.push = undefined;
   }
 
+  getRealCords(e) {
+    let gridsterOffsets = GridsterResizable.getOffsetSum(this.gridster.el);
+    let pageY = e.pageY - gridsterOffsets.top + GridsterResizable.getScrollSum(this.gridster.el).scrollTop;
+    let pageX = e.pageX - gridsterOffsets.left + GridsterResizable.getScrollSum(this.gridster.el).scrollLeft;
+    return {pageY, pageX};
+  }
+
   handleN(e): void {
-    this.top = e.pageY + this.offsetTop - this.margin;
+    this.top = this.getRealCords(e).pageY - this.margin;
     this.height = this.bottom - this.top;
     if (this.minHeight > this.height) {
       this.height = this.minHeight;
@@ -213,7 +247,7 @@ export class GridsterResizable {
   }
 
   handleW(e): void {
-    this.left = e.pageX + this.offsetLeft - this.margin;
+    this.left = this.getRealCords(e).pageX - this.margin;
     this.width = this.right - this.left;
     if (this.minWidth > this.width) {
       this.width = this.minWidth;
@@ -244,7 +278,7 @@ export class GridsterResizable {
   }
 
   handleS(e): void {
-    this.height = e.pageY + this.offsetTop - this.margin - this.gridsterItem.top;
+    this.height = this.getRealCords(e).pageY - this.margin - this.gridsterItem.top;
     if (this.minHeight > this.height) {
       this.height = this.minHeight;
     }
@@ -268,7 +302,7 @@ export class GridsterResizable {
   }
 
   handleE(e): void {
-    this.width = e.pageX + this.offsetLeft - this.margin - this.gridsterItem.left;
+    this.width = this.getRealCords(e).pageX - this.margin - this.gridsterItem.left;
     if (this.minWidth > this.width) {
       this.width = this.minWidth;
     }
