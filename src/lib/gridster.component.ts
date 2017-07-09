@@ -316,11 +316,14 @@ export class GridsterComponent implements OnInit, OnDestroy {
         }
       }
     }
-    if (this.rows >= this.columns && this.$options.maxCols > this.columns) {
+    const canAddToRows = this.$options.maxRows > this.rows + newItem.rows;
+    const canAddToColumns = this.$options.maxCols > this.columns + newItem.cols;
+    const addToRows = this.rows >= this.columns && canAddToRows;
+    if (!addToRows && canAddToColumns) {
       newItem.x = this.columns;
       newItem.y = 0;
       return true;
-    } else if (this.$options.maxRows > this.rows) {
+    } else if (canAddToRows) {
       newItem.y = this.rows;
       newItem.x = 0;
       return true;

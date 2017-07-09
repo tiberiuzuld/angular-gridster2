@@ -274,12 +274,15 @@ var GridsterComponent = (function () {
                 }
             }
         }
-        if (this.rows >= this.columns && this.$options.maxCols > this.columns) {
+        var canAddToRows = this.$options.maxRows > this.rows + newItem.rows;
+        var canAddToColumns = this.$options.maxCols > this.columns + newItem.cols;
+        var addToRows = this.rows >= this.columns && canAddToRows;
+        if (!addToRows && canAddToColumns) {
             newItem.x = this.columns;
             newItem.y = 0;
             return true;
         }
-        else if (this.$options.maxRows > this.rows) {
+        else if (canAddToRows) {
             newItem.y = this.rows;
             newItem.x = 0;
             return true;
