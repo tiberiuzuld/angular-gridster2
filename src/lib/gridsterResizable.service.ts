@@ -46,7 +46,7 @@ export class GridsterResizable {
     e.pageY = e.touches[0].pageY;
   }
 
-  static getOffsetSum(originalElement) {
+  static getOffsetSum(originalElement): { top: number, left: number } {
     let top = 0;
     let left = 0;
     let element = originalElement;
@@ -58,7 +58,7 @@ export class GridsterResizable {
     return {top: Math.round(top), left: Math.round(left)};
   }
 
-  static getScrollSum(originalElement) {
+  static getScrollSum(originalElement): { scrollTop: number, scrollLeft: number } {
     let top = 0;
     let left = 0;
     let element = originalElement;
@@ -209,10 +209,10 @@ export class GridsterResizable {
     this.push = undefined;
   }
 
-  getRealCords(e) {
-    let gridsterOffsets = GridsterResizable.getOffsetSum(this.gridster.el);
-    let pageY = e.pageY - gridsterOffsets.top + GridsterResizable.getScrollSum(this.gridster.el).scrollTop;
-    let pageX = e.pageX - gridsterOffsets.left + GridsterResizable.getScrollSum(this.gridster.el).scrollLeft;
+  getRealCords(e): { pageY: number, pageX: number } {
+    const gridsterOffsets = GridsterResizable.getOffsetSum(this.gridster.el);
+    const pageY = e.pageY - gridsterOffsets.top + GridsterResizable.getScrollSum(this.gridster.el).scrollTop;
+    const pageX = e.pageX - gridsterOffsets.left + GridsterResizable.getScrollSum(this.gridster.el).scrollLeft;
     return {pageY, pageX};
   }
 

@@ -32,7 +32,8 @@ exports.GridsterConfigService = {
         ignoreContentClass: 'gridster-item-content',
         ignoreContent: false,
         dragHandleClass: 'drag-handler',
-        stop: undefined // callback when dragging an item stops.  Accepts Promise return to cancel/approve drag.
+        stop: undefined,
+        start: undefined // callback when dragging an item starts.
         // Arguments: item, gridsterItem, event
     },
     resizable: {
@@ -47,7 +48,8 @@ exports.GridsterConfigService = {
             sw: true,
             nw: true
         },
-        stop: undefined // callback when resizing an item stops. Accepts Promise return to cancel/approve resize.
+        stop: undefined,
+        start: undefined // callback when resizing an item starts.
         // Arguments: item, gridsterItem, event
     },
     swap: true,

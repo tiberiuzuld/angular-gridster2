@@ -37,12 +37,24 @@ export declare class GridsterResizable {
     height: number;
     newPosition: number;
     static touchEvent(e: any): void;
+    static getOffsetSum(originalElement: any): {
+        top: number;
+        left: number;
+    };
+    static getScrollSum(originalElement: any): {
+        scrollTop: number;
+        scrollLeft: number;
+    };
     constructor(gridsterItem: GridsterItemComponent, gridster: GridsterComponent);
     dragStart(e: any): void;
     dragMove(e: any): void;
     dragStop(e: any): void;
     cancelResize(): void;
     makeResize(): void;
+    getRealCords(e: any): {
+        pageY: number;
+        pageX: number;
+    };
     handleN(e: any): void;
     handleW(e: any): void;
     handleS(e: any): void;

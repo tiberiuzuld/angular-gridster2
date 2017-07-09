@@ -77,9 +77,6 @@ export class GridsterDraggable {
         // right or middle mouse button
         return;
     }
-    if (this.gridster.$options.draggable.start) {
-      this.gridster.$options.draggable.start(this.gridsterItem.item, this.gridsterItem, e);
-    }
 
     if (this.gridster.$options.draggable.ignoreContent) {
       if (!this.checkContentClass(e.target, e.currentTarget, this.gridster.$options.draggable.dragHandleClass)) {
@@ -89,6 +86,10 @@ export class GridsterDraggable {
       if (this.checkContentClass(e.target, e.currentTarget, this.gridster.$options.draggable.ignoreContentClass)) {
         return;
       }
+    }
+
+    if (this.gridster.$options.draggable.start) {
+      this.gridster.$options.draggable.start(this.gridsterItem.item, this.gridsterItem, e);
     }
 
     e.stopPropagation();

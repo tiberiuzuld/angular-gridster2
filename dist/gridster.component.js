@@ -16,7 +16,9 @@ var GridsterComponent = (function () {
         this.curColWidth = 0;
         this.curRowHeight = 0;
         this.$options.draggable.stop = undefined;
+        this.$options.draggable.start = undefined;
         this.$options.resizable.stop = undefined;
+        this.$options.resizable.start = undefined;
         this.$options.itemChangeCallback = undefined;
         this.$options.itemResizeCallback = undefined;
     }
@@ -276,7 +278,7 @@ var GridsterComponent = (function () {
         }
         var canAddToRows = this.$options.maxRows > this.rows + newItem.rows;
         var canAddToColumns = this.$options.maxCols > this.columns + newItem.cols;
-        var addToRows = this.rows >= this.columns && canAddToRows;
+        var addToRows = this.rows <= this.columns && canAddToRows;
         if (!addToRows && canAddToColumns) {
             newItem.x = this.columns;
             newItem.y = 0;

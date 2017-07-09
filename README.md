@@ -151,7 +151,8 @@ export const GridsterConfigService: GridsterConfig = {
     ignoreContentClass: 'gridster-item-content', // default content class to ignore the drag event from
     ignoreContent: false, // if true drag will start only from elements from `dragHandleClass`
     dragHandleClass: 'drag-handler', // drag event only from this class. If `ignoreContent` is true.
-    stop: undefined // callback when dragging an item stops.  Accepts Promise return to cancel/approve drag.
+    stop: undefined, // callback when dragging an item stops.  Accepts Promise return to cancel/approve drag.
+    start: undefined // callback when dragging an item starts.
     // Arguments: item, gridsterItem, event
   },
   resizable: {
@@ -166,7 +167,8 @@ export const GridsterConfigService: GridsterConfig = {
       sw: true,
       nw: true
     }, // resizable edges of an item
-    stop: undefined // callback when resizing an item stops. Accepts Promise return to cancel/approve resize.
+    stop: undefined, // callback when resizing an item stops. Accepts Promise return to cancel/approve resize.
+    start: undefined // callback when resizing an item starts.
     // Arguments: item, gridsterItem, event
   },
   swap: true, // allow items to switch position if drop on top of another

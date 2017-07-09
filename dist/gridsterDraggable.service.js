@@ -51,6 +51,9 @@ var GridsterDraggable = (function () {
                 return;
             }
         }
+        if (this.gridster.$options.draggable.start) {
+            this.gridster.$options.draggable.start(this.gridsterItem.item, this.gridsterItem, e);
+        }
         e.stopPropagation();
         e.preventDefault();
         if (e.pageX === undefined && e.touches) {

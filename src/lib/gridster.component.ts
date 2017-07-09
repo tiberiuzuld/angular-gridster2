@@ -320,7 +320,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
     }
     const canAddToRows = this.$options.maxRows > this.rows + newItem.rows;
     const canAddToColumns = this.$options.maxCols > this.columns + newItem.cols;
-    const addToRows = this.rows >= this.columns && canAddToRows;
+    const addToRows = this.rows <= this.columns && canAddToRows;
     if (!addToRows && canAddToColumns) {
       newItem.x = this.columns;
       newItem.y = 0;
