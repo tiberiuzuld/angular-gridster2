@@ -6,7 +6,6 @@ var conf = require('./conf');
 
 var $ = require('gulp-load-plugins')();
 
-var wiredep = require('wiredep').stream;
 var _ = require('lodash');
 
 var browserSync = require('browser-sync');
@@ -60,6 +59,5 @@ gulp.task('inject', ['scripts'], function () {
     .pipe($.inject(injectStyles, injectOptions))
     .pipe($.inject(injectScriptsDirective, scriptsInjectOptionsDirective))
     .pipe($.inject(injectScripts, injectOptions))
-    .pipe(wiredep(_.extend({}, conf.wiredep, {dependencies: true, devDependencies: true})))
     .pipe(gulp.dest(path.join(conf.paths.tmp, '/serve')));
 });

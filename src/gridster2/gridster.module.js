@@ -1,6 +1,6 @@
 /*
  Angular Gridster 2
- (c) 2016 Tiberiu Zuld
+ (c) 2017 Tiberiu Zuld
  License: MIT
  */
 

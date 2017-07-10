@@ -1,44 +1,60 @@
 <md-toolbar>
-  <div class="md-toolbar-tools layout-row layout-align-space-between-center">
+  <div class="md-toolbar-tools layout-row layout-align-space-between-center layout-wrap">
     <md-button class="md-fab md-mini" ng-click="main.addItem()">
       <md-icon>add</md-icon>
       <md-tooltip>Add widget</md-tooltip>
     </md-button>
-    <md-select aria-label="Grid type" ng-model="main.options.gridType">
+    <md-select aria-label="Grid type" ng-model="main.options.gridType" ng-change="main.changedOptions()">
       <md-option value="fit">Fit to screen</md-option>
       <md-option value="scrollVertical">Scroll Vertical</md-option>
       <md-option value="scrollHorizontal">Scroll Horizontal</md-option>
     </md-select>
-    <md-checkbox ng-model="main.options.compactUp">
+    <md-checkbox ng-model="main.options.compactUp" ng-change="main.changedOptions()">
       Compact Up
     </md-checkbox>
-    <md-checkbox ng-model="main.options.compactLeft">
+    <md-checkbox ng-model="main.options.compactLeft" ng-change="main.changedOptions()">
       Compact Left
     </md-checkbox>
-    <md-checkbox ng-model="main.options.swap">
+    <md-checkbox ng-model="main.options.swap" ng-change="main.changedOptions()">
       Swap Items
     </md-checkbox>
-    <md-checkbox ng-model="main.options.draggable.enabled">
+    <md-checkbox ng-model="main.options.draggable.enabled" ng-change="main.changedOptions()">
       Drag Items
     </md-checkbox>
-    <md-checkbox ng-model="main.options.resizable.enabled">
+    <md-checkbox ng-model="main.options.resizable.enabled" ng-change="main.changedOptions()">
       Resize Items
     </md-checkbox>
     <div class="flex-30 layout-row layout-align-center-center">
       <div><span>Margin</span></div>
-      <md-slider aria-label="Margin" class="flex" min="0" max="30" ng-model="main.options.margin"></md-slider>
-      <input type="number" min="0" max="30" ng-model="main.options.margin">
+      <md-slider aria-label="Margin" class="flex" min="0" max="30" ng-model="main.options.margin"
+                 ng-change="main.changedOptions()"></md-slider>
     </div>
-    <md-checkbox ng-model="main.options.outerMargin">Outer Margin</md-checkbox>
+    <md-checkbox ng-model="main.options.outerMargin" ng-change="main.changedOptions()">Outer Margin</md-checkbox>
   </div>
 </md-toolbar>
 
-<div gridster="main.options" class="flex">
-  <div gridster-item="item" ng-repeat="item in main.dashboard">
+<gridster options="main.options" class="flex">
+  <gridster-item item="item" ng-repeat="item in main.dashboard">
     <div class="button-holder">
-      <md-button class="md-fab md-primary md-mini" ng-click="main.removeItem(item)">X
+      <div class="gridster-item-content" ng-if="item.hasContent">
+        <div class="stuff">
+          Some content to select and click without dragging the widget
+        </div>
+      </div>
+      <div class="item-buttons" ng-if="item.hasContent">
+        <md-button class="drag-handler md-raised md-icon-button">
+          <md-icon>open_with</md-icon>
+        </md-button>
+        <md-button class="remove-button md-raised md-icon-button" ng-click="main.removeItem($event, item)">
+          <md-icon>clear</md-icon>
+          <md-tooltip>Remove</md-tooltip>
+        </md-button>
+      </div>
+      <label ng-if="!item.hasContent" ng-bind="::item.label"></label>
+      <button class="md-icon-button md-fab-mini" ng-if="!item.hasContent" ng-click="main.removeItem($event, item)">
+        <md-icon>clear</md-icon>
         <md-tooltip>Remove</md-tooltip>
-      </md-button>
+      </button>
     </div>
-  </div>
-</div>
+  </gridster-item>
+</gridster>

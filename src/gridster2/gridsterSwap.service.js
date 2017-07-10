@@ -1,39 +1,76 @@
 (function () {
   'use strict';
 
-  angular.module('angular-gridster2').factory('gridsterSwap', gridsterSwap);
+  angular.module('angular-gridster2')
+    .service('GridsterSwap', function () {
+      return function (gridsterItem, gridster) {
+        var vm = this;
+        vm.swapedItem = undefined;
+        vm.gridsterItem = gridsterItem;
+        vm.gridster = gridster;
 
-  /** @ngInject */
-  function gridsterSwap() {
-    function GridsterSwap(scope, elemPosition) {
-      var position = scope.gridster.pixelsToPosition(elemPosition[0], elemPosition[1]);
-      var x = scope.gridsterItem.x;
-      var y = scope.gridsterItem.y;
-      scope.gridsterItem.x = position[0];
-      scope.gridsterItem.y = position[1];
-      var swapItem = scope.gridster.findItemWithItem(scope.gridsterItem);
-      scope.gridsterItem.x = x;
-      scope.gridsterItem.y = y;
-      if (!swapItem) {
-        return;
-      }
-      x = swapItem.x;
-      y = swapItem.y;
-      swapItem.x = scope.gridsterItem.x;
-      swapItem.y = scope.gridsterItem.y;
-      scope.gridsterItem.x = position[0];
-      scope.gridsterItem.y = position[1];
-      if (scope.gridster.checkCollision(swapItem) || scope.gridster.checkCollision(scope.gridsterItem)) {
-        scope.gridsterItem.x = swapItem.x;
-        scope.gridsterItem.y = swapItem.y;
-        swapItem.x = x;
-        swapItem.y = y;
-      } else {
-        swapItem.setSize(true);
-        swapItem.checkItemChanges(swapItem, {x: x, y: y, cols: swapItem.cols, rows: swapItem.rows});
-      }
-    }
+        vm.swapItems = function () {
+          if (vm.gridster.$options.swap) {
+            vm.checkSwapBack();
+            vm.checkSwap(vm.gridsterItem);
+          }
+        };
 
-    return GridsterSwap;
-  }
+        vm.checkSwapBack = function () {
+          if (vm.swapedItem) {
+            var x = vm.swapedItem.$item.x;
+            var y = vm.swapedItem.$item.y;
+            vm.swapedItem.$item.x = vm.swapedItem.item.x;
+            vm.swapedItem.$item.y = vm.swapedItem.item.y;
+            if (vm.gridster.checkCollision(vm.swapedItem.$item)) {
+              vm.swapedItem.$item.x = x;
+              vm.swapedItem.$item.y = y;
+            } else {
+              vm.swapedItem.setSize(true);
+              vm.gridsterItem.$item.x = vm.gridsterItem.item.x;
+              vm.gridsterItem.$item.y = vm.gridsterItem.item.y;
+              vm.swapedItem = undefined;
+            }
+
+          }
+        };
+
+        vm.restoreSwapItem = function () {
+          if (vm.swapedItem) {
+            vm.swapedItem.$item.x = vm.swapedItem.item.x;
+            vm.swapedItem.$item.y = vm.swapedItem.item.y;
+            vm.swapedItem.setSize(true);
+            vm.swapedItem = undefined;
+          }
+        };
+
+        vm.setSwapItem = function () {
+          if (vm.swapedItem) {
+            vm.swapedItem.checkItemChanges(vm.swapedItem.$item, vm.swapedItem.item);
+            vm.swapedItem = undefined;
+          }
+        };
+
+        vm.checkSwap = function (pushedBy) {
+          var gridsterItemCollision = vm.gridster.checkCollision(pushedBy.$item);
+          if (gridsterItemCollision && gridsterItemCollision !== true) {
+            var gridsterItemCollide = gridsterItemCollision;
+            gridsterItemCollide.$item.x = pushedBy.item.x;
+            gridsterItemCollide.$item.y = pushedBy.item.y;
+            pushedBy.$item.x = gridsterItemCollide.item.x;
+            pushedBy.$item.y = gridsterItemCollide.item.y;
+            if (vm.gridster.checkCollision(gridsterItemCollide.$item) || vm.gridster.checkCollision(pushedBy.$item)) {
+              pushedBy.$item.x = gridsterItemCollide.$item.x;
+              pushedBy.$item.y = gridsterItemCollide.$item.y;
+              gridsterItemCollide.$item.x = gridsterItemCollide.item.x;
+              gridsterItemCollide.$item.y = gridsterItemCollide.item.y;
+            } else {
+              gridsterItemCollide.setSize(true);
+              vm.swapedItem = gridsterItemCollide;
+            }
+          }
+        };
+        return vm;
+      }
+    });
 })();

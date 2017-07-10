@@ -1,18 +1,73 @@
 (function () {
   'use strict';
 
-  angular.module('angular-gridster2').factory('gridsterResizable', gridsterResizable);
+  angular.module('angular-gridster2')
+    .service('GridsterResizable', GridsterResizable);
 
   /** @ngInject */
-  function gridsterResizable($document, gridsterScroll) {
+  function GridsterResizable(GridsterPush, GridsterScroll) {
+    return function (gridsterItem, gridster) {
+      var vm = this;
 
-    function GridsterResizable($element, scope) {
+      vm.enabled = false;
+      vm.directionFunction = angular.noop;
+      vm.dragStartFunction = angular.noop;
+      vm.dragFunction = angular.noop;
+      vm.dragStopFunction = angular.noop;
+      vm.resizeEnabled = false;
+      vm.push = undefined;
+      vm.minHeight = 0;
+      vm.minWidth = 0;
+      vm.offsetTop = 0;
+      vm.offsetLeft = 0;
+      vm.margin = 0;
+      vm.top = 0;
+      vm.left = 0;
+      vm.bottom = 0;
+      vm.right = 0;
+      vm.width = 0;
+      vm.height = 0;
+      vm.newPosition = 0;
 
-      var enabled, dragHandles = [], handlesIndex, dragHandleElement, lastMouse = {},
-        elemPosition = [0, 0], directionFunction, position = [0, 0], itemBackup = [0, 0, 0, 0], itemCopy,
-        resizeEventScrollType;
+      vm.gridsterItem = gridsterItem;
+      vm.gridster = gridster;
+      vm.lastMouse = {
+        pageX: 0,
+        pageY: 0
+      };
+      vm.itemBackup = [0, 0, 0, 0];
+      vm.resizeEventScrollType = {w: false, e: false, n: false, s: false};
 
-      function dragStart(e) {
+      function touchEvent(e) {
+        e.pageX = e.touches[0].pageX;
+        e.pageY = e.touches[0].pageY;
+      }
+
+      function getOffsetSum(originalElement) {
+        var top = 0;
+        var left = 0;
+        var element = originalElement;
+        while (element) {
+          top = top + parseFloat(element.offsetTop);
+          left = left + parseFloat(element.offsetLeft);
+          element = element.offsetParent;
+        }
+        return {top: Math.round(top), left: Math.round(left)};
+      }
+
+      function getScrollSum(originalElement) {
+        var top = 0;
+        var left = 0;
+        var element = originalElement;
+        while (element) {
+          top = top + parseFloat(element.scrollTop);
+          left = left + parseFloat(element.scrollLeft);
+          element = element.offsetParent;
+        }
+        return {scrollTop: Math.round(top), scrollLeft: Math.round(left)};
+      }
+
+      vm.dragStart = function (e) {
         switch (e.which) {
           case 1:
             // left mouse button
@@ -22,214 +77,285 @@
             // right or middle mouse button
             return;
         }
-        e.preventDefault();
+        if (vm.gridster.$options.resizable.start) {
+          vm.gridster.$options.resizable.start(vm.gridsterItem.item, vm.gridsterItem, e);
+        }
         e.stopPropagation();
-        if (angular.isUndefined(e.pageX) && e.touches) {
+        e.preventDefault();
+        if (e.pageX === undefined && e.touches) {
           touchEvent(e);
         }
-        $document[0].addEventListener('mousemove', dragMove);
-        $document[0].addEventListener('mouseup', dragStop);
-        $document[0].addEventListener('touchmove', dragMove);
-        $document[0].addEventListener('touchend', dragStop);
-        $document[0].addEventListener('touchcancel', dragStop);
-        $element.addClass('gridster-item-resizing');
-        lastMouse.pageX = e.pageX;
-        lastMouse.pageY = e.pageY;
-        elemPosition[0] = parseInt($element[0].style.left, 10);
-        elemPosition[1] = parseInt($element[0].style.top, 10);
-        elemPosition[2] = $element[0].offsetWidth;
-        elemPosition[3] = $element[0].offsetHeight;
-        itemCopy = angular.copy(scope.gridsterItem);
-        scope.gridster.movingItem = scope.gridsterItem;
-        scope.gridster.previewStyle();
+        vm.dragFunction = vm.dragMove.bind(this);
+        vm.dragStopFunction = vm.dragStop.bind(this);
+        document.addEventListener('mousemove', vm.dragFunction);
+        document.addEventListener('mouseup', vm.dragStopFunction);
+        document.addEventListener('touchmove', vm.dragFunction);
+        document.addEventListener('touchend', vm.dragStopFunction);
+        document.addEventListener('touchcancel', vm.dragStopFunction);
+        vm.gridsterItem.el.addClass('gridster-item-resizing');
+        vm.lastMouse.pageX = e.pageX;
+        vm.lastMouse.pageY = e.pageY;
+        vm.left = vm.gridsterItem.left;
+        vm.top = vm.gridsterItem.top;
+        vm.width = vm.gridsterItem.width;
+        vm.height = vm.gridsterItem.height;
+        vm.bottom = vm.gridsterItem.top + vm.gridsterItem.height;
+        vm.right = vm.gridsterItem.left + vm.gridsterItem.width;
+        vm.margin = vm.gridster.$options.margin;
+        vm.minHeight = vm.gridster.positionYToPixels(vm.gridsterItem.$item.minItemRows || vm.gridster.$options.minItemRows)
+          - vm.gridster.$options.margin;
+        vm.minWidth = vm.gridster.positionXToPixels(vm.gridsterItem.$item.minItemCols || vm.gridster.$options.minItemCols)
+          - vm.gridster.$options.margin;
+        vm.gridster.movingItem = vm.gridsterItem;
+        vm.gridster.previewStyle();
+        vm.push = new GridsterPush(vm.gridsterItem, vm.gridster);
+        vm.gridster.gridLines.updateGrid(true);
 
-        resizeEventScrollType = {};
-        if (this.classList.contains('handle-n')) {
-          resizeEventScrollType.n = true;
-          directionFunction = handleN;
-        } else if (this.classList.contains('handle-w')) {
-          resizeEventScrollType.w = true;
-          directionFunction = handleW;
-        } else if (this.classList.contains('handle-s')) {
-          resizeEventScrollType.s = true;
-          directionFunction = handleS;
-        } else if (this.classList.contains('handle-e')) {
-          resizeEventScrollType.e = true;
-          directionFunction = handleE;
-        } else if (this.classList.contains('handle-nw')) {
-          resizeEventScrollType.n = true;
-          resizeEventScrollType.w = true;
-          directionFunction = handleNW;
-        } else if (this.classList.contains('handle-ne')) {
-          resizeEventScrollType.n = true;
-          resizeEventScrollType.e = true;
-          directionFunction = handleNE;
-        } else if (this.classList.contains('handle-sw')) {
-          resizeEventScrollType.s = true;
-          resizeEventScrollType.w = true;
-          directionFunction = handleSW;
-        } else if (this.classList.contains('handle-se')) {
-          resizeEventScrollType.s = true;
-          resizeEventScrollType.e = true;
-          directionFunction = handleSE;
-        }
-      }
-
-      function dragMove(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        if (angular.isUndefined(e.pageX) && e.touches) {
-          touchEvent(e);
-        }
-
-        gridsterScroll.scroll(elemPosition, scope, e, lastMouse, directionFunction, true, resizeEventScrollType);
-
-        directionFunction(e);
-
-        lastMouse.pageX = e.pageX;
-        lastMouse.pageY = e.pageY;
-      }
-
-      function dragStop(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        gridsterScroll.cancelScroll();
-        $document[0].removeEventListener('mousemove', dragMove);
-        $document[0].removeEventListener('mouseup', dragStop);
-        $document[0].removeEventListener('touchmove', dragMove);
-        $document[0].removeEventListener('touchend', dragStop);
-        $document[0].removeEventListener('touchcancel', dragStop);
-        $element.removeClass('gridster-item-resizing');
-        scope.gridster.movingItem = null;
-        scope.gridster.previewStyle();
-        scope.gridsterItem.setSize(true);
-        scope.gridsterItem.checkItemChanges(scope.gridsterItem, itemCopy);
-        if (scope.gridster.resizable.stop) {
-          scope.gridster.resizable.stop(scope.gridsterItem, scope);
-        }
-      }
-
-      this.toggle = function (enable) {
-        if (enable && !enabled) {
-          enabled = !enabled;
-          if (!dragHandles.length) {
-            var handles = scope.gridster.resizable.handles;
-            for (handlesIndex = 0; handlesIndex < handles.length; handlesIndex++) {
-              dragHandleElement = angular.element('<div class="gridster-item-resizable-handler handle-' + handles[handlesIndex] + '"></div>');
-              $element.append(dragHandleElement);
-              dragHandleElement[0].addEventListener('mousedown', dragStart);
-              dragHandleElement[0].addEventListener('touchstart', dragStart);
-              dragHandles.push(dragHandleElement);
-            }
-          } else {
-            handlesIndex = dragHandles.length - 1;
-            for (; handlesIndex >= 0; handlesIndex--) {
-              dragHandles[handlesIndex].css('display', 'block');
-            }
-          }
-        } else if (!enable && enabled) {
-          enabled = !enabled;
-          handlesIndex = dragHandles.length - 1;
-          for (; handlesIndex >= 0; handlesIndex--) {
-            dragHandles[handlesIndex].css('display', 'none');
-          }
+        if (e.currentTarget.classList.contains('handle-n')) {
+          vm.resizeEventScrollType.n = true;
+          vm.directionFunction = vm.handleN.bind(this);
+        } else if (e.currentTarget.classList.contains('handle-w')) {
+          vm.resizeEventScrollType.w = true;
+          vm.directionFunction = vm.handleW.bind(this);
+        } else if (e.currentTarget.classList.contains('handle-s')) {
+          vm.resizeEventScrollType.s = true;
+          vm.directionFunction = vm.handleS.bind(this);
+        } else if (e.currentTarget.classList.contains('handle-e')) {
+          vm.resizeEventScrollType.e = true;
+          vm.directionFunction = vm.handleE.bind(this);
+        } else if (e.currentTarget.classList.contains('handle-nw')) {
+          vm.resizeEventScrollType.n = true;
+          vm.resizeEventScrollType.w = true;
+          vm.directionFunction = vm.handleNW.bind(this);
+        } else if (e.currentTarget.classList.contains('handle-ne')) {
+          vm.resizeEventScrollType.n = true;
+          vm.resizeEventScrollType.e = true;
+          vm.directionFunction = vm.handleNE.bind(this);
+        } else if (e.currentTarget.classList.contains('handle-sw')) {
+          vm.resizeEventScrollType.s = true;
+          vm.resizeEventScrollType.w = true;
+          vm.directionFunction = vm.handleSW.bind(this);
+        } else if (e.currentTarget.classList.contains('handle-se')) {
+          vm.resizeEventScrollType.s = true;
+          vm.resizeEventScrollType.e = true;
+          vm.directionFunction = vm.handleSE.bind(this);
         }
       };
 
-      function touchEvent(e) {
-        e.pageX = e.touches[0].pageX;
-        e.pageY = e.touches[0].pageY;
-      }
-
-      function handleN(e) {
-        elemPosition[1] += e.pageY - lastMouse.pageY;
-        elemPosition[3] += lastMouse.pageY - e.pageY;
-        $element.css({'top': elemPosition[1] + 'px', 'height': elemPosition[3] + 'px'});
-        position = scope.gridster.pixelsToPosition(elemPosition[0], elemPosition[1]);
-        if (scope.gridsterItem.y !== position[1]) {
-          itemBackup[1] = scope.gridsterItem.y;
-          itemBackup[3] = scope.gridsterItem.rows;
-          scope.gridsterItem.rows += scope.gridsterItem.y - position[1];
-          scope.gridsterItem.y = position[1];
-          if (scope.gridsterItem.y < 0 || scope.gridsterItem.rows < 1 || scope.gridster.checkCollision(scope.gridsterItem)) {
-            scope.gridsterItem.y = itemBackup[1];
-            scope.gridsterItem.rows = itemBackup[3];
-          } else {
-            scope.gridster.previewStyle();
-          }
+      vm.dragMove = function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        if (e.pageX === undefined && e.touches) {
+          touchEvent(e);
         }
-      }
+        vm.offsetTop = vm.gridster.el.scrollTop - vm.gridster.el.offsetTop;
+        vm.offsetLeft = vm.gridster.el.scrollLeft - vm.gridster.el.offsetLeft;
+        GridsterScroll(vm.gridsterItem, e, vm.lastMouse, vm.directionFunction, true, vm.resizeEventScrollType);
+        vm.directionFunction(e);
 
-      function handleW(e) {
-        elemPosition[0] += e.pageX - lastMouse.pageX;
-        elemPosition[2] += lastMouse.pageX - e.pageX;
-        $element.css({'left': elemPosition[0] + 'px', 'width': elemPosition[2] + 'px'});
-        position = scope.gridster.pixelsToPosition(elemPosition[0], elemPosition[1]);
-        if (scope.gridsterItem.x !== position[0]) {
-          itemBackup[0] = scope.gridsterItem.x;
-          itemBackup[2] = scope.gridsterItem.cols;
-          scope.gridsterItem.cols += scope.gridsterItem.x - position[0];
-          scope.gridsterItem.x = position[0];
-          if (scope.gridsterItem.x < 0 || scope.gridsterItem.cols < 1 || scope.gridster.checkCollision(scope.gridsterItem)) {
-            scope.gridsterItem.x = itemBackup[0];
-            scope.gridsterItem.cols = itemBackup[2];
+        vm.lastMouse.pageX = e.pageX;
+        vm.lastMouse.pageY = e.pageY;
+      };
+
+      vm.dragStop = function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        GridsterScroll.cancelScroll();
+        document.removeEventListener('mousemove', vm.dragFunction);
+        document.removeEventListener('mouseup', vm.dragStopFunction);
+        document.removeEventListener('touchmove', vm.dragFunction);
+        document.removeEventListener('touchend', vm.dragStopFunction);
+        document.removeEventListener('touchcancel', vm.dragStopFunction);
+        vm.gridsterItem.el.removeClass('gridster-item-resizing');
+        vm.gridster.movingItem = null;
+        vm.gridster.previewStyle();
+        vm.gridster.gridLines.updateGrid(false);
+        if (vm.gridster.$options.resizable.stop) {
+          var promise = vm.gridster.$options.resizable.stop(vm.gridsterItem.item, vm.gridsterItem, e);
+          if (promise && promise.then) {
+            promise.then(vm.makeResize.bind(this), vm.cancelResize.bind(this));
           } else {
-            scope.gridster.previewStyle();
+            vm.makeResize();
           }
+        } else {
+          vm.makeResize();
         }
-      }
+      };
 
-      function handleS(e) {
-        elemPosition[3] += e.pageY - lastMouse.pageY;
-        $element.css({'height': elemPosition[3] + 'px'});
-        position = scope.gridster.pixelsToPosition(elemPosition[0], elemPosition[1] + elemPosition[3]);
-        if ((scope.gridsterItem.y + scope.gridsterItem.rows) !== position[1]) {
-          itemBackup[3] = scope.gridsterItem.rows;
-          scope.gridsterItem.rows = position[1] - scope.gridsterItem.y;
-          if (scope.gridsterItem.rows < 1 || scope.gridster.checkCollision(scope.gridsterItem)) {
-            scope.gridsterItem.rows = itemBackup[3];
+      vm.cancelResize = function () {
+        vm.gridsterItem.$item.cols = vm.gridsterItem.item.cols;
+        vm.gridsterItem.$item.rows = vm.gridsterItem.item.rows;
+        vm.gridsterItem.$item.x = vm.gridsterItem.item.x;
+        vm.gridsterItem.$item.y = vm.gridsterItem.item.y;
+        vm.gridsterItem.setSize(true);
+        vm.push.restoreItems();
+        vm.push = undefined;
+      };
+
+      vm.makeResize = function () {
+        vm.gridsterItem.setSize(true);
+        vm.gridsterItem.checkItemChanges(vm.gridsterItem.$item, vm.gridsterItem.item);
+        vm.push.setPushedItems();
+        vm.push = undefined;
+      };
+
+      vm.getRealCords = function (e) {
+        var gridsterOffsets = getOffsetSum(vm.gridster.el);
+        var pageY = e.pageY - gridsterOffsets.top + getScrollSum(vm.gridster.el).scrollTop;
+        var pageX = e.pageX - gridsterOffsets.left + getScrollSum(vm.gridster.el).scrollLeft;
+        return {pageY: pageY, pageX: pageX};
+      };
+
+      vm.handleN = function (e) {
+        vm.top = vm.getRealCords(e).pageY - vm.margin;
+        vm.height = vm.bottom - vm.top;
+        if (vm.minHeight > vm.height) {
+          vm.height = vm.minHeight;
+          vm.top = vm.bottom - vm.minHeight;
+        }
+        vm.newPosition = vm.gridster.pixelsToPositionY(vm.top, Math.floor);
+        if (vm.gridsterItem.$item.y !== vm.newPosition) {
+          vm.itemBackup[1] = vm.gridsterItem.$item.y;
+          vm.itemBackup[3] = vm.gridsterItem.$item.rows;
+          vm.gridsterItem.$item.rows += vm.gridsterItem.$item.y - vm.newPosition;
+          vm.gridsterItem.$item.y = vm.newPosition;
+          vm.push.pushItems(vm.push.fromSouth);
+          if (vm.gridster.checkCollision(vm.gridsterItem.$item)) {
+            vm.gridsterItem.$item.y = vm.itemBackup[1];
+            vm.gridsterItem.$item.rows = vm.itemBackup[3];
+            vm.gridsterItem.el.css('top', vm.gridster.positionYToPixels(vm.gridsterItem.$item.y) + 'px');
+            vm.gridsterItem.el.css('height', vm.gridster.positionYToPixels(vm.gridsterItem.$item.rows)
+              - vm.gridster.$options.margin + 'px');
+            return;
           } else {
-            scope.gridster.previewStyle();
+            vm.gridster.previewStyle();
           }
+          vm.push.checkPushBack();
         }
-      }
+        vm.gridsterItem.el.css('top', vm.top + 'px');
+        vm.gridsterItem.el.css('height', vm.height + 'px');
+      };
 
-      function handleE(e) {
-        elemPosition[2] += e.pageX - lastMouse.pageX;
-        $element.css({'width': elemPosition[2] + 'px'});
-        position = scope.gridster.pixelsToPosition(elemPosition[0] + elemPosition[2], elemPosition[1]);
-        if ((scope.gridsterItem.x + scope.gridsterItem.cols) !== position[0]) {
-          itemBackup[2] = scope.gridsterItem.cols;
-          scope.gridsterItem.cols = position[0] - scope.gridsterItem.x;
-          if (scope.gridsterItem.cols < 1 || scope.gridster.checkCollision(scope.gridsterItem)) {
-            scope.gridsterItem.cols = itemBackup[2];
+      vm.handleW = function (e) {
+        vm.left = vm.getRealCords(e).pageX - vm.margin;
+        vm.width = vm.right - vm.left;
+        if (vm.minWidth > vm.width) {
+          vm.width = vm.minWidth;
+          vm.left = vm.right - vm.minWidth;
+        }
+        vm.newPosition = vm.gridster.pixelsToPositionX(vm.left, Math.floor);
+        if (vm.gridsterItem.$item.x !== vm.newPosition) {
+          vm.itemBackup[0] = vm.gridsterItem.$item.x;
+          vm.itemBackup[2] = vm.gridsterItem.$item.cols;
+          vm.gridsterItem.$item.cols += vm.gridsterItem.$item.x - vm.newPosition;
+          vm.gridsterItem.$item.x = vm.newPosition;
+          vm.push.pushItems(vm.push.fromEast);
+          if (vm.gridster.checkCollision(vm.gridsterItem.$item)) {
+            vm.gridsterItem.$item.x = vm.itemBackup[0];
+            vm.gridsterItem.$item.cols = vm.itemBackup[2];
+            vm.gridsterItem.el.css('left',
+              vm.gridster.positionXToPixels(vm.gridsterItem.$item.x) + 'px');
+            vm.gridsterItem.el.css('width', vm.gridster.positionXToPixels(vm.gridsterItem.$item.cols)
+              - vm.gridster.$options.margin + 'px');
+            return;
           } else {
-            scope.gridster.previewStyle();
+            vm.gridster.previewStyle();
           }
+          vm.push.checkPushBack();
         }
-      }
+        vm.gridsterItem.el.css('left', vm.left + 'px');
+        vm.gridsterItem.el.css('width', vm.width + 'px');
+      };
 
-      function handleNW(e) {
-        handleN(e);
-        handleW(e);
-      }
+      vm.handleS = function (e) {
+        vm.height = vm.getRealCords(e).pageY - vm.margin - vm.gridsterItem.top;
+        if (vm.minHeight > vm.height) {
+          vm.height = vm.minHeight;
+        }
+        vm.bottom = vm.top + vm.height;
+        vm.newPosition = vm.gridster.pixelsToPositionY(vm.bottom, Math.ceil);
+        if ((vm.gridsterItem.$item.y + vm.gridsterItem.$item.rows) !== vm.newPosition) {
+          vm.itemBackup[3] = vm.gridsterItem.$item.rows;
+          vm.gridsterItem.$item.rows = vm.newPosition - vm.gridsterItem.$item.y;
+          vm.push.pushItems(vm.push.fromNorth);
+          if (vm.gridster.checkCollision(vm.gridsterItem.$item)) {
+            vm.gridsterItem.$item.rows = vm.itemBackup[3];
+            vm.gridsterItem.el.css('height', vm.gridster.positionYToPixels(vm.gridsterItem.$item.rows)
+              - vm.gridster.$options.margin + 'px');
+            return;
+          } else {
+            vm.gridster.previewStyle();
+          }
+          vm.push.checkPushBack();
+        }
+        vm.gridsterItem.el.css('height', vm.height + 'px');
+      };
 
-      function handleNE(e) {
-        handleN(e);
-        handleE(e);
-      }
+      vm.handleE = function (e) {
+        vm.width = vm.getRealCords(e).pageX - vm.margin - vm.gridsterItem.left;
+        if (vm.minWidth > vm.width) {
+          vm.width = vm.minWidth;
+        }
+        vm.right = vm.left + vm.width;
+        vm.newPosition = vm.gridster.pixelsToPositionX(vm.right, Math.ceil);
+        if ((vm.gridsterItem.$item.x + vm.gridsterItem.$item.cols) !== vm.newPosition) {
+          vm.itemBackup[2] = vm.gridsterItem.$item.cols;
+          vm.gridsterItem.$item.cols = vm.newPosition - vm.gridsterItem.$item.x;
+          vm.push.pushItems(vm.push.fromWest);
+          if (vm.gridsterItem.$item.cols < 1 || vm.gridster.checkCollision(vm.gridsterItem.$item)) {
+            vm.gridsterItem.$item.cols = vm.itemBackup[2];
+            vm.gridsterItem.el.css('width', vm.gridster.positionXToPixels(vm.gridsterItem.$item.cols)
+              - vm.gridster.$options.margin + 'px');
+            return;
+          } else {
+            vm.gridster.previewStyle();
+          }
+          vm.push.checkPushBack();
+        }
+        vm.gridsterItem.el.css('width', vm.width + 'px');
+      };
 
-      function handleSW(e) {
-        handleS(e);
-        handleW(e);
-      }
+      vm.handleNW = function (e) {
+        vm.handleN(e);
+        vm.handleW(e);
+      };
 
-      function handleSE(e) {
-        handleS(e);
-        handleE(e);
-      }
-    }
+      vm.handleNE = function (e) {
+        vm.handleN(e);
+        vm.handleE(e);
+      };
 
-    return GridsterResizable;
+      vm.handleSW = function (e) {
+        vm.handleS(e);
+        vm.handleW(e);
+      };
+
+      vm.handleSE = function (e) {
+        vm.handleS(e);
+        vm.handleE(e);
+      };
+
+      vm.toggle = function (enabled) {
+        var handlers;
+        var enableDrag = !vm.gridster.mobile &&
+          (vm.gridsterItem.$item.resizeEnabled === undefined ? enabled : vm.gridsterItem.$item.resizeEnabled);
+        if (!vm.resizeEnabled && enableDrag) {
+          vm.resizeEnabled = !vm.resizeEnabled;
+          vm.dragStartFunction = vm.dragStart.bind(this);
+          handlers = vm.gridsterItem.nativeEl.querySelectorAll('.gridster-item-resizable-handler');
+          handlers.forEach(function (handler) {
+            handler.addEventListener('mousedown', vm.dragStartFunction);
+            handler.addEventListener('touchstart', vm.dragStartFunction);
+          });
+        } else if (vm.resizeEnabled && !enableDrag) {
+          vm.resizeEnabled = !vm.resizeEnabled;
+          handlers = vm.gridsterItem.nativeEl.querySelectorAll('.gridster-item-resizable-handler');
+          handlers.forEach(function (handler) {
+            handler.removeEventListener('mousedown', vm.dragStartFunction);
+            handler.removeEventListener('touchstart', vm.dragStartFunction);
+          });
+        }
+      };
+    };
   }
 })();

@@ -15,9 +15,8 @@
 
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <!-- build:css({.tmp/serve,src}) styles/vendor.css -->
-  <!-- bower:css -->
-  <!-- run `gulp inject` to automatically populate bower styles dependencies -->
-  <!-- endbower -->
+  <link rel="stylesheet" href="../node_modules/angular/angular-csp.css">
+  <link rel="stylesheet" href="../node_modules/angular-material/angular-material.css">
   <!-- endbuild -->
 
   <!-- build:css(src) gridster.css -->
@@ -36,9 +35,10 @@
 <main class="flex layout-column"></main>
 
 <!-- build:js(src) scripts/vendor.js -->
-<!-- bower:js -->
-<!-- run `gulp inject` to automatically populate bower script dependencies -->
-<!-- endbower -->
+<script src="../node_modules/angular/angular.js"></script>
+<script src="../node_modules/angular-animate/angular-animate.js"></script>
+<script src="../node_modules/angular-aria/angular-aria.js"></script>
+<script src="../node_modules/angular-material/angular-material.js"></script>
 <!-- endbuild -->
 
 <!-- build:js(src) gridster.js -->
