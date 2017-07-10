@@ -23,7 +23,7 @@ export class GridsterPush {
       fromEast: [this.tryWest, this.trySouth, this.tryNorth, this.tryEast],
       fromWest: [this.tryEast, this.trySouth, this.tryNorth, this.tryWest],
       fromNorth: [this.trySouth, this.tryEast, this.tryWest, this.tryNorth],
-      fromSouth: [this.tryNorth, this.tryEast, this.tryWest, this.trySouth],
+      fromSouth: [this.tryNorth, this.tryEast, this.tryWest, this.trySouth]
     };
     this.fromSouth = 'fromSouth';
     this.fromNorth = 'fromNorth';

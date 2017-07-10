@@ -22,7 +22,6 @@ export class GridsterComponent implements OnInit, OnDestroy {
   mobile: boolean;
   curWidth: number;
   curHeight: number;
-  scrollBarPresent: boolean;
   grid: Array<GridsterItemComponent>;
   columns: number;
   rows: number;
@@ -30,7 +29,6 @@ export class GridsterComponent implements OnInit, OnDestroy {
   curRowHeight: number;
   windowResize: Function;
   gridLines: GridsterGridComponent;
-  private cleanCallback: any;
 
   static checkCollisionTwoItems(item: GridsterItem, item2: GridsterItem): boolean {
     return item.x < item2.x + item2.cols
@@ -45,7 +43,6 @@ export class GridsterComponent implements OnInit, OnDestroy {
     this.mobile = false;
     this.curWidth = 0;
     this.curHeight = 0;
-    this.scrollBarPresent = false;
     this.grid = [];
     this.curColWidth = 0;
     this.curRowHeight = 0;
@@ -64,8 +61,8 @@ export class GridsterComponent implements OnInit, OnDestroy {
       resize: this.resize.bind(this),
       getNextPossiblePosition: this.getNextPossiblePosition.bind(this)
     };
-    this.columns = GridsterConfigService.minCols;
-    this.rows = GridsterConfigService.minRows;
+    this.columns = this.$options.minCols;
+    this.rows = this.$options.minRows;
     this.setGridSize();
     this.calculateLayoutDebounce = GridsterUtils.debounce(this.calculateLayout.bind(this), 5);
     this.calculateLayoutDebounce();
@@ -103,9 +100,6 @@ export class GridsterComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.windowResize();
-    if (typeof this.cleanCallback === 'function') {
-      this.cleanCallback();
-    }
   }
 
   onResize(): void {
