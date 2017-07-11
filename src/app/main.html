@@ -4,19 +4,31 @@
       <md-icon>add</md-icon>
       <md-tooltip>Add widget</md-tooltip>
     </md-button>
-    <md-select aria-label="Grid type" ng-model="main.options.gridType" ng-change="main.changedOptions()">
-      <md-option value="fit">Fit to screen</md-option>
-      <md-option value="scrollVertical">Scroll Vertical</md-option>
-      <md-option value="scrollHorizontal">Scroll Horizontal</md-option>
-    </md-select>
-    <md-checkbox ng-model="main.options.compactUp" ng-change="main.changedOptions()">
-      Compact Up
-    </md-checkbox>
-    <md-checkbox ng-model="main.options.compactLeft" ng-change="main.changedOptions()">
-      Compact Left
-    </md-checkbox>
+    <md-input-container>
+      <label>Grid type</label>
+      <md-select aria-label="Grid type" ng-model="main.options.gridType" ng-change="main.changedOptions()">
+        <md-option value="fit">Fit to screen</md-option>
+        <md-option value="scrollVertical">Scroll Vertical</md-option>
+        <md-option value="scrollHorizontal">Scroll Horizontal</md-option>
+        <md-option value="fixed">Fixed</md-option>
+      </md-select>
+    </md-input-container>
+    <md-input-container>
+      <label>Compact Type</label>
+      <md-select aria-label="Compact type" ng-model="main.options.compactType" ng-change="main.changedOptions()"
+                 placeholder="Compact Type">
+        <md-option value="none">None</md-option>
+        <md-option value="compactUp">Compact Up</md-option>
+        <md-option value="compactLeft">Compact Left</md-option>
+        <md-option value="compactLeft&Up">Compact Left & Up</md-option>
+        <md-option value="compactUp&Left">Compact Up & Left</md-option>
+      </md-select>
+    </md-input-container>
     <md-checkbox ng-model="main.options.swap" ng-change="main.changedOptions()">
       Swap Items
+    </md-checkbox>
+    <md-checkbox ng-model="main.options.pushItems" ng-change="main.changedOptions()">
+      Push Items
     </md-checkbox>
     <md-checkbox ng-model="main.options.draggable.enabled" ng-change="main.changedOptions()">
       Drag Items
@@ -30,6 +42,67 @@
                  ng-change="main.changedOptions()"></md-slider>
     </div>
     <md-checkbox ng-model="main.options.outerMargin" ng-change="main.changedOptions()">Outer Margin</md-checkbox>
+    <md-input-container>
+      <input ng-model="main.options.maxItemCols" type="number" placeholder="Max Item Cols"
+             ng-change="main.changedOptions()">
+    </md-input-container>
+    <md-input-container>
+      <input ng-model="main.options.minItemCols" type="number" placeholder="Min Item Cols"
+             ng-change="main.changedOptions()">
+    </md-input-container>
+    <md-input-container>
+      <input ng-model="main.options.maxItemRows" type="number" placeholder="Max Item Rows"
+             ng-change="main.changedOptions()">
+    </md-input-container>
+    <md-input-container>
+      <input ng-model="main.options.minItemRows" type="number" placeholder="Min Item Rows"
+             ng-change="main.changedOptions()">
+    </md-input-container>
+    <md-input-container>
+      <input ng-model="main.options.defaultItemRows" type="number" placeholder="Default Item Rows"
+             ng-change="main.changedOptions()">
+    </md-input-container>
+    <md-input-container>
+      <input ng-model="main.options.defaultItemCols" type="number" placeholder="Default Item Cols"
+             ng-change="main.changedOptions()">
+    </md-input-container>
+    <md-input-container>
+      <input ng-model="main.options.fixedColWidth" type="number" placeholder="Fixed Col Width"
+             ng-change="main.changedOptions()">
+    </md-input-container>
+    <md-input-container>
+      <input ng-model="main.options.fixedRowHeight" type="number" placeholder="Fixed Row Height"
+             ng-change="main.changedOptions()">
+    </md-input-container>
+    <md-checkbox ng-model="main.options.keepFixedHeightInMobile" ng-change="main.changedOptions()">
+      Keep Fixed Height In Mobile
+    </md-checkbox>
+    <md-input-container>
+      <input ng-model="main.options.minCols" type="number" placeholder="Min Grid Cols"
+             ng-change="main.changedOptions()">
+    </md-input-container>
+    <md-input-container>
+      <input ng-model="main.options.maxCols" type="number" placeholder="Max Grid Cols"
+             ng-change="main.changedOptions()">
+    </md-input-container>
+    <md-input-container>
+      <input ng-model="main.options.minRows" type="number" placeholder="Min Grid Rows"
+             ng-change="main.changedOptions()">
+    </md-input-container>
+    <md-input-container>
+      <input ng-model="main.options.maxRows" type="number" placeholder="Max Grid Rows"
+             ng-change="main.changedOptions()">
+    </md-input-container>
+    <md-input-container>
+      <label>Display grid lines</label>
+      <md-select aria-label="Display grid lines" ng-model="main.options.displayGrid"
+                 placeholder="Display grid lines"
+                 ng-change="main.changedOptions()">
+        <md-option value="always">Always</md-option>
+        <md-option value="onDrag&Resize">On Drag & Resize</md-option>
+        <md-option value="none">None</md-option>
+      </md-select>
+    </md-input-container>
   </div>
 </md-toolbar>
 

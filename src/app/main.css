@@ -28,7 +28,7 @@ md-toolbar .md-toolbar-tools {
 }
 
 md-toolbar input[type='number'] {
-  width: 50px;
+  width: 100px;
 }
 
 md-toolbar md-checkbox {
