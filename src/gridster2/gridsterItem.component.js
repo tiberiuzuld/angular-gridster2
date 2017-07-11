@@ -91,7 +91,7 @@
       $element.css('height', vm.height + 'px');
       $element.css('margin', vm.itemMargin + 'px');
       if (vm.width !== vm.itemWidth || vm.height !== vm.itemHeight) {
-        $scope.$broadcast('itemResize', vm.item);
+        $scope.$broadcast('gridster-item-resize', vm.item);
         if (vm.gridster.$options.itemResizeCallback) {
           vm.gridster.$options.itemResizeCallback(vm.item, this);
         }
@@ -103,7 +103,7 @@
     };
 
     vm.itemChanged = function () {
-      $scope.$broadcast('itemChange', vm.item);
+      $scope.$broadcast('gridster-item-change', vm.item);
       if (vm.gridster.$options.itemChangeCallback) {
         vm.gridster.$options.itemChangeCallback(vm.item, this);
       }

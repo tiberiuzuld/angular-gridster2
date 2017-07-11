@@ -1,18 +1,8 @@
 angular-gridster2
 ==============
-# Angularjs 1.x version
- 
-## Description
- 
-angular-gridster2 inspired by [angular-gridster](https://github.com/ManifestWebDesign/angular-gridster) 
- 
-#### [Demo](http://tiberiuzuld.github.io/angular-gridster2/angularjs)
- 
-#### Install with Bower
-```bash
-  bower install angular-gridster2@1.x --save
-```
-#### Install with npm
+# Angularjs 1.x version [Demo](http://tiberiuzuld.github.io/angular-gridster2/angularjs)
+
+#### Install
 ```bash
   npm install angular-gridster2@1.x --save
 ```
@@ -20,10 +10,8 @@ angular-gridster2 inspired by [angular-gridster](https://github.com/ManifestWebD
 Then import the following in your HTML:
 
 ```html
-  <link rel="stylesheet" href="bower_components/angular-gridster2/dist/gridster.css"/>
-  <script src="bower_components/lodash/lodash.js"></script>
-  <script src="bower_components/javascript-detect-element-resize/detect-element-resize.js"></script>
-  <script src="bower_components/angular-gridster2/dist/gridster.js"></script>
+  <link rel="stylesheet" href="node_modules/angular-gridster2/dist/gridster.css"/>
+  <script src="node_modules/angular-gridster2/dist/gridster.js"></script>
 ```
 
 Include 'angular-gridster2' as a dependency of your module like this:
@@ -36,9 +24,9 @@ Include 'angular-gridster2' as a dependency of your module like this:
 Default usage:
 
 ```html
-<div gridster="vm.options">
-  <div gridster-item="item" ng-repeat="item in vm.dashboard"></div>
-</div>
+<gridster options="vm.options">
+  <gridster-item item="item" ng-repeat="item in vm.dashboard"></gridster-item>
+</gridster>
 ```
 Expects a scope setup(options object is optional):
 ```JavaScript
@@ -74,70 +62,114 @@ vm.dashboard = [
 ];
 ```
 
-Optional option ```initCallback``` for items after initialization.   
-All item options are optional. If any property is missing gridster will use the default options for rows, cols and   
-for x,y will auto position item where it fits
+##### Default Grid Options:
+```typescript
+import {GridsterConfig} from './gridsterConfig.interface';
 
-## Configuration
-
-#### Via Scope
-Simply pass your desired options to the gridster directive
-
-```JavaScript
-$scope.options = {
-     gridType: 'fit', // 'fit' will fit the items in the container without scroll;
-     // 'scrollVertical' will fit on width and height of the items will be the same as the width
-     // 'scrollHorizontal' will fit on height and width of the items will be the same as the height
-     compactUp: false, // compact items up if there is room
-     compactLeft: false, // compact items left if there is room
-     mobileBreakpoint: 640, // if the screen is not wider that this, remove the grid layout and stack the items
-     minCols: 1,// minimum amount of columns in the grid
-     maxCols: 100,// maximum amount of columns in the grid
-     minRows: 1,// minimum amount of rows in the grid
-     maxRows: 100,// maximum amount of rows in the grid
-     defaultItemCols: 1, // default width of an item in columns
-     defaultItemRows: 1, // default height of an item in rows
-     minItemCols: 1, // min item number of columns
-     minItemRows: 1, // min item number of rows
-     margin: 10, //margin between grid items
-     outerMargin: true, //if margins will apply to the sides of the container
-     scrollSensitivity: 10, //margin of the dashboard where to start scrolling
-     scrollSpeed: 20, //how much to scroll each mouse move when in the scrollSensitivity zone
-     itemChangeCallback: undefined, //callback to call for each item when is changes x, y, rows, cols. Arguments:gridsterItem, scope
-     initCallback: undefined, //callback to call after first initialization
-     draggable: {
-       enabled: false, // enable/disable draggable items
-       stop: undefined // callback when dragging an item stops. Arguments: gridsterItem, scope
-     },
-     resizable: {
-       enabled: false, // enable/disable resizable items
-       handles: ['s', 'e', 'n', 'w', 'se', 'ne', 'sw', 'nw'], // resizable edges of an item
-       stop: undefined // callback when resizing an item stops. Arguments: gridsterItem, scope
-     },
-     swap: true
-   };
+export const GridsterConfigService: GridsterConfig = {
+  gridType: 'fit', // 'fit' will fit the items in the container without scroll;
+  // 'scrollVertical' will fit on width and height of the items will be the same as the width
+  // 'scrollHorizontal' will fit on height and width of the items will be the same as the height
+  // 'fixed' will set the rows and columns dimensions based on fixedColWidth and fixedRowHeight options
+  fixedColWidth: 250, // fixed col width for gridType: 'fixed'
+  fixedRowHeight: 250, // fixed row height for gridType: 'fixed'
+  keepFixedHeightInMobile: false, // keep the height from fixed gridType in mobile layout
+  compactType: 'none', // compact items: 'none' | 'compactUp' | 'compactLeft' | 'compactUp&Left' | 'compactLeft&Up'
+  mobileBreakpoint: 640, // if the screen is not wider that this, remove the grid layout and stack the items
+  minCols: 1, // minimum amount of columns in the grid
+  maxCols: 100, // maximum amount of columns in the grid
+  minRows: 1, // minimum amount of rows in the grid
+  maxRows: 100, // maximum amount of rows in the grid
+  defaultItemCols: 1, // default width of an item in columns
+  defaultItemRows: 1, // default height of an item in rows
+  maxItemCols: 50, // max item number of cols
+  maxItemRows: 50, // max item number of rows
+  minItemCols: 1, // min item number of columns
+  minItemRows: 1, // min item number of rows
+  margin: 10,  // margin between grid items
+  outerMargin: true,  // if margins will apply to the sides of the container
+  scrollSensitivity: 10,  // margin of the dashboard where to start scrolling
+  scrollSpeed: 20,  // how much to scroll each mouse move when in the scrollSensitivity zone
+  initCallback: undefined, // callback to call after grid has initialized
+  itemChangeCallback: undefined,  // callback to call for each item when is changes x, y, rows, cols. Arguments: gridsterItem
+  itemResizeCallback: undefined,  // callback to call for each item when width/height changes. Arguments: gridsterItem
+  draggable: {
+    enabled: false, // enable/disable draggable items
+    ignoreContentClass: 'gridster-item-content', // default content class to ignore the drag event from
+    ignoreContent: false, // if true drag will start only from elements from `dragHandleClass`
+    dragHandleClass: 'drag-handler', // drag event only from this class. If `ignoreContent` is true.
+    stop: undefined, // callback when dragging an item stops.  Accepts Promise return to cancel/approve drag.
+    start: undefined // callback when dragging an item starts.
+    // Arguments: item, gridsterItem, event
+  },
+  resizable: {
+    enabled: false, // enable/disable resizable items
+    handles: {
+      s: true,
+      e: true,
+      n: true,
+      w: true,
+      se: true,
+      ne: true,
+      sw: true,
+      nw: true
+    }, // resizable edges of an item
+    stop: undefined, // callback when resizing an item stops. Accepts Promise return to cancel/approve resize.
+    start: undefined // callback when resizing an item starts.
+    // Arguments: item, gridsterItem, event
+  },
+  swap: true, // allow items to switch position if drop on top of another
+  pushItems: false, // push items when resizing and dragging
+  displayGrid: 'onDrag&Resize' // display background grid of rows and columns
+};
 ```
+
+##### Gridster options api
+```typescript
+    this.options.api.resize(); // call if size of container changes. Grid will auto resize on window resize.
+    this.options.api.optionsChanged(); // call on change of options after initialization
+    this.options.api.getNextPossiblePosition(item: GridsterItem); // call to get a viable position for item. Returns true if found
+```
+
+##### Gridster item options:
+```typescript
+export interface GridsterItem {
+  x?: number; // x position if missing will auto position
+  y?: number; // y position if missing will auto position
+  rows?: number; // number of rows if missing will use grid option defaultItemRows
+  cols?: number; // number of columns if missing will use grid option defaultItemCols
+  initCallback?: Function; // initialization callback
+  dragEnabled?: boolean; // override grid option draggable.enabled
+  resizeEnabled?: boolean; // override grid option resizable.enabled
+  maxItemRows?: number; // override grid option maxItemRows
+  minItemRows?: number; // override grid option minItemRows
+  maxItemCols?: number; // override grid option maxItemCols
+  minItemCols?: number; // override grid option minItemCols
+}
+```
+
+##### Gridster Item Events 
+
+  broadcasts ```'gridster-item-change'``` // triggered when a item cols,rows, x ,y changed
+  
+  broadcasts ```'gridster-item-resize'``` // triggered when a item width/height changed
+
+Note: When a item changes cols/rows both events get triggered
 
 #### Via Constant
 You can also override the default configuration by modifying the ```gridsterConfig``` constant
 
 ```js
-angular.module('app').run(['gridsterConfig', function(gridsterConfig) {
-	 gridsterConfig.gridType = 'fit';
+angular.module('app').run(['gridsterConfig', function(GridsterConfig) {
+	 GridsterConfig.gridType = 'fit';
 }]);
 ```
-
-### Gridster Item Events
-
-broadcasts ```'gridster-item-change'``` if item changes x ,y , cols, rows  
-broadcasts ```'gridster-item-resize'``` if item changes pixels height or width
 
 ### Contributing
 
 #### Install dependencies
 ```bash
  npm install
- bower install
 ```
 
 Please respect the formatting in .editorconfig and .eslintrc
@@ -146,6 +178,8 @@ Please respect the formatting in .editorconfig and .eslintrc
 ```bash
  gulp serve
 ```
+
+##### angular-gridster2 inspired by [angular-gridster](https://github.com/ManifestWebDesign/angular-gridster) 
 
 ### License
  The MIT License
