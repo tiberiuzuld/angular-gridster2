@@ -1,37 +1,74 @@
-[gridster] {
+gridster {
   position: relative;
+  display: flex;
   overflow: auto;
-  height: 100%;
-  width: 100%;
+  flex: 1 auto;
   background: grey;
-  -webkit-user-select: none;
+  width: 100%;
+  height: 100%;
 }
 
-[gridster].fit {
+gridster.fit {
   overflow-x: hidden;
   overflow-y: hidden;
 }
 
-[gridster].scrollVertical {
+gridster.scrollVertical {
   overflow-x: hidden;
   overflow-y: auto;
 }
 
-[gridster].scrollHorizontal {
+gridster.scrollHorizontal {
   overflow-x: auto;
   overflow-y: hidden;
 }
 
-[gridster].mobile {
-  overflow-x: hidden;
-  overflow-y: auto;
+gridster.fixed {
+  overflow: auto;
 }
 
-[gridster].mobile [gridster-item] {
+gridster.mobile {
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: block;
+}
+
+gridster.mobile gridster-item {
   position: relative;
 }
 
-[gridster-item] {
+gridster-grid {
+  display: none;
+  position: absolute;
+}
+
+gridster-grid .rows, gridster-grid .columns {
+  position: absolute;
+}
+
+gridster-grid .columns {
+  display: flex;
+  flex-direction: row;
+}
+
+gridster-grid .column, gridster-grid .row {
+  transition: .3s;
+  box-sizing: border-box;
+}
+
+gridster-grid .column {
+  height: 100%;
+  border-left: 1px solid white;
+  border-right: 1px solid white;
+}
+
+gridster-grid .row {
+  width: 100%;
+  border-top: 1px solid white;
+  border-bottom: 1px solid white;
+}
+
+gridster-item {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -45,27 +82,22 @@
   background: white;
 }
 
-.gridster-preview-holder {
-  background: rgba(0, 0, 0, 0.15);
-  position: absolute;
-}
-
-[gridster-item].gridster-item-moving {
+gridster-item.gridster-item-moving {
   cursor: move;
 }
 
-[gridster-item].gridster-item-resizing, [gridster-item].gridster-item-moving {
+gridster-item.gridster-item-resizing, gridster-item.gridster-item-moving {
   transition: 0s;
   z-index: 2;
   box-shadow: 0 0 5px 5px rgba(0, 0, 0, .2), 0 6px 10px 0 rgba(0, 0, 0, .14), 0 1px 18px 0 rgba(0, 0, 0, .12);
 }
 
-[gridster-item] .gridster-item-resizable-handler {
+.gridster-item-resizable-handler {
   position: absolute;
   z-index: 2;
 }
 
-[gridster-item] .gridster-item-resizable-handler.handle-n {
+.gridster-item-resizable-handler.handle-n {
   cursor: n-resize;
   height: 10px;
   right: 0;
@@ -73,7 +105,7 @@
   left: 0;
 }
 
-[gridster-item] .gridster-item-resizable-handler.handle-e {
+.gridster-item-resizable-handler.handle-e {
   cursor: e-resize;
   width: 10px;
   bottom: 0;
@@ -81,7 +113,7 @@
   top: 0;
 }
 
-[gridster-item] .gridster-item-resizable-handler.handle-s {
+.gridster-item-resizable-handler.handle-s {
   cursor: s-resize;
   height: 10px;
   right: 0;
@@ -89,7 +121,7 @@
   left: 0;
 }
 
-[gridster-item] .gridster-item-resizable-handler.handle-w {
+.gridster-item-resizable-handler.handle-w {
   cursor: w-resize;
   width: 10px;
   left: 0;
@@ -97,7 +129,7 @@
   bottom: 0;
 }
 
-[gridster-item] .gridster-item-resizable-handler.handle-ne {
+.gridster-item-resizable-handler.handle-ne {
   cursor: ne-resize;
   width: 10px;
   height: 10px;
@@ -105,7 +137,7 @@
   top: 0;
 }
 
-[gridster-item] .gridster-item-resizable-handler.handle-nw {
+.gridster-item-resizable-handler.handle-nw {
   cursor: nw-resize;
   width: 10px;
   height: 10px;
@@ -113,7 +145,7 @@
   top: 0;
 }
 
-[gridster-item] .gridster-item-resizable-handler.handle-se {
+.gridster-item-resizable-handler.handle-se {
   cursor: se-resize;
   width: 0;
   height: 0;
@@ -124,7 +156,7 @@
   border-color: transparent;
 }
 
-[gridster-item] .gridster-item-resizable-handler.handle-sw {
+.gridster-item-resizable-handler.handle-sw {
   cursor: sw-resize;
   width: 10px;
   height: 10px;
@@ -132,6 +164,18 @@
   bottom: 0;
 }
 
-[gridster-item]:hover .gridster-item-resizable-handler.handle-se {
+gridster-item .gridster-item-content {
+  -webkit-user-select: auto;
+  -moz-user-select: auto;
+  -ms-user-select: auto;
+  user-select: auto;
+}
+
+gridster-item:hover .gridster-item-resizable-handler.handle-se {
   border-color: transparent transparent #ccc
+}
+
+gridster-preview {
+  background: rgba(0, 0, 0, 0.15);
+  position: absolute;
 }
