@@ -13,12 +13,6 @@
       vm.pushedItemsPath = [];
       vm.gridsterItem = gridsterItem;
       vm.gridster = gridster;
-      vm.tryPattern = {
-        fromEast: [vm.tryWest, vm.trySouth, vm.tryNorth, vm.tryEast],
-        fromWest: [vm.tryEast, vm.trySouth, vm.tryNorth, vm.tryWest],
-        fromNorth: [vm.trySouth, vm.tryEast, vm.tryWest, vm.tryNorth],
-        fromSouth: [vm.tryNorth, vm.tryEast, vm.tryWest, vm.trySouth]
-      };
       vm.fromSouth = 'fromSouth';
       vm.fromNorth = 'fromNorth';
       vm.fromEast = 'fromEast';
@@ -129,6 +123,13 @@
         } else {
           gridsterItemCollide.$item.x = backUpX;
         }
+      };
+
+      vm.tryPattern = {
+        fromEast: [vm.tryWest, vm.trySouth, vm.tryNorth, vm.tryEast],
+        fromWest: [vm.tryEast, vm.trySouth, vm.tryNorth, vm.tryWest],
+        fromNorth: [vm.trySouth, vm.tryEast, vm.tryWest, vm.tryNorth],
+        fromSouth: [vm.tryNorth, vm.tryEast, vm.tryWest, vm.trySouth]
       };
 
       vm.addToPushed = function (gridsterItem) {
