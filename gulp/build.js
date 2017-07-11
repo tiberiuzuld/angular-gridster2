@@ -10,9 +10,9 @@ var $ = require('gulp-load-plugins')({
 
 gulp.task('partials', function () {
   return gulp.src([
-      path.join(conf.paths.src, '/app/**/*.html'),
-      path.join(conf.paths.tmp, '/serve/app/**/*.html')
-    ])
+    path.join(conf.paths.src, '/app/**/*.html'),
+    path.join(conf.paths.tmp, '/serve/app/**/*.html')
+  ])
     .pipe($.minifyHtml({
       removeComments: true,
       removeAttributeQuotes: true,
@@ -26,10 +26,33 @@ gulp.task('partials', function () {
     .pipe(gulp.dest(conf.paths.tmp + '/partials/'));
 });
 
-gulp.task('html', ['inject', 'partials'], function () {
+gulp.task('partials-directive', function () {
+  return gulp.src([
+    path.join(conf.paths.src, '/gridster2/**/*.html')
+  ])
+    .pipe($.minifyHtml({
+      removeComments: true,
+      removeAttributeQuotes: true,
+      collapseBooleanAttributes: true,
+      collapseWhitespace: true
+    }))
+    .pipe($.angularTemplatecache('templateCacheHtmlDirective.js', {
+      module: 'angular-gridster2',
+      root: 'gridster2'
+    }))
+    .pipe(gulp.dest(conf.paths.tmp + '/partials/'));
+});
+
+gulp.task('html', ['inject', 'partials', 'partials-directive'], function () {
   var partialsInjectFile = gulp.src(path.join(conf.paths.tmp, '/partials/templateCacheHtml.js'), {read: false});
   var partialsInjectOptions = {
     starttag: '<!-- inject:partials -->',
+    ignorePath: path.join(conf.paths.tmp, '/partials'),
+    addRootSlash: false
+  };
+  var partialsDirectiveInjectFile = gulp.src(path.join(conf.paths.tmp, '/partials/templateCacheHtmlDirective.js'), {read: false});
+  var partialsDirectiveInjectOptions = {
+    starttag: '<!-- inject:partials-directive -->',
     ignorePath: path.join(conf.paths.tmp, '/partials'),
     addRootSlash: false
   };
@@ -40,6 +63,7 @@ gulp.task('html', ['inject', 'partials'], function () {
 
   return gulp.src(path.join(conf.paths.tmp, '/serve/*.html'))
     .pipe($.inject(partialsInjectFile, partialsInjectOptions))
+    .pipe($.inject(partialsDirectiveInjectFile, partialsDirectiveInjectOptions))
     .pipe($.useref())
     .pipe(jsFilter)
     //.pipe($.sourcemaps.init())
@@ -73,9 +97,9 @@ gulp.task('other', function () {
   });
 
   return gulp.src([
-      path.join(conf.paths.src, '/**/*'),
-      path.join('!' + conf.paths.src, '/**/*.{html,css,js}')
-    ])
+    path.join(conf.paths.src, '/**/*'),
+    path.join('!' + conf.paths.src, '/**/*.{html,css,js}')
+  ])
     .pipe(fileFilter)
     .pipe(gulp.dest(path.join(conf.paths.dist, '/')));
 });
