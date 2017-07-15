@@ -57,7 +57,7 @@ export class GridsterSwap {
 
   checkSwap(pushedBy: GridsterItemComponent): void {
     const gridsterItemCollision: any = this.gridster.checkCollision(pushedBy.$item);
-    if (gridsterItemCollision && gridsterItemCollision !== true) {
+    if (gridsterItemCollision && gridsterItemCollision !== true && gridsterItemCollision.canBeDragged()) {
       const gridsterItemCollide: GridsterItemComponent = gridsterItemCollision;
       gridsterItemCollide.$item.x = pushedBy.item.x;
       gridsterItemCollide.$item.y = pushedBy.item.y;

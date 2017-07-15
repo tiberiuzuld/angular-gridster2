@@ -345,8 +345,7 @@ export class GridsterResizable {
     this.handleE(e);
   }
 
-  toggle(enabled): void {
-    this.resizeEnabled = !this.gridster.mobile &&
-      (this.gridsterItem.$item.resizeEnabled === undefined ? enabled : this.gridsterItem.$item.resizeEnabled);
+  toggle(): void {
+    this.resizeEnabled = this.gridsterItem.canBeResized();
   }
 }

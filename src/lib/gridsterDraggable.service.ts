@@ -228,9 +228,8 @@ export class GridsterDraggable {
     }
   }
 
-  toggle(enable: boolean) {
-    const enableDrag = !this.gridster.mobile &&
-      (this.gridsterItem.$item.dragEnabled === undefined ? enable : this.gridsterItem.$item.dragEnabled);
+  toggle() {
+    const enableDrag = this.gridsterItem.canBeDragged();
     if (!this.enabled && enableDrag) {
       this.enabled = !this.enabled;
       this.dragStartFunction = this.dragStart.bind(this);

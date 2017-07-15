@@ -134,4 +134,14 @@ export class GridsterItemComponent implements OnInit, OnDestroy {
     }
   }
 
+  canBeDragged(): boolean {
+    return !this.gridster.mobile &&
+      (this.$item.dragEnabled === undefined ? this.gridster.$options.draggable.enabled : this.$item.dragEnabled);
+  }
+
+  canBeResized(): boolean {
+    return !this.gridster.mobile &&
+      (this.$item.resizeEnabled === undefined ? this.gridster.$options.resizable.enabled : this.$item.resizeEnabled);
+  }
+
 }

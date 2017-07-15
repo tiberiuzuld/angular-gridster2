@@ -66,7 +66,7 @@ export class GridsterPush {
   private push(gridsterItem: GridsterItemComponent, direction: string, pushedBy: GridsterItemComponent): boolean {
     const gridsterItemCollision: any = this.gridster.checkCollision(gridsterItem.$item, pushedBy.$item);
     if (gridsterItemCollision && gridsterItemCollision !== true &&
-      gridsterItemCollision !== this.gridsterItem) {
+      gridsterItemCollision !== this.gridsterItem && gridsterItemCollision.canBeDragged()) {
       const gridsterItemCollide: GridsterItemComponent = gridsterItemCollision;
       if (this.tryPattern[direction][0].call(this, gridsterItemCollide, gridsterItem, direction, pushedBy)) {
         return true;

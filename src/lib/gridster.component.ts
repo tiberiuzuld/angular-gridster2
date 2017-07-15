@@ -220,8 +220,8 @@ export class GridsterComponent implements OnInit, OnDestroy {
     for (; widgetsIndex >= 0; widgetsIndex--) {
       widget = this.grid[widgetsIndex];
       widget.setSize(false);
-      widget.drag.toggle(this.$options.draggable.enabled);
-      widget.resize.toggle(this.$options.resizable.enabled);
+      widget.drag.toggle();
+      widget.resize.toggle();
     }
 
     setTimeout(this.resize.bind(this), 100);
