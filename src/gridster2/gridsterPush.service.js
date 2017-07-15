@@ -53,7 +53,7 @@
       vm.push = function (gridsterItem, direction, pushedBy) {
         var gridsterItemCollision = vm.gridster.checkCollision(gridsterItem.$item, pushedBy.$item);
         if (gridsterItemCollision && gridsterItemCollision !== true &&
-          gridsterItemCollision !== vm.gridsterItem) {
+          gridsterItemCollision !== vm.gridsterItem && gridsterItemCollision.canBeDragged()) {
           var gridsterItemCollide = gridsterItemCollision;
           if (vm.tryPattern[direction][0].call(this, gridsterItemCollide, gridsterItem, direction, pushedBy)) {
             return true;

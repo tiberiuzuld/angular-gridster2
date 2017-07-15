@@ -48,7 +48,7 @@
     };
 
     vm.$onInit = function () {
-      vm.$options = GridsterUtils.merge(vm.$options, vm.options, vm.$options);
+      vm.setOptions();
       vm.options.api = {
         optionsChanged: vm.optionsChanged.bind(this),
         resize: vm.resize.bind(this),
@@ -59,8 +59,6 @@
       vm.setGridSize();
       vm.calculateLayoutDebounce = GridsterUtils.debounce(vm.calculateLayout.bind(this), 5);
       vm.calculateLayoutDebounce();
-      vm.onResizeFunction = vm.onResize.bind(this);
-      window.addEventListener('resize', vm.onResizeFunction);
       if (vm.options.initCallback) {
         vm.options.initCallback();
       }
@@ -81,8 +79,18 @@
       }
     };
 
-    vm.optionsChanged = function optionsChanged() {
+    vm.setOptions = function setOptions() {
       vm.$options = GridsterUtils.merge(vm.$options, vm.options, vm.$options);
+      if (!vm.$options.disableWindowResize) {
+        vm.onResizeFunction = vm.onResize.bind(this);
+        window.addEventListener('resize', vm.onResizeFunction);
+      } else if (vm.onResizeFunction) {
+        window.removeEventListener('resize', vm.onResizeFunction);
+      }
+    };
+
+    vm.optionsChanged = function optionsChanged() {
+      vm.setOptions();
       var widgetsIndex = vm.grid.length - 1, widget;
       for (; widgetsIndex >= 0; widgetsIndex--) {
         widget = vm.grid[widgetsIndex];
@@ -92,7 +100,9 @@
     };
 
     vm.$onDestroy = function () {
-      window.removeEventListener('resize', vm.onResizeFunction);
+      if (vm.onResizeFunction) {
+        window.removeEventListener('resize', vm.onResizeFunction);
+      }
     };
 
     vm.onResize = function onResize() {
@@ -184,6 +194,18 @@
         removeClass1 = 'fit';
         removeClass2 = 'scrollVertical';
         removeClass3 = 'scrollHorizontal';
+      } else if (vm.$options.gridType === 'verticalFixed') {
+        vm.curRowHeight = vm.$options.fixedRowHeight;
+        addClass = 'scrollVertical';
+        removeClass1 = 'fit';
+        removeClass2 = 'scrollHorizontal';
+        removeClass3 = 'fixed';
+      } else if (vm.$options.gridType === 'horizontalFixed') {
+        vm.curColWidth = vm.$options.fixedColWidth;
+        addClass = 'scrollHorizontal';
+        removeClass1 = 'fit';
+        removeClass2 = 'scrollVertical';
+        removeClass3 = 'fixed';
       }
       $element.addClass(addClass);
       $element.removeClass(removeClass1);
@@ -205,8 +227,8 @@
       for (; widgetsIndex >= 0; widgetsIndex--) {
         widget = vm.grid[widgetsIndex];
         widget.setSize(false);
-        widget.drag.toggle(vm.$options.draggable.enabled);
-        widget.resize.toggle(vm.$options.resizable.enabled);
+        widget.drag.toggle();
+        widget.resize.toggle();
       }
       $scope.$applyAsync();
       setTimeout(vm.resize.bind(this), 100);

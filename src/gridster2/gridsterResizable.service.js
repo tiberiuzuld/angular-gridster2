@@ -335,10 +335,9 @@
         vm.handleE(e);
       };
 
-      vm.toggle = function (enabled) {
+      vm.toggle = function () {
         var handlers;
-        var enableDrag = !vm.gridster.mobile &&
-          (vm.gridsterItem.$item.resizeEnabled === undefined ? enabled : vm.gridsterItem.$item.resizeEnabled);
+        var enableDrag = vm.gridsterItem.canBeResized();
         if (!vm.resizeEnabled && enableDrag) {
           vm.resizeEnabled = !vm.resizeEnabled;
           vm.dragStartFunction = vm.dragStart.bind(this);

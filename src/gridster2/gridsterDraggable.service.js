@@ -215,9 +215,8 @@
         }
       };
 
-      vm.toggle = function (enable) {
-        var enableDrag = !vm.gridster.mobile &&
-          (vm.gridsterItem.$item.dragEnabled === undefined ? enable : vm.gridsterItem.$item.dragEnabled);
+      vm.toggle = function () {
+        var enableDrag = vm.gridsterItem.canBeDragged();
         if (!vm.enabled && enableDrag) {
           vm.enabled = !vm.enabled;
           vm.dragStartFunction = vm.dragStart.bind(this);

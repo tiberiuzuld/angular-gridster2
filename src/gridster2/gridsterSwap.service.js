@@ -53,7 +53,7 @@
 
         vm.checkSwap = function (pushedBy) {
           var gridsterItemCollision = vm.gridster.checkCollision(pushedBy.$item);
-          if (gridsterItemCollision && gridsterItemCollision !== true) {
+          if (gridsterItemCollision && gridsterItemCollision !== true && gridsterItemCollision.canBeDragged()) {
             var gridsterItemCollide = gridsterItemCollision;
             gridsterItemCollide.$item.x = pushedBy.item.x;
             gridsterItemCollide.$item.y = pushedBy.item.y;

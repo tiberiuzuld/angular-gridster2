@@ -127,5 +127,15 @@
         vm.itemChanged();
       }
     };
+
+    vm.canBeDragged = function canBeDragged() {
+      return !vm.gridster.mobile &&
+        (vm.$item.dragEnabled === undefined ? vm.gridster.$options.draggable.enabled : vm.$item.dragEnabled);
+    };
+
+    vm.canBeResized = function canBeResized() {
+      return !vm.gridster.mobile &&
+        (vm.$item.resizeEnabled === undefined ? vm.gridster.$options.resizable.enabled : vm.$item.resizeEnabled);
+    }
   }
 })();
