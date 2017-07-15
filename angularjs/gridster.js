@@ -105,7 +105,7 @@
 
         vm.checkSwap = function (pushedBy) {
           var gridsterItemCollision = vm.gridster.checkCollision(pushedBy.$item);
-          if (gridsterItemCollision && gridsterItemCollision !== true) {
+          if (gridsterItemCollision && gridsterItemCollision !== true && gridsterItemCollision.canBeDragged()) {
             var gridsterItemCollide = gridsterItemCollision;
             gridsterItemCollide.$item.x = pushedBy.item.x;
             gridsterItemCollide.$item.y = pushedBy.item.y;
@@ -608,10 +608,9 @@
         vm.handleE(e);
       };
 
-      vm.toggle = function (enabled) {
+      vm.toggle = function () {
         var handlers;
-        var enableDrag = !vm.gridster.mobile &&
-          (vm.gridsterItem.$item.resizeEnabled === undefined ? enabled : vm.gridsterItem.$item.resizeEnabled);
+        var enableDrag = vm.gridsterItem.canBeResized();
         if (!vm.resizeEnabled && enableDrag) {
           vm.resizeEnabled = !vm.resizeEnabled;
           vm.dragStartFunction = vm.dragStart.bind(this);
@@ -688,7 +687,7 @@
       vm.push = function (gridsterItem, direction, pushedBy) {
         var gridsterItemCollision = vm.gridster.checkCollision(gridsterItem.$item, pushedBy.$item);
         if (gridsterItemCollision && gridsterItemCollision !== true &&
-          gridsterItemCollision !== vm.gridsterItem) {
+          gridsterItemCollision !== vm.gridsterItem && gridsterItemCollision.canBeDragged()) {
           var gridsterItemCollide = gridsterItemCollision;
           if (vm.tryPattern[direction][0].call(this, gridsterItemCollide, gridsterItem, direction, pushedBy)) {
             return true;
@@ -989,6 +988,16 @@
         vm.itemChanged();
       }
     };
+
+    vm.canBeDragged = function canBeDragged() {
+      return !vm.gridster.mobile &&
+        (vm.$item.dragEnabled === undefined ? vm.gridster.$options.draggable.enabled : vm.$item.dragEnabled);
+    };
+
+    vm.canBeResized = function canBeResized() {
+      return !vm.gridster.mobile &&
+        (vm.$item.resizeEnabled === undefined ? vm.gridster.$options.resizable.enabled : vm.$item.resizeEnabled);
+    }
   }
 })();
 
@@ -1258,9 +1267,8 @@
         }
       };
 
-      vm.toggle = function (enable) {
-        var enableDrag = !vm.gridster.mobile &&
-          (vm.gridsterItem.$item.dragEnabled === undefined ? enable : vm.gridsterItem.$item.dragEnabled);
+      vm.toggle = function () {
+        var enableDrag = vm.gridsterItem.canBeDragged();
         if (!vm.enabled && enableDrag) {
           vm.enabled = !vm.enabled;
           vm.dragStartFunction = vm.dragStart.bind(this);
@@ -1284,6 +1292,8 @@
     // 'scrollVertical' will fit on width and height of the items will be the same as the width
     // 'scrollHorizontal' will fit on height and width of the items will be the same as the height
     // 'fixed' will set the rows and columns dimensions based on fixedColWidth and fixedRowHeight options
+    // 'verticalFixed' will set the rows to fixedRowHeight and columns width will fit the space available
+    // 'horizontalFixed' will set the columns to fixedColWidth and rows height will fit the space available
     fixedColWidth: 250, // fixed col width for gridType: 'fixed'
     fixedRowHeight: 250, // fixed row height for gridType: 'fixed'
     keepFixedHeightInMobile: false, // keep the height from fixed gridType in mobile layout
@@ -1333,7 +1343,8 @@
     },
     swap: true, // allow items to switch position if drop on top of another
     pushItems: false, // push items when resizing and dragging
-    displayGrid: 'onDrag&Resize' // display background grid of rows and columns
+    displayGrid: 'onDrag&Resize', // display background grid of rows and columns
+    disableWindowResize: false
   });
 })();
 
@@ -1388,7 +1399,7 @@
     };
 
     vm.$onInit = function () {
-      vm.$options = GridsterUtils.merge(vm.$options, vm.options, vm.$options);
+      vm.setOptions();
       vm.options.api = {
         optionsChanged: vm.optionsChanged.bind(this),
         resize: vm.resize.bind(this),
@@ -1399,8 +1410,6 @@
       vm.setGridSize();
       vm.calculateLayoutDebounce = GridsterUtils.debounce(vm.calculateLayout.bind(this), 5);
       vm.calculateLayoutDebounce();
-      vm.onResizeFunction = vm.onResize.bind(this);
-      window.addEventListener('resize', vm.onResizeFunction);
       if (vm.options.initCallback) {
         vm.options.initCallback();
       }
@@ -1421,8 +1430,18 @@
       }
     };
 
-    vm.optionsChanged = function optionsChanged() {
+    vm.setOptions = function setOptions() {
       vm.$options = GridsterUtils.merge(vm.$options, vm.options, vm.$options);
+      if (!vm.$options.disableWindowResize) {
+        vm.onResizeFunction = vm.onResize.bind(this);
+        window.addEventListener('resize', vm.onResizeFunction);
+      } else if (vm.onResizeFunction) {
+        window.removeEventListener('resize', vm.onResizeFunction);
+      }
+    };
+
+    vm.optionsChanged = function optionsChanged() {
+      vm.setOptions();
       var widgetsIndex = vm.grid.length - 1, widget;
       for (; widgetsIndex >= 0; widgetsIndex--) {
         widget = vm.grid[widgetsIndex];
@@ -1432,7 +1451,9 @@
     };
 
     vm.$onDestroy = function () {
-      window.removeEventListener('resize', vm.onResizeFunction);
+      if (vm.onResizeFunction) {
+        window.removeEventListener('resize', vm.onResizeFunction);
+      }
     };
 
     vm.onResize = function onResize() {
@@ -1524,6 +1545,18 @@
         removeClass1 = 'fit';
         removeClass2 = 'scrollVertical';
         removeClass3 = 'scrollHorizontal';
+      } else if (vm.$options.gridType === 'verticalFixed') {
+        vm.curRowHeight = vm.$options.fixedRowHeight;
+        addClass = 'scrollVertical';
+        removeClass1 = 'fit';
+        removeClass2 = 'scrollHorizontal';
+        removeClass3 = 'fixed';
+      } else if (vm.$options.gridType === 'horizontalFixed') {
+        vm.curColWidth = vm.$options.fixedColWidth;
+        addClass = 'scrollHorizontal';
+        removeClass1 = 'fit';
+        removeClass2 = 'scrollVertical';
+        removeClass3 = 'fixed';
       }
       $element.addClass(addClass);
       $element.removeClass(removeClass1);
@@ -1545,8 +1578,8 @@
       for (; widgetsIndex >= 0; widgetsIndex--) {
         widget = vm.grid[widgetsIndex];
         widget.setSize(false);
-        widget.drag.toggle(vm.$options.draggable.enabled);
-        widget.resize.toggle(vm.$options.resizable.enabled);
+        widget.drag.toggle();
+        widget.resize.toggle();
       }
       $scope.$applyAsync();
       setTimeout(vm.resize.bind(this), 100);
