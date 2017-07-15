@@ -301,9 +301,8 @@ var GridsterResizable = (function () {
         this.handleS(e);
         this.handleE(e);
     };
-    GridsterResizable.prototype.toggle = function (enabled) {
-        this.resizeEnabled = !this.gridster.mobile &&
-            (this.gridsterItem.$item.resizeEnabled === undefined ? enabled : this.gridsterItem.$item.resizeEnabled);
+    GridsterResizable.prototype.toggle = function () {
+        this.resizeEnabled = this.gridsterItem.canBeResized();
     };
     GridsterResizable.decorators = [
         { type: core_1.Injectable },

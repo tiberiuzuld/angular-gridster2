@@ -1,4 +1,4 @@
-export declare type GridType = 'fit' | 'scrollVertical' | 'scrollHorizontal' | 'fixed';
+export declare type GridType = 'fit' | 'scrollVertical' | 'scrollHorizontal' | 'fixed' | 'verticalFixed' | 'horizontalFixed';
 export declare type displayGrid = 'always' | 'onDrag&Resize' | 'none';
 export declare type compactType = 'none' | 'compactUp' | 'compactLeft' | 'compactUp&Left' | 'compactLeft&Up';
 export interface GridsterConfig {
@@ -30,6 +30,7 @@ export interface GridsterConfig {
     swap?: boolean;
     pushItems?: boolean;
     displayGrid?: displayGrid;
+    disableWindowResize?: boolean;
     api?: {
         resize?: Function;
         optionsChanged?: Function;

@@ -30,4 +30,6 @@ export declare class GridsterItemComponent implements OnInit, OnDestroy {
     setSize(noCheck: Boolean): void;
     itemChanged(): void;
     checkItemChanges(newValue: GridsterItem, oldValue: GridsterItem): void;
+    canBeDragged(): boolean;
+    canBeResized(): boolean;
 }

@@ -73,7 +73,7 @@ var GridsterItemComponent = (function () {
         this.renderer.setStyle(this.el, 'height', this.height + 'px');
         this.renderer.setStyle(this.el, 'margin', this.itemMargin + 'px');
         if (this.width !== this.itemWidth || this.height !== this.itemHeight) {
-            this.itemResize.emit(this.$item);
+            this.itemResize.emit(this.item);
             if (this.gridster.$options.itemResizeCallback) {
                 this.gridster.$options.itemResizeCallback(this.item, this);
             }
@@ -107,6 +107,14 @@ var GridsterItemComponent = (function () {
             this.gridster.calculateLayout();
             this.itemChanged();
         }
+    };
+    GridsterItemComponent.prototype.canBeDragged = function () {
+        return !this.gridster.mobile &&
+            (this.$item.dragEnabled === undefined ? this.gridster.$options.draggable.enabled : this.$item.dragEnabled);
+    };
+    GridsterItemComponent.prototype.canBeResized = function () {
+        return !this.gridster.mobile &&
+            (this.$item.resizeEnabled === undefined ? this.gridster.$options.resizable.enabled : this.$item.resizeEnabled);
     };
     GridsterItemComponent.decorators = [
         { type: core_1.Component, args: [{

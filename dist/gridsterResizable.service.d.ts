@@ -63,5 +63,5 @@ export declare class GridsterResizable {
     handleNE(e: any): void;
     handleSW(e: any): void;
     handleSE(e: any): void;
-    toggle(enabled: any): void;
+    toggle(): void;
 }

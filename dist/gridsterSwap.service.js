@@ -48,7 +48,7 @@ var GridsterSwap = (function () {
     };
     GridsterSwap.prototype.checkSwap = function (pushedBy) {
         var gridsterItemCollision = this.gridster.checkCollision(pushedBy.$item);
-        if (gridsterItemCollision && gridsterItemCollision !== true) {
+        if (gridsterItemCollision && gridsterItemCollision !== true && gridsterItemCollision.canBeDragged()) {
             var gridsterItemCollide = gridsterItemCollision;
             gridsterItemCollide.$item.x = pushedBy.item.x;
             gridsterItemCollide.$item.y = pushedBy.item.y;

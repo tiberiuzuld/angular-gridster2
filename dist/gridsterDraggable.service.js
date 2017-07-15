@@ -182,9 +182,8 @@ var GridsterDraggable = (function () {
             this.push.checkPushBack();
         }
     };
-    GridsterDraggable.prototype.toggle = function (enable) {
-        var enableDrag = !this.gridster.mobile &&
-            (this.gridsterItem.$item.dragEnabled === undefined ? enable : this.gridsterItem.$item.dragEnabled);
+    GridsterDraggable.prototype.toggle = function () {
+        var enableDrag = this.gridsterItem.canBeDragged();
         if (!this.enabled && enableDrag) {
             this.enabled = !this.enabled;
             this.dragStartFunction = this.dragStart.bind(this);

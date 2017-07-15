@@ -13,7 +13,7 @@ var GridsterPush = (function () {
             fromEast: [this.tryWest, this.trySouth, this.tryNorth, this.tryEast],
             fromWest: [this.tryEast, this.trySouth, this.tryNorth, this.tryWest],
             fromNorth: [this.trySouth, this.tryEast, this.tryWest, this.tryNorth],
-            fromSouth: [this.tryNorth, this.tryEast, this.tryWest, this.trySouth],
+            fromSouth: [this.tryNorth, this.tryEast, this.tryWest, this.trySouth]
         };
         this.fromSouth = 'fromSouth';
         this.fromNorth = 'fromNorth';
@@ -52,7 +52,7 @@ var GridsterPush = (function () {
     GridsterPush.prototype.push = function (gridsterItem, direction, pushedBy) {
         var gridsterItemCollision = this.gridster.checkCollision(gridsterItem.$item, pushedBy.$item);
         if (gridsterItemCollision && gridsterItemCollision !== true &&
-            gridsterItemCollision !== this.gridsterItem) {
+            gridsterItemCollision !== this.gridsterItem && gridsterItemCollision.canBeDragged()) {
             var gridsterItemCollide = gridsterItemCollision;
             if (this.tryPattern[direction][0].call(this, gridsterItemCollide, gridsterItem, direction, pushedBy)) {
                 return true;

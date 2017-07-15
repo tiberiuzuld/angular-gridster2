@@ -11,7 +11,6 @@ var GridsterComponent = (function () {
         this.mobile = false;
         this.curWidth = 0;
         this.curHeight = 0;
-        this.scrollBarPresent = false;
         this.grid = [];
         this.curColWidth = 0;
         this.curRowHeight = 0;
@@ -29,19 +28,17 @@ var GridsterComponent = (function () {
             && item.y + item.rows > item2.y;
     };
     GridsterComponent.prototype.ngOnInit = function () {
-        this.$options = gridsterUtils_service_1.GridsterUtils.merge(this.$options, this.options, this.$options);
+        this.setOptions();
         this.options.api = {
             optionsChanged: this.optionsChanged.bind(this),
             resize: this.resize.bind(this),
             getNextPossiblePosition: this.getNextPossiblePosition.bind(this)
         };
-        this.columns = gridsterConfig_constant_1.GridsterConfigService.minCols;
-        this.rows = gridsterConfig_constant_1.GridsterConfigService.minRows;
+        this.columns = this.$options.minCols;
+        this.rows = this.$options.minRows;
         this.setGridSize();
         this.calculateLayoutDebounce = gridsterUtils_service_1.GridsterUtils.debounce(this.calculateLayout.bind(this), 5);
         this.calculateLayoutDebounce();
-        this.onResizeFunction = this.onResize.bind(this);
-        this.windowResize = this.renderer.listen('window', 'resize', this.onResizeFunction);
         if (this.options.initCallback) {
             this.options.initCallback();
         }
@@ -61,8 +58,17 @@ var GridsterComponent = (function () {
             this.onResize();
         }
     };
-    GridsterComponent.prototype.optionsChanged = function () {
+    GridsterComponent.prototype.setOptions = function () {
         this.$options = gridsterUtils_service_1.GridsterUtils.merge(this.$options, this.options, this.$options);
+        if (!this.$options.disableWindowResize) {
+            this.windowResize = this.renderer.listen('window', 'resize', this.onResize.bind(this));
+        }
+        else if (this.windowResize) {
+            this.windowResize();
+        }
+    };
+    GridsterComponent.prototype.optionsChanged = function () {
+        this.setOptions();
         var widgetsIndex = this.grid.length - 1, widget;
         for (; widgetsIndex >= 0; widgetsIndex--) {
             widget = this.grid[widgetsIndex];
@@ -71,9 +77,8 @@ var GridsterComponent = (function () {
         this.calculateLayout();
     };
     GridsterComponent.prototype.ngOnDestroy = function () {
-        this.windowResize();
-        if (typeof this.cleanCallback === 'function') {
-            this.cleanCallback();
+        if (this.windowResize) {
+            this.windowResize();
         }
     };
     GridsterComponent.prototype.onResize = function () {
@@ -164,6 +169,20 @@ var GridsterComponent = (function () {
             removeClass2 = 'scrollVertical';
             removeClass3 = 'scrollHorizontal';
         }
+        else if (this.$options.gridType === 'verticalFixed') {
+            this.curRowHeight = this.$options.fixedRowHeight;
+            addClass = 'scrollVertical';
+            removeClass1 = 'fit';
+            removeClass2 = 'scrollHorizontal';
+            removeClass3 = 'fixed';
+        }
+        else if (this.$options.gridType === 'horizontalFixed') {
+            this.curColWidth = this.$options.fixedColWidth;
+            addClass = 'scrollHorizontal';
+            removeClass1 = 'fit';
+            removeClass2 = 'scrollVertical';
+            removeClass3 = 'fixed';
+        }
         this.renderer.addClass(this.el, addClass);
         this.renderer.removeClass(this.el, removeClass1);
         this.renderer.removeClass(this.el, removeClass2);
@@ -181,8 +200,8 @@ var GridsterComponent = (function () {
         for (; widgetsIndex >= 0; widgetsIndex--) {
             widget = this.grid[widgetsIndex];
             widget.setSize(false);
-            widget.drag.toggle(this.$options.draggable.enabled);
-            widget.resize.toggle(this.$options.resizable.enabled);
+            widget.drag.toggle();
+            widget.resize.toggle();
         }
         setTimeout(this.resize.bind(this), 100);
     };

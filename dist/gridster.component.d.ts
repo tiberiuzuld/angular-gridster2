@@ -15,7 +15,6 @@ export declare class GridsterComponent implements OnInit, OnDestroy {
     mobile: boolean;
     curWidth: number;
     curHeight: number;
-    scrollBarPresent: boolean;
     grid: Array<GridsterItemComponent>;
     columns: number;
     rows: number;
@@ -23,11 +22,11 @@ export declare class GridsterComponent implements OnInit, OnDestroy {
     curRowHeight: number;
     windowResize: Function;
     gridLines: GridsterGridComponent;
-    private cleanCallback;
     static checkCollisionTwoItems(item: GridsterItem, item2: GridsterItem): boolean;
     constructor(el: ElementRef, renderer: Renderer2);
     ngOnInit(): void;
     resize(): void;
+    setOptions(): void;
     optionsChanged(): void;
     ngOnDestroy(): void;
     onResize(): void;

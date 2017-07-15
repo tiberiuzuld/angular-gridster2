@@ -5,6 +5,8 @@ exports.GridsterConfigService = {
     // 'scrollVertical' will fit on width and height of the items will be the same as the width
     // 'scrollHorizontal' will fit on height and width of the items will be the same as the height
     // 'fixed' will set the rows and columns dimensions based on fixedColWidth and fixedRowHeight options
+    // 'verticalFixed' will set the rows to fixedRowHeight and columns width will fit the space available
+    // 'horizontalFixed' will set the columns to fixedColWidth and rows height will fit the space available
     fixedColWidth: 250,
     fixedRowHeight: 250,
     keepFixedHeightInMobile: false,
@@ -54,6 +56,7 @@ exports.GridsterConfigService = {
     },
     swap: true,
     pushItems: false,
-    displayGrid: 'onDrag&Resize' // display background grid of rows and columns
+    displayGrid: 'onDrag&Resize',
+    disableWindowResize: false // disable the window on resize listener. This will stop grid to recalculate on window resize.
 };
 //# sourceMappingURL=gridsterConfig.constant.js.map
