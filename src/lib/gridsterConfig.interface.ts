@@ -1,4 +1,4 @@
-export type GridType = 'fit' | 'scrollVertical' | 'scrollHorizontal' | 'fixed';
+export type GridType = 'fit' | 'scrollVertical' | 'scrollHorizontal' | 'fixed' | 'verticalFixed' | 'horizontalFixed';
 export type displayGrid = 'always' | 'onDrag&Resize' | 'none';
 export type compactType = 'none' | 'compactUp' | 'compactLeft' | 'compactUp&Left' | 'compactLeft&Up';
 
@@ -37,6 +37,7 @@ export interface GridsterConfig {
     optionsChanged?: Function,
     getNextPossiblePosition?: Function,
   };
+
   [propName: string]: any;
 }
 

@@ -200,6 +200,18 @@ export class GridsterComponent implements OnInit, OnDestroy {
       removeClass1 = 'fit';
       removeClass2 = 'scrollVertical';
       removeClass3 = 'scrollHorizontal';
+    } else if (this.$options.gridType === 'verticalFixed') {
+      this.curRowHeight = this.$options.fixedRowHeight;
+      addClass = 'scrollVertical';
+      removeClass1 = 'fit';
+      removeClass2 = 'scrollHorizontal';
+      removeClass3 = 'fixed';
+    } else if (this.$options.gridType === 'horizontalFixed') {
+      this.curColWidth = this.$options.fixedColWidth;
+      addClass = 'scrollHorizontal';
+      removeClass1 = 'fit';
+      removeClass2 = 'scrollVertical';
+      removeClass3 = 'fixed';
     }
 
     this.renderer.addClass(this.el, addClass);
