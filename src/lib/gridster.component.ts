@@ -55,7 +55,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.$options = GridsterUtils.merge(this.$options, this.options, this.$options);
+    this.setOptions();
     this.options.api = {
       optionsChanged: this.optionsChanged.bind(this),
       resize: this.resize.bind(this),
@@ -66,8 +66,6 @@ export class GridsterComponent implements OnInit, OnDestroy {
     this.setGridSize();
     this.calculateLayoutDebounce = GridsterUtils.debounce(this.calculateLayout.bind(this), 5);
     this.calculateLayoutDebounce();
-    this.onResizeFunction = this.onResize.bind(this);
-    this.windowResize = this.renderer.listen('window', 'resize', this.onResizeFunction);
     if (this.options.initCallback) {
       this.options.initCallback();
     }
@@ -88,8 +86,17 @@ export class GridsterComponent implements OnInit, OnDestroy {
     }
   }
 
-  optionsChanged(): void {
+  setOptions(): void {
     this.$options = GridsterUtils.merge(this.$options, this.options, this.$options);
+    if (!this.$options.disableWindowResize) {
+      this.windowResize = this.renderer.listen('window', 'resize', this.onResize.bind(this));
+    } else if (this.windowResize) {
+      this.windowResize();
+    }
+  }
+
+  optionsChanged(): void {
+    this.setOptions();
     let widgetsIndex: number = this.grid.length - 1, widget: GridsterItemComponent;
     for (; widgetsIndex >= 0; widgetsIndex--) {
       widget = this.grid[widgetsIndex];
@@ -99,7 +106,9 @@ export class GridsterComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.windowResize();
+    if (this.windowResize) {
+      this.windowResize();
+    }
   }
 
   onResize(): void {

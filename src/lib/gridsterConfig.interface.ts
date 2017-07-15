@@ -31,6 +31,7 @@ export interface GridsterConfig {
   swap?: boolean;
   pushItems?: boolean;
   displayGrid?: displayGrid;
+  disableWindowResize?: boolean;
   api?: {
     resize?: Function,
     optionsChanged?: Function,
