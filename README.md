@@ -115,6 +115,8 @@ Initialize the demo dashboard
    };
 ```
 
+##### Note: The gridster will take all the available space from the parent. It will not size depending on content. The parent of the component needs to have a size.
+
 ##### Default Grid Options:
 ```typescript
 import {GridsterConfig} from './gridsterConfig.interface';
