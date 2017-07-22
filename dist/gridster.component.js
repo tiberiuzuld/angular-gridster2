@@ -20,6 +20,7 @@ var GridsterComponent = (function () {
         this.$options.resizable.start = undefined;
         this.$options.itemChangeCallback = undefined;
         this.$options.itemResizeCallback = undefined;
+        this.$options.itemInitCallback = undefined;
     }
     GridsterComponent.checkCollisionTwoItems = function (item, item2) {
         return item.x < item2.x + item2.cols
@@ -40,7 +41,7 @@ var GridsterComponent = (function () {
         this.calculateLayoutDebounce = gridsterUtils_service_1.GridsterUtils.debounce(this.calculateLayout.bind(this), 5);
         this.calculateLayoutDebounce();
         if (this.options.initCallback) {
-            this.options.initCallback();
+            this.options.initCallback(this);
         }
     };
     GridsterComponent.prototype.resize = function () {
@@ -229,7 +230,10 @@ var GridsterComponent = (function () {
         this.grid.push(itemComponent);
         this.calculateLayoutDebounce();
         if (itemComponent.$item.initCallback) {
-            itemComponent.$item.initCallback(itemComponent);
+            itemComponent.$item.initCallback(itemComponent.item, itemComponent);
+        }
+        if (this.$options.itemInitCallback) {
+            this.$options.itemInitCallback(itemComponent.item, itemComponent);
         }
     };
     GridsterComponent.prototype.removeItem = function (itemComponent) {

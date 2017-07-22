@@ -20,28 +20,6 @@ var GridsterResizable = (function () {
         e.pageX = e.touches[0].pageX;
         e.pageY = e.touches[0].pageY;
     };
-    GridsterResizable.getOffsetSum = function (originalElement) {
-        var top = 0;
-        var left = 0;
-        var element = originalElement;
-        while (element) {
-            top = top + parseFloat(element.offsetTop);
-            left = left + parseFloat(element.offsetLeft);
-            element = element.offsetParent;
-        }
-        return { top: Math.round(top), left: Math.round(left) };
-    };
-    GridsterResizable.getScrollSum = function (originalElement) {
-        var top = 0;
-        var left = 0;
-        var element = originalElement;
-        while (element) {
-            top = top + parseFloat(element.scrollTop);
-            left = left + parseFloat(element.scrollLeft);
-            element = element.offsetParent;
-        }
-        return { scrollTop: Math.round(top), scrollLeft: Math.round(left) };
-    };
     GridsterResizable.prototype.dragStart = function (e) {
         switch (e.which) {
             case 1:
@@ -77,10 +55,16 @@ var GridsterResizable = (function () {
         this.bottom = this.gridsterItem.top + this.gridsterItem.height;
         this.right = this.gridsterItem.left + this.gridsterItem.width;
         this.margin = this.gridster.$options.margin;
+        this.offsetLeft = this.gridster.el.scrollLeft - this.gridster.el.offsetLeft;
+        this.offsetTop = this.gridster.el.scrollTop - this.gridster.el.offsetTop;
+        this.diffLeft = e.pageX + this.offsetLeft - this.margin - this.left;
+        this.diffRight = e.pageX + this.offsetLeft - this.margin - this.right;
+        this.diffTop = e.pageY + this.offsetTop - this.margin - this.top;
+        this.diffBottom = e.pageY + this.offsetTop - this.margin - this.bottom;
         this.minHeight = this.gridster.positionYToPixels(this.gridsterItem.$item.minItemRows || this.gridster.$options.minItemRows)
-            - this.gridster.$options.margin;
+            - this.margin;
         this.minWidth = this.gridster.positionXToPixels(this.gridsterItem.$item.minItemCols || this.gridster.$options.minItemCols)
-            - this.gridster.$options.margin;
+            - this.margin;
         this.gridster.movingItem = this.gridsterItem;
         this.gridster.previewStyle();
         this.push = new gridsterPush_service_1.GridsterPush(this.gridsterItem, this.gridster);
@@ -171,14 +155,8 @@ var GridsterResizable = (function () {
         this.push.setPushedItems();
         this.push = undefined;
     };
-    GridsterResizable.prototype.getRealCords = function (e) {
-        var gridsterOffsets = GridsterResizable.getOffsetSum(this.gridster.el);
-        var pageY = e.pageY - gridsterOffsets.top + GridsterResizable.getScrollSum(this.gridster.el).scrollTop;
-        var pageX = e.pageX - gridsterOffsets.left + GridsterResizable.getScrollSum(this.gridster.el).scrollLeft;
-        return { pageY: pageY, pageX: pageX };
-    };
     GridsterResizable.prototype.handleN = function (e) {
-        this.top = this.getRealCords(e).pageY - this.margin;
+        this.top = e.pageY + this.offsetTop - this.margin - this.diffTop;
         this.height = this.bottom - this.top;
         if (this.minHeight > this.height) {
             this.height = this.minHeight;
@@ -208,7 +186,7 @@ var GridsterResizable = (function () {
         this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'height', this.height + 'px');
     };
     GridsterResizable.prototype.handleW = function (e) {
-        this.left = this.getRealCords(e).pageX - this.margin;
+        this.left = e.pageX + this.offsetLeft - this.margin - this.diffLeft;
         this.width = this.right - this.left;
         if (this.minWidth > this.width) {
             this.width = this.minWidth;
@@ -238,7 +216,7 @@ var GridsterResizable = (function () {
         this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'width', this.width + 'px');
     };
     GridsterResizable.prototype.handleS = function (e) {
-        this.height = this.getRealCords(e).pageY - this.margin - this.gridsterItem.top;
+        this.height = e.pageY + this.offsetTop - this.margin - this.diffBottom - this.top;
         if (this.minHeight > this.height) {
             this.height = this.minHeight;
         }
@@ -262,7 +240,7 @@ var GridsterResizable = (function () {
         this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'height', this.height + 'px');
     };
     GridsterResizable.prototype.handleE = function (e) {
-        this.width = this.getRealCords(e).pageX - this.margin - this.gridsterItem.left;
+        this.width = e.pageX + this.offsetLeft - this.margin - this.diffRight - this.left;
         if (this.minWidth > this.width) {
             this.width = this.minWidth;
         }

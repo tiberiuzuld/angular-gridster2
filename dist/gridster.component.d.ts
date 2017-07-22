@@ -7,7 +7,6 @@ export declare class GridsterComponent implements OnInit, OnDestroy {
     renderer: Renderer2;
     options: GridsterConfig;
     calculateLayoutDebounce: Function;
-    onResizeFunction: (event: any) => void;
     movingItem: GridsterItemComponent;
     previewStyle: Function;
     el: any;

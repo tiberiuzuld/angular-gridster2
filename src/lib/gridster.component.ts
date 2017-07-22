@@ -14,7 +14,6 @@ import {GridsterItem} from './gridsterItem.interface';
 export class GridsterComponent implements OnInit, OnDestroy {
   @Input() options: GridsterConfig;
   calculateLayoutDebounce: Function;
-  onResizeFunction: (event: any) => void;
   movingItem: GridsterItemComponent;
   previewStyle: Function;
   el: any;
@@ -52,6 +51,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
     this.$options.resizable.start = undefined;
     this.$options.itemChangeCallback = undefined;
     this.$options.itemResizeCallback = undefined;
+    this.$options.itemInitCallback = undefined;
   }
 
   ngOnInit(): void {
@@ -67,7 +67,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
     this.calculateLayoutDebounce = GridsterUtils.debounce(this.calculateLayout.bind(this), 5);
     this.calculateLayoutDebounce();
     if (this.options.initCallback) {
-      this.options.initCallback();
+      this.options.initCallback(this);
     }
   }
 
@@ -262,7 +262,10 @@ export class GridsterComponent implements OnInit, OnDestroy {
     this.grid.push(itemComponent);
     this.calculateLayoutDebounce();
     if (itemComponent.$item.initCallback) {
-      itemComponent.$item.initCallback(itemComponent);
+      itemComponent.$item.initCallback(itemComponent.item, itemComponent);
+    }
+    if (this.$options.itemInitCallback) {
+      this.$options.itemInitCallback(itemComponent.item, itemComponent);
     }
   }
 

@@ -28,7 +28,11 @@ exports.GridsterConfigService = {
     scrollSpeed: 20,
     initCallback: undefined,
     itemChangeCallback: undefined,
+    // Arguments: gridsterItem, gridsterItemComponent
     itemResizeCallback: undefined,
+    // Arguments: gridsterItem, gridsterItemComponent
+    itemInitCallback: undefined,
+    // Arguments: gridsterItem, gridsterItemComponent
     draggable: {
         enabled: false,
         ignoreContentClass: 'gridster-item-content',

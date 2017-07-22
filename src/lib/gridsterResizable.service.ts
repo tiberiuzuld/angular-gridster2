@@ -32,6 +32,10 @@ export class GridsterResizable {
   minWidth: number;
   offsetTop: number;
   offsetLeft: number;
+  diffTop: number;
+  diffLeft: number;
+  diffRight: number;
+  diffBottom: number;
   margin: number;
   top: number;
   left: number;
@@ -44,30 +48,6 @@ export class GridsterResizable {
   static touchEvent(e) {
     e.pageX = e.touches[0].pageX;
     e.pageY = e.touches[0].pageY;
-  }
-
-  static getOffsetSum(originalElement): { top: number, left: number } {
-    let top = 0;
-    let left = 0;
-    let element = originalElement;
-    while (element) {
-      top = top + parseFloat(element.offsetTop);
-      left = left + parseFloat(element.offsetLeft);
-      element = element.offsetParent;
-    }
-    return {top: Math.round(top), left: Math.round(left)};
-  }
-
-  static getScrollSum(originalElement): { scrollTop: number, scrollLeft: number } {
-    let top = 0;
-    let left = 0;
-    let element = originalElement;
-    while (element) {
-      top = top + parseFloat(element.scrollTop);
-      left = left + parseFloat(element.scrollLeft);
-      element = element.offsetParent;
-    }
-    return {scrollTop: Math.round(top), scrollLeft: Math.round(left)};
   }
 
   constructor(gridsterItem: GridsterItemComponent, gridster: GridsterComponent) {
@@ -116,10 +96,16 @@ export class GridsterResizable {
     this.bottom = this.gridsterItem.top + this.gridsterItem.height;
     this.right = this.gridsterItem.left + this.gridsterItem.width;
     this.margin = this.gridster.$options.margin;
+    this.offsetLeft = this.gridster.el.scrollLeft - this.gridster.el.offsetLeft;
+    this.offsetTop = this.gridster.el.scrollTop - this.gridster.el.offsetTop;
+    this.diffLeft = e.pageX + this.offsetLeft - this.margin - this.left;
+    this.diffRight = e.pageX + this.offsetLeft - this.margin - this.right;
+    this.diffTop = e.pageY + this.offsetTop - this.margin - this.top;
+    this.diffBottom = e.pageY + this.offsetTop - this.margin - this.bottom;
     this.minHeight = this.gridster.positionYToPixels(this.gridsterItem.$item.minItemRows || this.gridster.$options.minItemRows)
-      - this.gridster.$options.margin;
+      - this.margin;
     this.minWidth = this.gridster.positionXToPixels(this.gridsterItem.$item.minItemCols || this.gridster.$options.minItemCols)
-      - this.gridster.$options.margin;
+      - this.margin;
     this.gridster.movingItem = this.gridsterItem;
     this.gridster.previewStyle();
     this.push = new GridsterPush(this.gridsterItem, this.gridster);
@@ -209,15 +195,8 @@ export class GridsterResizable {
     this.push = undefined;
   }
 
-  getRealCords(e): { pageY: number, pageX: number } {
-    const gridsterOffsets = GridsterResizable.getOffsetSum(this.gridster.el);
-    const pageY = e.pageY - gridsterOffsets.top + GridsterResizable.getScrollSum(this.gridster.el).scrollTop;
-    const pageX = e.pageX - gridsterOffsets.left + GridsterResizable.getScrollSum(this.gridster.el).scrollLeft;
-    return {pageY, pageX};
-  }
-
   handleN(e): void {
-    this.top = this.getRealCords(e).pageY - this.margin;
+    this.top = e.pageY + this.offsetTop - this.margin - this.diffTop;
     this.height = this.bottom - this.top;
     if (this.minHeight > this.height) {
       this.height = this.minHeight;
@@ -247,7 +226,7 @@ export class GridsterResizable {
   }
 
   handleW(e): void {
-    this.left = this.getRealCords(e).pageX - this.margin;
+    this.left = e.pageX + this.offsetLeft - this.margin - this.diffLeft;
     this.width = this.right - this.left;
     if (this.minWidth > this.width) {
       this.width = this.minWidth;
@@ -278,7 +257,7 @@ export class GridsterResizable {
   }
 
   handleS(e): void {
-    this.height = this.getRealCords(e).pageY - this.margin - this.gridsterItem.top;
+    this.height = e.pageY + this.offsetTop - this.margin - this.diffBottom - this.top;
     if (this.minHeight > this.height) {
       this.height = this.minHeight;
     }
@@ -302,7 +281,7 @@ export class GridsterResizable {
   }
 
   handleE(e): void {
-    this.width = this.getRealCords(e).pageX - this.margin - this.gridsterItem.left;
+    this.width = e.pageX + this.offsetLeft - this.margin - this.diffRight - this.left;
     if (this.minWidth > this.width) {
       this.width = this.minWidth;
     }

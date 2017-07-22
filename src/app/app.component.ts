@@ -10,20 +10,20 @@ export class AppComponent implements OnInit {
   options: GridsterConfig;
   dashboard: Array<Object>;
 
-  static eventStop(item, scope, event) {
-    console.info('eventStop', item, scope);
+  static eventStop(item, itemComponent, event) {
+    console.info('eventStop', item, itemComponent, event);
   }
 
-  static itemChange(item, scope) {
-    console.info('itemChanged', item, scope);
+  static itemChange(item, itemComponent) {
+    console.info('itemChanged', item, itemComponent);
   }
 
-  static itemResize(item, scope) {
-    console.info('itemResized', item, scope);
+  static itemResize(item, itemComponent) {
+    console.info('itemResized', item, itemComponent);
   }
 
-  static itemInit(item) {
-    console.info('itemInitialized', item);
+  static itemInit(item, itemComponent) {
+    console.info('itemInitialized', item, itemComponent);
   }
 
   ngOnInit() {
@@ -32,6 +32,7 @@ export class AppComponent implements OnInit {
       compactType: 'none',
       itemChangeCallback: AppComponent.itemChange,
       itemResizeCallback: AppComponent.itemResize,
+      itemInitCallback: AppComponent.itemInit,
       margin: 10,
       outerMargin: true,
       minCols: 1,

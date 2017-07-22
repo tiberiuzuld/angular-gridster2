@@ -147,9 +147,13 @@ export const GridsterConfigService: GridsterConfig = {
   outerMargin: true,  // if margins will apply to the sides of the container
   scrollSensitivity: 10,  // margin of the dashboard where to start scrolling
   scrollSpeed: 20,  // how much to scroll each mouse move when in the scrollSensitivity zone
-  initCallback: undefined, // callback to call after grid has initialized
-  itemChangeCallback: undefined,  // callback to call for each item when is changes x, y, rows, cols. Arguments: gridsterItem
-  itemResizeCallback: undefined,  // callback to call for each item when width/height changes. Arguments: gridsterItem
+  initCallback: undefined, // callback to call after grid has initialized. Arguments: gridsterComponent
+  itemChangeCallback: undefined,  // callback to call for each item when is changes x, y, rows, cols.
+  // Arguments: gridsterItem, gridsterItemComponent
+  itemResizeCallback: undefined,  // callback to call for each item when width/height changes.
+  // Arguments: gridsterItem, gridsterItemComponent
+  itemInitCallback: undefined,  // callback to call for each item when is initialized.
+  // Arguments: gridsterItem, gridsterItemComponent
   draggable: {
     enabled: false, // enable/disable draggable items
     ignoreContentClass: 'gridster-item-content', // default content class to ignore the drag event from
@@ -196,7 +200,7 @@ export interface GridsterItem {
   y?: number; // y position if missing will auto position
   rows?: number; // number of rows if missing will use grid option defaultItemRows
   cols?: number; // number of columns if missing will use grid option defaultItemCols
-  initCallback?: Function; // initialization callback
+  initCallback?: Function; // initialization callback. Argument: GridsterItem, GridsterItemComponent
   dragEnabled?: boolean; // override grid option draggable.enabled
   resizeEnabled?: boolean; // override grid option resizable.enabled
   maxItemRows?: number; // override grid option maxItemRows
