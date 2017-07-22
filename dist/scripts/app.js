@@ -40,6 +40,7 @@
         compactType: 'none',
         itemChangeCallback: itemChange,
         itemResizeCallback: itemResize,
+        itemInitCallback: itemInit,
         margin: 10,
         outerMargin: true,
         minCols: 1,
@@ -91,20 +92,20 @@
       vm.dashboard.push({});
     };
 
-    function eventStop(item, scope, event) {
-      $log.info('eventStop', item, scope, event);
+    function eventStop(item, itemComponent, event) {
+      $log.info('eventStop', item, itemComponent, event);
     }
 
-    function itemChange(item, scope) {
-      $log.info('itemChanged', item, scope);
+    function itemChange(item, itemComponent) {
+      $log.info('itemChanged', item, itemComponent);
     }
 
-    function itemResize(item, scope) {
-      $log.info('itemResized', item, scope);
+    function itemResize(item, itemComponent) {
+      $log.info('itemResized', item, itemComponent);
     }
 
-    function itemInit(item) {
-      $log.info('itemInitialized', item);
+    function itemInit(item, itemComponent) {
+      $log.info('itemInitialized', item, itemComponent);
     }
 
     vm.changedOptions = function changedOptions() {

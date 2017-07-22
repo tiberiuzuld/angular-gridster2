@@ -39,6 +39,7 @@
     vm.$options.resizable.start = undefined;
     vm.$options.itemChangeCallback = undefined;
     vm.$options.itemResizeCallback = undefined;
+    vm.$options.itemInitCallback = undefined;
 
     vm.checkCollisionTwoItems = function checkCollisionTwoItems(item, item2) {
       return item.x < item2.x + item2.cols
@@ -60,7 +61,7 @@
       vm.calculateLayoutDebounce = GridsterUtils.debounce(vm.calculateLayout.bind(this), 5);
       vm.calculateLayoutDebounce();
       if (vm.options.initCallback) {
-        vm.options.initCallback();
+        vm.options.initCallback(vm);
       }
     };
 
@@ -257,7 +258,10 @@
       vm.grid.push(itemComponent);
       vm.calculateLayoutDebounce();
       if (itemComponent.$item.initCallback) {
-        itemComponent.$item.initCallback(itemComponent);
+        itemComponent.$item.initCallback(itemComponent.item, itemComponent);
+      }
+      if (vm.$options.itemInitCallback) {
+        vm.$options.itemInitCallback(itemComponent.item, itemComponent);
       }
     };
 

@@ -20,6 +20,10 @@
       vm.minWidth = 0;
       vm.offsetTop = 0;
       vm.offsetLeft = 0;
+      vm.diffTop = 0;
+      vm.diffLeft = 0;
+      vm.diffRight = 0;
+      vm.diffBottom = 0;
       vm.margin = 0;
       vm.top = 0;
       vm.left = 0;
@@ -41,30 +45,6 @@
       function touchEvent(e) {
         e.pageX = e.touches[0].pageX;
         e.pageY = e.touches[0].pageY;
-      }
-
-      function getOffsetSum(originalElement) {
-        var top = 0;
-        var left = 0;
-        var element = originalElement;
-        while (element) {
-          top = top + parseFloat(element.offsetTop);
-          left = left + parseFloat(element.offsetLeft);
-          element = element.offsetParent;
-        }
-        return {top: Math.round(top), left: Math.round(left)};
-      }
-
-      function getScrollSum(originalElement) {
-        var top = 0;
-        var left = 0;
-        var element = originalElement;
-        while (element) {
-          top = top + parseFloat(element.scrollTop);
-          left = left + parseFloat(element.scrollLeft);
-          element = element.offsetParent;
-        }
-        return {scrollTop: Math.round(top), scrollLeft: Math.round(left)};
       }
 
       vm.dragStart = function (e) {
@@ -102,10 +82,16 @@
         vm.bottom = vm.gridsterItem.top + vm.gridsterItem.height;
         vm.right = vm.gridsterItem.left + vm.gridsterItem.width;
         vm.margin = vm.gridster.$options.margin;
+        vm.offsetLeft = vm.gridster.el.scrollLeft - vm.gridster.el.offsetLeft;
+        vm.offsetTop = vm.gridster.el.scrollTop - vm.gridster.el.offsetTop;
+        vm.diffLeft = e.pageX + vm.offsetLeft - vm.margin - vm.left;
+        vm.diffRight = e.pageX + vm.offsetLeft - vm.margin - vm.right;
+        vm.diffTop = e.pageY + vm.offsetTop - vm.margin - vm.top;
+        vm.diffBottom = e.pageY + vm.offsetTop - vm.margin - vm.bottom;
         vm.minHeight = vm.gridster.positionYToPixels(vm.gridsterItem.$item.minItemRows || vm.gridster.$options.minItemRows)
-          - vm.gridster.$options.margin;
+          - vm.margin;
         vm.minWidth = vm.gridster.positionXToPixels(vm.gridsterItem.$item.minItemCols || vm.gridster.$options.minItemCols)
-          - vm.gridster.$options.margin;
+          - vm.margin;
         vm.gridster.movingItem = vm.gridsterItem;
         vm.gridster.previewStyle();
         vm.push = new GridsterPush(vm.gridsterItem, vm.gridster);
@@ -199,15 +185,8 @@
         vm.push = undefined;
       };
 
-      vm.getRealCords = function (e) {
-        var gridsterOffsets = getOffsetSum(vm.gridster.el);
-        var pageY = e.pageY - gridsterOffsets.top + getScrollSum(vm.gridster.el).scrollTop;
-        var pageX = e.pageX - gridsterOffsets.left + getScrollSum(vm.gridster.el).scrollLeft;
-        return {pageY: pageY, pageX: pageX};
-      };
-
       vm.handleN = function (e) {
-        vm.top = vm.getRealCords(e).pageY - vm.margin;
+        vm.top = e.pageY + vm.offsetTop - vm.margin - vm.diffTop;
         vm.height = vm.bottom - vm.top;
         if (vm.minHeight > vm.height) {
           vm.height = vm.minHeight;
@@ -237,7 +216,7 @@
       };
 
       vm.handleW = function (e) {
-        vm.left = vm.getRealCords(e).pageX - vm.margin;
+        vm.left = e.pageX + vm.offsetLeft - vm.margin - vm.diffLeft;
         vm.width = vm.right - vm.left;
         if (vm.minWidth > vm.width) {
           vm.width = vm.minWidth;
@@ -268,7 +247,7 @@
       };
 
       vm.handleS = function (e) {
-        vm.height = vm.getRealCords(e).pageY - vm.margin - vm.gridsterItem.top;
+        vm.height = e.pageY + vm.offsetTop - vm.margin - vm.diffBottom - vm.top;
         if (vm.minHeight > vm.height) {
           vm.height = vm.minHeight;
         }
@@ -292,7 +271,7 @@
       };
 
       vm.handleE = function (e) {
-        vm.width = vm.getRealCords(e).pageX - vm.margin - vm.gridsterItem.left;
+        vm.width = e.pageX + vm.offsetLeft - vm.margin - vm.diffRight - vm.left;
         if (vm.minWidth > vm.width) {
           vm.width = vm.minWidth;
         }

@@ -1,6 +1,6 @@
 {
   "name": "angular-gridster2",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "main": "index.js",
   "dependencies": {
     "angular": ">=1.6.5"
@@ -9,7 +9,7 @@
     "angular-animate": "1.6.5",
     "angular-aria": "1.6.5",
     "angular-material": "1.1.4",
-    "browser-sync": "2.18.12",
+    "browser-sync": "2.18.13",
     "browser-sync-spa": "1.0.3",
     "chalk": "2.0.1",
     "del": "3.0.0",
