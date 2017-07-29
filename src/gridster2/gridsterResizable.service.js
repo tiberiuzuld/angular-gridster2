@@ -5,7 +5,7 @@
     .service('GridsterResizable', GridsterResizable);
 
   /** @ngInject */
-  function GridsterResizable(GridsterPush, GridsterScroll) {
+  function GridsterResizable(GridsterPush, GridsterScroll, GridsterUtils) {
     return function (gridsterItem, gridster) {
       var vm = this;
 
@@ -42,11 +42,6 @@
       vm.itemBackup = [0, 0, 0, 0];
       vm.resizeEventScrollType = {w: false, e: false, n: false, s: false};
 
-      function touchEvent(e) {
-        e.pageX = e.touches[0].pageX;
-        e.pageY = e.touches[0].pageY;
-      }
-
       vm.dragStart = function (e) {
         switch (e.which) {
           case 1:
@@ -62,9 +57,7 @@
         }
         e.stopPropagation();
         e.preventDefault();
-        if (e.pageX === undefined && e.touches) {
-          touchEvent(e);
-        }
+        GridsterUtils.checkTouchEvent(e);
         vm.dragFunction = vm.dragMove.bind(this);
         vm.dragStopFunction = vm.dragStop.bind(this);
         document.addEventListener('mousemove', vm.dragFunction);
@@ -92,7 +85,7 @@
           - vm.margin;
         vm.minWidth = vm.gridster.positionXToPixels(vm.gridsterItem.$item.minItemCols || vm.gridster.$options.minItemCols)
           - vm.margin;
-        vm.gridster.movingItem = vm.gridsterItem;
+        vm.gridster.movingItem = vm.gridsterItem.$item;
         vm.gridster.previewStyle();
         vm.push = new GridsterPush(vm.gridsterItem, vm.gridster);
         vm.gridster.gridLines.updateGrid(true);
@@ -131,9 +124,7 @@
       vm.dragMove = function (e) {
         e.stopPropagation();
         e.preventDefault();
-        if (e.pageX === undefined && e.touches) {
-          touchEvent(e);
-        }
+        GridsterUtils.checkTouchEvent(e);
         vm.offsetTop = vm.gridster.el.scrollTop - vm.gridster.el.offsetTop;
         vm.offsetLeft = vm.gridster.el.scrollLeft - vm.gridster.el.offsetLeft;
         GridsterScroll(vm.gridsterItem, e, vm.lastMouse, vm.directionFunction, true, vm.resizeEventScrollType);
@@ -153,8 +144,6 @@
         document.removeEventListener('touchend', vm.dragStopFunction);
         document.removeEventListener('touchcancel', vm.dragStopFunction);
         vm.gridsterItem.el.removeClass('gridster-item-resizing');
-        vm.gridster.movingItem = null;
-        vm.gridster.previewStyle();
         vm.gridster.gridLines.updateGrid(false);
         if (vm.gridster.$options.resizable.stop) {
           var promise = vm.gridster.$options.resizable.stop(vm.gridsterItem.item, vm.gridsterItem, e);
@@ -166,6 +155,10 @@
         } else {
           vm.makeResize();
         }
+        setTimeout(function () {
+          vm.gridster.movingItem = null;
+          vm.gridster.previewStyle();
+        });
       };
 
       vm.cancelResize = function () {

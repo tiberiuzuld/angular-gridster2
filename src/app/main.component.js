@@ -9,10 +9,10 @@
     });
 
   /** @ngInject */
-  function MainController($log) {
+  function MainController($log, $scope) {
     var vm = this;
     vm.$onInit = function () {
-      this.options = {
+      vm.options = {
         gridType: 'fit',
         compactType: 'none',
         itemChangeCallback: itemChange,
@@ -32,6 +32,8 @@
         defaultItemRows: 1,
         fixedColWidth: 250,
         fixedRowHeight: 250,
+        enableEmptyCellClickDrag: false,
+        emptyCellClickCallback: vm.emptyCellClick.bind(vm),
         draggable: {
           enabled: true,
           stop: eventStop
@@ -63,10 +65,17 @@
       event.stopPropagation();
       event.preventDefault();
       vm.dashboard.splice(vm.dashboard.indexOf(item), 1);
+      $scope.$applyAsync();
     };
 
     vm.addItem = function () {
       vm.dashboard.push({});
+    };
+
+    vm.emptyCellClick = function (event, item) {
+      $log.info('empty cell click', event, item);
+      vm.dashboard.push(item);
+      $scope.$applyAsync();
     };
 
     function eventStop(item, itemComponent, event) {
@@ -85,8 +94,13 @@
       $log.info('itemInitialized', item, itemComponent);
     }
 
+    vm.prevent = function (event) {
+      event.stopPropagation();
+      event.preventDefault();
+    };
+
     vm.changedOptions = function changedOptions() {
-      this.options.api.optionsChanged();
+      vm.options.api.optionsChanged();
     }
   }
 })();

@@ -1,6 +1,6 @@
 {
   "name": "angular-gridster2",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "main": "index.js",
   "dependencies": {
     "angular": ">=1.6.5"
@@ -30,7 +30,7 @@
     "gulp-protractor": "4.1.0",
     "gulp-rename": "1.2.2",
     "gulp-replace": "0.6.1",
-    "gulp-rev": "7.1.2",
+    "gulp-rev": "8.0.0",
     "gulp-rev-replace": "0.4.3",
     "gulp-size": "2.1.0",
     "gulp-sourcemaps": "2.6.0",

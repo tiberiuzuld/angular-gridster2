@@ -79,6 +79,9 @@
     <md-checkbox ng-model="main.options.keepFixedHeightInMobile" ng-change="main.changedOptions()">
       Keep Fixed Height In Mobile
     </md-checkbox>
+    <md-checkbox ng-model="main.options.enableEmptyCellClickDrag" ng-change="main.changedOptions()">
+      Enable click to add
+    </md-checkbox>
     <md-input-container>
       <input ng-model="main.options.minCols" type="number" placeholder="Min Grid Cols"
              ng-change="main.changedOptions()">
@@ -120,13 +123,15 @@
         <md-button class="drag-handler md-raised md-icon-button">
           <md-icon>open_with</md-icon>
         </md-button>
-        <md-button class="remove-button md-raised md-icon-button" ng-click="main.removeItem($event, item)">
+        <md-button class="remove-button md-raised md-icon-button" ng-click="main.removeItem($event, item)"
+                   ng-mousedown="main.prevent($event)">
           <md-icon>clear</md-icon>
           <md-tooltip>Remove</md-tooltip>
         </md-button>
       </div>
       <label ng-if="!item.hasContent" ng-bind="::item.label"></label>
-      <button class="md-icon-button md-fab-mini" ng-if="!item.hasContent" ng-click="main.removeItem($event, item)">
+      <button class="md-icon-button md-fab-mini" ng-if="!item.hasContent" ng-click="main.removeItem($event, item)"
+              ng-mousedown="main.prevent($event)">
         <md-icon>clear</md-icon>
         <md-tooltip>Remove</md-tooltip>
       </button>

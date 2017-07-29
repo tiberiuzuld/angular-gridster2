@@ -27,10 +27,10 @@
           margin = vm.gridster.$options.margin;
         }
         $element.css('display', 'block');
-        $element.css('height', (vm.gridster.movingItem.$item.rows * curRowHeight - margin) + 'px');
-        $element.css('width', (vm.gridster.movingItem.$item.cols * curColWidth - margin) + 'px');
-        $element.css('top', (vm.gridster.movingItem.$item.y * curRowHeight + margin) + 'px');
-        $element.css('left', (vm.gridster.movingItem.$item.x * curColWidth + margin) + 'px');
+        $element.css('height', (vm.gridster.movingItem.rows * curRowHeight - margin) + 'px');
+        $element.css('width', (vm.gridster.movingItem.cols * curColWidth - margin) + 'px');
+        $element.css('top', (vm.gridster.movingItem.y * curRowHeight + margin) + 'px');
+        $element.css('left', (vm.gridster.movingItem.x * curColWidth + margin) + 'px');
         $element.css('marginBottom', margin + 'px');
       }
     }

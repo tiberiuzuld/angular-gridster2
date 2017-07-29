@@ -154,8 +154,14 @@
 
       vm.checkPushBack = function () {
         var i = vm.pushedItems.length - 1;
+        var change = false;
         for (; i > -1; i--) {
-          vm.checkPushedItem(vm.pushedItems[i], i);
+          if (vm.checkPushedItem(vm.pushedItems[i], i)) {
+            change = true;
+          }
+        }
+        if (change) {
+          vm.checkPushBack();
         }
       };
 
@@ -178,6 +184,7 @@
         }
         if (path.length < 2) {
           vm.removeFromPushed(i);
+          return true;
         }
       };
     }

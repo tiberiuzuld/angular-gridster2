@@ -94,13 +94,17 @@ export const GridsterConfigService: GridsterConfig = {
   outerMargin: true,  // if margins will apply to the sides of the container
   scrollSensitivity: 10,  // margin of the dashboard where to start scrolling
   scrollSpeed: 20,  // how much to scroll each mouse move when in the scrollSensitivity zone
-    initCallback: undefined, // callback to call after grid has initialized. Arguments: gridsterComponent
-    itemChangeCallback: undefined,  // callback to call for each item when is changes x, y, rows, cols.
-    // Arguments: gridsterItem, gridsterItemComponent
-    itemResizeCallback: undefined,  // callback to call for each item when width/height changes.
-    // Arguments: gridsterItem, gridsterItemComponent
-    itemInitCallback: undefined,  // callback to call for each item when is initialized.
-    // Arguments: gridsterItem, gridsterItemComponent
+  initCallback: undefined, // callback to call after grid has initialized. Arguments: gridsterComponent
+  itemChangeCallback: undefined,  // callback to call for each item when is changes x, y, rows, cols.
+  // Arguments: gridsterItem, gridsterItemComponent
+  itemResizeCallback: undefined,  // callback to call for each item when width/height changes.
+  // Arguments: gridsterItem, gridsterItemComponent
+  itemInitCallback: undefined,  // callback to call for each item when is initialized.
+  // Arguments: gridsterItem, gridsterItemComponent
+  enableEmptyCellClickDrag: false, // enable empty cell click and drag drop events
+  emptyCellClickCallback: undefined, // empty cell click callback
+  emptyCellDropCallback: undefined, // empty cell drag drop callback. HTML5 Drag & Drop
+  // Arguments: event, gridsterItem{x, y, rows: defaultItemRows, cols: defaultItemCols}
   draggable: {
     enabled: false, // enable/disable draggable items
     ignoreContentClass: 'gridster-item-content', // default content class to ignore the drag event from

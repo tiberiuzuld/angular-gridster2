@@ -30,9 +30,17 @@
         };
       }
 
+      function checkTouchEvent(e) {
+        if (e.pageX === undefined && e.touches) {
+          e.pageX = e.touches[0].pageX;
+          e.pageY = e.touches[0].pageY;
+        }
+      }
+
       return {
         merge: merge,
-        debounce: debounce
+        debounce: debounce,
+        checkTouchEvent: checkTouchEvent
       }
     });
 })();

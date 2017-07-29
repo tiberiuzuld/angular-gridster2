@@ -16,7 +16,6 @@
     var vm = this;
 
     vm.calculateLayoutDebounce = angular.noop;
-    vm.onResizeFunction = angular.noop;
     vm.movingItem = undefined;
     vm.previewStyle = angular.noop;
     vm.mobile = false;
@@ -40,6 +39,8 @@
     vm.$options.itemChangeCallback = undefined;
     vm.$options.itemResizeCallback = undefined;
     vm.$options.itemInitCallback = undefined;
+    vm.$options.emptyCellClickCallback = undefined;
+    vm.$options.emptyCellDropCallback = undefined;
 
     vm.checkCollisionTwoItems = function checkCollisionTwoItems(item, item2) {
       return item.x < item2.x + item2.cols
@@ -51,14 +52,14 @@
     vm.$onInit = function () {
       vm.setOptions();
       vm.options.api = {
-        optionsChanged: vm.optionsChanged.bind(this),
-        resize: vm.resize.bind(this),
-        getNextPossiblePosition: vm.getNextPossiblePosition.bind(this)
+        optionsChanged: vm.optionsChanged.bind(vm),
+        resize: vm.resize.bind(vm),
+        getNextPossiblePosition: vm.getNextPossiblePosition.bind(vm)
       };
       vm.columns = vm.$options.minCols;
       vm.rows = vm.$options.minRows;
       vm.setGridSize();
-      vm.calculateLayoutDebounce = GridsterUtils.debounce(vm.calculateLayout.bind(this), 5);
+      vm.calculateLayoutDebounce = GridsterUtils.debounce(vm.calculateLayout.bind(vm), 5);
       vm.calculateLayoutDebounce();
       if (vm.options.initCallback) {
         vm.options.initCallback(vm);
@@ -82,11 +83,30 @@
 
     vm.setOptions = function setOptions() {
       vm.$options = GridsterUtils.merge(vm.$options, vm.options, vm.$options);
-      if (!vm.$options.disableWindowResize) {
-        vm.onResizeFunction = vm.onResize.bind(this);
+      if (!vm.$options.disableWindowResize && !vm.onResizeFunction) {
+        vm.onResizeFunction = vm.onResize.bind(vm);
         window.addEventListener('resize', vm.onResizeFunction);
-      } else if (vm.onResizeFunction) {
+      } else if (vm.$options.disableWindowResize && vm.onResizeFunction) {
         window.removeEventListener('resize', vm.onResizeFunction);
+        vm.onResizeFunction = null;
+      }
+      if (vm.$options.enableEmptyCellClickDrag && !vm.emptyCellClick && vm.$options.emptyCellClickCallback) {
+        vm.emptyCellClick = this.emptyCellClickCb.bind(this);
+        vm.el.addEventListener('click', vm.emptyCellClick);
+      } else if (!vm.$options.enableEmptyCellClickDrag && vm.emptyCellClick) {
+        vm.el.removeEventListener('click', vm.emptyCellClick);
+        vm.emptyCellClick = null;
+      }
+      if (vm.$options.enableEmptyCellClickDrag && !vm.emptyCellDrop && vm.$options.emptyCellDropCallback) {
+        vm.emptyCellDrop = vm.emptyCellDragDrop.bind(vm);
+        vm.emptyCellMove = vm.emptyCellDragOver.bind(vm);
+        vm.el.addEventListener('drop', vm.emptyCellDrop);
+        vm.el.addEventListener('dragover', vm.emptyCellMove);
+      } else if (!vm.$options.enableEmptyCellClickDrag && vm.emptyCellDrop) {
+        vm.el.removeEventListener('drop', vm.emptyCellDrop);
+        vm.el.removeEventListener('dragover', vm.emptyCellMove);
+        vm.emptyCellMove = null;
+        vm.emptyCellDrop = null;
       }
     };
 
@@ -104,6 +124,50 @@
       if (vm.onResizeFunction) {
         window.removeEventListener('resize', vm.onResizeFunction);
       }
+    };
+
+    vm.emptyCellClickCb = function (e) {
+      var item = vm.getValidItemFromEvent(e);
+      if (!item || vm.movingItem) {
+        return;
+      }
+      vm.$options.emptyCellClickCallback(event, item);
+    };
+
+    vm.emptyCellDragDrop = function (e) {
+      var item = vm.getValidItemFromEvent(e);
+      if (!item) {
+        return;
+      }
+      vm.$options.emptyCellDropCallback(event, item);
+    };
+
+    vm.emptyCellDragOver = function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (vm.getValidItemFromEvent(e)) {
+        e.dataTransfer.dropEffect = 'move';
+      } else {
+        e.dataTransfer.dropEffect = 'none';
+      }
+    };
+
+    vm.getValidItemFromEvent = function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      GridsterUtils.checkTouchEvent(e);
+      var x = e.pageX - vm.el.scrollLeft - vm.el.offsetLeft;
+      var y = e.pageY - vm.el.scrollTop - vm.el.offsetTop;
+      var item = {
+        x: vm.pixelsToPositionX(x, Math.floor),
+        y: vm.pixelsToPositionY(y, Math.floor),
+        cols: vm.$options.defaultItemCols,
+        rows: vm.$options.defaultItemRows
+      };
+      if (vm.checkCollision(item)) {
+        return;
+      }
+      return item;
     };
 
     vm.onResize = function onResize() {
@@ -232,7 +296,7 @@
         widget.resize.toggle();
       }
       $scope.$applyAsync();
-      setTimeout(vm.resize.bind(this), 100);
+      setTimeout(vm.resize.bind(vm), 100);
     };
 
     vm.addItem = function addItem(itemComponent) {

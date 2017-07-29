@@ -5,7 +5,7 @@
     .service('GridsterDraggable', GridsterDraggable);
 
   /** @ngInject */
-  function GridsterDraggable(GridsterPush, GridsterSwap, GridsterScroll) {
+  function GridsterDraggable(GridsterPush, GridsterSwap, GridsterScroll, GridsterUtils) {
     return function (gridsterItem, gridster) {
       var vm = this;
       vm.offsetLeft = 0;
@@ -34,11 +34,6 @@
         pageY: 0
       };
       vm.path = [];
-
-      function touchEvent(e) {
-        e.pageX = e.touches[0].pageX;
-        e.pageY = e.touches[0].pageY;
-      }
 
       vm.checkContentClass = function (target, current, contentClass) {
         if (target === current) {
@@ -78,9 +73,7 @@
 
         e.stopPropagation();
         e.preventDefault();
-        if (e.pageX === undefined && e.touches) {
-          touchEvent(e);
-        }
+        GridsterUtils.checkTouchEvent(e);
         vm.dragFunction = vm.dragMove.bind(this);
         vm.dragStopFunction = vm.dragStop.bind(this);
 
@@ -99,7 +92,7 @@
         vm.height = vm.gridsterItem.height;
         vm.diffLeft = e.pageX + vm.offsetLeft - vm.margin - vm.left;
         vm.diffTop = e.pageY + vm.offsetTop - vm.margin - vm.top;
-        vm.gridster.movingItem = vm.gridsterItem;
+        vm.gridster.movingItem = vm.gridsterItem.$item;
         vm.gridster.previewStyle();
         vm.push = new GridsterPush(vm.gridsterItem, vm.gridster);
         vm.swap = new GridsterSwap(vm.gridsterItem, vm.gridster);
@@ -110,9 +103,7 @@
       vm.dragMove = function (e) {
         e.stopPropagation();
         e.preventDefault();
-        if (e.pageX === undefined && e.touches) {
-          touchEvent(e);
-        }
+        GridsterUtils.checkTouchEvent(e);
         vm.offsetLeft = vm.gridster.el.scrollLeft - vm.gridster.el.offsetLeft;
         vm.offsetTop = vm.gridster.el.scrollTop - vm.gridster.el.offsetTop;
         GridsterScroll(vm.gridsterItem, e, vm.lastMouse, vm.calculateItemPositionFromMousePosition.bind(this));
