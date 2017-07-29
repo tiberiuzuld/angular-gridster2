@@ -4,6 +4,7 @@ import {scroll, cancelScroll} from './gridsterScroll.service';
 import {GridsterItemComponent} from './gridsterItem.component';
 import {GridsterComponent} from './gridster.component';
 import {GridsterPush} from './gridsterPush.service';
+import {GridsterUtils} from './gridsterUtils.service';
 
 @Injectable()
 export class GridsterDraggable {
@@ -40,11 +41,6 @@ export class GridsterDraggable {
   push: GridsterPush;
   swap: GridsterSwap;
   path: Array<{ x: number, y: number }>;
-
-  static touchEvent(e) {
-    e.pageX = e.touches[0].pageX;
-    e.pageY = e.touches[0].pageY;
-  }
 
   constructor(gridsterItem: GridsterItemComponent, gridster: GridsterComponent) {
     this.gridsterItem = gridsterItem;
@@ -94,9 +90,7 @@ export class GridsterDraggable {
 
     e.stopPropagation();
     e.preventDefault();
-    if (e.pageX === undefined && e.touches) {
-      GridsterDraggable.touchEvent(e);
-    }
+    GridsterUtils.checkTouchEvent(e);
     this.dragFunction = this.dragMove.bind(this);
     this.dragStopFunction = this.dragStop.bind(this);
 
@@ -115,7 +109,7 @@ export class GridsterDraggable {
     this.height = this.gridsterItem.height;
     this.diffLeft = e.pageX + this.offsetLeft - this.margin - this.left;
     this.diffTop = e.pageY + this.offsetTop - this.margin - this.top;
-    this.gridster.movingItem = this.gridsterItem;
+    this.gridster.movingItem = this.gridsterItem.$item;
     this.gridster.previewStyle();
     this.push = new GridsterPush(this.gridsterItem, this.gridster);
     this.swap = new GridsterSwap(this.gridsterItem, this.gridster);
@@ -126,9 +120,7 @@ export class GridsterDraggable {
   dragMove(e): void {
     e.stopPropagation();
     e.preventDefault();
-    if (e.pageX === undefined && e.touches) {
-      GridsterDraggable.touchEvent(e);
-    }
+    GridsterUtils.checkTouchEvent(e);
     this.offsetLeft = this.gridster.el.scrollLeft - this.gridster.el.offsetLeft;
     this.offsetTop = this.gridster.el.scrollTop - this.gridster.el.offsetTop;
     scroll(this.gridsterItem, e, this.lastMouse, this.calculateItemPositionFromMousePosition.bind(this));

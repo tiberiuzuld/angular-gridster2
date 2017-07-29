@@ -7,7 +7,7 @@ export declare class GridsterComponent implements OnInit, OnDestroy {
     renderer: Renderer2;
     options: GridsterConfig;
     calculateLayoutDebounce: Function;
-    movingItem: GridsterItemComponent;
+    movingItem: GridsterItem;
     previewStyle: Function;
     el: any;
     $options: GridsterConfig;
@@ -20,6 +20,9 @@ export declare class GridsterComponent implements OnInit, OnDestroy {
     curColWidth: number;
     curRowHeight: number;
     windowResize: Function;
+    emptyCellClick: Function;
+    emptyCellDrop: Function;
+    emptyCellMove: Function;
     gridLines: GridsterGridComponent;
     static checkCollisionTwoItems(item: GridsterItem, item2: GridsterItem): boolean;
     constructor(el: ElementRef, renderer: Renderer2);
@@ -28,6 +31,10 @@ export declare class GridsterComponent implements OnInit, OnDestroy {
     setOptions(): void;
     optionsChanged(): void;
     ngOnDestroy(): void;
+    emptyCellClickCb(e: any): void;
+    emptyCellDragDrop(e: any): void;
+    emptyCellDragOver(e: any): void;
+    getValidItemFromEvent(e: any): GridsterItem | undefined;
     onResize(): void;
     checkIfToResize(): boolean;
     setGridSize(): void;

@@ -26,6 +26,11 @@ export class AppComponent implements OnInit {
     console.info('itemInitialized', item, itemComponent);
   }
 
+  emptyCellClick(event, item) {
+    console.info('empty cell click', event, item);
+    this.dashboard.push(item);
+  }
+
   ngOnInit() {
     this.options = {
       gridType: 'fit',
@@ -47,6 +52,8 @@ export class AppComponent implements OnInit {
       defaultItemRows: 1,
       fixedColWidth: 250,
       fixedRowHeight: 250,
+      enableEmptyCellClickDrag: false,
+      emptyCellClickCallback: this.emptyCellClick.bind(this),
       draggable: {
         enabled: true,
         stop: AppComponent.eventStop

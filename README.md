@@ -154,6 +154,10 @@ export const GridsterConfigService: GridsterConfig = {
   // Arguments: gridsterItem, gridsterItemComponent
   itemInitCallback: undefined,  // callback to call for each item when is initialized.
   // Arguments: gridsterItem, gridsterItemComponent
+  enableEmptyCellClickDrag: false, // enable empty cell click and drag drop events
+  emptyCellClickCallback: undefined, // empty cell click callback
+  emptyCellDropCallback: undefined, // empty cell drag drop callback. HTML5 Drag & Drop
+  // Arguments: event, gridsterItem{x, y, rows: defaultItemRows, cols: defaultItemCols}
   draggable: {
     enabled: false, // enable/disable draggable items
     ignoreContentClass: 'gridster-item-content', // default content class to ignore the drag event from

@@ -4,6 +4,7 @@ import {scroll, cancelScroll} from './gridsterScroll.service';
 import {GridsterResizeEventType} from './gridsterResizeEventType.interface';
 import {GridsterPush} from './gridsterPush.service';
 import {GridsterComponent} from './gridster.component';
+import {GridsterUtils} from './gridsterUtils.service';
 
 @Injectable()
 export class GridsterResizable {
@@ -45,11 +46,6 @@ export class GridsterResizable {
   height: number;
   newPosition: number;
 
-  static touchEvent(e) {
-    e.pageX = e.touches[0].pageX;
-    e.pageY = e.touches[0].pageY;
-  }
-
   constructor(gridsterItem: GridsterItemComponent, gridster: GridsterComponent) {
     this.gridsterItem = gridsterItem;
     this.gridster = gridster;
@@ -76,9 +72,7 @@ export class GridsterResizable {
     }
     e.stopPropagation();
     e.preventDefault();
-    if (e.pageX === undefined && e.touches) {
-      GridsterResizable.touchEvent(e);
-    }
+    GridsterUtils.checkTouchEvent(e);
     this.dragFunction = this.dragMove.bind(this);
     this.dragStopFunction = this.dragStop.bind(this);
     this.mousemove = this.gridsterItem.renderer.listen('document', 'mousemove', this.dragFunction);
@@ -106,7 +100,7 @@ export class GridsterResizable {
       - this.margin;
     this.minWidth = this.gridster.positionXToPixels(this.gridsterItem.$item.minItemCols || this.gridster.$options.minItemCols)
       - this.margin;
-    this.gridster.movingItem = this.gridsterItem;
+    this.gridster.movingItem = this.gridsterItem.$item;
     this.gridster.previewStyle();
     this.push = new GridsterPush(this.gridsterItem, this.gridster);
     this.gridster.gridLines.updateGrid(true);
@@ -145,9 +139,7 @@ export class GridsterResizable {
   dragMove(e): void {
     e.stopPropagation();
     e.preventDefault();
-    if (e.pageX === undefined && e.touches) {
-      GridsterResizable.touchEvent(e);
-    }
+    GridsterUtils.checkTouchEvent(e);
     this.offsetTop = this.gridster.el.scrollTop - this.gridster.el.offsetTop;
     this.offsetLeft = this.gridster.el.scrollLeft - this.gridster.el.offsetLeft;
     scroll(this.gridsterItem, e, this.lastMouse, this.directionFunction, true, this.resizeEventScrollType);
@@ -167,8 +159,6 @@ export class GridsterResizable {
     this.touchend();
     this.touchcancel();
     this.gridsterItem.renderer.removeClass(this.gridsterItem.el, 'gridster-item-resizing');
-    this.gridster.movingItem = null;
-    this.gridster.previewStyle();
     this.gridster.gridLines.updateGrid(false);
     if (this.gridster.$options.resizable.stop) {
       Promise.resolve(this.gridster.$options.resizable.stop(this.gridsterItem.item, this.gridsterItem, e))
@@ -176,6 +166,10 @@ export class GridsterResizable {
     } else {
       this.makeResize();
     }
+    setTimeout(function () {
+      this.gridster.movingItem = null;
+      this.gridster.previewStyle();
+    }.bind(this));
   }
 
   cancelResize(): void {

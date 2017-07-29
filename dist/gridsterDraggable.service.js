@@ -6,6 +6,7 @@ var gridsterScroll_service_1 = require("./gridsterScroll.service");
 var gridsterItem_component_1 = require("./gridsterItem.component");
 var gridster_component_1 = require("./gridster.component");
 var gridsterPush_service_1 = require("./gridsterPush.service");
+var gridsterUtils_service_1 = require("./gridsterUtils.service");
 var GridsterDraggable = (function () {
     function GridsterDraggable(gridsterItem, gridster) {
         this.gridsterItem = gridsterItem;
@@ -16,10 +17,6 @@ var GridsterDraggable = (function () {
         };
         this.path = [];
     }
-    GridsterDraggable.touchEvent = function (e) {
-        e.pageX = e.touches[0].pageX;
-        e.pageY = e.touches[0].pageY;
-    };
     GridsterDraggable.prototype.checkContentClass = function (target, current, contentClass) {
         if (target === current) {
             return false;
@@ -56,9 +53,7 @@ var GridsterDraggable = (function () {
         }
         e.stopPropagation();
         e.preventDefault();
-        if (e.pageX === undefined && e.touches) {
-            GridsterDraggable.touchEvent(e);
-        }
+        gridsterUtils_service_1.GridsterUtils.checkTouchEvent(e);
         this.dragFunction = this.dragMove.bind(this);
         this.dragStopFunction = this.dragStop.bind(this);
         this.mousemove = this.gridsterItem.renderer.listen('document', 'mousemove', this.dragFunction);
@@ -76,7 +71,7 @@ var GridsterDraggable = (function () {
         this.height = this.gridsterItem.height;
         this.diffLeft = e.pageX + this.offsetLeft - this.margin - this.left;
         this.diffTop = e.pageY + this.offsetTop - this.margin - this.top;
-        this.gridster.movingItem = this.gridsterItem;
+        this.gridster.movingItem = this.gridsterItem.$item;
         this.gridster.previewStyle();
         this.push = new gridsterPush_service_1.GridsterPush(this.gridsterItem, this.gridster);
         this.swap = new gridsterSwap_service_1.GridsterSwap(this.gridsterItem, this.gridster);
@@ -86,9 +81,7 @@ var GridsterDraggable = (function () {
     GridsterDraggable.prototype.dragMove = function (e) {
         e.stopPropagation();
         e.preventDefault();
-        if (e.pageX === undefined && e.touches) {
-            GridsterDraggable.touchEvent(e);
-        }
+        gridsterUtils_service_1.GridsterUtils.checkTouchEvent(e);
         this.offsetLeft = this.gridster.el.scrollLeft - this.gridster.el.offsetLeft;
         this.offsetTop = this.gridster.el.scrollTop - this.gridster.el.offsetTop;
         gridsterScroll_service_1.scroll(this.gridsterItem, e, this.lastMouse, this.calculateItemPositionFromMousePosition.bind(this));

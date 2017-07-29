@@ -4,7 +4,7 @@ import {Injectable} from '@angular/core';
 export class GridsterUtils {
 
   static merge(obj1, obj2, properties) {
-    for (let p in obj2) {
+    for (const p in obj2) {
       if (obj2.hasOwnProperty(p) && properties.hasOwnProperty(p)) {
         if (typeof obj2[p] === 'object') {
           obj1[p] = GridsterUtils.merge(obj1[p], obj2[p], properties[p]);
@@ -17,7 +17,7 @@ export class GridsterUtils {
     return obj1;
   }
 
-  static debounce(func, wait) {
+  static debounce(func: Function, wait: number) {
     let timeout;
     return function () {
       const context = this, args = arguments;
@@ -28,5 +28,12 @@ export class GridsterUtils {
       clearTimeout(timeout);
       timeout = setTimeout(later, wait);
     };
+  }
+
+  static checkTouchEvent(e): void {
+    if (e.pageX === undefined && e.touches) {
+      e.pageX = e.touches[0].pageX;
+      e.pageY = e.touches[0].pageY;
+    }
   }
 }

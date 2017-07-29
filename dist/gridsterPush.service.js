@@ -145,8 +145,14 @@ var GridsterPush = (function () {
     };
     GridsterPush.prototype.checkPushBack = function () {
         var i = this.pushedItems.length - 1;
+        var change = false;
         for (; i > -1; i--) {
-            this.checkPushedItem(this.pushedItems[i], i);
+            if (this.checkPushedItem(this.pushedItems[i], i)) {
+                change = true;
+            }
+        }
+        if (change) {
+            this.checkPushBack();
         }
     };
     GridsterPush.prototype.checkPushedItem = function (pushedItem, i) {
@@ -169,6 +175,7 @@ var GridsterPush = (function () {
         }
         if (path.length < 2) {
             this.removeFromPushed(i);
+            return true;
         }
     };
     GridsterPush.decorators = [

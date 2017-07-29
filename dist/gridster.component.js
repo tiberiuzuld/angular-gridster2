@@ -21,6 +21,8 @@ var GridsterComponent = (function () {
         this.$options.itemChangeCallback = undefined;
         this.$options.itemResizeCallback = undefined;
         this.$options.itemInitCallback = undefined;
+        this.$options.emptyCellClickCallback = undefined;
+        this.$options.emptyCellDropCallback = undefined;
     }
     GridsterComponent.checkCollisionTwoItems = function (item, item2) {
         return item.x < item2.x + item2.cols
@@ -61,11 +63,29 @@ var GridsterComponent = (function () {
     };
     GridsterComponent.prototype.setOptions = function () {
         this.$options = gridsterUtils_service_1.GridsterUtils.merge(this.$options, this.options, this.$options);
-        if (!this.$options.disableWindowResize) {
+        if (!this.$options.disableWindowResize && !this.windowResize) {
             this.windowResize = this.renderer.listen('window', 'resize', this.onResize.bind(this));
         }
-        else if (this.windowResize) {
+        else if (this.$options.disableWindowResize && this.windowResize) {
             this.windowResize();
+            this.windowResize = null;
+        }
+        if (this.$options.enableEmptyCellClickDrag && !this.emptyCellClick && this.$options.emptyCellClickCallback) {
+            this.emptyCellClick = this.renderer.listen(this.el, 'click', this.emptyCellClickCb.bind(this));
+        }
+        else if (!this.$options.enableEmptyCellClickDrag && this.emptyCellClick) {
+            this.emptyCellClick();
+            this.emptyCellClick = null;
+        }
+        if (this.$options.enableEmptyCellClickDrag && !this.emptyCellDrop && this.$options.emptyCellDropCallback) {
+            this.emptyCellDrop = this.renderer.listen(this.el, 'drop', this.emptyCellDragDrop.bind(this));
+            this.emptyCellMove = this.renderer.listen(this.el, 'dragover', this.emptyCellDragOver.bind(this));
+        }
+        else if (!this.$options.enableEmptyCellClickDrag && this.emptyCellDrop) {
+            this.emptyCellDrop();
+            this.emptyCellMove();
+            this.emptyCellMove = null;
+            this.emptyCellDrop = null;
         }
     };
     GridsterComponent.prototype.optionsChanged = function () {
@@ -81,6 +101,47 @@ var GridsterComponent = (function () {
         if (this.windowResize) {
             this.windowResize();
         }
+    };
+    GridsterComponent.prototype.emptyCellClickCb = function (e) {
+        var item = this.getValidItemFromEvent(e);
+        if (!item || this.movingItem) {
+            return;
+        }
+        this.$options.emptyCellClickCallback(event, item);
+    };
+    GridsterComponent.prototype.emptyCellDragDrop = function (e) {
+        var item = this.getValidItemFromEvent(e);
+        if (!item) {
+            return;
+        }
+        this.$options.emptyCellDropCallback(event, item);
+    };
+    GridsterComponent.prototype.emptyCellDragOver = function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (this.getValidItemFromEvent(e)) {
+            e.dataTransfer.dropEffect = 'move';
+        }
+        else {
+            e.dataTransfer.dropEffect = 'none';
+        }
+    };
+    GridsterComponent.prototype.getValidItemFromEvent = function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        gridsterUtils_service_1.GridsterUtils.checkTouchEvent(e);
+        var x = e.pageX - this.el.scrollLeft - this.el.offsetLeft;
+        var y = e.pageY - this.el.scrollTop - this.el.offsetTop;
+        var item = {
+            x: this.pixelsToPositionX(x, Math.floor),
+            y: this.pixelsToPositionY(y, Math.floor),
+            cols: this.$options.defaultItemCols,
+            rows: this.$options.defaultItemRows
+        };
+        if (this.checkCollision(item)) {
+            return;
+        }
+        return item;
     };
     GridsterComponent.prototype.onResize = function () {
         this.setGridSize();

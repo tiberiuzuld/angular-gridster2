@@ -74,6 +74,9 @@
     <md-checkbox [(ngModel)]="options.keepFixedHeightInMobile" (ngModelChange)="changedOptions()">
       Keep Fixed Height In Mobile
     </md-checkbox>
+    <md-checkbox [(ngModel)]="options.enableEmptyCellClickDrag" (ngModelChange)="changedOptions()">
+      Enable click to add
+    </md-checkbox>
     <md-input-container>
       <input mdInput [(ngModel)]="options.minCols" type="number" placeholder="Min Grid Cols"
              (ngModelChange)="changedOptions()">
@@ -112,13 +115,13 @@
         <button md-icon-button md-raised-button class="drag-handler">
           <md-icon>open_with</md-icon>
         </button>
-        <button md-icon-button md-raised-button class="remove-button" (click)="removeItem($event, item)"
+        <button md-icon-button md-raised-button class="remove-button" (mousedown)="removeItem($event, item)"
                 (touchstart)="removeItem($event, item)" mdTooltip="Remove">
           <md-icon>clear</md-icon>
         </button>
       </div>
       <label *ngIf="!item.hasContent">{{item.label}}</label>
-      <button md-mini-fab *ngIf="!item.hasContent" (click)="removeItem($event, item)"
+      <button md-mini-fab *ngIf="!item.hasContent" (mousedown)="removeItem($event, item)"
               (touchstart)="removeItem($event, item)" mdTooltip="Remove">
         <md-icon>clear</md-icon>
       </button>

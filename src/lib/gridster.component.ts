@@ -14,7 +14,7 @@ import {GridsterItem} from './gridsterItem.interface';
 export class GridsterComponent implements OnInit, OnDestroy {
   @Input() options: GridsterConfig;
   calculateLayoutDebounce: Function;
-  movingItem: GridsterItemComponent;
+  movingItem: GridsterItem;
   previewStyle: Function;
   el: any;
   $options: GridsterConfig;
@@ -27,6 +27,9 @@ export class GridsterComponent implements OnInit, OnDestroy {
   curColWidth: number;
   curRowHeight: number;
   windowResize: Function;
+  emptyCellClick: Function;
+  emptyCellDrop: Function;
+  emptyCellMove: Function;
   gridLines: GridsterGridComponent;
 
   static checkCollisionTwoItems(item: GridsterItem, item2: GridsterItem): boolean {
@@ -52,6 +55,8 @@ export class GridsterComponent implements OnInit, OnDestroy {
     this.$options.itemChangeCallback = undefined;
     this.$options.itemResizeCallback = undefined;
     this.$options.itemInitCallback = undefined;
+    this.$options.emptyCellClickCallback = undefined;
+    this.$options.emptyCellDropCallback = undefined;
   }
 
   ngOnInit(): void {
@@ -88,10 +93,26 @@ export class GridsterComponent implements OnInit, OnDestroy {
 
   setOptions(): void {
     this.$options = GridsterUtils.merge(this.$options, this.options, this.$options);
-    if (!this.$options.disableWindowResize) {
+    if (!this.$options.disableWindowResize && !this.windowResize) {
       this.windowResize = this.renderer.listen('window', 'resize', this.onResize.bind(this));
-    } else if (this.windowResize) {
+    } else if (this.$options.disableWindowResize && this.windowResize) {
       this.windowResize();
+      this.windowResize = null;
+    }
+    if (this.$options.enableEmptyCellClickDrag && !this.emptyCellClick && this.$options.emptyCellClickCallback) {
+      this.emptyCellClick = this.renderer.listen(this.el, 'click', this.emptyCellClickCb.bind(this));
+    } else if (!this.$options.enableEmptyCellClickDrag && this.emptyCellClick) {
+      this.emptyCellClick();
+      this.emptyCellClick = null;
+    }
+    if (this.$options.enableEmptyCellClickDrag && !this.emptyCellDrop && this.$options.emptyCellDropCallback) {
+      this.emptyCellDrop = this.renderer.listen(this.el, 'drop', this.emptyCellDragDrop.bind(this));
+      this.emptyCellMove = this.renderer.listen(this.el, 'dragover', this.emptyCellDragOver.bind(this));
+    } else if (!this.$options.enableEmptyCellClickDrag && this.emptyCellDrop) {
+      this.emptyCellDrop();
+      this.emptyCellMove();
+      this.emptyCellMove = null;
+      this.emptyCellDrop = null;
     }
   }
 
@@ -109,6 +130,50 @@ export class GridsterComponent implements OnInit, OnDestroy {
     if (this.windowResize) {
       this.windowResize();
     }
+  }
+
+  emptyCellClickCb(e): void {
+    const item = this.getValidItemFromEvent(e);
+    if (!item || this.movingItem) {
+      return;
+    }
+    this.$options.emptyCellClickCallback(event, item);
+  }
+
+  emptyCellDragDrop(e): void {
+    const item = this.getValidItemFromEvent(e);
+    if (!item) {
+      return;
+    }
+    this.$options.emptyCellDropCallback(event, item);
+  }
+
+  emptyCellDragOver(e): void {
+    e.preventDefault();
+    e.stopPropagation();
+    if (this.getValidItemFromEvent(e)) {
+      e.dataTransfer.dropEffect = 'move';
+    } else {
+      e.dataTransfer.dropEffect = 'none';
+    }
+  }
+
+  getValidItemFromEvent(e): GridsterItem | undefined {
+    e.preventDefault();
+    e.stopPropagation();
+    GridsterUtils.checkTouchEvent(e);
+    const x = e.pageX - this.el.scrollLeft - this.el.offsetLeft;
+    const y = e.pageY - this.el.scrollTop - this.el.offsetTop;
+    const item: GridsterItem = {
+      x: this.pixelsToPositionX(x, Math.floor),
+      y: this.pixelsToPositionY(y, Math.floor),
+      cols: this.$options.defaultItemCols,
+      rows: this.$options.defaultItemRows
+    };
+    if (this.checkCollision(item)) {
+      return;
+    }
+    return item;
   }
 
   onResize(): void {

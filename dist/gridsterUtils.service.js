@@ -29,6 +29,12 @@ var GridsterUtils = (function () {
             timeout = setTimeout(later, wait);
         };
     };
+    GridsterUtils.checkTouchEvent = function (e) {
+        if (e.pageX === undefined && e.touches) {
+            e.pageX = e.touches[0].pageX;
+            e.pageY = e.touches[0].pageY;
+        }
+    };
     GridsterUtils.decorators = [
         { type: core_1.Injectable },
     ];

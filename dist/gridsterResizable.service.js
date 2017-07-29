@@ -5,6 +5,7 @@ var gridsterItem_component_1 = require("./gridsterItem.component");
 var gridsterScroll_service_1 = require("./gridsterScroll.service");
 var gridsterPush_service_1 = require("./gridsterPush.service");
 var gridster_component_1 = require("./gridster.component");
+var gridsterUtils_service_1 = require("./gridsterUtils.service");
 var GridsterResizable = (function () {
     function GridsterResizable(gridsterItem, gridster) {
         this.gridsterItem = gridsterItem;
@@ -16,10 +17,6 @@ var GridsterResizable = (function () {
         this.itemBackup = [0, 0, 0, 0];
         this.resizeEventScrollType = { w: false, e: false, n: false, s: false };
     }
-    GridsterResizable.touchEvent = function (e) {
-        e.pageX = e.touches[0].pageX;
-        e.pageY = e.touches[0].pageY;
-    };
     GridsterResizable.prototype.dragStart = function (e) {
         switch (e.which) {
             case 1:
@@ -35,9 +32,7 @@ var GridsterResizable = (function () {
         }
         e.stopPropagation();
         e.preventDefault();
-        if (e.pageX === undefined && e.touches) {
-            GridsterResizable.touchEvent(e);
-        }
+        gridsterUtils_service_1.GridsterUtils.checkTouchEvent(e);
         this.dragFunction = this.dragMove.bind(this);
         this.dragStopFunction = this.dragStop.bind(this);
         this.mousemove = this.gridsterItem.renderer.listen('document', 'mousemove', this.dragFunction);
@@ -65,7 +60,7 @@ var GridsterResizable = (function () {
             - this.margin;
         this.minWidth = this.gridster.positionXToPixels(this.gridsterItem.$item.minItemCols || this.gridster.$options.minItemCols)
             - this.margin;
-        this.gridster.movingItem = this.gridsterItem;
+        this.gridster.movingItem = this.gridsterItem.$item;
         this.gridster.previewStyle();
         this.push = new gridsterPush_service_1.GridsterPush(this.gridsterItem, this.gridster);
         this.gridster.gridLines.updateGrid(true);
@@ -109,9 +104,7 @@ var GridsterResizable = (function () {
     GridsterResizable.prototype.dragMove = function (e) {
         e.stopPropagation();
         e.preventDefault();
-        if (e.pageX === undefined && e.touches) {
-            GridsterResizable.touchEvent(e);
-        }
+        gridsterUtils_service_1.GridsterUtils.checkTouchEvent(e);
         this.offsetTop = this.gridster.el.scrollTop - this.gridster.el.offsetTop;
         this.offsetLeft = this.gridster.el.scrollLeft - this.gridster.el.offsetLeft;
         gridsterScroll_service_1.scroll(this.gridsterItem, e, this.lastMouse, this.directionFunction, true, this.resizeEventScrollType);
@@ -129,8 +122,6 @@ var GridsterResizable = (function () {
         this.touchend();
         this.touchcancel();
         this.gridsterItem.renderer.removeClass(this.gridsterItem.el, 'gridster-item-resizing');
-        this.gridster.movingItem = null;
-        this.gridster.previewStyle();
         this.gridster.gridLines.updateGrid(false);
         if (this.gridster.$options.resizable.stop) {
             Promise.resolve(this.gridster.$options.resizable.stop(this.gridsterItem.item, this.gridsterItem, e))
@@ -139,6 +130,10 @@ var GridsterResizable = (function () {
         else {
             this.makeResize();
         }
+        setTimeout(function () {
+            this.gridster.movingItem = null;
+            this.gridster.previewStyle();
+        }.bind(this));
     };
     GridsterResizable.prototype.cancelResize = function () {
         this.gridsterItem.$item.cols = this.gridsterItem.item.cols;

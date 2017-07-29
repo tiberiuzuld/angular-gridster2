@@ -33,6 +33,10 @@ exports.GridsterConfigService = {
     // Arguments: gridsterItem, gridsterItemComponent
     itemInitCallback: undefined,
     // Arguments: gridsterItem, gridsterItemComponent
+    enableEmptyCellClickDrag: false,
+    emptyCellClickCallback: undefined,
+    emptyCellDropCallback: undefined,
+    // Arguments: event, gridsterItem{x, y, rows: defaultItemRows, cols: defaultItemCols}
     draggable: {
         enabled: false,
         ignoreContentClass: 'gridster-item-content',

@@ -40,7 +40,6 @@ export declare class GridsterResizable {
     width: number;
     height: number;
     newPosition: number;
-    static touchEvent(e: any): void;
     constructor(gridsterItem: GridsterItemComponent, gridster: GridsterComponent);
     dragStart(e: any): void;
     dragMove(e: any): void;
