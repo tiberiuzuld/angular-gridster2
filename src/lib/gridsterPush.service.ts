@@ -31,13 +31,13 @@ export class GridsterPush {
     this.fromWest = 'fromWest';
   }
 
-  pushItems(direction) {
+  pushItems(direction): void {
     if (this.gridster.$options.pushItems) {
       this.push(this.gridsterItem, direction, this.gridsterItem);
     }
   }
 
-  restoreItems() {
+  restoreItems(): void {
     let i = 0;
     const l: number = this.pushedItems.length;
     let pushedItem: GridsterItemComponent;
@@ -142,7 +142,7 @@ export class GridsterPush {
     }
   }
 
-  private addToPushed(gridsterItem: GridsterItemComponent) {
+  private addToPushed(gridsterItem: GridsterItemComponent): void {
     if (this.pushedItems.indexOf(gridsterItem) < 0) {
       this.pushedItems.push(gridsterItem);
       this.pushedItemsPath.push([{x: gridsterItem.item.x, y: gridsterItem.item.y}, {x: gridsterItem.$item.x, y: gridsterItem.$item.y}]);
@@ -152,21 +152,27 @@ export class GridsterPush {
     }
   }
 
-  private removeFromPushed(i: number) {
+  private removeFromPushed(i: number): void {
     if (i > -1) {
       this.pushedItems.splice(i, 1);
       this.pushedItemsPath.splice(i, 1);
     }
   }
 
-  public checkPushBack() {
+  public checkPushBack(): void {
     let i: number = this.pushedItems.length - 1;
+    let change = false;
     for (; i > -1; i--) {
-      this.checkPushedItem(this.pushedItems[i], i);
+      if (this.checkPushedItem(this.pushedItems[i], i)) {
+        change = true;
+      }
+    }
+    if (change) {
+      this.checkPushBack();
     }
   }
 
-  private checkPushedItem(pushedItem: GridsterItemComponent, i: number) {
+  private checkPushedItem(pushedItem: GridsterItemComponent, i: number): boolean {
     const path = this.pushedItemsPath[i];
     let j = path.length - 2;
     let lastPosition;
@@ -185,6 +191,7 @@ export class GridsterPush {
     }
     if (path.length < 2) {
       this.removeFromPushed(i);
+      return true;
     }
   }
 }
