@@ -285,7 +285,7 @@
         $element.removeClass('mobile');
       }
       if (vm.gridLines) {
-        vm.gridLines.updateGrid(!!vm.movingItem);
+        vm.gridLines.updateGrid();
       }
 
       var widgetsIndex = vm.grid.length - 1, widget;

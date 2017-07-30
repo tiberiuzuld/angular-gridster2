@@ -62,7 +62,11 @@
       if (vm.gridster.mobile) {
         vm.top = 0;
         vm.left = 0;
-        vm.width = vm.gridster.curWidth - (vm.gridster.$options.outerMargin ? 2 * vm.gridster.$options.margin : 0);
+        if (vm.gridster.$options.keepFixedWidthInMobile) {
+          vm.width = vm.$item.cols * vm.gridster.$options.fixedColWidth;
+        } else {
+          vm.width = vm.gridster.curWidth - (vm.gridster.$options.outerMargin ? 2 * vm.gridster.$options.margin : 0);
+        }
         if (vm.gridster.$options.keepFixedHeightInMobile) {
           vm.height = vm.$item.rows * vm.gridster.$options.fixedRowHeight;
         } else {

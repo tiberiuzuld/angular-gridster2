@@ -130,8 +130,6 @@
         document.removeEventListener('touchend', vm.dragStopFunction);
         document.removeEventListener('touchcancel', vm.dragStopFunction);
         vm.gridsterItem.el.removeClass('gridster-item-moving');
-        vm.gridster.movingItem = null;
-        vm.gridster.previewStyle();
         vm.gridster.gridLines.updateGrid(false);
         vm.path = [];
         if (vm.gridster.$options.draggable.stop) {
@@ -144,6 +142,10 @@
         } else {
           vm.makeDrag();
         }
+        setTimeout(function () {
+          vm.gridster.movingItem = null;
+          vm.gridster.previewStyle();
+        });
       };
 
       vm.cancelDrag = function () {
