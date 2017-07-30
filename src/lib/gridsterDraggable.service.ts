@@ -113,7 +113,8 @@ export class GridsterDraggable {
     this.gridster.previewStyle();
     this.push = new GridsterPush(this.gridsterItem, this.gridster);
     this.swap = new GridsterSwap(this.gridsterItem, this.gridster);
-    this.gridster.gridLines.updateGrid(true);
+    this.gridster.dragInProgress = true;
+    this.gridster.gridLines.updateGrid();
     this.path.push({x: this.gridsterItem.item.x, y: this.gridsterItem.item.y});
   }
 
@@ -129,6 +130,7 @@ export class GridsterDraggable {
 
     this.lastMouse.pageX = e.pageX;
     this.lastMouse.pageY = e.pageY;
+    this.gridster.gridLines.updateGrid();
   }
 
   calculateItemPositionFromMousePosition(e): void {
@@ -148,7 +150,8 @@ export class GridsterDraggable {
     this.touchend();
     this.touchcancel();
     this.gridsterItem.renderer.removeClass(this.gridsterItem.el, 'gridster-item-moving');
-    this.gridster.gridLines.updateGrid(false);
+    this.gridster.dragInProgress = false;
+    this.gridster.gridLines.updateGrid();
     this.path = [];
     if (this.gridster.$options.draggable.stop) {
       Promise.resolve(this.gridster.$options.draggable.stop(this.gridsterItem.item, this.gridsterItem, e))

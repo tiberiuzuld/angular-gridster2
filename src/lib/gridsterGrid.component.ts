@@ -1,9 +1,11 @@
-import {Component, ElementRef, Host, Renderer2} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Host, Renderer2} from '@angular/core';
 import {GridsterComponent} from './gridster.component';
+
 @Component({
   selector: 'gridster-grid',
   templateUrl: './gridsterGrid.html',
-  styleUrls: ['./gridsterGrid.css']
+  styleUrls: ['./gridsterGrid.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class GridsterGridComponent {
@@ -17,7 +19,7 @@ export class GridsterGridComponent {
   columnsHeight: number;
   rowsWidth: number;
 
-  constructor(el: ElementRef, @Host() gridster: GridsterComponent, public renderer: Renderer2) {
+  constructor(el: ElementRef, @Host() gridster: GridsterComponent, public renderer: Renderer2, private cdRef: ChangeDetectorRef) {
     this.el = el.nativeElement;
     this.gridster = gridster;
     this.gridster.gridLines = this;
@@ -29,15 +31,15 @@ export class GridsterGridComponent {
     this.rowsWidth = 0;
   }
 
-  updateGrid(dragOn?: boolean): void {
+  updateGrid(): void {
     if (this.gridster.$options.displayGrid === 'always' && !this.gridster.mobile) {
       this.renderer.setStyle(this.el, 'display', 'block');
-    } else if (this.gridster.$options.displayGrid === 'onDrag&Resize' && dragOn) {
+    } else if (this.gridster.$options.displayGrid === 'onDrag&Resize' && this.gridster.dragInProgress) {
       this.renderer.setStyle(this.el, 'display', 'block');
-    } else if (this.gridster.$options.displayGrid === 'none' || !dragOn || this.gridster.mobile) {
+    } else if (this.gridster.$options.displayGrid === 'none' || !this.gridster.dragInProgress || this.gridster.mobile) {
       this.renderer.setStyle(this.el, 'display', 'none');
-      return;
     }
+    this.gridster.setGridDimensions();
     this.margin = this.gridster.$options.margin;
     this.height = this.gridster.curRowHeight - this.margin;
     this.width = this.gridster.curColWidth - this.margin;
@@ -45,5 +47,6 @@ export class GridsterGridComponent {
     this.rows.length = Math.max(this.gridster.rows, Math.floor(this.gridster.curHeight / this.gridster.curRowHeight));
     this.columnsHeight = this.gridster.curRowHeight * this.rows.length;
     this.rowsWidth = this.gridster.curColWidth * this.columns.length;
+    this.cdRef.detectChanges();
   }
 }

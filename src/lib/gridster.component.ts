@@ -31,6 +31,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
   emptyCellDrop: Function;
   emptyCellMove: Function;
   gridLines: GridsterGridComponent;
+  dragInProgress: boolean;
 
   static checkCollisionTwoItems(item: GridsterItem, item2: GridsterItem): boolean {
     return item.x < item2.x + item2.cols
@@ -48,6 +49,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
     this.grid = [];
     this.curColWidth = 0;
     this.curRowHeight = 0;
+    this.dragInProgress = false;
     this.$options.draggable.stop = undefined;
     this.$options.draggable.start = undefined;
     this.$options.resizable.stop = undefined;

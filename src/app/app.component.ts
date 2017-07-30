@@ -1,10 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {GridsterConfig} from '../lib/gridsterConfig.interface';
 
 @Component({
   selector: 'gridster-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit {
   options: GridsterConfig;
@@ -38,20 +39,20 @@ export class AppComponent implements OnInit {
       itemChangeCallback: AppComponent.itemChange,
       itemResizeCallback: AppComponent.itemResize,
       itemInitCallback: AppComponent.itemInit,
-      margin: 10,
+      margin: 5,
       outerMargin: true,
       minCols: 1,
       maxCols: 100,
       minRows: 1,
       maxRows: 100,
-      maxItemCols: 50,
+      maxItemCols: 100,
       minItemCols: 1,
-      maxItemRows: 50,
+      maxItemRows: 100,
       minItemRows: 1,
       defaultItemCols: 1,
       defaultItemRows: 1,
-      fixedColWidth: 250,
-      fixedRowHeight: 250,
+      fixedColWidth: 105,
+      fixedRowHeight: 105,
       enableEmptyCellClickDrag: false,
       emptyCellClickCallback: this.emptyCellClick.bind(this),
       draggable: {
@@ -63,6 +64,7 @@ export class AppComponent implements OnInit {
         stop: AppComponent.eventStop
       },
       swap: false,
+      pushItems: true,
       displayGrid: 'onDrag&Resize'
     };
 
