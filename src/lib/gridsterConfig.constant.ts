@@ -10,6 +10,7 @@ export const GridsterConfigService: GridsterConfig = {
   fixedColWidth: 250, // fixed col width for gridType: 'fixed'
   fixedRowHeight: 250, // fixed row height for gridType: 'fixed'
   keepFixedHeightInMobile: false, // keep the height from fixed gridType in mobile layout
+  keepFixedWidthInMobile: false, // keep the width from fixed gridType in mobile layout
   compactType: 'none', // compact items: 'none' | 'compactUp' | 'compactLeft' | 'compactUp&Left' | 'compactLeft&Up'
   mobileBreakpoint: 640, // if the screen is not wider that this, remove the grid layout and stack the items
   minCols: 1, // minimum amount of columns in the grid

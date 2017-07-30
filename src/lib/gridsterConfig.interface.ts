@@ -7,6 +7,7 @@ export interface GridsterConfig {
   fixedColWidth?: number;
   fixedRowHeight?: number;
   keepFixedHeightInMobile?: boolean;
+  keepFixedWidthInMobile?: boolean;
   compactType?: compactType;
   mobileBreakpoint?: number;
   minCols?: number;

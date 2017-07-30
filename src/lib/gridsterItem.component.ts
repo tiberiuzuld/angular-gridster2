@@ -68,7 +68,11 @@ export class GridsterItemComponent implements OnInit, OnDestroy {
     if (this.gridster.mobile) {
       this.top = 0;
       this.left = 0;
-      this.width = this.gridster.curWidth - (this.gridster.$options.outerMargin ? 2 * this.gridster.$options.margin : 0);
+      if (this.gridster.$options.keepFixedWidthInMobile) {
+        this.width = this.$item.cols * this.gridster.$options.fixedColWidth;
+      } else {
+        this.width = this.gridster.curWidth - (this.gridster.$options.outerMargin ? 2 * this.gridster.$options.margin : 0);
+      }
       if (this.gridster.$options.keepFixedHeightInMobile) {
         this.height = this.$item.rows * this.gridster.$options.fixedRowHeight;
       } else {
