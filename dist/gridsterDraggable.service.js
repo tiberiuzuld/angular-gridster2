@@ -104,8 +104,6 @@ var GridsterDraggable = (function () {
         this.touchend();
         this.touchcancel();
         this.gridsterItem.renderer.removeClass(this.gridsterItem.el, 'gridster-item-moving');
-        this.gridster.movingItem = null;
-        this.gridster.previewStyle();
         this.gridster.gridLines.updateGrid(false);
         this.path = [];
         if (this.gridster.$options.draggable.stop) {
@@ -115,6 +113,10 @@ var GridsterDraggable = (function () {
         else {
             this.makeDrag();
         }
+        setTimeout(function () {
+            this.gridster.movingItem = null;
+            this.gridster.previewStyle();
+        }.bind(this));
     };
     GridsterDraggable.prototype.cancelDrag = function () {
         this.gridsterItem.$item.x = this.gridsterItem.item.x;
