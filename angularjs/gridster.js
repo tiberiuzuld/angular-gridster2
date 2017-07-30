@@ -910,7 +910,11 @@
       if (vm.gridster.mobile) {
         vm.top = 0;
         vm.left = 0;
-        vm.width = vm.gridster.curWidth - (vm.gridster.$options.outerMargin ? 2 * vm.gridster.$options.margin : 0);
+        if (vm.gridster.$options.keepFixedWidthInMobile) {
+          vm.width = vm.$item.cols * vm.gridster.$options.fixedColWidth;
+        } else {
+          vm.width = vm.gridster.curWidth - (vm.gridster.$options.outerMargin ? 2 * vm.gridster.$options.margin : 0);
+        }
         if (vm.gridster.$options.keepFixedHeightInMobile) {
           vm.height = vm.$item.rows * vm.gridster.$options.fixedRowHeight;
         } else {
@@ -1169,8 +1173,6 @@
         document.removeEventListener('touchend', vm.dragStopFunction);
         document.removeEventListener('touchcancel', vm.dragStopFunction);
         vm.gridsterItem.el.removeClass('gridster-item-moving');
-        vm.gridster.movingItem = null;
-        vm.gridster.previewStyle();
         vm.gridster.gridLines.updateGrid(false);
         vm.path = [];
         if (vm.gridster.$options.draggable.stop) {
@@ -1183,6 +1185,10 @@
         } else {
           vm.makeDrag();
         }
+        setTimeout(function () {
+          vm.gridster.movingItem = null;
+          vm.gridster.previewStyle();
+        });
       };
 
       vm.cancelDrag = function () {
@@ -1275,6 +1281,7 @@
     fixedColWidth: 250, // fixed col width for gridType: 'fixed'
     fixedRowHeight: 250, // fixed row height for gridType: 'fixed'
     keepFixedHeightInMobile: false, // keep the height from fixed gridType in mobile layout
+    keepFixedWidthInMobile: false, // keep the width from fixed gridType in mobile layout
     compactType: 'none', // compact items: 'none' | 'compactUp' | 'compactLeft' | 'compactUp&Left' | 'compactLeft&Up'
     mobileBreakpoint: 640, // if the screen is not wider that this, remove the grid layout and stack the items
     minCols: 1, // minimum amount of columns in the grid
@@ -1622,7 +1629,7 @@
         $element.removeClass('mobile');
       }
       if (vm.gridLines) {
-        vm.gridLines.updateGrid(!!vm.movingItem);
+        vm.gridLines.updateGrid();
       }
 
       var widgetsIndex = vm.grid.length - 1, widget;
