@@ -291,7 +291,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
       this.mobile = !this.mobile;
       this.renderer.removeClass(this.el, 'mobile');
     }
-    this.gridLines.updateGrid(!!this.movingItem);
+    this.gridLines.updateGrid();
 
     let widgetsIndex: number = this.grid.length - 1, widget: GridsterItemComponent;
     for (; widgetsIndex >= 0; widgetsIndex--) {
