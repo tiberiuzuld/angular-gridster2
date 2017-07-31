@@ -1,4 +1,7 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Host, Renderer2} from '@angular/core';
+import {
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Host, OnDestroy,
+  Renderer2
+} from '@angular/core';
 import {GridsterComponent} from './gridster.component';
 
 @Component({
@@ -8,7 +11,7 @@ import {GridsterComponent} from './gridster.component';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class GridsterGridComponent {
+export class GridsterGridComponent implements OnDestroy {
   el: any;
   gridster: GridsterComponent;
   columns: Array<any>;
@@ -29,6 +32,10 @@ export class GridsterGridComponent {
     this.width = 0;
     this.columnsHeight = 0;
     this.rowsWidth = 0;
+  }
+
+  ngOnDestroy() {
+    this.cdRef.detach();
   }
 
   updateGrid(): void {
