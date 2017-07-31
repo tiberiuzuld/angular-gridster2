@@ -1,5 +1,5 @@
 import {
-  ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Host, OnDestroy,
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Host,
   Renderer2
 } from '@angular/core';
 import {GridsterComponent} from './gridster.component';
@@ -11,7 +11,7 @@ import {GridsterComponent} from './gridster.component';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class GridsterGridComponent implements OnDestroy {
+export class GridsterGridComponent {
   el: any;
   gridster: GridsterComponent;
   columns: Array<any>;
@@ -34,10 +34,6 @@ export class GridsterGridComponent implements OnDestroy {
     this.rowsWidth = 0;
   }
 
-  ngOnDestroy() {
-    this.cdRef.detach();
-  }
-
   updateGrid(): void {
     if (this.gridster.$options.displayGrid === 'always' && !this.gridster.mobile) {
       this.renderer.setStyle(this.el, 'display', 'block');
@@ -54,6 +50,6 @@ export class GridsterGridComponent implements OnDestroy {
     this.rows.length = Math.max(this.gridster.rows, Math.floor(this.gridster.curHeight / this.gridster.curRowHeight));
     this.columnsHeight = this.gridster.curRowHeight * this.rows.length;
     this.rowsWidth = this.gridster.curColWidth * this.columns.length;
-    this.cdRef.detectChanges();
+    this.cdRef.markForCheck();
   }
 }
