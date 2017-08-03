@@ -144,6 +144,8 @@ export const GridsterConfigService: GridsterConfig = {
   maxItemRows: 50, // max item number of rows
   minItemCols: 1, // min item number of columns
   minItemRows: 1, // min item number of rows
+  minItemArea: 1, // min item area: cols * rows
+  maxItemArea: 2500, // max item area: cols * rows
   margin: 10,  // margin between grid items
   outerMargin: true,  // if margins will apply to the sides of the container
   scrollSensitivity: 10,  // margin of the dashboard where to start scrolling
@@ -212,6 +214,8 @@ export interface GridsterItem {
   minItemRows?: number; // override grid option minItemRows
   maxItemCols?: number; // override grid option maxItemCols
   minItemCols?: number; // override grid option minItemCols
+  minItemArea?: number; //  override grid option minItemArea
+  maxItemArea?: number; //  override grid option maxItemArea
 }
 ```
 

@@ -358,7 +358,12 @@ export class GridsterComponent implements OnInit, OnDestroy {
     const minItemRows = itemComponent.minItemRows === undefined ? this.$options.minItemRows : itemComponent.minItemRows;
     const inColsLimits = itemComponent.cols <= maxItemCols && itemComponent.cols >= minItemCols;
     const inRowsLimits = itemComponent.rows <= maxItemRows && itemComponent.rows >= minItemRows;
-    return !(noNegativePosition && maxGridCols && maxGridRows && inColsLimits && inRowsLimits);
+    const minAreaLimit = itemComponent.minItemArea === undefined ? this.$options.minItemArea : itemComponent.minItemArea;
+    const maxAreaLimit = itemComponent.maxItemArea === undefined ? this.$options.maxItemArea : itemComponent.maxItemArea;
+    const area = itemComponent.cols * itemComponent.rows;
+    const inMinArea = minAreaLimit <= area;
+    const inMaxArea = maxAreaLimit >= area;
+    return !(noNegativePosition && maxGridCols && maxGridRows && inColsLimits && inRowsLimits && inMinArea && inMaxArea);
   }
 
   findItemWithItem(itemComponent: GridsterItem, ignoreItem?: GridsterItem): GridsterItemComponent {
