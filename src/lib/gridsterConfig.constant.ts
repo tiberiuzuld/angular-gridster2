@@ -39,6 +39,7 @@ export const GridsterConfigService: GridsterConfig = {
   enableEmptyCellClickDrag: false, // enable empty cell click and drag drop events
   emptyCellClickCallback: undefined, // empty cell click callback
   emptyCellDropCallback: undefined, // empty cell drag drop callback. HTML5 Drag & Drop
+  emptyCellDragCallback: undefined, // empty cell drag and create item like excel cell selection
   // Arguments: event, gridsterItem{x, y, rows: defaultItemRows, cols: defaultItemCols}
   draggable: {
     enabled: false, // enable/disable draggable items

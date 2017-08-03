@@ -160,6 +160,7 @@ export const GridsterConfigService: GridsterConfig = {
   enableEmptyCellClickDrag: false, // enable empty cell click and drag drop events
   emptyCellClickCallback: undefined, // empty cell click callback
   emptyCellDropCallback: undefined, // empty cell drag drop callback. HTML5 Drag & Drop
+  emptyCellDragCallback: undefined, // empty cell drag and create item like excel cell selection
   // Arguments: event, gridsterItem{x, y, rows: defaultItemRows, cols: defaultItemCols}
   draggable: {
     enabled: false, // enable/disable draggable items
@@ -187,7 +188,7 @@ export const GridsterConfigService: GridsterConfig = {
     // Arguments: item, gridsterItem, event
   },
   swap: true, // allow items to switch position if drop on top of another
-  pushItems: false, // push items when resizing and dragging
+pushItems: false, // push items when resizing and dragging
   displayGrid: 'onDrag&Resize', // display background grid of rows and columns
   disableWindowResize: false // disable the window on resize listener. This will stop grid to recalculate on window resize.
 };

@@ -39,6 +39,7 @@ export interface GridsterConfig {
   enableEmptyCellClickDrag?: boolean;
   emptyCellClickCallback?: Function;
   emptyCellDropCallback?: Function;
+  emptyCellDragCallback?: Function;
   api?: {
     resize?: Function,
     optionsChanged?: Function,

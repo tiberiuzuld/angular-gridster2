@@ -1,4 +1,4 @@
-import {Component, OnInit, ElementRef, Input, OnDestroy, Renderer2} from '@angular/core';
+import {Component, OnInit, ElementRef, Input, OnDestroy, Renderer2, ChangeDetectorRef} from '@angular/core';
 import {GridsterConfigService} from './gridsterConfig.constant';
 import {GridsterConfig} from './gridsterConfig.interface';
 import {GridsterUtils} from './gridsterUtils.service';
@@ -15,6 +15,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
   @Input() options: GridsterConfig;
   calculateLayoutDebounce: Function;
   movingItem: GridsterItem;
+  initialItem: GridsterItem;
   previewStyle: Function;
   el: any;
   $options: GridsterConfig;
@@ -29,6 +30,9 @@ export class GridsterComponent implements OnInit, OnDestroy {
   windowResize: Function;
   emptyCellClick: Function;
   emptyCellDrop: Function;
+  emptyCellDrag: Function;
+  emptyCellMMove: Function;
+  emptyCellUp: Function;
   emptyCellMove: Function;
   gridLines: GridsterGridComponent;
   dragInProgress: boolean;
@@ -40,7 +44,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
       && item.y + item.rows > item2.y;
   }
 
-  constructor(el: ElementRef, public renderer: Renderer2) {
+  constructor(el: ElementRef, public renderer: Renderer2, private cdRef: ChangeDetectorRef) {
     this.el = el.nativeElement;
     this.$options = JSON.parse(JSON.stringify(GridsterConfigService));
     this.mobile = false;
@@ -59,6 +63,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
     this.$options.itemInitCallback = undefined;
     this.$options.emptyCellClickCallback = undefined;
     this.$options.emptyCellDropCallback = undefined;
+    this.$options.emptyCellDragCallback = undefined;
   }
 
   ngOnInit(): void {
@@ -116,6 +121,12 @@ export class GridsterComponent implements OnInit, OnDestroy {
       this.emptyCellMove = null;
       this.emptyCellDrop = null;
     }
+    if (this.$options.enableEmptyCellClickDrag && !this.emptyCellDrag && this.$options.emptyCellDragCallback) {
+      this.emptyCellDrag = this.renderer.listen(this.el, 'mousedown', this.emptyCellMouseDown.bind(this));
+    } else if (!this.$options.enableEmptyCellClickDrag && this.emptyCellDrag) {
+      this.emptyCellDrag();
+      this.emptyCellDrag = null;
+    }
   }
 
   optionsChanged(): void {
@@ -140,6 +151,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
       return;
     }
     this.$options.emptyCellClickCallback(event, item);
+    this.cdRef.markForCheck();
   }
 
   emptyCellDragDrop(e): void {
@@ -148,6 +160,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
       return;
     }
     this.$options.emptyCellDropCallback(event, item);
+    this.cdRef.markForCheck();
   }
 
   emptyCellDragOver(e): void {
@@ -160,7 +173,49 @@ export class GridsterComponent implements OnInit, OnDestroy {
     }
   }
 
-  getValidItemFromEvent(e): GridsterItem | undefined {
+  emptyCellMouseDown(e): void {
+    e.preventDefault();
+    e.stopPropagation();
+    const item = this.getValidItemFromEvent(e);
+    if (!item) {
+      return;
+    }
+    this.initialItem = item;
+    this.movingItem = item;
+    this.previewStyle();
+    this.emptyCellMMove = this.renderer.listen('window', 'mousemove', this.emptyCellMouseMove.bind(this));
+    this.emptyCellUp = this.renderer.listen('window', 'mouseup', this.emptyCellMouseUp.bind(this));
+  }
+
+  emptyCellMouseMove(e): void {
+    e.preventDefault();
+    e.stopPropagation();
+    const item = this.getValidItemFromEvent(e, this.initialItem);
+    if (!item) {
+      return;
+    }
+
+    this.movingItem = item;
+    this.previewStyle();
+  }
+
+  emptyCellMouseUp(e): void {
+    this.emptyCellMMove();
+    this.emptyCellUp();
+    const item = this.getValidItemFromEvent(e, this.initialItem);
+    if (!item) {
+      return;
+    }
+    this.movingItem = item;
+    this.$options.emptyCellDragCallback(e, this.movingItem);
+    setTimeout(function () {
+      this.movingItem = null;
+      this.previewStyle();
+    }.bind(this));
+    this.cdRef.markForCheck();
+  }
+
+  getValidItemFromEvent(e, oldItem?: GridsterItem): GridsterItem | undefined {
     e.preventDefault();
     e.stopPropagation();
     GridsterUtils.checkTouchEvent(e);
@@ -172,6 +227,16 @@ export class GridsterComponent implements OnInit, OnDestroy {
       cols: this.$options.defaultItemCols,
       rows: this.$options.defaultItemRows
     };
+    if (oldItem) {
+      item.cols = Math.abs(oldItem.x - item.x) + 1;
+      item.rows = Math.abs(oldItem.y - item.y) + 1;
+      if (oldItem.x < item.x) {
+        item.x = oldItem.x;
+      }
+      if (oldItem.y < item.y) {
+        item.y = oldItem.y;
+      }
+    }
     if (this.checkCollision(item)) {
       return;
     }
