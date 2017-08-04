@@ -1,6 +1,6 @@
 {
   "name": "angular-gridster2",
-  "version": "1.8.0",
+  "version": "1.10.0",
   "main": "index.js",
   "dependencies": {
     "angular": ">=1.6.5"
@@ -20,7 +20,7 @@
     "gulp-angular-templatecache": "2.0.0",
     "gulp-autoprefixer": "4.0.0",
     "gulp-eslint": "4.0.0",
-    "gulp-filter": "5.0.0",
+    "gulp-filter": "5.0.1",
     "gulp-flatten": "0.3.1",
     "gulp-inject": "4.2.0",
     "gulp-load-plugins": "1.5.0",

@@ -30,8 +30,8 @@
       vm.gridsterItem = gridsterItem;
       vm.gridster = gridster;
       vm.lastMouse = {
-        pageX: 0,
-        pageY: 0
+        clientX: 0,
+        clientY: 0
       };
       vm.path = [];
 
@@ -90,13 +90,14 @@
         vm.top = vm.gridsterItem.top;
         vm.width = vm.gridsterItem.width;
         vm.height = vm.gridsterItem.height;
-        vm.diffLeft = e.pageX + vm.offsetLeft - vm.margin - vm.left;
-        vm.diffTop = e.pageY + vm.offsetTop - vm.margin - vm.top;
+        vm.diffLeft = e.clientX + vm.offsetLeft - vm.margin - vm.left;
+        vm.diffTop = e.clientY + vm.offsetTop - vm.margin - vm.top;
         vm.gridster.movingItem = vm.gridsterItem.$item;
         vm.gridster.previewStyle();
         vm.push = new GridsterPush(vm.gridsterItem, vm.gridster);
         vm.swap = new GridsterSwap(vm.gridsterItem, vm.gridster);
-        vm.gridster.gridLines.updateGrid(true);
+        vm.gridster.dragInProgress = true;
+        vm.gridster.gridLines.updateGrid();
         vm.path.push({x: vm.gridsterItem.item.x, y: vm.gridsterItem.item.y});
       };
 
@@ -110,13 +111,14 @@
 
         vm.calculateItemPositionFromMousePosition(e);
 
-        vm.lastMouse.pageX = e.pageX;
-        vm.lastMouse.pageY = e.pageY;
+        vm.lastMouse.clientX = e.clientX;
+        vm.lastMouse.clientY = e.clientY;
+        vm.gridster.gridLines.updateGrid();
       };
 
       vm.calculateItemPositionFromMousePosition = function (e) {
-        vm.left = e.pageX + vm.offsetLeft - vm.margin - vm.diffLeft;
-        vm.top = e.pageY + vm.offsetTop - vm.margin - vm.diffTop;
+        vm.left = e.clientX + vm.offsetLeft - vm.margin - vm.diffLeft;
+        vm.top = e.clientY + vm.offsetTop - vm.margin - vm.diffTop;
         vm.calculateItemPosition();
       };
 
@@ -130,6 +132,8 @@
         document.removeEventListener('touchend', vm.dragStopFunction);
         document.removeEventListener('touchcancel', vm.dragStopFunction);
         vm.gridsterItem.el.removeClass('gridster-item-moving');
+        vm.gridster.dragInProgress = false;
+        vm.gridster.gridLines.updateGrid();
         vm.gridster.gridLines.updateGrid(false);
         vm.path = [];
         if (vm.gridster.$options.draggable.stop) {

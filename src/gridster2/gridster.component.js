@@ -23,6 +23,7 @@
     vm.rows = 0;
     vm.windowResize = angular.noop;
     vm.gridLines = undefined;
+    vm.dragInProgress = false;
 
     vm.el = $element[0];
     vm.$options = JSON.parse(JSON.stringify(GridsterConfig));
@@ -41,6 +42,7 @@
     vm.$options.itemInitCallback = undefined;
     vm.$options.emptyCellClickCallback = undefined;
     vm.$options.emptyCellDropCallback = undefined;
+    vm.$options.emptyCellDragCallback = undefined;
 
     vm.checkCollisionTwoItems = function checkCollisionTwoItems(item, item2) {
       return item.x < item2.x + item2.cols
@@ -52,14 +54,14 @@
     vm.$onInit = function () {
       vm.setOptions();
       vm.options.api = {
-        optionsChanged: vm.optionsChanged.bind(vm),
-        resize: vm.resize.bind(vm),
-        getNextPossiblePosition: vm.getNextPossiblePosition.bind(vm)
+        optionsChanged: vm.optionsChanged,
+        resize: vm.resize,
+        getNextPossiblePosition: vm.getNextPossiblePosition
       };
       vm.columns = vm.$options.minCols;
       vm.rows = vm.$options.minRows;
       vm.setGridSize();
-      vm.calculateLayoutDebounce = GridsterUtils.debounce(vm.calculateLayout.bind(vm), 5);
+      vm.calculateLayoutDebounce = GridsterUtils.debounce(vm.calculateLayout, 5);
       vm.calculateLayoutDebounce();
       if (vm.options.initCallback) {
         vm.options.initCallback(vm);
@@ -84,29 +86,34 @@
     vm.setOptions = function setOptions() {
       vm.$options = GridsterUtils.merge(vm.$options, vm.options, vm.$options);
       if (!vm.$options.disableWindowResize && !vm.onResizeFunction) {
-        vm.onResizeFunction = vm.onResize.bind(vm);
-        window.addEventListener('resize', vm.onResizeFunction);
+        vm.onResizeFunction = true;
+        window.addEventListener('resize', vm.onResize);
       } else if (vm.$options.disableWindowResize && vm.onResizeFunction) {
-        window.removeEventListener('resize', vm.onResizeFunction);
-        vm.onResizeFunction = null;
+        vm.onResizeFunction = false;
+        window.removeEventListener('resize', vm.onResize);
       }
-      if (vm.$options.enableEmptyCellClickDrag && !vm.emptyCellClick && vm.$options.emptyCellClickCallback) {
-        vm.emptyCellClick = this.emptyCellClickCb.bind(this);
-        vm.el.addEventListener('click', vm.emptyCellClick);
-      } else if (!vm.$options.enableEmptyCellClickDrag && vm.emptyCellClick) {
-        vm.el.removeEventListener('click', vm.emptyCellClick);
-        vm.emptyCellClick = null;
+      if (vm.$options.enableEmptyCellClick && !vm.emptyCellClick && vm.$options.emptyCellClickCallback) {
+        vm.emptyCellClick = true;
+        vm.el.addEventListener('click', vm.emptyCellClickCb);
+      } else if (!vm.$options.enableEmptyCellClick && vm.emptyCellClick) {
+        vm.emptyCellClick = false;
+        vm.el.removeEventListener('click', vm.emptyCellClickCb);
       }
-      if (vm.$options.enableEmptyCellClickDrag && !vm.emptyCellDrop && vm.$options.emptyCellDropCallback) {
-        vm.emptyCellDrop = vm.emptyCellDragDrop.bind(vm);
-        vm.emptyCellMove = vm.emptyCellDragOver.bind(vm);
-        vm.el.addEventListener('drop', vm.emptyCellDrop);
-        vm.el.addEventListener('dragover', vm.emptyCellMove);
-      } else if (!vm.$options.enableEmptyCellClickDrag && vm.emptyCellDrop) {
-        vm.el.removeEventListener('drop', vm.emptyCellDrop);
-        vm.el.removeEventListener('dragover', vm.emptyCellMove);
-        vm.emptyCellMove = null;
-        vm.emptyCellDrop = null;
+      if (vm.$options.enableEmptyCellDrop && !vm.emptyCellDrop && vm.$options.emptyCellDropCallback) {
+        vm.emptyCellDrop = true;
+        vm.el.addEventListener('drop', vm.emptyCellDragDrop);
+        vm.el.addEventListener('dragover', vm.emptyCellDragOver);
+      } else if (!vm.$options.enableEmptyCellDrop && vm.emptyCellDrop) {
+        vm.emptyCellDrop = false;
+        vm.el.removeEventListener('drop', vm.emptyCellDragDrop);
+        vm.el.removeEventListener('dragover', vm.emptyCellDragOver);
+      }
+      if (vm.$options.enableEmptyCellDrag && !vm.emptyCellDrag && vm.$options.emptyCellDragCallback) {
+        vm.emptyCellDrag = true;
+        vm.el.addEventListener('mousedown', vm.emptyCellMouseDown);
+      } else if (!vm.$options.enableEmptyCellDrag && vm.emptyCellDrag) {
+        vm.emptyCellDrag = false;
+        vm.el.removeEventListener('mousedown', vm.emptyCellMouseDown);
       }
     };
 
@@ -122,7 +129,8 @@
 
     vm.$onDestroy = function () {
       if (vm.onResizeFunction) {
-        window.removeEventListener('resize', vm.onResizeFunction);
+        vm.onResizeFunction = false;
+        window.removeEventListener('resize', vm.onResize);
       }
     };
 
@@ -152,18 +160,74 @@
       }
     };
 
-    vm.getValidItemFromEvent = function (e) {
+    vm.emptyCellMouseDown = function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var item = vm.getValidItemFromEvent(e);
+      if (!item) {
+        return;
+      }
+      vm.initialItem = item;
+      vm.movingItem = item;
+      vm.previewStyle();
+      window.addEventListener('mousemove', vm.emptyCellMouseMove);
+      window.addEventListener('mouseup', vm.emptyCellMouseUp);
+    };
+
+    vm.emptyCellMouseMove = function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var item = vm.getValidItemFromEvent(e, vm.initialItem);
+      if (!item) {
+        return;
+      }
+
+      vm.movingItem = item;
+      vm.previewStyle();
+    };
+
+    vm.emptyCellMouseUp = function (e) {
+      window.removeEventListener('mousemove', vm.emptyCellMouseMove);
+      window.removeEventListener('mouseup', vm.emptyCellMouseUp);
+      var item = vm.getValidItemFromEvent(e, vm.initialItem);
+      if (!item) {
+        return;
+      }
+      vm.movingItem = item;
+      vm.$options.emptyCellDragCallback(e, vm.movingItem);
+      setTimeout(function () {
+        vm.movingItem = null;
+        vm.previewStyle();
+      });
+    };
+
+    vm.getValidItemFromEvent = function (e, oldItem) {
       e.preventDefault();
       e.stopPropagation();
       GridsterUtils.checkTouchEvent(e);
-      var x = e.pageX - vm.el.scrollLeft - vm.el.offsetLeft;
-      var y = e.pageY - vm.el.scrollTop - vm.el.offsetTop;
+      var rect = vm.el.getBoundingClientRect();
+      var x = e.clientX + vm.el.scrollLeft - rect.left;
+      var y = e.clientY + vm.el.scrollTop - rect.top;
       var item = {
         x: vm.pixelsToPositionX(x, Math.floor),
         y: vm.pixelsToPositionY(y, Math.floor),
         cols: vm.$options.defaultItemCols,
         rows: vm.$options.defaultItemRows
       };
+      if (oldItem) {
+        item.cols = Math.min(Math.abs(oldItem.x - item.x) + 1, vm.$options.emptyCellDragMaxCols);
+        item.rows = Math.min(Math.abs(oldItem.y - item.y) + 1, vm.$options.emptyCellDragMaxRows);
+        if (oldItem.x < item.x) {
+          item.x = oldItem.x;
+        } else if (oldItem.x - item.x > vm.$options.emptyCellDragMaxCols - 1) {
+          item.x = vm.movingItem.x;
+        }
+        if (oldItem.y < item.y) {
+          item.y = oldItem.y;
+        } else if (oldItem.y - item.y > vm.$options.emptyCellDragMaxRows - 1) {
+          item.y = vm.movingItem.y;
+        }
+      }
       if (vm.checkCollision(item)) {
         return;
       }
@@ -296,7 +360,7 @@
         widget.resize.toggle();
       }
       $scope.$applyAsync();
-      setTimeout(vm.resize.bind(vm), 100);
+      setTimeout(vm.resize, 100);
     };
 
     vm.addItem = function addItem(itemComponent) {
@@ -351,7 +415,12 @@
       var minItemRows = itemComponent.minItemRows === undefined ? vm.$options.minItemRows : itemComponent.minItemRows;
       var inColsLimits = itemComponent.cols <= maxItemCols && itemComponent.cols >= minItemCols;
       var inRowsLimits = itemComponent.rows <= maxItemRows && itemComponent.rows >= minItemRows;
-      return !(noNegativePosition && maxGridCols && maxGridRows && inColsLimits && inRowsLimits);
+      var minAreaLimit = itemComponent.minItemArea === undefined ? vm.$options.minItemArea : itemComponent.minItemArea;
+      var maxAreaLimit = itemComponent.maxItemArea === undefined ? vm.$options.maxItemArea : itemComponent.maxItemArea;
+      var area = itemComponent.cols * itemComponent.rows;
+      var inMinArea = minAreaLimit <= area;
+      var inMaxArea = maxAreaLimit >= area;
+      return !(noNegativePosition && maxGridCols && maxGridRows && inColsLimits && inRowsLimits && inMinArea && inMaxArea);
     };
 
     vm.findItemWithItem = function findItemWithItem(itemComponent, ignoreItem) {

@@ -1,8 +1,8 @@
 <div class="columns" ng-style="{height: $ctrl.columnsHeight + 'px'}">
   <div class="column" ng-repeat="column in $ctrl.columns track by $index"
-       ng-style="{'min-width': $ctrl.width + 'px', 'margin-left': $ctrl.margin + 'px'}"></div>
+       ng-style="{'min-width': $ctrl.width + 'px', 'margin-left': ($first && !$ctrl.gridster.$options.outerMargin ? 0 : $ctrl.margin) + 'px'}"></div>
 </div>
 <div class="rows" ng-style="{width: $ctrl.rowsWidth + 'px'}">
   <div class="row" ng-repeat="row in $ctrl.rows track by $index"
-       ng-style="{height: $ctrl.height + 'px', 'margin-top': $ctrl.margin + 'px'}"></div>
+       ng-style="{height: $ctrl.height + 'px', 'margin-top': ($first && !$ctrl.gridster.$options.outerMargin ? 0 :$ctrl.margin) + 'px'}"></div>
 </div>

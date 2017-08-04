@@ -24,6 +24,8 @@
     maxItemRows: 50, // max item number of rows
     minItemCols: 1, // min item number of columns
     minItemRows: 1, // min item number of rows
+    minItemArea: 1, // min item area: cols * rows
+    maxItemArea: 2500, // max item area: cols * rows
     margin: 10,  // margin between grid items
     outerMargin: true,  // if margins will apply to the sides of the container
     scrollSensitivity: 10,  // margin of the dashboard where to start scrolling
@@ -35,10 +37,15 @@
     // Arguments: gridsterItem, gridsterItemComponent
     itemInitCallback: undefined,  // callback to call for each item when is initialized.
     // Arguments: gridsterItem, gridsterItemComponent
-    enableEmptyCellClickDrag: false, // enable empty cell click and drag drop events
+    enableEmptyCellClick: false, // enable empty cell click events
+    enableEmptyCellDrop: false, // enable empty cell drop events
+    enableEmptyCellDrag: false, // enable empty cell drag events
     emptyCellClickCallback: undefined, // empty cell click callback
     emptyCellDropCallback: undefined, // empty cell drag drop callback. HTML5 Drag & Drop
+    emptyCellDragCallback: undefined, // empty cell drag and create item like excel cell selection
     // Arguments: event, gridsterItem{x, y, rows: defaultItemRows, cols: defaultItemCols}
+    emptyCellDragMaxCols: 50, // limit empty cell drag max cols
+    emptyCellDragMaxRows: 50, // limit empty cell drag max rows
     draggable: {
       enabled: false, // enable/disable draggable items
       ignoreContentClass: 'gridster-item-content', // default content class to ignore the drag event from

@@ -28,7 +28,7 @@ Default usage:
   <gridster-item item="item" ng-repeat="item in vm.dashboard"></gridster-item>
 </gridster>
 ```
-Expects a scope setup(options object is optional):
+Initialize a simple dashboard:
 ```JavaScript
 var vm = this;
 
@@ -49,26 +49,16 @@ vm.options = {
 
 vm.dashboard = [
   {cols: 2, rows: 1, y: 0, x: 0},
-  {cols: 2, rows: 2, y: 0, x: 2},
-  {cols: 1, rows: 1, y: 0, x: 4},
-  {cols: 1, rows: 1, y: 0, x: 5},
-  {cols: 2, rows: 1, y: 1, x: 0},
-  {cols: 1, rows: 1, y: 1, x: 4},
-  {cols: 1, rows: 2, y: 1, x: 5},
-  {cols: 1, rows: 3, y: 2, x: 0},
-  {cols: 2, rows: 1, y: 2, x: 1},
-  {cols: 1, rows: 1, y: 2, x: 3},
-  {cols: 1, rows: 1, y: 3, x: 4, initCallback: function(item){}}
+  {cols: 2, rows: 2, y: 0, x: 2}
 ];
 ```
 
 ##### Note: The gridster will take all the available space from the parent. It will not size depending on content. The parent of the component needs to have a size.
 
 ##### Default Grid Options:
-```typescript
-import {GridsterConfig} from './gridsterConfig.interface';
+```javascript
 
-export const GridsterConfigService: GridsterConfig = {
+var GridsterConfigService = {
   gridType: 'fit', // 'fit' will fit the items in the container without scroll;
   // 'scrollVertical' will fit on width and height of the items will be the same as the width
   // 'scrollHorizontal' will fit on height and width of the items will be the same as the height
@@ -91,6 +81,8 @@ export const GridsterConfigService: GridsterConfig = {
   maxItemRows: 50, // max item number of rows
   minItemCols: 1, // min item number of columns
   minItemRows: 1, // min item number of rows
+  minItemArea: 1, // min item area: cols * rows
+  maxItemArea: 2500, // max item area: cols * rows
   margin: 10,  // margin between grid items
   outerMargin: true,  // if margins will apply to the sides of the container
   scrollSensitivity: 10,  // margin of the dashboard where to start scrolling
@@ -102,9 +94,14 @@ export const GridsterConfigService: GridsterConfig = {
   // Arguments: gridsterItem, gridsterItemComponent
   itemInitCallback: undefined,  // callback to call for each item when is initialized.
   // Arguments: gridsterItem, gridsterItemComponent
-  enableEmptyCellClickDrag: false, // enable empty cell click and drag drop events
+  enableEmptyCellClick: false, // enable empty cell click events
+  enableEmptyCellDrop: false, // enable empty cell drop events
+  enableEmptyCellDrag: false, // enable empty cell drag events
   emptyCellClickCallback: undefined, // empty cell click callback
   emptyCellDropCallback: undefined, // empty cell drag drop callback. HTML5 Drag & Drop
+  emptyCellDragCallback: undefined, // empty cell drag and create item like excel cell selection
+  emptyCellDragMaxCols: 50, // limit empty cell drag max cols
+  emptyCellDragMaxRows: 50, // limit empty cell drag max rows
   // Arguments: event, gridsterItem{x, y, rows: defaultItemRows, cols: defaultItemCols}
   draggable: {
     enabled: false, // enable/disable draggable items
@@ -159,6 +156,8 @@ export interface GridsterItem {
   minItemRows?: number; // override grid option minItemRows
   maxItemCols?: number; // override grid option maxItemCols
   minItemCols?: number; // override grid option minItemCols
+  minItemArea?: number; //  override grid option minItemArea
+  maxItemArea?: number; //  override grid option maxItemArea
 }
 ```
 

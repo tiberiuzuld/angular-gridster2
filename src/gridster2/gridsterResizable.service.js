@@ -36,8 +36,8 @@
       vm.gridsterItem = gridsterItem;
       vm.gridster = gridster;
       vm.lastMouse = {
-        pageX: 0,
-        pageY: 0
+        clientX: 0,
+        clientY: 0
       };
       vm.itemBackup = [0, 0, 0, 0];
       vm.resizeEventScrollType = {w: false, e: false, n: false, s: false};
@@ -66,8 +66,8 @@
         document.addEventListener('touchend', vm.dragStopFunction);
         document.addEventListener('touchcancel', vm.dragStopFunction);
         vm.gridsterItem.el.addClass('gridster-item-resizing');
-        vm.lastMouse.pageX = e.pageX;
-        vm.lastMouse.pageY = e.pageY;
+        vm.lastMouse.clientX = e.clientX;
+        vm.lastMouse.clientY = e.clientY;
         vm.left = vm.gridsterItem.left;
         vm.top = vm.gridsterItem.top;
         vm.width = vm.gridsterItem.width;
@@ -77,10 +77,10 @@
         vm.margin = vm.gridster.$options.margin;
         vm.offsetLeft = vm.gridster.el.scrollLeft - vm.gridster.el.offsetLeft;
         vm.offsetTop = vm.gridster.el.scrollTop - vm.gridster.el.offsetTop;
-        vm.diffLeft = e.pageX + vm.offsetLeft - vm.margin - vm.left;
-        vm.diffRight = e.pageX + vm.offsetLeft - vm.margin - vm.right;
-        vm.diffTop = e.pageY + vm.offsetTop - vm.margin - vm.top;
-        vm.diffBottom = e.pageY + vm.offsetTop - vm.margin - vm.bottom;
+        vm.diffLeft = e.clientX + vm.offsetLeft - vm.margin - vm.left;
+        vm.diffRight = e.clientX + vm.offsetLeft - vm.margin - vm.right;
+        vm.diffTop = e.clientY + vm.offsetTop - vm.margin - vm.top;
+        vm.diffBottom = e.clientY + vm.offsetTop - vm.margin - vm.bottom;
         vm.minHeight = vm.gridster.positionYToPixels(vm.gridsterItem.$item.minItemRows || vm.gridster.$options.minItemRows)
           - vm.margin;
         vm.minWidth = vm.gridster.positionXToPixels(vm.gridsterItem.$item.minItemCols || vm.gridster.$options.minItemCols)
@@ -88,7 +88,8 @@
         vm.gridster.movingItem = vm.gridsterItem.$item;
         vm.gridster.previewStyle();
         vm.push = new GridsterPush(vm.gridsterItem, vm.gridster);
-        vm.gridster.gridLines.updateGrid(true);
+        vm.gridster.dragInProgress = true;
+        vm.gridster.gridLines.updateGrid();
 
         if (e.currentTarget.classList.contains('handle-n')) {
           vm.resizeEventScrollType.n = true;
@@ -130,8 +131,9 @@
         GridsterScroll(vm.gridsterItem, e, vm.lastMouse, vm.directionFunction, true, vm.resizeEventScrollType);
         vm.directionFunction(e);
 
-        vm.lastMouse.pageX = e.pageX;
-        vm.lastMouse.pageY = e.pageY;
+        vm.lastMouse.clientX = e.clientX;
+        vm.lastMouse.clientY = e.clientY;
+        vm.gridster.gridLines.updateGrid();
       };
 
       vm.dragStop = function (e) {
@@ -144,7 +146,8 @@
         document.removeEventListener('touchend', vm.dragStopFunction);
         document.removeEventListener('touchcancel', vm.dragStopFunction);
         vm.gridsterItem.el.removeClass('gridster-item-resizing');
-        vm.gridster.gridLines.updateGrid(false);
+        vm.gridster.dragInProgress = false;
+        vm.gridster.gridLines.updateGrid();
         if (vm.gridster.$options.resizable.stop) {
           var promise = vm.gridster.$options.resizable.stop(vm.gridsterItem.item, vm.gridsterItem, e);
           if (promise && promise.then) {
@@ -179,7 +182,7 @@
       };
 
       vm.handleN = function (e) {
-        vm.top = e.pageY + vm.offsetTop - vm.margin - vm.diffTop;
+        vm.top = e.clientY + vm.offsetTop - vm.margin - vm.diffTop;
         vm.height = vm.bottom - vm.top;
         if (vm.minHeight > vm.height) {
           vm.height = vm.minHeight;
@@ -209,7 +212,7 @@
       };
 
       vm.handleW = function (e) {
-        vm.left = e.pageX + vm.offsetLeft - vm.margin - vm.diffLeft;
+        vm.left = e.clientX + vm.offsetLeft - vm.margin - vm.diffLeft;
         vm.width = vm.right - vm.left;
         if (vm.minWidth > vm.width) {
           vm.width = vm.minWidth;
@@ -240,7 +243,7 @@
       };
 
       vm.handleS = function (e) {
-        vm.height = e.pageY + vm.offsetTop - vm.margin - vm.diffBottom - vm.top;
+        vm.height = e.clientY + vm.offsetTop - vm.margin - vm.diffBottom - vm.top;
         if (vm.minHeight > vm.height) {
           vm.height = vm.minHeight;
         }
@@ -264,7 +267,7 @@
       };
 
       vm.handleE = function (e) {
-        vm.width = e.pageX + vm.offsetLeft - vm.margin - vm.diffRight - vm.left;
+        vm.width = e.clientX + vm.offsetLeft - vm.margin - vm.diffRight - vm.left;
         if (vm.minWidth > vm.width) {
           vm.width = vm.minWidth;
         }

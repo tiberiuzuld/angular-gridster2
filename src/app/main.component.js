@@ -9,9 +9,12 @@
     });
 
   /** @ngInject */
-  function MainController($log, $scope) {
+  function MainController($log, $scope, $mdSidenav) {
     var vm = this;
     vm.$onInit = function () {
+      setTimeout(function () {
+        vm.sidenav = $mdSidenav('left');
+      }, 200);
       vm.options = {
         gridType: 'fit',
         compactType: 'none',
@@ -20,6 +23,7 @@
         itemInitCallback: itemInit,
         margin: 10,
         outerMargin: true,
+        mobileBreakpoint: 640,
         minCols: 1,
         maxCols: 100,
         minRows: 1,
@@ -28,12 +32,20 @@
         minItemCols: 1,
         maxItemRows: 50,
         minItemRows: 1,
+        maxItemArea: 2500,
+        minItemArea: 1,
         defaultItemCols: 1,
         defaultItemRows: 1,
         fixedColWidth: 250,
         fixedRowHeight: 250,
-        enableEmptyCellClickDrag: false,
-        emptyCellClickCallback: vm.emptyCellClick.bind(vm),
+        enableEmptyCellClick: false,
+        enableEmptyCellDrop: false,
+        enableEmptyCellDrag: false,
+        emptyCellClickCallback: vm.emptyCellClick,
+        emptyCellDropCallback: vm.emptyCellClick,
+        emptyCellDragCallback: vm.emptyCellClick,
+        emptyCellDragMaxCols: 50,
+        emptyCellDragMaxRows: 50,
         draggable: {
           enabled: true,
           stop: eventStop
@@ -43,7 +55,8 @@
           stop: eventStop
         },
         swap: false,
-        displayGrid: 'onDrag&Resize'
+        displayGrid: 'onDrag&Resize',
+        disableWindowResize: false
       };
 
       this.dashboard = [

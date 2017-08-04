@@ -24,12 +24,12 @@
       vm.rowsWidth = 0;
     };
 
-    vm.updateGrid = function updateGrid(dragOn) {
+    vm.updateGrid = function updateGrid() {
       if (vm.gridster.$options.displayGrid === 'always' && !vm.gridster.mobile) {
         $element.css('display', 'block');
-      } else if (vm.gridster.$options.displayGrid === 'onDrag&Resize' && dragOn) {
+      } else if (vm.gridster.$options.displayGrid === 'onDrag&Resize' && vm.gridster.dragInProgress) {
         $element.css('display', 'block');
-      } else if (vm.gridster.$options.displayGrid === 'none' || !dragOn || vm.gridster.mobile) {
+      } else if (vm.gridster.$options.displayGrid === 'none' || !vm.gridster.dragInProgress || vm.gridster.mobile) {
         $element.css('display', 'none');
         return;
       }
