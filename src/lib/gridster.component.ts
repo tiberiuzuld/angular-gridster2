@@ -106,24 +106,24 @@ export class GridsterComponent implements OnInit, OnDestroy {
       this.windowResize();
       this.windowResize = null;
     }
-    if (this.$options.enableEmptyCellClickDrag && !this.emptyCellClick && this.$options.emptyCellClickCallback) {
+    if (this.$options.enableEmptyCellClick && !this.emptyCellClick && this.$options.emptyCellClickCallback) {
       this.emptyCellClick = this.renderer.listen(this.el, 'click', this.emptyCellClickCb.bind(this));
-    } else if (!this.$options.enableEmptyCellClickDrag && this.emptyCellClick) {
+    } else if (!this.$options.enableEmptyCellClick && this.emptyCellClick) {
       this.emptyCellClick();
       this.emptyCellClick = null;
     }
-    if (this.$options.enableEmptyCellClickDrag && !this.emptyCellDrop && this.$options.emptyCellDropCallback) {
+    if (this.$options.enableEmptyCellDrop && !this.emptyCellDrop && this.$options.emptyCellDropCallback) {
       this.emptyCellDrop = this.renderer.listen(this.el, 'drop', this.emptyCellDragDrop.bind(this));
       this.emptyCellMove = this.renderer.listen(this.el, 'dragover', this.emptyCellDragOver.bind(this));
-    } else if (!this.$options.enableEmptyCellClickDrag && this.emptyCellDrop) {
+    } else if (!this.$options.enableEmptyCellDrop && this.emptyCellDrop) {
       this.emptyCellDrop();
       this.emptyCellMove();
       this.emptyCellMove = null;
       this.emptyCellDrop = null;
     }
-    if (this.$options.enableEmptyCellClickDrag && !this.emptyCellDrag && this.$options.emptyCellDragCallback) {
+    if (this.$options.enableEmptyCellDrag && !this.emptyCellDrag && this.$options.emptyCellDragCallback) {
       this.emptyCellDrag = this.renderer.listen(this.el, 'mousedown', this.emptyCellMouseDown.bind(this));
-    } else if (!this.$options.enableEmptyCellClickDrag && this.emptyCellDrag) {
+    } else if (!this.$options.enableEmptyCellDrag && this.emptyCellDrag) {
       this.emptyCellDrag();
       this.emptyCellDrag = null;
     }
@@ -219,8 +219,9 @@ export class GridsterComponent implements OnInit, OnDestroy {
     e.preventDefault();
     e.stopPropagation();
     GridsterUtils.checkTouchEvent(e);
-    const x = e.pageX - this.el.scrollLeft - this.el.offsetLeft;
-    const y = e.pageY - this.el.scrollTop - this.el.offsetTop;
+    const rect = this.el.getBoundingClientRect();
+    const x = e.clientX + this.el.scrollLeft - rect.left;
+    const y = e.clientY + this.el.scrollTop - rect.top;
     const item: GridsterItem = {
       x: this.pixelsToPositionX(x, Math.floor),
       y: this.pixelsToPositionY(y, Math.floor),
@@ -228,13 +229,17 @@ export class GridsterComponent implements OnInit, OnDestroy {
       rows: this.$options.defaultItemRows
     };
     if (oldItem) {
-      item.cols = Math.abs(oldItem.x - item.x) + 1;
-      item.rows = Math.abs(oldItem.y - item.y) + 1;
+      item.cols = Math.min(Math.abs(oldItem.x - item.x) + 1, this.$options.emptyCellDragMaxCols);
+      item.rows = Math.min(Math.abs(oldItem.y - item.y) + 1, this.$options.emptyCellDragMaxRows);
       if (oldItem.x < item.x) {
         item.x = oldItem.x;
+      } else if (oldItem.x - item.x > this.$options.emptyCellDragMaxCols - 1) {
+        item.x = this.movingItem.x;
       }
       if (oldItem.y < item.y) {
         item.y = oldItem.y;
+      } else if (oldItem.y - item.y > this.$options.emptyCellDragMaxRows - 1) {
+        item.y = this.movingItem.y;
       }
     }
     if (this.checkCollision(item)) {

@@ -10,7 +10,7 @@ import {
   MdSliderModule,
   MdInputModule,
   MdTooltipModule,
-  MdCheckboxModule
+  MdCheckboxModule, MdSidenavModule
 } from '@angular/material';
 
 import {AppComponent} from './app.component';
@@ -24,7 +24,7 @@ import {GridsterModule} from '../lib/gridster.module';
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
-    MdIconModule, MdButtonModule, MdSelectModule, MdSliderModule, MdInputModule, MdTooltipModule, MdCheckboxModule,
+    MdIconModule, MdButtonModule, MdSelectModule, MdInputModule, MdTooltipModule, MdCheckboxModule, MdSidenavModule,
     GridsterModule
   ],
   providers: [],

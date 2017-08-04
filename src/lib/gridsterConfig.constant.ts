@@ -36,10 +36,14 @@ export const GridsterConfigService: GridsterConfig = {
   // Arguments: gridsterItem, gridsterItemComponent
   itemInitCallback: undefined,  // callback to call for each item when is initialized.
   // Arguments: gridsterItem, gridsterItemComponent
-  enableEmptyCellClickDrag: false, // enable empty cell click and drag drop events
+  enableEmptyCellClick: false, // enable empty cell click events
+  enableEmptyCellDrop: false, // enable empty cell drop events
+  enableEmptyCellDrag: false, // enable empty cell drag events
   emptyCellClickCallback: undefined, // empty cell click callback
   emptyCellDropCallback: undefined, // empty cell drag drop callback. HTML5 Drag & Drop
   emptyCellDragCallback: undefined, // empty cell drag and create item like excel cell selection
+  emptyCellDragMaxCols: 50, // limit empty cell drag max cols
+  emptyCellDragMaxRows: 50, // limit empty cell drag max rows
   // Arguments: event, gridsterItem{x, y, rows: defaultItemRows, cols: defaultItemCols}
   draggable: {
     enabled: false, // enable/disable draggable items

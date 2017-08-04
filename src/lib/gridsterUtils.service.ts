@@ -31,9 +31,9 @@ export class GridsterUtils {
   }
 
   static checkTouchEvent(e): void {
-    if (e.pageX === undefined && e.touches) {
-      e.pageX = e.touches[0].pageX;
-      e.pageY = e.touches[0].pageY;
+    if (e.clientX === undefined && e.touches) {
+      e.clientX = e.touches[0].clientX;
+      e.clientY = e.touches[0].clientY;
     }
   }
 }

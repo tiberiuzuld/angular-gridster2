@@ -1,133 +1,191 @@
-<md-toolbar colo="primary">
-  <div class="main-toolbar">
-    <button md-mini-fab (click)="addItem()" mdTooltip="Add widget">
-      <md-icon>add</md-icon>
-    </button>
-    <md-select aria-label="Grid type" [(ngModel)]="options.gridType" (ngModelChange)="changedOptions()"
-               placeholder="Grid Type">
-      <md-option value="fit">Fit to screen</md-option>
-      <md-option value="scrollVertical">Scroll Vertical</md-option>
-      <md-option value="scrollHorizontal">Scroll Horizontal</md-option>
-      <md-option value="fixed">Fixed</md-option>
-      <md-option value="verticalFixed">Vertical Fixed</md-option>
-      <md-option value="horizontalFixed">Horizontal Fixed</md-option>
-    </md-select>
-    <md-select aria-label="Compact type" [(ngModel)]="options.compactType" (ngModelChange)="changedOptions()"
-               placeholder="Compact Type">
-      <md-option value="none">None</md-option>
-      <md-option value="compactUp">Compact Up</md-option>
-      <md-option value="compactLeft">Compact Left</md-option>
-      <md-option value="compactLeft&Up">Compact Left & Up</md-option>
-      <md-option value="compactUp&Left">Compact Up & Left</md-option>
-    </md-select>
-    <md-checkbox [(ngModel)]="options.swap" (ngModelChange)="changedOptions()">
-      Swap Items
-    </md-checkbox>
-    <md-checkbox [(ngModel)]="options.pushItems" (ngModelChange)="changedOptions()">
-      Push Items
-    </md-checkbox>
-    <md-checkbox [(ngModel)]="options.draggable.enabled" (ngModelChange)="changedOptions()">
-      Drag Items
-    </md-checkbox>
-    <md-checkbox [(ngModel)]="options.resizable.enabled" (ngModelChange)="changedOptions()">
-      Resize Items
-    </md-checkbox>
-    <div class="margin-slider">
-      <div><span>Margin</span></div>
-      <md-slider aria-label="Margin" thumbLabel
-                 min="0" max="30" step="1" (ngModelChange)="changedOptions()"
-                 [(ngModel)]="options.margin"></md-slider>
+<md-sidenav-container>
+  <md-sidenav #sidenav mode="over">
+    <label class="mat-headline">Grid Settings</label>
+    <div class="row flex">
+      <md-select aria-label="Grid type" [(ngModel)]="options.gridType" (ngModelChange)="changedOptions()"
+                 placeholder="Grid Type" class="flex">
+        <md-option value="fit">Fit to screen</md-option>
+        <md-option value="scrollVertical">Scroll Vertical</md-option>
+        <md-option value="scrollHorizontal">Scroll Horizontal</md-option>
+        <md-option value="fixed">Fixed</md-option>
+        <md-option value="verticalFixed">Vertical Fixed</md-option>
+        <md-option value="horizontalFixed">Horizontal Fixed</md-option>
+      </md-select>
+      <md-select aria-label="Compact type" [(ngModel)]="options.compactType" (ngModelChange)="changedOptions()"
+                 placeholder="Compact Type" class="flex">
+        <md-option value="none">None</md-option>
+        <md-option value="compactUp">Compact Up</md-option>
+        <md-option value="compactLeft">Compact Left</md-option>
+        <md-option value="compactLeft&Up">Compact Left & Up</md-option>
+        <md-option value="compactUp&Left">Compact Up & Left</md-option>
+      </md-select>
     </div>
-    <md-checkbox [(ngModel)]="options.outerMargin" (ngModelChange)="changedOptions()">Outer Margin</md-checkbox>
-    <md-input-container>
-      <input mdInput [(ngModel)]="options.maxItemCols" type="number" placeholder="Max Item Cols"
-             (ngModelChange)="changedOptions()">
-    </md-input-container>
-    <md-input-container>
-      <input mdInput [(ngModel)]="options.minItemCols" type="number" placeholder="Min Item Cols"
-             (ngModelChange)="changedOptions()">
-    </md-input-container>
-    <md-input-container>
-      <input mdInput [(ngModel)]="options.maxItemRows" type="number" placeholder="Max Item Rows"
-             (ngModelChange)="changedOptions()">
-    </md-input-container>
-    <md-input-container>
-      <input mdInput [(ngModel)]="options.minItemRows" type="number" placeholder="Min Item Rows"
-             (ngModelChange)="changedOptions()">
-    </md-input-container>
-    <md-input-container>
-      <input mdInput [(ngModel)]="options.defaultItemRows" type="number" placeholder="Default Item Rows"
-             (ngModelChange)="changedOptions()">
-    </md-input-container>
-    <md-input-container>
-      <input mdInput [(ngModel)]="options.defaultItemCols" type="number" placeholder="Default Item Cols"
-             (ngModelChange)="changedOptions()">
-    </md-input-container>
-    <md-input-container>
-      <input mdInput [(ngModel)]="options.fixedColWidth" type="number" placeholder="Fixed Col Width"
-             (ngModelChange)="changedOptions()">
-    </md-input-container>
-    <md-input-container>
-      <input mdInput [(ngModel)]="options.fixedRowHeight" type="number" placeholder="Fixed Row Height"
-             (ngModelChange)="changedOptions()">
-    </md-input-container>
-    <md-checkbox [(ngModel)]="options.keepFixedHeightInMobile" (ngModelChange)="changedOptions()">
-      Keep Fixed Height In Mobile
-    </md-checkbox>
-    <md-checkbox [(ngModel)]="options.keepFixedWidthInMobile" (ngModelChange)="changedOptions()">
-      Keep Fixed Width In Mobile
-    </md-checkbox>
-    <md-checkbox [(ngModel)]="options.enableEmptyCellClickDrag" (ngModelChange)="changedOptions()">
-      Enable click to add
-    </md-checkbox>
-    <md-input-container>
-      <input mdInput [(ngModel)]="options.minCols" type="number" placeholder="Min Grid Cols"
-             (ngModelChange)="changedOptions()">
-    </md-input-container>
-    <md-input-container>
-      <input mdInput [(ngModel)]="options.maxCols" type="number" placeholder="Max Grid Cols"
-             (ngModelChange)="changedOptions()">
-    </md-input-container>
-    <md-input-container>
-      <input mdInput [(ngModel)]="options.minRows" type="number" placeholder="Min Grid Rows"
-             (ngModelChange)="changedOptions()">
-    </md-input-container>
-    <md-input-container>
-      <input mdInput [(ngModel)]="options.maxRows" type="number" placeholder="Max Grid Rows"
-             (ngModelChange)="changedOptions()">
-    </md-input-container>
-    <md-select aria-label="Display grid lines" [(ngModel)]="options.displayGrid"
-               placeholder="Display grid lines"
+    <div class="row flex">
+      <md-checkbox [(ngModel)]="options.swap" (ngModelChange)="changedOptions()">
+        Swap Items
+      </md-checkbox>
+      <md-checkbox [(ngModel)]="options.pushItems" (ngModelChange)="changedOptions()">
+        Push Items
+      </md-checkbox>
+      <md-checkbox [(ngModel)]="options.draggable.enabled" (ngModelChange)="changedOptions()">
+        Drag Items
+      </md-checkbox>
+      <md-checkbox [(ngModel)]="options.resizable.enabled" (ngModelChange)="changedOptions()">
+        Resize Items
+      </md-checkbox>
+    </div>
+    <div class="row flex">
+      <md-input-container>
+        <input mdInput [(ngModel)]="options.minCols" type="number" placeholder="Min Grid Cols"
                (ngModelChange)="changedOptions()">
-      <md-option value="always">Always</md-option>
-      <md-option value="onDrag&Resize">On Drag & Resize</md-option>
-      <md-option value="none">None</md-option>
-    </md-select>
-  </div>
-</md-toolbar>
-
-<gridster [options]="options">
-  <gridster-item [item]="item" *ngFor="let item of dashboard">
-    <div class="button-holder">
-      <div class="gridster-item-content" *ngIf="item.hasContent">
-        <div class="stuff">
-          Some content to select and click without dragging the widget
+      </md-input-container>
+      <md-input-container>
+        <input mdInput [(ngModel)]="options.maxCols" type="number" placeholder="Max Grid Cols"
+               (ngModelChange)="changedOptions()">
+      </md-input-container>
+      <md-input-container>
+        <input mdInput [(ngModel)]="options.minRows" type="number" placeholder="Min Grid Rows"
+               (ngModelChange)="changedOptions()">
+      </md-input-container>
+      <md-input-container>
+        <input mdInput [(ngModel)]="options.maxRows" type="number" placeholder="Max Grid Rows"
+               (ngModelChange)="changedOptions()">
+      </md-input-container>
+    </div>
+    <div class="row flex">
+      <md-select aria-label="Display grid lines" [(ngModel)]="options.displayGrid"
+                 placeholder="Display grid lines"
+                 (ngModelChange)="changedOptions()">
+        <md-option value="always">Always</md-option>
+        <md-option value="onDrag&Resize">On Drag & Resize</md-option>
+        <md-option value="none">None</md-option>
+      </md-select>
+    </div>
+    <div class="row flex">
+      <md-input-container>
+        <input mdInput [(ngModel)]="options.margin" min="0" max="30" step="1" type="number" placeholder="Margin"
+               (ngModelChange)="changedOptions()">
+      </md-input-container>
+      <md-checkbox [(ngModel)]="options.outerMargin" (ngModelChange)="changedOptions()">Outer Margin</md-checkbox>
+    </div>
+    <div class="row flex">
+      <md-input-container>
+        <input mdInput [(ngModel)]="options.mobileBreakpoint" type="number" placeholder="Mobile Breakpoint"
+               (ngModelChange)="changedOptions()">
+      </md-input-container>
+      <md-checkbox [(ngModel)]="options.disableWindowResize" (ngModelChange)="changedOptions()">
+        Disable window resize
+      </md-checkbox>
+    </div>
+    <label class="mat-headline">Item Settings</label>
+    <div class="row flex">
+      <md-input-container>
+        <input mdInput [(ngModel)]="options.maxItemCols" type="number" placeholder="Max Item Cols"
+               (ngModelChange)="changedOptions()">
+      </md-input-container>
+      <md-input-container>
+        <input mdInput [(ngModel)]="options.minItemCols" type="number" placeholder="Min Item Cols"
+               (ngModelChange)="changedOptions()">
+      </md-input-container>
+      <md-input-container>
+        <input mdInput [(ngModel)]="options.maxItemRows" type="number" placeholder="Max Item Rows"
+               (ngModelChange)="changedOptions()">
+      </md-input-container>
+      <md-input-container>
+        <input mdInput [(ngModel)]="options.minItemRows" type="number" placeholder="Min Item Rows"
+               (ngModelChange)="changedOptions()">
+      </md-input-container>
+    </div>
+    <div class="row flex">
+      <md-input-container>
+        <input mdInput [(ngModel)]="options.maxItemArea" type="number" placeholder="Max Item Area"
+               (ngModelChange)="changedOptions()">
+      </md-input-container>
+      <md-input-container>
+        <input mdInput [(ngModel)]="options.minItemArea" type="number" placeholder="Min Item Area"
+               (ngModelChange)="changedOptions()">
+      </md-input-container>
+    </div>
+    <div class="row flex">
+      <md-input-container>
+        <input mdInput [(ngModel)]="options.defaultItemRows" type="number" placeholder="Default Item Rows"
+               (ngModelChange)="changedOptions()">
+      </md-input-container>
+      <md-input-container>
+        <input mdInput [(ngModel)]="options.defaultItemCols" type="number" placeholder="Default Item Cols"
+               (ngModelChange)="changedOptions()">
+      </md-input-container>
+      <md-input-container>
+        <input mdInput [(ngModel)]="options.fixedColWidth" type="number" placeholder="Fixed Col Width"
+               (ngModelChange)="changedOptions()">
+      </md-input-container>
+      <md-input-container>
+        <input mdInput [(ngModel)]="options.fixedRowHeight" type="number" placeholder="Fixed Row Height"
+               (ngModelChange)="changedOptions()">
+      </md-input-container>
+    </div>
+    <div class="row flex">
+      <md-checkbox [(ngModel)]="options.keepFixedHeightInMobile" (ngModelChange)="changedOptions()">
+        Keep Fixed Height In Mobile
+      </md-checkbox>
+      <md-checkbox [(ngModel)]="options.keepFixedWidthInMobile" (ngModelChange)="changedOptions()">
+        Keep Fixed Width In Mobile
+      </md-checkbox>
+    </div>
+    <div class="row flex">
+      <md-checkbox [(ngModel)]="options.enableEmptyCellClick" (ngModelChange)="changedOptions()">
+        Enable click to add
+      </md-checkbox>
+      <md-checkbox [(ngModel)]="options.enableEmptyCellDrop" (ngModelChange)="changedOptions()">
+        Enable drop to add
+      </md-checkbox>
+      <md-checkbox [(ngModel)]="options.enableEmptyCellDrag" (ngModelChange)="changedOptions()">
+        Enable drag to add
+      </md-checkbox>
+    </div>
+    <div class="row flex">
+      <md-input-container>
+        <input mdInput [(ngModel)]="options.emptyCellDragMaxCols" type="number" placeholder="Drag Max Cols"
+               (ngModelChange)="changedOptions()">
+      </md-input-container>
+      <md-input-container>
+        <input mdInput [(ngModel)]="options.emptyCellDragMaxRows" type="number" placeholder="Drag Max Rows"
+               (ngModelChange)="changedOptions()">
+      </md-input-container>
+    </div>
+    <div class="row flex">
+      <div class="flex"></div>
+      <button md-mini-fab (click)="addItem()" mdTooltip="Add widget">
+        <md-icon>add</md-icon>
+      </button>
+    </div>
+  </md-sidenav>
+  <button md-mini-fab class="sidenav-fab" (click)="sidenav.toggle()">
+    <md-icon>settings</md-icon>
+  </button>
+  <gridster [options]="options">
+    <gridster-item [item]="item" *ngFor="let item of dashboard">
+      <div class="button-holder">
+        <div class="gridster-item-content" *ngIf="item.hasContent">
+          <div class="stuff">
+            Some content to select and click without dragging the widget
+          </div>
         </div>
-      </div>
-      <div class="item-buttons" *ngIf="item.hasContent">
-        <button md-icon-button md-raised-button class="drag-handler">
-          <md-icon>open_with</md-icon>
-        </button>
-        <button md-icon-button md-raised-button class="remove-button" (mousedown)="removeItem($event, item)"
+        <div class="item-buttons" *ngIf="item.hasContent">
+          <button md-icon-button md-raised-button class="drag-handler">
+            <md-icon>open_with</md-icon>
+          </button>
+          <button md-icon-button md-raised-button class="remove-button" (mousedown)="removeItem($event, item)"
+                  (touchstart)="removeItem($event, item)" mdTooltip="Remove">
+            <md-icon>clear</md-icon>
+          </button>
+        </div>
+        <label *ngIf="!item.hasContent">{{item.label}}</label>
+        <button md-mini-fab *ngIf="!item.hasContent" (mousedown)="removeItem($event, item)"
                 (touchstart)="removeItem($event, item)" mdTooltip="Remove">
           <md-icon>clear</md-icon>
         </button>
       </div>
-      <label *ngIf="!item.hasContent">{{item.label}}</label>
-      <button md-mini-fab *ngIf="!item.hasContent" (mousedown)="removeItem($event, item)"
-              (touchstart)="removeItem($event, item)" mdTooltip="Remove">
-        <md-icon>clear</md-icon>
-      </button>
-    </div>
-  </gridster-item>
-</gridster>
+    </gridster-item>
+  </gridster>
+</md-sidenav-container>

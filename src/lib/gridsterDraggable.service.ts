@@ -11,8 +11,8 @@ export class GridsterDraggable {
   gridsterItem: GridsterItemComponent;
   gridster: GridsterComponent;
   lastMouse: {
-    pageX: number,
-    pageY: number
+    clientX: number,
+    clientY: number
   };
   offsetLeft: number;
   offsetTop: number;
@@ -46,8 +46,8 @@ export class GridsterDraggable {
     this.gridsterItem = gridsterItem;
     this.gridster = gridster;
     this.lastMouse = {
-      pageX: 0,
-      pageY: 0
+      clientX: 0,
+      clientY: 0
     };
     this.path = [];
   }
@@ -107,8 +107,8 @@ export class GridsterDraggable {
     this.top = this.gridsterItem.top;
     this.width = this.gridsterItem.width;
     this.height = this.gridsterItem.height;
-    this.diffLeft = e.pageX + this.offsetLeft - this.margin - this.left;
-    this.diffTop = e.pageY + this.offsetTop - this.margin - this.top;
+    this.diffLeft = e.clientX + this.offsetLeft - this.margin - this.left;
+    this.diffTop = e.clientY + this.offsetTop - this.margin - this.top;
     this.gridster.movingItem = this.gridsterItem.$item;
     this.gridster.previewStyle();
     this.push = new GridsterPush(this.gridsterItem, this.gridster);
@@ -128,14 +128,14 @@ export class GridsterDraggable {
 
     this.calculateItemPositionFromMousePosition(e);
 
-    this.lastMouse.pageX = e.pageX;
-    this.lastMouse.pageY = e.pageY;
+    this.lastMouse.clientX = e.clientX;
+    this.lastMouse.clientY = e.clientY;
     this.gridster.gridLines.updateGrid();
   }
 
   calculateItemPositionFromMousePosition(e): void {
-    this.left = e.pageX + this.offsetLeft - this.margin - this.diffLeft;
-    this.top = e.pageY + this.offsetTop - this.margin - this.diffTop;
+    this.left = e.clientX + this.offsetLeft - this.margin - this.diffLeft;
+    this.top = e.clientY + this.offsetTop - this.margin - this.diffTop;
     this.calculateItemPosition();
   }
 

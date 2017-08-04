@@ -38,67 +38,29 @@ import {GridsterModule} from 'angular-gridster2';
 </gridster>
 ```
 
-Initialize the demo dashboard
+Initialize a simple dashboard:
 ```typescript
+   import {GridsterConfig, GridsterItem}  from 'angular-gridster2';
    options: GridsterConfig;
-   dashboard: Array<Object>;
- 
-   static eventStop(item, scope) {
-     console.info('eventStop', item, scope);
+   dashboard: Array<GridsterItem>;
+
+   static itemChange(item, itemComponent) {
+     console.info('itemChanged', item, itemComponent);
    }
  
-   static itemChange(item, scope) {
-     console.info('itemChanged', item, scope);
-   }
- 
-   static itemResize(item, scope) {
-     console.info('itemResized', item, scope);
-   }
- 
-   static itemInit(item) {
-     console.info('itemInitialized', item);
+   static itemResize(item, itemComponent) {
+     console.info('itemResized', item, itemComponent);
    }
  
    ngOnInit() {
      this.options = {
-       gridType: 'fit',
-       compactUp: false,
-       compactLeft: false,
        itemChangeCallback: AppComponent.itemChange,
        itemResizeCallback: AppComponent.itemResize,
-       margin: 10,
-       outerMargin: true,
-       maxItemCols: 50,
-       minItemCols: 1,
-       maxItemRows: 50,
-       minItemRows: 1,
-       defaultItemCols: 1,
-       defaultItemRows: 1,
-       fixedColWidth: 250,
-       fixedRowHeight: 250,
-       draggable: {
-         enabled: true,
-         stop: AppComponent.eventStop
-       },
-       resizable: {
-         enabled: true,
-         stop: AppComponent.eventStop
-       },
-       swap: false
      };
  
      this.dashboard = [
        {cols: 2, rows: 1, y: 0, x: 0},
-       {cols: 2, rows: 2, y: 0, x: 2},
-       {cols: 1, rows: 1, y: 0, x: 4},
-       {cols: 1, rows: 1, y: 0, x: 5},
-       {cols: undefined, rows: undefined, y: 1, x: 0},
-       {cols: 1, rows: 1, y: undefined, x: undefined},
-       {cols: 2, rows: 2, y: 1, x: 5, minItemRows: 2, minItemCols: 2, label: 'Min rows & cols = 2'},
-       {cols: 2, rows: 2, y: 2, x: 0, maxItemRows: 2, maxItemCols: 2, label: 'Max rows & cols = 2'},
-       {cols: 2, rows: 1, y: 2, x: 2, dragEnabled: true, resizeEnabled: true, label: 'Drag&Resize Enabled'},
-       {cols: 1, rows: 1, y: 2, x: 4, dragEnabled: false, resizeEnabled: false, label: 'Drag&Resize Disabled'},
-       {cols: 1, rows: 1, y: 0, x: 6, initCallback: AppComponent.itemInit}
+       {cols: 2, rows: 2, y: 0, x: 2}
      ];
    }
  
@@ -108,18 +70,18 @@ Initialize the demo dashboard
  
    removeItem(item) {
      this.dashboard.splice(this.dashboard.indexOf(item), 1);
-   };
+   }
  
    addItem() {
      this.dashboard.push({});
-   };
+   }
 ```
 
 ##### Note: The gridster will take all the available space from the parent. It will not size depending on content. The parent of the component needs to have a size.
 
 ##### Default Grid Options:
 ```typescript
-import {GridsterConfig} from './gridsterConfig.interface';
+import {GridsterConfig} from 'angular-gridster2';
 
 export const GridsterConfigService: GridsterConfig = {
   gridType: 'fit', // 'fit' will fit the items in the container without scroll;
@@ -157,11 +119,15 @@ export const GridsterConfigService: GridsterConfig = {
   // Arguments: gridsterItem, gridsterItemComponent
   itemInitCallback: undefined,  // callback to call for each item when is initialized.
   // Arguments: gridsterItem, gridsterItemComponent
-  enableEmptyCellClickDrag: false, // enable empty cell click and drag drop events
+  enableEmptyCellClick: false, // enable empty cell click events
+  enableEmptyCellDrop: false, // enable empty cell drop events
+  enableEmptyCellDrag: false, // enable empty cell drag events
   emptyCellClickCallback: undefined, // empty cell click callback
   emptyCellDropCallback: undefined, // empty cell drag drop callback. HTML5 Drag & Drop
   emptyCellDragCallback: undefined, // empty cell drag and create item like excel cell selection
   // Arguments: event, gridsterItem{x, y, rows: defaultItemRows, cols: defaultItemCols}
+  emptyCellDragMaxCols: 50, // limit empty cell drag max cols
+  emptyCellDragMaxRows: 50, // limit empty cell drag max rows
   draggable: {
     enabled: false, // enable/disable draggable items
     ignoreContentClass: 'gridster-item-content', // default content class to ignore the drag event from
@@ -188,7 +154,7 @@ export const GridsterConfigService: GridsterConfig = {
     // Arguments: item, gridsterItem, event
   },
   swap: true, // allow items to switch position if drop on top of another
-pushItems: false, // push items when resizing and dragging
+  pushItems: false, // push items when resizing and dragging
   displayGrid: 'onDrag&Resize', // display background grid of rows and columns
   disableWindowResize: false // disable the window on resize listener. This will stop grid to recalculate on window resize.
 };
