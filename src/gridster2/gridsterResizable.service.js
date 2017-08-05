@@ -5,7 +5,7 @@
     .service('GridsterResizable', GridsterResizable);
 
   /** @ngInject */
-  function GridsterResizable(GridsterPush, GridsterScroll, GridsterUtils) {
+  function GridsterResizable(GridsterPush, GridsterScroll, GridsterUtils, GridsterPushResize) {
     return function (gridsterItem, gridster) {
       var vm = this;
 
@@ -16,6 +16,7 @@
       vm.dragStopFunction = angular.noop;
       vm.resizeEnabled = false;
       vm.push = undefined;
+      vm.pushResize = undefined;
       vm.minHeight = 0;
       vm.minWidth = 0;
       vm.offsetTop = 0;
@@ -58,8 +59,8 @@
         e.stopPropagation();
         e.preventDefault();
         GridsterUtils.checkTouchEvent(e);
-        vm.dragFunction = vm.dragMove.bind(this);
-        vm.dragStopFunction = vm.dragStop.bind(this);
+        vm.dragFunction = vm.dragMove.bind(vm);
+        vm.dragStopFunction = vm.dragStop.bind(vm);
         document.addEventListener('mousemove', vm.dragFunction);
         document.addEventListener('mouseup', vm.dragStopFunction);
         document.addEventListener('touchmove', vm.dragFunction);
@@ -88,37 +89,38 @@
         vm.gridster.movingItem = vm.gridsterItem.$item;
         vm.gridster.previewStyle();
         vm.push = new GridsterPush(vm.gridsterItem, vm.gridster);
+        vm.pushResize = new GridsterPushResize(vm.gridsterItem, vm.gridster);
         vm.gridster.dragInProgress = true;
         vm.gridster.gridLines.updateGrid();
 
         if (e.currentTarget.classList.contains('handle-n')) {
           vm.resizeEventScrollType.n = true;
-          vm.directionFunction = vm.handleN.bind(this);
+          vm.directionFunction = vm.handleN.bind(vm);
         } else if (e.currentTarget.classList.contains('handle-w')) {
           vm.resizeEventScrollType.w = true;
-          vm.directionFunction = vm.handleW.bind(this);
+          vm.directionFunction = vm.handleW.bind(vm);
         } else if (e.currentTarget.classList.contains('handle-s')) {
           vm.resizeEventScrollType.s = true;
-          vm.directionFunction = vm.handleS.bind(this);
+          vm.directionFunction = vm.handleS.bind(vm);
         } else if (e.currentTarget.classList.contains('handle-e')) {
           vm.resizeEventScrollType.e = true;
-          vm.directionFunction = vm.handleE.bind(this);
+          vm.directionFunction = vm.handleE.bind(vm);
         } else if (e.currentTarget.classList.contains('handle-nw')) {
           vm.resizeEventScrollType.n = true;
           vm.resizeEventScrollType.w = true;
-          vm.directionFunction = vm.handleNW.bind(this);
+          vm.directionFunction = vm.handleNW.bind(vm);
         } else if (e.currentTarget.classList.contains('handle-ne')) {
           vm.resizeEventScrollType.n = true;
           vm.resizeEventScrollType.e = true;
-          vm.directionFunction = vm.handleNE.bind(this);
+          vm.directionFunction = vm.handleNE.bind(vm);
         } else if (e.currentTarget.classList.contains('handle-sw')) {
           vm.resizeEventScrollType.s = true;
           vm.resizeEventScrollType.w = true;
-          vm.directionFunction = vm.handleSW.bind(this);
+          vm.directionFunction = vm.handleSW.bind(vm);
         } else if (e.currentTarget.classList.contains('handle-se')) {
           vm.resizeEventScrollType.s = true;
           vm.resizeEventScrollType.e = true;
-          vm.directionFunction = vm.handleSE.bind(this);
+          vm.directionFunction = vm.handleSE.bind(vm);
         }
       };
 
@@ -151,7 +153,7 @@
         if (vm.gridster.$options.resizable.stop) {
           var promise = vm.gridster.$options.resizable.stop(vm.gridsterItem.item, vm.gridsterItem, e);
           if (promise && promise.then) {
-            promise.then(vm.makeResize.bind(this), vm.cancelResize.bind(this));
+            promise.then(vm.makeResize.bind(vm), vm.cancelResize.bind(vm));
           } else {
             vm.makeResize();
           }
@@ -172,6 +174,8 @@
         vm.gridsterItem.setSize(true);
         vm.push.restoreItems();
         vm.push = undefined;
+        vm.pushResize.restoreItems();
+        vm.pushResize = undefined;
       };
 
       vm.makeResize = function () {
@@ -179,6 +183,8 @@
         vm.gridsterItem.checkItemChanges(vm.gridsterItem.$item, vm.gridsterItem.item);
         vm.push.setPushedItems();
         vm.push = undefined;
+        vm.pushResize.setPushedItems();
+        vm.pushResize = undefined;
       };
 
       vm.handleN = function (e) {
@@ -194,6 +200,7 @@
           vm.itemBackup[3] = vm.gridsterItem.$item.rows;
           vm.gridsterItem.$item.rows += vm.gridsterItem.$item.y - vm.newPosition;
           vm.gridsterItem.$item.y = vm.newPosition;
+          vm.pushResize.pushItems(vm.pushResize.fromSouth);
           vm.push.pushItems(vm.push.fromSouth);
           if (vm.gridster.checkCollision(vm.gridsterItem.$item)) {
             vm.gridsterItem.$item.y = vm.itemBackup[1];
@@ -205,6 +212,7 @@
           } else {
             vm.gridster.previewStyle();
           }
+          vm.pushResize.checkPushBack();
           vm.push.checkPushBack();
         }
         vm.gridsterItem.el.css('top', vm.top + 'px');
@@ -224,6 +232,7 @@
           vm.itemBackup[2] = vm.gridsterItem.$item.cols;
           vm.gridsterItem.$item.cols += vm.gridsterItem.$item.x - vm.newPosition;
           vm.gridsterItem.$item.x = vm.newPosition;
+          vm.pushResize.pushItems(vm.pushResize.fromEast);
           vm.push.pushItems(vm.push.fromEast);
           if (vm.gridster.checkCollision(vm.gridsterItem.$item)) {
             vm.gridsterItem.$item.x = vm.itemBackup[0];
@@ -236,6 +245,7 @@
           } else {
             vm.gridster.previewStyle();
           }
+          vm.pushResize.checkPushBack();
           vm.push.checkPushBack();
         }
         vm.gridsterItem.el.css('left', vm.left + 'px');
@@ -252,6 +262,7 @@
         if ((vm.gridsterItem.$item.y + vm.gridsterItem.$item.rows) !== vm.newPosition) {
           vm.itemBackup[3] = vm.gridsterItem.$item.rows;
           vm.gridsterItem.$item.rows = vm.newPosition - vm.gridsterItem.$item.y;
+          vm.pushResize.pushItems(vm.pushResize.fromNorth);
           vm.push.pushItems(vm.push.fromNorth);
           if (vm.gridster.checkCollision(vm.gridsterItem.$item)) {
             vm.gridsterItem.$item.rows = vm.itemBackup[3];
@@ -261,6 +272,7 @@
           } else {
             vm.gridster.previewStyle();
           }
+          vm.pushResize.checkPushBack();
           vm.push.checkPushBack();
         }
         vm.gridsterItem.el.css('height', vm.height + 'px');
@@ -276,8 +288,9 @@
         if ((vm.gridsterItem.$item.x + vm.gridsterItem.$item.cols) !== vm.newPosition) {
           vm.itemBackup[2] = vm.gridsterItem.$item.cols;
           vm.gridsterItem.$item.cols = vm.newPosition - vm.gridsterItem.$item.x;
+          vm.pushResize.pushItems(vm.pushResize.fromWest);
           vm.push.pushItems(vm.push.fromWest);
-          if (vm.gridsterItem.$item.cols < 1 || vm.gridster.checkCollision(vm.gridsterItem.$item)) {
+          if (vm.gridster.checkCollision(vm.gridsterItem.$item)) {
             vm.gridsterItem.$item.cols = vm.itemBackup[2];
             vm.gridsterItem.el.css('width', vm.gridster.positionXToPixels(vm.gridsterItem.$item.cols)
               - vm.gridster.$options.margin + 'px');
@@ -285,6 +298,7 @@
           } else {
             vm.gridster.previewStyle();
           }
+          vm.pushResize.checkPushBack();
           vm.push.checkPushBack();
         }
         vm.gridsterItem.el.css('width', vm.width + 'px');
@@ -315,7 +329,7 @@
         var enableDrag = vm.gridsterItem.canBeResized();
         if (!vm.resizeEnabled && enableDrag) {
           vm.resizeEnabled = !vm.resizeEnabled;
-          vm.dragStartFunction = vm.dragStart.bind(this);
+          vm.dragStartFunction = vm.dragStart.bind(vm);
           handlers = vm.gridsterItem.nativeEl.querySelectorAll('.gridster-item-resizable-handler');
           handlers.forEach(function (handler) {
             handler.addEventListener('mousedown', vm.dragStartFunction);

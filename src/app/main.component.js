@@ -55,6 +55,8 @@
           stop: eventStop
         },
         swap: false,
+        pushItems: true,
+        pushResizeItems: false,
         displayGrid: 'onDrag&Resize',
         disableWindowResize: false
       };

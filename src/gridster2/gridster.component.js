@@ -398,11 +398,11 @@
       vm.calculateLayoutDebounce();
     };
 
-    vm.checkCollision = function checkCollision(itemComponent, ignoreItem) {
+    vm.checkCollision = function checkCollision(itemComponent) {
       if (vm.checkGridCollision(itemComponent)) {
         return true;
       }
-      return vm.findItemWithItem(itemComponent, ignoreItem);
+      return vm.findItemWithItem(itemComponent);
     };
 
     vm.checkGridCollision = function checkGridCollision(itemComponent) {
@@ -423,12 +423,11 @@
       return !(noNegativePosition && maxGridCols && maxGridRows && inColsLimits && inRowsLimits && inMinArea && inMaxArea);
     };
 
-    vm.findItemWithItem = function findItemWithItem(itemComponent, ignoreItem) {
+    vm.findItemWithItem = function findItemWithItem(itemComponent) {
       var widgetsIndex = vm.grid.length - 1, widget;
       for (; widgetsIndex >= 0; widgetsIndex--) {
         widget = vm.grid[widgetsIndex];
-        if (widget.$item !== itemComponent && widget.$item !== ignoreItem
-          && vm.checkCollisionTwoItems(widget.$item, itemComponent)) {
+        if (widget.$item !== itemComponent && vm.checkCollisionTwoItems(widget.$item, itemComponent)) {
           return widget;
         }
       }

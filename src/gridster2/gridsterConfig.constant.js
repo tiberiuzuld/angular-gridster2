@@ -73,6 +73,7 @@
     },
     swap: true, // allow items to switch position if drop on top of another
     pushItems: false, // push items when resizing and dragging
+    pushResizeItems: false, // on resize of item will shrink adjacent items
     displayGrid: 'onDrag&Resize', // display background grid of rows and columns
     disableWindowResize: false
   });
