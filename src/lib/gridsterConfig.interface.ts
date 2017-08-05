@@ -34,6 +34,7 @@ export interface GridsterConfig {
   resizable?: Resizable;
   swap?: boolean;
   pushItems?: boolean;
+  pushResizeItems?: boolean;
   displayGrid?: displayGrid;
   disableWindowResize?: boolean;
   enableEmptyCellClick?: boolean;

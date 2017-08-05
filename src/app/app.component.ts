@@ -74,6 +74,7 @@ export class AppComponent implements OnInit {
       },
       swap: false,
       pushItems: true,
+      pushResizeItems: false,
       displayGrid: 'onDrag&Resize',
       disableWindowResize: false
     };

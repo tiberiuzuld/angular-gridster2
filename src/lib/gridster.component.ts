@@ -411,11 +411,11 @@ export class GridsterComponent implements OnInit, OnDestroy {
     this.calculateLayoutDebounce();
   }
 
-  checkCollision(itemComponent: GridsterItem, ignoreItem?: GridsterItem): GridsterItemComponent | boolean {
+  checkCollision(itemComponent: GridsterItem): GridsterItemComponent | boolean {
     if (this.checkGridCollision(itemComponent)) {
       return true;
     }
-    return this.findItemWithItem(itemComponent, ignoreItem);
+    return this.findItemWithItem(itemComponent);
   }
 
   checkGridCollision(itemComponent: GridsterItem): boolean {
@@ -436,12 +436,11 @@ export class GridsterComponent implements OnInit, OnDestroy {
     return !(noNegativePosition && maxGridCols && maxGridRows && inColsLimits && inRowsLimits && inMinArea && inMaxArea);
   }
 
-  findItemWithItem(itemComponent: GridsterItem, ignoreItem?: GridsterItem): GridsterItemComponent {
+  findItemWithItem(itemComponent: GridsterItem): GridsterItemComponent {
     let widgetsIndex: number = this.grid.length - 1, widget: GridsterItemComponent;
     for (; widgetsIndex >= 0; widgetsIndex--) {
       widget = this.grid[widgetsIndex];
-      if (widget.$item !== itemComponent && widget.$item !== ignoreItem
-        && GridsterComponent.checkCollisionTwoItems(widget.$item, itemComponent)) {
+      if (widget.$item !== itemComponent && GridsterComponent.checkCollisionTwoItems(widget.$item, itemComponent)) {
         return widget;
       }
     }
