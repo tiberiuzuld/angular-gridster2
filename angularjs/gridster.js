@@ -50,10 +50,34 @@
         }
       }
 
+      function checkContentClassForEvent(gridster, e) {
+        if (gridster.$options.draggable.ignoreContent) {
+          if (!checkContentClass(e.target, e.currentTarget, gridster.$options.draggable.dragHandleClass)) {
+            return true;
+          }
+        } else {
+          if (checkContentClass(e.target, e.currentTarget, gridster.$options.draggable.ignoreContentClass)) {
+            return true;
+          }
+        }
+      }
+
+      function checkContentClass(target, current, contentClass) {
+        if (target === current) {
+          return false;
+        }
+        if (target.classList && target.classList.contains(contentClass)) {
+          return true;
+        } else {
+          return checkContentClass(target.parentNode, current, contentClass);
+        }
+      }
+
       return {
         merge: merge,
         debounce: debounce,
-        checkTouchEvent: checkTouchEvent
+        checkTouchEvent: checkTouchEvent,
+        checkContentClassForEvent: checkContentClassForEvent
       }
     });
 })();
@@ -281,12 +305,12 @@
 (function () {
   'use strict';
 
-  GridsterResizable.$inject = ["GridsterPush", "GridsterScroll", "GridsterUtils"];
+  GridsterResizable.$inject = ["GridsterPush", "GridsterScroll", "GridsterUtils", "GridsterPushResize"];
   angular.module('angular-gridster2')
     .service('GridsterResizable', GridsterResizable);
 
   /** @ngInject */
-  function GridsterResizable(GridsterPush, GridsterScroll, GridsterUtils) {
+  function GridsterResizable(GridsterPush, GridsterScroll, GridsterUtils, GridsterPushResize) {
     return function (gridsterItem, gridster) {
       var vm = this;
 
@@ -297,6 +321,7 @@
       vm.dragStopFunction = angular.noop;
       vm.resizeEnabled = false;
       vm.push = undefined;
+      vm.pushResize = undefined;
       vm.minHeight = 0;
       vm.minWidth = 0;
       vm.offsetTop = 0;
@@ -339,8 +364,8 @@
         e.stopPropagation();
         e.preventDefault();
         GridsterUtils.checkTouchEvent(e);
-        vm.dragFunction = vm.dragMove.bind(this);
-        vm.dragStopFunction = vm.dragStop.bind(this);
+        vm.dragFunction = vm.dragMove.bind(vm);
+        vm.dragStopFunction = vm.dragStop.bind(vm);
         document.addEventListener('mousemove', vm.dragFunction);
         document.addEventListener('mouseup', vm.dragStopFunction);
         document.addEventListener('touchmove', vm.dragFunction);
@@ -369,37 +394,38 @@
         vm.gridster.movingItem = vm.gridsterItem.$item;
         vm.gridster.previewStyle();
         vm.push = new GridsterPush(vm.gridsterItem, vm.gridster);
+        vm.pushResize = new GridsterPushResize(vm.gridsterItem, vm.gridster);
         vm.gridster.dragInProgress = true;
         vm.gridster.gridLines.updateGrid();
 
         if (e.currentTarget.classList.contains('handle-n')) {
           vm.resizeEventScrollType.n = true;
-          vm.directionFunction = vm.handleN.bind(this);
+          vm.directionFunction = vm.handleN.bind(vm);
         } else if (e.currentTarget.classList.contains('handle-w')) {
           vm.resizeEventScrollType.w = true;
-          vm.directionFunction = vm.handleW.bind(this);
+          vm.directionFunction = vm.handleW.bind(vm);
         } else if (e.currentTarget.classList.contains('handle-s')) {
           vm.resizeEventScrollType.s = true;
-          vm.directionFunction = vm.handleS.bind(this);
+          vm.directionFunction = vm.handleS.bind(vm);
         } else if (e.currentTarget.classList.contains('handle-e')) {
           vm.resizeEventScrollType.e = true;
-          vm.directionFunction = vm.handleE.bind(this);
+          vm.directionFunction = vm.handleE.bind(vm);
         } else if (e.currentTarget.classList.contains('handle-nw')) {
           vm.resizeEventScrollType.n = true;
           vm.resizeEventScrollType.w = true;
-          vm.directionFunction = vm.handleNW.bind(this);
+          vm.directionFunction = vm.handleNW.bind(vm);
         } else if (e.currentTarget.classList.contains('handle-ne')) {
           vm.resizeEventScrollType.n = true;
           vm.resizeEventScrollType.e = true;
-          vm.directionFunction = vm.handleNE.bind(this);
+          vm.directionFunction = vm.handleNE.bind(vm);
         } else if (e.currentTarget.classList.contains('handle-sw')) {
           vm.resizeEventScrollType.s = true;
           vm.resizeEventScrollType.w = true;
-          vm.directionFunction = vm.handleSW.bind(this);
+          vm.directionFunction = vm.handleSW.bind(vm);
         } else if (e.currentTarget.classList.contains('handle-se')) {
           vm.resizeEventScrollType.s = true;
           vm.resizeEventScrollType.e = true;
-          vm.directionFunction = vm.handleSE.bind(this);
+          vm.directionFunction = vm.handleSE.bind(vm);
         }
       };
 
@@ -432,7 +458,7 @@
         if (vm.gridster.$options.resizable.stop) {
           var promise = vm.gridster.$options.resizable.stop(vm.gridsterItem.item, vm.gridsterItem, e);
           if (promise && promise.then) {
-            promise.then(vm.makeResize.bind(this), vm.cancelResize.bind(this));
+            promise.then(vm.makeResize.bind(vm), vm.cancelResize.bind(vm));
           } else {
             vm.makeResize();
           }
@@ -453,6 +479,8 @@
         vm.gridsterItem.setSize(true);
         vm.push.restoreItems();
         vm.push = undefined;
+        vm.pushResize.restoreItems();
+        vm.pushResize = undefined;
       };
 
       vm.makeResize = function () {
@@ -460,6 +488,8 @@
         vm.gridsterItem.checkItemChanges(vm.gridsterItem.$item, vm.gridsterItem.item);
         vm.push.setPushedItems();
         vm.push = undefined;
+        vm.pushResize.setPushedItems();
+        vm.pushResize = undefined;
       };
 
       vm.handleN = function (e) {
@@ -475,6 +505,7 @@
           vm.itemBackup[3] = vm.gridsterItem.$item.rows;
           vm.gridsterItem.$item.rows += vm.gridsterItem.$item.y - vm.newPosition;
           vm.gridsterItem.$item.y = vm.newPosition;
+          vm.pushResize.pushItems(vm.pushResize.fromSouth);
           vm.push.pushItems(vm.push.fromSouth);
           if (vm.gridster.checkCollision(vm.gridsterItem.$item)) {
             vm.gridsterItem.$item.y = vm.itemBackup[1];
@@ -486,6 +517,7 @@
           } else {
             vm.gridster.previewStyle();
           }
+          vm.pushResize.checkPushBack();
           vm.push.checkPushBack();
         }
         vm.gridsterItem.el.css('top', vm.top + 'px');
@@ -505,6 +537,7 @@
           vm.itemBackup[2] = vm.gridsterItem.$item.cols;
           vm.gridsterItem.$item.cols += vm.gridsterItem.$item.x - vm.newPosition;
           vm.gridsterItem.$item.x = vm.newPosition;
+          vm.pushResize.pushItems(vm.pushResize.fromEast);
           vm.push.pushItems(vm.push.fromEast);
           if (vm.gridster.checkCollision(vm.gridsterItem.$item)) {
             vm.gridsterItem.$item.x = vm.itemBackup[0];
@@ -517,6 +550,7 @@
           } else {
             vm.gridster.previewStyle();
           }
+          vm.pushResize.checkPushBack();
           vm.push.checkPushBack();
         }
         vm.gridsterItem.el.css('left', vm.left + 'px');
@@ -533,6 +567,7 @@
         if ((vm.gridsterItem.$item.y + vm.gridsterItem.$item.rows) !== vm.newPosition) {
           vm.itemBackup[3] = vm.gridsterItem.$item.rows;
           vm.gridsterItem.$item.rows = vm.newPosition - vm.gridsterItem.$item.y;
+          vm.pushResize.pushItems(vm.pushResize.fromNorth);
           vm.push.pushItems(vm.push.fromNorth);
           if (vm.gridster.checkCollision(vm.gridsterItem.$item)) {
             vm.gridsterItem.$item.rows = vm.itemBackup[3];
@@ -542,6 +577,7 @@
           } else {
             vm.gridster.previewStyle();
           }
+          vm.pushResize.checkPushBack();
           vm.push.checkPushBack();
         }
         vm.gridsterItem.el.css('height', vm.height + 'px');
@@ -557,8 +593,9 @@
         if ((vm.gridsterItem.$item.x + vm.gridsterItem.$item.cols) !== vm.newPosition) {
           vm.itemBackup[2] = vm.gridsterItem.$item.cols;
           vm.gridsterItem.$item.cols = vm.newPosition - vm.gridsterItem.$item.x;
+          vm.pushResize.pushItems(vm.pushResize.fromWest);
           vm.push.pushItems(vm.push.fromWest);
-          if (vm.gridsterItem.$item.cols < 1 || vm.gridster.checkCollision(vm.gridsterItem.$item)) {
+          if (vm.gridster.checkCollision(vm.gridsterItem.$item)) {
             vm.gridsterItem.$item.cols = vm.itemBackup[2];
             vm.gridsterItem.el.css('width', vm.gridster.positionXToPixels(vm.gridsterItem.$item.cols)
               - vm.gridster.$options.margin + 'px');
@@ -566,6 +603,7 @@
           } else {
             vm.gridster.previewStyle();
           }
+          vm.pushResize.checkPushBack();
           vm.push.checkPushBack();
         }
         vm.gridsterItem.el.css('width', vm.width + 'px');
@@ -596,7 +634,7 @@
         var enableDrag = vm.gridsterItem.canBeResized();
         if (!vm.resizeEnabled && enableDrag) {
           vm.resizeEnabled = !vm.resizeEnabled;
-          vm.dragStartFunction = vm.dragStart.bind(this);
+          vm.dragStartFunction = vm.dragStart.bind(vm);
           handlers = vm.gridsterItem.nativeEl.querySelectorAll('.gridster-item-resizable-handler');
           handlers.forEach(function (handler) {
             handler.addEventListener('mousedown', vm.dragStartFunction);
@@ -612,6 +650,222 @@
         }
       };
     };
+  }
+})();
+
+(function () {
+  'use strict';
+
+  angular.module('angular-gridster2')
+    .service('GridsterPushResize', GridsterPushResize);
+
+  /** @ngInject */
+  function GridsterPushResize() {
+    return function (gridsterItem, gridster) {
+      var vm = this;
+      vm.pushedItems = [];
+      vm.pushedItemsPath = [];
+      vm.gridsterItem = gridsterItem;
+      vm.gridster = gridster;
+
+      vm.fromSouth = 'fromSouth';
+      vm.fromNorth = 'fromNorth';
+      vm.fromEast = 'fromEast';
+      vm.fromWest = 'fromWest';
+
+      vm.pushItems = function (direction) {
+        if (vm.gridster.$options.pushResizeItems) {
+          vm.push(vm.gridsterItem, direction);
+        }
+      };
+
+      vm.restoreItems = function () {
+        var i = 0;
+        var l = vm.pushedItems.length;
+        var pushedItem;
+        for (; i < l; i++) {
+          pushedItem = vm.pushedItems[i];
+          pushedItem.$item.x = pushedItem.item.x;
+          pushedItem.$item.y = pushedItem.item.y;
+          pushedItem.$item.cols = pushedItem.item.cols;
+          pushedItem.$item.row = pushedItem.item.row;
+          pushedItem.setSize(true);
+        }
+        vm.pushedItems = undefined;
+        vm.pushedItemsPath = undefined;
+      };
+
+      vm.setPushedItems = function () {
+        var i = 0;
+        var l = vm.pushedItems.length;
+        var pushedItem;
+        for (; i < l; i++) {
+          pushedItem = vm.pushedItems[i];
+          pushedItem.checkItemChanges(pushedItem.$item, pushedItem.item);
+        }
+        vm.pushedItems = undefined;
+        vm.pushedItemsPath = undefined;
+      };
+
+      vm.push = function (gridsterItem, direction) {
+        var gridsterItemCollision = vm.gridster.checkCollision(gridsterItem.$item);
+        if (gridsterItemCollision && gridsterItemCollision !== true &&
+          gridsterItemCollision !== vm.gridsterItem && gridsterItemCollision.canBeResized()) {
+          if (vm.tryPattern[direction].call(vm, gridsterItemCollision, gridsterItem, direction)) {
+            return true;
+          }
+        } else if (gridsterItemCollision === undefined) {
+          return true;
+        }
+      };
+
+      vm.trySouth = function (gridsterItemCollide, gridsterItem, direction) {
+        var backUpY = gridsterItemCollide.$item.y;
+        var backUpRows = gridsterItemCollide.$item.rows;
+        gridsterItemCollide.$item.y = gridsterItem.$item.y + gridsterItem.$item.rows;
+        gridsterItemCollide.$item.rows = backUpRows + backUpY - gridsterItemCollide.$item.y;
+        if (!vm.gridster.checkCollisionTwoItems(gridsterItemCollide.$item, gridsterItem.$item)
+          && !vm.gridster.checkGridCollision(gridsterItemCollide.$item)) {
+          gridsterItemCollide.setSize(true);
+          vm.addToPushed(gridsterItemCollide);
+          vm.push(gridsterItem, direction);
+          return true;
+        } else {
+          gridsterItemCollide.$item.y = backUpY;
+          gridsterItemCollide.$item.rows = backUpRows;
+        }
+      };
+
+      vm.tryNorth = function (gridsterItemCollide, gridsterItem, direction) {
+        var backUpRows = gridsterItemCollide.$item.rows;
+        gridsterItemCollide.$item.rows = gridsterItem.$item.y - gridsterItemCollide.$item.y;
+        if (!vm.gridster.checkCollisionTwoItems(gridsterItemCollide.$item, gridsterItem.$item)
+          && !vm.gridster.checkGridCollision(gridsterItemCollide.$item)) {
+          gridsterItemCollide.setSize(true);
+          vm.addToPushed(gridsterItemCollide);
+          vm.push(gridsterItem, direction);
+          return true;
+        } else {
+          gridsterItemCollide.$item.rows = backUpRows;
+        }
+      };
+
+      vm.tryEast = function (gridsterItemCollide, gridsterItem, direction) {
+        var backUpX = gridsterItemCollide.$item.x;
+        var backUpCols = gridsterItemCollide.$item.cols;
+        gridsterItemCollide.$item.x = gridsterItem.$item.x + gridsterItem.$item.cols;
+        gridsterItemCollide.$item.cols = backUpCols + backUpX - gridsterItemCollide.$item.x;
+        if (!vm.gridster.checkCollisionTwoItems(gridsterItemCollide.$item, gridsterItem.$item)
+          && !vm.gridster.checkGridCollision(gridsterItemCollide.$item)) {
+          gridsterItemCollide.setSize(true);
+          vm.addToPushed(gridsterItemCollide);
+          vm.push(gridsterItem, direction);
+          return true;
+        } else {
+          gridsterItemCollide.$item.x = backUpX;
+          gridsterItemCollide.$item.cols = backUpCols;
+        }
+      };
+
+      vm.tryWest = function (gridsterItemCollide, gridsterItem, direction) {
+        var backUpCols = gridsterItemCollide.$item.cols;
+        gridsterItemCollide.$item.cols = gridsterItem.$item.x - gridsterItemCollide.$item.x;
+        if (!vm.gridster.checkCollisionTwoItems(gridsterItemCollide.$item, gridsterItem.$item)
+          && !vm.gridster.checkGridCollision(gridsterItemCollide.$item)) {
+          gridsterItemCollide.setSize(true);
+          vm.addToPushed(gridsterItemCollide);
+          vm.push(gridsterItem, direction);
+          return true;
+        } else {
+          gridsterItemCollide.$item.cols = backUpCols;
+        }
+      };
+
+      vm.tryPattern = {
+        fromEast: vm.tryWest,
+        fromWest: vm.tryEast,
+        fromNorth: vm.trySouth,
+        fromSouth: vm.tryNorth
+      };
+
+      vm.addToPushed = function (gridsterItem) {
+        if (vm.pushedItems.indexOf(gridsterItem) < 0) {
+          vm.pushedItems.push(gridsterItem);
+          vm.pushedItemsPath.push([
+            {
+              x: gridsterItem.item.x,
+              y: gridsterItem.item.y,
+              cols: gridsterItem.item.cols,
+              rows: gridsterItem.item.rows
+            },
+            {
+              x: gridsterItem.$item.x,
+              y: gridsterItem.$item.y,
+              cols: gridsterItem.$item.cols,
+              rows: gridsterItem.$item.rows
+            }]);
+        } else {
+          var i = vm.pushedItems.indexOf(gridsterItem);
+          vm.pushedItemsPath[i].push(
+            {
+              x: gridsterItem.$item.x,
+              y: gridsterItem.$item.y,
+              cols: gridsterItem.$item.cols,
+              rows: gridsterItem.$item.rows
+            });
+        }
+      };
+
+      vm.removeFromPushed = function (i) {
+        if (i > -1) {
+          vm.pushedItems.splice(i, 1);
+          vm.pushedItemsPath.splice(i, 1);
+        }
+      };
+
+      vm.checkPushBack = function () {
+        var i = vm.pushedItems.length - 1;
+        var change = false;
+        for (; i > -1; i--) {
+          if (vm.checkPushedItem(vm.pushedItems[i], i)) {
+            change = true;
+          }
+        }
+        if (change) {
+          vm.checkPushBack();
+        }
+      };
+
+      vm.checkPushedItem = function (pushedItem, i) {
+        var path = vm.pushedItemsPath[i];
+        var j = path.length - 2;
+        var lastPosition, x, y, cols, rows;
+        for (; j > -1; j--) {
+          lastPosition = path[j];
+          x = pushedItem.$item.x;
+          y = pushedItem.$item.y;
+          cols = pushedItem.$item.cols;
+          rows = pushedItem.$item.rows;
+          pushedItem.$item.x = lastPosition.x;
+          pushedItem.$item.y = lastPosition.y;
+          pushedItem.$item.cols = lastPosition.cols;
+          pushedItem.$item.rows = lastPosition.rows;
+          if (!vm.gridster.findItemWithItem(pushedItem.$item)) {
+            pushedItem.setSize(true);
+            path.splice(j + 1, path.length - 1 - j);
+          } else {
+            pushedItem.$item.x = x;
+            pushedItem.$item.y = y;
+            pushedItem.$item.cols = cols;
+            pushedItem.$item.rows = rows;
+          }
+        }
+        if (path.length < 2) {
+          vm.removeFromPushed(i);
+          return true;
+        }
+      }
+    }
   }
 })();
 
@@ -637,7 +891,7 @@
 
       vm.pushItems = function (direction) {
         if (vm.gridster.$options.pushItems) {
-          vm.push(vm.gridsterItem, direction, vm.gridsterItem);
+          vm.push(vm.gridsterItem, direction);
         }
       };
 
@@ -667,18 +921,18 @@
         vm.pushedItemsPath = undefined;
       };
 
-      vm.push = function (gridsterItem, direction, pushedBy) {
-        var gridsterItemCollision = vm.gridster.checkCollision(gridsterItem.$item, pushedBy.$item);
+      vm.push = function (gridsterItem, direction) {
+        var gridsterItemCollision = vm.gridster.checkCollision(gridsterItem.$item);
         if (gridsterItemCollision && gridsterItemCollision !== true &&
           gridsterItemCollision !== vm.gridsterItem && gridsterItemCollision.canBeDragged()) {
           var gridsterItemCollide = gridsterItemCollision;
-          if (vm.tryPattern[direction][0].call(this, gridsterItemCollide, gridsterItem, direction, pushedBy)) {
+          if (vm.tryPattern[direction][0].call(this, gridsterItemCollide, gridsterItem, direction)) {
             return true;
-          } else if (vm.tryPattern[direction][1].call(this, gridsterItemCollide, gridsterItem, direction, pushedBy)) {
+          } else if (vm.tryPattern[direction][1].call(this, gridsterItemCollide, gridsterItem, direction)) {
             return true;
-          } else if (vm.tryPattern[direction][2].call(this, gridsterItemCollide, gridsterItem, direction, pushedBy)) {
+          } else if (vm.tryPattern[direction][2].call(this, gridsterItemCollide, gridsterItem, direction)) {
             return true;
-          } else if (vm.tryPattern[direction][3].call(this, gridsterItemCollide, gridsterItem, direction, pushedBy)) {
+          } else if (vm.tryPattern[direction][3].call(this, gridsterItemCollide, gridsterItem, direction)) {
             return true;
           }
         } else if (gridsterItemCollision === undefined) {
@@ -686,56 +940,56 @@
         }
       };
 
-      vm.trySouth = function (gridsterItemCollide, gridsterItem, direction, pushedBy) {
+      vm.trySouth = function (gridsterItemCollide, gridsterItem, direction) {
         var backUpY = gridsterItemCollide.$item.y;
         gridsterItemCollide.$item.y = gridsterItem.$item.y + gridsterItem.$item.rows;
         if (!vm.gridster.checkCollisionTwoItems(gridsterItemCollide.$item, gridsterItem.$item)
-          && vm.push(gridsterItemCollide, vm.fromNorth, gridsterItem)) {
+          && vm.push(gridsterItemCollide, vm.fromNorth)) {
           gridsterItemCollide.setSize(true);
           vm.addToPushed(gridsterItemCollide);
-          vm.push(gridsterItem, direction, pushedBy);
+          vm.push(gridsterItem, direction);
           return true;
         } else {
           gridsterItemCollide.$item.y = backUpY;
         }
       };
 
-      vm.tryNorth = function (gridsterItemCollide, gridsterItem, direction, pushedBy) {
+      vm.tryNorth = function (gridsterItemCollide, gridsterItem, direction) {
         var backUpY = gridsterItemCollide.$item.y;
         gridsterItemCollide.$item.y = gridsterItem.$item.y - gridsterItemCollide.$item.rows;
         if (!vm.gridster.checkCollisionTwoItems(gridsterItemCollide.$item, gridsterItem.$item)
-          && vm.push(gridsterItemCollide, vm.fromSouth, gridsterItem)) {
+          && vm.push(gridsterItemCollide, vm.fromSouth)) {
           gridsterItemCollide.setSize(true);
           vm.addToPushed(gridsterItemCollide);
-          vm.push(gridsterItem, direction, pushedBy);
+          vm.push(gridsterItem, direction);
           return true;
         } else {
           gridsterItemCollide.$item.y = backUpY;
         }
       };
 
-      vm.tryEast = function (gridsterItemCollide, gridsterItem, direction, pushedBy) {
+      vm.tryEast = function (gridsterItemCollide, gridsterItem, direction) {
         var backUpX = gridsterItemCollide.$item.x;
         gridsterItemCollide.$item.x = gridsterItem.$item.x + gridsterItem.$item.cols;
         if (!vm.gridster.checkCollisionTwoItems(gridsterItemCollide.$item, gridsterItem.$item)
-          && vm.push(gridsterItemCollide, vm.fromWest, gridsterItem)) {
+          && vm.push(gridsterItemCollide, vm.fromWest)) {
           gridsterItemCollide.setSize(true);
           vm.addToPushed(gridsterItemCollide);
-          vm.push(gridsterItem, direction, pushedBy);
+          vm.push(gridsterItem, direction);
           return true;
         } else {
           gridsterItemCollide.$item.x = backUpX;
         }
       };
 
-      vm.tryWest = function (gridsterItemCollide, gridsterItem, direction, pushedBy) {
+      vm.tryWest = function (gridsterItemCollide, gridsterItem, direction) {
         var backUpX = gridsterItemCollide.$item.x;
         gridsterItemCollide.$item.x = gridsterItem.$item.x - gridsterItemCollide.$item.cols;
         if (!vm.gridster.checkCollisionTwoItems(gridsterItemCollide.$item, gridsterItem.$item)
-          && vm.push(gridsterItemCollide, vm.fromEast, gridsterItem)) {
+          && vm.push(gridsterItemCollide, vm.fromEast)) {
           gridsterItemCollide.setSize(true);
           vm.addToPushed(gridsterItemCollide);
-          vm.push(gridsterItem, direction, pushedBy);
+          vm.push(gridsterItem, direction);
           return true;
         } else {
           gridsterItemCollide.$item.x = backUpX;
@@ -785,18 +1039,19 @@
       vm.checkPushedItem = function (pushedItem, i) {
         var path = vm.pushedItemsPath[i];
         var j = path.length - 2;
-        var lastPosition;
+        var lastPosition, x, y;
         for (; j > -1; j--) {
           lastPosition = path[j];
+          x = pushedItem.$item.x;
+          y = pushedItem.$item.y;
           pushedItem.$item.x = lastPosition.x;
           pushedItem.$item.y = lastPosition.y;
           if (!vm.gridster.findItemWithItem(pushedItem.$item)) {
             pushedItem.setSize(true);
             path.splice(j + 1, path.length - 1 - j);
           } else {
-            lastPosition = path[path.length - 1];
-            pushedItem.$item.x = lastPosition.x;
-            pushedItem.$item.y = lastPosition.y;
+            pushedItem.$item.x = x;
+            pushedItem.$item.y = y;
           }
         }
         if (path.length < 2) {
@@ -1081,17 +1336,6 @@
       };
       vm.path = [];
 
-      vm.checkContentClass = function (target, current, contentClass) {
-        if (target === current) {
-          return false;
-        }
-        if (target.classList && target.classList.contains(contentClass)) {
-          return true;
-        } else {
-          return vm.checkContentClass(target.parentNode, current, contentClass);
-        }
-      };
-
       vm.dragStart = function (e) {
         switch (e.which) {
           case 1:
@@ -1103,14 +1347,8 @@
             return;
         }
 
-        if (vm.gridster.$options.draggable.ignoreContent) {
-          if (!vm.checkContentClass(e.target, e.currentTarget, vm.gridster.$options.draggable.dragHandleClass)) {
-            return;
-          }
-        } else {
-          if (vm.checkContentClass(e.target, e.currentTarget, vm.gridster.$options.draggable.ignoreContentClass)) {
-            return;
-          }
+        if (GridsterUtils.checkContentClassForEvent(vm.gridster, e)) {
+          return;
         }
 
         if (vm.gridster.$options.draggable.start) {
@@ -1350,6 +1588,7 @@
     },
     swap: true, // allow items to switch position if drop on top of another
     pushItems: false, // push items when resizing and dragging
+    pushResizeItems: false, // on resize of item will shrink adjacent items
     displayGrid: 'onDrag&Resize', // display background grid of rows and columns
     disableWindowResize: false
   });
@@ -1493,6 +1732,9 @@
     };
 
     vm.emptyCellClickCb = function (e) {
+      if (GridsterUtils.checkContentClassForEvent(vm, e)) {
+        return;
+      }
       var item = vm.getValidItemFromEvent(e);
       if (!item || vm.movingItem) {
         return;
@@ -1519,6 +1761,9 @@
     };
 
     vm.emptyCellMouseDown = function (e) {
+      if (GridsterUtils.checkContentClassForEvent(vm, e)) {
+        return;
+      }
       e.preventDefault();
       e.stopPropagation();
       var item = vm.getValidItemFromEvent(e);
@@ -1756,11 +2001,11 @@
       vm.calculateLayoutDebounce();
     };
 
-    vm.checkCollision = function checkCollision(itemComponent, ignoreItem) {
+    vm.checkCollision = function checkCollision(itemComponent) {
       if (vm.checkGridCollision(itemComponent)) {
         return true;
       }
-      return vm.findItemWithItem(itemComponent, ignoreItem);
+      return vm.findItemWithItem(itemComponent);
     };
 
     vm.checkGridCollision = function checkGridCollision(itemComponent) {
@@ -1781,12 +2026,11 @@
       return !(noNegativePosition && maxGridCols && maxGridRows && inColsLimits && inRowsLimits && inMinArea && inMaxArea);
     };
 
-    vm.findItemWithItem = function findItemWithItem(itemComponent, ignoreItem) {
+    vm.findItemWithItem = function findItemWithItem(itemComponent) {
       var widgetsIndex = vm.grid.length - 1, widget;
       for (; widgetsIndex >= 0; widgetsIndex--) {
         widget = vm.grid[widgetsIndex];
-        if (widget.$item !== itemComponent && widget.$item !== ignoreItem
-          && vm.checkCollisionTwoItems(widget.$item, itemComponent)) {
+        if (widget.$item !== itemComponent && vm.checkCollisionTwoItems(widget.$item, itemComponent)) {
           return widget;
         }
       }
