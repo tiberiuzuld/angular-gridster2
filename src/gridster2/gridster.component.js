@@ -135,6 +135,9 @@
     };
 
     vm.emptyCellClickCb = function (e) {
+      if (GridsterUtils.checkContentClassForEvent(vm, e)) {
+        return;
+      }
       var item = vm.getValidItemFromEvent(e);
       if (!item || vm.movingItem) {
         return;
@@ -161,6 +164,9 @@
     };
 
     vm.emptyCellMouseDown = function (e) {
+      if (GridsterUtils.checkContentClassForEvent(vm, e)) {
+        return;
+      }
       e.preventDefault();
       e.stopPropagation();
       var item = vm.getValidItemFromEvent(e);

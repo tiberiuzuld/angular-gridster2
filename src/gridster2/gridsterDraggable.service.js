@@ -35,17 +35,6 @@
       };
       vm.path = [];
 
-      vm.checkContentClass = function (target, current, contentClass) {
-        if (target === current) {
-          return false;
-        }
-        if (target.classList && target.classList.contains(contentClass)) {
-          return true;
-        } else {
-          return vm.checkContentClass(target.parentNode, current, contentClass);
-        }
-      };
-
       vm.dragStart = function (e) {
         switch (e.which) {
           case 1:
@@ -57,14 +46,8 @@
             return;
         }
 
-        if (vm.gridster.$options.draggable.ignoreContent) {
-          if (!vm.checkContentClass(e.target, e.currentTarget, vm.gridster.$options.draggable.dragHandleClass)) {
-            return;
-          }
-        } else {
-          if (vm.checkContentClass(e.target, e.currentTarget, vm.gridster.$options.draggable.ignoreContentClass)) {
-            return;
-          }
+        if (GridsterUtils.checkContentClassForEvent(vm.gridster, e)) {
+          return;
         }
 
         if (vm.gridster.$options.draggable.start) {

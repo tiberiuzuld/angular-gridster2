@@ -37,10 +37,34 @@
         }
       }
 
+      function checkContentClassForEvent(gridster, e) {
+        if (gridster.$options.draggable.ignoreContent) {
+          if (!checkContentClass(e.target, e.currentTarget, gridster.$options.draggable.dragHandleClass)) {
+            return true;
+          }
+        } else {
+          if (checkContentClass(e.target, e.currentTarget, gridster.$options.draggable.ignoreContentClass)) {
+            return true;
+          }
+        }
+      }
+
+      function checkContentClass(target, current, contentClass) {
+        if (target === current) {
+          return false;
+        }
+        if (target.classList && target.classList.contains(contentClass)) {
+          return true;
+        } else {
+          return checkContentClass(target.parentNode, current, contentClass);
+        }
+      }
+
       return {
         merge: merge,
         debounce: debounce,
-        checkTouchEvent: checkTouchEvent
+        checkTouchEvent: checkTouchEvent,
+        checkContentClassForEvent: checkContentClassForEvent
       }
     });
 })();
