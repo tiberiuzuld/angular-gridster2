@@ -36,4 +36,27 @@ export class GridsterUtils {
       e.clientY = e.touches[0].clientY;
     }
   }
+
+  static checkContentClassForEvent(gridster, e): boolean {
+    if (gridster.$options.draggable.ignoreContent) {
+      if (!GridsterUtils.checkContentClass(e.target, e.currentTarget, gridster.$options.draggable.dragHandleClass)) {
+        return true;
+      }
+    } else {
+      if (GridsterUtils.checkContentClass(e.target, e.currentTarget, gridster.$options.draggable.ignoreContentClass)) {
+        return true;
+      }
+    }
+  }
+
+  static checkContentClass(target, current, contentClass): boolean {
+    if (target === current) {
+      return false;
+    }
+    if (target.classList && target.classList.contains(contentClass)) {
+      return true;
+    } else {
+      return GridsterUtils.checkContentClass(target.parentNode, current, contentClass);
+    }
+  }
 }

@@ -146,6 +146,9 @@ export class GridsterComponent implements OnInit, OnDestroy {
   }
 
   emptyCellClickCb(e): void {
+    if (GridsterUtils.checkContentClassForEvent(this, e)) {
+      return;
+    }
     const item = this.getValidItemFromEvent(e);
     if (!item || this.movingItem) {
       return;
@@ -174,6 +177,9 @@ export class GridsterComponent implements OnInit, OnDestroy {
   }
 
   emptyCellMouseDown(e): void {
+    if (GridsterUtils.checkContentClassForEvent(this, e)) {
+      return;
+    }
     e.preventDefault();
     e.stopPropagation();
     const item = this.getValidItemFromEvent(e);

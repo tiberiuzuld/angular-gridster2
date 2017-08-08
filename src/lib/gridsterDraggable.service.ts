@@ -52,17 +52,6 @@ export class GridsterDraggable {
     this.path = [];
   }
 
-  checkContentClass(target, current, contentClass): boolean {
-    if (target === current) {
-      return false;
-    }
-    if (target.classList && target.classList.contains(contentClass)) {
-      return true;
-    } else {
-      return this.checkContentClass(target.parentNode, current, contentClass);
-    }
-  }
-
   dragStart(e): void {
     switch (e.which) {
       case 1:
@@ -74,14 +63,8 @@ export class GridsterDraggable {
         return;
     }
 
-    if (this.gridster.$options.draggable.ignoreContent) {
-      if (!this.checkContentClass(e.target, e.currentTarget, this.gridster.$options.draggable.dragHandleClass)) {
-        return;
-      }
-    } else {
-      if (this.checkContentClass(e.target, e.currentTarget, this.gridster.$options.draggable.ignoreContentClass)) {
-        return;
-      }
+    if (GridsterUtils.checkContentClassForEvent(this.gridster, e)) {
+      return;
     }
 
     if (this.gridster.$options.draggable.start) {
