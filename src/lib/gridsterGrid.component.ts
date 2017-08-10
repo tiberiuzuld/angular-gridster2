@@ -46,8 +46,8 @@ export class GridsterGridComponent {
     this.margin = this.gridster.$options.margin;
     this.height = this.gridster.curRowHeight - this.margin;
     this.width = this.gridster.curColWidth - this.margin;
-    this.columns.length = Math.max(this.gridster.columns, Math.floor(this.gridster.curWidth / this.gridster.curColWidth));
-    this.rows.length = Math.max(this.gridster.rows, Math.floor(this.gridster.curHeight / this.gridster.curRowHeight));
+    this.columns.length = Math.max(this.gridster.columns, Math.floor(this.gridster.curWidth / this.gridster.curColWidth)) || 0;
+    this.rows.length = Math.max(this.gridster.rows, Math.floor(this.gridster.curHeight / this.gridster.curRowHeight)) || 0;
     this.columnsHeight = this.gridster.curRowHeight * this.rows.length;
     this.rowsWidth = this.gridster.curColWidth * this.columns.length;
     this.cdRef.markForCheck();
