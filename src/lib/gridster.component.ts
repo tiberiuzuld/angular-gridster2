@@ -5,6 +5,8 @@ import {GridsterUtils} from './gridsterUtils.service';
 import {GridsterItemComponent} from './gridsterItem.component';
 import {GridsterGridComponent} from './gridsterGrid.component';
 import {GridsterItem} from './gridsterItem.interface';
+import {GridsterEmptyCell} from './gridsterEmptyCell.service';
+import {GridsterCompact} from './gridsterCompact.service';
 
 @Component({
   selector: 'gridster',
@@ -15,7 +17,6 @@ export class GridsterComponent implements OnInit, OnDestroy {
   @Input() options: GridsterConfig;
   calculateLayoutDebounce: Function;
   movingItem: GridsterItem;
-  initialItem: GridsterItem;
   previewStyle: Function;
   el: any;
   $options: GridsterConfig;
@@ -28,14 +29,10 @@ export class GridsterComponent implements OnInit, OnDestroy {
   curColWidth: number;
   curRowHeight: number;
   windowResize: Function;
-  emptyCellClick: Function;
-  emptyCellDrop: Function;
-  emptyCellDrag: Function;
-  emptyCellMMove: Function;
-  emptyCellUp: Function;
-  emptyCellMove: Function;
   gridLines: GridsterGridComponent;
   dragInProgress: boolean;
+  emptyCell: GridsterEmptyCell;
+  compact: GridsterCompact;
 
   static checkCollisionTwoItems(item: GridsterItem, item2: GridsterItem): boolean {
     return item.x < item2.x + item2.cols
@@ -44,7 +41,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
       && item.y + item.rows > item2.y;
   }
 
-  constructor(el: ElementRef, public renderer: Renderer2, private cdRef: ChangeDetectorRef) {
+  constructor(el: ElementRef, public renderer: Renderer2, public cdRef: ChangeDetectorRef) {
     this.el = el.nativeElement;
     this.$options = JSON.parse(JSON.stringify(GridsterConfigService));
     this.mobile = false;
@@ -64,6 +61,8 @@ export class GridsterComponent implements OnInit, OnDestroy {
     this.$options.emptyCellClickCallback = undefined;
     this.$options.emptyCellDropCallback = undefined;
     this.$options.emptyCellDragCallback = undefined;
+    this.emptyCell = new GridsterEmptyCell(this);
+    this.compact = new GridsterCompact(this);
   }
 
   ngOnInit(): void {
@@ -106,27 +105,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
       this.windowResize();
       this.windowResize = null;
     }
-    if (this.$options.enableEmptyCellClick && !this.emptyCellClick && this.$options.emptyCellClickCallback) {
-      this.emptyCellClick = this.renderer.listen(this.el, 'click', this.emptyCellClickCb.bind(this));
-    } else if (!this.$options.enableEmptyCellClick && this.emptyCellClick) {
-      this.emptyCellClick();
-      this.emptyCellClick = null;
-    }
-    if (this.$options.enableEmptyCellDrop && !this.emptyCellDrop && this.$options.emptyCellDropCallback) {
-      this.emptyCellDrop = this.renderer.listen(this.el, 'drop', this.emptyCellDragDrop.bind(this));
-      this.emptyCellMove = this.renderer.listen(this.el, 'dragover', this.emptyCellDragOver.bind(this));
-    } else if (!this.$options.enableEmptyCellDrop && this.emptyCellDrop) {
-      this.emptyCellDrop();
-      this.emptyCellMove();
-      this.emptyCellMove = null;
-      this.emptyCellDrop = null;
-    }
-    if (this.$options.enableEmptyCellDrag && !this.emptyCellDrag && this.$options.emptyCellDragCallback) {
-      this.emptyCellDrag = this.renderer.listen(this.el, 'mousedown', this.emptyCellMouseDown.bind(this));
-    } else if (!this.$options.enableEmptyCellDrag && this.emptyCellDrag) {
-      this.emptyCellDrag();
-      this.emptyCellDrag = null;
-    }
+    this.emptyCell.updateOptions();
   }
 
   optionsChanged(): void {
@@ -143,115 +122,6 @@ export class GridsterComponent implements OnInit, OnDestroy {
     if (this.windowResize) {
       this.windowResize();
     }
-  }
-
-  emptyCellClickCb(e): void {
-    if (GridsterUtils.checkContentClassForEvent(this, e)) {
-      return;
-    }
-    const item = this.getValidItemFromEvent(e);
-    if (!item || this.movingItem) {
-      return;
-    }
-    this.$options.emptyCellClickCallback(event, item);
-    this.cdRef.markForCheck();
-  }
-
-  emptyCellDragDrop(e): void {
-    const item = this.getValidItemFromEvent(e);
-    if (!item) {
-      return;
-    }
-    this.$options.emptyCellDropCallback(event, item);
-    this.cdRef.markForCheck();
-  }
-
-  emptyCellDragOver(e): void {
-    e.preventDefault();
-    e.stopPropagation();
-    if (this.getValidItemFromEvent(e)) {
-      e.dataTransfer.dropEffect = 'move';
-    } else {
-      e.dataTransfer.dropEffect = 'none';
-    }
-  }
-
-  emptyCellMouseDown(e): void {
-    if (GridsterUtils.checkContentClassForEvent(this, e)) {
-      return;
-    }
-    e.preventDefault();
-    e.stopPropagation();
-    const item = this.getValidItemFromEvent(e);
-    if (!item) {
-      return;
-    }
-    this.initialItem = item;
-    this.movingItem = item;
-    this.previewStyle();
-    this.emptyCellMMove = this.renderer.listen('window', 'mousemove', this.emptyCellMouseMove.bind(this));
-    this.emptyCellUp = this.renderer.listen('window', 'mouseup', this.emptyCellMouseUp.bind(this));
-  }
-
-  emptyCellMouseMove(e): void {
-    e.preventDefault();
-    e.stopPropagation();
-    const item = this.getValidItemFromEvent(e, this.initialItem);
-    if (!item) {
-      return;
-    }
-
-    this.movingItem = item;
-    this.previewStyle();
-  }
-
-  emptyCellMouseUp(e): void {
-    this.emptyCellMMove();
-    this.emptyCellUp();
-    const item = this.getValidItemFromEvent(e, this.initialItem);
-    if (!item) {
-      return;
-    }
-    this.movingItem = item;
-    this.$options.emptyCellDragCallback(e, this.movingItem);
-    setTimeout(function () {
-      this.movingItem = null;
-      this.previewStyle();
-    }.bind(this));
-    this.cdRef.markForCheck();
-  }
-
-  getValidItemFromEvent(e, oldItem?: GridsterItem): GridsterItem | undefined {
-    e.preventDefault();
-    e.stopPropagation();
-    GridsterUtils.checkTouchEvent(e);
-    const rect = this.el.getBoundingClientRect();
-    const x = e.clientX + this.el.scrollLeft - rect.left;
-    const y = e.clientY + this.el.scrollTop - rect.top;
-    const item: GridsterItem = {
-      x: this.pixelsToPositionX(x, Math.floor),
-      y: this.pixelsToPositionY(y, Math.floor),
-      cols: this.$options.defaultItemCols,
-      rows: this.$options.defaultItemRows
-    };
-    if (oldItem) {
-      item.cols = Math.min(Math.abs(oldItem.x - item.x) + 1, this.$options.emptyCellDragMaxCols);
-      item.rows = Math.min(Math.abs(oldItem.y - item.y) + 1, this.$options.emptyCellDragMaxRows);
-      if (oldItem.x < item.x) {
-        item.x = oldItem.x;
-      } else if (oldItem.x - item.x > this.$options.emptyCellDragMaxCols - 1) {
-        item.x = this.movingItem.x;
-      }
-      if (oldItem.y < item.y) {
-        item.y = oldItem.y;
-      } else if (oldItem.y - item.y > this.$options.emptyCellDragMaxRows - 1) {
-        item.y = this.movingItem.y;
-      }
-    }
-    if (this.checkCollision(item)) {
-      return;
-    }
-    return item;
   }
 
   onResize(): void {
@@ -305,7 +175,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
 
   calculateLayout(): void {
     // check to compact
-    this.checkCompact();
+    this.compact.checkCompact();
 
     this.setGridDimensions();
     if (this.$options.outerMargin) {
@@ -515,79 +385,5 @@ export class GridsterComponent implements OnInit, OnDestroy {
 
   positionYToPixels(y: number): number {
     return y * this.curRowHeight;
-  }
-
-  checkCompact(): void {
-    if (this.$options.compactType !== 'none') {
-      if (this.$options.compactType === 'compactUp') {
-        this.checkCompactUp();
-      } else if (this.$options.compactType === 'compactLeft') {
-        this.checkCompactLeft();
-      } else if (this.$options.compactType === 'compactUp&Left') {
-        this.checkCompactUp();
-        this.checkCompactLeft();
-      } else if (this.$options.compactType === 'compactLeft&Up') {
-        this.checkCompactLeft();
-        this.checkCompactUp();
-      }
-    }
-  }
-
-  checkCompactUp(): boolean {
-    let widgetMovedUp = false, widget: GridsterItemComponent, moved: boolean;
-    const l = this.grid.length;
-    for (let i = 0; i < l; i++) {
-      widget = this.grid[i];
-      moved = this.moveUpTillCollision(widget);
-      if (moved) {
-        widgetMovedUp = true;
-        widget.item.y = widget.$item.y;
-        widget.itemChanged();
-      }
-    }
-    if (widgetMovedUp) {
-      this.checkCompactUp();
-      return widgetMovedUp;
-    }
-  }
-
-  moveUpTillCollision(itemComponent: GridsterItemComponent): boolean {
-    itemComponent.$item.y -= 1;
-    if (this.checkCollision(itemComponent.$item)) {
-      itemComponent.$item.y += 1;
-      return false;
-    } else {
-      this.moveUpTillCollision(itemComponent);
-      return true;
-    }
-  }
-
-  checkCompactLeft(): boolean {
-    let widgetMovedUp = false, widget: GridsterItemComponent, moved: boolean;
-    const l = this.grid.length;
-    for (let i = 0; i < l; i++) {
-      widget = this.grid[i];
-      moved = this.moveLeftTillCollision(widget);
-      if (moved) {
-        widgetMovedUp = true;
-        widget.item.x = widget.$item.x;
-        widget.itemChanged();
-      }
-    }
-    if (widgetMovedUp) {
-      this.checkCompactLeft();
-      return widgetMovedUp;
-    }
-  }
-
-  moveLeftTillCollision(itemComponent: GridsterItemComponent): boolean {
-    itemComponent.$item.x -= 1;
-    if (this.checkCollision(itemComponent.$item)) {
-      itemComponent.$item.x += 1;
-      return false;
-    } else {
-      this.moveUpTillCollision(itemComponent);
-      return true;
-    }
   }
 }

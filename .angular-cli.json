@@ -54,5 +54,6 @@
   "defaults": {
     "styleExt": "css",
     "component": {}
-  }
+  },
+  "packageManager": "npm"
 }
