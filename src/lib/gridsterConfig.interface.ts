@@ -54,16 +54,13 @@ export interface GridsterConfig {
   [propName: string]: any;
 }
 
-export interface Draggable {
-  enabled?: boolean;
+export interface Draggable extends DragBase {
   ignoreContentClass?: string;
   ignoreContent?: boolean;
   dragHandleClass?: string;
-  stop?: Function;
-  start?: Function;
 }
 
-export interface Resizable extends Draggable {
+export interface Resizable extends DragBase {
   handles?: {
     s: boolean,
     e: boolean,
@@ -74,4 +71,10 @@ export interface Resizable extends Draggable {
     sw: boolean,
     nw: boolean
   };
+}
+
+export interface DragBase {
+  enabled?: boolean;
+  stop?: Function;
+  start?: Function;
 }

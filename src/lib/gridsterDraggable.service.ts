@@ -98,7 +98,7 @@ export class GridsterDraggable {
     this.swap = new GridsterSwap(this.gridsterItem, this.gridster);
     this.gridster.dragInProgress = true;
     this.gridster.gridLines.updateGrid();
-    this.path.push({x: this.gridsterItem.item.x, y: this.gridsterItem.item.y});
+    this.path.push({x: this.gridsterItem.item.x || 0, y: this.gridsterItem.item.y || 0});
   }
 
   dragMove(e): void {
@@ -149,22 +149,18 @@ export class GridsterDraggable {
   }
 
   cancelDrag() {
-    this.gridsterItem.$item.x = this.gridsterItem.item.x;
-    this.gridsterItem.$item.y = this.gridsterItem.item.y;
+    this.gridsterItem.$item.x = this.gridsterItem.item.x || 0;
+    this.gridsterItem.$item.y = this.gridsterItem.item.y || 0;
     this.gridsterItem.setSize(true);
     this.push.restoreItems();
-    this.push = undefined;
     this.swap.restoreSwapItem();
-    this.swap = undefined;
   }
 
   makeDrag() {
     this.gridsterItem.setSize(true);
     this.gridsterItem.checkItemChanges(this.gridsterItem.$item, this.gridsterItem.item);
     this.push.setPushedItems();
-    this.push = undefined;
     this.swap.setSwapItem();
-    this.swap = undefined;
   }
 
   calculateItemPosition() {

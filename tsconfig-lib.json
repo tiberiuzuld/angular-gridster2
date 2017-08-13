@@ -10,6 +10,8 @@
     "stripInternal": true,
     "declaration": true,
     "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
     "outDir": "./dist",
     "lib": [
       "es2016",

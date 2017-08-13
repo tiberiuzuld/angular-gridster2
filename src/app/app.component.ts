@@ -1,5 +1,6 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {GridsterConfig, GridsterItem} from '../lib/index';
+import {GridsterItem} from '../lib/index';
+import {GridsterConfigS} from '../lib/gridsterConfigS.interface';
 
 @Component({
   selector: 'gridster-root',
@@ -8,7 +9,7 @@ import {GridsterConfig, GridsterItem} from '../lib/index';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit {
-  options: GridsterConfig;
+  options: GridsterConfigS;
   dashboard: Array<GridsterItem>;
 
   static eventStop(item, itemComponent, event) {
@@ -56,6 +57,10 @@ export class AppComponent implements OnInit {
       defaultItemRows: 1,
       fixedColWidth: 105,
       fixedRowHeight: 105,
+      keepFixedHeightInMobile: false,
+      keepFixedWidthInMobile: false,
+      scrollSensitivity: 10,
+      scrollSpeed: 20,
       enableEmptyCellClick: false,
       enableEmptyCellDrop: false,
       enableEmptyCellDrag: false,
@@ -66,11 +71,29 @@ export class AppComponent implements OnInit {
       emptyCellDragMaxRows: 50,
       draggable: {
         enabled: true,
+        ignoreContentClass: 'gridster-item-content',
+        ignoreContent: false,
+        dragHandleClass: 'drag-handler',
         stop: AppComponent.eventStop
       },
       resizable: {
         enabled: true,
-        stop: AppComponent.eventStop
+        stop: AppComponent.eventStop,
+        handles: {
+          s: true,
+          e: true,
+          n: true,
+          w: true,
+          se: true,
+          ne: true,
+          sw: true,
+          nw: true
+        }
+      },
+      api: {
+        resize: AppComponent.eventStop,
+        optionsChanged: AppComponent.eventStop,
+        getNextPossiblePosition: AppComponent.eventStop,
       },
       swap: false,
       pushItems: true,
@@ -95,7 +118,9 @@ export class AppComponent implements OnInit {
   }
 
   changedOptions() {
-    this.options.api.optionsChanged();
+    if (this.options.api && this.options.api.optionsChanged) {
+      this.options.api.optionsChanged();
+    }
   }
 
   removeItem($event, item) {

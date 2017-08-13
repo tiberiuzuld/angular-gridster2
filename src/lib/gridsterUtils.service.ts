@@ -48,6 +48,7 @@ export class GridsterUtils {
         return true;
       }
     }
+    return false;
   }
 
   static checkContentClass(target, current, contentClass): boolean {

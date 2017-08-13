@@ -5,8 +5,8 @@ let scrollSensitivity: number;
 let scrollSpeed: number;
 const intervalDuration = 50;
 let gridsterElement: any;
-let resizeEvent: boolean;
-let resizeEventType: GridsterResizeEventType;
+let resizeEvent: boolean | undefined;
+let resizeEventType: GridsterResizeEventType | undefined;
 let intervalE: number;
 let intervalW: number;
 let intervalN: number;
@@ -27,13 +27,13 @@ export function scroll(gridsterItem: GridsterItemComponent, e: MouseEvent, lastM
   const elemBottomOffset = offsetHeight + offsetTop - gridsterItem.el.offsetTop - gridsterItem.el.offsetHeight;
   if (lastMouse.clientY < e.clientY && elemBottomOffset < scrollSensitivity) {
     cancelN();
-    if ((resizeEvent && !resizeEventType.s) || intervalS) {
+    if ((resizeEvent && resizeEventType && !resizeEventType.s) || intervalS) {
       return;
     }
     intervalS = startVertical(1, calculateItemPosition, lastMouse);
   } else if (lastMouse.clientY > e.clientY && offsetTop > 0 && elemTopOffset < scrollSensitivity) {
     cancelS();
-    if ((resizeEvent && !resizeEventType.n) || intervalN) {
+    if ((resizeEvent && resizeEventType && !resizeEventType.n) || intervalN) {
       return;
     }
     intervalN = startVertical(-1, calculateItemPosition, lastMouse);
@@ -45,13 +45,13 @@ export function scroll(gridsterItem: GridsterItemComponent, e: MouseEvent, lastM
   const elemLeftOffset = gridsterItem.el.offsetLeft - offsetLeft;
   if (lastMouse.clientX < e.clientX && elemRightOffset <= scrollSensitivity) {
     cancelW();
-    if ((resizeEvent && !resizeEventType.e) || intervalE) {
+    if ((resizeEvent && resizeEventType && !resizeEventType.e) || intervalE) {
       return;
     }
     intervalE = startHorizontal(1, calculateItemPosition, lastMouse);
   } else if (lastMouse.clientX > e.clientX && offsetLeft > 0 && elemLeftOffset < scrollSensitivity) {
     cancelE();
-    if ((resizeEvent && !resizeEventType.w) || intervalW) {
+    if ((resizeEvent && resizeEventType && !resizeEventType.w) || intervalW) {
       return;
     }
     intervalW = startHorizontal(-1, calculateItemPosition, lastMouse);
@@ -87,10 +87,7 @@ function startHorizontal(sign: number, calculateItemPosition: Function, lastMous
 export function cancelScroll() {
   cancelHorizontal();
   cancelVertical();
-  scrollSensitivity = undefined;
-  scrollSpeed = undefined;
   gridsterElement = undefined;
-  resizeEventType = undefined;
 }
 
 function cancelHorizontal() {
@@ -106,27 +103,27 @@ function cancelVertical() {
 function cancelE() {
   if (intervalE) {
     clearInterval(intervalE);
-    intervalE = undefined;
+    intervalE = 0;
   }
 }
 
 function cancelW() {
   if (intervalW) {
     clearInterval(intervalW);
-    intervalW = undefined;
+    intervalW = 0;
   }
 }
 
 function cancelS() {
   if (intervalS) {
     clearInterval(intervalS);
-    intervalS = undefined;
+    intervalS = 0;
   }
 }
 
 function cancelN() {
   if (intervalN) {
     clearInterval(intervalN);
-    intervalN = undefined;
+    intervalN = 0;
   }
 }

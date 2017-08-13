@@ -4,6 +4,7 @@ import {GridsterComponent} from './gridster.component';
 import {GridsterDraggable} from './gridsterDraggable.service';
 import {GridsterResizable} from './gridsterResizable.service';
 import {GridsterUtils} from './gridsterUtils.service';
+import {GridsterItemS} from './gridsterItemS.interface';
 
 @Component({
   selector: 'gridster-item',
@@ -14,7 +15,7 @@ export class GridsterItemComponent implements OnInit, OnDestroy {
   @Input() item: GridsterItem;
   @Output() itemChange: EventEmitter<GridsterItem> = new EventEmitter();
   @Output() itemResize: EventEmitter<GridsterItem> = new EventEmitter();
-  $item: GridsterItem;
+  $item: GridsterItemS;
   el: any;
   gridster: GridsterComponent;
   itemTop: number;
@@ -33,19 +34,11 @@ export class GridsterItemComponent implements OnInit, OnDestroy {
   constructor(el: ElementRef, @Host() gridster: GridsterComponent, public renderer: Renderer2) {
     this.el = el.nativeElement;
     this.$item = {
-      cols: undefined,
-      rows: undefined,
-      x: undefined,
-      y: undefined,
-      initCallback: undefined,
-      dragEnabled: undefined,
-      resizeEnabled: undefined,
-      maxItemRows: undefined,
-      minItemRows: undefined,
-      maxItemCols: undefined,
-      minItemCols: undefined
+      cols: -1,
+      rows: -1,
+      x: -1,
+      y: -1,
     };
-
     this.gridster = gridster;
     this.drag = new GridsterDraggable(this, gridster);
     this.resize = new GridsterResizable(this, gridster);
@@ -57,7 +50,19 @@ export class GridsterItemComponent implements OnInit, OnDestroy {
   }
 
   updateOptions(): void {
-    this.$item = GridsterUtils.merge(this.$item, this.item, this.$item);
+    this.$item = GridsterUtils.merge(this.$item, this.item, {
+      cols: undefined,
+      rows: undefined,
+      x: undefined,
+      y: undefined,
+      initCallback: undefined,
+      dragEnabled: undefined,
+      resizeEnabled: undefined,
+      maxItemRows: undefined,
+      minItemRows: undefined,
+      maxItemCols: undefined,
+      minItemCols: undefined
+    });
   }
 
   ngOnDestroy(): void {
@@ -124,10 +129,10 @@ export class GridsterItemComponent implements OnInit, OnDestroy {
       return;
     }
     if (this.gridster.checkCollision(this.$item)) {
-      this.$item.x = oldValue.x;
-      this.$item.y = oldValue.y;
-      this.$item.cols = oldValue.cols;
-      this.$item.rows = oldValue.rows;
+      this.$item.x = oldValue.x || 0;
+      this.$item.y = oldValue.y || 0;
+      this.$item.cols = oldValue.cols || 1;
+      this.$item.rows = oldValue.rows || 1;
     } else {
       this.item.cols = this.$item.cols;
       this.item.rows = this.$item.rows;

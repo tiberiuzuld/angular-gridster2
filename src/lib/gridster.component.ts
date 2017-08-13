@@ -4,9 +4,10 @@ import {GridsterConfig} from './gridsterConfig.interface';
 import {GridsterUtils} from './gridsterUtils.service';
 import {GridsterItemComponent} from './gridsterItem.component';
 import {GridsterGridComponent} from './gridsterGrid.component';
-import {GridsterItem} from './gridsterItem.interface';
 import {GridsterEmptyCell} from './gridsterEmptyCell.service';
 import {GridsterCompact} from './gridsterCompact.service';
+import {GridsterConfigS} from './gridsterConfigS.interface';
+import {GridsterItemS} from './gridsterItemS.interface';
 
 @Component({
   selector: 'gridster',
@@ -16,10 +17,10 @@ import {GridsterCompact} from './gridsterCompact.service';
 export class GridsterComponent implements OnInit, OnDestroy {
   @Input() options: GridsterConfig;
   calculateLayoutDebounce: Function;
-  movingItem: GridsterItem;
+  movingItem: GridsterItemS;
   previewStyle: Function;
   el: any;
-  $options: GridsterConfig;
+  $options: GridsterConfigS;
   mobile: boolean;
   curWidth: number;
   curHeight: number;
@@ -28,13 +29,13 @@ export class GridsterComponent implements OnInit, OnDestroy {
   rows: number;
   curColWidth: number;
   curRowHeight: number;
-  windowResize: Function;
+  windowResize: Function | null;
   gridLines: GridsterGridComponent;
   dragInProgress: boolean;
   emptyCell: GridsterEmptyCell;
   compact: GridsterCompact;
 
-  static checkCollisionTwoItems(item: GridsterItem, item2: GridsterItem): boolean {
+  static checkCollisionTwoItems(item: GridsterItemS, item2: GridsterItemS): boolean {
     return item.x < item2.x + item2.cols
       && item.x + item.cols > item2.x
       && item.y < item2.y + item2.rows
@@ -185,10 +186,10 @@ export class GridsterComponent implements OnInit, OnDestroy {
       this.curColWidth = Math.floor((this.curWidth + this.$options.margin) / this.columns);
       this.curRowHeight = Math.floor((this.curHeight + this.$options.margin) / this.rows);
     }
-    let addClass: string;
-    let removeClass1: string;
-    let removeClass2: string;
-    let removeClass3: string;
+    let addClass = '';
+    let removeClass1 = '';
+    let removeClass2 = '';
+    let removeClass3 = '';
     if (this.$options.gridType === 'fit') {
       addClass = 'fit';
       removeClass1 = 'scrollVertical';
@@ -268,8 +269,6 @@ export class GridsterComponent implements OnInit, OnDestroy {
     } else if (this.checkCollision(itemComponent.$item)) {
       console.warn('Can\'t be placed in the bounds of the dashboard, trying to auto position!/n' +
         JSON.stringify(itemComponent.item, ['cols', 'rows', 'x', 'y']));
-      itemComponent.$item.x = undefined;
-      itemComponent.$item.y = undefined;
       this.autoPositionItem(itemComponent);
     }
     this.grid.push(itemComponent);
@@ -287,14 +286,14 @@ export class GridsterComponent implements OnInit, OnDestroy {
     this.calculateLayoutDebounce();
   }
 
-  checkCollision(itemComponent: GridsterItem): GridsterItemComponent | boolean {
+  checkCollision(itemComponent: GridsterItemS): GridsterItemComponent | boolean {
     if (this.checkGridCollision(itemComponent)) {
       return true;
     }
     return this.findItemWithItem(itemComponent);
   }
 
-  checkGridCollision(itemComponent: GridsterItem): boolean {
+  checkGridCollision(itemComponent: GridsterItemS): boolean {
     const noNegativePosition = itemComponent.y > -1 && itemComponent.x > -1;
     const maxGridCols = itemComponent.cols + itemComponent.x <= this.$options.maxCols;
     const maxGridRows = itemComponent.rows + itemComponent.y <= this.$options.maxRows;
@@ -312,7 +311,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
     return !(noNegativePosition && maxGridCols && maxGridRows && inColsLimits && inRowsLimits && inMinArea && inMaxArea);
   }
 
-  findItemWithItem(itemComponent: GridsterItem): GridsterItemComponent {
+  findItemWithItem(itemComponent: GridsterItemS): GridsterItemComponent | boolean {
     let widgetsIndex: number = this.grid.length - 1, widget: GridsterItemComponent;
     for (; widgetsIndex >= 0; widgetsIndex--) {
       widget = this.grid[widgetsIndex];
@@ -320,6 +319,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
         return widget;
       }
     }
+    return false;
   }
 
   autoPositionItem(itemComponent: GridsterItemComponent): void {
@@ -334,7 +334,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
     }
   }
 
-  getNextPossiblePosition(newItem: GridsterItem): boolean {
+  getNextPossiblePosition(newItem: GridsterItemS): boolean {
     if (newItem.cols === undefined) {
       newItem.cols = this.$options.defaultItemCols;
     }
@@ -365,6 +365,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
       newItem.x = 0;
       return true;
     }
+    return false;
   }
 
   pixelsToPosition(x: number, y: number, roundingMethod: Function): [number, number] {

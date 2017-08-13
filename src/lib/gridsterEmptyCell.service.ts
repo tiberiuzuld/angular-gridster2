@@ -1,17 +1,17 @@
 import {Injectable} from '@angular/core';
 import {GridsterComponent} from './gridster.component';
 import {GridsterUtils} from './gridsterUtils.service';
-import {GridsterItem} from './gridsterItem.interface';
+import {GridsterItemS} from './gridsterItemS.interface';
 
 @Injectable()
 export class GridsterEmptyCell {
-  initialItem: GridsterItem;
-  emptyCellClick: Function;
-  emptyCellDrop: Function;
-  emptyCellDrag: Function;
+  initialItem: GridsterItemS;
+  emptyCellClick: Function | null;
+  emptyCellDrop: Function | null;
+  emptyCellDrag: Function | null;
   emptyCellMMove: Function;
   emptyCellUp: Function;
-  emptyCellMove: Function;
+  emptyCellMove: Function | null;
 
   constructor(private gridster: GridsterComponent) {
   }
@@ -26,7 +26,7 @@ export class GridsterEmptyCell {
     if (this.gridster.$options.enableEmptyCellDrop && !this.emptyCellDrop && this.gridster.$options.emptyCellDropCallback) {
       this.emptyCellDrop = this.gridster.renderer.listen(this.gridster.el, 'drop', this.emptyCellDragDrop.bind(this));
       this.emptyCellMove = this.gridster.renderer.listen(this.gridster.el, 'dragover', this.emptyCellDragOver.bind(this));
-    } else if (!this.gridster.$options.enableEmptyCellDrop && this.emptyCellDrop) {
+    } else if (!this.gridster.$options.enableEmptyCellDrop && this.emptyCellDrop && this.emptyCellMove) {
       this.emptyCellDrop();
       this.emptyCellMove();
       this.emptyCellMove = null;
@@ -117,14 +117,14 @@ export class GridsterEmptyCell {
     this.gridster.cdRef.markForCheck();
   }
 
-  getValidItemFromEvent(e, oldItem?: GridsterItem): GridsterItem | undefined {
+  getValidItemFromEvent(e, oldItem?: GridsterItemS): GridsterItemS | undefined {
     e.preventDefault();
     e.stopPropagation();
     GridsterUtils.checkTouchEvent(e);
     const rect = this.gridster.el.getBoundingClientRect();
     const x = e.clientX + this.gridster.el.scrollLeft - rect.left;
     const y = e.clientY + this.gridster.el.scrollTop - rect.top;
-    const item: GridsterItem = {
+    const item: GridsterItemS = {
       x: this.gridster.pixelsToPositionX(x, Math.floor),
       y: this.gridster.pixelsToPositionY(y, Math.floor),
       cols: this.gridster.$options.defaultItemCols,

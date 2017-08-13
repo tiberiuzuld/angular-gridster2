@@ -179,24 +179,20 @@ export class GridsterResizable {
   }
 
   cancelResize(): void {
-    this.gridsterItem.$item.cols = this.gridsterItem.item.cols;
-    this.gridsterItem.$item.rows = this.gridsterItem.item.rows;
-    this.gridsterItem.$item.x = this.gridsterItem.item.x;
-    this.gridsterItem.$item.y = this.gridsterItem.item.y;
+    this.gridsterItem.$item.cols = this.gridsterItem.item.cols || 1;
+    this.gridsterItem.$item.rows = this.gridsterItem.item.rows || 1;
+    this.gridsterItem.$item.x = this.gridsterItem.item.x || 0;
+    this.gridsterItem.$item.y = this.gridsterItem.item.y || 0;
     this.gridsterItem.setSize(true);
     this.push.restoreItems();
-    this.push = undefined;
     this.pushResize.restoreItems();
-    this.pushResize = undefined;
   }
 
   makeResize(): void {
     this.gridsterItem.setSize(true);
     this.gridsterItem.checkItemChanges(this.gridsterItem.$item, this.gridsterItem.item);
     this.push.setPushedItems();
-    this.push = undefined;
     this.pushResize.setPushedItems();
-    this.pushResize = undefined;
   }
 
   handleN(e): void {

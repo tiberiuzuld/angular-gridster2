@@ -38,8 +38,8 @@ export class GridsterCompact {
     }
     if (widgetMovedUp) {
       this.checkCompactUp();
-      return widgetMovedUp;
     }
+    return widgetMovedUp;
   }
 
   moveUpTillCollision(itemComponent: GridsterItemComponent): boolean {
@@ -67,8 +67,8 @@ export class GridsterCompact {
     }
     if (widgetMovedUp) {
       this.checkCompactLeft();
-      return widgetMovedUp;
     }
+    return widgetMovedUp;
   }
 
   moveLeftTillCollision(itemComponent: GridsterItemComponent): boolean {
