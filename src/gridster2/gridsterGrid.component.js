@@ -36,8 +36,8 @@
       vm.margin = vm.gridster.$options.margin;
       vm.height = vm.gridster.curRowHeight - vm.margin;
       vm.width = vm.gridster.curColWidth - vm.margin;
-      vm.columns.length = Math.max(vm.gridster.columns, Math.floor(vm.gridster.curWidth / vm.gridster.curColWidth));
-      vm.rows.length = Math.max(vm.gridster.rows, Math.floor(vm.gridster.curHeight / vm.gridster.curRowHeight));
+      vm.columns.length = Math.max(vm.gridster.columns, Math.floor(vm.gridster.curWidth / vm.gridster.curColWidth))|| 0;
+      vm.rows.length = Math.max(vm.gridster.rows, Math.floor(vm.gridster.curHeight / vm.gridster.curRowHeight))|| 0;
       vm.columnsHeight = vm.gridster.curRowHeight * vm.rows.length;
       vm.rowsWidth = vm.gridster.curColWidth * vm.columns.length;
       $scope.$applyAsync();

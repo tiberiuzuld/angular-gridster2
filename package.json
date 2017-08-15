@@ -1,6 +1,6 @@
 {
   "name": "angular-gridster2",
-  "version": "1.11.1",
+  "version": "1.11.3",
   "main": "index.js",
   "dependencies": {
     "angular": ">=1.6.5"
@@ -45,7 +45,7 @@
     "karma-ng-html2js-preprocessor": "1.0.0",
     "karma-phantomjs-launcher": "1.0.4",
     "lodash": "4.17.4",
-    "phantomjs-prebuilt": "2.1.14",
+    "phantomjs-prebuilt": "2.1.15",
     "uglify-save-license": "0.4.1",
     "wrench": "1.5.9"
   },

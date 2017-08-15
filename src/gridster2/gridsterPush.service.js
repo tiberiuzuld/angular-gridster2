@@ -64,9 +64,10 @@
           } else if (vm.tryPattern[direction][3].call(this, gridsterItemCollide, gridsterItem, direction)) {
             return true;
           }
-        } else if (gridsterItemCollision === undefined) {
+        } else if (gridsterItemCollision === false) {
           return true;
         }
+        return false;
       };
 
       vm.trySouth = function (gridsterItemCollide, gridsterItem, direction) {
@@ -81,6 +82,7 @@
         } else {
           gridsterItemCollide.$item.y = backUpY;
         }
+        return false;
       };
 
       vm.tryNorth = function (gridsterItemCollide, gridsterItem, direction) {
@@ -95,6 +97,7 @@
         } else {
           gridsterItemCollide.$item.y = backUpY;
         }
+        return false;
       };
 
       vm.tryEast = function (gridsterItemCollide, gridsterItem, direction) {
@@ -109,6 +112,7 @@
         } else {
           gridsterItemCollide.$item.x = backUpX;
         }
+        return false;
       };
 
       vm.tryWest = function (gridsterItemCollide, gridsterItem, direction) {
@@ -123,6 +127,7 @@
         } else {
           gridsterItemCollide.$item.x = backUpX;
         }
+        return false;
       };
 
       vm.tryPattern = {
@@ -187,6 +192,7 @@
           vm.removeFromPushed(i);
           return true;
         }
+        return false;
       };
     }
   }

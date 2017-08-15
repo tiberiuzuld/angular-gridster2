@@ -47,6 +47,7 @@
             return true;
           }
         }
+        return false;
       }
 
       function checkContentClass(target, current, contentClass) {

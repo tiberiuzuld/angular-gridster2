@@ -12,7 +12,7 @@
   });
 
   /** @ngInject */
-  function GridsterController($element, GridsterConfig, GridsterUtils, $log, $scope) {
+  function GridsterController($element, GridsterConfig, GridsterUtils, $log, $scope, GridsterEmptyCell, GridsterCompact) {
     var vm = this;
 
     vm.calculateLayoutDebounce = angular.noop;
@@ -52,6 +52,8 @@
     };
 
     vm.$onInit = function () {
+      vm.emptyCell = new GridsterEmptyCell(vm);
+      vm.compact = new GridsterCompact(vm);
       vm.setOptions();
       vm.options.api = {
         optionsChanged: vm.optionsChanged,
@@ -92,29 +94,7 @@
         vm.onResizeFunction = false;
         window.removeEventListener('resize', vm.onResize);
       }
-      if (vm.$options.enableEmptyCellClick && !vm.emptyCellClick && vm.$options.emptyCellClickCallback) {
-        vm.emptyCellClick = true;
-        vm.el.addEventListener('click', vm.emptyCellClickCb);
-      } else if (!vm.$options.enableEmptyCellClick && vm.emptyCellClick) {
-        vm.emptyCellClick = false;
-        vm.el.removeEventListener('click', vm.emptyCellClickCb);
-      }
-      if (vm.$options.enableEmptyCellDrop && !vm.emptyCellDrop && vm.$options.emptyCellDropCallback) {
-        vm.emptyCellDrop = true;
-        vm.el.addEventListener('drop', vm.emptyCellDragDrop);
-        vm.el.addEventListener('dragover', vm.emptyCellDragOver);
-      } else if (!vm.$options.enableEmptyCellDrop && vm.emptyCellDrop) {
-        vm.emptyCellDrop = false;
-        vm.el.removeEventListener('drop', vm.emptyCellDragDrop);
-        vm.el.removeEventListener('dragover', vm.emptyCellDragOver);
-      }
-      if (vm.$options.enableEmptyCellDrag && !vm.emptyCellDrag && vm.$options.emptyCellDragCallback) {
-        vm.emptyCellDrag = true;
-        vm.el.addEventListener('mousedown', vm.emptyCellMouseDown);
-      } else if (!vm.$options.enableEmptyCellDrag && vm.emptyCellDrag) {
-        vm.emptyCellDrag = false;
-        vm.el.removeEventListener('mousedown', vm.emptyCellMouseDown);
-      }
+      vm.emptyCell.updateOptions();
     };
 
     vm.optionsChanged = function optionsChanged() {
@@ -132,112 +112,6 @@
         vm.onResizeFunction = false;
         window.removeEventListener('resize', vm.onResize);
       }
-    };
-
-    vm.emptyCellClickCb = function (e) {
-      if (GridsterUtils.checkContentClassForEvent(vm, e)) {
-        return;
-      }
-      var item = vm.getValidItemFromEvent(e);
-      if (!item || vm.movingItem) {
-        return;
-      }
-      vm.$options.emptyCellClickCallback(event, item);
-    };
-
-    vm.emptyCellDragDrop = function (e) {
-      var item = vm.getValidItemFromEvent(e);
-      if (!item) {
-        return;
-      }
-      vm.$options.emptyCellDropCallback(event, item);
-    };
-
-    vm.emptyCellDragOver = function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      if (vm.getValidItemFromEvent(e)) {
-        e.dataTransfer.dropEffect = 'move';
-      } else {
-        e.dataTransfer.dropEffect = 'none';
-      }
-    };
-
-    vm.emptyCellMouseDown = function (e) {
-      if (GridsterUtils.checkContentClassForEvent(vm, e)) {
-        return;
-      }
-      e.preventDefault();
-      e.stopPropagation();
-      var item = vm.getValidItemFromEvent(e);
-      if (!item) {
-        return;
-      }
-      vm.initialItem = item;
-      vm.movingItem = item;
-      vm.previewStyle();
-      window.addEventListener('mousemove', vm.emptyCellMouseMove);
-      window.addEventListener('mouseup', vm.emptyCellMouseUp);
-    };
-
-    vm.emptyCellMouseMove = function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      var item = vm.getValidItemFromEvent(e, vm.initialItem);
-      if (!item) {
-        return;
-      }
-
-      vm.movingItem = item;
-      vm.previewStyle();
-    };
-
-    vm.emptyCellMouseUp = function (e) {
-      window.removeEventListener('mousemove', vm.emptyCellMouseMove);
-      window.removeEventListener('mouseup', vm.emptyCellMouseUp);
-      var item = vm.getValidItemFromEvent(e, vm.initialItem);
-      if (!item) {
-        return;
-      }
-      vm.movingItem = item;
-      vm.$options.emptyCellDragCallback(e, vm.movingItem);
-      setTimeout(function () {
-        vm.movingItem = null;
-        vm.previewStyle();
-      });
-    };
-
-    vm.getValidItemFromEvent = function (e, oldItem) {
-      e.preventDefault();
-      e.stopPropagation();
-      GridsterUtils.checkTouchEvent(e);
-      var rect = vm.el.getBoundingClientRect();
-      var x = e.clientX + vm.el.scrollLeft - rect.left;
-      var y = e.clientY + vm.el.scrollTop - rect.top;
-      var item = {
-        x: vm.pixelsToPositionX(x, Math.floor),
-        y: vm.pixelsToPositionY(y, Math.floor),
-        cols: vm.$options.defaultItemCols,
-        rows: vm.$options.defaultItemRows
-      };
-      if (oldItem) {
-        item.cols = Math.min(Math.abs(oldItem.x - item.x) + 1, vm.$options.emptyCellDragMaxCols);
-        item.rows = Math.min(Math.abs(oldItem.y - item.y) + 1, vm.$options.emptyCellDragMaxRows);
-        if (oldItem.x < item.x) {
-          item.x = oldItem.x;
-        } else if (oldItem.x - item.x > vm.$options.emptyCellDragMaxCols - 1) {
-          item.x = vm.movingItem.x;
-        }
-        if (oldItem.y < item.y) {
-          item.y = oldItem.y;
-        } else if (oldItem.y - item.y > vm.$options.emptyCellDragMaxRows - 1) {
-          item.y = vm.movingItem.y;
-        }
-      }
-      if (vm.checkCollision(item)) {
-        return;
-      }
-      return item;
     };
 
     vm.onResize = function onResize() {
@@ -291,7 +165,7 @@
 
     vm.calculateLayout = function calculateLayout() {
       // check to compact
-      vm.checkCompact();
+      vm.compact.checkCompact();
 
       vm.setGridDimensions();
       if (vm.$options.outerMargin) {
@@ -437,6 +311,7 @@
           return widget;
         }
       }
+      return false;
     };
 
     vm.autoPositionItem = function autoPositionItem(itemComponent) {
@@ -482,6 +357,7 @@
         newItem.x = 0;
         return true;
       }
+      return false;
     };
 
     vm.pixelsToPosition = function pixelsToPosition(x, y, roundingMethod) {
@@ -503,79 +379,5 @@
     vm.positionYToPixels = function positionYToPixels(y) {
       return y * vm.curRowHeight;
     };
-
-    vm.checkCompact = function checkCompact() {
-      if (vm.$options.compactType !== 'none') {
-        if (vm.$options.compactType === 'compactUp') {
-          vm.checkCompactUp();
-        } else if (vm.$options.compactType === 'compactLeft') {
-          vm.checkCompactLeft();
-        } else if (vm.$options.compactType === 'compactUp&Left') {
-          vm.checkCompactUp();
-          vm.checkCompactLeft();
-        } else if (vm.$options.compactType === 'compactLeft&Up') {
-          vm.checkCompactLeft();
-          vm.checkCompactUp();
-        }
-      }
-    };
-
-    vm.checkCompactUp = function checkCompactUp() {
-      var widgetMovedUp = false, widget, moved;
-      var l = vm.grid.length;
-      for (var i = 0; i < l; i++) {
-        widget = vm.grid[i];
-        moved = vm.moveUpTillCollision(widget);
-        if (moved) {
-          widgetMovedUp = true;
-          widget.item.y = widget.$item.y;
-          widget.itemChanged();
-        }
-      }
-      if (widgetMovedUp) {
-        vm.checkCompactUp();
-        return widgetMovedUp;
-      }
-    };
-
-    vm.moveUpTillCollision = function moveUpTillCollision(itemComponent) {
-      itemComponent.$item.y -= 1;
-      if (vm.checkCollision(itemComponent.$item)) {
-        itemComponent.$item.y += 1;
-        return false;
-      } else {
-        vm.moveUpTillCollision(itemComponent);
-        return true;
-      }
-    };
-
-    vm.checkCompactLeft = function checkCompactLeft() {
-      var widgetMovedUp = false, widget, moved;
-      var l = vm.grid.length;
-      for (var i = 0; i < l; i++) {
-        widget = vm.grid[i];
-        moved = vm.moveLeftTillCollision(widget);
-        if (moved) {
-          widgetMovedUp = true;
-          widget.item.x = widget.$item.x;
-          widget.itemChanged();
-        }
-      }
-      if (widgetMovedUp) {
-        vm.checkCompactLeft();
-        return widgetMovedUp;
-      }
-    };
-
-    vm.moveLeftTillCollision = function moveLeftTillCollision(itemComponent) {
-      itemComponent.$item.x -= 1;
-      if (vm.checkCollision(itemComponent.$item)) {
-        itemComponent.$item.x += 1;
-        return false;
-      } else {
-        vm.moveUpTillCollision(itemComponent);
-        return true;
-      }
-    }
   }
 })();
