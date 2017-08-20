@@ -77,7 +77,7 @@ export class GridsterCompact {
       itemComponent.$item.x += 1;
       return false;
     } else {
-      this.moveUpTillCollision(itemComponent);
+      this.moveLeftTillCollision(itemComponent);
       return true;
     }
   }

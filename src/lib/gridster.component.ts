@@ -264,7 +264,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
       itemComponent.item.rows = itemComponent.$item.rows;
       itemComponent.itemChanged();
     }
-    if (itemComponent.$item.x === undefined || itemComponent.$item.y === undefined) {
+    if (itemComponent.$item.x === -1 || itemComponent.$item.y === -1) {
       this.autoPositionItem(itemComponent);
     } else if (this.checkCollision(itemComponent.$item)) {
       console.warn('Can\'t be placed in the bounds of the dashboard, trying to auto position!/n' +
@@ -286,40 +286,49 @@ export class GridsterComponent implements OnInit, OnDestroy {
     this.calculateLayoutDebounce();
   }
 
-  checkCollision(itemComponent: GridsterItemS): GridsterItemComponent | boolean {
-    if (this.checkGridCollision(itemComponent)) {
-      return true;
-    }
-    return this.findItemWithItem(itemComponent);
+  checkCollision(item: GridsterItemS): GridsterItemComponent | boolean {
+    return this.checkGridCollision(item) || this.findItemWithItem(item);
   }
 
-  checkGridCollision(itemComponent: GridsterItemS): boolean {
-    const noNegativePosition = itemComponent.y > -1 && itemComponent.x > -1;
-    const maxGridCols = itemComponent.cols + itemComponent.x <= this.$options.maxCols;
-    const maxGridRows = itemComponent.rows + itemComponent.y <= this.$options.maxRows;
-    const maxItemCols = itemComponent.maxItemCols === undefined ? this.$options.maxItemCols : itemComponent.maxItemCols;
-    const minItemCols = itemComponent.minItemCols === undefined ? this.$options.minItemCols : itemComponent.minItemCols;
-    const maxItemRows = itemComponent.maxItemRows === undefined ? this.$options.maxItemRows : itemComponent.maxItemRows;
-    const minItemRows = itemComponent.minItemRows === undefined ? this.$options.minItemRows : itemComponent.minItemRows;
-    const inColsLimits = itemComponent.cols <= maxItemCols && itemComponent.cols >= minItemCols;
-    const inRowsLimits = itemComponent.rows <= maxItemRows && itemComponent.rows >= minItemRows;
-    const minAreaLimit = itemComponent.minItemArea === undefined ? this.$options.minItemArea : itemComponent.minItemArea;
-    const maxAreaLimit = itemComponent.maxItemArea === undefined ? this.$options.maxItemArea : itemComponent.maxItemArea;
-    const area = itemComponent.cols * itemComponent.rows;
+  checkGridCollision(item: GridsterItemS): boolean {
+    const noNegativePosition = item.y > -1 && item.x > -1;
+    const maxGridCols = item.cols + item.x <= this.$options.maxCols;
+    const maxGridRows = item.rows + item.y <= this.$options.maxRows;
+    const maxItemCols = item.maxItemCols === undefined ? this.$options.maxItemCols : item.maxItemCols;
+    const minItemCols = item.minItemCols === undefined ? this.$options.minItemCols : item.minItemCols;
+    const maxItemRows = item.maxItemRows === undefined ? this.$options.maxItemRows : item.maxItemRows;
+    const minItemRows = item.minItemRows === undefined ? this.$options.minItemRows : item.minItemRows;
+    const inColsLimits = item.cols <= maxItemCols && item.cols >= minItemCols;
+    const inRowsLimits = item.rows <= maxItemRows && item.rows >= minItemRows;
+    const minAreaLimit = item.minItemArea === undefined ? this.$options.minItemArea : item.minItemArea;
+    const maxAreaLimit = item.maxItemArea === undefined ? this.$options.maxItemArea : item.maxItemArea;
+    const area = item.cols * item.rows;
     const inMinArea = minAreaLimit <= area;
     const inMaxArea = maxAreaLimit >= area;
     return !(noNegativePosition && maxGridCols && maxGridRows && inColsLimits && inRowsLimits && inMinArea && inMaxArea);
   }
 
-  findItemWithItem(itemComponent: GridsterItemS): GridsterItemComponent | boolean {
+  findItemWithItem(item: GridsterItemS): GridsterItemComponent | boolean {
     let widgetsIndex: number = this.grid.length - 1, widget: GridsterItemComponent;
-    for (; widgetsIndex >= 0; widgetsIndex--) {
+    for (; widgetsIndex > -1; widgetsIndex--) {
       widget = this.grid[widgetsIndex];
-      if (widget.$item !== itemComponent && GridsterComponent.checkCollisionTwoItems(widget.$item, itemComponent)) {
+      if (widget.$item !== item && GridsterComponent.checkCollisionTwoItems(widget.$item, item)) {
         return widget;
       }
     }
     return false;
+  }
+
+  findItemsWithItem(item: GridsterItemS): Array<GridsterItemComponent> {
+    const a: Array<GridsterItemComponent> = [];
+    let widgetsIndex: number = this.grid.length - 1, widget: GridsterItemComponent;
+    for (; widgetsIndex > -1; widgetsIndex--) {
+      widget = this.grid[widgetsIndex];
+      if (widget.$item !== item && GridsterComponent.checkCollisionTwoItems(widget.$item, item)) {
+        a.push(widget);
+      }
+    }
+    return a;
   }
 
   autoPositionItem(itemComponent: GridsterItemComponent): void {
@@ -335,10 +344,10 @@ export class GridsterComponent implements OnInit, OnDestroy {
   }
 
   getNextPossiblePosition(newItem: GridsterItemS): boolean {
-    if (newItem.cols === undefined) {
+    if (newItem.cols === -1) {
       newItem.cols = this.$options.defaultItemCols;
     }
-    if (newItem.rows === undefined) {
+    if (newItem.rows === -1) {
       newItem.rows = this.$options.defaultItemRows;
     }
     this.setGridDimensions();
@@ -353,8 +362,8 @@ export class GridsterComponent implements OnInit, OnDestroy {
         }
       }
     }
-    const canAddToRows = this.$options.maxRows > this.rows + newItem.rows;
-    const canAddToColumns = this.$options.maxCols > this.columns + newItem.cols;
+    const canAddToRows = this.$options.maxRows >= this.rows + newItem.rows;
+    const canAddToColumns = this.$options.maxCols >= this.columns + newItem.cols;
     const addToRows = this.rows <= this.columns && canAddToRows;
     if (!addToRows && canAddToColumns) {
       newItem.x = this.columns;
@@ -373,11 +382,11 @@ export class GridsterComponent implements OnInit, OnDestroy {
   }
 
   pixelsToPositionX(x: number, roundingMethod: Function): number {
-    return roundingMethod(x / this.curColWidth);
+    return Math.max(roundingMethod(x / this.curColWidth), 0);
   }
 
   pixelsToPositionY(y: number, roundingMethod: Function): number {
-    return roundingMethod(y / this.curRowHeight);
+    return Math.max(roundingMethod(y / this.curRowHeight), 0);
   }
 
   positionXToPixels(x: number): number {

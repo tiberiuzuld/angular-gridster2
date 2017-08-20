@@ -41,11 +41,11 @@ export class GridsterEmptyCell {
   }
 
   emptyCellClickCb(e): void {
-    if (GridsterUtils.checkContentClassForEvent(this.gridster, e)) {
+    if (this.gridster.movingItem || GridsterUtils.checkContentClassForEvent(this.gridster, e)) {
       return;
     }
     const item = this.getValidItemFromEvent(e);
-    if (!item || this.gridster.movingItem) {
+    if (!item) {
       return;
     }
     this.gridster.$options.emptyCellClickCallback(event, item);
@@ -104,10 +104,9 @@ export class GridsterEmptyCell {
     this.emptyCellMMove();
     this.emptyCellUp();
     const item = this.getValidItemFromEvent(e, this.initialItem);
-    if (!item) {
-      return;
+    if (item) {
+      this.gridster.movingItem = item;
     }
-    this.gridster.movingItem = item;
     this.gridster.$options.emptyCellDragCallback(e, this.gridster.movingItem);
     setTimeout(function () {
       this.initialItem = null;

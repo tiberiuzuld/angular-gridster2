@@ -169,15 +169,17 @@ export class GridsterDraggable {
     this.positionXBackup = this.gridsterItem.$item.x;
     this.positionYBackup = this.gridsterItem.$item.y;
     this.gridsterItem.$item.x = this.positionX;
-    this.gridsterItem.$item.y = this.positionY;
     if (this.gridster.checkGridCollision(this.gridsterItem.$item)) {
       this.gridsterItem.$item.x = this.positionXBackup;
-      this.gridsterItem.$item.y = this.positionYBackup;
-      return;
+    } else {
+      this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'left', this.left + 'px');
     }
-
-    this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'left', this.left + 'px');
-    this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'top', this.top + 'px');
+    this.gridsterItem.$item.y = this.positionY;
+    if (this.gridster.checkGridCollision(this.gridsterItem.$item)) {
+      this.gridsterItem.$item.y = this.positionYBackup;
+    } else {
+      this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'top', this.top + 'px');
+    }
 
     if (this.positionXBackup !== this.gridsterItem.$item.x || this.positionYBackup !== this.gridsterItem.$item.y) {
       const lastPosition = this.path[this.path.length - 1];

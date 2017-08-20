@@ -7,7 +7,6 @@ import {
   MdIconModule,
   MdButtonModule,
   MdSelectModule,
-  MdSliderModule,
   MdInputModule,
   MdTooltipModule,
   MdCheckboxModule, MdSidenavModule
