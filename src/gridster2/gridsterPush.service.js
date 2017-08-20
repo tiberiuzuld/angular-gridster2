@@ -11,6 +11,8 @@
 
       vm.pushedItems = [];
       vm.pushedItemsPath = [];
+      vm.pushedItemsTemp = [];
+      vm.pushedItemsTempInit = [];
       vm.gridsterItem = gridsterItem;
       vm.gridster = gridster;
       vm.fromSouth = 'fromSouth';
@@ -20,7 +22,15 @@
 
       vm.pushItems = function (direction) {
         if (vm.gridster.$options.pushItems) {
-          vm.push(vm.gridsterItem, direction);
+          vm.count = 0;
+          if (!vm.push(vm.gridsterItem, direction)) {
+            var i = vm.pushedItemsTemp.length - 1;
+            for (; i > -1; i--) {
+              vm.removeFromTempPushed(vm.pushedItemsTemp[i]);
+            }
+          }
+          vm.pushedItemsTemp = [];
+          vm.pushedItemsTempInit = [];
         }
       };
 
@@ -51,33 +61,50 @@
       };
 
       vm.push = function (gridsterItem, direction) {
-        var gridsterItemCollision = vm.gridster.checkCollision(gridsterItem.$item);
-        if (gridsterItemCollision && gridsterItemCollision !== true &&
-          gridsterItemCollision !== vm.gridsterItem && gridsterItemCollision.canBeDragged()) {
-          var gridsterItemCollide = gridsterItemCollision;
-          if (vm.tryPattern[direction][0].call(this, gridsterItemCollide, gridsterItem, direction)) {
-            return true;
-          } else if (vm.tryPattern[direction][1].call(this, gridsterItemCollide, gridsterItem, direction)) {
-            return true;
-          } else if (vm.tryPattern[direction][2].call(this, gridsterItemCollide, gridsterItem, direction)) {
-            return true;
-          } else if (vm.tryPattern[direction][3].call(this, gridsterItemCollide, gridsterItem, direction)) {
-            return true;
-          }
-        } else if (gridsterItemCollision === false) {
-          return true;
+        if (vm.count > 3000) {
+          return false;
+        } else {
+          vm.count++;
         }
-        return false;
+        if (vm.gridster.checkGridCollision(gridsterItem.$item)) {
+          return false;
+        }
+        var a = vm.gridster.findItemsWithItem(gridsterItem.$item);
+        var i = a.length - 1, itemColision;
+        var makePush = true;
+        for (; i > -1; i--) {
+          itemColision = a[i];
+          if (itemColision === vm.gridsterItem) {
+            makePush = false;
+            break;
+          }
+          if (!itemColision.canBeDragged()) {
+            makePush = false;
+            break;
+          }
+          if (vm.tryPattern[direction][0].call(vm, itemColision, gridsterItem)) {
+            makePush = true;
+          } else if (vm.tryPattern[direction][1].call(vm, itemColision, gridsterItem)) {
+            makePush = true;
+          } else if (vm.tryPattern[direction][2].call(vm, itemColision, gridsterItem)) {
+            makePush = true;
+          } else if (vm.tryPattern[direction][3].call(vm, itemColision, gridsterItem)) {
+            makePush = true;
+          } else {
+            makePush = false;
+            break;
+          }
+        }
+        return makePush;
       };
 
-      vm.trySouth = function (gridsterItemCollide, gridsterItem, direction) {
+      vm.trySouth = function (gridsterItemCollide, gridsterItem) {
+        vm.addToTempPushed(gridsterItemCollide);
         var backUpY = gridsterItemCollide.$item.y;
         gridsterItemCollide.$item.y = gridsterItem.$item.y + gridsterItem.$item.rows;
-        if (!vm.gridster.checkCollisionTwoItems(gridsterItemCollide.$item, gridsterItem.$item)
-          && vm.push(gridsterItemCollide, vm.fromNorth)) {
+        if (vm.push(gridsterItemCollide, vm.fromNorth)) {
           gridsterItemCollide.setSize(true);
           vm.addToPushed(gridsterItemCollide);
-          vm.push(gridsterItem, direction);
           return true;
         } else {
           gridsterItemCollide.$item.y = backUpY;
@@ -85,14 +112,13 @@
         return false;
       };
 
-      vm.tryNorth = function (gridsterItemCollide, gridsterItem, direction) {
+      vm.tryNorth = function (gridsterItemCollide, gridsterItem) {
+        vm.addToTempPushed(gridsterItemCollide);
         var backUpY = gridsterItemCollide.$item.y;
         gridsterItemCollide.$item.y = gridsterItem.$item.y - gridsterItemCollide.$item.rows;
-        if (!vm.gridster.checkCollisionTwoItems(gridsterItemCollide.$item, gridsterItem.$item)
-          && vm.push(gridsterItemCollide, vm.fromSouth)) {
+        if (vm.push(gridsterItemCollide, vm.fromSouth)) {
           gridsterItemCollide.setSize(true);
           vm.addToPushed(gridsterItemCollide);
-          vm.push(gridsterItem, direction);
           return true;
         } else {
           gridsterItemCollide.$item.y = backUpY;
@@ -100,14 +126,13 @@
         return false;
       };
 
-      vm.tryEast = function (gridsterItemCollide, gridsterItem, direction) {
+      vm.tryEast = function (gridsterItemCollide, gridsterItem) {
+        vm.addToTempPushed(gridsterItemCollide);
         var backUpX = gridsterItemCollide.$item.x;
         gridsterItemCollide.$item.x = gridsterItem.$item.x + gridsterItem.$item.cols;
-        if (!vm.gridster.checkCollisionTwoItems(gridsterItemCollide.$item, gridsterItem.$item)
-          && vm.push(gridsterItemCollide, vm.fromWest)) {
+        if (vm.push(gridsterItemCollide, vm.fromWest)) {
           gridsterItemCollide.setSize(true);
           vm.addToPushed(gridsterItemCollide);
-          vm.push(gridsterItem, direction);
           return true;
         } else {
           gridsterItemCollide.$item.x = backUpX;
@@ -115,14 +140,13 @@
         return false;
       };
 
-      vm.tryWest = function (gridsterItemCollide, gridsterItem, direction) {
+      vm.tryWest = function (gridsterItemCollide, gridsterItem) {
+        vm.addToTempPushed(gridsterItemCollide);
         var backUpX = gridsterItemCollide.$item.x;
         gridsterItemCollide.$item.x = gridsterItem.$item.x - gridsterItemCollide.$item.cols;
-        if (!vm.gridster.checkCollisionTwoItems(gridsterItemCollide.$item, gridsterItem.$item)
-          && vm.push(gridsterItemCollide, vm.fromEast)) {
+        if (vm.push(gridsterItemCollide, vm.fromEast)) {
           gridsterItemCollide.setSize(true);
           vm.addToPushed(gridsterItemCollide);
-          vm.push(gridsterItem, direction);
           return true;
         } else {
           gridsterItemCollide.$item.x = backUpX;
@@ -135,6 +159,28 @@
         fromWest: [vm.tryEast, vm.trySouth, vm.tryNorth, vm.tryWest],
         fromNorth: [vm.trySouth, vm.tryEast, vm.tryWest, vm.tryNorth],
         fromSouth: [vm.tryNorth, vm.tryEast, vm.tryWest, vm.trySouth]
+      };
+
+      vm.addToTempPushed = function (gridsterItem) {
+        if (vm.checkInTempPushed(gridsterItem)) {
+          return;
+        }
+        var l = vm.pushedItemsTemp.push(gridsterItem);
+        vm.pushedItemsTempInit[l - 1] = {x: gridsterItem.$item.x, y: gridsterItem.$item.y};
+      };
+
+      vm.removeFromTempPushed = function (gridsterItem) {
+        var i = vm.pushedItemsTemp.indexOf(gridsterItem);
+        vm.pushedItemsTemp.splice(i, 1);
+        var initPosition = vm.pushedItemsTempInit[i];
+        gridsterItem.$item.x = initPosition.x;
+        gridsterItem.$item.y = initPosition.y;
+        gridsterItem.setSize(true);
+        vm.pushedItemsTempInit.splice(i, 1);
+      };
+
+      vm.checkInTempPushed = function (gridsterItem) {
+        return vm.pushedItemsTemp.indexOf(gridsterItem) > -1;
       };
 
       vm.addToPushed = function (gridsterItem) {

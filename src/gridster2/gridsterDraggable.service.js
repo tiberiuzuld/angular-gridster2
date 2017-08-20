@@ -160,15 +160,17 @@
         vm.positionXBackup = vm.gridsterItem.$item.x;
         vm.positionYBackup = vm.gridsterItem.$item.y;
         vm.gridsterItem.$item.x = vm.positionX;
-        vm.gridsterItem.$item.y = vm.positionY;
         if (vm.gridster.checkGridCollision(vm.gridsterItem.$item)) {
           vm.gridsterItem.$item.x = vm.positionXBackup;
-          vm.gridsterItem.$item.y = vm.positionYBackup;
-          return;
+        } else {
+          vm.gridsterItem.el.css('left', vm.left + 'px');
         }
-
-        vm.gridsterItem.el.css('left', vm.left + 'px');
-        vm.gridsterItem.el.css('top', vm.top + 'px');
+        vm.gridsterItem.$item.y = vm.positionY;
+        if (vm.gridster.checkGridCollision(vm.gridsterItem.$item)) {
+          vm.gridsterItem.$item.y = vm.positionYBackup;
+        } else {
+          vm.gridsterItem.el.css('top', vm.top + 'px');
+        }
 
         if (vm.positionXBackup !== vm.gridsterItem.$item.x || vm.positionYBackup !== vm.gridsterItem.$item.y) {
           var lastPosition = vm.path[vm.path.length - 1];

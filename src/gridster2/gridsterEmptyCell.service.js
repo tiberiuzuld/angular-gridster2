@@ -34,11 +34,11 @@
         }
       };
       vm.emptyCellClickCb = function (e) {
-        if (GridsterUtils.checkContentClassForEvent(gridster, e)) {
+        if (gridster.movingItem || GridsterUtils.checkContentClassForEvent(gridster, e)) {
           return;
         }
         var item = vm.getValidItemFromEvent(e);
-        if (!item || gridster.movingItem) {
+        if (!item) {
           return;
         }
         gridster.$options.emptyCellClickCallback(event, item);
@@ -95,10 +95,9 @@
         window.removeEventListener('mousemove', vm.emptyCellMouseMove);
         window.removeEventListener('mouseup', vm.emptyCellMouseUp);
         var item = vm.getValidItemFromEvent(e, vm.initialItem);
-        if (!item) {
-          return;
+        if (item) {
+          gridster.movingItem = item;
         }
-        gridster.movingItem = item;
         gridster.$options.emptyCellDragCallback(e, gridster.movingItem);
         setTimeout(function () {
           gridster.movingItem = null;

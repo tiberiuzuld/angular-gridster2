@@ -29,7 +29,7 @@
         var l = gridster.grid.length;
         for (var i = 0; i < l; i++) {
           widget = gridster.grid[i];
-          moved = gridster.moveUpTillCollision(widget);
+          moved = vm.moveUpTillCollision(widget);
           if (moved) {
             widgetMovedUp = true;
             widget.item.y = widget.$item.y;
@@ -77,7 +77,7 @@
           itemComponent.$item.x += 1;
           return false;
         } else {
-          vm.moveUpTillCollision(itemComponent);
+          vm.moveLeftTillCollision(itemComponent);
           return true;
         }
       }

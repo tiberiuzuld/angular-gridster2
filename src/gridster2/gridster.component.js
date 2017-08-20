@@ -278,40 +278,49 @@
       vm.calculateLayoutDebounce();
     };
 
-    vm.checkCollision = function checkCollision(itemComponent) {
-      if (vm.checkGridCollision(itemComponent)) {
-        return true;
-      }
-      return vm.findItemWithItem(itemComponent);
+    vm.checkCollision = function checkCollision(item) {
+      return vm.checkGridCollision(item) || vm.findItemWithItem(item);
     };
 
-    vm.checkGridCollision = function checkGridCollision(itemComponent) {
-      var noNegativePosition = itemComponent.y > -1 && itemComponent.x > -1;
-      var maxGridCols = itemComponent.cols + itemComponent.x <= vm.$options.maxCols;
-      var maxGridRows = itemComponent.rows + itemComponent.y <= vm.$options.maxRows;
-      var maxItemCols = itemComponent.maxItemCols === undefined ? vm.$options.maxItemCols : itemComponent.maxItemCols;
-      var minItemCols = itemComponent.minItemCols === undefined ? vm.$options.minItemCols : itemComponent.minItemCols;
-      var maxItemRows = itemComponent.maxItemRows === undefined ? vm.$options.maxItemRows : itemComponent.maxItemRows;
-      var minItemRows = itemComponent.minItemRows === undefined ? vm.$options.minItemRows : itemComponent.minItemRows;
-      var inColsLimits = itemComponent.cols <= maxItemCols && itemComponent.cols >= minItemCols;
-      var inRowsLimits = itemComponent.rows <= maxItemRows && itemComponent.rows >= minItemRows;
-      var minAreaLimit = itemComponent.minItemArea === undefined ? vm.$options.minItemArea : itemComponent.minItemArea;
-      var maxAreaLimit = itemComponent.maxItemArea === undefined ? vm.$options.maxItemArea : itemComponent.maxItemArea;
-      var area = itemComponent.cols * itemComponent.rows;
+    vm.checkGridCollision = function checkGridCollision(item) {
+      var noNegativePosition = item.y > -1 && item.x > -1;
+      var maxGridCols = item.cols + item.x <= vm.$options.maxCols;
+      var maxGridRows = item.rows + item.y <= vm.$options.maxRows;
+      var maxItemCols = item.maxItemCols === undefined ? vm.$options.maxItemCols : item.maxItemCols;
+      var minItemCols = item.minItemCols === undefined ? vm.$options.minItemCols : item.minItemCols;
+      var maxItemRows = item.maxItemRows === undefined ? vm.$options.maxItemRows : item.maxItemRows;
+      var minItemRows = item.minItemRows === undefined ? vm.$options.minItemRows : item.minItemRows;
+      var inColsLimits = item.cols <= maxItemCols && item.cols >= minItemCols;
+      var inRowsLimits = item.rows <= maxItemRows && item.rows >= minItemRows;
+      var minAreaLimit = item.minItemArea === undefined ? vm.$options.minItemArea : item.minItemArea;
+      var maxAreaLimit = item.maxItemArea === undefined ? vm.$options.maxItemArea : item.maxItemArea;
+      var area = item.cols * item.rows;
       var inMinArea = minAreaLimit <= area;
       var inMaxArea = maxAreaLimit >= area;
       return !(noNegativePosition && maxGridCols && maxGridRows && inColsLimits && inRowsLimits && inMinArea && inMaxArea);
     };
 
-    vm.findItemWithItem = function findItemWithItem(itemComponent) {
+    vm.findItemWithItem = function findItemWithItem(item) {
       var widgetsIndex = vm.grid.length - 1, widget;
-      for (; widgetsIndex >= 0; widgetsIndex--) {
+      for (; widgetsIndex > -1; widgetsIndex--) {
         widget = vm.grid[widgetsIndex];
-        if (widget.$item !== itemComponent && vm.checkCollisionTwoItems(widget.$item, itemComponent)) {
+        if (widget.$item !== item && vm.checkCollisionTwoItems(widget.$item, item)) {
           return widget;
         }
       }
       return false;
+    };
+
+    vm.findItemsWithItem = function findItemWithItem(item) {
+      var a = [];
+      var widgetsIndex = vm.grid.length - 1, widget;
+      for (; widgetsIndex > -1; widgetsIndex--) {
+        widget = vm.grid[widgetsIndex];
+        if (widget.$item !== item && vm.checkCollisionTwoItems(widget.$item, item)) {
+          a.push(widget);
+        }
+      }
+      return a;
     };
 
     vm.autoPositionItem = function autoPositionItem(itemComponent) {
@@ -345,8 +354,8 @@
           }
         }
       }
-      var canAddToRows = vm.$options.maxRows > vm.rows + newItem.rows;
-      var canAddToColumns = vm.$options.maxCols > vm.columns + newItem.cols;
+      var canAddToRows = vm.$options.maxRows >= vm.rows + newItem.rows;
+      var canAddToColumns = vm.$options.maxCols >= vm.columns + newItem.cols;
       var addToRows = vm.rows <= vm.columns && canAddToRows;
       if (!addToRows && canAddToColumns) {
         newItem.x = vm.columns;
@@ -365,11 +374,11 @@
     };
 
     vm.pixelsToPositionX = function pixelsToPositionX(x, roundingMethod) {
-      return roundingMethod(x / vm.curColWidth);
+      return Math.max(roundingMethod(x / vm.curColWidth), 0);
     };
 
     vm.pixelsToPositionY = function pixelsToPositionY(y, roundingMethod) {
-      return roundingMethod(y / vm.curRowHeight);
+      return Math.max(roundingMethod(y / vm.curRowHeight), 0);
     };
 
     vm.positionXToPixels = function positionXToPixels(x) {
