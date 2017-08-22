@@ -61,7 +61,9 @@ export class GridsterItemComponent implements OnInit, OnDestroy {
       maxItemRows: undefined,
       minItemRows: undefined,
       maxItemCols: undefined,
-      minItemCols: undefined
+      minItemCols: undefined,
+      maxItemArea: undefined,
+      minItemArea: undefined,
     });
   }
 
