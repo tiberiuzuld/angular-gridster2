@@ -48,7 +48,7 @@ export class GridsterEmptyCell {
     if (!item) {
       return;
     }
-    this.gridster.$options.emptyCellClickCallback(event, item);
+    this.gridster.$options.emptyCellClickCallback(e, item);
     this.gridster.cdRef.markForCheck();
   }
 
@@ -57,7 +57,7 @@ export class GridsterEmptyCell {
     if (!item) {
       return;
     }
-    this.gridster.$options.emptyCellDropCallback(event, item);
+    this.gridster.$options.emptyCellDropCallback(e, item);
     this.gridster.cdRef.markForCheck();
   }
 
