@@ -22,7 +22,7 @@ THE SOFTWARE.
 
 @angular/core@5.0.0-beta.3 MIT
 
-zone.js@0.8.16 MIT
+zone.js@0.8.17 MIT
 The MIT License
 
 Copyright (c) 2016 Google, Inc.
