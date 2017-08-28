@@ -69,7 +69,7 @@
     "gulp-clean": "0.3.2",
     "gulp-inline-ng2-template": "4.0.0",
     "hammerjs": "2.0.8",
-    "jasmine-core": "2.7.0",
+    "jasmine-core": "2.8.0",
     "jasmine-spec-reporter": "4.2.1",
     "karma": "1.7.0",
     "karma-chrome-launcher": "2.2.0",
@@ -83,7 +83,7 @@
     "ts-helpers": "1.1.2",
     "ts-node": "3.3.0",
     "tslib": "1.7.1",
-    "tslint": "5.6.0",
+    "tslint": "5.7.0",
     "typescript": "2.4.2",
     "zone.js": "0.8.17"
   }
