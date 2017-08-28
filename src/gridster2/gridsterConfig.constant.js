@@ -38,9 +38,11 @@
     itemInitCallback: undefined,  // callback to call for each item when is initialized.
     // Arguments: gridsterItem, gridsterItemComponent
     enableEmptyCellClick: false, // enable empty cell click events
+    enableEmptyCellContextMenu: false, // enable empty cell context menu (right click) events
     enableEmptyCellDrop: false, // enable empty cell drop events
     enableEmptyCellDrag: false, // enable empty cell drag events
     emptyCellClickCallback: undefined, // empty cell click callback
+    emptyCellContextMenuCallback: undefined, // empty cell context menu (right click) callback
     emptyCellDropCallback: undefined, // empty cell drag drop callback. HTML5 Drag & Drop
     emptyCellDragCallback: undefined, // empty cell drag and create item like excel cell selection
     // Arguments: event, gridsterItem{x, y, rows: defaultItemRows, cols: defaultItemCols}

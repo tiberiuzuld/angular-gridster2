@@ -16,6 +16,13 @@
           vm.emptyCellClick = false;
           gridster.el.removeEventListener('click', vm.emptyCellClickCb);
         }
+        if (gridster.$options.enableEmptyCellContextMenu && !vm.emptyCellContextMenu && gridster.$options.emptyCellContextMenuCallback) {
+          vm.emptyCellContextMenu = true;
+          gridster.el.addEventListener('contextmenu', vm.emptyCellContextMenuCb);
+        } else if (!gridster.$options.enableEmptyCellContextMenu && vm.emptyCellContextMenu) {
+          vm.emptyCellContextMenu = false;
+          gridster.el.removeEventListener('contextmenu', vm.emptyCellContextMenuCb);
+        }
         if (gridster.$options.enableEmptyCellDrop && !vm.emptyCellDrop && gridster.$options.emptyCellDropCallback) {
           vm.emptyCellDrop = true;
           gridster.el.addEventListener('drop', vm.emptyCellDragDrop);
@@ -42,6 +49,19 @@
           return;
         }
         gridster.$options.emptyCellClickCallback(e, item);
+      };
+
+      vm.emptyCellContextMenuCb = function (e) {
+        if (gridster.movingItem || GridsterUtils.checkContentClassForEvent(gridster, e)) {
+          return;
+        }
+        e.preventDefault();
+        e.stopPropagation();
+        var item = vm.getValidItemFromEvent(e);
+        if (!item) {
+          return;
+        }
+        gridster.$options.emptyCellContextMenuCallback(e, item);
       };
 
       vm.emptyCellDragDrop = function (e) {

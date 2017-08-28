@@ -138,6 +138,11 @@
     <md-checkbox ng-model="main.options.enableEmptyCellClick" ng-change="main.changedOptions()">
       Enable click to add
     </md-checkbox>
+    <md-checkbox ng-model="main.options.enableEmptyCellContextMenu" ng-change="main.changedOptions()">
+      Enable right click to add
+    </md-checkbox>
+  </div>
+  <div class="layout-row flex">
     <md-checkbox ng-model="main.options.enableEmptyCellDrop" ng-change="main.changedOptions()">
       Enable drop to add
     </md-checkbox>
@@ -187,7 +192,7 @@
       </div>
       <label ng-if="!item.hasContent" ng-bind="::item.label"></label>
       <md-button class="md-icon-button md-fab-mini" ng-if="!item.hasContent" ng-click="main.removeItem($event, item)"
-              ng-mousedown="main.prevent($event)">
+                 ng-mousedown="main.prevent($event)">
         <md-icon>clear</md-icon>
         <md-tooltip>Remove</md-tooltip>
       </md-button>

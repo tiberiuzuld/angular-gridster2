@@ -41,6 +41,7 @@
     vm.$options.itemResizeCallback = undefined;
     vm.$options.itemInitCallback = undefined;
     vm.$options.emptyCellClickCallback = undefined;
+    vm.$options.emptyCellContextMenuCallback = undefined;
     vm.$options.emptyCellDropCallback = undefined;
     vm.$options.emptyCellDragCallback = undefined;
 
