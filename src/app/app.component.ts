@@ -62,7 +62,7 @@ export class AppComponent implements OnInit {
       scrollSensitivity: 10,
       scrollSpeed: 20,
       enableEmptyCellClick: false,
-      enableEmptyCellContextMenu: true,
+      enableEmptyCellContextMenu: false,
       enableEmptyCellDrop: false,
       enableEmptyCellDrag: false,
       emptyCellClickCallback: this.emptyCellClick.bind(this),
