@@ -1388,6 +1388,13 @@
           vm.emptyCellClick = false;
           gridster.el.removeEventListener('click', vm.emptyCellClickCb);
         }
+        if (gridster.$options.enableEmptyCellContextMenu && !vm.emptyCellContextMenu && gridster.$options.emptyCellContextMenuCallback) {
+          vm.emptyCellContextMenu = true;
+          gridster.el.addEventListener('contextmenu', vm.emptyCellContextMenuCb);
+        } else if (!gridster.$options.enableEmptyCellContextMenu && vm.emptyCellContextMenu) {
+          vm.emptyCellContextMenu = false;
+          gridster.el.removeEventListener('contextmenu', vm.emptyCellContextMenuCb);
+        }
         if (gridster.$options.enableEmptyCellDrop && !vm.emptyCellDrop && gridster.$options.emptyCellDropCallback) {
           vm.emptyCellDrop = true;
           gridster.el.addEventListener('drop', vm.emptyCellDragDrop);
@@ -1414,6 +1421,19 @@
           return;
         }
         gridster.$options.emptyCellClickCallback(e, item);
+      };
+
+      vm.emptyCellContextMenuCb = function (e) {
+        if (gridster.movingItem || GridsterUtils.checkContentClassForEvent(gridster, e)) {
+          return;
+        }
+        e.preventDefault();
+        e.stopPropagation();
+        var item = vm.getValidItemFromEvent(e);
+        if (!item) {
+          return;
+        }
+        gridster.$options.emptyCellContextMenuCallback(e, item);
       };
 
       vm.emptyCellDragDrop = function (e) {
@@ -1770,9 +1790,11 @@
     itemInitCallback: undefined,  // callback to call for each item when is initialized.
     // Arguments: gridsterItem, gridsterItemComponent
     enableEmptyCellClick: false, // enable empty cell click events
+    enableEmptyCellContextMenu: false, // enable empty cell context menu (right click) events
     enableEmptyCellDrop: false, // enable empty cell drop events
     enableEmptyCellDrag: false, // enable empty cell drag events
     emptyCellClickCallback: undefined, // empty cell click callback
+    emptyCellContextMenuCallback: undefined, // empty cell context menu (right click) callback
     emptyCellDropCallback: undefined, // empty cell drag drop callback. HTML5 Drag & Drop
     emptyCellDragCallback: undefined, // empty cell drag and create item like excel cell selection
     // Arguments: event, gridsterItem{x, y, rows: defaultItemRows, cols: defaultItemCols}
@@ -1942,6 +1964,7 @@
     vm.$options.itemResizeCallback = undefined;
     vm.$options.itemInitCallback = undefined;
     vm.$options.emptyCellClickCallback = undefined;
+    vm.$options.emptyCellContextMenuCallback = undefined;
     vm.$options.emptyCellDropCallback = undefined;
     vm.$options.emptyCellDragCallback = undefined;
 
