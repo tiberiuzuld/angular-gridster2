@@ -28,7 +28,9 @@
       maxItemRows: undefined,
       minItemRows: undefined,
       maxItemCols: undefined,
-      minItemCols: undefined
+      minItemCols: undefined,
+      maxItemArea: undefined,
+      minItemArea: undefined
     };
     vm.el = $element;
     vm.nativeEl = $element[0];
@@ -79,7 +81,7 @@
         vm.height = vm.$item.rows * vm.gridster.curRowHeight - vm.gridster.$options.margin;
       }
       if (!noCheck && vm.top === vm.itemTop && vm.left === vm.itemLeft &&
-        vm.width === vm.itemWidth && vm.height === vm.itemHeight) {
+          vm.width === vm.itemWidth && vm.height === vm.itemHeight) {
         return;
       }
       if (vm.gridster.$options.outerMargin) {
@@ -114,7 +116,8 @@
     };
 
     vm.checkItemChanges = function (newValue, oldValue) {
-      if (newValue.rows === oldValue.rows && newValue.cols === oldValue.cols && newValue.x === oldValue.x && newValue.y === oldValue.y) {
+      if (newValue.rows === oldValue.rows && newValue.cols === oldValue.cols && newValue.x === oldValue.x &&
+          newValue.y === oldValue.y) {
         return;
       }
       if (vm.gridster.checkCollision(vm.$item)) {
@@ -134,12 +137,12 @@
 
     vm.canBeDragged = function canBeDragged() {
       return !vm.gridster.mobile &&
-        (vm.$item.dragEnabled === undefined ? vm.gridster.$options.draggable.enabled : vm.$item.dragEnabled);
+             (vm.$item.dragEnabled === undefined ? vm.gridster.$options.draggable.enabled : vm.$item.dragEnabled);
     };
 
     vm.canBeResized = function canBeResized() {
       return !vm.gridster.mobile &&
-        (vm.$item.resizeEnabled === undefined ? vm.gridster.$options.resizable.enabled : vm.$item.resizeEnabled);
+             (vm.$item.resizeEnabled === undefined ? vm.gridster.$options.resizable.enabled : vm.$item.resizeEnabled);
     }
   }
 })();

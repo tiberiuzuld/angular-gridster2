@@ -41,7 +41,7 @@
         if (!item) {
           return;
         }
-        gridster.$options.emptyCellClickCallback(event, item);
+        gridster.$options.emptyCellClickCallback(e, item);
       };
 
       vm.emptyCellDragDrop = function (e) {
@@ -49,7 +49,7 @@
         if (!item) {
           return;
         }
-        gridster.$options.emptyCellDropCallback(event, item);
+        gridster.$options.emptyCellDropCallback(e, item);
       };
 
       vm.emptyCellDragOver = function (e) {

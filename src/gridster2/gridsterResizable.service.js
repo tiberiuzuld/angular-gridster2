@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('angular-gridster2')
-    .service('GridsterResizable', GridsterResizable);
+         .service('GridsterResizable', GridsterResizable);
 
   /** @ngInject */
   function GridsterResizable(GridsterPush, GridsterScroll, GridsterUtils, GridsterPushResize) {
@@ -41,7 +41,12 @@
         clientY: 0
       };
       vm.itemBackup = [0, 0, 0, 0];
-      vm.resizeEventScrollType = {w: false, e: false, n: false, s: false};
+      vm.resizeEventScrollType = {
+        w: false,
+        e: false,
+        n: false,
+        s: false
+      };
 
       vm.dragStart = function (e) {
         switch (e.which) {
@@ -82,10 +87,10 @@
         vm.diffRight = e.clientX + vm.offsetLeft - vm.margin - vm.right;
         vm.diffTop = e.clientY + vm.offsetTop - vm.margin - vm.top;
         vm.diffBottom = e.clientY + vm.offsetTop - vm.margin - vm.bottom;
-        vm.minHeight = vm.gridster.positionYToPixels(vm.gridsterItem.$item.minItemRows || vm.gridster.$options.minItemRows)
-          - vm.margin;
-        vm.minWidth = vm.gridster.positionXToPixels(vm.gridsterItem.$item.minItemCols || vm.gridster.$options.minItemCols)
-          - vm.margin;
+        vm.minHeight = vm.gridster.positionYToPixels(vm.gridsterItem.$item.minItemRows ||
+                                                     vm.gridster.$options.minItemRows) - vm.margin;
+        vm.minWidth = vm.gridster.positionXToPixels(vm.gridsterItem.$item.minItemCols ||
+                                                    vm.gridster.$options.minItemCols) - vm.margin;
         vm.gridster.movingItem = vm.gridsterItem.$item;
         vm.gridster.previewStyle();
         vm.push = new GridsterPush(vm.gridsterItem, vm.gridster);
@@ -207,7 +212,7 @@
             vm.gridsterItem.$item.rows = vm.itemBackup[3];
             vm.gridsterItem.el.css('top', vm.gridster.positionYToPixels(vm.gridsterItem.$item.y) + 'px');
             vm.gridsterItem.el.css('height', vm.gridster.positionYToPixels(vm.gridsterItem.$item.rows)
-              - vm.gridster.$options.margin + 'px');
+                                             - vm.gridster.$options.margin + 'px');
             return;
           } else {
             vm.gridster.previewStyle();
@@ -240,7 +245,7 @@
             vm.gridsterItem.el.css('left',
               vm.gridster.positionXToPixels(vm.gridsterItem.$item.x) + 'px');
             vm.gridsterItem.el.css('width', vm.gridster.positionXToPixels(vm.gridsterItem.$item.cols)
-              - vm.gridster.$options.margin + 'px');
+                                            - vm.gridster.$options.margin + 'px');
             return;
           } else {
             vm.gridster.previewStyle();
@@ -267,7 +272,7 @@
           if (vm.gridster.checkCollision(vm.gridsterItem.$item)) {
             vm.gridsterItem.$item.rows = vm.itemBackup[3];
             vm.gridsterItem.el.css('height', vm.gridster.positionYToPixels(vm.gridsterItem.$item.rows)
-              - vm.gridster.$options.margin + 'px');
+                                             - vm.gridster.$options.margin + 'px');
             return;
           } else {
             vm.gridster.previewStyle();
@@ -293,7 +298,7 @@
           if (vm.gridster.checkCollision(vm.gridsterItem.$item)) {
             vm.gridsterItem.$item.cols = vm.itemBackup[2];
             vm.gridsterItem.el.css('width', vm.gridster.positionXToPixels(vm.gridsterItem.$item.cols)
-              - vm.gridster.$options.margin + 'px');
+                                            - vm.gridster.$options.margin + 'px');
             return;
           } else {
             vm.gridster.previewStyle();
@@ -325,23 +330,27 @@
       };
 
       vm.toggle = function () {
-        var handlers;
+        var handlers, handler, i;
         var enableDrag = vm.gridsterItem.canBeResized();
         if (!vm.resizeEnabled && enableDrag) {
           vm.resizeEnabled = !vm.resizeEnabled;
           vm.dragStartFunction = vm.dragStart.bind(vm);
           handlers = vm.gridsterItem.nativeEl.querySelectorAll('.gridster-item-resizable-handler');
-          handlers.forEach(function (handler) {
+          i = handlers.length - 1;
+          for (; i > -1; i--) {
+            handler = handlers[i];
             handler.addEventListener('mousedown', vm.dragStartFunction);
             handler.addEventListener('touchstart', vm.dragStartFunction);
-          });
+          }
         } else if (vm.resizeEnabled && !enableDrag) {
           vm.resizeEnabled = !vm.resizeEnabled;
           handlers = vm.gridsterItem.nativeEl.querySelectorAll('.gridster-item-resizable-handler');
-          handlers.forEach(function (handler) {
+          i = handlers.length - 1;
+          for (; i > -1; i--) {
+            handler = handlers[i];
             handler.removeEventListener('mousedown', vm.dragStartFunction);
             handler.removeEventListener('touchstart', vm.dragStartFunction);
-          });
+          }
         }
       };
     };

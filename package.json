@@ -1,6 +1,6 @@
 {
   "name": "angular-gridster2",
-  "version": "1.11.4",
+  "version": "1.11.6",
   "main": "index.js",
   "dependencies": {
     "angular": ">=1.6.0"
@@ -13,7 +13,7 @@
     "browser-sync-spa": "1.0.3",
     "chalk": "2.1.0",
     "del": "3.0.0",
-    "eslint-plugin-angular": "3.0.2",
+    "eslint-plugin-angular": "3.1.0",
     "estraverse": "4.2.0",
     "gulp": "3.9.1",
     "gulp-angular-filesort": "1.1.1",
