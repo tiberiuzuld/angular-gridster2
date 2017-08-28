@@ -60,6 +60,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
     this.$options.itemResizeCallback = undefined;
     this.$options.itemInitCallback = undefined;
     this.$options.emptyCellClickCallback = undefined;
+    this.$options.emptyCellContextMenuCallback = undefined;
     this.$options.emptyCellDropCallback = undefined;
     this.$options.emptyCellDragCallback = undefined;
     this.emptyCell = new GridsterEmptyCell(this);

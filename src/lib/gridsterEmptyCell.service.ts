@@ -7,6 +7,7 @@ import {GridsterItemS} from './gridsterItemS.interface';
 export class GridsterEmptyCell {
   initialItem: GridsterItemS;
   emptyCellClick: Function | null;
+  emptyCellContextMenu: Function | null;
   emptyCellDrop: Function | null;
   emptyCellDrag: Function | null;
   emptyCellMMove: Function;
@@ -22,6 +23,12 @@ export class GridsterEmptyCell {
     } else if (!this.gridster.$options.enableEmptyCellClick && this.emptyCellClick) {
       this.emptyCellClick();
       this.emptyCellClick = null;
+    }
+    if (this.gridster.$options.enableEmptyCellContextMenu && !this.emptyCellContextMenu && this.gridster.$options.emptyCellContextMenuCallback) {
+      this.emptyCellContextMenu = this.gridster.renderer.listen(this.gridster.el, 'contextmenu', this.emptyCellContextMenuCb.bind(this));
+    } else if (!this.gridster.$options.enableEmptyCellContextMenu && this.emptyCellContextMenu) {
+      this.emptyCellContextMenu();
+      this.emptyCellContextMenu = null;
     }
     if (this.gridster.$options.enableEmptyCellDrop && !this.emptyCellDrop && this.gridster.$options.emptyCellDropCallback) {
       this.emptyCellDrop = this.gridster.renderer.listen(this.gridster.el, 'drop', this.emptyCellDragDrop.bind(this));
@@ -49,6 +56,20 @@ export class GridsterEmptyCell {
       return;
     }
     this.gridster.$options.emptyCellClickCallback(e, item);
+    this.gridster.cdRef.markForCheck();
+  }
+
+  emptyCellContextMenuCb(e): void {
+    if (this.gridster.movingItem || GridsterUtils.checkContentClassForEvent(this.gridster, e)) {
+      return;
+    }
+    e.preventDefault();
+    e.stopPropagation();
+    const item = this.getValidItemFromEvent(e);
+    if (!item) {
+      return;
+    }
+    this.gridster.$options.emptyCellContextMenuCallback(e, item);
     this.gridster.cdRef.markForCheck();
   }
 

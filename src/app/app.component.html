@@ -139,6 +139,11 @@
       <md-checkbox [(ngModel)]="options.enableEmptyCellClick" (ngModelChange)="changedOptions()">
         Enable click to add
       </md-checkbox>
+      <md-checkbox [(ngModel)]="options.enableEmptyCellContextMenu" (ngModelChange)="changedOptions()">
+        Enable right click to add
+      </md-checkbox>
+    </div>
+    <div class="row flex">
       <md-checkbox [(ngModel)]="options.enableEmptyCellDrop" (ngModelChange)="changedOptions()">
         Enable drop to add
       </md-checkbox>
