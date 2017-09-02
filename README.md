@@ -19,10 +19,10 @@ angular-gridster2
 Should work out of the box with webpack, respectively angular-cli.
 
 ```javascript
-import {GridsterModule} from 'angular-gridster2';
+import { GridsterModule } from 'angular-gridster2';
 
 @NgModule({
-  imports: [GridsterModule],
+  imports: [ GridsterModule ],
   ...
 })
 ```
@@ -40,7 +40,7 @@ import {GridsterModule} from 'angular-gridster2';
 
 Initialize a simple dashboard:
 ```typescript
-   import {GridsterConfig, GridsterItem}  from 'angular-gridster2';
+   import { GridsterConfig, GridsterItem }  from 'angular-gridster2';
    options: GridsterConfig;
    dashboard: Array<GridsterItem>;
 
@@ -81,7 +81,7 @@ Initialize a simple dashboard:
 
 ##### Default Grid Options:
 ```typescript
-import {GridsterConfig} from 'angular-gridster2';
+import { GridsterConfig } from 'angular-gridster2';
 
 export const GridsterConfigService: GridsterConfig = {
   gridType: 'fit', // 'fit' will fit the items in the container without scroll;
@@ -196,7 +196,7 @@ export interface GridsterItem {
   @Output() itemChange: EventEmitter<GridsterItem> = new EventEmitter();
   @Output() itemResize: EventEmitter<GridsterItem> = new EventEmitter();
   ....
-  this.itemChange.emit(this.state.item); // triggered when a item cols,rows, x ,y changed
+  this.itemChange.emit(this.state.item); // triggered when a item cols, rows, x, y changed
   this.itemResize.emit(this.state.item); // triggered when a item width/height changed
 ```
 Note: When a item changes cols/rows both events get triggered
