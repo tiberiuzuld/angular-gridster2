@@ -28,6 +28,10 @@ export class AppComponent implements OnInit {
     console.info('itemInitialized', item, itemComponent);
   }
 
+  static itemRemoved(item, itemComponent) {
+    console.info('itemRemoved', item, itemComponent);
+  }
+
   emptyCellClick(event, item) {
     console.info('empty cell click', event, item);
     this.dashboard.push(item);
@@ -40,6 +44,7 @@ export class AppComponent implements OnInit {
       itemChangeCallback: AppComponent.itemChange,
       itemResizeCallback: AppComponent.itemResize,
       itemInitCallback: AppComponent.itemInit,
+      itemRemovedCallback: AppComponent.itemRemoved,
       margin: 5,
       outerMargin: true,
       mobileBreakpoint: 640,

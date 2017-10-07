@@ -59,6 +59,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
     this.$options.itemChangeCallback = undefined;
     this.$options.itemResizeCallback = undefined;
     this.$options.itemInitCallback = undefined;
+    this.$options.itemRemovedCallback = undefined;
     this.$options.emptyCellClickCallback = undefined;
     this.$options.emptyCellContextMenuCallback = undefined;
     this.$options.emptyCellDropCallback = undefined;
@@ -285,6 +286,9 @@ export class GridsterComponent implements OnInit, OnDestroy {
   removeItem(itemComponent: GridsterItemComponent): void {
     this.grid.splice(this.grid.indexOf(itemComponent), 1);
     this.calculateLayoutDebounce();
+    if (this.$options.itemRemovedCallback) {
+      this.$options.itemRemovedCallback(itemComponent.item, itemComponent);
+    }
   }
 
   checkCollision(item: GridsterItemS): GridsterItemComponent | boolean {
