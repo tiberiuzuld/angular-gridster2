@@ -33,6 +33,14 @@
       </mat-checkbox>
     </div>
     <div class="row flex">
+      <mat-checkbox [(ngModel)]="options.disablePushOnDrag" (ngModelChange)="changedOptions()">
+        Disable Push On Drag
+      </mat-checkbox>
+      <mat-checkbox [(ngModel)]="options.disablePushOnResize" (ngModelChange)="changedOptions()">
+        Disable Push On Resize
+      </mat-checkbox>
+    </div>
+    <div class="row flex">
       <mat-checkbox [(ngModel)]="options.draggable.enabled" (ngModelChange)="changedOptions()">
         Drag Items
       </mat-checkbox>

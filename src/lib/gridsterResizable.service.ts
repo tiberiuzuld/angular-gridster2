@@ -207,7 +207,7 @@ export class GridsterResizable {
       this.gridsterItem.$item.rows += this.gridsterItem.$item.y - this.newPosition;
       this.gridsterItem.$item.y = this.newPosition;
       this.pushResize.pushItems(this.pushResize.fromSouth);
-      this.push.pushItems(this.push.fromSouth);
+      this.push.pushItems(this.push.fromSouth, this.gridster.$options.disablePushOnResize);
       if (this.gridster.checkCollision(this.gridsterItem.$item)) {
         this.gridsterItem.$item.y = this.itemBackup[1];
         this.gridsterItem.$item.rows = this.itemBackup[3];
@@ -239,7 +239,7 @@ export class GridsterResizable {
       this.gridsterItem.$item.cols += this.gridsterItem.$item.x - this.newPosition;
       this.gridsterItem.$item.x = this.newPosition;
       this.pushResize.pushItems(this.pushResize.fromEast);
-      this.push.pushItems(this.push.fromEast);
+      this.push.pushItems(this.push.fromEast, this.gridster.$options.disablePushOnResize);
       if (this.gridster.checkCollision(this.gridsterItem.$item)) {
         this.gridsterItem.$item.x = this.itemBackup[0];
         this.gridsterItem.$item.cols = this.itemBackup[2];
@@ -269,7 +269,7 @@ export class GridsterResizable {
       this.itemBackup[3] = this.gridsterItem.$item.rows;
       this.gridsterItem.$item.rows = this.newPosition - this.gridsterItem.$item.y;
       this.pushResize.pushItems(this.pushResize.fromNorth);
-      this.push.pushItems(this.push.fromNorth);
+      this.push.pushItems(this.push.fromNorth, this.gridster.$options.disablePushOnResize);
       if (this.gridster.checkCollision(this.gridsterItem.$item)) {
         this.gridsterItem.$item.rows = this.itemBackup[3];
         this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'height', this.gridster.positionYToPixels(this.gridsterItem.$item.rows)
@@ -295,7 +295,7 @@ export class GridsterResizable {
       this.itemBackup[2] = this.gridsterItem.$item.cols;
       this.gridsterItem.$item.cols = this.newPosition - this.gridsterItem.$item.x;
       this.pushResize.pushItems(this.pushResize.fromWest);
-      this.push.pushItems(this.push.fromWest);
+      this.push.pushItems(this.push.fromWest, this.gridster.$options.disablePushOnResize);
       if (this.gridster.checkCollision(this.gridsterItem.$item)) {
         this.gridsterItem.$item.cols = this.itemBackup[2];
         this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'width', this.gridster.positionXToPixels(this.gridsterItem.$item.cols)

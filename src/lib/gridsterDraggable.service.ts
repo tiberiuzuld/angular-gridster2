@@ -189,7 +189,7 @@ export class GridsterDraggable {
       } else if (lastPosition.y > this.gridsterItem.$item.y) {
         direction = this.push.fromSouth;
       }
-      this.push.pushItems(direction);
+      this.push.pushItems(direction, this.gridster.$options.disablePushOnDrag);
       this.swap.swapItems();
       if (this.gridster.checkCollision(this.gridsterItem.$item)) {
         this.gridsterItem.$item.x = this.positionXBackup;

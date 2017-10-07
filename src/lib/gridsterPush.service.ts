@@ -36,8 +36,8 @@ export class GridsterPush {
     this.fromWest = 'fromWest';
   }
 
-  pushItems(direction): void {
-    if (this.gridster.$options.pushItems) {
+  pushItems(direction: string, disable: boolean): void {
+    if (this.gridster.$options.pushItems && !disable) {
       this.count = 0;
       if (!this.push(this.gridsterItem, direction)) {
         let i = this.pushedItemsTemp.length - 1;

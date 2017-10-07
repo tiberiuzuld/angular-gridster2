@@ -28,6 +28,8 @@ export interface GridsterConfigS {
   resizable: Resizable;
   swap: boolean;
   pushItems: boolean;
+  disablePushOnDrag: boolean;
+  disablePushOnResize: boolean;
   pushResizeItems: boolean;
   displayGrid: displayGrid;
   disableWindowResize: boolean;

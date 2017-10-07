@@ -35,6 +35,8 @@ export interface GridsterConfig {
   resizable?: Resizable;
   swap?: boolean;
   pushItems?: boolean;
+  disablePushOnDrag?: boolean;
+  disablePushOnResize?: boolean;
   pushResizeItems?: boolean;
   displayGrid?: displayGrid;
   disableWindowResize?: boolean;
@@ -43,7 +45,7 @@ export interface GridsterConfig {
   enableEmptyCellDrop?: boolean;
   enableEmptyCellDrag?: boolean;
   emptyCellClickCallback?: Function;
-  emptyCellContextMenuCallback?: Function,
+  emptyCellContextMenuCallback?: Function;
   emptyCellDropCallback?: Function;
   emptyCellDragCallback?: Function;
   emptyCellDragMaxCols?: number;
