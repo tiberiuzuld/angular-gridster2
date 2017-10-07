@@ -1,14 +1,14 @@
-md-sidenav-container {
+mat-sidenav-container {
   margin: 0;
   width: 100%;
   height: 100%;
 }
 
-md-sidenav .row, md-sidenav .mat-headline {
+mat-sidenav .row, mat-sidenav .mat-headline {
   padding: 5px;
 }
 
-md-sidenav {
+mat-sidenav {
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
@@ -17,17 +17,17 @@ md-sidenav {
   min-width: 400px;
 }
 
-md-sidenav .row {
+mat-sidenav .row {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
 
-md-sidenav .row > *:not(:first-child) {
+mat-sidenav .row > *:not(:first-child) {
   margin-left: 5px;
 }
 
-md-sidenav .flex {
+mat-sidenav .flex {
   flex: 1 auto;
 }
 
