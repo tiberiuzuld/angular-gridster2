@@ -63,10 +63,6 @@ export class GridsterDraggable {
         return;
     }
 
-    if (GridsterUtils.checkContentClassForEvent(this.gridster, e)) {
-      return;
-    }
-
     if (this.gridster.$options.draggable.start) {
       this.gridster.$options.draggable.start(this.gridsterItem.item, this.gridsterItem, e);
     }
@@ -79,7 +75,7 @@ export class GridsterDraggable {
 
     this.mousemove = this.gridsterItem.renderer.listen('document', 'mousemove', this.dragFunction);
     this.mouseup = this.gridsterItem.renderer.listen('document', 'mouseup', this.dragStopFunction);
-    this.touchmove = this.gridsterItem.renderer.listen('document', 'touchmove', this.dragFunction);
+    this.touchmove = this.gridster.renderer.listen(this.gridster.el, 'touchmove', this.dragFunction);
     this.touchend = this.gridsterItem.renderer.listen('document', 'touchend', this.dragStopFunction);
     this.touchcancel = this.gridsterItem.renderer.listen('document', 'touchcancel', this.dragStopFunction);
     this.gridsterItem.renderer.addClass(this.gridsterItem.el, 'gridster-item-moving');
@@ -210,13 +206,46 @@ export class GridsterDraggable {
     const enableDrag = this.gridsterItem.canBeDragged();
     if (!this.enabled && enableDrag) {
       this.enabled = !this.enabled;
-      this.dragStartFunction = this.dragStart.bind(this);
+      this.dragStartFunction = this.dragStartDelay.bind(this);
       this.mousedown = this.gridsterItem.renderer.listen(this.gridsterItem.el, 'mousedown', this.dragStartFunction);
       this.touchstart = this.gridsterItem.renderer.listen(this.gridsterItem.el, 'touchstart', this.dragStartFunction);
     } else if (this.enabled && !enableDrag) {
       this.enabled = !this.enabled;
       this.mousedown();
       this.touchstart();
+    }
+  }
+
+  dragStartDelay(e): void {
+    if (e.target.classList.contains('gridster-item-resizable-handler')) {
+      return;
+    }
+    if (GridsterUtils.checkContentClassForEvent(this.gridster, e)) {
+      return;
+    }
+    GridsterUtils.checkTouchEvent(e);
+    const timeout = setTimeout(() => {
+      this.dragStart(e);
+      cancelDrag();
+    }, 250);
+    const cancelMouse = this.gridsterItem.renderer.listen('document', 'mouseup', cancelDrag);
+    const cancelTouchMove = this.gridsterItem.renderer.listen('document', 'touchmove', cancelMove);
+    const cancelTouchEnd = this.gridsterItem.renderer.listen('document', 'touchend', cancelDrag);
+    const cancelTouchCancel = this.gridsterItem.renderer.listen('document', 'touchcancel', cancelDrag);
+
+    function cancelMove(eventMove) {
+      GridsterUtils.checkTouchEvent(eventMove);
+      if (Math.abs(eventMove.clientX - e.clientX) > 9 || Math.abs(eventMove.clientY - e.clientY) > 9) {
+        cancelDrag();
+      }
+    }
+
+    function cancelDrag() {
+      clearTimeout(timeout);
+      cancelMouse();
+      cancelTouchMove();
+      cancelTouchEnd();
+      cancelTouchCancel();
     }
   }
 }
