@@ -106,6 +106,7 @@ export class AppComponent implements OnInit {
       pushItems: true,
       disablePushOnDrag: false,
       disablePushOnResize: false,
+      pushDirections: {north: true, east: true, south: true, west: true},
       pushResizeItems: false,
       displayGrid: 'onDrag&Resize',
       disableWindowResize: false

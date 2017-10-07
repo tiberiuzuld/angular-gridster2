@@ -37,6 +37,7 @@ export interface GridsterConfig {
   pushItems?: boolean;
   disablePushOnDrag?: boolean;
   disablePushOnResize?: boolean;
+  pushDirections?: PushDirections;
   pushResizeItems?: boolean;
   displayGrid?: displayGrid;
   disableWindowResize?: boolean;
@@ -82,4 +83,11 @@ export interface DragBase {
   enabled?: boolean;
   stop?: Function;
   start?: Function;
+}
+
+export interface PushDirections {
+  north: boolean;
+  east: boolean;
+  south: boolean;
+  west: boolean;
 }

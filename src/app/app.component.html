@@ -1,194 +1,167 @@
 <mat-sidenav-container>
   <mat-sidenav #sidenav mode="over">
-    <label class="mat-headline">Grid Settings</label>
-    <div class="row flex">
-      <mat-form-field class="flex">
-        <mat-select aria-label="Grid type" [(ngModel)]="options.gridType" (ngModelChange)="changedOptions()"
-                    placeholder="Grid Type" class="flex">
-          <mat-option value="fit">Fit to screen</mat-option>
-          <mat-option value="scrollVertical">Scroll Vertical</mat-option>
-          <mat-option value="scrollHorizontal">Scroll Horizontal</mat-option>
-          <mat-option value="fixed">Fixed</mat-option>
-          <mat-option value="verticalFixed">Vertical Fixed</mat-option>
-          <mat-option value="horizontalFixed">Horizontal Fixed</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field class="flex">
-        <mat-select aria-label="Compact type" [(ngModel)]="options.compactType" (ngModelChange)="changedOptions()"
-                    placeholder="Compact Type" class="flex">
-          <mat-option value="none">None</mat-option>
-          <mat-option value="compactUp">Compact Up</mat-option>
-          <mat-option value="compactLeft">Compact Left</mat-option>
-          <mat-option value="compactLeft&Up">Compact Left & Up</mat-option>
-          <mat-option value="compactUp&Left">Compact Up & Left</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div class="row flex">
-      <mat-checkbox [(ngModel)]="options.swap" (ngModelChange)="changedOptions()">
-        Swap Items
-      </mat-checkbox>
-      <mat-checkbox [(ngModel)]="options.pushItems" (ngModelChange)="changedOptions()">
-        Push Items
-      </mat-checkbox>
-    </div>
-    <div class="row flex">
-      <mat-checkbox [(ngModel)]="options.disablePushOnDrag" (ngModelChange)="changedOptions()">
-        Disable Push On Drag
-      </mat-checkbox>
-      <mat-checkbox [(ngModel)]="options.disablePushOnResize" (ngModelChange)="changedOptions()">
-        Disable Push On Resize
-      </mat-checkbox>
-    </div>
-    <div class="row flex">
-      <mat-checkbox [(ngModel)]="options.draggable.enabled" (ngModelChange)="changedOptions()">
-        Drag Items
-      </mat-checkbox>
-      <mat-checkbox [(ngModel)]="options.resizable.enabled" (ngModelChange)="changedOptions()">
-        Resize Items
-      </mat-checkbox>
-      <mat-checkbox [(ngModel)]="options.pushResizeItems" (ngModelChange)="changedOptions()">
-        Push Resize Items
-      </mat-checkbox>
-    </div>
-    <div class="row flex">
-      <mat-form-field>
-        <input matInput [(ngModel)]="options.minCols" type="number" placeholder="Min Grid Cols"
-               (ngModelChange)="changedOptions()">
-      </mat-form-field>
-      <mat-form-field>
-        <input matInput [(ngModel)]="options.maxCols" type="number" placeholder="Max Grid Cols"
-               (ngModelChange)="changedOptions()">
-      </mat-form-field>
-    </div>
-    <div class="row flex">
-      <mat-form-field>
-        <input matInput [(ngModel)]="options.minRows" type="number" placeholder="Min Grid Rows"
-               (ngModelChange)="changedOptions()">
-      </mat-form-field>
-      <mat-form-field>
-        <input matInput [(ngModel)]="options.maxRows" type="number" placeholder="Max Grid Rows"
-               (ngModelChange)="changedOptions()">
-      </mat-form-field>
-    </div>
-    <div class="row flex">
-      <mat-form-field class="flex">
-        <mat-select aria-label="Display grid lines" [(ngModel)]="options.displayGrid"
-                    placeholder="Display grid lines"
-                    (ngModelChange)="changedOptions()">
-          <mat-option value="always">Always</mat-option>
-          <mat-option value="onDrag&Resize">On Drag & Resize</mat-option>
-          <mat-option value="none">None</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div class="row flex">
-      <mat-form-field>
-        <input matInput [(ngModel)]="options.margin" min="0" max="30" step="1" type="number" placeholder="Margin"
-               (ngModelChange)="changedOptions()">
-      </mat-form-field>
-      <mat-checkbox [(ngModel)]="options.outerMargin" (ngModelChange)="changedOptions()">Outer Margin</mat-checkbox>
-    </div>
-    <div class="row flex">
-      <mat-form-field>
-        <input matInput [(ngModel)]="options.mobileBreakpoint" type="number" placeholder="Mobile Breakpoint"
-               (ngModelChange)="changedOptions()">
-      </mat-form-field>
-      <mat-checkbox [(ngModel)]="options.disableWindowResize" (ngModelChange)="changedOptions()">
-        Disable window resize
-      </mat-checkbox>
-    </div>
-    <label class="mat-headline">Item Settings</label>
-    <div class="row flex">
-      <mat-form-field>
-        <input matInput [(ngModel)]="options.maxItemCols" type="number" placeholder="Max Item Cols"
-               (ngModelChange)="changedOptions()">
-      </mat-form-field>
-      <mat-form-field>
-        <input matInput [(ngModel)]="options.minItemCols" type="number" placeholder="Min Item Cols"
-               (ngModelChange)="changedOptions()">
-      </mat-form-field>
-    </div>
-    <div class="row flex">
-      <mat-form-field>
-        <input matInput [(ngModel)]="options.maxItemRows" type="number" placeholder="Max Item Rows"
-               (ngModelChange)="changedOptions()">
-      </mat-form-field>
-      <mat-form-field>
-        <input matInput [(ngModel)]="options.minItemRows" type="number" placeholder="Min Item Rows"
-               (ngModelChange)="changedOptions()">
-      </mat-form-field>
-    </div>
-    <div class="row flex">
-      <mat-form-field>
-        <input matInput [(ngModel)]="options.maxItemArea" type="number" placeholder="Max Item Area"
-               (ngModelChange)="changedOptions()">
-      </mat-form-field>
-      <mat-form-field>
-        <input matInput [(ngModel)]="options.minItemArea" type="number" placeholder="Min Item Area"
-               (ngModelChange)="changedOptions()">
-      </mat-form-field>
-    </div>
-    <div class="row flex">
-      <mat-form-field>
-        <input matInput [(ngModel)]="options.defaultItemRows" type="number" placeholder="Default Item Rows"
-               (ngModelChange)="changedOptions()">
-      </mat-form-field>
-      <mat-form-field>
-        <input matInput [(ngModel)]="options.defaultItemCols" type="number" placeholder="Default Item Cols"
-               (ngModelChange)="changedOptions()">
-      </mat-form-field>
-    </div>
-    <div class="row flex">
-      <mat-form-field>
-        <input matInput [(ngModel)]="options.fixedColWidth" type="number" placeholder="Fixed Col Width"
-               (ngModelChange)="changedOptions()">
-      </mat-form-field>
-      <mat-form-field>
-        <input matInput [(ngModel)]="options.fixedRowHeight" type="number" placeholder="Fixed Row Height"
-               (ngModelChange)="changedOptions()">
-      </mat-form-field>
-    </div>
-    <div class="row flex">
-      <mat-checkbox [(ngModel)]="options.keepFixedHeightInMobile" (ngModelChange)="changedOptions()">
-        Keep Fixed Height In Mobile
-      </mat-checkbox>
-      <mat-checkbox [(ngModel)]="options.keepFixedWidthInMobile" (ngModelChange)="changedOptions()">
-        Keep Fixed Width In Mobile
-      </mat-checkbox>
-    </div>
-    <div class="row flex">
-      <mat-checkbox [(ngModel)]="options.enableEmptyCellClick" (ngModelChange)="changedOptions()">
-        Enable click to add
-      </mat-checkbox>
-      <mat-checkbox [(ngModel)]="options.enableEmptyCellContextMenu" (ngModelChange)="changedOptions()">
-        Enable right click to add
-      </mat-checkbox>
-    </div>
-    <div class="row flex">
-      <mat-checkbox [(ngModel)]="options.enableEmptyCellDrop" (ngModelChange)="changedOptions()">
-        Enable drop to add
-      </mat-checkbox>
-      <mat-checkbox [(ngModel)]="options.enableEmptyCellDrag" (ngModelChange)="changedOptions()">
-        Enable drag to add
-      </mat-checkbox>
-    </div>
-    <div class="row flex">
-      <mat-form-field>
-        <input matInput [(ngModel)]="options.emptyCellDragMaxCols" type="number" placeholder="Drag Max Cols"
-               (ngModelChange)="changedOptions()">
-      </mat-form-field>
-      <mat-form-field>
-        <input matInput [(ngModel)]="options.emptyCellDragMaxRows" type="number" placeholder="Drag Max Rows"
-               (ngModelChange)="changedOptions()">
-      </mat-form-field>
-    </div>
-    <div class="row flex">
-      <div class="flex"></div>
-      <button mat-mini-fab (click)="addItem()" matTooltip="Add widget">
-        <mat-icon>add</mat-icon>
-      </button>
-    </div>
+    <label class="mat-headline cols-2">Grid Settings</label>
+    <mat-form-field>
+      <mat-select aria-label="Grid type" [(ngModel)]="options.gridType" (ngModelChange)="changedOptions()"
+                  placeholder="Grid Type">
+        <mat-option value="fit">Fit to screen</mat-option>
+        <mat-option value="scrollVertical">Scroll Vertical</mat-option>
+        <mat-option value="scrollHorizontal">Scroll Horizontal</mat-option>
+        <mat-option value="fixed">Fixed</mat-option>
+        <mat-option value="verticalFixed">Vertical Fixed</mat-option>
+        <mat-option value="horizontalFixed">Horizontal Fixed</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-select aria-label="Compact type" [(ngModel)]="options.compactType" (ngModelChange)="changedOptions()"
+                  placeholder="Compact Type">
+        <mat-option value="none">None</mat-option>
+        <mat-option value="compactUp">Compact Up</mat-option>
+        <mat-option value="compactLeft">Compact Left</mat-option>
+        <mat-option value="compactLeft&Up">Compact Left & Up</mat-option>
+        <mat-option value="compactUp&Left">Compact Up & Left</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-checkbox [(ngModel)]="options.swap" (ngModelChange)="changedOptions()">
+      Swap Items
+    </mat-checkbox>
+    <mat-checkbox [(ngModel)]="options.pushItems" (ngModelChange)="changedOptions()">
+      Push Items
+    </mat-checkbox>
+    <mat-checkbox [(ngModel)]="options.disablePushOnDrag" (ngModelChange)="changedOptions()">
+      Disable Push On Drag
+    </mat-checkbox>
+    <mat-checkbox [(ngModel)]="options.disablePushOnResize" (ngModelChange)="changedOptions()">
+      Disable Push On Resize
+    </mat-checkbox>
+    <mat-checkbox [(ngModel)]="options.pushDirections.north" (ngModelChange)="changedOptions()">
+      Push North
+    </mat-checkbox>
+    <mat-checkbox [(ngModel)]="options.pushDirections.east" (ngModelChange)="changedOptions()">
+      Push East
+    </mat-checkbox>
+    <mat-checkbox [(ngModel)]="options.pushDirections.south" (ngModelChange)="changedOptions()">
+      Push South
+    </mat-checkbox>
+    <mat-checkbox [(ngModel)]="options.pushDirections.west" (ngModelChange)="changedOptions()">
+      Push West
+    </mat-checkbox>
+    <mat-checkbox [(ngModel)]="options.draggable.enabled" (ngModelChange)="changedOptions()">
+      Drag Items
+    </mat-checkbox>
+    <mat-form-field>
+      <mat-select aria-label="Display grid lines" [(ngModel)]="options.displayGrid"
+                  placeholder="Display grid lines"
+                  (ngModelChange)="changedOptions()">
+        <mat-option value="always">Always</mat-option>
+        <mat-option value="onDrag&Resize">On Drag & Resize</mat-option>
+        <mat-option value="none">None</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-checkbox [(ngModel)]="options.resizable.enabled" (ngModelChange)="changedOptions()">
+      Resize Items
+    </mat-checkbox>
+    <mat-checkbox [(ngModel)]="options.pushResizeItems" (ngModelChange)="changedOptions()">
+      Push Resize Items
+    </mat-checkbox>
+    <mat-form-field>
+      <input matInput [(ngModel)]="options.minCols" type="number" placeholder="Min Grid Cols"
+             (ngModelChange)="changedOptions()">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [(ngModel)]="options.maxCols" type="number" placeholder="Max Grid Cols"
+             (ngModelChange)="changedOptions()">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [(ngModel)]="options.minRows" type="number" placeholder="Min Grid Rows"
+             (ngModelChange)="changedOptions()">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [(ngModel)]="options.maxRows" type="number" placeholder="Max Grid Rows"
+             (ngModelChange)="changedOptions()">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [(ngModel)]="options.margin" min="0" max="30" step="1" type="number" placeholder="Margin"
+             (ngModelChange)="changedOptions()">
+    </mat-form-field>
+    <mat-checkbox [(ngModel)]="options.outerMargin" (ngModelChange)="changedOptions()">Outer Margin</mat-checkbox>
+    <mat-form-field>
+      <input matInput [(ngModel)]="options.mobileBreakpoint" type="number" placeholder="Mobile Breakpoint"
+             (ngModelChange)="changedOptions()">
+    </mat-form-field>
+    <mat-checkbox [(ngModel)]="options.disableWindowResize" (ngModelChange)="changedOptions()">
+      Disable window resize
+    </mat-checkbox>
+    <label class="mat-headline cols-2">Item Settings</label>
+    <mat-form-field>
+      <input matInput [(ngModel)]="options.maxItemCols" type="number" placeholder="Max Item Cols"
+             (ngModelChange)="changedOptions()">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [(ngModel)]="options.minItemCols" type="number" placeholder="Min Item Cols"
+             (ngModelChange)="changedOptions()">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [(ngModel)]="options.maxItemRows" type="number" placeholder="Max Item Rows"
+             (ngModelChange)="changedOptions()">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [(ngModel)]="options.minItemRows" type="number" placeholder="Min Item Rows"
+             (ngModelChange)="changedOptions()">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [(ngModel)]="options.maxItemArea" type="number" placeholder="Max Item Area"
+             (ngModelChange)="changedOptions()">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [(ngModel)]="options.minItemArea" type="number" placeholder="Min Item Area"
+             (ngModelChange)="changedOptions()">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [(ngModel)]="options.defaultItemRows" type="number" placeholder="Default Item Rows"
+             (ngModelChange)="changedOptions()">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [(ngModel)]="options.defaultItemCols" type="number" placeholder="Default Item Cols"
+             (ngModelChange)="changedOptions()">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [(ngModel)]="options.fixedColWidth" type="number" placeholder="Fixed Col Width"
+             (ngModelChange)="changedOptions()">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [(ngModel)]="options.fixedRowHeight" type="number" placeholder="Fixed Row Height"
+             (ngModelChange)="changedOptions()">
+    </mat-form-field>
+    <mat-checkbox [(ngModel)]="options.keepFixedHeightInMobile" (ngModelChange)="changedOptions()">
+      Keep Fixed Height In Mobile
+    </mat-checkbox>
+    <mat-checkbox [(ngModel)]="options.keepFixedWidthInMobile" (ngModelChange)="changedOptions()">
+      Keep Fixed Width In Mobile
+    </mat-checkbox>
+    <mat-checkbox [(ngModel)]="options.enableEmptyCellClick" (ngModelChange)="changedOptions()">
+      Enable click to add
+    </mat-checkbox>
+    <mat-checkbox [(ngModel)]="options.enableEmptyCellContextMenu" (ngModelChange)="changedOptions()">
+      Enable right click to add
+    </mat-checkbox>
+    <mat-checkbox [(ngModel)]="options.enableEmptyCellDrop" (ngModelChange)="changedOptions()">
+      Enable drop to add
+    </mat-checkbox>
+    <mat-checkbox [(ngModel)]="options.enableEmptyCellDrag" (ngModelChange)="changedOptions()">
+      Enable drag to add
+    </mat-checkbox>
+    <mat-form-field>
+      <input matInput [(ngModel)]="options.emptyCellDragMaxCols" type="number" placeholder="Drag Max Cols"
+             (ngModelChange)="changedOptions()">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [(ngModel)]="options.emptyCellDragMaxRows" type="number" placeholder="Drag Max Rows"
+             (ngModelChange)="changedOptions()">
+    </mat-form-field>
+    <button mat-mini-fab (click)="addItem()" matTooltip="Add widget" class="add-button cols-2">
+      <mat-icon>add</mat-icon>
+    </button>
   </mat-sidenav>
   <button mat-mini-fab class="sidenav-fab" (click)="sidenav.toggle()">
     <mat-icon>settings</mat-icon>
