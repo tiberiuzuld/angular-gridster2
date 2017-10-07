@@ -71,7 +71,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
     this.setOptions();
     this.options.api = {
       optionsChanged: this.optionsChanged.bind(this),
-      resize: this.resize.bind(this),
+      resize: this.onResize.bind(this),
       getNextPossiblePosition: this.getNextPossiblePosition.bind(this)
     };
     this.columns = this.$options.minCols;
