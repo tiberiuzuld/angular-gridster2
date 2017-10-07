@@ -1,0 +1,8 @@
+<div class="columns" [style.height.px]="columnsHeight">
+  <div class="column" *ngFor="let column of columns; let isFirst = first;" [style.min-width.px]="width"
+       [style.margin-left.px]="isFirst && !gridster.$options.outerMargin ? 0 : margin"></div>
+</div>
+<div class="rows" [style.width.px]="rowsWidth">
+  <div class="row" *ngFor="let row of rows; let isFirst = first;" [style.height.px]="height"
+       [style.margin-top.px]="isFirst && !gridster.$options.outerMargin ? 0 : margin"></div>
+</div>

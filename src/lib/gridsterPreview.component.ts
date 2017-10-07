@@ -3,7 +3,8 @@ import {GridsterComponent} from './gridster.component';
 
 @Component({
   selector: 'gridster-preview',
-  template: ''
+  template: '',
+  styleUrls: ['./gridsterPreview.css']
 })
 export class GridsterPreviewComponent {
   el: any;
@@ -20,10 +21,10 @@ export class GridsterPreviewComponent {
       this.renderer.setElementStyle(this.el, 'display', 'none');
     } else {
       let margin = 0;
-      const curRowHeight = this.gridster.state.curRowHeight;
-      const curColWidth = this.gridster.state.curColWidth;
-      if (this.gridster.options.outerMargin) {
-        margin = this.gridster.state.options.margin;
+      const curRowHeight = this.gridster.curRowHeight;
+      const curColWidth = this.gridster.curColWidth;
+      if (this.gridster.$options.outerMargin) {
+        margin = this.gridster.$options.margin;
       }
       this.renderer.setElementStyle(this.el, 'display', 'block');
       this.renderer.setElementStyle(this.el, 'height', (this.gridster.movingItem.rows * curRowHeight - margin) + 'px');
