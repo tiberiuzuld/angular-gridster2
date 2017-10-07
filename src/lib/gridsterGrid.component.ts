@@ -1,6 +1,6 @@
 import {
   ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Host,
-  Renderer2
+  Renderer
 } from '@angular/core';
 import {GridsterComponent} from './gridster.component';
 
@@ -22,7 +22,7 @@ export class GridsterGridComponent {
   columnsHeight: number;
   rowsWidth: number;
 
-  constructor(el: ElementRef, @Host() gridster: GridsterComponent, public renderer: Renderer2, private cdRef: ChangeDetectorRef) {
+  constructor(el: ElementRef, @Host() gridster: GridsterComponent, public renderer: Renderer, private cdRef: ChangeDetectorRef) {
     this.el = el.nativeElement;
     this.gridster = gridster;
     this.gridster.gridLines = this;
@@ -36,11 +36,11 @@ export class GridsterGridComponent {
 
   updateGrid(): void {
     if (this.gridster.$options.displayGrid === 'always' && !this.gridster.mobile) {
-      this.renderer.setStyle(this.el, 'display', 'block');
+      this.renderer.setElementStyle(this.el, 'display', 'block');
     } else if (this.gridster.$options.displayGrid === 'onDrag&Resize' && this.gridster.dragInProgress) {
-      this.renderer.setStyle(this.el, 'display', 'block');
+      this.renderer.setElementStyle(this.el, 'display', 'block');
     } else if (this.gridster.$options.displayGrid === 'none' || !this.gridster.dragInProgress || this.gridster.mobile) {
-      this.renderer.setStyle(this.el, 'display', 'none');
+      this.renderer.setElementStyle(this.el, 'display', 'none');
     }
     this.gridster.setGridDimensions();
     this.margin = this.gridster.$options.margin;

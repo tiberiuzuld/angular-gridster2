@@ -105,8 +105,8 @@ export class GridsterEmptyCell {
     this.initialItem = item;
     this.gridster.movingItem = item;
     this.gridster.previewStyle();
-    this.emptyCellMMove = this.gridster.renderer.listen('window', 'mousemove', this.emptyCellMouseMove.bind(this));
-    this.emptyCellUp = this.gridster.renderer.listen('window', 'mouseup', this.emptyCellMouseUp.bind(this));
+    this.emptyCellMMove = this.gridster.renderer.listenGlobal('window', 'mousemove', this.emptyCellMouseMove.bind(this));
+    this.emptyCellUp = this.gridster.renderer.listenGlobal('window', 'mouseup', this.emptyCellMouseUp.bind(this));
   }
 
   emptyCellMouseMove(e): void {

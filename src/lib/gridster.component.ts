@@ -1,4 +1,4 @@
-import {Component, OnInit, ElementRef, Input, OnDestroy, Renderer2, ChangeDetectorRef} from '@angular/core';
+import {Component, OnInit, ElementRef, Input, OnDestroy, Renderer, ChangeDetectorRef} from '@angular/core';
 import {GridsterConfigService} from './gridsterConfig.constant';
 import {GridsterConfig} from './gridsterConfig.interface';
 import {GridsterUtils} from './gridsterUtils.service';
@@ -42,7 +42,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
       && item.y + item.rows > item2.y;
   }
 
-  constructor(el: ElementRef, public renderer: Renderer2, public cdRef: ChangeDetectorRef) {
+  constructor(el: ElementRef, public renderer: Renderer, public cdRef: ChangeDetectorRef) {
     this.el = el.nativeElement;
     this.$options = JSON.parse(JSON.stringify(GridsterConfigService));
     this.mobile = false;
@@ -103,7 +103,7 @@ export class GridsterComponent implements OnInit, OnDestroy {
   setOptions(): void {
     this.$options = GridsterUtils.merge(this.$options, this.options, this.$options);
     if (!this.$options.disableWindowResize && !this.windowResize) {
-      this.windowResize = this.renderer.listen('window', 'resize', this.onResize.bind(this));
+      this.windowResize = this.renderer.listenGlobal('window', 'resize', this.onResize.bind(this));
     } else if (this.$options.disableWindowResize && this.windowResize) {
       this.windowResize();
       this.windowResize = null;
@@ -230,17 +230,17 @@ export class GridsterComponent implements OnInit, OnDestroy {
       removeClass3 = 'fixed';
     }
 
-    this.renderer.addClass(this.el, addClass);
-    this.renderer.removeClass(this.el, removeClass1);
-    this.renderer.removeClass(this.el, removeClass2);
-    this.renderer.removeClass(this.el, removeClass3);
+    this.renderer.setElementClass(this.el, addClass, true);
+    this.renderer.setElementClass(this.el, removeClass1, false);
+    this.renderer.setElementClass(this.el, removeClass2, false);
+    this.renderer.setElementClass(this.el, removeClass3, false);
 
     if (!this.mobile && this.$options.mobileBreakpoint > this.curWidth) {
       this.mobile = !this.mobile;
-      this.renderer.addClass(this.el, 'mobile');
+      this.renderer.setElementClass(this.el, 'mobile', true);
     } else if (this.mobile && this.$options.mobileBreakpoint < this.curWidth) {
       this.mobile = !this.mobile;
-      this.renderer.removeClass(this.el, 'mobile');
+      this.renderer.setElementClass(this.el, 'mobile', false);
     }
     this.gridLines.updateGrid();
 
