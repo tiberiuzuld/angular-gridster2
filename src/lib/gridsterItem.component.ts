@@ -1,4 +1,15 @@
-import {Component, OnInit, ElementRef, Input, Host, OnDestroy, Output, EventEmitter, Renderer2} from '@angular/core';
+import {
+        Component,
+        ElementRef,
+        EventEmitter,        
+        Host,
+        Input,
+        OnInit,
+        OnDestroy,
+        Output,
+        Renderer2,
+      } from '@angular/core';
+
 import {GridsterItem} from './gridsterItem.interface';
 import {GridsterComponent} from './gridster.component';
 import {GridsterDraggable} from './gridsterDraggable.service';
