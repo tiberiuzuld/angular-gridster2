@@ -69,7 +69,6 @@ export class GridsterDraggable {
 
     e.stopPropagation();
     e.preventDefault();
-    GridsterUtils.checkTouchEvent(e);
     this.dragFunction = this.dragMove.bind(this);
     this.dragStopFunction = this.dragStop.bind(this);
 
@@ -224,10 +223,14 @@ export class GridsterDraggable {
       return;
     }
     GridsterUtils.checkTouchEvent(e);
+    if (!this.gridster.$options.draggable.delayStart) {
+      this.dragStart(e);
+      return;
+    }
     const timeout = setTimeout(() => {
       this.dragStart(e);
       cancelDrag();
-    }, 250);
+    }, this.gridster.$options.draggable.delayStart);
     const cancelMouse = this.gridsterItem.renderer.listen('document', 'mouseup', cancelDrag);
     const cancelTouchMove = this.gridsterItem.renderer.listen('document', 'touchmove', cancelMove);
     const cancelTouchEnd = this.gridsterItem.renderer.listen('document', 'touchend', cancelDrag);

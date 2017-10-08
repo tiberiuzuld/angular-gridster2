@@ -50,6 +50,7 @@ export const GridsterConfigService: GridsterConfig = {
   emptyCellDragMaxRows: 50, // limit empty cell drag max rows
   // Arguments: event, gridsterItem{x, y, rows: defaultItemRows, cols: defaultItemCols}
   draggable: {
+    delayStart: 0, // milliseconds to delay the start of drag, useful for touch interaction
     enabled: false, // enable/disable draggable items
     ignoreContentClass: 'gridster-item-content', // default content class to ignore the drag event from
     ignoreContent: false, // if true drag will start only from elements from `dragHandleClass`
@@ -59,6 +60,7 @@ export const GridsterConfigService: GridsterConfig = {
     // Arguments: item, gridsterItem, event
   },
   resizable: {
+    delayStart: 0, // milliseconds to delay the start of resize, useful for touch interaction
     enabled: false, // enable/disable resizable items
     handles: {
       s: true,

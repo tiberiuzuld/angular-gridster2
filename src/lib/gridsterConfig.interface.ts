@@ -83,6 +83,7 @@ export interface DragBase {
   enabled?: boolean;
   stop?: Function;
   start?: Function;
+  delayStart?: number;
 }
 
 export interface PushDirections {

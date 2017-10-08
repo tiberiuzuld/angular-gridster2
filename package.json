@@ -1,6 +1,6 @@
 {
   "name": "angular-gridster2",
-  "version": "3.14.2",
+  "version": "3.15.0",
   "license": "MIT",
   "main": "dist/index.js",
   "jsnext:main": "dist/index.js",
@@ -48,7 +48,7 @@
   "devDependencies": {
     "@angular/animations": "5.0.0-beta.3",
     "@angular/cdk": "2.0.0-beta.12",
-    "@angular/cli": "1.5.0-beta.4",
+    "@angular/cli": "1.5.0-beta.1",
     "@angular/common": "5.0.0-beta.3",
     "@angular/compiler": "5.0.0-beta.3",
     "@angular/compiler-cli": "5.0.0-beta.3",

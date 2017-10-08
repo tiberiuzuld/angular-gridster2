@@ -77,6 +77,7 @@ export class AppComponent implements OnInit {
       emptyCellDragMaxCols: 50,
       emptyCellDragMaxRows: 50,
       draggable: {
+        delayStart: 0,
         enabled: true,
         ignoreContentClass: 'gridster-item-content',
         ignoreContent: false,
@@ -84,6 +85,7 @@ export class AppComponent implements OnInit {
         stop: AppComponent.eventStop
       },
       resizable: {
+        delayStart: 0,
         enabled: true,
         stop: AppComponent.eventStop,
         handles: {

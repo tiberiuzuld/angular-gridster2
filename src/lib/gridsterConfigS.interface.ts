@@ -70,7 +70,7 @@ export interface Resizable extends DragBase {
 
 export interface DragBase {
   enabled: boolean;
-
+  delayStart: number;
   [propName: string]: any;
 }
 
