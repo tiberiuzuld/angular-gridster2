@@ -78,6 +78,7 @@
           stop: eventStop
         },
         resizable: {
+          delayStart: 0,
           enabled: true,
           stop: eventStop
         },
