@@ -13,7 +13,6 @@
     "skipLibCheck": true,
     "strictNullChecks": true,
     "outDir": "./dist",
-    "rootDir": "./.tmp",
     "lib": [
       "es2016",
       "dom"
