@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Host,
   Renderer2
 } from '@angular/core';
+
 import {GridsterComponent} from './gridster.component';
 
 @Component({

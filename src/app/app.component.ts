@@ -1,4 +1,5 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+
 import {GridsterItem} from '../lib/index';
 import {GridsterConfigS} from '../lib/gridsterConfigS.interface';
 

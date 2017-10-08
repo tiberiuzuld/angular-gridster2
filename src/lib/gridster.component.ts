@@ -1,4 +1,13 @@
-import {Component, OnInit, ElementRef, Input, OnDestroy, Renderer2, ChangeDetectorRef} from '@angular/core';
+import {
+        Component,
+        ChangeDetectorRef,
+        ElementRef,
+        Input,        
+        OnInit,
+        OnDestroy,
+        Renderer2,
+      } from '@angular/core';
+
 import {GridsterConfigService} from './gridsterConfig.constant';
 import {GridsterConfig} from './gridsterConfig.interface';
 import {GridsterUtils} from './gridsterUtils.service';
