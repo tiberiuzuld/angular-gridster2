@@ -72,7 +72,6 @@ export class GridsterResizable {
     }
     e.stopPropagation();
     e.preventDefault();
-    GridsterUtils.checkTouchEvent(e);
     this.dragFunction = this.dragMove.bind(this);
     this.dragStopFunction = this.dragStop.bind(this);
     this.mousemove = this.gridsterItem.renderer.listenGlobal('document', 'mousemove', this.dragFunction);
@@ -335,10 +334,15 @@ export class GridsterResizable {
   }
 
   dragStartDelay(e): void {
+    GridsterUtils.checkTouchEvent(e);
+    if (!this.gridster.$options.resizable.delayStart) {
+      this.dragStart(e);
+      return;
+    }
     const timeout = setTimeout(() => {
       this.dragStart(e);
       cancelDrag();
-    }, 250);
+    }, this.gridster.$options.resizable.delayStart);
     GridsterUtils.checkTouchEvent(e);
     const cancelMouse = this.gridsterItem.renderer.listenGlobal('document', 'mouseup', cancelDrag);
     const cancelTouchMove = this.gridsterItem.renderer.listenGlobal('document', 'touchmove', cancelMove);
