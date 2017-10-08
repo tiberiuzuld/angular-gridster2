@@ -48,7 +48,7 @@
   "devDependencies": {
     "@angular/animations": "5.0.0-beta.3",
     "@angular/cdk": "2.0.0-beta.12",
-    "@angular/cli": "1.5.0-beta.1",
+    "@angular/cli": "1.4.5",
     "@angular/common": "5.0.0-beta.3",
     "@angular/compiler": "5.0.0-beta.3",
     "@angular/compiler-cli": "5.0.0-beta.3",
