@@ -332,7 +332,7 @@
         var enableDrag = vm.gridsterItem.canBeResized();
         if (!vm.resizeEnabled && enableDrag) {
           vm.resizeEnabled = !vm.resizeEnabled;
-          vm.dragStartFunction = vm.dragStart.bind(vm);
+          vm.dragStartFunction = vm.dragStartDelay;
           handlers = vm.gridsterItem.nativeEl.querySelectorAll('.gridster-item-resizable-handler');
           i = handlers.length - 1;
           for (; i > -1; i--) {
