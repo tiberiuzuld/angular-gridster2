@@ -94,6 +94,8 @@ var GridsterConfigService = {
   // Arguments: gridsterItem, gridsterItemComponent
   itemInitCallback: undefined,  // callback to call for each item when is initialized.
   // Arguments: gridsterItem, gridsterItemComponent
+  itemRemovedCallback: undefined,  // callback to call for each item when is initialized.
+  // Arguments: gridsterItem, gridsterItemComponent
   enableEmptyCellClick: false, // enable empty cell click events
   enableEmptyCellContextMenu: false, // enable empty cell context menu (right click) events
   enableEmptyCellDrop: false, // enable empty cell drop events
@@ -106,6 +108,7 @@ var GridsterConfigService = {
   emptyCellDragMaxRows: 50, // limit empty cell drag max rows
   // Arguments: event, gridsterItem{x, y, rows: defaultItemRows, cols: defaultItemCols}
   draggable: {
+    delayStart: 0, // milliseconds to delay the start of resize, useful for touch interaction
     enabled: false, // enable/disable draggable items
     ignoreContentClass: 'gridster-item-content', // default content class to ignore the drag event from
     ignoreContent: false, // if true drag will start only from elements from `dragHandleClass`
@@ -115,6 +118,7 @@ var GridsterConfigService = {
     // Arguments: item, gridsterItem, event
   },
   resizable: {
+    delayStart: 0, // milliseconds to delay the start of resize, useful for touch interaction
     enabled: false, // enable/disable resizable items
     handles: {
       s: true,
@@ -132,6 +136,9 @@ var GridsterConfigService = {
   },
   swap: true, // allow items to switch position if drop on top of another
   pushItems: false, // push items when resizing and dragging
+  disablePushOnDrag: false, // disable push on drag
+  disablePushOnResize: false, // disable push on resize
+  pushDirections: {north: true, east: true, south: true, west: true}, // control the directions items are pushed
   pushResizeItems: false, // on resize of item will shrink adjacent items
   displayGrid: 'onDrag&Resize', // display background grid of rows and columns
   disableWindowResize: false // disable the window on resize listener. This will stop grid to recalculate on window resize.

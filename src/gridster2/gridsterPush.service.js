@@ -20,8 +20,8 @@
       vm.fromEast = 'fromEast';
       vm.fromWest = 'fromWest';
 
-      vm.pushItems = function (direction) {
-        if (vm.gridster.$options.pushItems) {
+      vm.pushItems = function (direction, disabled) {
+        if (vm.gridster.$options.pushItems && !disabled) {
           vm.count = 0;
           if (!vm.push(vm.gridsterItem, direction)) {
             var i = vm.pushedItemsTemp.length - 1;
@@ -99,6 +99,9 @@
       };
 
       vm.trySouth = function (gridsterItemCollide, gridsterItem) {
+        if (!vm.gridster.$options.pushDirections.south) {
+          return false;
+        }
         vm.addToTempPushed(gridsterItemCollide);
         var backUpY = gridsterItemCollide.$item.y;
         gridsterItemCollide.$item.y = gridsterItem.$item.y + gridsterItem.$item.rows;
@@ -113,6 +116,9 @@
       };
 
       vm.tryNorth = function (gridsterItemCollide, gridsterItem) {
+        if (!vm.gridster.$options.pushDirections.north) {
+          return false;
+        }
         vm.addToTempPushed(gridsterItemCollide);
         var backUpY = gridsterItemCollide.$item.y;
         gridsterItemCollide.$item.y = gridsterItem.$item.y - gridsterItemCollide.$item.rows;
@@ -127,6 +133,9 @@
       };
 
       vm.tryEast = function (gridsterItemCollide, gridsterItem) {
+        if (!vm.gridster.$options.pushDirections.east) {
+          return false;
+        }
         vm.addToTempPushed(gridsterItemCollide);
         var backUpX = gridsterItemCollide.$item.x;
         gridsterItemCollide.$item.x = gridsterItem.$item.x + gridsterItem.$item.cols;
@@ -141,6 +150,9 @@
       };
 
       vm.tryWest = function (gridsterItemCollide, gridsterItem) {
+        if (!vm.gridster.$options.pushDirections.west) {
+          return false;
+        }
         vm.addToTempPushed(gridsterItemCollide);
         var backUpX = gridsterItemCollide.$item.x;
         gridsterItemCollide.$item.x = gridsterItem.$item.x - gridsterItemCollide.$item.cols;

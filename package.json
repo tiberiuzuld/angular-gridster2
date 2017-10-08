@@ -1,6 +1,6 @@
 {
   "name": "angular-gridster2",
-  "version": "1.12.0",
+  "version": "1.15.0",
   "main": "index.js",
   "dependencies": {
     "angular": ">=1.6.0"
@@ -8,12 +8,12 @@
   "devDependencies": {
     "angular-animate": "1.6.6",
     "angular-aria": "1.6.6",
-    "angular-material": "1.1.4",
+    "angular-material": "1.1.5",
     "browser-sync": "2.18.13",
     "browser-sync-spa": "1.0.3",
     "chalk": "2.1.0",
     "del": "3.0.0",
-    "eslint-plugin-angular": "3.1.0",
+    "eslint-plugin-angular": "3.1.1",
     "estraverse": "4.2.0",
     "gulp": "3.9.1",
     "gulp-angular-filesort": "1.1.1",
@@ -22,7 +22,7 @@
     "gulp-eslint": "4.0.0",
     "gulp-filter": "5.0.1",
     "gulp-flatten": "0.3.1",
-    "gulp-inject": "4.2.0",
+    "gulp-inject": "4.3.0",
     "gulp-load-plugins": "1.5.0",
     "gulp-minify-css": "1.2.4",
     "gulp-minify-html": "1.0.6",
@@ -38,7 +38,7 @@
     "gulp-useref": "3.1.2",
     "gulp-util": "3.0.8",
     "http-proxy-middleware": "0.17.4",
-    "karma": "1.7.0",
+    "karma": "1.7.1",
     "karma-angular-filesort": "1.0.2",
     "karma-coverage": "1.1.1",
     "karma-jasmine": "1.1.0",

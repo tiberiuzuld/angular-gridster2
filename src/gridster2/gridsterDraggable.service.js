@@ -46,23 +46,18 @@
             return;
         }
 
-        if (GridsterUtils.checkContentClassForEvent(vm.gridster, e)) {
-          return;
-        }
-
         if (vm.gridster.$options.draggable.start) {
           vm.gridster.$options.draggable.start(vm.gridsterItem.item, vm.gridsterItem, e);
         }
 
         e.stopPropagation();
         e.preventDefault();
-        GridsterUtils.checkTouchEvent(e);
         vm.dragFunction = vm.dragMove.bind(this);
         vm.dragStopFunction = vm.dragStop.bind(this);
 
         document.addEventListener('mousemove', vm.dragFunction);
         document.addEventListener('mouseup', vm.dragStopFunction);
-        document.addEventListener('touchmove', vm.dragFunction);
+        vm.gridster.el.addEventListener('touchmove', vm.dragFunction);
         document.addEventListener('touchend', vm.dragStopFunction);
         document.addEventListener('touchcancel', vm.dragStopFunction);
         vm.gridsterItem.el.addClass('gridster-item-moving');
@@ -111,7 +106,7 @@
         GridsterScroll.cancelScroll();
         document.removeEventListener('mousemove', vm.dragFunction);
         document.removeEventListener('mouseup', vm.dragStopFunction);
-        document.removeEventListener('touchmove', vm.dragFunction);
+        vm.gridster.el.removeEventListener('touchmove', vm.dragFunction);
         document.removeEventListener('touchend', vm.dragStopFunction);
         document.removeEventListener('touchcancel', vm.dragStopFunction);
         vm.gridsterItem.el.removeClass('gridster-item-moving');
@@ -184,7 +179,7 @@
           } else if (lastPosition.y > vm.gridsterItem.$item.y) {
             direction = vm.push.fromSouth;
           }
-          vm.push.pushItems(direction);
+          vm.push.pushItems(direction, vm.gridster.$options.disablePushOnDrag);
           vm.swap.swapItems();
           if (vm.gridster.checkCollision(vm.gridsterItem.$item)) {
             vm.gridsterItem.$item.x = vm.positionXBackup;
@@ -201,7 +196,7 @@
         var enableDrag = vm.gridsterItem.canBeDragged();
         if (!vm.enabled && enableDrag) {
           vm.enabled = !vm.enabled;
-          vm.dragStartFunction = vm.dragStart.bind(this);
+          vm.dragStartFunction = vm.dragStartDelay;
           vm.gridsterItem.nativeEl.addEventListener('mousedown', vm.dragStartFunction);
           vm.gridsterItem.nativeEl.addEventListener('touchstart', vm.dragStartFunction);
         } else if (vm.enabled && !enableDrag) {
@@ -210,6 +205,43 @@
           vm.gridsterItem.nativeEl.removeEventListener('touchstart', vm.dragStartFunction);
         }
       };
+
+      vm.dragStartDelay = function (e) {
+        GridsterUtils.checkTouchEvent(e);
+        if (e.target.classList.contains('gridster-item-resizable-handler')) {
+          return;
+        }
+        if (GridsterUtils.checkContentClassForEvent(vm.gridster, e)) {
+          return;
+        }
+        if (!vm.gridster.$options.draggable.delayStart) {
+          vm.dragStart(e);
+          return;
+        }
+        var timeout = setTimeout(function () {
+          vm.dragStart(e);
+          cancelDrag();
+        }, vm.gridster.$options.draggable.delayStart);
+        document.addEventListener('mouseup', cancelDrag);
+        document.addEventListener('touchmove', cancelMove);
+        document.addEventListener('touchend', cancelDrag);
+        document.addEventListener('touchcancel', cancelDrag);
+
+        function cancelMove(eventMove) {
+          GridsterUtils.checkTouchEvent(eventMove);
+          if (Math.abs(eventMove.clientX - e.clientX) > 9 || Math.abs(eventMove.clientY - e.clientY) > 9) {
+            cancelDrag();
+          }
+        }
+
+        function cancelDrag() {
+          clearTimeout(timeout);
+          document.removeEventListener('mouseup', cancelDrag);
+          document.removeEventListener('touchmove', cancelMove);
+          document.removeEventListener('touchend', cancelDrag);
+          document.removeEventListener('touchcancel', cancelDrag);
+        }
+      }
     };
   }
 })();

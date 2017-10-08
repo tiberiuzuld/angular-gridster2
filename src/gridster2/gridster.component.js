@@ -40,6 +40,7 @@
     vm.$options.itemChangeCallback = undefined;
     vm.$options.itemResizeCallback = undefined;
     vm.$options.itemInitCallback = undefined;
+    vm.$options.itemRemovedCallback = undefined;
     vm.$options.emptyCellClickCallback = undefined;
     vm.$options.emptyCellContextMenuCallback = undefined;
     vm.$options.emptyCellDropCallback = undefined;
@@ -58,7 +59,7 @@
       vm.setOptions();
       vm.options.api = {
         optionsChanged: vm.optionsChanged,
-        resize: vm.resize,
+        resize: vm.onResize,
         getNextPossiblePosition: vm.getNextPossiblePosition
       };
       vm.columns = vm.$options.minCols;
@@ -277,6 +278,9 @@
     vm.removeItem = function removeItem(itemComponent) {
       vm.grid.splice(vm.grid.indexOf(itemComponent), 1);
       vm.calculateLayoutDebounce();
+      if (vm.$options.itemRemovedCallback) {
+        vm.$options.itemRemovedCallback(itemComponent.item, itemComponent);
+      }
     };
 
     vm.checkCollision = function checkCollision(item) {

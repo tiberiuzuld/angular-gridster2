@@ -21,6 +21,7 @@
         itemChangeCallback: itemChange,
         itemResizeCallback: itemResize,
         itemInitCallback: itemInit,
+        itemRemovedCallback: itemRemoved,
         margin: 10,
         outerMargin: true,
         mobileBreakpoint: 640,
@@ -49,6 +50,7 @@
         emptyCellDragMaxCols: 50,
         emptyCellDragMaxRows: 50,
         draggable: {
+          delayStart: 0,
           enabled: true,
           stop: eventStop
         },
@@ -58,6 +60,9 @@
         },
         swap: false,
         pushItems: true,
+        disablePushOnDrag: false,
+        disablePushOnResize: false,
+        pushDirections: {north: true, east: true, south: true, west: true},
         pushResizeItems: false,
         displayGrid: 'onDrag&Resize',
         disableWindowResize: false
@@ -109,6 +114,10 @@
 
     function itemInit(item, itemComponent) {
       $log.info('itemInitialized', item, itemComponent);
+    }
+
+    function itemRemoved(item, itemComponent) {
+      $log.info('itemRemoved', item, itemComponent);
     }
 
     vm.prevent = function (event) {

@@ -2,14 +2,13 @@
   'use strict';
 
   angular.module('angular-gridster2')
-         .service('GridsterResizable', GridsterResizable);
+    .service('GridsterResizable', GridsterResizable);
 
   /** @ngInject */
   function GridsterResizable(GridsterPush, GridsterScroll, GridsterUtils, GridsterPushResize) {
     return function (gridsterItem, gridster) {
       var vm = this;
 
-      vm.enabled = false;
       vm.directionFunction = angular.noop;
       vm.dragStartFunction = angular.noop;
       vm.dragFunction = angular.noop;
@@ -63,12 +62,11 @@
         }
         e.stopPropagation();
         e.preventDefault();
-        GridsterUtils.checkTouchEvent(e);
         vm.dragFunction = vm.dragMove.bind(vm);
         vm.dragStopFunction = vm.dragStop.bind(vm);
         document.addEventListener('mousemove', vm.dragFunction);
         document.addEventListener('mouseup', vm.dragStopFunction);
-        document.addEventListener('touchmove', vm.dragFunction);
+        vm.gridster.el.addEventListener('touchmove', vm.dragFunction);
         document.addEventListener('touchend', vm.dragStopFunction);
         document.addEventListener('touchcancel', vm.dragStopFunction);
         vm.gridsterItem.el.addClass('gridster-item-resizing');
@@ -88,9 +86,9 @@
         vm.diffTop = e.clientY + vm.offsetTop - vm.margin - vm.top;
         vm.diffBottom = e.clientY + vm.offsetTop - vm.margin - vm.bottom;
         vm.minHeight = vm.gridster.positionYToPixels(vm.gridsterItem.$item.minItemRows ||
-                                                     vm.gridster.$options.minItemRows) - vm.margin;
+          vm.gridster.$options.minItemRows) - vm.margin;
         vm.minWidth = vm.gridster.positionXToPixels(vm.gridsterItem.$item.minItemCols ||
-                                                    vm.gridster.$options.minItemCols) - vm.margin;
+          vm.gridster.$options.minItemCols) - vm.margin;
         vm.gridster.movingItem = vm.gridsterItem.$item;
         vm.gridster.previewStyle();
         vm.push = new GridsterPush(vm.gridsterItem, vm.gridster);
@@ -98,31 +96,31 @@
         vm.gridster.dragInProgress = true;
         vm.gridster.gridLines.updateGrid();
 
-        if (e.currentTarget.classList.contains('handle-n')) {
+        if (e.target.classList.contains('handle-n')) {
           vm.resizeEventScrollType.n = true;
           vm.directionFunction = vm.handleN.bind(vm);
-        } else if (e.currentTarget.classList.contains('handle-w')) {
+        } else if (e.target.classList.contains('handle-w')) {
           vm.resizeEventScrollType.w = true;
           vm.directionFunction = vm.handleW.bind(vm);
-        } else if (e.currentTarget.classList.contains('handle-s')) {
+        } else if (e.target.classList.contains('handle-s')) {
           vm.resizeEventScrollType.s = true;
           vm.directionFunction = vm.handleS.bind(vm);
-        } else if (e.currentTarget.classList.contains('handle-e')) {
+        } else if (e.target.classList.contains('handle-e')) {
           vm.resizeEventScrollType.e = true;
           vm.directionFunction = vm.handleE.bind(vm);
-        } else if (e.currentTarget.classList.contains('handle-nw')) {
+        } else if (e.target.classList.contains('handle-nw')) {
           vm.resizeEventScrollType.n = true;
           vm.resizeEventScrollType.w = true;
           vm.directionFunction = vm.handleNW.bind(vm);
-        } else if (e.currentTarget.classList.contains('handle-ne')) {
+        } else if (e.target.classList.contains('handle-ne')) {
           vm.resizeEventScrollType.n = true;
           vm.resizeEventScrollType.e = true;
           vm.directionFunction = vm.handleNE.bind(vm);
-        } else if (e.currentTarget.classList.contains('handle-sw')) {
+        } else if (e.target.classList.contains('handle-sw')) {
           vm.resizeEventScrollType.s = true;
           vm.resizeEventScrollType.w = true;
           vm.directionFunction = vm.handleSW.bind(vm);
-        } else if (e.currentTarget.classList.contains('handle-se')) {
+        } else if (e.target.classList.contains('handle-se')) {
           vm.resizeEventScrollType.s = true;
           vm.resizeEventScrollType.e = true;
           vm.directionFunction = vm.handleSE.bind(vm);
@@ -149,7 +147,7 @@
         GridsterScroll.cancelScroll();
         document.removeEventListener('mousemove', vm.dragFunction);
         document.removeEventListener('mouseup', vm.dragStopFunction);
-        document.removeEventListener('touchmove', vm.dragFunction);
+        vm.gridster.el.removeEventListener('touchmove', vm.dragFunction);
         document.removeEventListener('touchend', vm.dragStopFunction);
         document.removeEventListener('touchcancel', vm.dragStopFunction);
         vm.gridsterItem.el.removeClass('gridster-item-resizing');
@@ -205,14 +203,14 @@
           vm.itemBackup[3] = vm.gridsterItem.$item.rows;
           vm.gridsterItem.$item.rows += vm.gridsterItem.$item.y - vm.newPosition;
           vm.gridsterItem.$item.y = vm.newPosition;
-          vm.pushResize.pushItems(vm.pushResize.fromSouth);
+          vm.pushResize.pushItems(vm.pushResize.fromSouth, vm.gridster.$options.disablePushOnResize);
           vm.push.pushItems(vm.push.fromSouth);
           if (vm.gridster.checkCollision(vm.gridsterItem.$item)) {
             vm.gridsterItem.$item.y = vm.itemBackup[1];
             vm.gridsterItem.$item.rows = vm.itemBackup[3];
             vm.gridsterItem.el.css('top', vm.gridster.positionYToPixels(vm.gridsterItem.$item.y) + 'px');
             vm.gridsterItem.el.css('height', vm.gridster.positionYToPixels(vm.gridsterItem.$item.rows)
-                                             - vm.gridster.$options.margin + 'px');
+              - vm.gridster.$options.margin + 'px');
             return;
           } else {
             vm.gridster.previewStyle();
@@ -238,14 +236,14 @@
           vm.gridsterItem.$item.cols += vm.gridsterItem.$item.x - vm.newPosition;
           vm.gridsterItem.$item.x = vm.newPosition;
           vm.pushResize.pushItems(vm.pushResize.fromEast);
-          vm.push.pushItems(vm.push.fromEast);
+          vm.push.pushItems(vm.push.fromEast, vm.gridster.$options.disablePushOnResize);
           if (vm.gridster.checkCollision(vm.gridsterItem.$item)) {
             vm.gridsterItem.$item.x = vm.itemBackup[0];
             vm.gridsterItem.$item.cols = vm.itemBackup[2];
             vm.gridsterItem.el.css('left',
               vm.gridster.positionXToPixels(vm.gridsterItem.$item.x) + 'px');
             vm.gridsterItem.el.css('width', vm.gridster.positionXToPixels(vm.gridsterItem.$item.cols)
-                                            - vm.gridster.$options.margin + 'px');
+              - vm.gridster.$options.margin + 'px');
             return;
           } else {
             vm.gridster.previewStyle();
@@ -268,11 +266,11 @@
           vm.itemBackup[3] = vm.gridsterItem.$item.rows;
           vm.gridsterItem.$item.rows = vm.newPosition - vm.gridsterItem.$item.y;
           vm.pushResize.pushItems(vm.pushResize.fromNorth);
-          vm.push.pushItems(vm.push.fromNorth);
+          vm.push.pushItems(vm.push.fromNorth, vm.gridster.$options.disablePushOnResize);
           if (vm.gridster.checkCollision(vm.gridsterItem.$item)) {
             vm.gridsterItem.$item.rows = vm.itemBackup[3];
             vm.gridsterItem.el.css('height', vm.gridster.positionYToPixels(vm.gridsterItem.$item.rows)
-                                             - vm.gridster.$options.margin + 'px');
+              - vm.gridster.$options.margin + 'px');
             return;
           } else {
             vm.gridster.previewStyle();
@@ -294,11 +292,11 @@
           vm.itemBackup[2] = vm.gridsterItem.$item.cols;
           vm.gridsterItem.$item.cols = vm.newPosition - vm.gridsterItem.$item.x;
           vm.pushResize.pushItems(vm.pushResize.fromWest);
-          vm.push.pushItems(vm.push.fromWest);
+          vm.push.pushItems(vm.push.fromWest, vm.gridster.$options.disablePushOnResize);
           if (vm.gridster.checkCollision(vm.gridsterItem.$item)) {
             vm.gridsterItem.$item.cols = vm.itemBackup[2];
             vm.gridsterItem.el.css('width', vm.gridster.positionXToPixels(vm.gridsterItem.$item.cols)
-                                            - vm.gridster.$options.margin + 'px');
+              - vm.gridster.$options.margin + 'px');
             return;
           } else {
             vm.gridster.previewStyle();
@@ -353,6 +351,38 @@
           }
         }
       };
+
+
+      vm.dragStartDelay = function (e) {
+        GridsterUtils.checkTouchEvent(e);
+        if (!vm.gridster.$options.resizable.delayStart) {
+          vm.dragStart(e);
+          return;
+        }
+        var timeout = setTimeout(function () {
+          vm.dragStart(e);
+          cancelDrag();
+        }, vm.gridster.$options.resizable.delayStart);
+        document.addEventListener('mouseup', cancelDrag);
+        document.addEventListener('touchmove', cancelMove);
+        document.addEventListener('touchend', cancelDrag);
+        document.addEventListener('touchcancel', cancelDrag);
+
+        function cancelMove(eventMove) {
+          GridsterUtils.checkTouchEvent(eventMove);
+          if (Math.abs(eventMove.clientX - e.clientX) > 9 || Math.abs(eventMove.clientY - e.clientY) > 9) {
+            cancelDrag();
+          }
+        }
+
+        function cancelDrag() {
+          clearTimeout(timeout);
+          document.removeEventListener('mouseup', cancelDrag);
+          document.removeEventListener('touchmove', cancelMove);
+          document.removeEventListener('touchend', cancelDrag);
+          document.removeEventListener('touchcancel', cancelDrag);
+        }
+      }
     };
   }
 })();
