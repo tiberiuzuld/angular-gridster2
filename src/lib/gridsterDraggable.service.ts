@@ -53,7 +53,7 @@ export class GridsterDraggable {
     this.path = [];
   }
 
-  dragStart(e): void {
+  dragStart(e: any): void {
     switch (e.which) {
       case 1:
         // left mouse button
@@ -97,7 +97,7 @@ export class GridsterDraggable {
     this.path.push({x: this.gridsterItem.item.x || 0, y: this.gridsterItem.item.y || 0});
   }
 
-  dragMove(e): void {
+  dragMove(e: any): void {
     e.stopPropagation();
     e.preventDefault();
     GridsterUtils.checkTouchEvent(e);
@@ -112,13 +112,13 @@ export class GridsterDraggable {
     this.gridster.gridLines.updateGrid();
   }
 
-  calculateItemPositionFromMousePosition(e): void {
+  calculateItemPositionFromMousePosition(e: any): void {
     this.left = e.clientX + this.offsetLeft - this.margin - this.diffLeft;
     this.top = e.clientY + this.offsetTop - this.margin - this.diffTop;
     this.calculateItemPosition();
   }
 
-  dragStop(e): void {
+  dragStop(e: any): void {
     e.stopPropagation();
     e.preventDefault();
 
@@ -179,7 +179,7 @@ export class GridsterDraggable {
 
     if (this.positionXBackup !== this.gridsterItem.$item.x || this.positionYBackup !== this.gridsterItem.$item.y) {
       const lastPosition = this.path[this.path.length - 1];
-      let direction;
+      let direction = '';
       if (lastPosition.x < this.gridsterItem.$item.x) {
         direction = this.push.fromWest;
       } else if (lastPosition.x > this.gridsterItem.$item.x) {
@@ -216,7 +216,7 @@ export class GridsterDraggable {
     }
   }
 
-  dragStartDelay(e): void {
+  dragStartDelay(e: any): void {
     if (e.target.classList.contains('gridster-item-resizable-handler')) {
       return;
     }
@@ -237,7 +237,7 @@ export class GridsterDraggable {
     const cancelTouchEnd = this.gridsterItem.renderer.listen('document', 'touchend', cancelDrag);
     const cancelTouchCancel = this.gridsterItem.renderer.listen('document', 'touchcancel', cancelDrag);
 
-    function cancelMove(eventMove) {
+    function cancelMove(eventMove: any) {
       GridsterUtils.checkTouchEvent(eventMove);
       if (Math.abs(eventMove.clientX - e.clientX) > 9 || Math.abs(eventMove.clientY - e.clientY) > 9) {
         cancelDrag();

@@ -1,6 +1,6 @@
 {
   "name": "angular-gridster2",
-  "version": "3.15.0",
+  "version": "3.15.1",
   "license": "MIT",
   "main": "dist/index.js",
   "jsnext:main": "dist/index.js",
@@ -78,8 +78,8 @@
     "karma-jasmine": "1.1.0",
     "karma-jasmine-html-reporter": "0.2.2",
     "protractor": "5.1.2",
-    "systemjs": "0.20.19",
     "rxjs": "5.4.3",
+    "systemjs": "0.20.19",
     "ts-helpers": "1.1.2",
     "ts-node": "3.3.0",
     "tslib": "1.8.0",

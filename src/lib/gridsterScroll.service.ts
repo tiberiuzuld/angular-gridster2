@@ -11,7 +11,7 @@ let intervalE: number;
 let intervalW: number;
 let intervalN: number;
 let intervalS: number;
-export function scroll(gridsterItem: GridsterItemComponent, e: MouseEvent, lastMouse, calculateItemPosition: Function, resize?: boolean,
+export function scroll(gridsterItem: GridsterItemComponent, e: MouseEvent, lastMouse: any, calculateItemPosition: Function, resize?: boolean,
                        resizeEventScrollType?: GridsterResizeEventType) {
   scrollSensitivity = gridsterItem.gridster.$options.scrollSensitivity;
   scrollSpeed = gridsterItem.gridster.$options.scrollSpeed;
@@ -60,7 +60,7 @@ export function scroll(gridsterItem: GridsterItemComponent, e: MouseEvent, lastM
   }
 }
 
-function startVertical(sign: number, calculateItemPosition: Function, lastMouse): any {
+function startVertical(sign: number, calculateItemPosition: Function, lastMouse: any): any {
   let clientY = lastMouse.clientY;
   return setInterval(function () {
     if (!gridsterElement || sign === -1 && gridsterElement.scrollTop - scrollSpeed < 0) {
@@ -72,7 +72,7 @@ function startVertical(sign: number, calculateItemPosition: Function, lastMouse)
   }.bind(this), intervalDuration);
 }
 
-function startHorizontal(sign: number, calculateItemPosition: Function, lastMouse): any {
+function startHorizontal(sign: number, calculateItemPosition: Function, lastMouse: any): any {
   let clientX = lastMouse.clientX;
   return setInterval(function () {
     if (!gridsterElement || sign === -1 && gridsterElement.scrollLeft - scrollSpeed < 0) {

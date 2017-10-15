@@ -2,15 +2,21 @@ import {Injectable} from '@angular/core';
 
 import {GridsterItemComponent} from './gridsterItem.component';
 import {GridsterComponent} from './gridster.component';
-import {GridsterItem} from './gridsterItem.interface';
+import {GridsterItemS} from './gridsterItemS.interface';
 
 @Injectable()
 export class GridsterPushResize {
   private pushedItems: Array<GridsterItemComponent>;
-  private pushedItemsPath: Array<Array<GridsterItem>>;
+  private pushedItemsPath: Array<Array<GridsterItemS>>;
   private gridsterItem: GridsterItemComponent;
   private gridster: GridsterComponent;
-  private tryPattern: Object;
+  private tryPattern: {
+    fromEast: Function,
+    fromWest: Function,
+    fromNorth: Function,
+    fromSouth: Function,
+    [key: string]: Function
+  };
   public fromSouth: string;
   public fromNorth: string;
   public fromEast: string;
@@ -33,7 +39,7 @@ export class GridsterPushResize {
     this.fromWest = 'fromWest';
   }
 
-  pushItems(direction): void {
+  pushItems(direction: string): void {
     if (this.gridster.$options.pushResizeItems) {
       this.push(this.gridsterItem, direction);
     }
@@ -151,10 +157,10 @@ export class GridsterPushResize {
       this.pushedItems.push(gridsterItem);
       this.pushedItemsPath.push([
         {
-          x: gridsterItem.item.x,
-          y: gridsterItem.item.y,
-          cols: gridsterItem.item.cols,
-          rows: gridsterItem.item.rows
+          x: gridsterItem.item.x || 0,
+          y: gridsterItem.item.y || 0,
+          cols: gridsterItem.item.cols || 0,
+          rows: gridsterItem.item.rows || 0
         },
         {
           x: gridsterItem.$item.x,
@@ -197,7 +203,7 @@ export class GridsterPushResize {
   private checkPushedItem(pushedItem: GridsterItemComponent, i: number): boolean {
     const path = this.pushedItemsPath[i];
     let j = path.length - 2;
-    let lastPosition, x, y, cols, rows;
+    let lastPosition: { x: number, y: number, cols: number, rows: number }, x, y, cols, rows;
     for (; j > -1; j--) {
       lastPosition = path[j];
       x = pushedItem.$item.x;

@@ -5,7 +5,7 @@ import {GridsterComponent} from './gridster.component';
 @Injectable()
 export class GridsterUtils {
 
-  static merge(obj1, obj2, properties) {
+  static merge(obj1: any, obj2: any, properties: any) {
     for (const p in obj2) {
       if (obj2.hasOwnProperty(p) && properties.hasOwnProperty(p)) {
         if (typeof obj2[p] === 'object') {
@@ -20,7 +20,7 @@ export class GridsterUtils {
   }
 
   static debounce(func: Function, wait: number) {
-    let timeout;
+    let timeout: any;
     return function () {
       const context = this, args = arguments;
       const later = function () {
@@ -32,14 +32,14 @@ export class GridsterUtils {
     };
   }
 
-  static checkTouchEvent(e): void {
+  static checkTouchEvent(e: any): void {
     if (e.clientX === undefined && e.touches) {
       e.clientX = e.touches[0].clientX;
       e.clientY = e.touches[0].clientY;
     }
   }
 
-  static checkContentClassForEvent(gridster: GridsterComponent, e): boolean {
+  static checkContentClassForEvent(gridster: GridsterComponent, e: any): boolean {
     if (gridster.$options.draggable.ignoreContent) {
       if (!GridsterUtils.checkContentClass(e.target, e.currentTarget, gridster.$options.draggable.dragHandleClass)) {
         return true;
@@ -52,7 +52,7 @@ export class GridsterUtils {
     return false;
   }
 
-  static checkContentClass(target, current, contentClass): boolean {
+  static checkContentClass(target: any, current: any, contentClass: string): boolean {
     if (target === current) {
       return false;
     }

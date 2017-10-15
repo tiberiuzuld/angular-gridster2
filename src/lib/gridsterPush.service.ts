@@ -12,7 +12,13 @@ export class GridsterPush {
   private pushedItemsPath: Array<Array<{ x: number, y: number }>>;
   private gridsterItem: GridsterItemComponent;
   private gridster: GridsterComponent;
-  private tryPattern: Object;
+  private tryPattern: {
+    fromEast: Array<Function>,
+    fromWest: Array<Function>,
+    fromNorth: Array<Function>,
+    fromSouth: Array<Function>,
+    [key: string]: Array<Function>
+  };
   public fromSouth: string;
   public fromNorth: string;
   public fromEast: string;

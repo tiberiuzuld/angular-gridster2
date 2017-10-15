@@ -1,10 +1,8 @@
 {
-  "compileOnSave": false,
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
     "moduleResolution": "node",
-    "sourceMap": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "stripInternal": true,
@@ -12,10 +10,12 @@
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "strictNullChecks": true,
+    "noImplicitAny": true,
+    "inlineSourceMap": true,
+    "inlineSources": true,
     "outDir": "./dist",
-    "rootDir": "./.tmp",
     "lib": [
-      "es2017",
+      "es2015",
       "dom"
     ]
   },
