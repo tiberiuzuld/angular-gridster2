@@ -55,15 +55,19 @@
           var gridsterItemCollision = vm.gridster.checkCollision(pushedBy.$item);
           if (gridsterItemCollision && gridsterItemCollision !== true && gridsterItemCollision.canBeDragged()) {
             var gridsterItemCollide = gridsterItemCollision;
+            var copyCollisionX = gridsterItemCollide.$item.x;
+            var copyCollisionY = gridsterItemCollide.$item.y;
+            var copyX = pushedBy.$item.x;
+            var copyY = pushedBy.$item.y;
             gridsterItemCollide.$item.x = pushedBy.item.x;
             gridsterItemCollide.$item.y = pushedBy.item.y;
             pushedBy.$item.x = gridsterItemCollide.item.x;
             pushedBy.$item.y = gridsterItemCollide.item.y;
             if (vm.gridster.checkCollision(gridsterItemCollide.$item) || vm.gridster.checkCollision(pushedBy.$item)) {
-              pushedBy.$item.x = gridsterItemCollide.$item.x;
-              pushedBy.$item.y = gridsterItemCollide.$item.y;
-              gridsterItemCollide.$item.x = gridsterItemCollide.item.x;
-              gridsterItemCollide.$item.y = gridsterItemCollide.item.y;
+              pushedBy.$item.x = copyX;
+              pushedBy.$item.y = copyY;
+              gridsterItemCollide.$item.x = copyCollisionX;
+              gridsterItemCollide.$item.y = copyCollisionY;
             } else {
               gridsterItemCollide.setSize(true);
               vm.swapedItem = gridsterItemCollide;
