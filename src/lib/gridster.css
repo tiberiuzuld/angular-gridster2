@@ -33,6 +33,6 @@
   display: block;
 }
 
-:host(.mobile) /deep/ gridster-item {
+:host(.mobile) ::ng-deep gridster-item {
   position: relative;
 }

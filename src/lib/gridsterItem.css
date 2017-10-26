@@ -94,7 +94,7 @@
   bottom: 0;
 }
 
-:host /deep/ .gridster-item-content {
+:host ::ng-deep .gridster-item-content {
   -webkit-user-select: auto;
   -moz-user-select: auto;
   -ms-user-select: auto;
