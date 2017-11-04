@@ -2,6 +2,11 @@ angular-gridster2
 ==============
 # Angularjs 1.x version [Demo](http://tiberiuzuld.github.io/angular-gridster2/angularjs)
 
+### Angular 5.x library is [master branch](https://github.com/tiberiuzuld/angular-gridster2/tree/master) 
+### Angular 4.x library is [4.x branch](https://github.com/tiberiuzuld/angular-gridster2/tree/4.x) 
+### Angular 2.x library is [2.4.x branch](https://github.com/tiberiuzuld/angular-gridster2/tree/2.4.x)  
+### AngularJS >=1.5.x library is [1.x branch](https://github.com/tiberiuzuld/angular-gridster2/tree/1.x)
+
 #### Install
 ```bash
   npm install angular-gridster2@1.x --save
