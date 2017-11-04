@@ -102,8 +102,8 @@ export class GridsterResizable {
       - this.margin;
     this.gridster.movingItem = this.gridsterItem.$item;
     this.gridster.previewStyle();
-    this.push = new GridsterPush(this.gridsterItem, this.gridster);
-    this.pushResize = new GridsterPushResize(this.gridsterItem, this.gridster);
+    this.push = new GridsterPush(this.gridsterItem);
+    this.pushResize = new GridsterPushResize(this.gridsterItem);
     this.gridster.dragInProgress = true;
     this.gridster.gridLines.updateGrid();
 

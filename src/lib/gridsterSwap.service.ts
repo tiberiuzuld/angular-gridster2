@@ -9,9 +9,9 @@ export class GridsterSwap {
   private gridsterItem: GridsterItemComponent;
   private gridster: GridsterComponent;
 
-  constructor(gridsterItem: GridsterItemComponent, gridster: GridsterComponent) {
+  constructor(gridsterItem: GridsterItemComponent) {
     this.gridsterItem = gridsterItem;
-    this.gridster = gridster;
+    this.gridster = gridsterItem.gridster;
   }
 
   swapItems(): void {

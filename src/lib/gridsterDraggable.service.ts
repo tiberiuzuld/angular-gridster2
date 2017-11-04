@@ -90,8 +90,8 @@ export class GridsterDraggable {
     this.diffTop = e.clientY + this.offsetTop - this.margin - this.top;
     this.gridster.movingItem = this.gridsterItem.$item;
     this.gridster.previewStyle();
-    this.push = new GridsterPush(this.gridsterItem, this.gridster);
-    this.swap = new GridsterSwap(this.gridsterItem, this.gridster);
+    this.push = new GridsterPush(this.gridsterItem);
+    this.swap = new GridsterSwap(this.gridsterItem);
     this.gridster.dragInProgress = true;
     this.gridster.gridLines.updateGrid();
     this.path.push({x: this.gridsterItem.item.x || 0, y: this.gridsterItem.item.y || 0});

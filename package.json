@@ -1,6 +1,6 @@
 {
   "name": "angular-gridster2",
-  "version": "3.15.3",
+  "version": "3.16.0",
   "license": "MIT",
   "main": "dist/index.js",
   "jsnext:main": "dist/index.js",
@@ -63,7 +63,7 @@
     "@angular/router": "4.4.6",
     "@types/jasmine": "2.6.2",
     "@types/node": "8.0.47",
-    "codelyzer": "3.2.2",
+    "codelyzer": "4.0.1",
     "core-js": "2.5.1",
     "gulp": "3.9.1",
     "gulp-clean": "0.3.2",

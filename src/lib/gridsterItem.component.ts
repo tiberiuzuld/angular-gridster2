@@ -1,14 +1,14 @@
 import {
-        Component,
-        ElementRef,
-        EventEmitter,        
-        Host,
-        Input,
-        OnInit,
-        OnDestroy,
-        Output,
-        Renderer2,
-      } from '@angular/core';
+  Component,
+  ElementRef,
+  EventEmitter,
+  Host,
+  Input,
+  OnInit,
+  OnDestroy,
+  Output,
+  Renderer2,
+} from '@angular/core';
 
 import {GridsterItem} from './gridsterItem.interface';
 import {GridsterComponent} from './gridster.component';

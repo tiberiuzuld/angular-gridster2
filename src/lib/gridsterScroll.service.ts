@@ -11,8 +11,9 @@ let intervalE: number;
 let intervalW: number;
 let intervalN: number;
 let intervalS: number;
-export function scroll(gridsterItem: GridsterItemComponent, e: MouseEvent, lastMouse: any, calculateItemPosition: Function, resize?: boolean,
-                       resizeEventScrollType?: GridsterResizeEventType) {
+
+export function scroll(gridsterItem: GridsterItemComponent, e: MouseEvent, lastMouse: any, calculateItemPosition: Function,
+                       resize?: boolean, resizeEventScrollType?: GridsterResizeEventType) {
   scrollSensitivity = gridsterItem.gridster.$options.scrollSensitivity;
   scrollSpeed = gridsterItem.gridster.$options.scrollSpeed;
   gridsterElement = gridsterItem.gridster.el;
