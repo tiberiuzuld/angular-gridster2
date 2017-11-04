@@ -1,4 +1,14 @@
-import {Component, OnInit, ElementRef, Input, OnDestroy, Renderer, ChangeDetectorRef} from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ElementRef,
+  Input,
+  OnDestroy,
+  Renderer,
+  ChangeDetectorRef,
+  OnChanges,
+  SimpleChanges
+} from '@angular/core';
 import {GridsterConfigService} from './gridsterConfig.constant';
 import {GridsterConfig} from './gridsterConfig.interface';
 import {GridsterUtils} from './gridsterUtils.service';
@@ -14,7 +24,7 @@ import {GridsterItemS} from './gridsterItemS.interface';
   templateUrl: './gridster.html',
   styleUrls: ['./gridster.css']
 })
-export class GridsterComponent implements OnInit, OnDestroy {
+export class GridsterComponent implements OnInit, OnChanges, OnDestroy {
   @Input() options: GridsterConfig;
   calculateLayoutDebounce: Function;
   movingItem: GridsterItemS;
@@ -82,6 +92,12 @@ export class GridsterComponent implements OnInit, OnDestroy {
     this.calculateLayoutDebounce();
     if (this.options.initCallback) {
       this.options.initCallback(this);
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.options) {
+      this.ngOnInit();
     }
   }
 

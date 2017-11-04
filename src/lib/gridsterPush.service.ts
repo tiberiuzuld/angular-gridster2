@@ -4,6 +4,10 @@ import {GridsterComponent} from './gridster.component';
 
 @Injectable()
 export class GridsterPush {
+  public fromSouth: string;
+  public fromNorth: string;
+  public fromEast: string;
+  public fromWest: string;
   private pushedItems: Array<GridsterItemComponent>;
   private pushedItemsTemp: Array<GridsterItemComponent>;
   private pushedItemsTempInit: Array<{ x: number, y: number }>;
@@ -12,18 +16,14 @@ export class GridsterPush {
   private gridsterItem: GridsterItemComponent;
   private gridster: GridsterComponent;
   private tryPattern: Object;
-  public fromSouth: string;
-  public fromNorth: string;
-  public fromEast: string;
-  public fromWest: string;
 
-  constructor(gridsterItem: GridsterItemComponent, gridster: GridsterComponent) {
+  constructor(gridsterItem: GridsterItemComponent) {
     this.pushedItems = [];
     this.pushedItemsTemp = [];
     this.pushedItemsTempInit = [];
     this.pushedItemsPath = [];
     this.gridsterItem = gridsterItem;
-    this.gridster = gridster;
+    this.gridster = gridsterItem.gridster;
     this.tryPattern = {
       fromEast: [this.tryWest, this.trySouth, this.tryNorth, this.tryEast],
       fromWest: [this.tryEast, this.trySouth, this.tryNorth, this.tryWest],
@@ -36,7 +36,7 @@ export class GridsterPush {
     this.fromWest = 'fromWest';
   }
 
-  pushItems(direction: string, disable: boolean): void {
+  pushItems(direction: string, disable?: boolean): void {
     if (this.gridster.$options.pushItems && !disable) {
       this.count = 0;
       if (!this.push(this.gridsterItem, direction)) {
@@ -73,6 +73,19 @@ export class GridsterPush {
     }
     this.pushedItems = [];
     this.pushedItemsPath = [];
+  }
+
+  checkPushBack(): void {
+    let i: number = this.pushedItems.length - 1;
+    let change = false;
+    for (; i > -1; i--) {
+      if (this.checkPushedItem(this.pushedItems[i], i)) {
+        change = true;
+      }
+    }
+    if (change) {
+      this.checkPushBack();
+    }
   }
 
   private push(gridsterItem: GridsterItemComponent, direction: string): boolean {
@@ -214,19 +227,6 @@ export class GridsterPush {
     if (i > -1) {
       this.pushedItems.splice(i, 1);
       this.pushedItemsPath.splice(i, 1);
-    }
-  }
-
-  public checkPushBack(): void {
-    let i: number = this.pushedItems.length - 1;
-    let change = false;
-    for (; i > -1; i--) {
-      if (this.checkPushedItem(this.pushedItems[i], i)) {
-        change = true;
-      }
-    }
-    if (change) {
-      this.checkPushBack();
     }
   }
 

@@ -5,21 +5,21 @@ import {GridsterItem} from './gridsterItem.interface';
 
 @Injectable()
 export class GridsterPushResize {
+  public fromSouth: string;
+  public fromNorth: string;
+  public fromEast: string;
+  public fromWest: string;
   private pushedItems: Array<GridsterItemComponent>;
   private pushedItemsPath: Array<Array<GridsterItem>>;
   private gridsterItem: GridsterItemComponent;
   private gridster: GridsterComponent;
   private tryPattern: Object;
-  public fromSouth: string;
-  public fromNorth: string;
-  public fromEast: string;
-  public fromWest: string;
 
-  constructor(gridsterItem: GridsterItemComponent, gridster: GridsterComponent) {
+  constructor(gridsterItem: GridsterItemComponent) {
     this.pushedItems = [];
     this.pushedItemsPath = [];
     this.gridsterItem = gridsterItem;
-    this.gridster = gridster;
+    this.gridster = gridsterItem.gridster;
     this.tryPattern = {
       fromEast: this.tryWest,
       fromWest: this.tryEast,
@@ -64,6 +64,19 @@ export class GridsterPushResize {
     }
     this.pushedItems = [];
     this.pushedItemsPath = [];
+  }
+
+  checkPushBack(): void {
+    let i: number = this.pushedItems.length - 1;
+    let change = false;
+    for (; i > -1; i--) {
+      if (this.checkPushedItem(this.pushedItems[i], i)) {
+        change = true;
+      }
+    }
+    if (change) {
+      this.checkPushBack();
+    }
   }
 
   private push(gridsterItem: GridsterItemComponent, direction: string): boolean {
@@ -177,19 +190,6 @@ export class GridsterPushResize {
     if (i > -1) {
       this.pushedItems.splice(i, 1);
       this.pushedItemsPath.splice(i, 1);
-    }
-  }
-
-  public checkPushBack(): void {
-    let i: number = this.pushedItems.length - 1;
-    let change = false;
-    for (; i > -1; i--) {
-      if (this.checkPushedItem(this.pushedItems[i], i)) {
-        change = true;
-      }
-    }
-    if (change) {
-      this.checkPushBack();
     }
   }
 
