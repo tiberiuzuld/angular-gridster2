@@ -91,8 +91,8 @@
           vm.gridster.$options.minItemCols) - vm.margin;
         vm.gridster.movingItem = vm.gridsterItem.$item;
         vm.gridster.previewStyle();
-        vm.push = new GridsterPush(vm.gridsterItem, vm.gridster);
-        vm.pushResize = new GridsterPushResize(vm.gridsterItem, vm.gridster);
+        vm.push = new GridsterPush(vm.gridsterItem);
+        vm.pushResize = new GridsterPushResize(vm.gridsterItem);
         vm.gridster.dragInProgress = true;
         vm.gridster.gridLines.updateGrid();
 

@@ -72,8 +72,8 @@
         vm.diffTop = e.clientY + vm.offsetTop - vm.margin - vm.top;
         vm.gridster.movingItem = vm.gridsterItem.$item;
         vm.gridster.previewStyle();
-        vm.push = new GridsterPush(vm.gridsterItem, vm.gridster);
-        vm.swap = new GridsterSwap(vm.gridsterItem, vm.gridster);
+        vm.push = new GridsterPush(vm.gridsterItem);
+        vm.swap = new GridsterSwap(vm.gridsterItem);
         vm.gridster.dragInProgress = true;
         vm.gridster.gridLines.updateGrid();
         vm.path.push({x: vm.gridsterItem.item.x, y: vm.gridsterItem.item.y});

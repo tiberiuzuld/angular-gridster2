@@ -72,6 +72,12 @@
       }
     };
 
+    vm.$onChanges = function (changes) {
+      if (changes.options) {
+        vm.$onInit();
+      }
+    };
+
     vm.resize = function resize() {
       var height;
       var width;

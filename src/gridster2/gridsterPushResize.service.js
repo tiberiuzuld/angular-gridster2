@@ -6,12 +6,12 @@
 
   /** @ngInject */
   function GridsterPushResize() {
-    return function (gridsterItem, gridster) {
+    return function (gridsterItem) {
       var vm = this;
       vm.pushedItems = [];
       vm.pushedItemsPath = [];
       vm.gridsterItem = gridsterItem;
-      vm.gridster = gridster;
+      vm.gridster = gridsterItem.gridster;
 
       vm.fromSouth = 'fromSouth';
       vm.fromNorth = 'fromNorth';

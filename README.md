@@ -150,6 +150,20 @@ var GridsterConfigService = {
     this.options.api.resize(); // call if size of container changes. Grid will auto resize on window resize.
     this.options.api.optionsChanged(); // call on change of options after initialization
     this.options.api.getNextPossiblePosition(item: GridsterItem); // call to get a viable position for item. Returns true if found
+
+// if you want to push items from code use the GridsterPush service
+import {GridsterItemComponent, GridsterPush, GridsterPushResize, GridsterSwap} from 'gridster'
+
+myMethod(gridsterItemComponent: GridsterItemComponent) {
+  const push = new GridsterPush(gridsterItemComponent); // init the service
+  gridsterItemComponent.$item.rows += 1; // move your item
+  push.pushItems(push.fromEast);  // push items from a direction
+  push.setPushedItems(); // save the items pushed
+  push.restoreItems(); // restore to initial state the pushed items
+  push.checkPushBack(); // check for items restore to original position
+  
+  // same for GridsterPushResize and GridsterSwap
+}
 ```
 
 ##### Gridster item options:

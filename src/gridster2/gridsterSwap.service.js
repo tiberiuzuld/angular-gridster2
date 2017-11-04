@@ -3,11 +3,11 @@
 
   angular.module('angular-gridster2')
     .service('GridsterSwap', function () {
-      return function (gridsterItem, gridster) {
+      return function (gridsterItem) {
         var vm = this;
         vm.swapedItem = undefined;
         vm.gridsterItem = gridsterItem;
-        vm.gridster = gridster;
+        vm.gridster = gridsterItem.gridster;
 
         vm.swapItems = function () {
           if (vm.gridster.$options.swap) {
