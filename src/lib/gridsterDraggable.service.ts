@@ -249,7 +249,6 @@ export class GridsterDraggable {
     }
 
     function cancelDrag() {
-      console.log(arguments);
       clearTimeout(timeout);
       cancelOnBlur();
       cancelMouse();
