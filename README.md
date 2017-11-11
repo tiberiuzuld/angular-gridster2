@@ -15,7 +15,7 @@ angular-gridster2
 
 ## Install
 
-``npm install angular-gridster2 --save``
+``npm install angular-gridster2@2.4.x --save``
 
 Should work out of the box with webpack, respectively angular-cli.
 
