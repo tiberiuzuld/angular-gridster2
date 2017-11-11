@@ -66,6 +66,7 @@
         vm.dragStopFunction = vm.dragStop.bind(vm);
         document.addEventListener('mousemove', vm.dragFunction);
         document.addEventListener('mouseup', vm.dragStopFunction);
+        window.addEventListener('blur', vm.dragStopFunction);
         vm.gridster.el.addEventListener('touchmove', vm.dragFunction);
         document.addEventListener('touchend', vm.dragStopFunction);
         document.addEventListener('touchcancel', vm.dragStopFunction);
@@ -147,6 +148,7 @@
         GridsterScroll.cancelScroll();
         document.removeEventListener('mousemove', vm.dragFunction);
         document.removeEventListener('mouseup', vm.dragStopFunction);
+        window.removeEventListener('blur', vm.dragStopFunction);
         vm.gridster.el.removeEventListener('touchmove', vm.dragFunction);
         document.removeEventListener('touchend', vm.dragStopFunction);
         document.removeEventListener('touchcancel', vm.dragStopFunction);
@@ -364,6 +366,7 @@
           cancelDrag();
         }, vm.gridster.$options.resizable.delayStart);
         document.addEventListener('mouseup', cancelDrag);
+        window.addEventListener('blur', cancelDrag);
         document.addEventListener('touchmove', cancelMove);
         document.addEventListener('touchend', cancelDrag);
         document.addEventListener('touchcancel', cancelDrag);
@@ -377,6 +380,7 @@
 
         function cancelDrag() {
           clearTimeout(timeout);
+          window.removeEventListener('blur', cancelDrag);
           document.removeEventListener('mouseup', cancelDrag);
           document.removeEventListener('touchmove', cancelMove);
           document.removeEventListener('touchend', cancelDrag);
