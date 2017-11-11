@@ -4,18 +4,15 @@ mat-sidenav-container {
   height: 100%;
 }
 
-mat-sidenav .row, mat-sidenav .mat-headline {
-  padding: 5px;
-}
-
 mat-sidenav {
   overflow-x: hidden;
   display: grid;
+  grid-gap: 8px;
   grid-template-columns: 1fr 1fr;
   width: 50%;
   max-width: 600px;
   min-width: 400px;
-  padding: 5px;
+  padding: 8px;
   align-items: center;
 }
 

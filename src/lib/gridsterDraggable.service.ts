@@ -34,6 +34,7 @@ export class GridsterDraggable {
   dragStopFunction: (event: any) => void;
   mousemove: Function;
   mouseup: Function;
+  cancelOnBlur: Function;
   touchmove: Function;
   touchend: Function;
   touchcancel: Function;
@@ -75,6 +76,7 @@ export class GridsterDraggable {
 
     this.mousemove = this.gridsterItem.renderer.listen('document', 'mousemove', this.dragFunction);
     this.mouseup = this.gridsterItem.renderer.listen('document', 'mouseup', this.dragStopFunction);
+    this.cancelOnBlur = this.gridsterItem.renderer.listen('window', 'blur', this.dragStopFunction);
     this.touchmove = this.gridster.renderer.listen(this.gridster.el, 'touchmove', this.dragFunction);
     this.touchend = this.gridsterItem.renderer.listen('document', 'touchend', this.dragStopFunction);
     this.touchcancel = this.gridsterItem.renderer.listen('document', 'touchcancel', this.dragStopFunction);
@@ -123,6 +125,7 @@ export class GridsterDraggable {
     e.preventDefault();
 
     cancelScroll();
+    this.cancelOnBlur();
     this.mousemove();
     this.mouseup();
     this.touchmove();
@@ -233,6 +236,7 @@ export class GridsterDraggable {
       cancelDrag();
     }, this.gridster.$options.draggable.delayStart);
     const cancelMouse = this.gridsterItem.renderer.listen('document', 'mouseup', cancelDrag);
+    const cancelOnBlur = this.gridsterItem.renderer.listen('window', 'blur', cancelDrag);
     const cancelTouchMove = this.gridsterItem.renderer.listen('document', 'touchmove', cancelMove);
     const cancelTouchEnd = this.gridsterItem.renderer.listen('document', 'touchend', cancelDrag);
     const cancelTouchCancel = this.gridsterItem.renderer.listen('document', 'touchcancel', cancelDrag);
@@ -245,7 +249,9 @@ export class GridsterDraggable {
     }
 
     function cancelDrag() {
+      console.log(arguments);
       clearTimeout(timeout);
+      cancelOnBlur();
       cancelMouse();
       cancelTouchMove();
       cancelTouchEnd();
