@@ -1,6 +1,6 @@
 {
   "name": "angular-gridster2",
-  "version": "2.4.16",
+  "version": "2.4.17",
   "license": "MIT",
   "main": "dist/index.js",
   "jsnext:main": "dist/index.js",

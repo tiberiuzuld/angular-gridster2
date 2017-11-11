@@ -23,6 +23,7 @@ export class GridsterResizable {
   resizeEnabled: boolean;
   mousemove: Function;
   mouseup: Function;
+  cancelOnBlur: Function;
   touchmove: Function;
   touchend: Function;
   touchcancel: Function;
@@ -57,7 +58,7 @@ export class GridsterResizable {
     this.resizeEventScrollType = {w: false, e: false, n: false, s: false};
   }
 
-  dragStart(e): void {
+  dragStart(e: any): void {
     switch (e.which) {
       case 1:
         // left mouse button
@@ -76,6 +77,7 @@ export class GridsterResizable {
     this.dragStopFunction = this.dragStop.bind(this);
     this.mousemove = this.gridsterItem.renderer.listenGlobal('document', 'mousemove', this.dragFunction);
     this.mouseup = this.gridsterItem.renderer.listenGlobal('document', 'mouseup', this.dragStopFunction);
+    this.cancelOnBlur = this.gridsterItem.renderer.listenGlobal('window', 'blur', this.dragStopFunction);
     this.touchmove = this.gridster.renderer.listen(this.gridster.el, 'touchmove', this.dragFunction);
     this.touchend = this.gridsterItem.renderer.listenGlobal('document', 'touchend', this.dragStopFunction);
     this.touchcancel = this.gridsterItem.renderer.listenGlobal('document', 'touchcancel', this.dragStopFunction);
@@ -137,7 +139,7 @@ export class GridsterResizable {
     }
   }
 
-  dragMove(e): void {
+  dragMove(e: any): void {
     e.stopPropagation();
     e.preventDefault();
     GridsterUtils.checkTouchEvent(e);
@@ -151,12 +153,13 @@ export class GridsterResizable {
     this.gridster.gridLines.updateGrid();
   }
 
-  dragStop(e): void {
+  dragStop(e: any): void {
     e.stopPropagation();
     e.preventDefault();
     cancelScroll();
     this.mousemove();
     this.mouseup();
+    this.cancelOnBlur();
     this.touchmove();
     this.touchend();
     this.touchcancel();
@@ -192,7 +195,7 @@ export class GridsterResizable {
     this.pushResize.setPushedItems();
   }
 
-  handleN(e): void {
+  handleN(e: any): void {
     this.top = e.clientY + this.offsetTop - this.margin - this.diffTop;
     this.height = this.bottom - this.top;
     if (this.minHeight > this.height) {
@@ -226,7 +229,7 @@ export class GridsterResizable {
     this.gridsterItem.renderer.setElementStyle(this.gridsterItem.el, 'height', this.height + 'px');
   }
 
-  handleW(e): void {
+  handleW(e: any): void {
     this.left = e.clientX + this.offsetLeft - this.margin - this.diffLeft;
     this.width = this.right - this.left;
     if (this.minWidth > this.width) {
@@ -260,7 +263,7 @@ export class GridsterResizable {
     this.gridsterItem.renderer.setElementStyle(this.gridsterItem.el, 'width', this.width + 'px');
   }
 
-  handleS(e): void {
+  handleS(e: any): void {
     this.height = e.clientY + this.offsetTop - this.margin - this.diffBottom - this.top;
     if (this.minHeight > this.height) {
       this.height = this.minHeight;
@@ -287,7 +290,7 @@ export class GridsterResizable {
     this.gridsterItem.renderer.setElementStyle(this.gridsterItem.el, 'height', this.height + 'px');
   }
 
-  handleE(e): void {
+  handleE(e: any): void {
     this.width = e.clientX + this.offsetLeft - this.margin - this.diffRight - this.left;
     if (this.minWidth > this.width) {
       this.width = this.minWidth;
@@ -314,22 +317,22 @@ export class GridsterResizable {
     this.gridsterItem.renderer.setElementStyle(this.gridsterItem.el, 'width', this.width + 'px');
   }
 
-  handleNW(e): void {
+  handleNW(e: any): void {
     this.handleN(e);
     this.handleW(e);
   }
 
-  handleNE(e): void {
+  handleNE(e: any): void {
     this.handleN(e);
     this.handleE(e);
   }
 
-  handleSW(e): void {
+  handleSW(e: any): void {
     this.handleS(e);
     this.handleW(e);
   }
 
-  handleSE(e): void {
+  handleSE(e: any): void {
     this.handleS(e);
     this.handleE(e);
   }
@@ -338,7 +341,7 @@ export class GridsterResizable {
     this.resizeEnabled = this.gridsterItem.canBeResized();
   }
 
-  dragStartDelay(e): void {
+  dragStartDelay(e: any): void {
     GridsterUtils.checkTouchEvent(e);
     if (!this.gridster.$options.resizable.delayStart) {
       this.dragStart(e);
@@ -348,13 +351,13 @@ export class GridsterResizable {
       this.dragStart(e);
       cancelDrag();
     }, this.gridster.$options.resizable.delayStart);
-    GridsterUtils.checkTouchEvent(e);
     const cancelMouse = this.gridsterItem.renderer.listenGlobal('document', 'mouseup', cancelDrag);
+    const cancelOnBlur = this.gridsterItem.renderer.listen('window', 'blur', cancelDrag);
     const cancelTouchMove = this.gridsterItem.renderer.listenGlobal('document', 'touchmove', cancelMove);
     const cancelTouchEnd = this.gridsterItem.renderer.listenGlobal('document', 'touchend', cancelDrag);
     const cancelTouchCancel = this.gridsterItem.renderer.listenGlobal('document', 'touchcancel', cancelDrag);
 
-    function cancelMove(eventMove) {
+    function cancelMove(eventMove: any) {
       GridsterUtils.checkTouchEvent(eventMove);
       if (Math.abs(eventMove.clientX - e.clientX) > 9 || Math.abs(eventMove.clientY - e.clientY) > 9) {
         cancelDrag();
@@ -363,6 +366,7 @@ export class GridsterResizable {
 
     function cancelDrag() {
       clearTimeout(timeout);
+      cancelOnBlur();
       cancelMouse();
       cancelTouchMove();
       cancelTouchEnd();
