@@ -88,11 +88,11 @@
 
   angular.module('angular-gridster2')
     .service('GridsterSwap', function () {
-      return function (gridsterItem, gridster) {
+      return function (gridsterItem) {
         var vm = this;
         vm.swapedItem = undefined;
         vm.gridsterItem = gridsterItem;
-        vm.gridster = gridster;
+        vm.gridster = gridsterItem.gridster;
 
         vm.swapItems = function () {
           if (vm.gridster.$options.swap) {
@@ -376,6 +376,7 @@
         vm.dragStopFunction = vm.dragStop.bind(vm);
         document.addEventListener('mousemove', vm.dragFunction);
         document.addEventListener('mouseup', vm.dragStopFunction);
+        window.addEventListener('blur', vm.dragStopFunction);
         vm.gridster.el.addEventListener('touchmove', vm.dragFunction);
         document.addEventListener('touchend', vm.dragStopFunction);
         document.addEventListener('touchcancel', vm.dragStopFunction);
@@ -401,8 +402,8 @@
           vm.gridster.$options.minItemCols) - vm.margin;
         vm.gridster.movingItem = vm.gridsterItem.$item;
         vm.gridster.previewStyle();
-        vm.push = new GridsterPush(vm.gridsterItem, vm.gridster);
-        vm.pushResize = new GridsterPushResize(vm.gridsterItem, vm.gridster);
+        vm.push = new GridsterPush(vm.gridsterItem);
+        vm.pushResize = new GridsterPushResize(vm.gridsterItem);
         vm.gridster.dragInProgress = true;
         vm.gridster.gridLines.updateGrid();
 
@@ -457,6 +458,7 @@
         GridsterScroll.cancelScroll();
         document.removeEventListener('mousemove', vm.dragFunction);
         document.removeEventListener('mouseup', vm.dragStopFunction);
+        window.removeEventListener('blur', vm.dragStopFunction);
         vm.gridster.el.removeEventListener('touchmove', vm.dragFunction);
         document.removeEventListener('touchend', vm.dragStopFunction);
         document.removeEventListener('touchcancel', vm.dragStopFunction);
@@ -674,6 +676,7 @@
           cancelDrag();
         }, vm.gridster.$options.resizable.delayStart);
         document.addEventListener('mouseup', cancelDrag);
+        window.addEventListener('blur', cancelDrag);
         document.addEventListener('touchmove', cancelMove);
         document.addEventListener('touchend', cancelDrag);
         document.addEventListener('touchcancel', cancelDrag);
@@ -687,6 +690,7 @@
 
         function cancelDrag() {
           clearTimeout(timeout);
+          window.removeEventListener('blur', cancelDrag);
           document.removeEventListener('mouseup', cancelDrag);
           document.removeEventListener('touchmove', cancelMove);
           document.removeEventListener('touchend', cancelDrag);
@@ -705,12 +709,12 @@
 
   /** @ngInject */
   function GridsterPushResize() {
-    return function (gridsterItem, gridster) {
+    return function (gridsterItem) {
       var vm = this;
       vm.pushedItems = [];
       vm.pushedItemsPath = [];
       vm.gridsterItem = gridsterItem;
-      vm.gridster = gridster;
+      vm.gridster = gridsterItem.gridster;
 
       vm.fromSouth = 'fromSouth';
       vm.fromNorth = 'fromNorth';
@@ -927,7 +931,7 @@
 
   /** @ngInject */
   function GridsterPush() {
-    return function (gridsterItem, gridster) {
+    return function (gridsterItem) {
       var vm = this;
 
       vm.pushedItems = [];
@@ -935,7 +939,7 @@
       vm.pushedItemsTemp = [];
       vm.pushedItemsTempInit = [];
       vm.gridsterItem = gridsterItem;
-      vm.gridster = gridster;
+      vm.gridster = gridsterItem.gridster;
       vm.fromSouth = 'fromSouth';
       vm.fromNorth = 'fromNorth';
       vm.fromEast = 'fromEast';
@@ -1639,6 +1643,7 @@
 
         document.addEventListener('mousemove', vm.dragFunction);
         document.addEventListener('mouseup', vm.dragStopFunction);
+        window.addEventListener('blur', vm.dragStopFunction);
         vm.gridster.el.addEventListener('touchmove', vm.dragFunction);
         document.addEventListener('touchend', vm.dragStopFunction);
         document.addEventListener('touchcancel', vm.dragStopFunction);
@@ -1654,8 +1659,8 @@
         vm.diffTop = e.clientY + vm.offsetTop - vm.margin - vm.top;
         vm.gridster.movingItem = vm.gridsterItem.$item;
         vm.gridster.previewStyle();
-        vm.push = new GridsterPush(vm.gridsterItem, vm.gridster);
-        vm.swap = new GridsterSwap(vm.gridsterItem, vm.gridster);
+        vm.push = new GridsterPush(vm.gridsterItem);
+        vm.swap = new GridsterSwap(vm.gridsterItem);
         vm.gridster.dragInProgress = true;
         vm.gridster.gridLines.updateGrid();
         vm.path.push({x: vm.gridsterItem.item.x, y: vm.gridsterItem.item.y});
@@ -1688,6 +1693,7 @@
         GridsterScroll.cancelScroll();
         document.removeEventListener('mousemove', vm.dragFunction);
         document.removeEventListener('mouseup', vm.dragStopFunction);
+        window.removeEventListener('blur', vm.dragStopFunction);
         vm.gridster.el.removeEventListener('touchmove', vm.dragFunction);
         document.removeEventListener('touchend', vm.dragStopFunction);
         document.removeEventListener('touchcancel', vm.dragStopFunction);
@@ -1805,6 +1811,7 @@
           cancelDrag();
         }, vm.gridster.$options.draggable.delayStart);
         document.addEventListener('mouseup', cancelDrag);
+        window.addEventListener('blur', cancelDrag);
         document.addEventListener('touchmove', cancelMove);
         document.addEventListener('touchend', cancelDrag);
         document.addEventListener('touchcancel', cancelDrag);
@@ -1819,6 +1826,7 @@
         function cancelDrag() {
           clearTimeout(timeout);
           document.removeEventListener('mouseup', cancelDrag);
+          window.removeEventListener('blur', cancelDrag);
           document.removeEventListener('touchmove', cancelMove);
           document.removeEventListener('touchend', cancelDrag);
           document.removeEventListener('touchcancel', cancelDrag);
@@ -2080,6 +2088,12 @@
       }
     };
 
+    vm.$onChanges = function (changes) {
+      if (changes.options) {
+        vm.$onInit();
+      }
+    };
+
     vm.resize = function resize() {
       var height;
       var width;
@@ -2207,20 +2221,20 @@
         removeClass2 = 'scrollVertical';
         removeClass3 = 'fixed';
       } else if (vm.$options.gridType === 'fixed') {
-        vm.curColWidth = vm.$options.fixedColWidth;
-        vm.curRowHeight = vm.$options.fixedRowHeight;
+        vm.curColWidth = vm.$options.fixedColWidth + vm.$options.margin;
+        vm.curRowHeight = vm.$options.fixedRowHeight + vm.$options.margin;
         addClass = 'fixed';
         removeClass1 = 'fit';
         removeClass2 = 'scrollVertical';
         removeClass3 = 'scrollHorizontal';
       } else if (vm.$options.gridType === 'verticalFixed') {
-        vm.curRowHeight = vm.$options.fixedRowHeight;
+        vm.curRowHeight = vm.$options.fixedRowHeight + vm.$options.margin;
         addClass = 'scrollVertical';
         removeClass1 = 'fit';
         removeClass2 = 'scrollHorizontal';
         removeClass3 = 'fixed';
       } else if (vm.$options.gridType === 'horizontalFixed') {
-        vm.curColWidth = vm.$options.fixedColWidth;
+        vm.curColWidth = vm.$options.fixedColWidth + vm.$options.margin;
         addClass = 'scrollHorizontal';
         removeClass1 = 'fit';
         removeClass2 = 'scrollVertical';
