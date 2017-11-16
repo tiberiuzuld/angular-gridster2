@@ -205,20 +205,20 @@
         removeClass2 = 'scrollVertical';
         removeClass3 = 'fixed';
       } else if (vm.$options.gridType === 'fixed') {
-        vm.curColWidth = vm.$options.fixedColWidth;
-        vm.curRowHeight = vm.$options.fixedRowHeight;
+        vm.curColWidth = vm.$options.fixedColWidth + vm.$options.margin;
+        vm.curRowHeight = vm.$options.fixedRowHeight + vm.$options.margin;
         addClass = 'fixed';
         removeClass1 = 'fit';
         removeClass2 = 'scrollVertical';
         removeClass3 = 'scrollHorizontal';
       } else if (vm.$options.gridType === 'verticalFixed') {
-        vm.curRowHeight = vm.$options.fixedRowHeight;
+        vm.curRowHeight = vm.$options.fixedRowHeight + vm.$options.margin;
         addClass = 'scrollVertical';
         removeClass1 = 'fit';
         removeClass2 = 'scrollHorizontal';
         removeClass3 = 'fixed';
       } else if (vm.$options.gridType === 'horizontalFixed') {
-        vm.curColWidth = vm.$options.fixedColWidth;
+        vm.curColWidth = vm.$options.fixedColWidth + vm.$options.margin;
         addClass = 'scrollHorizontal';
         removeClass1 = 'fit';
         removeClass2 = 'scrollVertical';
