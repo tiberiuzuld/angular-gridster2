@@ -180,6 +180,14 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   setGridDimensions(): void {
+    this.setGridSize();
+    if (!this.mobile && this.$options.mobileBreakpoint > this.curWidth) {
+      this.mobile = !this.mobile;
+      this.renderer.setElementClass(this.el, 'mobile', true);
+    } else if (this.mobile && this.$options.mobileBreakpoint < this.curWidth) {
+      this.mobile = !this.mobile;
+      this.renderer.setElementClass(this.el, 'mobile', false);
+    }
     let rows = this.$options.minRows, columns = this.$options.minCols;
 
     let widgetsIndex = this.grid.length - 1;
@@ -251,13 +259,6 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy {
     this.renderer.setElementClass(this.el, removeClass2, false);
     this.renderer.setElementClass(this.el, removeClass3, false);
 
-    if (!this.mobile && this.$options.mobileBreakpoint > this.curWidth) {
-      this.mobile = !this.mobile;
-      this.renderer.setElementClass(this.el, 'mobile', true);
-    } else if (this.mobile && this.$options.mobileBreakpoint < this.curWidth) {
-      this.mobile = !this.mobile;
-      this.renderer.setElementClass(this.el, 'mobile', false);
-    }
     this.gridLines.updateGrid();
 
     let widgetsIndex: number = this.grid.length - 1, widget: GridsterItemComponent;
