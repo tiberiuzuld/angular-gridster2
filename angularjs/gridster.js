@@ -2175,6 +2175,14 @@
     };
 
     vm.setGridDimensions = function setGridDimensions() {
+      vm.setGridSize();
+      if (!vm.mobile && vm.$options.mobileBreakpoint > vm.curWidth) {
+        vm.mobile = !vm.mobile;
+        $element.addClass('mobile');
+      } else if (vm.mobile && vm.$options.mobileBreakpoint < vm.curWidth) {
+        vm.mobile = !vm.mobile;
+        $element.removeClass('mobile');
+      }
       var rows = vm.$options.minRows, columns = vm.$options.minCols;
 
       var widgetsIndex = vm.grid.length - 1;
@@ -2245,13 +2253,6 @@
       $element.removeClass(removeClass2);
       $element.removeClass(removeClass3);
 
-      if (!vm.mobile && vm.$options.mobileBreakpoint > vm.curWidth) {
-        vm.mobile = !vm.mobile;
-        $element.addClass('mobile');
-      } else if (vm.mobile && vm.$options.mobileBreakpoint < vm.curWidth) {
-        vm.mobile = !vm.mobile;
-        $element.removeClass('mobile');
-      }
       if (vm.gridLines) {
         vm.gridLines.updateGrid();
       }
