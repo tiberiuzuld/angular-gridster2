@@ -58,6 +58,7 @@ export class GridsterItemComponent implements OnInit, OnDestroy {
       initCallback: undefined,
       dragEnabled: undefined,
       resizeEnabled: undefined,
+      compactEnabled: undefined,
       maxItemRows: undefined,
       minItemRows: undefined,
       maxItemCols: undefined,
