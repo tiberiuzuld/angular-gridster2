@@ -30,6 +30,9 @@ export class GridsterCompact {
     const l = this.gridster.grid.length;
     for (let i = 0; i < l; i++) {
       widget = this.gridster.grid[i];
+      if (widget.$item.compactEnabled === false) {
+        continue;
+      }
       moved = this.moveUpTillCollision(widget);
       if (moved) {
         widgetMovedUp = true;
@@ -59,6 +62,9 @@ export class GridsterCompact {
     const l = this.gridster.grid.length;
     for (let i = 0; i < l; i++) {
       widget = this.gridster.grid[i];
+      if (widget.$item.compactEnabled === false) {
+        continue;
+      }
       moved = this.moveLeftTillCollision(widget);
       if (moved) {
         widgetMovedUp = true;
