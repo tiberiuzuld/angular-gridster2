@@ -45,8 +45,13 @@
 
       function checkTouchEvent(e) {
         if (e.clientX === undefined && e.touches) {
-          e.clientX = e.touches[0].clientX;
-          e.clientY = e.touches[0].clientY;
+          if (e.touches && e.touches.length) {
+            e.clientX = e.touches[0].clientX;
+            e.clientY = e.touches[0].clientY;
+          } else if (e.changedTouches && e.changedTouches.length) {
+            e.clientX = e.changedTouches[0].clientX;
+            e.clientY = e.changedTouches[0].clientY;
+          }
         }
       }
 
@@ -1249,6 +1254,7 @@
       initCallback: undefined,
       dragEnabled: undefined,
       resizeEnabled: undefined,
+      compactEnabled: undefined,
       maxItemRows: undefined,
       minItemRows: undefined,
       maxItemCols: undefined,
@@ -1434,11 +1440,14 @@
         if (gridster.$options.enableEmptyCellClick && !vm.emptyCellClick && gridster.$options.emptyCellClickCallback) {
           vm.emptyCellClick = true;
           gridster.el.addEventListener('click', vm.emptyCellClickCb);
+          gridster.el.addEventListener('touchend', this.emptyCellClickCb);
         } else if (!gridster.$options.enableEmptyCellClick && vm.emptyCellClick) {
           vm.emptyCellClick = false;
           gridster.el.removeEventListener('click', vm.emptyCellClickCb);
+          gridster.el.removeEventListener('touchend', vm.emptyCellClickCb);
         }
-        if (gridster.$options.enableEmptyCellContextMenu && !vm.emptyCellContextMenu && gridster.$options.emptyCellContextMenuCallback) {
+        if (gridster.$options.enableEmptyCellContextMenu && !vm.emptyCellContextMenu &&
+          gridster.$options.emptyCellContextMenuCallback) {
           vm.emptyCellContextMenu = true;
           gridster.el.addEventListener('contextmenu', vm.emptyCellContextMenuCb);
         } else if (!gridster.$options.enableEmptyCellContextMenu && vm.emptyCellContextMenu) {
@@ -1457,9 +1466,11 @@
         if (gridster.$options.enableEmptyCellDrag && !vm.emptyCellDrag && gridster.$options.emptyCellDragCallback) {
           vm.emptyCellDrag = true;
           gridster.el.addEventListener('mousedown', vm.emptyCellMouseDown);
+          gridster.el.addEventListener('touchstart', vm.emptyCellMouseDown);
         } else if (!gridster.$options.enableEmptyCellDrag && vm.emptyCellDrag) {
           vm.emptyCellDrag = false;
           gridster.el.removeEventListener('mousedown', vm.emptyCellMouseDown);
+          gridster.el.removeEventListener('touchstart', vm.emptyCellMouseDown);
         }
       };
       vm.emptyCellClickCb = function (e) {
@@ -1518,7 +1529,9 @@
         gridster.movingItem = item;
         gridster.previewStyle();
         window.addEventListener('mousemove', vm.emptyCellMouseMove);
+        window.addEventListener('touchmove', vm.emptyCellMouseMove);
         window.addEventListener('mouseup', vm.emptyCellMouseUp);
+        window.addEventListener('touchend', vm.emptyCellMouseUp);
       };
 
       vm.emptyCellMouseMove = function (e) {
@@ -1535,7 +1548,9 @@
 
       vm.emptyCellMouseUp = function (e) {
         window.removeEventListener('mousemove', vm.emptyCellMouseMove);
+        window.removeEventListener('touchmove', vm.emptyCellMouseMove);
         window.removeEventListener('mouseup', vm.emptyCellMouseUp);
+        window.removeEventListener('touchend', vm.emptyCellMouseUp);
         var item = vm.getValidItemFromEvent(e, vm.initialItem);
         if (item) {
           gridster.movingItem = item;
@@ -1957,6 +1972,9 @@
         var l = gridster.grid.length;
         for (var i = 0; i < l; i++) {
           widget = gridster.grid[i];
+          if (widget.$item.compactEnabled === false) {
+            continue;
+          }
           moved = vm.moveUpTillCollision(widget);
           if (moved) {
             widgetMovedUp = true;
@@ -1986,6 +2004,9 @@
         var l = gridster.grid.length;
         for (var i = 0; i < l; i++) {
           widget = gridster.grid[i];
+          if (widget.$item.compactEnabled === false) {
+            continue;
+          }
           moved = vm.moveLeftTillCollision(widget);
           if (moved) {
             widgetMovedLeft = true;
