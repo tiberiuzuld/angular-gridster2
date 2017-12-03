@@ -202,6 +202,7 @@ export interface GridsterItem {
   initCallback?: Function; // initialization callback. Argument: GridsterItem, GridsterItemComponent
   dragEnabled?: boolean; // override grid option draggable.enabled
   resizeEnabled?: boolean; // override grid option resizable.enabled
+  compactEnabled?: boolean; // disable compact
   maxItemRows?: number; // override grid option maxItemRows
   minItemRows?: number; // override grid option minItemRows
   maxItemCols?: number; // override grid option maxItemCols

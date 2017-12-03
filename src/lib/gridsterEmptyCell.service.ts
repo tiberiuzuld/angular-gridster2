@@ -8,11 +8,15 @@ import {GridsterItemS} from './gridsterItemS.interface';
 export class GridsterEmptyCell {
   initialItem: GridsterItemS;
   emptyCellClick: Function | null;
+  emptyCellClickTouch: Function | null;
   emptyCellContextMenu: Function | null;
   emptyCellDrop: Function | null;
   emptyCellDrag: Function | null;
+  emptyCellDragTouch: Function | null;
   emptyCellMMove: Function;
+  emptyCellMMoveTouch: Function;
   emptyCellUp: Function;
+  emptyCellUpTouch: Function;
   emptyCellMove: Function | null;
 
   constructor(private gridster: GridsterComponent) {
@@ -21,11 +25,15 @@ export class GridsterEmptyCell {
   updateOptions(): void {
     if (this.gridster.$options.enableEmptyCellClick && !this.emptyCellClick && this.gridster.$options.emptyCellClickCallback) {
       this.emptyCellClick = this.gridster.renderer.listen(this.gridster.el, 'click', this.emptyCellClickCb.bind(this));
-    } else if (!this.gridster.$options.enableEmptyCellClick && this.emptyCellClick) {
+      this.emptyCellClickTouch = this.gridster.renderer.listen(this.gridster.el, 'touchend', this.emptyCellClickCb.bind(this));
+    } else if (!this.gridster.$options.enableEmptyCellClick && this.emptyCellClick && this.emptyCellClickTouch) {
       this.emptyCellClick();
+      this.emptyCellClickTouch();
       this.emptyCellClick = null;
+      this.emptyCellClickTouch = null;
     }
-    if (this.gridster.$options.enableEmptyCellContextMenu && !this.emptyCellContextMenu && this.gridster.$options.emptyCellContextMenuCallback) {
+    if (this.gridster.$options.enableEmptyCellContextMenu && !this.emptyCellContextMenu &&
+      this.gridster.$options.emptyCellContextMenuCallback) {
       this.emptyCellContextMenu = this.gridster.renderer.listen(this.gridster.el, 'contextmenu', this.emptyCellContextMenuCb.bind(this));
     } else if (!this.gridster.$options.enableEmptyCellContextMenu && this.emptyCellContextMenu) {
       this.emptyCellContextMenu();
@@ -42,9 +50,12 @@ export class GridsterEmptyCell {
     }
     if (this.gridster.$options.enableEmptyCellDrag && !this.emptyCellDrag && this.gridster.$options.emptyCellDragCallback) {
       this.emptyCellDrag = this.gridster.renderer.listen(this.gridster.el, 'mousedown', this.emptyCellMouseDown.bind(this));
-    } else if (!this.gridster.$options.enableEmptyCellDrag && this.emptyCellDrag) {
+      this.emptyCellDragTouch = this.gridster.renderer.listen(this.gridster.el, 'touchstart', this.emptyCellMouseDown.bind(this));
+    } else if (!this.gridster.$options.enableEmptyCellDrag && this.emptyCellDrag && this.emptyCellDragTouch) {
       this.emptyCellDrag();
+      this.emptyCellDragTouch();
       this.emptyCellDrag = null;
+      this.emptyCellDragTouch = null;
     }
   }
 
@@ -107,7 +118,9 @@ export class GridsterEmptyCell {
     this.gridster.movingItem = item;
     this.gridster.previewStyle();
     this.emptyCellMMove = this.gridster.renderer.listen('window', 'mousemove', this.emptyCellMouseMove.bind(this));
+    this.emptyCellMMoveTouch = this.gridster.renderer.listen('window', 'touchmove', this.emptyCellMouseMove.bind(this));
     this.emptyCellUp = this.gridster.renderer.listen('window', 'mouseup', this.emptyCellMouseUp.bind(this));
+    this.emptyCellUpTouch = this.gridster.renderer.listen('window', 'touchend', this.emptyCellMouseUp.bind(this));
   }
 
   emptyCellMouseMove(e: any): void {
@@ -124,7 +137,9 @@ export class GridsterEmptyCell {
 
   emptyCellMouseUp(e: any): void {
     this.emptyCellMMove();
+    this.emptyCellMMoveTouch();
     this.emptyCellUp();
+    this.emptyCellUpTouch();
     const item = this.getValidItemFromEvent(e, this.initialItem);
     if (item) {
       this.gridster.movingItem = item;
