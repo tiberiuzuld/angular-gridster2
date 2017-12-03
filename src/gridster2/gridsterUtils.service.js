@@ -32,8 +32,13 @@
 
       function checkTouchEvent(e) {
         if (e.clientX === undefined && e.touches) {
-          e.clientX = e.touches[0].clientX;
-          e.clientY = e.touches[0].clientY;
+          if (e.touches && e.touches.length) {
+            e.clientX = e.touches[0].clientX;
+            e.clientY = e.touches[0].clientY;
+          } else if (e.changedTouches && e.changedTouches.length) {
+            e.clientX = e.changedTouches[0].clientX;
+            e.clientY = e.changedTouches[0].clientY;
+          }
         }
       }
 

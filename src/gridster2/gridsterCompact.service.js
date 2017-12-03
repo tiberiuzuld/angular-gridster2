@@ -29,6 +29,9 @@
         var l = gridster.grid.length;
         for (var i = 0; i < l; i++) {
           widget = gridster.grid[i];
+          if (widget.$item.compactEnabled === false) {
+            continue;
+          }
           moved = vm.moveUpTillCollision(widget);
           if (moved) {
             widgetMovedUp = true;
@@ -58,6 +61,9 @@
         var l = gridster.grid.length;
         for (var i = 0; i < l; i++) {
           widget = gridster.grid[i];
+          if (widget.$item.compactEnabled === false) {
+            continue;
+          }
           moved = vm.moveLeftTillCollision(widget);
           if (moved) {
             widgetMovedLeft = true;

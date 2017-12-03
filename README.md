@@ -99,8 +99,8 @@ var GridsterConfigService = {
   // Arguments: gridsterItem, gridsterItemComponent
   itemInitCallback: undefined,  // callback to call for each item when is initialized.
   // Arguments: gridsterItem, gridsterItemComponent
-  itemRemovedCallback: undefined,  // callback to call for each item when is initialized.
-  // Arguments: gridsterItem, gridsterItemComponent
+  itemRemovedCallback: undefined,  // callback to call for each item when is removed.
+    // Arguments: gridsterItem, gridsterItemComponent
   enableEmptyCellClick: false, // enable empty cell click events
   enableEmptyCellContextMenu: false, // enable empty cell context menu (right click) events
   enableEmptyCellDrop: false, // enable empty cell drop events
@@ -109,9 +109,9 @@ var GridsterConfigService = {
   emptyCellContextMenuCallback: undefined, // empty cell context menu (right click) callback
   emptyCellDropCallback: undefined, // empty cell drag drop callback. HTML5 Drag & Drop
   emptyCellDragCallback: undefined, // empty cell drag and create item like excel cell selection
+  // Arguments: event, gridsterItem{x, y, rows: defaultItemRows, cols: defaultItemCols}
   emptyCellDragMaxCols: 50, // limit empty cell drag max cols
   emptyCellDragMaxRows: 50, // limit empty cell drag max rows
-  // Arguments: event, gridsterItem{x, y, rows: defaultItemRows, cols: defaultItemCols}
   draggable: {
     delayStart: 0, // milliseconds to delay the start of resize, useful for touch interaction
     enabled: false, // enable/disable draggable items
@@ -181,6 +181,7 @@ export interface GridsterItem {
   initCallback?: Function; // initialization callback. Argument: GridsterItem, GridsterItemComponent
   dragEnabled?: boolean; // override grid option draggable.enabled
   resizeEnabled?: boolean; // override grid option resizable.enabled
+  compactEnabled?: boolean; // disable compact
   maxItemRows?: number; // override grid option maxItemRows
   minItemRows?: number; // override grid option minItemRows
   maxItemCols?: number; // override grid option maxItemCols
