@@ -76,8 +76,6 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy {
     this.$options.emptyCellDragCallback = undefined;
     this.emptyCell = new GridsterEmptyCell(this);
     this.compact = new GridsterCompact(this);
-    console.log(this.$options);
-
   }
 
   ngOnInit(): void {
