@@ -168,6 +168,7 @@ export const GridsterConfigService: GridsterConfig = {
   pushResizeItems: false, // on resize of item will shrink adjacent items
   displayGrid: 'onDrag&Resize', // display background grid of rows and columns
   disableWindowResize: false // disable the window on resize listener. This will stop grid to recalculate on window resize.
+  disableWarnings: false // disable console log warnings about misplacements grid items
 };
 ```
 

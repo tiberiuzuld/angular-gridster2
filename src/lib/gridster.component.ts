@@ -76,6 +76,8 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy {
     this.$options.emptyCellDragCallback = undefined;
     this.emptyCell = new GridsterEmptyCell(this);
     this.compact = new GridsterCompact(this);
+    console.log(this.$options);
+
   }
 
   ngOnInit(): void {
@@ -286,8 +288,11 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy {
     if (itemComponent.$item.x === -1 || itemComponent.$item.y === -1) {
       this.autoPositionItem(itemComponent);
     } else if (this.checkCollision(itemComponent.$item)) {
-      console.warn('Can\'t be placed in the bounds of the dashboard, trying to auto position!/n' +
-        JSON.stringify(itemComponent.item, ['cols', 'rows', 'x', 'y']));
+      if(!this.$options.disableWarnings) {
+        console.warn('Can\'t be placed in the bounds of the dashboard, trying to auto position!/n' +
+          JSON.stringify(itemComponent.item, ['cols', 'rows', 'x', 'y']));
+      }
+
       this.autoPositionItem(itemComponent);
     }
     this.grid.push(itemComponent);
@@ -360,8 +365,10 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy {
       itemComponent.itemChanged();
     } else {
       itemComponent.notPlaced = true;
-      console.warn('Can\'t be placed in the bounds of the dashboard!/n' +
-        JSON.stringify(itemComponent.item, ['cols', 'rows', 'x', 'y']));
+      if(!this.$options.disableWarnings) {
+        console.warn('Can\'t be placed in the bounds of the dashboard!/n' +
+          JSON.stringify(itemComponent.item, ['cols', 'rows', 'x', 'y']));
+      }
     }
   }
 
