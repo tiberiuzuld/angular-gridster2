@@ -34,6 +34,7 @@ export interface GridsterConfigS {
   pushResizeItems: boolean;
   displayGrid: displayGrid;
   disableWindowResize: boolean;
+  disableWarnings: boolean;
   enableEmptyCellClick: boolean;
   enableEmptyCellContextMenu: boolean;
   enableEmptyCellDrop: boolean;

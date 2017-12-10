@@ -1,8 +1,4 @@
 :host {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
   box-sizing: border-box;
   z-index: 1;
   position: absolute;
@@ -92,13 +88,6 @@
   height: 10px;
   left: 0;
   bottom: 0;
-}
-
-:host ::ng-deep .gridster-item-content {
-  -webkit-user-select: auto;
-  -moz-user-select: auto;
-  -ms-user-select: auto;
-  user-select: auto;
 }
 
 :host(:hover) .gridster-item-resizable-handler.handle-se {
