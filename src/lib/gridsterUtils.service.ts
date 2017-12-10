@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 
-import {GridsterComponent} from './gridster.component';
+import {GridsterComponentInterface} from './gridster.interface';
 
 @Injectable()
 export class GridsterUtils {
@@ -44,7 +44,7 @@ export class GridsterUtils {
     }
   }
 
-  static checkContentClassForEvent(gridster: GridsterComponent, e: any): boolean {
+  static checkContentClassForEvent(gridster: GridsterComponentInterface, e: any): boolean {
     if (gridster.$options.draggable.ignoreContent) {
       if (!GridsterUtils.checkContentClass(e.target, e.currentTarget, gridster.$options.draggable.dragHandleClass)) {
         return true;

@@ -1,13 +1,4 @@
-import {
-  Component,
-  ChangeDetectorRef,
-  ElementRef,
-  Input,
-  OnChanges,
-  OnInit,
-  OnDestroy,
-  Renderer2, SimpleChanges
-} from '@angular/core';
+import {ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, Renderer2, SimpleChanges} from '@angular/core';
 
 import {GridsterConfigService} from './gridsterConfig.constant';
 import {GridsterConfig} from './gridsterConfig.interface';
@@ -18,13 +9,14 @@ import {GridsterEmptyCell} from './gridsterEmptyCell.service';
 import {GridsterCompact} from './gridsterCompact.service';
 import {GridsterConfigS} from './gridsterConfigS.interface';
 import {GridsterItemS} from './gridsterItemS.interface';
+import {GridsterComponentInterface} from './gridster.interface';
 
 @Component({
   selector: 'gridster',
   templateUrl: './gridster.html',
   styleUrls: ['./gridster.css']
 })
-export class GridsterComponent implements OnInit, OnChanges, OnDestroy {
+export class GridsterComponent implements OnInit, OnChanges, OnDestroy, GridsterComponentInterface {
   @Input() options: GridsterConfig;
   calculateLayoutDebounce: Function;
   movingItem: GridsterItemS;
@@ -44,13 +36,6 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy {
   dragInProgress: boolean;
   emptyCell: GridsterEmptyCell;
   compact: GridsterCompact;
-
-  static checkCollisionTwoItems(item: GridsterItemS, item2: GridsterItemS): boolean {
-    return item.x < item2.x + item2.cols
-      && item.x + item.cols > item2.x
-      && item.y < item2.y + item2.rows
-      && item.y + item.rows > item2.y;
-  }
 
   constructor(el: ElementRef, public renderer: Renderer2, public cdRef: ChangeDetectorRef) {
     this.el = el.nativeElement;
@@ -76,6 +61,13 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy {
     this.$options.emptyCellDragCallback = undefined;
     this.emptyCell = new GridsterEmptyCell(this);
     this.compact = new GridsterCompact(this);
+  }
+
+  static checkCollisionTwoItems(item: GridsterItemS, item2: GridsterItemS): boolean {
+    return item.x < item2.x + item2.cols
+      && item.x + item.cols > item2.x
+      && item.y < item2.y + item2.rows
+      && item.y + item.rows > item2.y;
   }
 
   ngOnInit(): void {
@@ -286,7 +278,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy {
     if (itemComponent.$item.x === -1 || itemComponent.$item.y === -1) {
       this.autoPositionItem(itemComponent);
     } else if (this.checkCollision(itemComponent.$item)) {
-      if(!this.$options.disableWarnings) {
+      if (!this.$options.disableWarnings) {
         console.warn('Can\'t be placed in the bounds of the dashboard, trying to auto position!/n' +
           JSON.stringify(itemComponent.item, ['cols', 'rows', 'x', 'y']));
       }
@@ -363,7 +355,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy {
       itemComponent.itemChanged();
     } else {
       itemComponent.notPlaced = true;
-      if(!this.$options.disableWarnings) {
+      if (!this.$options.disableWarnings) {
         console.warn('Can\'t be placed in the bounds of the dashboard!/n' +
           JSON.stringify(itemComponent.item, ['cols', 'rows', 'x', 'y']));
       }

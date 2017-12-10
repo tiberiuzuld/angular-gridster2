@@ -1,7 +1,4 @@
-import {
-  ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Host,
-  Renderer2
-} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Host, Renderer2} from '@angular/core';
 
 import {GridsterComponent} from './gridster.component';
 
@@ -23,7 +20,8 @@ export class GridsterGridComponent {
   columnsHeight: number;
   rowsWidth: number;
 
-  constructor(el: ElementRef, @Host() gridster: GridsterComponent, public renderer: Renderer2, private cdRef: ChangeDetectorRef) {
+  constructor(el: ElementRef, @Host() gridster: GridsterComponent, public renderer: Renderer2,
+              private cdRef: ChangeDetectorRef) {
     this.el = el.nativeElement;
     this.gridster = gridster;
     this.gridster.gridLines = this;

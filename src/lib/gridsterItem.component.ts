@@ -1,14 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  Host,
-  Input,
-  OnInit,
-  OnDestroy,
-  Output,
-  Renderer2,
-} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Host, Input, OnDestroy, OnInit, Output, Renderer2,} from '@angular/core';
 
 import {GridsterItem} from './gridsterItem.interface';
 import {GridsterComponent} from './gridster.component';
@@ -16,13 +6,14 @@ import {GridsterDraggable} from './gridsterDraggable.service';
 import {GridsterResizable} from './gridsterResizable.service';
 import {GridsterUtils} from './gridsterUtils.service';
 import {GridsterItemS} from './gridsterItemS.interface';
+import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
 
 @Component({
   selector: 'gridster-item',
   templateUrl: './gridsterItem.html',
   styleUrls: ['./gridsterItem.css']
 })
-export class GridsterItemComponent implements OnInit, OnDestroy {
+export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemComponentInterface {
   @Input() item: GridsterItem;
   @Output() itemChange: EventEmitter<GridsterItem> = new EventEmitter();
   @Output() itemResize: EventEmitter<GridsterItem> = new EventEmitter();

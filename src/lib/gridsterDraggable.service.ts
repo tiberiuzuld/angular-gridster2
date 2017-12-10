@@ -1,16 +1,16 @@
 import {Injectable} from '@angular/core';
 
 import {GridsterSwap} from './gridsterSwap.service';
-import {scroll, cancelScroll} from './gridsterScroll.service';
-import {GridsterItemComponent} from './gridsterItem.component';
-import {GridsterComponent} from './gridster.component';
+import {cancelScroll, scroll} from './gridsterScroll.service';
 import {GridsterPush} from './gridsterPush.service';
 import {GridsterUtils} from './gridsterUtils.service';
+import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
+import {GridsterComponentInterface} from './gridster.interface';
 
 @Injectable()
 export class GridsterDraggable {
-  gridsterItem: GridsterItemComponent;
-  gridster: GridsterComponent;
+  gridsterItem: GridsterItemComponentInterface;
+  gridster: GridsterComponentInterface;
   lastMouse: {
     clientX: number,
     clientY: number
@@ -44,7 +44,7 @@ export class GridsterDraggable {
   swap: GridsterSwap;
   path: Array<{ x: number, y: number }>;
 
-  constructor(gridsterItem: GridsterItemComponent, gridster: GridsterComponent) {
+  constructor(gridsterItem: GridsterItemComponentInterface, gridster: GridsterComponentInterface) {
     this.gridsterItem = gridsterItem;
     this.gridster = gridster;
     this.lastMouse = {

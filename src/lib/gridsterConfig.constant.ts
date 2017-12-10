@@ -83,6 +83,6 @@ export const GridsterConfigService: GridsterConfig = {
   pushDirections: {north: true, east: true, south: true, west: true}, // control the directions items are pushed
   pushResizeItems: false, // on resize of item will shrink adjacent items
   displayGrid: 'onDrag&Resize', // display background grid of rows and columns
-  disableWindowResize: false // disable the window on resize listener. This will stop grid to recalculate on window resize.
+  disableWindowResize: false, // disable the window on resize listener. This will stop grid to recalculate on window resize.
   disableWarnings: false // disable console log warnings about misplacements grid items
 };

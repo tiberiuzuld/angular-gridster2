@@ -1,5 +1,5 @@
-import {GridsterItemComponent} from './gridsterItem.component';
 import {GridsterResizeEventType} from './gridsterResizeEventType.interface';
+import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
 
 let scrollSensitivity: number;
 let scrollSpeed: number;
@@ -12,7 +12,7 @@ let intervalW: number;
 let intervalN: number;
 let intervalS: number;
 
-export function scroll(gridsterItem: GridsterItemComponent, e: MouseEvent, lastMouse: any, calculateItemPosition: Function,
+export function scroll(gridsterItem: GridsterItemComponentInterface, e: MouseEvent, lastMouse: any, calculateItemPosition: Function,
                        resize?: boolean, resizeEventScrollType?: GridsterResizeEventType) {
   scrollSensitivity = gridsterItem.gridster.$options.scrollSensitivity;
   scrollSpeed = gridsterItem.gridster.$options.scrollSpeed;

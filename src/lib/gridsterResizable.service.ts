@@ -1,17 +1,17 @@
 import {Injectable} from '@angular/core';
 
-import {GridsterItemComponent} from './gridsterItem.component';
-import {scroll, cancelScroll} from './gridsterScroll.service';
+import {cancelScroll, scroll} from './gridsterScroll.service';
 import {GridsterResizeEventType} from './gridsterResizeEventType.interface';
 import {GridsterPush} from './gridsterPush.service';
-import {GridsterComponent} from './gridster.component';
 import {GridsterUtils} from './gridsterUtils.service';
 import {GridsterPushResize} from './gridsterPushResize.service';
+import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
+import {GridsterComponentInterface} from './gridster.interface';
 
 @Injectable()
 export class GridsterResizable {
-  gridsterItem: GridsterItemComponent;
-  gridster: GridsterComponent;
+  gridsterItem: GridsterItemComponentInterface;
+  gridster: GridsterComponentInterface;
   lastMouse: {
     clientX: number,
     clientY: number
@@ -48,7 +48,7 @@ export class GridsterResizable {
   height: number;
   newPosition: number;
 
-  constructor(gridsterItem: GridsterItemComponent, gridster: GridsterComponent) {
+  constructor(gridsterItem: GridsterItemComponentInterface, gridster: GridsterComponentInterface) {
     this.gridsterItem = gridsterItem;
     this.gridster = gridster;
     this.lastMouse = {

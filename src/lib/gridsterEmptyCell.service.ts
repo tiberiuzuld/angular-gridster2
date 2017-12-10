@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 
-import {GridsterComponent} from './gridster.component';
 import {GridsterUtils} from './gridsterUtils.service';
 import {GridsterItemS} from './gridsterItemS.interface';
+import {GridsterComponentInterface} from './gridster.interface';
 
 @Injectable()
 export class GridsterEmptyCell {
@@ -19,7 +19,7 @@ export class GridsterEmptyCell {
   emptyCellUpTouch: Function;
   emptyCellMove: Function | null;
 
-  constructor(private gridster: GridsterComponent) {
+  constructor(private gridster: GridsterComponentInterface) {
   }
 
   updateOptions(): void {
