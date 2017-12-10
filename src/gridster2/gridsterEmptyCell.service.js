@@ -8,11 +8,16 @@
   function GridsterEmptyCell(GridsterUtils) {
     return function (gridster) {
       var vm = this;
+
+      vm.destroy = function () {
+        delete vm.gridster;
+      };
+
       vm.updateOptions = function () {
         if (gridster.$options.enableEmptyCellClick && !vm.emptyCellClick && gridster.$options.emptyCellClickCallback) {
           vm.emptyCellClick = true;
           gridster.el.addEventListener('click', vm.emptyCellClickCb);
-          gridster.el.addEventListener('touchend', this.emptyCellClickCb);
+          gridster.el.addEventListener('touchend', vm.emptyCellClickCb);
         } else if (!gridster.$options.enableEmptyCellClick && vm.emptyCellClick) {
           vm.emptyCellClick = false;
           gridster.el.removeEventListener('click', vm.emptyCellClickCb);

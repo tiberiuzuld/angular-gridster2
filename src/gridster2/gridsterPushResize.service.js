@@ -18,6 +18,11 @@
       vm.fromEast = 'fromEast';
       vm.fromWest = 'fromWest';
 
+      vm.destroy = function () {
+        delete vm.gridster;
+        delete vm.gridsterItem;
+      };
+
       vm.pushItems = function (direction) {
         if (vm.gridster.$options.pushResizeItems) {
           vm.push(vm.gridsterItem, direction);

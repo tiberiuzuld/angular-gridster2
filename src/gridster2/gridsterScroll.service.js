@@ -26,17 +26,17 @@
         var offsetHeight = gridsterElement.offsetHeight;
         var offsetLeft = gridsterElement.scrollLeft;
         var offsetTop = gridsterElement.scrollTop;
-        var elemTopOffset = gridsterItem.el.offsetTop - offsetTop;
-        var elemBottomOffset = offsetHeight + offsetTop - gridsterItem.el.offsetTop - gridsterItem.el.offsetHeight;
+        var elemTopOffset = gridsterItem.nativeEl.offsetTop - offsetTop;
+        var elemBottomOffset = offsetHeight + offsetTop - gridsterItem.nativeEl.offsetTop - gridsterItem.nativeEl.offsetHeight;
         if (lastMouse.clientY < e.clientY && elemBottomOffset < scrollSensitivity) {
           cancelN();
-          if ((resizeEvent && !resizeEventType.s) || intervalS) {
+          if ((resizeEvent && resizeEventType && !resizeEventType.s) || intervalS) {
             return;
           }
           intervalS = startVertical(1, calculateItemPosition, lastMouse);
         } else if (lastMouse.clientY > e.clientY && offsetTop > 0 && elemTopOffset < scrollSensitivity) {
           cancelS();
-          if ((resizeEvent && !resizeEventType.n) || intervalN) {
+          if ((resizeEvent && resizeEventType &&!resizeEventType.n) || intervalN) {
             return;
           }
           intervalN = startVertical(-1, calculateItemPosition, lastMouse);
@@ -44,17 +44,17 @@
           cancelVertical();
         }
 
-        var elemRightOffset = offsetLeft + offsetWidth - gridsterItem.el.offsetLeft - gridsterItem.el.offsetWidth;
-        var elemLeftOffset = gridsterItem.el.offsetLeft - offsetLeft;
+        var elemRightOffset = offsetLeft + offsetWidth - gridsterItem.nativeEl.offsetLeft - gridsterItem.nativeEl.offsetWidth;
+        var elemLeftOffset = gridsterItem.nativeEl.offsetLeft - offsetLeft;
         if (lastMouse.clientX < e.clientX && elemRightOffset <= scrollSensitivity) {
           cancelW();
-          if ((resizeEvent && !resizeEventType.e) || intervalE) {
+          if ((resizeEvent && resizeEventType && !resizeEventType.e) || intervalE) {
             return;
           }
           intervalE = startHorizontal(1, calculateItemPosition, lastMouse);
         } else if (lastMouse.clientX > e.clientX && offsetLeft > 0 && elemLeftOffset < scrollSensitivity) {
           cancelE();
-          if ((resizeEvent && !resizeEventType.w) || intervalW) {
+          if ((resizeEvent && resizeEventType && !resizeEventType.w) || intervalW) {
             return;
           }
           intervalW = startHorizontal(-1, calculateItemPosition, lastMouse);
@@ -76,7 +76,7 @@
           gridsterElement.scrollTop += sign * scrollSpeed;
           clientY += sign * scrollSpeed;
           calculateItemPosition({clientX: lastMouse.clientX, clientY: clientY});
-        }.bind(this), intervalDuration);
+        }, intervalDuration);
       }
 
       function startHorizontal(sign, calculateItemPosition, lastMouse) {
@@ -88,7 +88,7 @@
           gridsterElement.scrollLeft += sign * scrollSpeed;
           clientX += sign * scrollSpeed;
           calculateItemPosition({clientX: clientX, clientY: lastMouse.clientY});
-        }.bind(this), intervalDuration);
+        }, intervalDuration);
       }
 
       function cancelScroll() {

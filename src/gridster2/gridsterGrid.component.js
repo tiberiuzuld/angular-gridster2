@@ -14,7 +14,7 @@
     var vm = this;
 
     vm.$onInit = function () {
-      vm.gridster.gridLines = this;
+      vm.gridster.gridLines = vm;
       vm.columns = [];
       vm.rows = [];
       vm.height = 0;
@@ -22,6 +22,10 @@
       vm.margin = 0;
       vm.columnsHeight = 0;
       vm.rowsWidth = 0;
+    };
+
+    vm.$onDestroy = function () {
+      delete vm.gridster.gridLines;
     };
 
     vm.updateGrid = function updateGrid() {

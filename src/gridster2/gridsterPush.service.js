@@ -12,7 +12,7 @@
       vm.pushedItems = [];
       vm.pushedItemsPath = [];
       vm.pushedItemsTemp = [];
-      vm.pushedItemsTempInit = [];
+      vm.pushedItemsTempPath = [];
       vm.gridsterItem = gridsterItem;
       vm.gridster = gridsterItem.gridster;
       vm.fromSouth = 'fromSouth';
@@ -20,17 +20,27 @@
       vm.fromEast = 'fromEast';
       vm.fromWest = 'fromWest';
 
+      vm.destroy = function () {
+        delete vm.gridster;
+        delete vm.gridsterItem;
+      };
+
       vm.pushItems = function (direction, disabled) {
         if (vm.gridster.$options.pushItems && !disabled) {
-          vm.count = 0;
+          vm.pushedItemsOrder = [];
           if (!vm.push(vm.gridsterItem, direction)) {
-            var i = vm.pushedItemsTemp.length - 1;
-            for (; i > -1; i--) {
-              vm.removeFromTempPushed(vm.pushedItemsTemp[i]);
-            }
+            vm.restoreTempItems();
           }
+          vm.pushedItemsOrder = [];
           vm.pushedItemsTemp = [];
-          vm.pushedItemsTempInit = [];
+          vm.pushedItemsTempPath = [];
+        }
+      };
+
+      vm.restoreTempItems = function () {
+        var i = vm.pushedItemsTemp.length - 1;
+        for (; i > -1; i--) {
+          vm.removeFromTempPushed(vm.pushedItemsTemp[i]);
         }
       };
 
@@ -61,38 +71,54 @@
       };
 
       vm.push = function (gridsterItem, direction) {
-        if (vm.count > 3000) {
-          return false;
-        } else {
-          vm.count++;
-        }
         if (vm.gridster.checkGridCollision(gridsterItem.$item)) {
           return false;
         }
         var a = vm.gridster.findItemsWithItem(gridsterItem.$item);
-        var i = a.length - 1, itemColision;
+        var i = a.length - 1, itemCollision;
         var makePush = true;
+        var b = [];
         for (; i > -1; i--) {
-          itemColision = a[i];
-          if (itemColision === vm.gridsterItem) {
+          itemCollision = a[i];
+          if (itemCollision === vm.gridsterItem) {
             makePush = false;
             break;
           }
-          if (!itemColision.canBeDragged()) {
+          if (!itemCollision.canBeDragged()) {
             makePush = false;
             break;
           }
-          if (vm.tryPattern[direction][0].call(vm, itemColision, gridsterItem)) {
-            makePush = true;
-          } else if (vm.tryPattern[direction][1].call(vm, itemColision, gridsterItem)) {
-            makePush = true;
-          } else if (vm.tryPattern[direction][2].call(vm, itemColision, gridsterItem)) {
-            makePush = true;
-          } else if (vm.tryPattern[direction][3].call(vm, itemColision, gridsterItem)) {
-            makePush = true;
+          if (vm.pushedItemsTemp.indexOf(itemCollision) > -1) {
+            makePush = false;
+            break;
+          }
+          if (vm.tryPattern[direction][0].call(vm, itemCollision, gridsterItem)) {
+            vm.pushedItemsOrder.push(itemCollision);
+            b.push(itemCollision);
+          } else if (vm.tryPattern[direction][1].call(vm, itemCollision, gridsterItem)) {
+            vm.pushedItemsOrder.push(itemCollision);
+            b.push(itemCollision);
+          } else if (vm.tryPattern[direction][2].call(vm, itemCollision, gridsterItem)) {
+            vm.pushedItemsOrder.push(itemCollision);
+            b.push(itemCollision);
+          } else if (vm.tryPattern[direction][3].call(vm, itemCollision, gridsterItem)) {
+            vm.pushedItemsOrder.push(itemCollision);
+            b.push(itemCollision);
           } else {
             makePush = false;
             break;
+          }
+        }
+        if (!makePush) {
+          i = vm.pushedItemsOrder.lastIndexOf(b[0]);
+          if (i > -1) {
+            var j = vm.pushedItemsOrder.length - 1;
+            for (; j >= i; j--) {
+              itemCollision = vm.pushedItemsOrder[j];
+              vm.pushedItemsOrder.pop();
+              vm.removeFromTempPushed(itemCollision);
+              vm.removeFromPushedItem(itemCollision);
+            }
           }
         }
         return makePush;
@@ -103,14 +129,13 @@
           return false;
         }
         vm.addToTempPushed(gridsterItemCollide);
-        var backUpY = gridsterItemCollide.$item.y;
         gridsterItemCollide.$item.y = gridsterItem.$item.y + gridsterItem.$item.rows;
         if (vm.push(gridsterItemCollide, vm.fromNorth)) {
           gridsterItemCollide.setSize(true);
           vm.addToPushed(gridsterItemCollide);
           return true;
         } else {
-          gridsterItemCollide.$item.y = backUpY;
+          vm.removeFromTempPushed(gridsterItemCollide);
         }
         return false;
       };
@@ -120,14 +145,13 @@
           return false;
         }
         vm.addToTempPushed(gridsterItemCollide);
-        var backUpY = gridsterItemCollide.$item.y;
         gridsterItemCollide.$item.y = gridsterItem.$item.y - gridsterItemCollide.$item.rows;
         if (vm.push(gridsterItemCollide, vm.fromSouth)) {
           gridsterItemCollide.setSize(true);
           vm.addToPushed(gridsterItemCollide);
           return true;
         } else {
-          gridsterItemCollide.$item.y = backUpY;
+          vm.removeFromTempPushed(gridsterItemCollide);
         }
         return false;
       };
@@ -137,14 +161,13 @@
           return false;
         }
         vm.addToTempPushed(gridsterItemCollide);
-        var backUpX = gridsterItemCollide.$item.x;
         gridsterItemCollide.$item.x = gridsterItem.$item.x + gridsterItem.$item.cols;
         if (vm.push(gridsterItemCollide, vm.fromWest)) {
           gridsterItemCollide.setSize(true);
           vm.addToPushed(gridsterItemCollide);
           return true;
         } else {
-          gridsterItemCollide.$item.x = backUpX;
+          vm.removeFromTempPushed(gridsterItemCollide);
         }
         return false;
       };
@@ -154,14 +177,13 @@
           return false;
         }
         vm.addToTempPushed(gridsterItemCollide);
-        var backUpX = gridsterItemCollide.$item.x;
         gridsterItemCollide.$item.x = gridsterItem.$item.x - gridsterItemCollide.$item.cols;
         if (vm.push(gridsterItemCollide, vm.fromEast)) {
           gridsterItemCollide.setSize(true);
           vm.addToPushed(gridsterItemCollide);
           return true;
         } else {
-          gridsterItemCollide.$item.x = backUpX;
+          vm.removeFromTempPushed(gridsterItemCollide);
         }
         return false;
       };
@@ -174,21 +196,27 @@
       };
 
       vm.addToTempPushed = function (gridsterItem) {
-        if (vm.checkInTempPushed(gridsterItem)) {
-          return;
+        var i = vm.pushedItemsTemp.indexOf(gridsterItem);
+        if (i === -1) {
+          i = vm.pushedItemsTemp.push(gridsterItem) - 1;
+          vm.pushedItemsTempPath[i] = [];
         }
-        var l = vm.pushedItemsTemp.push(gridsterItem);
-        vm.pushedItemsTempInit[l - 1] = {x: gridsterItem.$item.x, y: gridsterItem.$item.y};
+        vm.pushedItemsTempPath[i].push({x: gridsterItem.$item.x, y: gridsterItem.$item.y});
       };
 
       vm.removeFromTempPushed = function (gridsterItem) {
         var i = vm.pushedItemsTemp.indexOf(gridsterItem);
-        vm.pushedItemsTemp.splice(i, 1);
-        var initPosition = vm.pushedItemsTempInit[i];
-        gridsterItem.$item.x = initPosition.x;
-        gridsterItem.$item.y = initPosition.y;
+        var tempPosition = vm.pushedItemsTempPath[i].pop();
+        if (!tempPosition) {
+          return;
+        }
+        gridsterItem.$item.x = tempPosition.x;
+        gridsterItem.$item.y = tempPosition.y;
         gridsterItem.setSize(true);
-        vm.pushedItemsTempInit.splice(i, 1);
+        if (!vm.pushedItemsTempPath[i].length) {
+          vm.pushedItemsTemp.splice(i, 1);
+          vm.pushedItemsTempPath.splice(i, 1);
+        }
       };
 
       vm.checkInTempPushed = function (gridsterItem) {
@@ -225,6 +253,17 @@
         }
         if (change) {
           vm.checkPushBack();
+        }
+      };
+
+      vm.removeFromPushedItem = function (gridsterItem) {
+        var i = vm.pushedItems.indexOf(gridsterItem);
+        if (i > -1) {
+          vm.pushedItemsPath[i].pop();
+          if (!vm.pushedItemsPath.length) {
+            vm.pushedItems.splice(i, 1);
+            vm.pushedItemsPath.splice(i, 1);
+          }
         }
       };
 

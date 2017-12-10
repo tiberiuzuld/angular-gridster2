@@ -35,6 +35,15 @@
       };
       vm.path = [];
 
+      vm.destroy = function () {
+        delete vm.gridsterItem;
+        delete vm.gridster;
+        if (vm.mousedown) {
+          vm.gridsterItem.nativeEl.removeEventListener('mousedown', vm.dragStartDelay);
+          vm.gridsterItem.nativeEl.removeEventListener('touchstart', vm.dragStartDelay);
+        }
+      };
+
       vm.dragStart = function (e) {
         switch (e.which) {
           case 1:
@@ -52,8 +61,8 @@
 
         e.stopPropagation();
         e.preventDefault();
-        vm.dragFunction = vm.dragMove.bind(this);
-        vm.dragStopFunction = vm.dragStop.bind(this);
+        vm.dragFunction = vm.dragMove.bind(vm);
+        vm.dragStopFunction = vm.dragStop.bind(vm);
 
         document.addEventListener('mousemove', vm.dragFunction);
         document.addEventListener('mouseup', vm.dragStopFunction);
@@ -86,7 +95,7 @@
         GridsterUtils.checkTouchEvent(e);
         vm.offsetLeft = vm.gridster.el.scrollLeft - vm.gridster.el.offsetLeft;
         vm.offsetTop = vm.gridster.el.scrollTop - vm.gridster.el.offsetTop;
-        GridsterScroll(vm.gridsterItem, e, vm.lastMouse, vm.calculateItemPositionFromMousePosition.bind(this));
+        GridsterScroll(vm.gridsterItem, e, vm.lastMouse, vm.calculateItemPositionFromMousePosition.bind(vm));
 
         vm.calculateItemPositionFromMousePosition(e);
 
@@ -119,7 +128,7 @@
         if (vm.gridster.$options.draggable.stop) {
           var promise = vm.gridster.$options.draggable.stop(vm.gridsterItem.item, vm.gridsterItem, e);
           if (promise && promise.then) {
-            promise.then(vm.makeDrag.bind(this), vm.cancelDrag.bind(this));
+            promise.then(vm.makeDrag.bind(vm), vm.cancelDrag.bind(vm));
           } else {
             vm.makeDrag();
           }
@@ -137,18 +146,22 @@
         vm.gridsterItem.$item.y = vm.gridsterItem.item.y;
         vm.gridsterItem.setSize(true);
         vm.push.restoreItems();
-        vm.push = undefined;
         vm.swap.restoreSwapItem();
-        vm.swap = undefined;
+        vm.push.destroy();
+        delete vm.push;
+        vm.swap.destroy();
+        delete vm.swap;
       };
 
       vm.makeDrag = function () {
         vm.gridsterItem.setSize(true);
         vm.gridsterItem.checkItemChanges(vm.gridsterItem.$item, vm.gridsterItem.item);
         vm.push.setPushedItems();
-        vm.push = undefined;
         vm.swap.setSwapItem();
-        vm.swap = undefined;
+        vm.push.destroy();
+        delete vm.push;
+        vm.swap.destroy();
+        delete vm.swap;
       };
 
       vm.calculateItemPosition = function () {
@@ -198,13 +211,12 @@
         var enableDrag = vm.gridsterItem.canBeDragged();
         if (!vm.enabled && enableDrag) {
           vm.enabled = !vm.enabled;
-          vm.dragStartFunction = vm.dragStartDelay;
-          vm.gridsterItem.nativeEl.addEventListener('mousedown', vm.dragStartFunction);
-          vm.gridsterItem.nativeEl.addEventListener('touchstart', vm.dragStartFunction);
+          vm.gridsterItem.nativeEl.addEventListener('mousedown', vm.dragStartDelay);
+          vm.gridsterItem.nativeEl.addEventListener('touchstart', vm.dragStartDelay);
         } else if (vm.enabled && !enableDrag) {
           vm.enabled = !vm.enabled;
-          vm.gridsterItem.nativeEl.removeEventListener('mousedown', vm.dragStartFunction);
-          vm.gridsterItem.nativeEl.removeEventListener('touchstart', vm.dragStartFunction);
+          vm.gridsterItem.nativeEl.removeEventListener('mousedown', vm.dragStartDelay);
+          vm.gridsterItem.nativeEl.removeEventListener('touchstart', vm.dragStartDelay);
         }
       };
 

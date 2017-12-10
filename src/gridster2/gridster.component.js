@@ -54,19 +54,6 @@
     };
 
     vm.$onInit = function () {
-      vm.emptyCell = new GridsterEmptyCell(vm);
-      vm.compact = new GridsterCompact(vm);
-      vm.setOptions();
-      vm.options.api = {
-        optionsChanged: vm.optionsChanged,
-        resize: vm.onResize,
-        getNextPossiblePosition: vm.getNextPossiblePosition
-      };
-      vm.columns = vm.$options.minCols;
-      vm.rows = vm.$options.minRows;
-      vm.setGridSize();
-      vm.calculateLayoutDebounce = GridsterUtils.debounce(vm.calculateLayout, 5);
-      vm.calculateLayoutDebounce();
       if (vm.options.initCallback) {
         vm.options.initCallback(vm);
       }
@@ -74,7 +61,19 @@
 
     vm.$onChanges = function (changes) {
       if (changes.options) {
-        vm.$onInit();
+        vm.emptyCell = new GridsterEmptyCell(vm);
+        vm.compact = new GridsterCompact(vm);
+        vm.setOptions();
+        vm.options.api = {
+          optionsChanged: vm.optionsChanged,
+          resize: vm.onResize,
+          getNextPossiblePosition: vm.getNextPossiblePosition
+        };
+        vm.columns = vm.$options.minCols;
+        vm.rows = vm.$options.minRows;
+        vm.setGridSize();
+        vm.calculateLayoutDebounce = GridsterUtils.debounce(vm.calculateLayout, 5);
+        vm.calculateLayoutDebounce();
       }
     };
 
@@ -120,6 +119,19 @@
         vm.onResizeFunction = false;
         window.removeEventListener('resize', vm.onResize);
       }
+      if (vm.options.destroyCallback) {
+        vm.options.destroyCallback(vm);
+      }
+      if (vm.options.api) {
+        vm.options.api.resize = undefined;
+        vm.options.api.optionsChanged = undefined;
+        vm.options.api.getNextPossiblePosition = undefined;
+        vm.options.api = undefined;
+      }
+      vm.emptyCell.destroy();
+      delete vm.emptyCell;
+      vm.compact.destroy();
+      delete vm.compact;
     };
 
     vm.onResize = function onResize() {
@@ -181,7 +193,9 @@
 
     vm.calculateLayout = function calculateLayout() {
       // check to compact
-      vm.compact.checkCompact();
+      if (vm.compact) {
+        vm.compact.checkCompact();
+      }
 
       vm.setGridDimensions();
       if (vm.$options.outerMargin) {
@@ -266,8 +280,10 @@
       if (itemComponent.$item.x === undefined || itemComponent.$item.y === undefined) {
         vm.autoPositionItem(itemComponent);
       } else if (vm.checkCollision(itemComponent.$item)) {
-        $log.warn('Can\'t be placed in the bounds of the dashboard, trying to auto position!/n' +
-          JSON.stringify(itemComponent.item, ['cols', 'rows', 'x', 'y']));
+        if (!vm.$options.disableWarnings) {
+          $log.warn('Can\'t be placed in the bounds of the dashboard, trying to auto position!/n' +
+            JSON.stringify(itemComponent.item, ['cols', 'rows', 'x', 'y']));
+        }
         itemComponent.$item.x = undefined;
         itemComponent.$item.y = undefined;
         vm.autoPositionItem(itemComponent);
@@ -342,8 +358,10 @@
         itemComponent.itemChanged();
       } else {
         itemComponent.notPlaced = true;
-        $log.warn('Can\'t be placed in the bounds of the dashboard!/n' +
-          JSON.stringify(itemComponent.item, ['cols', 'rows', 'x', 'y']));
+        if (!vm.$options.disableWarnings) {
+          $log.warn('Can\'t be placed in the bounds of the dashboard!/n' +
+            JSON.stringify(itemComponent.item, ['cols', 'rows', 'x', 'y']));
+        }
       }
     };
 

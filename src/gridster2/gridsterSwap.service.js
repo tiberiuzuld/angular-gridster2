@@ -9,6 +9,12 @@
         vm.gridsterItem = gridsterItem;
         vm.gridster = gridsterItem.gridster;
 
+        vm.destroy = function () {
+          delete vm.gridster;
+          delete vm.gridsterItem;
+          delete vm.swapedItem;
+        };
+
         vm.swapItems = function () {
           if (vm.gridster.$options.swap) {
             vm.checkSwapBack();

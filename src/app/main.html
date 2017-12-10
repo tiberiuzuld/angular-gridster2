@@ -214,7 +214,7 @@
 <md-button class="md-fab md-mini md-primary sidenav-fab" ng-click="main.sidenav.toggle()">
   <md-icon>settings</md-icon>
 </md-button>
-<gridster options="main.options" class="flex">
+<gridster options="main.options" class="flex" ng-if="!main.remove">
   <gridster-item item="item" ng-repeat="item in main.dashboard">
     <div class="button-holder">
       <div class="gridster-item-content" ng-if="item.hasContent">
@@ -229,16 +229,19 @@
         </md-button>
         <md-button class="remove-button md-raised md-icon-button" ng-click="main.removeItem($event, item)"
                    ng-mousedown="main.prevent($event)">
-          <md-icon>clear</md-icon>
+          <md-icon>delete</md-icon>
           <md-tooltip>Remove</md-tooltip>
         </md-button>
       </div>
       <label ng-if="!item.hasContent" ng-bind="::item.label"></label>
       <md-button class="md-icon-button md-fab-mini" ng-if="!item.hasContent" ng-click="main.removeItem($event, item)"
                  ng-mousedown="main.prevent($event)">
-        <md-icon>clear</md-icon>
+        <md-icon>delete</md-icon>
         <md-tooltip>Remove</md-tooltip>
       </md-button>
     </div>
   </gridster-item>
 </gridster>
+<md-button class="md-icon-button md-fab-mini destroy-button" ng-click="main.destroy()">
+  <md-icon>delete</md-icon>
+</md-button>

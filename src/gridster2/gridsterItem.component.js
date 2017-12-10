@@ -58,7 +58,12 @@
     };
 
     vm.$onDestroy = function () {
-      vm.gridster.removeItem(this);
+      vm.gridster.removeItem(vm);
+      delete vm.$item.initCallback;
+      vm.drag.destroy();
+      delete vm.drag;
+      vm.resize.destroy();
+      delete vm.resize;
     };
 
     vm.setSize = function (noCheck) {
@@ -100,7 +105,7 @@
       if (vm.width !== vm.itemWidth || vm.height !== vm.itemHeight) {
         $scope.$broadcast('gridster-item-resize', vm.item);
         if (vm.gridster.$options.itemResizeCallback) {
-          vm.gridster.$options.itemResizeCallback(vm.item, this);
+          vm.gridster.$options.itemResizeCallback(vm.item, vm);
         }
       }
       vm.itemTop = vm.top;
@@ -112,7 +117,7 @@
     vm.itemChanged = function () {
       $scope.$broadcast('gridster-item-change', vm.item);
       if (vm.gridster.$options.itemChangeCallback) {
-        vm.gridster.$options.itemChangeCallback(vm.item, this);
+        vm.gridster.$options.itemChangeCallback(vm.item, vm);
       }
     };
 

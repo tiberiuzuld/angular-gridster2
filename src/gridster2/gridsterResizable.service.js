@@ -47,6 +47,11 @@
         s: false
       };
 
+      vm.destroy = function () {
+        delete vm.gridster;
+        delete vm.gridsterItem;
+      };
+
       vm.dragStart = function (e) {
         switch (e.which) {
           case 1:
@@ -178,18 +183,22 @@
         vm.gridsterItem.$item.y = vm.gridsterItem.item.y;
         vm.gridsterItem.setSize(true);
         vm.push.restoreItems();
-        vm.push = undefined;
         vm.pushResize.restoreItems();
-        vm.pushResize = undefined;
+        vm.push.destroy();
+        delete vm.push;
+        vm.pushResize.destroy();
+        delete vm.pushResize;
       };
 
       vm.makeResize = function () {
         vm.gridsterItem.setSize(true);
         vm.gridsterItem.checkItemChanges(vm.gridsterItem.$item, vm.gridsterItem.item);
         vm.push.setPushedItems();
-        vm.push = undefined;
         vm.pushResize.setPushedItems();
-        vm.pushResize = undefined;
+        vm.push.destroy();
+        delete vm.push;
+        vm.pushResize.destroy();
+        delete vm.pushResize;
       };
 
       vm.handleN = function (e) {

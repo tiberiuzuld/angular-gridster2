@@ -18,6 +18,8 @@
       vm.options = {
         gridType: 'fit',
         compactType: 'none',
+        initCallback: gridInit,
+        destroyCallback: gridDestroy,
         itemChangeCallback: itemChange,
         itemResizeCallback: itemResize,
         itemInitCallback: itemInit,
@@ -66,7 +68,8 @@
         pushDirections: {north: true, east: true, south: true, west: true},
         pushResizeItems: false,
         displayGrid: 'onDrag&Resize',
-        disableWindowResize: false
+        disableWindowResize: false,
+        disableWarnings: false
       };
 
       this.dashboard = [
@@ -121,6 +124,14 @@
       $log.info('itemRemoved', item, itemComponent);
     }
 
+    function gridInit(grid) {
+      $log.info('gridInit', grid);
+    }
+
+    function gridDestroy(grid) {
+      $log.info('gridDestroy', grid);
+    }
+
     vm.prevent = function (event) {
       event.stopPropagation();
       event.preventDefault();
@@ -128,6 +139,10 @@
 
     vm.changedOptions = function changedOptions() {
       vm.options.api.optionsChanged();
-    }
+    };
+
+    vm.destroy = function () {
+      vm.remove = !vm.remove;
+    };
   }
 })();

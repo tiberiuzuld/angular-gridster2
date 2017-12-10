@@ -8,6 +8,11 @@
   function GridsterCompact() {
     return function (gridster) {
       var vm = this;
+
+      vm.destroy = function () {
+        delete vm.gridster;
+      };
+
       vm.checkCompact = function checkCompact() {
         if (gridster.$options.compactType !== 'none') {
           if (gridster.$options.compactType === 'compactUp') {

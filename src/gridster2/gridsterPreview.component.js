@@ -13,10 +13,14 @@
     var vm = this;
 
     vm.$onInit = function () {
-      vm.gridster.previewStyle = vm.previewStyle.bind(this);
+      vm.gridster.previewStyle = vm.previewStyle.bind(vm);
     };
 
-    vm.previewStyle = function() {
+    vm.$onDestroy = function () {
+      delete vm.gridster.previewStyle;
+    };
+
+    vm.previewStyle = function () {
       if (!vm.gridster.movingItem) {
         $element.css('display', 'none');
       } else {
