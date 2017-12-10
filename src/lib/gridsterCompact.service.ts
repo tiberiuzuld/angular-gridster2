@@ -9,6 +9,10 @@ export class GridsterCompact {
   constructor(private gridster: GridsterComponentInterface) {
   }
 
+  destroy(): void {
+    delete this.gridster;
+  }
+
   checkCompact(): void {
     if (this.gridster.$options.compactType !== 'none') {
       if (this.gridster.$options.compactType === 'compactUp') {

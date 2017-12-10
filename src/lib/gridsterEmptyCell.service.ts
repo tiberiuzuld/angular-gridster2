@@ -22,6 +22,10 @@ export class GridsterEmptyCell {
   constructor(private gridster: GridsterComponentInterface) {
   }
 
+  destroy(): void {
+    delete this.gridster;
+  }
+
   updateOptions(): void {
     if (this.gridster.$options.enableEmptyCellClick && !this.emptyCellClick && this.gridster.$options.emptyCellClickCallback) {
       this.emptyCellClick = this.gridster.renderer.listen(this.gridster.el, 'click', this.emptyCellClickCb.bind(this));

@@ -43,6 +43,11 @@ export class GridsterPush {
     this.fromWest = 'fromWest';
   }
 
+  destroy(): void {
+    delete this.gridster;
+    delete this.gridsterItem;
+  }
+
   pushItems(direction: string, disable?: boolean): void {
     if (this.gridster.$options.pushItems && !disable) {
       this.pushedItemsOrder = [];

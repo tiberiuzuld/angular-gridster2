@@ -54,6 +54,15 @@ export class GridsterDraggable {
     this.path = [];
   }
 
+  destroy(): void {
+    delete this.gridsterItem;
+    delete this.gridster;
+    if (this.mousedown) {
+      this.mousedown();
+      this.touchstart();
+    }
+  }
+
   dragStart(e: any): void {
     switch (e.which) {
       case 1:
@@ -153,6 +162,10 @@ export class GridsterDraggable {
     this.gridsterItem.setSize(true);
     this.push.restoreItems();
     this.swap.restoreSwapItem();
+    this.push.destroy();
+    delete this.push;
+    this.swap.destroy();
+    delete this.swap;
   }
 
   makeDrag() {
@@ -160,6 +173,10 @@ export class GridsterDraggable {
     this.gridsterItem.checkItemChanges(this.gridsterItem.$item, this.gridsterItem.item);
     this.push.setPushedItems();
     this.swap.setSwapItem();
+    this.push.destroy();
+    delete this.push;
+    this.swap.destroy();
+    delete this.swap;
   }
 
   calculateItemPosition() {

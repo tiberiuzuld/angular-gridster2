@@ -59,6 +59,11 @@ export class GridsterResizable {
     this.resizeEventScrollType = {w: false, e: false, n: false, s: false};
   }
 
+  destroy(): void {
+    delete this.gridsterItem;
+    delete this.gridster;
+  }
+
   dragStart(e: any): void {
     switch (e.which) {
       case 1:
@@ -187,6 +192,10 @@ export class GridsterResizable {
     this.gridsterItem.setSize(true);
     this.push.restoreItems();
     this.pushResize.restoreItems();
+    this.push.destroy();
+    delete this.push;
+    this.pushResize.destroy();
+    delete this.pushResize;
   }
 
   makeResize(): void {
@@ -194,6 +203,10 @@ export class GridsterResizable {
     this.gridsterItem.checkItemChanges(this.gridsterItem.$item, this.gridsterItem.item);
     this.push.setPushedItems();
     this.pushResize.setPushedItems();
+    this.push.destroy();
+    delete this.push;
+    this.pushResize.destroy();
+    delete this.pushResize;
   }
 
   handleN(e: any): void {

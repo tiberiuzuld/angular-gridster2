@@ -14,6 +14,12 @@ export class GridsterSwap {
     this.gridster = gridsterItem.gridster;
   }
 
+  destroy(): void {
+    delete this.gridster;
+    delete this.gridsterItem;
+    delete this.swapedItem;
+  }
+
   swapItems(): void {
     if (this.gridster.$options.swap) {
       this.checkSwapBack();
