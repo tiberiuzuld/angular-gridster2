@@ -64,7 +64,7 @@
     "@types/jasmine": "2.8.2",
     "@types/node": "8.0.57",
     "codelyzer": "4.0.1",
-    "core-js": "2.5.1",
+    "core-js": "2.5.2",
     "gulp": "3.9.1",
     "gulp-clean": "0.3.2",
     "gulp-inline-ng2-template": "4.0.0",
