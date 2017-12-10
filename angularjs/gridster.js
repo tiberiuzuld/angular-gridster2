@@ -99,6 +99,12 @@
         vm.gridsterItem = gridsterItem;
         vm.gridster = gridsterItem.gridster;
 
+        vm.destroy = function () {
+          delete vm.gridster;
+          delete vm.gridsterItem;
+          delete vm.swapedItem;
+        };
+
         vm.swapItems = function () {
           if (vm.gridster.$options.swap) {
             vm.checkSwapBack();
@@ -197,17 +203,17 @@
         var offsetHeight = gridsterElement.offsetHeight;
         var offsetLeft = gridsterElement.scrollLeft;
         var offsetTop = gridsterElement.scrollTop;
-        var elemTopOffset = gridsterItem.el.offsetTop - offsetTop;
-        var elemBottomOffset = offsetHeight + offsetTop - gridsterItem.el.offsetTop - gridsterItem.el.offsetHeight;
+        var elemTopOffset = gridsterItem.nativeEl.offsetTop - offsetTop;
+        var elemBottomOffset = offsetHeight + offsetTop - gridsterItem.nativeEl.offsetTop - gridsterItem.nativeEl.offsetHeight;
         if (lastMouse.clientY < e.clientY && elemBottomOffset < scrollSensitivity) {
           cancelN();
-          if ((resizeEvent && !resizeEventType.s) || intervalS) {
+          if ((resizeEvent && resizeEventType && !resizeEventType.s) || intervalS) {
             return;
           }
           intervalS = startVertical(1, calculateItemPosition, lastMouse);
         } else if (lastMouse.clientY > e.clientY && offsetTop > 0 && elemTopOffset < scrollSensitivity) {
           cancelS();
-          if ((resizeEvent && !resizeEventType.n) || intervalN) {
+          if ((resizeEvent && resizeEventType &&!resizeEventType.n) || intervalN) {
             return;
           }
           intervalN = startVertical(-1, calculateItemPosition, lastMouse);
@@ -215,17 +221,17 @@
           cancelVertical();
         }
 
-        var elemRightOffset = offsetLeft + offsetWidth - gridsterItem.el.offsetLeft - gridsterItem.el.offsetWidth;
-        var elemLeftOffset = gridsterItem.el.offsetLeft - offsetLeft;
+        var elemRightOffset = offsetLeft + offsetWidth - gridsterItem.nativeEl.offsetLeft - gridsterItem.nativeEl.offsetWidth;
+        var elemLeftOffset = gridsterItem.nativeEl.offsetLeft - offsetLeft;
         if (lastMouse.clientX < e.clientX && elemRightOffset <= scrollSensitivity) {
           cancelW();
-          if ((resizeEvent && !resizeEventType.e) || intervalE) {
+          if ((resizeEvent && resizeEventType && !resizeEventType.e) || intervalE) {
             return;
           }
           intervalE = startHorizontal(1, calculateItemPosition, lastMouse);
         } else if (lastMouse.clientX > e.clientX && offsetLeft > 0 && elemLeftOffset < scrollSensitivity) {
           cancelE();
-          if ((resizeEvent && !resizeEventType.w) || intervalW) {
+          if ((resizeEvent && resizeEventType && !resizeEventType.w) || intervalW) {
             return;
           }
           intervalW = startHorizontal(-1, calculateItemPosition, lastMouse);
@@ -247,7 +253,7 @@
           gridsterElement.scrollTop += sign * scrollSpeed;
           clientY += sign * scrollSpeed;
           calculateItemPosition({clientX: lastMouse.clientX, clientY: clientY});
-        }.bind(this), intervalDuration);
+        }, intervalDuration);
       }
 
       function startHorizontal(sign, calculateItemPosition, lastMouse) {
@@ -259,7 +265,7 @@
           gridsterElement.scrollLeft += sign * scrollSpeed;
           clientX += sign * scrollSpeed;
           calculateItemPosition({clientX: clientX, clientY: lastMouse.clientY});
-        }.bind(this), intervalDuration);
+        }, intervalDuration);
       }
 
       function cancelScroll() {
@@ -360,6 +366,11 @@
         e: false,
         n: false,
         s: false
+      };
+
+      vm.destroy = function () {
+        delete vm.gridster;
+        delete vm.gridsterItem;
       };
 
       vm.dragStart = function (e) {
@@ -493,18 +504,22 @@
         vm.gridsterItem.$item.y = vm.gridsterItem.item.y;
         vm.gridsterItem.setSize(true);
         vm.push.restoreItems();
-        vm.push = undefined;
         vm.pushResize.restoreItems();
-        vm.pushResize = undefined;
+        vm.push.destroy();
+        delete vm.push;
+        vm.pushResize.destroy();
+        delete vm.pushResize;
       };
 
       vm.makeResize = function () {
         vm.gridsterItem.setSize(true);
         vm.gridsterItem.checkItemChanges(vm.gridsterItem.$item, vm.gridsterItem.item);
         vm.push.setPushedItems();
-        vm.push = undefined;
         vm.pushResize.setPushedItems();
-        vm.pushResize = undefined;
+        vm.push.destroy();
+        delete vm.push;
+        vm.pushResize.destroy();
+        delete vm.pushResize;
       };
 
       vm.handleN = function (e) {
@@ -726,6 +741,11 @@
       vm.fromEast = 'fromEast';
       vm.fromWest = 'fromWest';
 
+      vm.destroy = function () {
+        delete vm.gridster;
+        delete vm.gridsterItem;
+      };
+
       vm.pushItems = function (direction) {
         if (vm.gridster.$options.pushResizeItems) {
           vm.push(vm.gridsterItem, direction);
@@ -942,7 +962,7 @@
       vm.pushedItems = [];
       vm.pushedItemsPath = [];
       vm.pushedItemsTemp = [];
-      vm.pushedItemsTempInit = [];
+      vm.pushedItemsTempPath = [];
       vm.gridsterItem = gridsterItem;
       vm.gridster = gridsterItem.gridster;
       vm.fromSouth = 'fromSouth';
@@ -950,17 +970,27 @@
       vm.fromEast = 'fromEast';
       vm.fromWest = 'fromWest';
 
+      vm.destroy = function () {
+        delete vm.gridster;
+        delete vm.gridsterItem;
+      };
+
       vm.pushItems = function (direction, disabled) {
         if (vm.gridster.$options.pushItems && !disabled) {
-          vm.count = 0;
+          vm.pushedItemsOrder = [];
           if (!vm.push(vm.gridsterItem, direction)) {
-            var i = vm.pushedItemsTemp.length - 1;
-            for (; i > -1; i--) {
-              vm.removeFromTempPushed(vm.pushedItemsTemp[i]);
-            }
+            vm.restoreTempItems();
           }
+          vm.pushedItemsOrder = [];
           vm.pushedItemsTemp = [];
-          vm.pushedItemsTempInit = [];
+          vm.pushedItemsTempPath = [];
+        }
+      };
+
+      vm.restoreTempItems = function () {
+        var i = vm.pushedItemsTemp.length - 1;
+        for (; i > -1; i--) {
+          vm.removeFromTempPushed(vm.pushedItemsTemp[i]);
         }
       };
 
@@ -991,38 +1021,54 @@
       };
 
       vm.push = function (gridsterItem, direction) {
-        if (vm.count > 3000) {
-          return false;
-        } else {
-          vm.count++;
-        }
         if (vm.gridster.checkGridCollision(gridsterItem.$item)) {
           return false;
         }
         var a = vm.gridster.findItemsWithItem(gridsterItem.$item);
-        var i = a.length - 1, itemColision;
+        var i = a.length - 1, itemCollision;
         var makePush = true;
+        var b = [];
         for (; i > -1; i--) {
-          itemColision = a[i];
-          if (itemColision === vm.gridsterItem) {
+          itemCollision = a[i];
+          if (itemCollision === vm.gridsterItem) {
             makePush = false;
             break;
           }
-          if (!itemColision.canBeDragged()) {
+          if (!itemCollision.canBeDragged()) {
             makePush = false;
             break;
           }
-          if (vm.tryPattern[direction][0].call(vm, itemColision, gridsterItem)) {
-            makePush = true;
-          } else if (vm.tryPattern[direction][1].call(vm, itemColision, gridsterItem)) {
-            makePush = true;
-          } else if (vm.tryPattern[direction][2].call(vm, itemColision, gridsterItem)) {
-            makePush = true;
-          } else if (vm.tryPattern[direction][3].call(vm, itemColision, gridsterItem)) {
-            makePush = true;
+          if (vm.pushedItemsTemp.indexOf(itemCollision) > -1) {
+            makePush = false;
+            break;
+          }
+          if (vm.tryPattern[direction][0].call(vm, itemCollision, gridsterItem)) {
+            vm.pushedItemsOrder.push(itemCollision);
+            b.push(itemCollision);
+          } else if (vm.tryPattern[direction][1].call(vm, itemCollision, gridsterItem)) {
+            vm.pushedItemsOrder.push(itemCollision);
+            b.push(itemCollision);
+          } else if (vm.tryPattern[direction][2].call(vm, itemCollision, gridsterItem)) {
+            vm.pushedItemsOrder.push(itemCollision);
+            b.push(itemCollision);
+          } else if (vm.tryPattern[direction][3].call(vm, itemCollision, gridsterItem)) {
+            vm.pushedItemsOrder.push(itemCollision);
+            b.push(itemCollision);
           } else {
             makePush = false;
             break;
+          }
+        }
+        if (!makePush) {
+          i = vm.pushedItemsOrder.lastIndexOf(b[0]);
+          if (i > -1) {
+            var j = vm.pushedItemsOrder.length - 1;
+            for (; j >= i; j--) {
+              itemCollision = vm.pushedItemsOrder[j];
+              vm.pushedItemsOrder.pop();
+              vm.removeFromTempPushed(itemCollision);
+              vm.removeFromPushedItem(itemCollision);
+            }
           }
         }
         return makePush;
@@ -1033,14 +1079,13 @@
           return false;
         }
         vm.addToTempPushed(gridsterItemCollide);
-        var backUpY = gridsterItemCollide.$item.y;
         gridsterItemCollide.$item.y = gridsterItem.$item.y + gridsterItem.$item.rows;
         if (vm.push(gridsterItemCollide, vm.fromNorth)) {
           gridsterItemCollide.setSize(true);
           vm.addToPushed(gridsterItemCollide);
           return true;
         } else {
-          gridsterItemCollide.$item.y = backUpY;
+          vm.removeFromTempPushed(gridsterItemCollide);
         }
         return false;
       };
@@ -1050,14 +1095,13 @@
           return false;
         }
         vm.addToTempPushed(gridsterItemCollide);
-        var backUpY = gridsterItemCollide.$item.y;
         gridsterItemCollide.$item.y = gridsterItem.$item.y - gridsterItemCollide.$item.rows;
         if (vm.push(gridsterItemCollide, vm.fromSouth)) {
           gridsterItemCollide.setSize(true);
           vm.addToPushed(gridsterItemCollide);
           return true;
         } else {
-          gridsterItemCollide.$item.y = backUpY;
+          vm.removeFromTempPushed(gridsterItemCollide);
         }
         return false;
       };
@@ -1067,14 +1111,13 @@
           return false;
         }
         vm.addToTempPushed(gridsterItemCollide);
-        var backUpX = gridsterItemCollide.$item.x;
         gridsterItemCollide.$item.x = gridsterItem.$item.x + gridsterItem.$item.cols;
         if (vm.push(gridsterItemCollide, vm.fromWest)) {
           gridsterItemCollide.setSize(true);
           vm.addToPushed(gridsterItemCollide);
           return true;
         } else {
-          gridsterItemCollide.$item.x = backUpX;
+          vm.removeFromTempPushed(gridsterItemCollide);
         }
         return false;
       };
@@ -1084,14 +1127,13 @@
           return false;
         }
         vm.addToTempPushed(gridsterItemCollide);
-        var backUpX = gridsterItemCollide.$item.x;
         gridsterItemCollide.$item.x = gridsterItem.$item.x - gridsterItemCollide.$item.cols;
         if (vm.push(gridsterItemCollide, vm.fromEast)) {
           gridsterItemCollide.setSize(true);
           vm.addToPushed(gridsterItemCollide);
           return true;
         } else {
-          gridsterItemCollide.$item.x = backUpX;
+          vm.removeFromTempPushed(gridsterItemCollide);
         }
         return false;
       };
@@ -1104,21 +1146,27 @@
       };
 
       vm.addToTempPushed = function (gridsterItem) {
-        if (vm.checkInTempPushed(gridsterItem)) {
-          return;
+        var i = vm.pushedItemsTemp.indexOf(gridsterItem);
+        if (i === -1) {
+          i = vm.pushedItemsTemp.push(gridsterItem) - 1;
+          vm.pushedItemsTempPath[i] = [];
         }
-        var l = vm.pushedItemsTemp.push(gridsterItem);
-        vm.pushedItemsTempInit[l - 1] = {x: gridsterItem.$item.x, y: gridsterItem.$item.y};
+        vm.pushedItemsTempPath[i].push({x: gridsterItem.$item.x, y: gridsterItem.$item.y});
       };
 
       vm.removeFromTempPushed = function (gridsterItem) {
         var i = vm.pushedItemsTemp.indexOf(gridsterItem);
-        vm.pushedItemsTemp.splice(i, 1);
-        var initPosition = vm.pushedItemsTempInit[i];
-        gridsterItem.$item.x = initPosition.x;
-        gridsterItem.$item.y = initPosition.y;
+        var tempPosition = vm.pushedItemsTempPath[i].pop();
+        if (!tempPosition) {
+          return;
+        }
+        gridsterItem.$item.x = tempPosition.x;
+        gridsterItem.$item.y = tempPosition.y;
         gridsterItem.setSize(true);
-        vm.pushedItemsTempInit.splice(i, 1);
+        if (!vm.pushedItemsTempPath[i].length) {
+          vm.pushedItemsTemp.splice(i, 1);
+          vm.pushedItemsTempPath.splice(i, 1);
+        }
       };
 
       vm.checkInTempPushed = function (gridsterItem) {
@@ -1155,6 +1203,17 @@
         }
         if (change) {
           vm.checkPushBack();
+        }
+      };
+
+      vm.removeFromPushedItem = function (gridsterItem) {
+        var i = vm.pushedItems.indexOf(gridsterItem);
+        if (i > -1) {
+          vm.pushedItemsPath[i].pop();
+          if (!vm.pushedItemsPath.length) {
+            vm.pushedItems.splice(i, 1);
+            vm.pushedItemsPath.splice(i, 1);
+          }
         }
       };
 
@@ -1202,10 +1261,14 @@
     var vm = this;
 
     vm.$onInit = function () {
-      vm.gridster.previewStyle = vm.previewStyle.bind(this);
+      vm.gridster.previewStyle = vm.previewStyle.bind(vm);
     };
 
-    vm.previewStyle = function() {
+    vm.$onDestroy = function () {
+      delete vm.gridster.previewStyle;
+    };
+
+    vm.previewStyle = function () {
       if (!vm.gridster.movingItem) {
         $element.css('display', 'none');
       } else {
@@ -1287,7 +1350,12 @@
     };
 
     vm.$onDestroy = function () {
-      vm.gridster.removeItem(this);
+      vm.gridster.removeItem(vm);
+      delete vm.$item.initCallback;
+      vm.drag.destroy();
+      delete vm.drag;
+      vm.resize.destroy();
+      delete vm.resize;
     };
 
     vm.setSize = function (noCheck) {
@@ -1329,7 +1397,7 @@
       if (vm.width !== vm.itemWidth || vm.height !== vm.itemHeight) {
         $scope.$broadcast('gridster-item-resize', vm.item);
         if (vm.gridster.$options.itemResizeCallback) {
-          vm.gridster.$options.itemResizeCallback(vm.item, this);
+          vm.gridster.$options.itemResizeCallback(vm.item, vm);
         }
       }
       vm.itemTop = vm.top;
@@ -1341,7 +1409,7 @@
     vm.itemChanged = function () {
       $scope.$broadcast('gridster-item-change', vm.item);
       if (vm.gridster.$options.itemChangeCallback) {
-        vm.gridster.$options.itemChangeCallback(vm.item, this);
+        vm.gridster.$options.itemChangeCallback(vm.item, vm);
       }
     };
 
@@ -1394,7 +1462,7 @@
     var vm = this;
 
     vm.$onInit = function () {
-      vm.gridster.gridLines = this;
+      vm.gridster.gridLines = vm;
       vm.columns = [];
       vm.rows = [];
       vm.height = 0;
@@ -1402,6 +1470,10 @@
       vm.margin = 0;
       vm.columnsHeight = 0;
       vm.rowsWidth = 0;
+    };
+
+    vm.$onDestroy = function () {
+      delete vm.gridster.gridLines;
     };
 
     vm.updateGrid = function updateGrid() {
@@ -1436,11 +1508,16 @@
   function GridsterEmptyCell(GridsterUtils) {
     return function (gridster) {
       var vm = this;
+
+      vm.destroy = function () {
+        delete vm.gridster;
+      };
+
       vm.updateOptions = function () {
         if (gridster.$options.enableEmptyCellClick && !vm.emptyCellClick && gridster.$options.emptyCellClickCallback) {
           vm.emptyCellClick = true;
           gridster.el.addEventListener('click', vm.emptyCellClickCb);
-          gridster.el.addEventListener('touchend', this.emptyCellClickCb);
+          gridster.el.addEventListener('touchend', vm.emptyCellClickCb);
         } else if (!gridster.$options.enableEmptyCellClick && vm.emptyCellClick) {
           vm.emptyCellClick = false;
           gridster.el.removeEventListener('click', vm.emptyCellClickCb);
@@ -1636,6 +1713,15 @@
       };
       vm.path = [];
 
+      vm.destroy = function () {
+        delete vm.gridsterItem;
+        delete vm.gridster;
+        if (vm.mousedown) {
+          vm.gridsterItem.nativeEl.removeEventListener('mousedown', vm.dragStartDelay);
+          vm.gridsterItem.nativeEl.removeEventListener('touchstart', vm.dragStartDelay);
+        }
+      };
+
       vm.dragStart = function (e) {
         switch (e.which) {
           case 1:
@@ -1653,8 +1739,8 @@
 
         e.stopPropagation();
         e.preventDefault();
-        vm.dragFunction = vm.dragMove.bind(this);
-        vm.dragStopFunction = vm.dragStop.bind(this);
+        vm.dragFunction = vm.dragMove.bind(vm);
+        vm.dragStopFunction = vm.dragStop.bind(vm);
 
         document.addEventListener('mousemove', vm.dragFunction);
         document.addEventListener('mouseup', vm.dragStopFunction);
@@ -1687,7 +1773,7 @@
         GridsterUtils.checkTouchEvent(e);
         vm.offsetLeft = vm.gridster.el.scrollLeft - vm.gridster.el.offsetLeft;
         vm.offsetTop = vm.gridster.el.scrollTop - vm.gridster.el.offsetTop;
-        GridsterScroll(vm.gridsterItem, e, vm.lastMouse, vm.calculateItemPositionFromMousePosition.bind(this));
+        GridsterScroll(vm.gridsterItem, e, vm.lastMouse, vm.calculateItemPositionFromMousePosition.bind(vm));
 
         vm.calculateItemPositionFromMousePosition(e);
 
@@ -1720,7 +1806,7 @@
         if (vm.gridster.$options.draggable.stop) {
           var promise = vm.gridster.$options.draggable.stop(vm.gridsterItem.item, vm.gridsterItem, e);
           if (promise && promise.then) {
-            promise.then(vm.makeDrag.bind(this), vm.cancelDrag.bind(this));
+            promise.then(vm.makeDrag.bind(vm), vm.cancelDrag.bind(vm));
           } else {
             vm.makeDrag();
           }
@@ -1738,18 +1824,22 @@
         vm.gridsterItem.$item.y = vm.gridsterItem.item.y;
         vm.gridsterItem.setSize(true);
         vm.push.restoreItems();
-        vm.push = undefined;
         vm.swap.restoreSwapItem();
-        vm.swap = undefined;
+        vm.push.destroy();
+        delete vm.push;
+        vm.swap.destroy();
+        delete vm.swap;
       };
 
       vm.makeDrag = function () {
         vm.gridsterItem.setSize(true);
         vm.gridsterItem.checkItemChanges(vm.gridsterItem.$item, vm.gridsterItem.item);
         vm.push.setPushedItems();
-        vm.push = undefined;
         vm.swap.setSwapItem();
-        vm.swap = undefined;
+        vm.push.destroy();
+        delete vm.push;
+        vm.swap.destroy();
+        delete vm.swap;
       };
 
       vm.calculateItemPosition = function () {
@@ -1799,13 +1889,12 @@
         var enableDrag = vm.gridsterItem.canBeDragged();
         if (!vm.enabled && enableDrag) {
           vm.enabled = !vm.enabled;
-          vm.dragStartFunction = vm.dragStartDelay;
-          vm.gridsterItem.nativeEl.addEventListener('mousedown', vm.dragStartFunction);
-          vm.gridsterItem.nativeEl.addEventListener('touchstart', vm.dragStartFunction);
+          vm.gridsterItem.nativeEl.addEventListener('mousedown', vm.dragStartDelay);
+          vm.gridsterItem.nativeEl.addEventListener('touchstart', vm.dragStartDelay);
         } else if (vm.enabled && !enableDrag) {
           vm.enabled = !vm.enabled;
-          vm.gridsterItem.nativeEl.removeEventListener('mousedown', vm.dragStartFunction);
-          vm.gridsterItem.nativeEl.removeEventListener('touchstart', vm.dragStartFunction);
+          vm.gridsterItem.nativeEl.removeEventListener('mousedown', vm.dragStartDelay);
+          vm.gridsterItem.nativeEl.removeEventListener('touchstart', vm.dragStartDelay);
         }
       };
 
@@ -1884,6 +1973,7 @@
     scrollSensitivity: 10,  // margin of the dashboard where to start scrolling
     scrollSpeed: 20,  // how much to scroll each mouse move when in the scrollSensitivity zone
     initCallback: undefined, // callback to call after grid has initialized. Arguments: gridsterComponent
+    destroyCallback: undefined, // callback to call after grid has destroyed. Arguments: gridsterComponent
     itemChangeCallback: undefined,  // callback to call for each item when is changes x, y, rows, cols.
     // Arguments: gridsterItem, gridsterItemComponent
     itemResizeCallback: undefined,  // callback to call for each item when width/height changes.
@@ -1937,7 +2027,8 @@
     pushDirections: {north: true, east: true, south: true, west: true}, // control the directions items are pushed
     pushResizeItems: false, // on resize of item will shrink adjacent items
     displayGrid: 'onDrag&Resize', // display background grid of rows and columns
-    disableWindowResize: false
+    disableWindowResize: false, // disable the window on resize listener. This will stop grid to recalculate on window resize.
+    disableWarnings: false // disable console log warnings about misplacement of grid items
   });
 })();
 
@@ -1951,6 +2042,11 @@
   function GridsterCompact() {
     return function (gridster) {
       var vm = this;
+
+      vm.destroy = function () {
+        delete vm.gridster;
+      };
+
       vm.checkCompact = function checkCompact() {
         if (gridster.$options.compactType !== 'none') {
           if (gridster.$options.compactType === 'compactUp') {
@@ -2091,19 +2187,6 @@
     };
 
     vm.$onInit = function () {
-      vm.emptyCell = new GridsterEmptyCell(vm);
-      vm.compact = new GridsterCompact(vm);
-      vm.setOptions();
-      vm.options.api = {
-        optionsChanged: vm.optionsChanged,
-        resize: vm.onResize,
-        getNextPossiblePosition: vm.getNextPossiblePosition
-      };
-      vm.columns = vm.$options.minCols;
-      vm.rows = vm.$options.minRows;
-      vm.setGridSize();
-      vm.calculateLayoutDebounce = GridsterUtils.debounce(vm.calculateLayout, 5);
-      vm.calculateLayoutDebounce();
       if (vm.options.initCallback) {
         vm.options.initCallback(vm);
       }
@@ -2111,7 +2194,19 @@
 
     vm.$onChanges = function (changes) {
       if (changes.options) {
-        vm.$onInit();
+        vm.emptyCell = new GridsterEmptyCell(vm);
+        vm.compact = new GridsterCompact(vm);
+        vm.setOptions();
+        vm.options.api = {
+          optionsChanged: vm.optionsChanged,
+          resize: vm.onResize,
+          getNextPossiblePosition: vm.getNextPossiblePosition
+        };
+        vm.columns = vm.$options.minCols;
+        vm.rows = vm.$options.minRows;
+        vm.setGridSize();
+        vm.calculateLayoutDebounce = GridsterUtils.debounce(vm.calculateLayout, 5);
+        vm.calculateLayoutDebounce();
       }
     };
 
@@ -2157,6 +2252,19 @@
         vm.onResizeFunction = false;
         window.removeEventListener('resize', vm.onResize);
       }
+      if (vm.options.destroyCallback) {
+        vm.options.destroyCallback(vm);
+      }
+      if (vm.options.api) {
+        vm.options.api.resize = undefined;
+        vm.options.api.optionsChanged = undefined;
+        vm.options.api.getNextPossiblePosition = undefined;
+        vm.options.api = undefined;
+      }
+      vm.emptyCell.destroy();
+      delete vm.emptyCell;
+      vm.compact.destroy();
+      delete vm.compact;
     };
 
     vm.onResize = function onResize() {
@@ -2218,7 +2326,9 @@
 
     vm.calculateLayout = function calculateLayout() {
       // check to compact
-      vm.compact.checkCompact();
+      if (vm.compact) {
+        vm.compact.checkCompact();
+      }
 
       vm.setGridDimensions();
       if (vm.$options.outerMargin) {
@@ -2303,8 +2413,10 @@
       if (itemComponent.$item.x === undefined || itemComponent.$item.y === undefined) {
         vm.autoPositionItem(itemComponent);
       } else if (vm.checkCollision(itemComponent.$item)) {
-        $log.warn('Can\'t be placed in the bounds of the dashboard, trying to auto position!/n' +
-          JSON.stringify(itemComponent.item, ['cols', 'rows', 'x', 'y']));
+        if (!vm.$options.disableWarnings) {
+          $log.warn('Can\'t be placed in the bounds of the dashboard, trying to auto position!/n' +
+            JSON.stringify(itemComponent.item, ['cols', 'rows', 'x', 'y']));
+        }
         itemComponent.$item.x = undefined;
         itemComponent.$item.y = undefined;
         vm.autoPositionItem(itemComponent);
@@ -2379,8 +2491,10 @@
         itemComponent.itemChanged();
       } else {
         itemComponent.notPlaced = true;
-        $log.warn('Can\'t be placed in the bounds of the dashboard!/n' +
-          JSON.stringify(itemComponent.item, ['cols', 'rows', 'x', 'y']));
+        if (!vm.$options.disableWarnings) {
+          $log.warn('Can\'t be placed in the bounds of the dashboard!/n' +
+            JSON.stringify(itemComponent.item, ['cols', 'rows', 'x', 'y']));
+        }
       }
     };
 

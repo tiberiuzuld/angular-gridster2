@@ -69,10 +69,6 @@ gridster-grid .row {
 }
 
 gridster-item {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
   box-sizing: border-box;
   z-index: 1;
   position: absolute;
@@ -162,13 +158,6 @@ gridster-item.gridster-item-resizing, gridster-item.gridster-item-moving {
   height: 10px;
   left: 0;
   bottom: 0;
-}
-
-gridster-item .gridster-item-content {
-  -webkit-user-select: auto;
-  -moz-user-select: auto;
-  -ms-user-select: auto;
-  user-select: auto;
 }
 
 gridster-item:hover .gridster-item-resizable-handler.handle-se {
