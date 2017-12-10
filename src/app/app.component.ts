@@ -112,7 +112,8 @@ export class AppComponent implements OnInit {
       pushDirections: {north: true, east: true, south: true, west: true},
       pushResizeItems: false,
       displayGrid: 'onDrag&Resize',
-      disableWindowResize: false
+      disableWindowResize: false,
+      disableWarnings: false,
     };
 
     this.dashboard = [
