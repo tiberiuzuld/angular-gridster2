@@ -30,6 +30,7 @@ export const GridsterConfigService: GridsterConfig = {
   scrollSensitivity: 10,  // margin of the dashboard where to start scrolling
   scrollSpeed: 20,  // how much to scroll each mouse move when in the scrollSensitivity zone
   initCallback: undefined, // callback to call after grid has initialized. Arguments: gridsterComponent
+  destroyCallback: undefined, // callback to call after grid has destroyed. Arguments: gridsterComponent
   itemChangeCallback: undefined,  // callback to call for each item when is changes x, y, rows, cols.
   // Arguments: gridsterItem, gridsterItemComponent
   itemResizeCallback: undefined,  // callback to call for each item when width/height changes.

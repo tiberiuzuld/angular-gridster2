@@ -12,6 +12,7 @@ import {GridsterConfigS} from '../lib/gridsterConfigS.interface';
 export class AppComponent implements OnInit {
   options: GridsterConfigS;
   dashboard: Array<GridsterItem>;
+  remove: boolean;
 
   static eventStop(item, itemComponent, event) {
     console.info('eventStop', item, itemComponent, event);
@@ -33,6 +34,14 @@ export class AppComponent implements OnInit {
     console.info('itemRemoved', item, itemComponent);
   }
 
+  static gridInit(grid) {
+    console.info('gridInit', grid);
+  }
+
+  static gridDestroy(grid) {
+    console.info('gridDestroy', grid);
+  }
+
   emptyCellClick(event, item) {
     console.info('empty cell click', event, item);
     this.dashboard.push(item);
@@ -42,6 +51,8 @@ export class AppComponent implements OnInit {
     this.options = {
       gridType: 'fit',
       compactType: 'none',
+      initCallback: AppComponent.gridInit,
+      destroyCallback: AppComponent.gridDestroy,
       itemChangeCallback: AppComponent.itemChange,
       itemResizeCallback: AppComponent.itemResize,
       itemInitCallback: AppComponent.itemInit,
@@ -145,5 +156,9 @@ export class AppComponent implements OnInit {
 
   addItem() {
     this.dashboard.push({});
+  }
+
+  destroy() {
+    this.remove = !this.remove;
   }
 }

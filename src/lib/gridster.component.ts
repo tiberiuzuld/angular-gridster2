@@ -71,17 +71,6 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
   }
 
   ngOnInit(): void {
-    this.setOptions();
-    this.options.api = {
-      optionsChanged: this.optionsChanged.bind(this),
-      resize: this.onResize.bind(this),
-      getNextPossiblePosition: this.getNextPossiblePosition.bind(this)
-    };
-    this.columns = this.$options.minCols;
-    this.rows = this.$options.minRows;
-    this.setGridSize();
-    this.calculateLayoutDebounce = GridsterUtils.debounce(this.calculateLayout.bind(this), 5);
-    this.calculateLayoutDebounce();
     if (this.options.initCallback) {
       this.options.initCallback(this);
     }
@@ -89,7 +78,17 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.options) {
-      this.ngOnInit();
+      this.setOptions();
+      this.options.api = {
+        optionsChanged: this.optionsChanged.bind(this),
+        resize: this.onResize.bind(this),
+        getNextPossiblePosition: this.getNextPossiblePosition.bind(this)
+      };
+      this.columns = this.$options.minCols;
+      this.rows = this.$options.minRows;
+      this.setGridSize();
+      this.calculateLayoutDebounce = GridsterUtils.debounce(this.calculateLayout.bind(this), 5);
+      this.calculateLayoutDebounce();
     }
   }
 
@@ -132,6 +131,9 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
   ngOnDestroy(): void {
     if (this.windowResize) {
       this.windowResize();
+    }
+    if (this.options.destroyCallback) {
+      this.options.destroyCallback(this);
     }
   }
 
