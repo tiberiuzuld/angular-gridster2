@@ -48,3 +48,53 @@ describe("check touch event", () => {
         expect(event.clientY).toBe(100);        
     })
 })
+
+describe("check content class for event", () => {
+    let div = document.createElement('div');
+    div.setAttribute('class', 'divClass');
+    document.body.appendChild(div);
+    let body = document.body;
+    body.setAttribute('class', 'body');
+    let event: any = document.createEvent('Event');
+    event.initEvent('testing', true, true);
+    div.addEventListener('testing', function(){});
+    div.dispatchEvent(event);
+
+    it("should check when ignoreContent is true and target & currentTarget is same", () => {
+        let gridster: any = {$options: {draggable: {ignoreContent: true, dragHandleClass: "class1", ignoreContentClass: "class2"}}};
+        let e: any = {target: "element", currentTarget: "element"};
+        expect(GridsterUtils.checkContentClassForEvent(gridster, e)).toBe(true);
+    })
+    it("should check when ignoreContent is true but target and currentTarget is not same", () => {
+        let gridster: any = {$options: {draggable: {ignoreContent: true, dragHandleClass: "divClass", ignoreContentClass: "class2"}}};
+        expect(GridsterUtils.checkContentClassForEvent(gridster, event)).toBe(false);
+    })
+    it("should check when draghandleClass is false but ignoreContentClass is true", () => {
+      let gridster: any = {$options: {draggable: {ignoreContent: false, dragHandleClass: "divClass1", ignoreContentClass: "body"}}};
+      expect(GridsterUtils.checkContentClassForEvent(gridster, event)).toBe(true);
+    })
+
+})
+
+describe("check content class", () => {
+    let div = document.createElement('div');
+    div.setAttribute('class', 'divClass');
+    document.body.appendChild(div);
+    let body = document.body;
+    body.setAttribute('class', 'body');
+    let event: any = document.createEvent('Event');
+    event.initEvent('testing', true, true);
+    div.addEventListener('testing', function(){});
+    div.dispatchEvent(event);
+
+    it("should check target == current", () => {
+        let target = "element";
+        let current = "element";
+        let contentClass = "class1";
+        expect(GridsterUtils.checkContentClass(target, current, contentClass)).toBe(false);
+    })
+    it("should check in classList", () => {
+        expect(GridsterUtils.checkContentClass(event.target, event.currentTarget, 'divClass')).toBe(true);
+        expect(GridsterUtils.checkContentClass(event.target, event.currentTarget, 'body')).toBe(true);
+    })    
+})
