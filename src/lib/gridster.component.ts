@@ -212,11 +212,11 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
 
     this.setGridDimensions();
     if (this.$options.outerMargin) {
-      this.curColWidth = Math.floor((this.curWidth - this.$options.margin) / this.columns);
-      this.curRowHeight = Math.floor((this.curHeight - this.$options.margin) / this.rows);
+      this.curColWidth = (this.curWidth - this.$options.margin) / this.columns;
+      this.curRowHeight = (this.curHeight - this.$options.margin) / this.rows;
     } else {
-      this.curColWidth = Math.floor((this.curWidth + this.$options.margin) / this.columns);
-      this.curRowHeight = Math.floor((this.curHeight + this.$options.margin) / this.rows);
+      this.curColWidth = (this.curWidth + this.$options.margin) / this.columns;
+      this.curRowHeight = (this.curHeight + this.$options.margin) / this.rows;
     }
     let addClass = '';
     let removeClass1 = '';
