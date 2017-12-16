@@ -1,4 +1,4 @@
-import {Component, ElementRef, EventEmitter, Host, Input, OnDestroy, OnInit, Output, Renderer2} from '@angular/core';
+import {Component, ElementRef, Host, Input, OnDestroy, OnInit, Renderer2} from '@angular/core';
 
 import {GridsterItem} from './gridsterItem.interface';
 import {GridsterComponent} from './gridster.component';
@@ -15,8 +15,6 @@ import {GridsterItemComponentInterface} from './gridsterItemComponent.interface'
 })
 export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemComponentInterface {
   @Input() item: GridsterItem;
-  @Output() itemChange: EventEmitter<GridsterItem> = new EventEmitter();
-  @Output() itemResize: EventEmitter<GridsterItem> = new EventEmitter();
   $item: GridsterItemS;
   el: any;
   gridster: GridsterComponent;
@@ -115,7 +113,6 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
     this.renderer.setStyle(this.el, 'height', this.height + 'px');
     this.renderer.setStyle(this.el, 'margin', this.itemMargin + 'px');
     if (this.width !== this.itemWidth || this.height !== this.itemHeight) {
-      this.itemResize.emit(this.item);
       if (this.gridster.options.itemResizeCallback) {
         this.gridster.options.itemResizeCallback(this.item, this);
       }
@@ -127,7 +124,6 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
   }
 
   itemChanged(): void {
-    this.itemChange.emit(this.item);
     if (this.gridster.options.itemChangeCallback) {
       this.gridster.options.itemChangeCallback(this.item, this);
     }
