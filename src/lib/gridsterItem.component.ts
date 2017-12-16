@@ -57,7 +57,6 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
       rows: undefined,
       x: undefined,
       y: undefined,
-      initCallback: undefined,
       dragEnabled: undefined,
       resizeEnabled: undefined,
       compactEnabled: undefined,
@@ -72,7 +71,6 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
 
   ngOnDestroy(): void {
     this.gridster.removeItem(this);
-    delete this.$item.initCallback;
     delete this.gridster;
     this.drag.destroy();
     delete this.drag;
@@ -118,8 +116,8 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
     this.renderer.setStyle(this.el, 'margin', this.itemMargin + 'px');
     if (this.width !== this.itemWidth || this.height !== this.itemHeight) {
       this.itemResize.emit(this.item);
-      if (this.gridster.$options.itemResizeCallback) {
-        this.gridster.$options.itemResizeCallback(this.item, this);
+      if (this.gridster.options.itemResizeCallback) {
+        this.gridster.options.itemResizeCallback(this.item, this);
       }
     }
     this.itemTop = this.top;
@@ -130,8 +128,8 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
 
   itemChanged(): void {
     this.itemChange.emit(this.item);
-    if (this.gridster.$options.itemChangeCallback) {
-      this.gridster.$options.itemChangeCallback(this.item, this);
+    if (this.gridster.options.itemChangeCallback) {
+      this.gridster.options.itemChangeCallback(this.item, this);
     }
   }
 

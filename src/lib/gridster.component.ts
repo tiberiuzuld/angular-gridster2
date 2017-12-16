@@ -47,18 +47,6 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     this.curColWidth = 0;
     this.curRowHeight = 0;
     this.dragInProgress = false;
-    this.$options.draggable.stop = undefined;
-    this.$options.draggable.start = undefined;
-    this.$options.resizable.stop = undefined;
-    this.$options.resizable.start = undefined;
-    this.$options.itemChangeCallback = undefined;
-    this.$options.itemResizeCallback = undefined;
-    this.$options.itemInitCallback = undefined;
-    this.$options.itemRemovedCallback = undefined;
-    this.$options.emptyCellClickCallback = undefined;
-    this.$options.emptyCellContextMenuCallback = undefined;
-    this.$options.emptyCellDropCallback = undefined;
-    this.$options.emptyCellDragCallback = undefined;
     this.emptyCell = new GridsterEmptyCell(this);
     this.compact = new GridsterCompact(this);
   }
@@ -303,19 +291,19 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     }
     this.grid.push(itemComponent);
     this.calculateLayoutDebounce();
-    if (itemComponent.$item.initCallback) {
-      itemComponent.$item.initCallback(itemComponent.item, itemComponent);
+    if (itemComponent.item.initCallback) {
+      itemComponent.item.initCallback(itemComponent.item, itemComponent);
     }
-    if (this.$options.itemInitCallback) {
-      this.$options.itemInitCallback(itemComponent.item, itemComponent);
+    if (this.options.itemInitCallback) {
+      this.options.itemInitCallback(itemComponent.item, itemComponent);
     }
   }
 
   removeItem(itemComponent: GridsterItemComponent): void {
     this.grid.splice(this.grid.indexOf(itemComponent), 1);
     this.calculateLayoutDebounce();
-    if (this.$options.itemRemovedCallback) {
-      this.$options.itemRemovedCallback(itemComponent.item, itemComponent);
+    if (this.options.itemRemovedCallback) {
+      this.options.itemRemovedCallback(itemComponent.item, itemComponent);
     }
   }
 

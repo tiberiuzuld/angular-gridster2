@@ -74,8 +74,8 @@ export class GridsterDraggable {
         return;
     }
 
-    if (this.gridster.$options.draggable.start) {
-      this.gridster.$options.draggable.start(this.gridsterItem.item, this.gridsterItem, e);
+    if (this.gridster.options.draggable && this.gridster.options.draggable.start) {
+      this.gridster.options.draggable.start(this.gridsterItem.item, this.gridsterItem, e);
     }
 
     e.stopPropagation();
@@ -144,8 +144,8 @@ export class GridsterDraggable {
     this.gridster.dragInProgress = false;
     this.gridster.gridLines.updateGrid();
     this.path = [];
-    if (this.gridster.$options.draggable.stop) {
-      Promise.resolve(this.gridster.$options.draggable.stop(this.gridsterItem.item, this.gridsterItem, e))
+    if (this.gridster.options.draggable && this.gridster.options.draggable.stop) {
+      Promise.resolve(this.gridster.options.draggable.stop(this.gridsterItem.item, this.gridsterItem, e))
         .then(this.makeDrag.bind(this), this.cancelDrag.bind(this));
     } else {
       this.makeDrag();

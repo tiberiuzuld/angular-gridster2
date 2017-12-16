@@ -74,8 +74,8 @@ export class GridsterResizable {
         // right or middle mouse button
         return;
     }
-    if (this.gridster.$options.resizable.start) {
-      this.gridster.$options.resizable.start(this.gridsterItem.item, this.gridsterItem, e);
+    if (this.gridster.options.resizable && this.gridster.options.resizable.start) {
+      this.gridster.options.resizable.start(this.gridsterItem.item, this.gridsterItem, e);
     }
     e.stopPropagation();
     e.preventDefault();
@@ -172,8 +172,8 @@ export class GridsterResizable {
     this.gridsterItem.renderer.removeClass(this.gridsterItem.el, 'gridster-item-resizing');
     this.gridster.dragInProgress = false;
     this.gridster.gridLines.updateGrid();
-    if (this.gridster.$options.resizable.stop) {
-      Promise.resolve(this.gridster.$options.resizable.stop(this.gridsterItem.item, this.gridsterItem, e))
+    if (this.gridster.options.resizable && this.gridster.options.resizable.stop) {
+      Promise.resolve(this.gridster.options.resizable.stop(this.gridsterItem.item, this.gridsterItem, e))
         .then(this.makeResize.bind(this), this.cancelResize.bind(this));
     } else {
       this.makeResize();
