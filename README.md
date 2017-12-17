@@ -170,7 +170,7 @@ export const GridsterConfigService: GridsterConfig = {
   displayGrid: 'onDrag&Resize', // display background grid of rows and columns. Options: 'always' | 'onDrag&Resize' | 'none'
   disableWindowResize: false, // disable the window on resize listener. This will stop grid to recalculate on window resize.
   disableWarnings: false, // disable console log warnings about misplacement of grid items
-  scrollToNewItems: false, // scroll to new items placed in a scrollable view
+  scrollToNewItems: false // scroll to new items placed in a scrollable view
 };
 ```
 
