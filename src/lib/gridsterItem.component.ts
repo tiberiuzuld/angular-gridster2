@@ -30,6 +30,7 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
   drag: GridsterDraggable;
   resize: GridsterResizable;
   notPlaced: boolean;
+  init: boolean;
 
   constructor(el: ElementRef, @Host() gridster: GridsterComponent, public renderer: Renderer2) {
     this.el = el.nativeElement;
@@ -112,6 +113,15 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
     this.renderer.setStyle(this.el, 'width', this.width + 'px');
     this.renderer.setStyle(this.el, 'height', this.height + 'px');
     this.renderer.setStyle(this.el, 'margin', this.itemMargin + 'px');
+    if (!this.init && this.width > 0 && this.height > 0) {
+      this.init = true;
+      if (this.item.initCallback) {
+        this.item.initCallback(this.item, this);
+      }
+      if (this.gridster.options.itemInitCallback) {
+        this.gridster.options.itemInitCallback(this.item, this);
+      }
+    }
     if (this.width !== this.itemWidth || this.height !== this.itemHeight) {
       if (this.gridster.options.itemResizeCallback) {
         this.gridster.options.itemResizeCallback(this.item, this);

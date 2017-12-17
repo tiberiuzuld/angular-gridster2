@@ -291,12 +291,6 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     }
     this.grid.push(itemComponent);
     this.calculateLayoutDebounce();
-    if (itemComponent.item.initCallback) {
-      itemComponent.item.initCallback(itemComponent.item, itemComponent);
-    }
-    if (this.options.itemInitCallback) {
-      this.options.itemInitCallback(itemComponent.item, itemComponent);
-    }
   }
 
   removeItem(itemComponent: GridsterItemComponent): void {

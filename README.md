@@ -119,7 +119,7 @@ export const GridsterConfigService: GridsterConfig = {
   // Arguments: gridsterItem, gridsterItemComponent
   itemResizeCallback: undefined,  // callback to call for each item when width/height changes.
   // Arguments: gridsterItem, gridsterItemComponent
-  itemInitCallback: undefined,  // callback to call for each item when is initialized.
+  itemInitCallback: undefined,  // callback to call for each item when is initialized and has size > 0.
   // Arguments: gridsterItem, gridsterItemComponent
   itemRemovedCallback: undefined,  // callback to call for each item when is removed.
     // Arguments: gridsterItem, gridsterItemComponent
@@ -201,7 +201,7 @@ export interface GridsterItem {
   y?: number; // y position if missing will auto position
   rows?: number; // number of rows if missing will use grid option defaultItemRows
   cols?: number; // number of columns if missing will use grid option defaultItemCols
-  initCallback?: Function; // initialization callback. Argument: GridsterItem, GridsterItemComponent
+  initCallback?: Function; // initialization callback and has size > 0. Argument: GridsterItem, GridsterItemComponent
   dragEnabled?: boolean; // override grid option draggable.enabled
   resizeEnabled?: boolean; // override grid option resizable.enabled
   compactEnabled?: boolean; // disable compact
