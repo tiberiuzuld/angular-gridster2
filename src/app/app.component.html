@@ -92,6 +92,12 @@
     <mat-checkbox [(ngModel)]="options.disableWindowResize" (ngModelChange)="changedOptions()">
       Disable window resize
     </mat-checkbox>
+    <mat-checkbox [(ngModel)]="options.scrollToNewItems" (ngModelChange)="changedOptions()">
+      Scroll to new items
+    </mat-checkbox>
+    <mat-checkbox [(ngModel)]="options.disableWarnings" (ngModelChange)="changedOptions()">
+      Disable console warnings
+    </mat-checkbox>
     <label class="mat-headline cols-2">Item Settings</label>
     <mat-form-field>
       <input matInput [(ngModel)]="options.maxItemCols" type="number" placeholder="Max Item Cols"
@@ -166,7 +172,7 @@
   <button mat-mini-fab class="sidenav-fab" (click)="sidenav.toggle()">
     <mat-icon>settings</mat-icon>
   </button>
-  <gridster [options]="options">
+  <gridster [options]="options" *ngIf="!remove">
     <gridster-item [item]="item" *ngFor="let item of dashboard">
       <div class="button-holder">
         <div class="gridster-item-content" *ngIf="item.hasContent">
@@ -181,15 +187,18 @@
           </button>
           <button mat-icon-button mat-raised-button class="remove-button" (mousedown)="removeItem($event, item)"
                   (touchstart)="removeItem($event, item)" matTooltip="Remove">
-            <mat-icon>clear</mat-icon>
+            <mat-icon>delete</mat-icon>
           </button>
         </div>
         <label *ngIf="!item.hasContent">{{item.label}}</label>
         <button mat-mini-fab *ngIf="!item.hasContent" (mousedown)="removeItem($event, item)"
                 (touchstart)="removeItem($event, item)" matTooltip="Remove">
-          <mat-icon>clear</mat-icon>
+          <mat-icon>delete</mat-icon>
         </button>
       </div>
     </gridster-item>
   </gridster>
+  <button mat-mini-fab class="destroy-button" (click)="destroy()">
+    <mat-icon>delete</mat-icon>
+  </button>
 </mat-sidenav-container>

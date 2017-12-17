@@ -1,14 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  Host,
-  Input,
-  OnInit,
-  OnDestroy,
-  Output,
-  Renderer2,
-} from '@angular/core';
+import {Component, ElementRef, Host, Input, OnDestroy, OnInit, Renderer2} from '@angular/core';
 
 import {GridsterItem} from './gridsterItem.interface';
 import {GridsterComponent} from './gridster.component';
@@ -16,16 +6,15 @@ import {GridsterDraggable} from './gridsterDraggable.service';
 import {GridsterResizable} from './gridsterResizable.service';
 import {GridsterUtils} from './gridsterUtils.service';
 import {GridsterItemS} from './gridsterItemS.interface';
+import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
 
 @Component({
   selector: 'gridster-item',
   templateUrl: './gridsterItem.html',
   styleUrls: ['./gridsterItem.css']
 })
-export class GridsterItemComponent implements OnInit, OnDestroy {
+export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemComponentInterface {
   @Input() item: GridsterItem;
-  @Output() itemChange: EventEmitter<GridsterItem> = new EventEmitter();
-  @Output() itemResize: EventEmitter<GridsterItem> = new EventEmitter();
   $item: GridsterItemS;
   el: any;
   gridster: GridsterComponent;
@@ -41,6 +30,7 @@ export class GridsterItemComponent implements OnInit, OnDestroy {
   drag: GridsterDraggable;
   resize: GridsterResizable;
   notPlaced: boolean;
+  init: boolean;
 
   constructor(el: ElementRef, @Host() gridster: GridsterComponent, public renderer: Renderer2) {
     this.el = el.nativeElement;
@@ -66,7 +56,6 @@ export class GridsterItemComponent implements OnInit, OnDestroy {
       rows: undefined,
       x: undefined,
       y: undefined,
-      initCallback: undefined,
       dragEnabled: undefined,
       resizeEnabled: undefined,
       compactEnabled: undefined,
@@ -81,6 +70,11 @@ export class GridsterItemComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.gridster.removeItem(this);
+    delete this.gridster;
+    this.drag.destroy();
+    delete this.drag;
+    this.resize.destroy();
+    delete this.resize;
   }
 
   setSize(noCheck: Boolean): void {
@@ -119,10 +113,21 @@ export class GridsterItemComponent implements OnInit, OnDestroy {
     this.renderer.setStyle(this.el, 'width', this.width + 'px');
     this.renderer.setStyle(this.el, 'height', this.height + 'px');
     this.renderer.setStyle(this.el, 'margin', this.itemMargin + 'px');
+    if (!this.init && this.width > 0 && this.height > 0) {
+      this.init = true;
+      if (this.item.initCallback) {
+        this.item.initCallback(this.item, this);
+      }
+      if (this.gridster.options.itemInitCallback) {
+        this.gridster.options.itemInitCallback(this.item, this);
+      }
+      if (this.gridster.$options.scrollToNewItems) {
+        this.el.scrollIntoView(false);
+      }
+    }
     if (this.width !== this.itemWidth || this.height !== this.itemHeight) {
-      this.itemResize.emit(this.item);
-      if (this.gridster.$options.itemResizeCallback) {
-        this.gridster.$options.itemResizeCallback(this.item, this);
+      if (this.gridster.options.itemResizeCallback) {
+        this.gridster.options.itemResizeCallback(this.item, this);
       }
     }
     this.itemTop = this.top;
@@ -132,9 +137,8 @@ export class GridsterItemComponent implements OnInit, OnDestroy {
   }
 
   itemChanged(): void {
-    this.itemChange.emit(this.item);
-    if (this.gridster.$options.itemChangeCallback) {
-      this.gridster.$options.itemChangeCallback(this.item, this);
+    if (this.gridster.options.itemChangeCallback) {
+      this.gridster.options.itemChangeCallback(this.item, this);
     }
   }
 

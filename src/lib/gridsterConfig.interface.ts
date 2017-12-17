@@ -27,6 +27,7 @@ export interface GridsterConfig {
   scrollSensitivity?: number;
   scrollSpeed?: number;
   initCallback?: Function;
+  destroyCallback?: Function;
   itemChangeCallback?: Function;
   itemResizeCallback?: Function;
   itemInitCallback?: Function;
@@ -41,6 +42,8 @@ export interface GridsterConfig {
   pushResizeItems?: boolean;
   displayGrid?: displayGrid;
   disableWindowResize?: boolean;
+  disableWarnings?: boolean;
+  scrollToNewItems?: boolean;
   enableEmptyCellClick?: boolean;
   enableEmptyCellContextMenu?: boolean;
   enableEmptyCellDrop?: boolean;

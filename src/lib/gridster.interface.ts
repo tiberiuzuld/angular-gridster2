@@ -1,0 +1,40 @@
+import {GridsterConfigS} from './gridsterConfigS.interface';
+import {GridsterItemComponent} from './gridsterItem.component';
+import {ChangeDetectorRef, Renderer2} from '@angular/core';
+import {GridsterEmptyCell} from './gridsterEmptyCell.service';
+import {GridsterCompact} from './gridsterCompact.service';
+import {GridsterGridComponent} from './gridsterGrid.component';
+import {GridsterConfig} from './gridsterConfig.interface';
+import {GridsterItemS} from './gridsterItemS.interface';
+
+export interface GridsterComponentInterface {
+  $options: GridsterConfigS;
+  grid: Array<GridsterItemComponent>;
+  checkCollision: Function;
+  positionXToPixels: Function;
+  pixelsToPositionX: Function;
+  positionYToPixels: Function;
+  pixelsToPositionY: Function;
+  findItemWithItem: Function;
+  findItemsWithItem: Function;
+  checkGridCollision: Function;
+  el: any;
+  renderer: Renderer2;
+  cdRef: ChangeDetectorRef;
+  options: GridsterConfig;
+  calculateLayoutDebounce: Function;
+  movingItem: GridsterItemS;
+  previewStyle: Function;
+  mobile: boolean;
+  curWidth: number;
+  curHeight: number;
+  columns: number;
+  rows: number;
+  curColWidth: number;
+  curRowHeight: number;
+  windowResize: Function | null;
+  gridLines: GridsterGridComponent;
+  dragInProgress: boolean;
+  emptyCell: GridsterEmptyCell;
+  compact: GridsterCompact;
+}

@@ -1,13 +1,4 @@
-import {
-  Component,
-  ChangeDetectorRef,
-  ElementRef,
-  Input,
-  OnChanges,
-  OnInit,
-  OnDestroy,
-  Renderer2, SimpleChanges
-} from '@angular/core';
+import {ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, Renderer2, SimpleChanges} from '@angular/core';
 
 import {GridsterConfigService} from './gridsterConfig.constant';
 import {GridsterConfig} from './gridsterConfig.interface';
@@ -18,13 +9,14 @@ import {GridsterEmptyCell} from './gridsterEmptyCell.service';
 import {GridsterCompact} from './gridsterCompact.service';
 import {GridsterConfigS} from './gridsterConfigS.interface';
 import {GridsterItemS} from './gridsterItemS.interface';
+import {GridsterComponentInterface} from './gridster.interface';
 
 @Component({
   selector: 'gridster',
   templateUrl: './gridster.html',
   styleUrls: ['./gridster.css']
 })
-export class GridsterComponent implements OnInit, OnChanges, OnDestroy {
+export class GridsterComponent implements OnInit, OnChanges, OnDestroy, GridsterComponentInterface {
   @Input() options: GridsterConfig;
   calculateLayoutDebounce: Function;
   movingItem: GridsterItemS;
@@ -45,13 +37,6 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy {
   emptyCell: GridsterEmptyCell;
   compact: GridsterCompact;
 
-  static checkCollisionTwoItems(item: GridsterItemS, item2: GridsterItemS): boolean {
-    return item.x < item2.x + item2.cols
-      && item.x + item.cols > item2.x
-      && item.y < item2.y + item2.rows
-      && item.y + item.rows > item2.y;
-  }
-
   constructor(el: ElementRef, public renderer: Renderer2, public cdRef: ChangeDetectorRef) {
     this.el = el.nativeElement;
     this.$options = JSON.parse(JSON.stringify(GridsterConfigService));
@@ -62,34 +47,18 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy {
     this.curColWidth = 0;
     this.curRowHeight = 0;
     this.dragInProgress = false;
-    this.$options.draggable.stop = undefined;
-    this.$options.draggable.start = undefined;
-    this.$options.resizable.stop = undefined;
-    this.$options.resizable.start = undefined;
-    this.$options.itemChangeCallback = undefined;
-    this.$options.itemResizeCallback = undefined;
-    this.$options.itemInitCallback = undefined;
-    this.$options.itemRemovedCallback = undefined;
-    this.$options.emptyCellClickCallback = undefined;
-    this.$options.emptyCellContextMenuCallback = undefined;
-    this.$options.emptyCellDropCallback = undefined;
-    this.$options.emptyCellDragCallback = undefined;
     this.emptyCell = new GridsterEmptyCell(this);
     this.compact = new GridsterCompact(this);
   }
 
+  static checkCollisionTwoItems(item: GridsterItemS, item2: GridsterItemS): boolean {
+    return item.x < item2.x + item2.cols
+      && item.x + item.cols > item2.x
+      && item.y < item2.y + item2.rows
+      && item.y + item.rows > item2.y;
+  }
+
   ngOnInit(): void {
-    this.setOptions();
-    this.options.api = {
-      optionsChanged: this.optionsChanged.bind(this),
-      resize: this.onResize.bind(this),
-      getNextPossiblePosition: this.getNextPossiblePosition.bind(this)
-    };
-    this.columns = this.$options.minCols;
-    this.rows = this.$options.minRows;
-    this.setGridSize();
-    this.calculateLayoutDebounce = GridsterUtils.debounce(this.calculateLayout.bind(this), 5);
-    this.calculateLayoutDebounce();
     if (this.options.initCallback) {
       this.options.initCallback(this);
     }
@@ -97,7 +66,17 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.options) {
-      this.ngOnInit();
+      this.setOptions();
+      this.options.api = {
+        optionsChanged: this.optionsChanged.bind(this),
+        resize: this.onResize.bind(this),
+        getNextPossiblePosition: this.getNextPossiblePosition.bind(this)
+      };
+      this.columns = this.$options.minCols;
+      this.rows = this.$options.minRows;
+      this.setGridSize();
+      this.calculateLayoutDebounce = GridsterUtils.debounce(this.calculateLayout.bind(this), 5);
+      this.calculateLayoutDebounce();
     }
   }
 
@@ -141,6 +120,19 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy {
     if (this.windowResize) {
       this.windowResize();
     }
+    if (this.options.destroyCallback) {
+      this.options.destroyCallback(this);
+    }
+    if (this.options.api) {
+      this.options.api.resize = undefined;
+      this.options.api.optionsChanged = undefined;
+      this.options.api.getNextPossiblePosition = undefined;
+      this.options.api = undefined;
+    }
+    this.emptyCell.destroy();
+    delete this.emptyCell;
+    this.compact.destroy();
+    delete this.compact;
   }
 
   onResize(): void {
@@ -202,15 +194,17 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy {
 
   calculateLayout(): void {
     // check to compact
-    this.compact.checkCompact();
+    if (this.compact) {
+      this.compact.checkCompact();
+    }
 
     this.setGridDimensions();
     if (this.$options.outerMargin) {
-      this.curColWidth = Math.floor((this.curWidth - this.$options.margin) / this.columns);
-      this.curRowHeight = Math.floor((this.curHeight - this.$options.margin) / this.rows);
+      this.curColWidth = (this.curWidth - this.$options.margin) / this.columns;
+      this.curRowHeight = (this.curHeight - this.$options.margin) / this.rows;
     } else {
-      this.curColWidth = Math.floor((this.curWidth + this.$options.margin) / this.columns);
-      this.curRowHeight = Math.floor((this.curHeight + this.$options.margin) / this.rows);
+      this.curColWidth = (this.curWidth + this.$options.margin) / this.columns;
+      this.curRowHeight = (this.curHeight + this.$options.margin) / this.rows;
     }
     let addClass = '';
     let removeClass1 = '';
@@ -259,7 +253,9 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy {
     this.renderer.removeClass(this.el, removeClass2);
     this.renderer.removeClass(this.el, removeClass3);
 
-    this.gridLines.updateGrid();
+    if (this.gridLines) {
+      this.gridLines.updateGrid();
+    }
 
     let widgetsIndex: number = this.grid.length - 1, widget: GridsterItemComponent;
     for (; widgetsIndex >= 0; widgetsIndex--) {
@@ -286,25 +282,22 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy {
     if (itemComponent.$item.x === -1 || itemComponent.$item.y === -1) {
       this.autoPositionItem(itemComponent);
     } else if (this.checkCollision(itemComponent.$item)) {
-      console.warn('Can\'t be placed in the bounds of the dashboard, trying to auto position!/n' +
-        JSON.stringify(itemComponent.item, ['cols', 'rows', 'x', 'y']));
+      if (!this.$options.disableWarnings) {
+        console.warn('Can\'t be placed in the bounds of the dashboard, trying to auto position!/n' +
+          JSON.stringify(itemComponent.item, ['cols', 'rows', 'x', 'y']));
+      }
+
       this.autoPositionItem(itemComponent);
     }
     this.grid.push(itemComponent);
     this.calculateLayoutDebounce();
-    if (itemComponent.$item.initCallback) {
-      itemComponent.$item.initCallback(itemComponent.item, itemComponent);
-    }
-    if (this.$options.itemInitCallback) {
-      this.$options.itemInitCallback(itemComponent.item, itemComponent);
-    }
   }
 
   removeItem(itemComponent: GridsterItemComponent): void {
     this.grid.splice(this.grid.indexOf(itemComponent), 1);
     this.calculateLayoutDebounce();
-    if (this.$options.itemRemovedCallback) {
-      this.$options.itemRemovedCallback(itemComponent.item, itemComponent);
+    if (this.options.itemRemovedCallback) {
+      this.options.itemRemovedCallback(itemComponent.item, itemComponent);
     }
   }
 
@@ -360,8 +353,10 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy {
       itemComponent.itemChanged();
     } else {
       itemComponent.notPlaced = true;
-      console.warn('Can\'t be placed in the bounds of the dashboard!/n' +
-        JSON.stringify(itemComponent.item, ['cols', 'rows', 'x', 'y']));
+      if (!this.$options.disableWarnings) {
+        console.warn('Can\'t be placed in the bounds of the dashboard!/n' +
+          JSON.stringify(itemComponent.item, ['cols', 'rows', 'x', 'y']));
+      }
     }
   }
 

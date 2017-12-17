@@ -63,3 +63,10 @@ gridster-item .gridster-item-content {
   display: flex;
   flex-direction: column;
 }
+
+.destroy-button {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  z-index: 100;
+}

@@ -1,17 +1,17 @@
 import {Injectable} from '@angular/core';
 
-import {GridsterItemComponent} from './gridsterItem.component';
-import {scroll, cancelScroll} from './gridsterScroll.service';
+import {cancelScroll, scroll} from './gridsterScroll.service';
 import {GridsterResizeEventType} from './gridsterResizeEventType.interface';
 import {GridsterPush} from './gridsterPush.service';
-import {GridsterComponent} from './gridster.component';
 import {GridsterUtils} from './gridsterUtils.service';
 import {GridsterPushResize} from './gridsterPushResize.service';
+import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
+import {GridsterComponentInterface} from './gridster.interface';
 
 @Injectable()
 export class GridsterResizable {
-  gridsterItem: GridsterItemComponent;
-  gridster: GridsterComponent;
+  gridsterItem: GridsterItemComponentInterface;
+  gridster: GridsterComponentInterface;
   lastMouse: {
     clientX: number,
     clientY: number
@@ -48,7 +48,7 @@ export class GridsterResizable {
   height: number;
   newPosition: number;
 
-  constructor(gridsterItem: GridsterItemComponent, gridster: GridsterComponent) {
+  constructor(gridsterItem: GridsterItemComponentInterface, gridster: GridsterComponentInterface) {
     this.gridsterItem = gridsterItem;
     this.gridster = gridster;
     this.lastMouse = {
@@ -57,6 +57,11 @@ export class GridsterResizable {
     };
     this.itemBackup = [0, 0, 0, 0];
     this.resizeEventScrollType = {w: false, e: false, n: false, s: false};
+  }
+
+  destroy(): void {
+    delete this.gridsterItem;
+    delete this.gridster;
   }
 
   dragStart(e: any): void {
@@ -69,8 +74,8 @@ export class GridsterResizable {
         // right or middle mouse button
         return;
     }
-    if (this.gridster.$options.resizable.start) {
-      this.gridster.$options.resizable.start(this.gridsterItem.item, this.gridsterItem, e);
+    if (this.gridster.options.resizable && this.gridster.options.resizable.start) {
+      this.gridster.options.resizable.start(this.gridsterItem.item, this.gridsterItem, e);
     }
     e.stopPropagation();
     e.preventDefault();
@@ -167,8 +172,8 @@ export class GridsterResizable {
     this.gridsterItem.renderer.removeClass(this.gridsterItem.el, 'gridster-item-resizing');
     this.gridster.dragInProgress = false;
     this.gridster.gridLines.updateGrid();
-    if (this.gridster.$options.resizable.stop) {
-      Promise.resolve(this.gridster.$options.resizable.stop(this.gridsterItem.item, this.gridsterItem, e))
+    if (this.gridster.options.resizable && this.gridster.options.resizable.stop) {
+      Promise.resolve(this.gridster.options.resizable.stop(this.gridsterItem.item, this.gridsterItem, e))
         .then(this.makeResize.bind(this), this.cancelResize.bind(this));
     } else {
       this.makeResize();
@@ -187,6 +192,10 @@ export class GridsterResizable {
     this.gridsterItem.setSize(true);
     this.push.restoreItems();
     this.pushResize.restoreItems();
+    this.push.destroy();
+    delete this.push;
+    this.pushResize.destroy();
+    delete this.pushResize;
   }
 
   makeResize(): void {
@@ -194,6 +203,10 @@ export class GridsterResizable {
     this.gridsterItem.checkItemChanges(this.gridsterItem.$item, this.gridsterItem.item);
     this.push.setPushedItems();
     this.pushResize.setPushedItems();
+    this.push.destroy();
+    delete this.push;
+    this.pushResize.destroy();
+    delete this.pushResize;
   }
 
   handleN(e: any): void {

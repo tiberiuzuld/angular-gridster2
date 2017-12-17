@@ -1,17 +1,23 @@
 import {Injectable} from '@angular/core';
 
-import {GridsterItemComponent} from './gridsterItem.component';
-import {GridsterComponent} from './gridster.component';
+import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
+import {GridsterComponentInterface} from './gridster.interface';
 
 @Injectable()
 export class GridsterSwap {
-  private swapedItem: GridsterItemComponent | undefined;
-  private gridsterItem: GridsterItemComponent;
-  private gridster: GridsterComponent;
+  private swapedItem: GridsterItemComponentInterface | undefined;
+  private gridsterItem: GridsterItemComponentInterface;
+  private gridster: GridsterComponentInterface;
 
-  constructor(gridsterItem: GridsterItemComponent) {
+  constructor(gridsterItem: GridsterItemComponentInterface) {
     this.gridsterItem = gridsterItem;
     this.gridster = gridsterItem.gridster;
+  }
+
+  destroy(): void {
+    delete this.gridster;
+    delete this.gridsterItem;
+    delete this.swapedItem;
   }
 
   swapItems(): void {
@@ -56,10 +62,10 @@ export class GridsterSwap {
     }
   }
 
-  checkSwap(pushedBy: GridsterItemComponent): void {
+  checkSwap(pushedBy: GridsterItemComponentInterface): void {
     const gridsterItemCollision: any = this.gridster.checkCollision(pushedBy.$item);
     if (gridsterItemCollision && gridsterItemCollision !== true && gridsterItemCollision.canBeDragged()) {
-      const gridsterItemCollide: GridsterItemComponent = gridsterItemCollision;
+      const gridsterItemCollide: GridsterItemComponentInterface = gridsterItemCollision;
       const copyCollisionX = gridsterItemCollide.$item.x;
       const copyCollisionY = gridsterItemCollide.$item.y;
       const copyX = pushedBy.$item.x;

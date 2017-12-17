@@ -1,16 +1,16 @@
 import {Injectable} from '@angular/core';
 
 import {GridsterSwap} from './gridsterSwap.service';
-import {scroll, cancelScroll} from './gridsterScroll.service';
-import {GridsterItemComponent} from './gridsterItem.component';
-import {GridsterComponent} from './gridster.component';
+import {cancelScroll, scroll} from './gridsterScroll.service';
 import {GridsterPush} from './gridsterPush.service';
 import {GridsterUtils} from './gridsterUtils.service';
+import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
+import {GridsterComponentInterface} from './gridster.interface';
 
 @Injectable()
 export class GridsterDraggable {
-  gridsterItem: GridsterItemComponent;
-  gridster: GridsterComponent;
+  gridsterItem: GridsterItemComponentInterface;
+  gridster: GridsterComponentInterface;
   lastMouse: {
     clientX: number,
     clientY: number
@@ -44,7 +44,7 @@ export class GridsterDraggable {
   swap: GridsterSwap;
   path: Array<{ x: number, y: number }>;
 
-  constructor(gridsterItem: GridsterItemComponent, gridster: GridsterComponent) {
+  constructor(gridsterItem: GridsterItemComponentInterface, gridster: GridsterComponentInterface) {
     this.gridsterItem = gridsterItem;
     this.gridster = gridster;
     this.lastMouse = {
@@ -52,6 +52,15 @@ export class GridsterDraggable {
       clientY: 0
     };
     this.path = [];
+  }
+
+  destroy(): void {
+    delete this.gridsterItem;
+    delete this.gridster;
+    if (this.mousedown) {
+      this.mousedown();
+      this.touchstart();
+    }
   }
 
   dragStart(e: any): void {
@@ -65,8 +74,8 @@ export class GridsterDraggable {
         return;
     }
 
-    if (this.gridster.$options.draggable.start) {
-      this.gridster.$options.draggable.start(this.gridsterItem.item, this.gridsterItem, e);
+    if (this.gridster.options.draggable && this.gridster.options.draggable.start) {
+      this.gridster.options.draggable.start(this.gridsterItem.item, this.gridsterItem, e);
     }
 
     e.stopPropagation();
@@ -135,8 +144,8 @@ export class GridsterDraggable {
     this.gridster.dragInProgress = false;
     this.gridster.gridLines.updateGrid();
     this.path = [];
-    if (this.gridster.$options.draggable.stop) {
-      Promise.resolve(this.gridster.$options.draggable.stop(this.gridsterItem.item, this.gridsterItem, e))
+    if (this.gridster.options.draggable && this.gridster.options.draggable.stop) {
+      Promise.resolve(this.gridster.options.draggable.stop(this.gridsterItem.item, this.gridsterItem, e))
         .then(this.makeDrag.bind(this), this.cancelDrag.bind(this));
     } else {
       this.makeDrag();
@@ -153,6 +162,10 @@ export class GridsterDraggable {
     this.gridsterItem.setSize(true);
     this.push.restoreItems();
     this.swap.restoreSwapItem();
+    this.push.destroy();
+    delete this.push;
+    this.swap.destroy();
+    delete this.swap;
   }
 
   makeDrag() {
@@ -160,6 +173,10 @@ export class GridsterDraggable {
     this.gridsterItem.checkItemChanges(this.gridsterItem.$item, this.gridsterItem.item);
     this.push.setPushedItems();
     this.swap.setSwapItem();
+    this.push.destroy();
+    delete this.push;
+    this.swap.destroy();
+    delete this.swap;
   }
 
   calculateItemPosition() {

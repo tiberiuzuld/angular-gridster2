@@ -34,6 +34,8 @@ export interface GridsterConfigS {
   pushResizeItems: boolean;
   displayGrid: displayGrid;
   disableWindowResize: boolean;
+  disableWarnings: boolean;
+  scrollToNewItems: boolean;
   enableEmptyCellClick: boolean;
   enableEmptyCellContextMenu: boolean;
   enableEmptyCellDrop: boolean;
@@ -71,6 +73,7 @@ export interface Resizable extends DragBase {
 export interface DragBase {
   enabled: boolean;
   delayStart: number;
+
   [propName: string]: any;
 }
 
