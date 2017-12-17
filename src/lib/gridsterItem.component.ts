@@ -121,6 +121,9 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
       if (this.gridster.options.itemInitCallback) {
         this.gridster.options.itemInitCallback(this.item, this);
       }
+      if (this.gridster.$options.scrollToNewItems) {
+        this.el.scrollIntoView(false);
+      }
     }
     if (this.width !== this.itemWidth || this.height !== this.itemHeight) {
       if (this.gridster.options.itemResizeCallback) {

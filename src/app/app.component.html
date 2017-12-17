@@ -92,6 +92,12 @@
     <mat-checkbox [(ngModel)]="options.disableWindowResize" (ngModelChange)="changedOptions()">
       Disable window resize
     </mat-checkbox>
+    <mat-checkbox [(ngModel)]="options.scrollToNewItems" (ngModelChange)="changedOptions()">
+      Scroll to new items
+    </mat-checkbox>
+    <mat-checkbox [(ngModel)]="options.disableWarnings" (ngModelChange)="changedOptions()">
+      Disable console warnings
+    </mat-checkbox>
     <label class="mat-headline cols-2">Item Settings</label>
     <mat-form-field>
       <input matInput [(ngModel)]="options.maxItemCols" type="number" placeholder="Max Item Cols"

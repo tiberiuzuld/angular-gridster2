@@ -125,6 +125,7 @@ export class AppComponent implements OnInit {
       displayGrid: 'onDrag&Resize',
       disableWindowResize: false,
       disableWarnings: false,
+      scrollToNewItems: false
     };
 
     this.dashboard = [
