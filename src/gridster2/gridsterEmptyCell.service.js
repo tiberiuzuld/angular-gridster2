@@ -14,7 +14,7 @@
       };
 
       vm.updateOptions = function () {
-        if (gridster.$options.enableEmptyCellClick && !vm.emptyCellClick && gridster.$options.emptyCellClickCallback) {
+        if (gridster.$options.enableEmptyCellClick && !vm.emptyCellClick && gridster.options.emptyCellClickCallback) {
           vm.emptyCellClick = true;
           gridster.el.addEventListener('click', vm.emptyCellClickCb);
           gridster.el.addEventListener('touchend', vm.emptyCellClickCb);
@@ -24,14 +24,14 @@
           gridster.el.removeEventListener('touchend', vm.emptyCellClickCb);
         }
         if (gridster.$options.enableEmptyCellContextMenu && !vm.emptyCellContextMenu &&
-          gridster.$options.emptyCellContextMenuCallback) {
+          gridster.options.emptyCellContextMenuCallback) {
           vm.emptyCellContextMenu = true;
           gridster.el.addEventListener('contextmenu', vm.emptyCellContextMenuCb);
         } else if (!gridster.$options.enableEmptyCellContextMenu && vm.emptyCellContextMenu) {
           vm.emptyCellContextMenu = false;
           gridster.el.removeEventListener('contextmenu', vm.emptyCellContextMenuCb);
         }
-        if (gridster.$options.enableEmptyCellDrop && !vm.emptyCellDrop && gridster.$options.emptyCellDropCallback) {
+        if (gridster.$options.enableEmptyCellDrop && !vm.emptyCellDrop && gridster.options.emptyCellDropCallback) {
           vm.emptyCellDrop = true;
           gridster.el.addEventListener('drop', vm.emptyCellDragDrop);
           gridster.el.addEventListener('dragover', vm.emptyCellDragOver);
@@ -40,7 +40,7 @@
           gridster.el.removeEventListener('drop', vm.emptyCellDragDrop);
           gridster.el.removeEventListener('dragover', vm.emptyCellDragOver);
         }
-        if (gridster.$options.enableEmptyCellDrag && !vm.emptyCellDrag && gridster.$options.emptyCellDragCallback) {
+        if (gridster.$options.enableEmptyCellDrag && !vm.emptyCellDrag && gridster.options.emptyCellDragCallback) {
           vm.emptyCellDrag = true;
           gridster.el.addEventListener('mousedown', vm.emptyCellMouseDown);
           gridster.el.addEventListener('touchstart', vm.emptyCellMouseDown);
@@ -58,7 +58,7 @@
         if (!item) {
           return;
         }
-        gridster.$options.emptyCellClickCallback(e, item);
+        gridster.options.emptyCellClickCallback(e, item);
       };
 
       vm.emptyCellContextMenuCb = function (e) {
@@ -71,7 +71,7 @@
         if (!item) {
           return;
         }
-        gridster.$options.emptyCellContextMenuCallback(e, item);
+        gridster.options.emptyCellContextMenuCallback(e, item);
       };
 
       vm.emptyCellDragDrop = function (e) {
@@ -79,7 +79,7 @@
         if (!item) {
           return;
         }
-        gridster.$options.emptyCellDropCallback(e, item);
+        gridster.options.emptyCellDropCallback(e, item);
       };
 
       vm.emptyCellDragOver = function (e) {
@@ -132,7 +132,7 @@
         if (item) {
           gridster.movingItem = item;
         }
-        gridster.$options.emptyCellDragCallback(e, gridster.movingItem);
+        gridster.options.emptyCellDragCallback(e, gridster.movingItem);
         setTimeout(function () {
           gridster.movingItem = null;
           gridster.previewStyle();

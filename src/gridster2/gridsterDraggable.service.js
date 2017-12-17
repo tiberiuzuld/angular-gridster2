@@ -55,8 +55,8 @@
             return;
         }
 
-        if (vm.gridster.$options.draggable.start) {
-          vm.gridster.$options.draggable.start(vm.gridsterItem.item, vm.gridsterItem, e);
+        if (vm.gridster.options.draggable && vm.gridster.options.draggable.start) {
+          vm.gridster.options.draggable.start(vm.gridsterItem.item, vm.gridsterItem, e);
         }
 
         e.stopPropagation();
@@ -125,8 +125,8 @@
         vm.gridster.gridLines.updateGrid();
         vm.gridster.gridLines.updateGrid(false);
         vm.path = [];
-        if (vm.gridster.$options.draggable.stop) {
-          var promise = vm.gridster.$options.draggable.stop(vm.gridsterItem.item, vm.gridsterItem, e);
+        if (vm.gridster.options.draggable && vm.gridster.options.draggable.stop) {
+          var promise = vm.gridster.options.draggable.stop(vm.gridsterItem.item, vm.gridsterItem, e);
           if (promise && promise.then) {
             promise.then(vm.makeDrag.bind(vm), vm.cancelDrag.bind(vm));
           } else {

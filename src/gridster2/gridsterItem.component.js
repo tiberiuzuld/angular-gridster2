@@ -22,7 +22,6 @@
       rows: undefined,
       x: undefined,
       y: undefined,
-      initCallback: undefined,
       dragEnabled: undefined,
       resizeEnabled: undefined,
       compactEnabled: undefined,
@@ -45,6 +44,7 @@
     vm.width = 0;
     vm.height = 0;
     vm.itemMargin = 0;
+    vm.init = false;
 
     vm.$onInit = function () {
       vm.drag = new GridsterDraggable(vm, vm.gridster);
@@ -59,11 +59,12 @@
 
     vm.$onDestroy = function () {
       vm.gridster.removeItem(vm);
-      delete vm.$item.initCallback;
       vm.drag.destroy();
       delete vm.drag;
       vm.resize.destroy();
       delete vm.resize;
+      delete vm.el;
+      delete vm.nativeEl;
     };
 
     vm.setSize = function (noCheck) {
@@ -87,7 +88,7 @@
         vm.height = vm.$item.rows * vm.gridster.curRowHeight - vm.gridster.$options.margin;
       }
       if (!noCheck && vm.top === vm.itemTop && vm.left === vm.itemLeft &&
-          vm.width === vm.itemWidth && vm.height === vm.itemHeight) {
+        vm.width === vm.itemWidth && vm.height === vm.itemHeight) {
         return;
       }
       if (vm.gridster.$options.outerMargin) {
@@ -102,10 +103,22 @@
       $element.css('width', vm.width + 'px');
       $element.css('height', vm.height + 'px');
       $element.css('margin', vm.itemMargin + 'px');
+      if (!vm.init && vm.width > 0 && vm.height) {
+        vm.init = true;
+        if (vm.item.initCallback) {
+          vm.item.initCallback(vm.item, vm);
+        }
+        if (vm.gridster.options.itemInitCallback) {
+          vm.gridster.options.itemInitCallback(vm.item, vm);
+        }
+        if (vm.gridster.$options.scrollToNewItems) {
+          vm.nativeEl.scrollIntoView(false);
+        }
+      }
       if (vm.width !== vm.itemWidth || vm.height !== vm.itemHeight) {
         $scope.$broadcast('gridster-item-resize', vm.item);
-        if (vm.gridster.$options.itemResizeCallback) {
-          vm.gridster.$options.itemResizeCallback(vm.item, vm);
+        if (vm.gridster.options.itemResizeCallback) {
+          vm.gridster.options.itemResizeCallback(vm.item, vm);
         }
       }
       vm.itemTop = vm.top;
@@ -116,14 +129,14 @@
 
     vm.itemChanged = function () {
       $scope.$broadcast('gridster-item-change', vm.item);
-      if (vm.gridster.$options.itemChangeCallback) {
-        vm.gridster.$options.itemChangeCallback(vm.item, vm);
+      if (vm.gridster.options.itemChangeCallback) {
+        vm.gridster.options.itemChangeCallback(vm.item, vm);
       }
     };
 
     vm.checkItemChanges = function (newValue, oldValue) {
       if (newValue.rows === oldValue.rows && newValue.cols === oldValue.cols && newValue.x === oldValue.x &&
-          newValue.y === oldValue.y) {
+        newValue.y === oldValue.y) {
         return;
       }
       if (vm.gridster.checkCollision(vm.$item)) {
@@ -143,12 +156,12 @@
 
     vm.canBeDragged = function canBeDragged() {
       return !vm.gridster.mobile &&
-             (vm.$item.dragEnabled === undefined ? vm.gridster.$options.draggable.enabled : vm.$item.dragEnabled);
+        (vm.$item.dragEnabled === undefined ? vm.gridster.$options.draggable.enabled : vm.$item.dragEnabled);
     };
 
     vm.canBeResized = function canBeResized() {
       return !vm.gridster.mobile &&
-             (vm.$item.resizeEnabled === undefined ? vm.gridster.$options.resizable.enabled : vm.$item.resizeEnabled);
+        (vm.$item.resizeEnabled === undefined ? vm.gridster.$options.resizable.enabled : vm.$item.resizeEnabled);
     }
   }
 })();

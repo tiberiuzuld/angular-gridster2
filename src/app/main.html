@@ -117,6 +117,14 @@
       Disable window resize
     </md-checkbox>
   </div>
+  <div class="layout-row layout-align-start-center flex">
+    <md-checkbox ng-model="main.options.scrollToNewItems" ng-change="main.changedOptions()" class="flex">
+      Scroll to new items
+    </md-checkbox>
+    <md-checkbox ng-model="main.options.disableWarnings" ng-change="main.changedOptions()" class="flex">
+      Disable console warnings
+    </md-checkbox>
+  </div>
   <label class="md-headline">Item Settings</label>
   <div class="layout-row layout-align-start-center flex">
     <md-input-container class="flex">

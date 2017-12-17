@@ -62,8 +62,8 @@
             // right or middle mouse button
             return;
         }
-        if (vm.gridster.$options.resizable.start) {
-          vm.gridster.$options.resizable.start(vm.gridsterItem.item, vm.gridsterItem, e);
+        if (vm.gridster.options.resizable && vm.gridster.options.resizable.start) {
+          vm.gridster.options.resizable.start(vm.gridsterItem.item, vm.gridsterItem, e);
         }
         e.stopPropagation();
         e.preventDefault();
@@ -160,8 +160,8 @@
         vm.gridsterItem.el.removeClass('gridster-item-resizing');
         vm.gridster.dragInProgress = false;
         vm.gridster.gridLines.updateGrid();
-        if (vm.gridster.$options.resizable.stop) {
-          var promise = vm.gridster.$options.resizable.stop(vm.gridsterItem.item, vm.gridsterItem, e);
+        if (vm.gridster.options.resizable && vm.gridster.options.resizable.stop) {
+          var promise = vm.gridster.options.resizable.stop(vm.gridsterItem.item, vm.gridsterItem, e);
           if (promise && promise.then) {
             promise.then(vm.makeResize.bind(vm), vm.cancelResize.bind(vm));
           } else {

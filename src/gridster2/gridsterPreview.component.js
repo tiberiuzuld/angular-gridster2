@@ -2,14 +2,14 @@
   'use strict';
 
   angular.module('angular-gridster2').component('gridsterPreview', {
-    controller: GridsterGridController,
+    controller: GridsterPreviewController,
     require: {
       gridster: '^^gridster'
     }
   });
 
   /** @ngInject */
-  function GridsterGridController($element) {
+  function GridsterPreviewController($element) {
     var vm = this;
 
     vm.$onInit = function () {

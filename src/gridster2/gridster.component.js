@@ -21,7 +21,6 @@
     vm.mobile = false;
     vm.columns = 0;
     vm.rows = 0;
-    vm.windowResize = angular.noop;
     vm.gridLines = undefined;
     vm.dragInProgress = false;
 
@@ -33,18 +32,6 @@
     vm.grid = [];
     vm.curColWidth = 0;
     vm.curRowHeight = 0;
-    vm.$options.draggable.stop = undefined;
-    vm.$options.draggable.start = undefined;
-    vm.$options.resizable.stop = undefined;
-    vm.$options.resizable.start = undefined;
-    vm.$options.itemChangeCallback = undefined;
-    vm.$options.itemResizeCallback = undefined;
-    vm.$options.itemInitCallback = undefined;
-    vm.$options.itemRemovedCallback = undefined;
-    vm.$options.emptyCellClickCallback = undefined;
-    vm.$options.emptyCellContextMenuCallback = undefined;
-    vm.$options.emptyCellDropCallback = undefined;
-    vm.$options.emptyCellDragCallback = undefined;
 
     vm.checkCollisionTwoItems = function checkCollisionTwoItems(item, item2) {
       return item.x < item2.x + item2.cols
@@ -132,6 +119,7 @@
       delete vm.emptyCell;
       vm.compact.destroy();
       delete vm.compact;
+      delete vm.movingItem;
     };
 
     vm.onResize = function onResize() {
@@ -199,11 +187,11 @@
 
       vm.setGridDimensions();
       if (vm.$options.outerMargin) {
-        vm.curColWidth = Math.floor((vm.curWidth - vm.$options.margin) / vm.columns);
-        vm.curRowHeight = Math.floor((vm.curHeight - vm.$options.margin) / vm.rows);
+        vm.curColWidth = (vm.curWidth - vm.$options.margin) / vm.columns;
+        vm.curRowHeight = (vm.curHeight - vm.$options.margin) / vm.rows;
       } else {
-        vm.curColWidth = Math.floor((vm.curWidth + vm.$options.margin) / vm.columns);
-        vm.curRowHeight = Math.floor((vm.curHeight + vm.$options.margin) / vm.rows);
+        vm.curColWidth = (vm.curWidth + vm.$options.margin) / vm.columns;
+        vm.curRowHeight = (vm.curHeight + vm.$options.margin) / vm.rows;
       }
       var addClass;
       var removeClass1;
@@ -290,19 +278,13 @@
       }
       vm.grid.push(itemComponent);
       vm.calculateLayoutDebounce();
-      if (itemComponent.$item.initCallback) {
-        itemComponent.$item.initCallback(itemComponent.item, itemComponent);
-      }
-      if (vm.$options.itemInitCallback) {
-        vm.$options.itemInitCallback(itemComponent.item, itemComponent);
-      }
     };
 
     vm.removeItem = function removeItem(itemComponent) {
       vm.grid.splice(vm.grid.indexOf(itemComponent), 1);
       vm.calculateLayoutDebounce();
-      if (vm.$options.itemRemovedCallback) {
-        vm.$options.itemRemovedCallback(itemComponent.item, itemComponent);
+      if (vm.options.itemRemovedCallback) {
+        vm.options.itemRemovedCallback(itemComponent.item, itemComponent);
       }
     };
 

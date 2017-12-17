@@ -3,7 +3,7 @@ angular-gridster2
 # Angularjs 1.x version [Demo](http://tiberiuzuld.github.io/angular-gridster2/angularjs)
 
 ### Angular 5.x library is [master branch](https://github.com/tiberiuzuld/angular-gridster2/tree/master) 
-### Angular 4.x library is [4.x branch](https://github.com/tiberiuzuld/angular-gridster2/tree/4.x) (no longer maintained)
+### Angular 4.x library is [4.x branch](https://github.com/tiberiuzuld/angular-gridster2/tree/4.x)
 ### Angular 2.x library is [2.4.x branch](https://github.com/tiberiuzuld/angular-gridster2/tree/2.4.x) (no longer maintained)
 ### AngularJS >=1.5.x library is [1.x branch](https://github.com/tiberiuzuld/angular-gridster2/tree/1.x)
 
@@ -98,7 +98,7 @@ var GridsterConfigService = {
   // Arguments: gridsterItem, gridsterItemComponent
   itemResizeCallback: undefined,  // callback to call for each item when width/height changes.
   // Arguments: gridsterItem, gridsterItemComponent
-  itemInitCallback: undefined,  // callback to call for each item when is initialized.
+  itemInitCallback: undefined,  // callback to call for each item when is initialized and has size > 0.
   // Arguments: gridsterItem, gridsterItemComponent
   itemRemovedCallback: undefined,  // callback to call for each item when is removed.
     // Arguments: gridsterItem, gridsterItemComponent
@@ -146,9 +146,10 @@ var GridsterConfigService = {
   disablePushOnResize: false, // disable push on resize
   pushDirections: {north: true, east: true, south: true, west: true}, // control the directions items are pushed
   pushResizeItems: false, // on resize of item will shrink adjacent items
-    displayGrid: 'onDrag&Resize', // display background grid of rows and columns. Options: 'always' | 'onDrag&Resize' | 'none'
+  displayGrid: 'onDrag&Resize', // display background grid of rows and columns. Options: 'always' | 'onDrag&Resize' | 'none'
   disableWindowResize: false, // disable the window on resize listener. This will stop grid to recalculate on window resize.
-  disableWarnings: false // disable console log warnings about misplacement of grid items
+  disableWarnings: false, // disable console log warnings about misplacement of grid items
+  scrollToNewItems: false // scroll to new items placed in a scrollable view
 };
 ```
 
@@ -180,7 +181,7 @@ export interface GridsterItem {
   y?: number; // y position if missing will auto position
   rows?: number; // number of rows if missing will use grid option defaultItemRows
   cols?: number; // number of columns if missing will use grid option defaultItemCols
-  initCallback?: Function; // initialization callback. Argument: GridsterItem, GridsterItemComponent
+  initCallback?: Function; // initialization callback and has size > 0. Argument: GridsterItem, GridsterItemComponent
   dragEnabled?: boolean; // override grid option draggable.enabled
   resizeEnabled?: boolean; // override grid option resizable.enabled
   compactEnabled?: boolean; // disable compact
