@@ -67,7 +67,7 @@
     "core-js": "2.5.3",
     "gulp": "3.9.1",
     "gulp-clean": "0.3.2",
-    "gulp-inline-ng2-template": "4.0.0",
+    "gulp-inline-ng2-template": "4.1.0",
     "hammerjs": "2.0.8",
     "jasmine-core": "2.8.0",
     "jasmine-spec-reporter": "4.2.1",
