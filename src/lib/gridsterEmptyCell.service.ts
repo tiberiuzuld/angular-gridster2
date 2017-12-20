@@ -64,7 +64,7 @@ export class GridsterEmptyCell {
   }
 
   emptyCellClickCb(e: any): void {
-    if (this.gridster.movingItem || GridsterUtils.checkContentClassForEvent(this.gridster, e)) {
+    if (this.gridster.movingItem || GridsterUtils.checkContentClassForEmptyCellClickEvent(this.gridster, e)) {
       return;
     }
     const item = this.getValidItemFromEvent(e);
@@ -78,7 +78,7 @@ export class GridsterEmptyCell {
   }
 
   emptyCellContextMenuCb(e: any): void {
-    if (this.gridster.movingItem || GridsterUtils.checkContentClassForEvent(this.gridster, e)) {
+    if (this.gridster.movingItem || GridsterUtils.checkContentClassForEmptyCellClickEvent(this.gridster, e)) {
       return;
     }
     e.preventDefault();
@@ -115,7 +115,7 @@ export class GridsterEmptyCell {
   }
 
   emptyCellMouseDown(e: any): void {
-    if (GridsterUtils.checkContentClassForEvent(this.gridster, e)) {
+    if (GridsterUtils.checkContentClassForEmptyCellClickEvent(this.gridster, e)) {
       return;
     }
     e.preventDefault();
