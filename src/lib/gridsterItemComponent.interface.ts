@@ -5,7 +5,7 @@ import {GridsterItemS} from './gridsterItemS.interface';
 import {GridsterResizable} from './gridsterResizable.service';
 import {GridsterComponentInterface} from './gridster.interface';
 
-export interface GridsterItemComponentInterface {
+export abstract class GridsterItemComponentInterface {
   item: GridsterItem;
   $item: GridsterItemS;
   itemTop: number;
