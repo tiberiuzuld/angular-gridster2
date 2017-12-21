@@ -29,7 +29,7 @@ export class GridsterCompact {
     }
   }
 
-  checkCompactUp(): boolean {
+  checkCompactUp(): void {
     let widgetMovedUp = false, widget: GridsterItemComponent, moved: boolean;
     const l = this.gridster.grid.length;
     for (let i = 0; i < l; i++) {
@@ -47,7 +47,6 @@ export class GridsterCompact {
     if (widgetMovedUp) {
       this.checkCompactUp();
     }
-    return widgetMovedUp;
   }
 
   moveUpTillCollision(itemComponent: GridsterItemComponent): boolean {
@@ -61,7 +60,7 @@ export class GridsterCompact {
     }
   }
 
-  checkCompactLeft(): boolean {
+  checkCompactLeft(): void {
     let widgetMovedUp = false, widget: GridsterItemComponent, moved: boolean;
     const l = this.gridster.grid.length;
     for (let i = 0; i < l; i++) {
@@ -79,7 +78,6 @@ export class GridsterCompact {
     if (widgetMovedUp) {
       this.checkCompactLeft();
     }
-    return widgetMovedUp;
   }
 
   moveLeftTillCollision(itemComponent: GridsterItemComponent): boolean {

@@ -57,6 +57,11 @@ export class GridsterUtils {
     return false;
   }
 
+  static checkContentClassForEmptyCellClickEvent(gridster: GridsterComponentInterface, e: any): boolean {
+    return GridsterUtils.checkContentClass(e.target, e.currentTarget, gridster.$options.draggable.ignoreContentClass)
+      || GridsterUtils.checkContentClass(e.target, e.currentTarget, gridster.$options.draggable.dragHandleClass);
+  }
+
   static checkContentClass(target: any, current: any, contentClass: string): boolean {
     if (target === current) {
       return false;

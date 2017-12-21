@@ -55,6 +55,7 @@ export class GridsterDraggable {
   }
 
   destroy(): void {
+    delete this.gridster.movingItem;
     delete this.gridsterItem;
     delete this.gridster;
     if (this.mousedown) {
@@ -151,8 +152,10 @@ export class GridsterDraggable {
       this.makeDrag();
     }
     setTimeout(function () {
-      this.gridster.movingItem = null;
-      this.gridster.previewStyle();
+      if (this.gridster) {
+        this.gridster.movingItem = null;
+        this.gridster.previewStyle();
+      }
     }.bind(this));
   }
 

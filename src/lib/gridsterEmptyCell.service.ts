@@ -23,6 +23,8 @@ export class GridsterEmptyCell {
   }
 
   destroy(): void {
+    delete this.initialItem;
+    delete this.gridster.movingItem;
     delete this.gridster;
   }
 
@@ -64,7 +66,7 @@ export class GridsterEmptyCell {
   }
 
   emptyCellClickCb(e: any): void {
-    if (this.gridster.movingItem || GridsterUtils.checkContentClassForEvent(this.gridster, e)) {
+    if (this.gridster.movingItem || GridsterUtils.checkContentClassForEmptyCellClickEvent(this.gridster, e)) {
       return;
     }
     const item = this.getValidItemFromEvent(e);
@@ -78,7 +80,7 @@ export class GridsterEmptyCell {
   }
 
   emptyCellContextMenuCb(e: any): void {
-    if (this.gridster.movingItem || GridsterUtils.checkContentClassForEvent(this.gridster, e)) {
+    if (this.gridster.movingItem || GridsterUtils.checkContentClassForEmptyCellClickEvent(this.gridster, e)) {
       return;
     }
     e.preventDefault();
@@ -115,7 +117,7 @@ export class GridsterEmptyCell {
   }
 
   emptyCellMouseDown(e: any): void {
-    if (GridsterUtils.checkContentClassForEvent(this.gridster, e)) {
+    if (GridsterUtils.checkContentClassForEmptyCellClickEvent(this.gridster, e)) {
       return;
     }
     e.preventDefault();
@@ -159,8 +161,10 @@ export class GridsterEmptyCell {
     }
     setTimeout(function () {
       this.initialItem = null;
-      this.gridster.movingItem = null;
-      this.gridster.previewStyle();
+      if (this.gridster) {
+        this.gridster.movingItem = null;
+        this.gridster.previewStyle();
+      }
     }.bind(this));
     this.gridster.cdRef.markForCheck();
   }

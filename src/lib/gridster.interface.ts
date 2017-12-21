@@ -7,7 +7,7 @@ import {GridsterGridComponent} from './gridsterGrid.component';
 import {GridsterConfig} from './gridsterConfig.interface';
 import {GridsterItemS} from './gridsterItemS.interface';
 
-export interface GridsterComponentInterface {
+export abstract class GridsterComponentInterface {
   $options: GridsterConfigS;
   grid: Array<GridsterItemComponent>;
   checkCollision: Function;
