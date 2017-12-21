@@ -23,6 +23,8 @@ export class GridsterEmptyCell {
   }
 
   destroy(): void {
+    delete this.initialItem;
+    delete this.gridster.movingItem;
     delete this.gridster;
   }
 
@@ -159,8 +161,10 @@ export class GridsterEmptyCell {
     }
     setTimeout(function () {
       this.initialItem = null;
-      this.gridster.movingItem = null;
-      this.gridster.previewStyle();
+      if (this.gridster) {
+        this.gridster.movingItem = null;
+        this.gridster.previewStyle();
+      }
     }.bind(this));
     this.gridster.cdRef.markForCheck();
   }

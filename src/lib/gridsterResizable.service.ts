@@ -60,6 +60,7 @@ export class GridsterResizable {
   }
 
   destroy(): void {
+    delete this.gridster.movingItem;
     delete this.gridsterItem;
     delete this.gridster;
   }
@@ -179,8 +180,10 @@ export class GridsterResizable {
       this.makeResize();
     }
     setTimeout(function () {
-      this.gridster.movingItem = null;
-      this.gridster.previewStyle();
+      if (this.gridster) {
+        this.gridster.movingItem = null;
+        this.gridster.previewStyle();
+      }
     }.bind(this));
   }
 
