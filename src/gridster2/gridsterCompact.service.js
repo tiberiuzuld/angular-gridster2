@@ -47,7 +47,6 @@
         if (widgetMovedUp) {
           vm.checkCompactUp();
         }
-        return widgetMovedUp;
       };
 
       vm.moveUpTillCollision = function moveUpTillCollision(itemComponent) {
@@ -79,7 +78,6 @@
         if (widgetMovedLeft) {
           vm.checkCompactLeft();
         }
-        return widgetMovedLeft;
       };
 
       vm.moveLeftTillCollision = function moveLeftTillCollision(itemComponent) {

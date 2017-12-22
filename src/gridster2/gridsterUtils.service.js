@@ -55,6 +55,11 @@
         return false;
       }
 
+      function checkContentClassForEmptyCellClickEvent(gridster, e) {
+        return checkContentClass(e.target, e.currentTarget, gridster.$options.draggable.ignoreContentClass)
+          || checkContentClass(e.target, e.currentTarget, gridster.$options.draggable.dragHandleClass);
+      }
+
       function checkContentClass(target, current, contentClass) {
         if (target === current) {
           return false;
@@ -70,6 +75,7 @@
         merge: merge,
         debounce: debounce,
         checkTouchEvent: checkTouchEvent,
+        checkContentClassForEmptyCellClickEvent: checkContentClassForEmptyCellClickEvent,
         checkContentClassForEvent: checkContentClassForEvent
       }
     });

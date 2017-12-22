@@ -10,7 +10,11 @@
       var vm = this;
 
       vm.destroy = function () {
-        delete vm.gridster;
+        delete vm.initialItem;
+        delete gridster.movingItem;
+        if (gridster.previewStyle) {
+          gridster.previewStyle();
+        }
       };
 
       vm.updateOptions = function () {
@@ -51,7 +55,7 @@
         }
       };
       vm.emptyCellClickCb = function (e) {
-        if (gridster.movingItem || GridsterUtils.checkContentClassForEvent(gridster, e)) {
+        if (gridster.movingItem || GridsterUtils.checkContentClassForEmptyCellClickEvent(gridster, e)) {
           return;
         }
         var item = vm.getValidItemFromEvent(e);
@@ -62,7 +66,7 @@
       };
 
       vm.emptyCellContextMenuCb = function (e) {
-        if (gridster.movingItem || GridsterUtils.checkContentClassForEvent(gridster, e)) {
+        if (gridster.movingItem || GridsterUtils.checkContentClassForEmptyCellClickEvent(gridster, e)) {
           return;
         }
         e.preventDefault();
@@ -93,7 +97,7 @@
       };
 
       vm.emptyCellMouseDown = function (e) {
-        if (GridsterUtils.checkContentClassForEvent(gridster, e)) {
+        if (GridsterUtils.checkContentClassForEmptyCellClickEvent(gridster, e)) {
           return;
         }
         e.preventDefault();
@@ -134,8 +138,10 @@
         }
         gridster.options.emptyCellDragCallback(e, gridster.movingItem);
         setTimeout(function () {
-          gridster.movingItem = null;
-          gridster.previewStyle();
+          if (gridster) {
+            gridster.movingItem = null;
+            gridster.previewStyle();
+          }
         });
       };
 

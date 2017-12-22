@@ -36,12 +36,16 @@
       vm.path = [];
 
       vm.destroy = function () {
-        delete vm.gridsterItem;
+        delete vm.gridster.movingItem;
+        if (vm.gridster.previewStyle) {
+          vm.gridster.previewStyle();
+        }
         delete vm.gridster;
         if (vm.mousedown) {
           vm.gridsterItem.nativeEl.removeEventListener('mousedown', vm.dragStartDelay);
           vm.gridsterItem.nativeEl.removeEventListener('touchstart', vm.dragStartDelay);
         }
+        delete vm.gridsterItem;
       };
 
       vm.dragStart = function (e) {
@@ -136,8 +140,10 @@
           vm.makeDrag();
         }
         setTimeout(function () {
-          vm.gridster.movingItem = null;
-          vm.gridster.previewStyle();
+          if (vm.gridster) {
+            vm.gridster.movingItem = null;
+            vm.gridster.previewStyle();
+          }
         });
       };
 

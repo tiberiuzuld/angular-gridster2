@@ -48,6 +48,10 @@
       };
 
       vm.destroy = function () {
+        delete vm.gridster.movingItem;
+        if (vm.gridster.previewStyle) {
+          vm.gridster.previewStyle();
+        }
         delete vm.gridster;
         delete vm.gridsterItem;
       };
@@ -171,8 +175,10 @@
           vm.makeResize();
         }
         setTimeout(function () {
-          vm.gridster.movingItem = null;
-          vm.gridster.previewStyle();
+          if (vm.gridster) {
+            vm.gridster.movingItem = null;
+            vm.gridster.previewStyle();
+          }
         });
       };
 

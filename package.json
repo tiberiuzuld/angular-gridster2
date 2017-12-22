@@ -6,10 +6,10 @@
     "angular": ">=1.6.0"
   },
   "devDependencies": {
-    "angular-animate": "1.6.7",
-    "angular-aria": "1.6.7",
+    "angular-animate": "1.6.8",
+    "angular-aria": "1.6.8",
     "angular-material": "1.1.5",
-    "browser-sync": "2.18.13",
+    "browser-sync": "2.21.0",
     "browser-sync-spa": "1.0.3",
     "chalk": "2.3.0",
     "del": "3.0.0",
@@ -38,7 +38,7 @@
     "gulp-useref": "3.1.3",
     "gulp-util": "3.0.8",
     "http-proxy-middleware": "0.17.4",
-    "karma": "1.7.1",
+    "karma": "2.0.0",
     "karma-angular-filesort": "1.0.2",
     "karma-coverage": "1.1.1",
     "karma-jasmine": "1.1.1",
