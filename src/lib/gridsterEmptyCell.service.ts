@@ -25,6 +25,7 @@ export class GridsterEmptyCell {
   destroy(): void {
     delete this.initialItem;
     delete this.gridster.movingItem;
+    this.gridster.previewStyle();
     delete this.gridster;
   }
 

@@ -56,6 +56,7 @@ export class GridsterDraggable {
 
   destroy(): void {
     delete this.gridster.movingItem;
+    this.gridster.previewStyle();
     delete this.gridsterItem;
     delete this.gridster;
     if (this.mousedown) {
