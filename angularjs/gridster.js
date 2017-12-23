@@ -68,6 +68,11 @@
         return false;
       }
 
+      function checkContentClassForEmptyCellClickEvent(gridster, e) {
+        return checkContentClass(e.target, e.currentTarget, gridster.$options.draggable.ignoreContentClass)
+          || checkContentClass(e.target, e.currentTarget, gridster.$options.draggable.dragHandleClass);
+      }
+
       function checkContentClass(target, current, contentClass) {
         if (target === current) {
           return false;
@@ -83,6 +88,7 @@
         merge: merge,
         debounce: debounce,
         checkTouchEvent: checkTouchEvent,
+        checkContentClassForEmptyCellClickEvent: checkContentClassForEmptyCellClickEvent,
         checkContentClassForEvent: checkContentClassForEvent
       }
     });
@@ -369,6 +375,10 @@
       };
 
       vm.destroy = function () {
+        delete vm.gridster.movingItem;
+        if (vm.gridster.previewStyle) {
+          vm.gridster.previewStyle();
+        }
         delete vm.gridster;
         delete vm.gridsterItem;
       };
@@ -492,8 +502,10 @@
           vm.makeResize();
         }
         setTimeout(function () {
-          vm.gridster.movingItem = null;
-          vm.gridster.previewStyle();
+          if (vm.gridster) {
+            vm.gridster.movingItem = null;
+            vm.gridster.previewStyle();
+          }
         });
       };
 
@@ -1498,11 +1510,14 @@
         $element.css('display', 'none');
         return;
       }
+      vm.gridster.setGridDimensions();
       vm.margin = vm.gridster.$options.margin;
       vm.height = vm.gridster.curRowHeight - vm.margin;
       vm.width = vm.gridster.curColWidth - vm.margin;
-      vm.columns.length = Math.max(vm.gridster.columns, Math.floor(vm.gridster.curWidth / vm.gridster.curColWidth))|| 0;
-      vm.rows.length = Math.max(vm.gridster.rows, Math.floor(vm.gridster.curHeight / vm.gridster.curRowHeight))|| 0;
+      var c = Math.max(vm.gridster.columns, Math.floor(vm.gridster.curWidth / vm.gridster.curColWidth))|| 0;
+      var r = Math.max(vm.gridster.rows, Math.floor(vm.gridster.curHeight / vm.gridster.curRowHeight))|| 0;
+      vm.columns = Array.apply(null, {length: c}).map(Number.call, Number);
+      vm.rows = Array.apply(null, {length: r}).map(Number.call, Number);
       vm.columnsHeight = vm.gridster.curRowHeight * vm.rows.length;
       vm.rowsWidth = vm.gridster.curColWidth * vm.columns.length;
       $scope.$applyAsync();
@@ -1523,7 +1538,11 @@
       var vm = this;
 
       vm.destroy = function () {
-        delete vm.gridster;
+        delete vm.initialItem;
+        delete gridster.movingItem;
+        if (gridster.previewStyle) {
+          gridster.previewStyle();
+        }
       };
 
       vm.updateOptions = function () {
@@ -1564,7 +1583,7 @@
         }
       };
       vm.emptyCellClickCb = function (e) {
-        if (gridster.movingItem || GridsterUtils.checkContentClassForEvent(gridster, e)) {
+        if (gridster.movingItem || GridsterUtils.checkContentClassForEmptyCellClickEvent(gridster, e)) {
           return;
         }
         var item = vm.getValidItemFromEvent(e);
@@ -1575,7 +1594,7 @@
       };
 
       vm.emptyCellContextMenuCb = function (e) {
-        if (gridster.movingItem || GridsterUtils.checkContentClassForEvent(gridster, e)) {
+        if (gridster.movingItem || GridsterUtils.checkContentClassForEmptyCellClickEvent(gridster, e)) {
           return;
         }
         e.preventDefault();
@@ -1606,7 +1625,7 @@
       };
 
       vm.emptyCellMouseDown = function (e) {
-        if (GridsterUtils.checkContentClassForEvent(gridster, e)) {
+        if (GridsterUtils.checkContentClassForEmptyCellClickEvent(gridster, e)) {
           return;
         }
         e.preventDefault();
@@ -1647,8 +1666,10 @@
         }
         gridster.options.emptyCellDragCallback(e, gridster.movingItem);
         setTimeout(function () {
-          gridster.movingItem = null;
-          gridster.previewStyle();
+          if (gridster) {
+            gridster.movingItem = null;
+            gridster.previewStyle();
+          }
         });
       };
 
@@ -1727,12 +1748,16 @@
       vm.path = [];
 
       vm.destroy = function () {
-        delete vm.gridsterItem;
+        delete vm.gridster.movingItem;
+        if (vm.gridster.previewStyle) {
+          vm.gridster.previewStyle();
+        }
         delete vm.gridster;
         if (vm.mousedown) {
           vm.gridsterItem.nativeEl.removeEventListener('mousedown', vm.dragStartDelay);
           vm.gridsterItem.nativeEl.removeEventListener('touchstart', vm.dragStartDelay);
         }
+        delete vm.gridsterItem;
       };
 
       vm.dragStart = function (e) {
@@ -1827,8 +1852,10 @@
           vm.makeDrag();
         }
         setTimeout(function () {
-          vm.gridster.movingItem = null;
-          vm.gridster.previewStyle();
+          if (vm.gridster) {
+            vm.gridster.movingItem = null;
+            vm.gridster.previewStyle();
+          }
         });
       };
 
@@ -2095,7 +2122,6 @@
         if (widgetMovedUp) {
           vm.checkCompactUp();
         }
-        return widgetMovedUp;
       };
 
       vm.moveUpTillCollision = function moveUpTillCollision(itemComponent) {
@@ -2127,7 +2153,6 @@
         if (widgetMovedLeft) {
           vm.checkCompactLeft();
         }
-        return widgetMovedLeft;
       };
 
       vm.moveLeftTillCollision = function moveLeftTillCollision(itemComponent) {
@@ -2551,5 +2576,5 @@
 })();
 
 angular.module('angular-gridster2').run(['$templateCache', function($templateCache) {$templateCache.put('gridster2/gridster.html','<gridster-grid class=gridster-grid></gridster-grid><ng-transclude></ng-transclude><gridster-preview class=gridster-preview></gridster-preview>');
-$templateCache.put('gridster2/gridsterGrid.html','<div class=columns ng-style="{height: $ctrl.columnsHeight + \'px\'}"><div class=column ng-repeat="column in $ctrl.columns track by $index" ng-style="{\'min-width\': $ctrl.width + \'px\', \'margin-left\': ($first && !$ctrl.gridster.$options.outerMargin ? 0 : $ctrl.margin) + \'px\'}"></div></div><div class=rows ng-style="{width: $ctrl.rowsWidth + \'px\'}"><div class=row ng-repeat="row in $ctrl.rows track by $index" ng-style="{height: $ctrl.height + \'px\', \'margin-top\': ($first && !$ctrl.gridster.$options.outerMargin ? 0 :$ctrl.margin) + \'px\'}"></div></div>');
+$templateCache.put('gridster2/gridsterGrid.html','<div class=columns ng-style="{height: $ctrl.columnsHeight + \'px\'}"><div class=column ng-repeat="column in $ctrl.columns" ng-style="{\'min-width\': $ctrl.width + \'px\', \'margin-left\': ($first && !$ctrl.gridster.$options.outerMargin ? 0 : $ctrl.margin) + \'px\'}"></div></div><div class=rows ng-style="{width: $ctrl.rowsWidth + \'px\'}"><div class=row ng-repeat="row in $ctrl.rows" ng-style="{height: $ctrl.height + \'px\', \'margin-top\': ($first && !$ctrl.gridster.$options.outerMargin ? 0 :$ctrl.margin) + \'px\'}"></div></div>');
 $templateCache.put('gridster2/gridsterItem.html','<ng-transclude></ng-transclude><div ng-hide="!GridsterItemCtrl.gridster.$options.resizable.handles.s || !GridsterItemCtrl.resize.resizeEnabled" class="gridster-item-resizable-handler handle-s ng-hide"></div><div ng-hide="!GridsterItemCtrl.gridster.$options.resizable.handles.e || !GridsterItemCtrl.resize.resizeEnabled" class="gridster-item-resizable-handler handle-e ng-hide"></div><div ng-hide="!GridsterItemCtrl.gridster.$options.resizable.handles.n || !GridsterItemCtrl.resize.resizeEnabled" class="gridster-item-resizable-handler handle-n ng-hide"></div><div ng-hide="!GridsterItemCtrl.gridster.$options.resizable.handles.w || !GridsterItemCtrl.resize.resizeEnabled" class="gridster-item-resizable-handler handle-w ng-hide"></div><div ng-hide="!GridsterItemCtrl.gridster.$options.resizable.handles.se || !GridsterItemCtrl.resize.resizeEnabled" class="gridster-item-resizable-handler handle-se ng-hide"></div><div ng-hide="!GridsterItemCtrl.gridster.$options.resizable.handles.ne || !GridsterItemCtrl.resize.resizeEnabled" class="gridster-item-resizable-handler handle-ne ng-hide"></div><div ng-hide="!GridsterItemCtrl.gridster.$options.resizable.handles.sw || !GridsterItemCtrl.resize.resizeEnabled" class="gridster-item-resizable-handler handle-sw ng-hide"></div><div ng-hide="!GridsterItemCtrl.gridster.$options.resizable.handles.nw || !GridsterItemCtrl.resize.resizeEnabled" class="gridster-item-resizable-handler handle-nw ng-hide"></div>');}]);
