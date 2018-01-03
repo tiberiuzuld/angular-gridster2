@@ -19,7 +19,7 @@ import {GridsterComponentInterface} from './gridster.interface';
 export class GridsterComponent implements OnInit, OnChanges, OnDestroy, GridsterComponentInterface {
   @Input() options: GridsterConfig;
   calculateLayoutDebounce: Function;
-  movingItem: GridsterItemS;
+  movingItem: GridsterItemS | null;
   previewStyle: Function;
   el: any;
   $options: GridsterConfigS;

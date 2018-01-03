@@ -180,12 +180,12 @@ export class GridsterResizable {
     } else {
       this.makeResize();
     }
-    setTimeout(function () {
+    setTimeout(() => {
       if (this.gridster) {
         this.gridster.movingItem = null;
         this.gridster.previewStyle();
       }
-    }.bind(this));
+    });
   }
 
   cancelResize(): void {

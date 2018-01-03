@@ -152,12 +152,12 @@ export class GridsterDraggable {
     } else {
       this.makeDrag();
     }
-    setTimeout(function () {
+    setTimeout(() => {
       if (this.gridster) {
         this.gridster.movingItem = null;
         this.gridster.previewStyle();
       }
-    }.bind(this));
+    });
   }
 
   cancelDrag() {

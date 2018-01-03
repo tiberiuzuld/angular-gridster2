@@ -23,7 +23,7 @@ export abstract class GridsterComponentInterface {
   cdRef: ChangeDetectorRef;
   options: GridsterConfig;
   calculateLayoutDebounce: Function;
-  movingItem: GridsterItemS;
+  movingItem: GridsterItemS | null;
   previewStyle: Function;
   mobile: boolean;
   curWidth: number;
