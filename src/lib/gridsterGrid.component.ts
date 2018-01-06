@@ -1,4 +1,7 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Host, OnDestroy, Renderer2} from '@angular/core';
+import {
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Host, OnDestroy, Renderer2,
+  ViewEncapsulation
+} from '@angular/core';
 
 import {GridsterComponent} from './gridster.component';
 
@@ -6,7 +9,8 @@ import {GridsterComponent} from './gridster.component';
   selector: 'gridster-grid',
   templateUrl: './gridsterGrid.html',
   styleUrls: ['./gridsterGrid.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None
 })
 
 export class GridsterGridComponent implements OnDestroy {

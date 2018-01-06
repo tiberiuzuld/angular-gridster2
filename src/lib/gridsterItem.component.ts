@@ -1,4 +1,4 @@
-import {Component, ElementRef, Host, Input, OnDestroy, OnInit, Renderer2} from '@angular/core';
+import {Component, ElementRef, Host, Input, OnDestroy, OnInit, Renderer2, ViewEncapsulation} from '@angular/core';
 
 import {GridsterItem} from './gridsterItem.interface';
 import {GridsterComponent} from './gridster.component';
@@ -11,7 +11,8 @@ import {GridsterItemComponentInterface} from './gridsterItemComponent.interface'
 @Component({
   selector: 'gridster-item',
   templateUrl: './gridsterItem.html',
-  styleUrls: ['./gridsterItem.css']
+  styleUrls: ['./gridsterItem.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemComponentInterface {
   @Input() item: GridsterItem;

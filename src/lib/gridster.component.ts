@@ -1,4 +1,7 @@
-import {ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, Renderer2, SimpleChanges} from '@angular/core';
+import {
+  ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, Renderer2, SimpleChanges,
+  ViewEncapsulation
+} from '@angular/core';
 
 import {GridsterConfigService} from './gridsterConfig.constant';
 import {GridsterConfig} from './gridsterConfig.interface';
@@ -14,7 +17,8 @@ import {GridsterComponentInterface} from './gridster.interface';
 @Component({
   selector: 'gridster',
   templateUrl: './gridster.html',
-  styleUrls: ['./gridster.css']
+  styleUrls: ['./gridster.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class GridsterComponent implements OnInit, OnChanges, OnDestroy, GridsterComponentInterface {
   @Input() options: GridsterConfig;
