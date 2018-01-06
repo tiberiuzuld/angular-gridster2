@@ -273,4 +273,4 @@ Option 2 (with text selection):
 ### License
  The MIT License
  
- Copyright (c) 2017 Tiberiu Zuld
+ Copyright (c) 2018 Tiberiu Zuld
