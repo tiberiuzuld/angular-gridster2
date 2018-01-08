@@ -215,18 +215,6 @@ export interface GridsterItem {
 }
 ```
 
-### Events 
-
-##### Gridster Item
-```typescript
-  @Output() itemChange: EventEmitter<GridsterItem> = new EventEmitter();
-  @Output() itemResize: EventEmitter<GridsterItem> = new EventEmitter();
-  ....
-  this.itemChange.emit(this.state.item); // triggered when a item cols, rows, x, y changed
-  this.itemResize.emit(this.state.item); // triggered when a item width/height changed
-```
-Note: When a item changes cols/rows both events get triggered
-
 ### Load dynamic components inside the `gridster-item`
 
 You can load dynamic components in Angular4+ with the help of [`ng-dynamic-component` library](https://www.npmjs.com/package/ng-dynamic-component) 
