@@ -19,7 +19,7 @@ export class GridsterUtils {
     return obj1;
   }
 
-  static debounce(func: Function, wait: number) {
+  static debounce(func: Function, wait: number): () => void {
     let timeout: any;
     return function () {
       const context = this, args = arguments;

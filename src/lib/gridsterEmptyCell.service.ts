@@ -159,7 +159,7 @@ export class GridsterEmptyCell {
     if (item) {
       this.gridster.movingItem = item;
     }
-    if (this.gridster.options.emptyCellDragCallback) {
+    if (this.gridster.options.emptyCellDragCallback && this.gridster.movingItem) {
       this.gridster.options.emptyCellDragCallback(e, this.gridster.movingItem);
     }
     setTimeout(() => {

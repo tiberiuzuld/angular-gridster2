@@ -1,7 +1,9 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 
-import {GridsterItem} from '../lib';
-import {GridsterConfigS} from '../lib/gridsterConfigS.interface';
+import {
+  CompactType, DisplayGrid, GridsterComponentInterface, GridsterConfig, GridsterItem, GridsterItemComponentInterface,
+  GridType
+} from '../lib';
 
 @Component({
   selector: 'gridster-root',
@@ -10,47 +12,47 @@ import {GridsterConfigS} from '../lib/gridsterConfigS.interface';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit {
-  options: GridsterConfigS;
+  options: GridsterConfig;
   dashboard: Array<GridsterItem>;
   remove: boolean;
 
-  static eventStop(item, itemComponent, event) {
+  static eventStop(item: GridsterItem, itemComponent: GridsterItemComponentInterface, event: MouseEvent) {
     console.info('eventStop', item, itemComponent, event);
   }
 
-  static itemChange(item, itemComponent) {
+  static itemChange(item: GridsterItem, itemComponent: GridsterItemComponentInterface) {
     console.info('itemChanged', item, itemComponent);
   }
 
-  static itemResize(item, itemComponent) {
+  static itemResize(item: GridsterItem, itemComponent: GridsterItemComponentInterface) {
     console.info('itemResized', item, itemComponent);
   }
 
-  static itemInit(item, itemComponent) {
+  static itemInit(item: GridsterItem, itemComponent: GridsterItemComponentInterface) {
     console.info('itemInitialized', item, itemComponent);
   }
 
-  static itemRemoved(item, itemComponent) {
+  static itemRemoved(item: GridsterItem, itemComponent: GridsterItemComponentInterface) {
     console.info('itemRemoved', item, itemComponent);
   }
 
-  static gridInit(grid) {
+  static gridInit(grid: GridsterComponentInterface) {
     console.info('gridInit', grid);
   }
 
-  static gridDestroy(grid) {
+  static gridDestroy(grid: GridsterComponentInterface) {
     console.info('gridDestroy', grid);
   }
 
-  emptyCellClick(event, item) {
+  emptyCellClick(event: MouseEvent, item: GridsterItem) {
     console.info('empty cell click', event, item);
     this.dashboard.push(item);
   }
 
   ngOnInit() {
     this.options = {
-      gridType: 'fit',
-      compactType: 'none',
+      gridType: GridType.Fit,
+      compactType: CompactType.None,
       initCallback: AppComponent.gridInit,
       destroyCallback: AppComponent.gridDestroy,
       itemChangeCallback: AppComponent.itemChange,
@@ -111,18 +113,13 @@ export class AppComponent implements OnInit {
           nw: true
         }
       },
-      api: {
-        resize: AppComponent.eventStop,
-        optionsChanged: AppComponent.eventStop,
-        getNextPossiblePosition: AppComponent.eventStop,
-      },
       swap: false,
       pushItems: true,
       disablePushOnDrag: false,
       disablePushOnResize: false,
       pushDirections: {north: true, east: true, south: true, west: true},
       pushResizeItems: false,
-      displayGrid: 'onDrag&Resize',
+      displayGrid: DisplayGrid.OnDragAndResize,
       disableWindowResize: false,
       disableWarnings: false,
       scrollToNewItems: false

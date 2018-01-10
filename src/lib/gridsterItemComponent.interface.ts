@@ -20,10 +20,12 @@ export abstract class GridsterItemComponentInterface {
   drag: GridsterDraggable;
   resize: GridsterResizable;
   notPlaced: boolean;
-  setSize: Function;
-  checkItemChanges: Function;
-  canBeDragged: Function;
-  canBeResized: Function;
+  updateOptions: () => void;
+  itemChanged: () => void;
+  setSize: (noCheck: Boolean) => void;
+  checkItemChanges: (newValue: GridsterItem, oldValue: GridsterItem) => void;
+  canBeDragged: () => boolean;
+  canBeResized: () => boolean;
   el: any;
   gridster: GridsterComponentInterface;
   renderer: Renderer2;
