@@ -1,10 +1,9 @@
 const gulp = require('gulp'),
   inlineNg2Template = require('gulp-inline-ng2-template'),
-  clean = require('gulp-clean');
+  del = require('del');
 
 gulp.task('clean', function () {
-  return gulp.src(['./tmp', './dist'], {read: false})
-    .pipe(clean());
+  return del(['./.tmp', './dist']);
 });
 
 gulp.task('inline-templates', ['clean'], function () {
