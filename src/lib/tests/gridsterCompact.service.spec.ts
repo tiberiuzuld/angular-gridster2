@@ -5,7 +5,7 @@ import {
     tick,
     ComponentFixture,
     ComponentFixtureAutoDetect,
-    inject } from '@angular/core/testing'
+    inject } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
 
@@ -37,12 +37,11 @@ describe('gridsterCompact service', () => {
             }
         }
 
-        checkCollision(param: any): any {
-            switch (collision) {
-                case true:
-                    return true;
-                case false:
-                    return false;
+        checkCollision($item: any): any {
+            if ($item.y < 0 || $item.x < 0) {
+                return true;
+            } else {
+                return false;
             }
         }
     }
@@ -96,7 +95,7 @@ describe('gridsterCompact service', () => {
 
     it('should check moveUpTillCollision when checkCollision returns true', () => {
         collision = true;
-        const itemComponent = {$item: {y : 2} };
+        const itemComponent = {$item: {y : 0, x: 0} };
         const gridster: any = new MockGridsterComponent();
         gridsterCompact = new GridsterCompact(gridster);
         expect(gridsterCompact.moveUpTillCollision(itemComponent)).toBe(false);
@@ -104,7 +103,7 @@ describe('gridsterCompact service', () => {
 
     it('should check moveLeftTillCollision when checkCollision returns true', () => {
         collision = true;
-        const itemComponent = {$item: {y : 2} };
+        const itemComponent = {$item: {y : 0, x: 0} };
         const gridster: any = new MockGridsterComponent();
         gridsterCompact = new GridsterCompact(gridster);
         expect(gridsterCompact.moveLeftTillCollision(itemComponent)).toBe(false);
