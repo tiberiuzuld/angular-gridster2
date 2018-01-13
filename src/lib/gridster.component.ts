@@ -22,9 +22,9 @@ import {GridsterItemComponentInterface} from './gridsterItemComponent.interface'
 })
 export class GridsterComponent implements OnInit, OnChanges, OnDestroy, GridsterComponentInterface {
   @Input() options: GridsterConfig;
-  calculateLayoutDebounce;
-  movingItem;
-  previewStyle;
+  calculateLayoutDebounce: () => void;
+  movingItem: GridsterItemS | null;
+  previewStyle: () => void;
   el: any;
   $options: GridsterConfigS;
   mobile: boolean;
@@ -35,7 +35,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
   rows: number;
   curColWidth: number;
   curRowHeight: number;
-  windowResize;
+  windowResize: (() => void) | null;
   gridLines: GridsterGridComponent;
   dragInProgress: boolean;
   emptyCell: GridsterEmptyCell;
