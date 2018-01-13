@@ -6,34 +6,26 @@ var conf = require('./conf');
 
 var browserSync = require('browser-sync');
 
-function isOnlyChange(event) {
-  return event.type === 'changed';
-}
+gulp.task('watch', function (done) {
+  gulp.watch([path.join(conf.paths.src, '/*.html'), 'package.json'])
+    .on('add', gulp.parallel('inject-reload'))
+    .on('change', gulp.parallel('inject-reload'))
+    .on('unlink', gulp.parallel('inject-reload'));
 
-gulp.task('watch', ['inject'], function () {
+  gulp.watch([path.join(conf.paths.app, '/**/*.css'), path.join(conf.paths.gridster, '/**/*.css')])
+    .on('add', gulp.parallel('inject-reload'))
+    .on('change', browserSync.reload)
+    .on('unlink', gulp.parallel('inject-reload'));
 
-  gulp.watch([path.join(conf.paths.src, '/*.html'), 'package.json'], ['inject-reload']);
+  gulp.watch([path.join(conf.paths.app, '/**/*.js'), path.join(conf.paths.gridster, '/**/*.js')])
+    .on('add', gulp.parallel('inject-reload'))
+    .on('change', gulp.parallel('inject-reload'))
+    .on('unlink', gulp.parallel('inject-reload'));
 
-  gulp.watch([path.join(conf.paths.src, '/app/**/*.css'), path.join(conf.paths.src, '/gridster2/**/*.css')],
-    function (event) {
-      if (isOnlyChange(event)) {
-        browserSync.reload(event.path);
-      } else {
-        gulp.start('inject-reload');
-      }
-    });
+  gulp.watch([path.join(conf.paths.app, '/**/*.html'), path.join(conf.paths.gridster, '/**/*.html')])
+    .on('add', gulp.parallel('inject-reload'))
+    .on('change', browserSync.reload)
+    .on('unlink', gulp.parallel('inject-reload'));
 
-  gulp.watch([path.join(conf.paths.src, '/app/**/*.js'), path.join(conf.paths.src, '/gridster2/**/*.js')],
-    function (event) {
-      if (isOnlyChange(event)) {
-        gulp.start('scripts-reload');
-      } else {
-        gulp.start('inject-reload');
-      }
-    }
-  );
-
-  gulp.watch(path.join(conf.paths.src, '/app/**/*.html'), function (event) {
-    browserSync.reload(event.path);
-  });
+  done();
 });

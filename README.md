@@ -230,4 +230,4 @@ Please respect the formatting in .editorconfig and .eslintrc
 ### License
  The MIT License
  
- Copyright (c) 2017 Tiberiu Zuld
+ Copyright (c) 2018 Tiberiu Zuld

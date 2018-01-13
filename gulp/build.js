@@ -4,108 +4,83 @@ var path = require('path');
 var gulp = require('gulp');
 var conf = require('./conf');
 
-var $ = require('gulp-load-plugins')({
-  pattern: ['gulp-*', 'uglify-save-license', 'del']
-});
+require('./scripts');
+require('./inject');
+require('./watch');
+
+var minifyHtml = require('gulp-htmlmin');
+var angularTemplatecache = require('gulp-angular-templatecache');
+var filter = require('gulp-filter');
+var inject = require('gulp-inject');
+var useref = require('gulp-useref');
+var ngAnnotate = require('gulp-ng-annotate');
+var size = require('gulp-size');
+var flatten = require('gulp-flatten');
+
+var del = require('del');
 
 gulp.task('partials', function () {
-  return gulp.src([
-    path.join(conf.paths.src, '/app/**/*.html'),
-    path.join(conf.paths.tmp, '/serve/app/**/*.html')
-  ])
-    .pipe($.minifyHtml({
+  return gulp.src(path.join(conf.paths.app, '/**/*.html'))
+    .pipe(flatten({subPath: 2}))
+    .pipe(minifyHtml({
       removeComments: true,
       removeAttributeQuotes: true,
       collapseBooleanAttributes: true,
       collapseWhitespace: true
     }))
-    .pipe($.angularTemplatecache('templateCacheHtml.js', {
+    .pipe(angularTemplatecache('templateCacheHtml.js', {
       module: 'gridster2App',
       root: 'app'
     }))
-    .pipe(gulp.dest(conf.paths.tmp + '/partials/'));
+    .pipe(gulp.dest(conf.paths.partials));
 });
 
 gulp.task('partials-directive', function () {
-  return gulp.src([
-    path.join(conf.paths.src, '/gridster2/**/*.html')
-  ])
-    .pipe($.minifyHtml({
+  return gulp.src(path.join(conf.paths.gridster, '/**/*.html'))
+    .pipe(flatten({subPath: 2}))
+    .pipe(minifyHtml({
       removeComments: true,
       removeAttributeQuotes: true,
       collapseBooleanAttributes: true,
       collapseWhitespace: true
     }))
-    .pipe($.angularTemplatecache('templateCacheHtmlDirective.js', {
+    .pipe(angularTemplatecache('templateCacheHtmlDirective.js', {
       module: 'angular-gridster2',
       root: 'gridster2'
     }))
-    .pipe(gulp.dest(conf.paths.tmp + '/partials/'));
+    .pipe(gulp.dest(conf.paths.partials));
 });
 
-gulp.task('html', ['inject', 'partials', 'partials-directive'], function () {
-  var partialsInjectFile = gulp.src(path.join(conf.paths.tmp, '/partials/templateCacheHtml.js'), {read: false});
+gulp.task('html', function () {
+  var partialsInjectFile = gulp.src(path.join(conf.paths.partials, '/templateCacheHtml.js'), {read: false});
   var partialsInjectOptions = {
     starttag: '<!-- inject:partials -->',
-    ignorePath: path.join(conf.paths.tmp, '/partials'),
+    ignorePath: conf.paths.partials,
     addRootSlash: false
   };
-  var partialsDirectiveInjectFile = gulp.src(path.join(conf.paths.tmp, '/partials/templateCacheHtmlDirective.js'), {read: false});
+  var partialsDirectiveInjectFile = gulp.src(path.join(conf.paths.partials, '/templateCacheHtmlDirective.js'), {read: false});
   var partialsDirectiveInjectOptions = {
     starttag: '<!-- inject:partials-directive -->',
-    ignorePath: path.join(conf.paths.tmp, '/partials'),
+    ignorePath: conf.paths.partials,
     addRootSlash: false
   };
 
-  //var htmlFilter = $.filter('*.html', { restore: true });
-  var jsFilter = $.filter(path.join(conf.paths.tmp, '/**/*.js'), {restore: true});
-  //var cssFilter = $.filter('**/*.css', { restore: true });
+  var jsFilter = filter(path.join(conf.paths.tmp, '/**/*.js'), {restore: true});
 
-  return gulp.src(path.join(conf.paths.tmp, '/serve/*.html'))
-    .pipe($.inject(partialsInjectFile, partialsInjectOptions))
-    .pipe($.inject(partialsDirectiveInjectFile, partialsDirectiveInjectOptions))
-    .pipe($.useref())
+  return gulp.src(path.join(conf.paths.serve, '/*.html'), {base: conf.paths.serve})
+    .pipe(inject(partialsInjectFile, partialsInjectOptions))
+    .pipe(inject(partialsDirectiveInjectFile, partialsDirectiveInjectOptions))
+    .pipe(useref())
     .pipe(jsFilter)
-    //.pipe($.sourcemaps.init())
-    .pipe($.ngAnnotate())
-    //.pipe($.uglify({ preserveComments: $.uglifySaveLicense })).on('error', conf.errorHandler('Uglify'))
-    //.pipe($.rev())
-    //.pipe($.sourcemaps.write('maps'))
+    .pipe(ngAnnotate())
     .pipe(jsFilter.restore)
-    //.pipe(cssFilter)
-    //.pipe($.sourcemaps.init())
-    //.pipe($.minifyCss({ processImport: false }))
-    //.pipe($.rev())
-    //.pipe($.sourcemaps.write('maps'))
-    //.pipe(cssFilter.restore)
-    //.pipe($.revReplace())
-    //.pipe(htmlFilter)
-    // .pipe($.minifyHtml({
-    //   removeComments: true,
-    //   removeAttributeQuotes: true,
-    //   collapseBooleanAttributes: true,
-    //   collapseWhitespace: true
-    // }))
-    //.pipe(htmlFilter.restore)
     .pipe(gulp.dest(path.join(conf.paths.dist, '/')))
-    .pipe($.size({title: path.join(conf.paths.dist, '/'), showFiles: true}));
-});
-
-gulp.task('other', function () {
-  var fileFilter = $.filter(function (file) {
-    return file.stat.isFile();
-  });
-
-  return gulp.src([
-    path.join(conf.paths.src, '/**/*'),
-    path.join('!' + conf.paths.src, '/**/*.{html,css,js}')
-  ])
-    .pipe(fileFilter)
-    .pipe(gulp.dest(path.join(conf.paths.dist, '/')));
+    .pipe(size({title: path.join(conf.paths.dist, '/'), showFiles: true}));
 });
 
 gulp.task('clean', function () {
-  return $.del([path.join(conf.paths.dist, '/'), path.join(conf.paths.tmp, '/')]);
+  return del([path.join(conf.paths.dist, '/'), path.join(conf.paths.tmp, '/')]);
 });
 
-gulp.task('build', ['html', 'other']);
+gulp.task('build', gulp.series('clean', gulp.parallel('inject', 'partials', 'partials-directive'), 'html'));
+require('./server');

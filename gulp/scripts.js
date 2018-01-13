@@ -6,7 +6,8 @@ var conf = require('./conf');
 
 var browserSync = require('browser-sync');
 
-var $ = require('gulp-load-plugins')();
+var eslint = require('gulp-eslint');
+var size = require('gulp-size');
 
 gulp.task('scripts-reload', function () {
   return buildScripts().pipe(browserSync.stream());
@@ -17,8 +18,8 @@ gulp.task('scripts', function () {
 });
 
 var buildScripts = function () {
-  return gulp.src([path.join(conf.paths.src, '/app/**/*.js'), path.join(conf.paths.src, '/gridster2/**/*.js')])
-    .pipe($.eslint())
-    .pipe($.eslint.format())
-    .pipe($.size())
+  return gulp.src([path.join(conf.paths.app, '/**/*.js'), path.join(conf.paths.gridster, '/**/*.js')])
+    .pipe(eslint())
+    .pipe(eslint.format())
+    .pipe(size())
 };
