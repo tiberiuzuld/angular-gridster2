@@ -23,6 +23,7 @@ export class GridsterPush {
     fromSouth: Array<Function>,
     [key: string]: Array<Function>
   };
+  private count = 0;
 
   constructor(gridsterItem: GridsterItemComponentInterface) {
     this.pushedItems = [];
@@ -49,6 +50,7 @@ export class GridsterPush {
   }
 
   pushItems(direction: string, disable?: boolean): void {
+    this.count = 0;
     if (this.gridster.$options.pushItems && !disable) {
       this.pushedItemsOrder = [];
       if (!this.push(this.gridsterItem, direction)) {
@@ -107,6 +109,11 @@ export class GridsterPush {
   }
 
   private push(gridsterItem: GridsterItemComponentInterface, direction: string): boolean {
+    if (this.count > 50000) {
+      return false;
+    } else {
+      this.count++;
+    }
     if (this.gridster.checkGridCollision(gridsterItem.$item)) {
       return false;
     }
