@@ -48,7 +48,7 @@
   "devDependencies": {
     "@angular/animations": "5.2.0",
     "@angular/cdk": "5.0.4",
-    "@angular/cli": "1.6.3",
+    "@angular/cli": "1.6.4",
     "@angular/common": "5.2.0",
     "@angular/compiler": "5.2.0",
     "@angular/compiler-cli": "5.2.0",
@@ -61,7 +61,7 @@
     "@angular/platform-browser-dynamic": "5.2.0",
     "@angular/platform-server": "5.2.0",
     "@angular/router": "5.2.0",
-    "@types/jasmine": "2.8.3",
+    "@types/jasmine": "2.8.4",
     "@types/node": "9.3.0",
     "codelyzer": "4.0.2",
     "core-js": "2.5.3",
