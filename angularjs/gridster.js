@@ -981,6 +981,7 @@
       vm.fromNorth = 'fromNorth';
       vm.fromEast = 'fromEast';
       vm.fromWest = 'fromWest';
+      vm.count = 0;
 
       vm.destroy = function () {
         delete vm.gridster;
@@ -988,6 +989,7 @@
       };
 
       vm.pushItems = function (direction, disabled) {
+        vm.count = 0;
         if (vm.gridster.$options.pushItems && !disabled) {
           vm.pushedItemsOrder = [];
           if (!vm.push(vm.gridsterItem, direction)) {
@@ -1033,6 +1035,11 @@
       };
 
       vm.push = function (gridsterItem, direction) {
+        if (this.count > 50000) {
+          return false;
+        } else {
+          this.count++;
+        }
         if (vm.gridster.checkGridCollision(gridsterItem.$item)) {
           return false;
         }
@@ -2213,6 +2220,7 @@
     };
 
     vm.$onInit = function () {
+      vm.calculateLayoutDebounce = GridsterUtils.debounce(vm.calculateLayout, 5);
       if (vm.options.initCallback) {
         vm.options.initCallback(vm);
       }
@@ -2231,7 +2239,6 @@
         vm.columns = vm.$options.minCols;
         vm.rows = vm.$options.minRows;
         vm.setGridSize();
-        vm.calculateLayoutDebounce = GridsterUtils.debounce(vm.calculateLayout, 5);
         vm.calculateLayoutDebounce();
       }
     };
