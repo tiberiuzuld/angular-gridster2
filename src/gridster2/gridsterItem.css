@@ -6,6 +6,7 @@ gridster-item {
   transition: .3s;
   display: none;
   background: white;
+  user-select: text;
 }
 
 gridster-item.gridster-item-moving {

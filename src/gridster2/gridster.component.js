@@ -32,6 +32,7 @@
     vm.grid = [];
     vm.curColWidth = 0;
     vm.curRowHeight = 0;
+    vm.calculateLayoutDebounce = GridsterUtils.debounce(vm.calculateLayout, 5);
 
     vm.checkCollisionTwoItems = function checkCollisionTwoItems(item, item2) {
       return item.x < item2.x + item2.cols
@@ -59,7 +60,6 @@
         vm.columns = vm.$options.minCols;
         vm.rows = vm.$options.minRows;
         vm.setGridSize();
-        vm.calculateLayoutDebounce = GridsterUtils.debounce(vm.calculateLayout, 5);
         vm.calculateLayoutDebounce();
       }
     };
