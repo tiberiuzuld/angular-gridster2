@@ -34,19 +34,19 @@
     <mat-checkbox [(ngModel)]="options.disablePushOnResize" (ngModelChange)="changedOptions()">
       Disable Push On Resize
     </mat-checkbox>
-    <mat-checkbox [(ngModel)]="options.pushDirections.north" (ngModelChange)="changedOptions()">
+    <mat-checkbox [(ngModel)]="options.pushDirections.north" *ngIf="options.pushDirections" (ngModelChange)="changedOptions()">
       Push North
     </mat-checkbox>
-    <mat-checkbox [(ngModel)]="options.pushDirections.east" (ngModelChange)="changedOptions()">
+    <mat-checkbox [(ngModel)]="options.pushDirections.east" *ngIf="options.pushDirections" (ngModelChange)="changedOptions()">
       Push East
     </mat-checkbox>
-    <mat-checkbox [(ngModel)]="options.pushDirections.south" (ngModelChange)="changedOptions()">
+    <mat-checkbox [(ngModel)]="options.pushDirections.south" *ngIf="options.pushDirections" (ngModelChange)="changedOptions()">
       Push South
     </mat-checkbox>
-    <mat-checkbox [(ngModel)]="options.pushDirections.west" (ngModelChange)="changedOptions()">
+    <mat-checkbox [(ngModel)]="options.pushDirections.west" *ngIf="options.pushDirections" (ngModelChange)="changedOptions()">
       Push West
     </mat-checkbox>
-    <mat-checkbox [(ngModel)]="options.draggable.enabled" (ngModelChange)="changedOptions()">
+    <mat-checkbox [(ngModel)]="options.draggable.enabled" *ngIf="options.draggable" (ngModelChange)="changedOptions()">
       Drag Items
     </mat-checkbox>
     <mat-form-field>
@@ -58,7 +58,7 @@
         <mat-option value="none">None</mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-checkbox [(ngModel)]="options.resizable.enabled" (ngModelChange)="changedOptions()">
+    <mat-checkbox [(ngModel)]="options.resizable.enabled" *ngIf="options.resizable" (ngModelChange)="changedOptions()">
       Resize Items
     </mat-checkbox>
     <mat-checkbox [(ngModel)]="options.pushResizeItems" (ngModelChange)="changedOptions()">
