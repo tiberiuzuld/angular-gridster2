@@ -3,27 +3,27 @@ gridster-grid {
   position: absolute;
 }
 
-.rows, .columns {
+gridster-grid .rows, gridster-grid .columns {
   position: absolute;
 }
 
-.columns {
+gridster-grid .columns {
   display: flex;
   flex-direction: row;
 }
 
-.column, .row {
+gridster-grid .column, gridster-grid .row {
   transition: .3s;
   box-sizing: border-box;
 }
 
-.column {
+gridster-grid .column {
   height: 100%;
   border-left: 1px solid white;
   border-right: 1px solid white;
 }
 
-.row {
+gridster-grid .row {
   width: 100%;
   border-top: 1px solid white;
   border-bottom: 1px solid white;
