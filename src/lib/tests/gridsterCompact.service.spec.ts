@@ -1,16 +1,3 @@
-import { 
-    TestBed,
-    async,
-    fakeAsync,
-    tick,
-    ComponentFixture,
-    ComponentFixtureAutoDetect,
-    inject } from '@angular/core/testing';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { By } from '@angular/platform-browser';
-
-import { GridsterComponentInterface } from '../gridster.interface';
-import { GridsterComponent } from '../gridster.component';
 import { GridsterCompact } from '../gridsterCompact.service';
 
 describe('gridsterCompact service', () => {
