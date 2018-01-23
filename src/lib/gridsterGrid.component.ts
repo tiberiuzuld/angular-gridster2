@@ -1,17 +1,19 @@
 import {
-  ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Host,
-  Renderer2
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Host, OnDestroy, Renderer2,
+  ViewEncapsulation
 } from '@angular/core';
+
 import {GridsterComponent} from './gridster.component';
 
 @Component({
   selector: 'gridster-grid',
   templateUrl: './gridsterGrid.html',
   styleUrls: ['./gridsterGrid.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None
 })
 
-export class GridsterGridComponent {
+export class GridsterGridComponent implements OnDestroy {
   el: any;
   gridster: GridsterComponent;
   columns: Array<any>;
@@ -22,7 +24,8 @@ export class GridsterGridComponent {
   columnsHeight: number;
   rowsWidth: number;
 
-  constructor(el: ElementRef, @Host() gridster: GridsterComponent, public renderer: Renderer2, private cdRef: ChangeDetectorRef) {
+  constructor(el: ElementRef, @Host() gridster: GridsterComponent, public renderer: Renderer2,
+              private cdRef: ChangeDetectorRef) {
     this.el = el.nativeElement;
     this.gridster = gridster;
     this.gridster.gridLines = this;
@@ -32,6 +35,12 @@ export class GridsterGridComponent {
     this.width = 0;
     this.columnsHeight = 0;
     this.rowsWidth = 0;
+  }
+
+  ngOnDestroy(): void {
+    delete this.el;
+    delete this.gridster.gridLines;
+    delete this.gridster;
   }
 
   updateGrid(): void {

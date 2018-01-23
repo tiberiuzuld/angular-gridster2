@@ -1,0 +1,40 @@
+import {GridsterConfigS} from './gridsterConfigS.interface';
+import {ChangeDetectorRef, Renderer2} from '@angular/core';
+import {GridsterEmptyCell} from './gridsterEmptyCell.service';
+import {GridsterCompact} from './gridsterCompact.service';
+import {GridsterGridComponent} from './gridsterGrid.component';
+import {GridsterConfig} from './gridsterConfig.interface';
+import {GridsterItemS} from './gridsterItemS.interface';
+import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
+
+export abstract class GridsterComponentInterface {
+  $options: GridsterConfigS;
+  grid: Array<GridsterItemComponentInterface>;
+  checkCollision: (item: GridsterItemS) => GridsterItemComponentInterface | boolean;
+  positionXToPixels: (x: number) => number;
+  pixelsToPositionX: (x: number, roundingMethod: (x: number) => number) => number;
+  positionYToPixels: (y: number) => number;
+  pixelsToPositionY: (y: number, roundingMethod: (x: number) => number) => number;
+  findItemWithItem: (item: GridsterItemS) => GridsterItemComponentInterface | boolean;
+  findItemsWithItem: (item: GridsterItemS) => Array<GridsterItemComponentInterface>;
+  checkGridCollision: (item: GridsterItemS) => boolean;
+  el: any;
+  renderer: Renderer2;
+  cdRef: ChangeDetectorRef;
+  options: GridsterConfig;
+  calculateLayoutDebounce: () => void;
+  movingItem: GridsterItemS | null;
+  previewStyle: () => void;
+  mobile: boolean;
+  curWidth: number;
+  curHeight: number;
+  columns: number;
+  rows: number;
+  curColWidth: number;
+  curRowHeight: number;
+  windowResize: (() => void) | null;
+  gridLines: GridsterGridComponent;
+  dragInProgress: boolean;
+  emptyCell: GridsterEmptyCell;
+  compact: GridsterCompact;
+}

@@ -30,22 +30,28 @@ export const GridsterConfigService: GridsterConfig = {
   scrollSensitivity: 10,  // margin of the dashboard where to start scrolling
   scrollSpeed: 20,  // how much to scroll each mouse move when in the scrollSensitivity zone
   initCallback: undefined, // callback to call after grid has initialized. Arguments: gridsterComponent
+  destroyCallback: undefined, // callback to call after grid has destroyed. Arguments: gridsterComponent
   itemChangeCallback: undefined,  // callback to call for each item when is changes x, y, rows, cols.
   // Arguments: gridsterItem, gridsterItemComponent
   itemResizeCallback: undefined,  // callback to call for each item when width/height changes.
   // Arguments: gridsterItem, gridsterItemComponent
   itemInitCallback: undefined,  // callback to call for each item when is initialized.
   // Arguments: gridsterItem, gridsterItemComponent
+  itemRemovedCallback: undefined,  // callback to call for each item when is initialized.
+  // Arguments: gridsterItem, gridsterItemComponent
   enableEmptyCellClick: false, // enable empty cell click events
+  enableEmptyCellContextMenu: false, // enable empty cell context menu (right click) events
   enableEmptyCellDrop: false, // enable empty cell drop events
   enableEmptyCellDrag: false, // enable empty cell drag events
   emptyCellClickCallback: undefined, // empty cell click callback
+  emptyCellContextMenuCallback: undefined, // empty cell context menu (right click) callback
   emptyCellDropCallback: undefined, // empty cell drag drop callback. HTML5 Drag & Drop
   emptyCellDragCallback: undefined, // empty cell drag and create item like excel cell selection
   emptyCellDragMaxCols: 50, // limit empty cell drag max cols
   emptyCellDragMaxRows: 50, // limit empty cell drag max rows
   // Arguments: event, gridsterItem{x, y, rows: defaultItemRows, cols: defaultItemCols}
   draggable: {
+    delayStart: 0, // milliseconds to delay the start of drag, useful for touch interaction
     enabled: false, // enable/disable draggable items
     ignoreContentClass: 'gridster-item-content', // default content class to ignore the drag event from
     ignoreContent: false, // if true drag will start only from elements from `dragHandleClass`
@@ -55,6 +61,7 @@ export const GridsterConfigService: GridsterConfig = {
     // Arguments: item, gridsterItem, event
   },
   resizable: {
+    delayStart: 0, // milliseconds to delay the start of resize, useful for touch interaction
     enabled: false, // enable/disable resizable items
     handles: {
       s: true,
@@ -72,7 +79,12 @@ export const GridsterConfigService: GridsterConfig = {
   },
   swap: true, // allow items to switch position if drop on top of another
   pushItems: false, // push items when resizing and dragging
+  disablePushOnDrag: false, // disable push on drag
+  disablePushOnResize: false, // disable push on resize
+  pushDirections: {north: true, east: true, south: true, west: true}, // control the directions items are pushed
   pushResizeItems: false, // on resize of item will shrink adjacent items
   displayGrid: 'onDrag&Resize', // display background grid of rows and columns
-  disableWindowResize: false // disable the window on resize listener. This will stop grid to recalculate on window resize.
+  disableWindowResize: false, // disable the window on resize listener. This will stop grid to recalculate on window resize.
+  disableWarnings: false, // disable console log warnings about misplacement of grid items
+  scrollToNewItems: false // scroll to new items placed in a scrollable view
 };

@@ -1,15 +1,16 @@
 import {Injectable} from '@angular/core';
+
 import {GridsterSwap} from './gridsterSwap.service';
-import {scroll, cancelScroll} from './gridsterScroll.service';
-import {GridsterItemComponent} from './gridsterItem.component';
-import {GridsterComponent} from './gridster.component';
+import {cancelScroll, scroll} from './gridsterScroll.service';
 import {GridsterPush} from './gridsterPush.service';
 import {GridsterUtils} from './gridsterUtils.service';
+import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
+import {GridsterComponentInterface} from './gridster.interface';
 
 @Injectable()
 export class GridsterDraggable {
-  gridsterItem: GridsterItemComponent;
-  gridster: GridsterComponent;
+  gridsterItem: GridsterItemComponentInterface;
+  gridster: GridsterComponentInterface;
   lastMouse: {
     clientX: number,
     clientY: number
@@ -33,6 +34,7 @@ export class GridsterDraggable {
   dragStopFunction: (event: any) => void;
   mousemove: Function;
   mouseup: Function;
+  cancelOnBlur: Function;
   touchmove: Function;
   touchend: Function;
   touchcancel: Function;
@@ -42,7 +44,7 @@ export class GridsterDraggable {
   swap: GridsterSwap;
   path: Array<{ x: number, y: number }>;
 
-  constructor(gridsterItem: GridsterItemComponent, gridster: GridsterComponent) {
+  constructor(gridsterItem: GridsterItemComponentInterface, gridster: GridsterComponentInterface) {
     this.gridsterItem = gridsterItem;
     this.gridster = gridster;
     this.lastMouse = {
@@ -52,7 +54,20 @@ export class GridsterDraggable {
     this.path = [];
   }
 
-  dragStart(e): void {
+  destroy(): void {
+    delete this.gridster.movingItem;
+    if (this.gridster.previewStyle) {
+      this.gridster.previewStyle();
+    }
+    delete this.gridsterItem;
+    delete this.gridster;
+    if (this.mousedown) {
+      this.mousedown();
+      this.touchstart();
+    }
+  }
+
+  dragStart(e: any): void {
     switch (e.which) {
       case 1:
         // left mouse button
@@ -63,23 +78,19 @@ export class GridsterDraggable {
         return;
     }
 
-    if (GridsterUtils.checkContentClassForEvent(this.gridster, e)) {
-      return;
-    }
-
-    if (this.gridster.$options.draggable.start) {
-      this.gridster.$options.draggable.start(this.gridsterItem.item, this.gridsterItem, e);
+    if (this.gridster.options.draggable && this.gridster.options.draggable.start) {
+      this.gridster.options.draggable.start(this.gridsterItem.item, this.gridsterItem, e);
     }
 
     e.stopPropagation();
     e.preventDefault();
-    GridsterUtils.checkTouchEvent(e);
     this.dragFunction = this.dragMove.bind(this);
     this.dragStopFunction = this.dragStop.bind(this);
 
     this.mousemove = this.gridsterItem.renderer.listen('document', 'mousemove', this.dragFunction);
     this.mouseup = this.gridsterItem.renderer.listen('document', 'mouseup', this.dragStopFunction);
-    this.touchmove = this.gridsterItem.renderer.listen('document', 'touchmove', this.dragFunction);
+    this.cancelOnBlur = this.gridsterItem.renderer.listen('window', 'blur', this.dragStopFunction);
+    this.touchmove = this.gridster.renderer.listen(this.gridster.el, 'touchmove', this.dragFunction);
     this.touchend = this.gridsterItem.renderer.listen('document', 'touchend', this.dragStopFunction);
     this.touchcancel = this.gridsterItem.renderer.listen('document', 'touchcancel', this.dragStopFunction);
     this.gridsterItem.renderer.addClass(this.gridsterItem.el, 'gridster-item-moving');
@@ -94,14 +105,14 @@ export class GridsterDraggable {
     this.diffTop = e.clientY + this.offsetTop - this.margin - this.top;
     this.gridster.movingItem = this.gridsterItem.$item;
     this.gridster.previewStyle();
-    this.push = new GridsterPush(this.gridsterItem, this.gridster);
-    this.swap = new GridsterSwap(this.gridsterItem, this.gridster);
+    this.push = new GridsterPush(this.gridsterItem);
+    this.swap = new GridsterSwap(this.gridsterItem);
     this.gridster.dragInProgress = true;
     this.gridster.gridLines.updateGrid();
     this.path.push({x: this.gridsterItem.item.x || 0, y: this.gridsterItem.item.y || 0});
   }
 
-  dragMove(e): void {
+  dragMove(e: any): void {
     e.stopPropagation();
     e.preventDefault();
     GridsterUtils.checkTouchEvent(e);
@@ -116,17 +127,18 @@ export class GridsterDraggable {
     this.gridster.gridLines.updateGrid();
   }
 
-  calculateItemPositionFromMousePosition(e): void {
+  calculateItemPositionFromMousePosition(e: any): void {
     this.left = e.clientX + this.offsetLeft - this.margin - this.diffLeft;
     this.top = e.clientY + this.offsetTop - this.margin - this.diffTop;
     this.calculateItemPosition();
   }
 
-  dragStop(e): void {
+  dragStop(e: any): void {
     e.stopPropagation();
     e.preventDefault();
 
     cancelScroll();
+    this.cancelOnBlur();
     this.mousemove();
     this.mouseup();
     this.touchmove();
@@ -136,16 +148,18 @@ export class GridsterDraggable {
     this.gridster.dragInProgress = false;
     this.gridster.gridLines.updateGrid();
     this.path = [];
-    if (this.gridster.$options.draggable.stop) {
-      Promise.resolve(this.gridster.$options.draggable.stop(this.gridsterItem.item, this.gridsterItem, e))
+    if (this.gridster.options.draggable && this.gridster.options.draggable.stop) {
+      Promise.resolve(this.gridster.options.draggable.stop(this.gridsterItem.item, this.gridsterItem, e))
         .then(this.makeDrag.bind(this), this.cancelDrag.bind(this));
     } else {
       this.makeDrag();
     }
-    setTimeout(function () {
-      this.gridster.movingItem = null;
-      this.gridster.previewStyle();
-    }.bind(this));
+    setTimeout(() => {
+      if (this.gridster) {
+        this.gridster.movingItem = null;
+        this.gridster.previewStyle();
+      }
+    });
   }
 
   cancelDrag() {
@@ -154,6 +168,10 @@ export class GridsterDraggable {
     this.gridsterItem.setSize(true);
     this.push.restoreItems();
     this.swap.restoreSwapItem();
+    this.push.destroy();
+    delete this.push;
+    this.swap.destroy();
+    delete this.swap;
   }
 
   makeDrag() {
@@ -161,6 +179,10 @@ export class GridsterDraggable {
     this.gridsterItem.checkItemChanges(this.gridsterItem.$item, this.gridsterItem.item);
     this.push.setPushedItems();
     this.swap.setSwapItem();
+    this.push.destroy();
+    delete this.push;
+    this.swap.destroy();
+    delete this.swap;
   }
 
   calculateItemPosition() {
@@ -183,7 +205,7 @@ export class GridsterDraggable {
 
     if (this.positionXBackup !== this.gridsterItem.$item.x || this.positionYBackup !== this.gridsterItem.$item.y) {
       const lastPosition = this.path[this.path.length - 1];
-      let direction;
+      let direction = '';
       if (lastPosition.x < this.gridsterItem.$item.x) {
         direction = this.push.fromWest;
       } else if (lastPosition.x > this.gridsterItem.$item.x) {
@@ -193,7 +215,7 @@ export class GridsterDraggable {
       } else if (lastPosition.y > this.gridsterItem.$item.y) {
         direction = this.push.fromSouth;
       }
-      this.push.pushItems(direction);
+      this.push.pushItems(direction, this.gridster.$options.disablePushOnDrag);
       this.swap.swapItems();
       if (this.gridster.checkCollision(this.gridsterItem.$item)) {
         this.gridsterItem.$item.x = this.positionXBackup;
@@ -210,13 +232,52 @@ export class GridsterDraggable {
     const enableDrag = this.gridsterItem.canBeDragged();
     if (!this.enabled && enableDrag) {
       this.enabled = !this.enabled;
-      this.dragStartFunction = this.dragStart.bind(this);
+      this.dragStartFunction = this.dragStartDelay.bind(this);
       this.mousedown = this.gridsterItem.renderer.listen(this.gridsterItem.el, 'mousedown', this.dragStartFunction);
       this.touchstart = this.gridsterItem.renderer.listen(this.gridsterItem.el, 'touchstart', this.dragStartFunction);
     } else if (this.enabled && !enableDrag) {
       this.enabled = !this.enabled;
       this.mousedown();
       this.touchstart();
+    }
+  }
+
+  dragStartDelay(e: any): void {
+    if (e.target.classList.contains('gridster-item-resizable-handler')) {
+      return;
+    }
+    if (GridsterUtils.checkContentClassForEvent(this.gridster, e)) {
+      return;
+    }
+    GridsterUtils.checkTouchEvent(e);
+    if (!this.gridster.$options.draggable.delayStart) {
+      this.dragStart(e);
+      return;
+    }
+    const timeout = setTimeout(() => {
+      this.dragStart(e);
+      cancelDrag();
+    }, this.gridster.$options.draggable.delayStart);
+    const cancelMouse = this.gridsterItem.renderer.listen('document', 'mouseup', cancelDrag);
+    const cancelOnBlur = this.gridsterItem.renderer.listen('window', 'blur', cancelDrag);
+    const cancelTouchMove = this.gridsterItem.renderer.listen('document', 'touchmove', cancelMove);
+    const cancelTouchEnd = this.gridsterItem.renderer.listen('document', 'touchend', cancelDrag);
+    const cancelTouchCancel = this.gridsterItem.renderer.listen('document', 'touchcancel', cancelDrag);
+
+    function cancelMove(eventMove: any) {
+      GridsterUtils.checkTouchEvent(eventMove);
+      if (Math.abs(eventMove.clientX - e.clientX) > 9 || Math.abs(eventMove.clientY - e.clientY) > 9) {
+        cancelDrag();
+      }
+    }
+
+    function cancelDrag() {
+      clearTimeout(timeout);
+      cancelOnBlur();
+      cancelMouse();
+      cancelTouchMove();
+      cancelTouchEnd();
+      cancelTouchCancel();
     }
   }
 }

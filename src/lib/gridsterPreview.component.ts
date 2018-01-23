@@ -1,12 +1,14 @@
-import {Component, ElementRef, Host, Renderer2} from '@angular/core';
+import {Component, ElementRef, Host, OnDestroy, Renderer2, ViewEncapsulation} from '@angular/core';
+
 import {GridsterComponent} from './gridster.component';
 
 @Component({
   selector: 'gridster-preview',
   template: '',
-  styleUrls: ['./gridsterPreview.css']
+  styleUrls: ['./gridsterPreview.css'],
+  encapsulation: ViewEncapsulation.None
 })
-export class GridsterPreviewComponent {
+export class GridsterPreviewComponent implements OnDestroy {
   el: any;
   gridster: GridsterComponent;
 
@@ -16,7 +18,13 @@ export class GridsterPreviewComponent {
     this.gridster.previewStyle = this.previewStyle.bind(this);
   }
 
-  previewStyle() {
+  ngOnDestroy(): void {
+    delete this.el;
+    delete this.gridster.previewStyle;
+    delete this.gridster;
+  }
+
+  previewStyle(): void {
     if (!this.gridster.movingItem) {
       this.renderer.setStyle(this.el, 'display', 'none');
     } else {

@@ -8,9 +8,10 @@ angular-gridster2
 
 ### Angular implementation of angular-gridster [Demo](http://tiberiuzuld.github.io/angular-gridster2/angular)
 
-### Angular 4.x library is [master branch](https://github.com/tiberiuzuld/angular-gridster2/tree/master) 
-### Angular 2.x library is [2.4.x branch](https://github.com/tiberiuzuld/angular-gridster2/tree/2.4.x)  
-### AngularJS 1.x library is [1.x branch](https://github.com/tiberiuzuld/angular-gridster2/tree/1.x)
+### Angular 5.x library is [master branch](https://github.com/tiberiuzuld/angular-gridster2/tree/master) 
+### Angular 4.x library is [4.x branch](https://github.com/tiberiuzuld/angular-gridster2/tree/4.x)
+### Angular 2.x library is [2.4.x branch](https://github.com/tiberiuzuld/angular-gridster2/tree/2.4.x) (no longer maintained) 
+### AngularJS >=1.5.x library is [1.x branch](https://github.com/tiberiuzuld/angular-gridster2/tree/1.x)
 
 ## Install
 
@@ -19,10 +20,10 @@ angular-gridster2
 Should work out of the box with webpack, respectively angular-cli.
 
 ```javascript
-import {GridsterModule} from 'angular-gridster2';
+import { GridsterModule } from 'angular-gridster2';
 
 @NgModule({
-  imports: [GridsterModule],
+  imports: [ GridsterModule ],
   ...
 })
 ```
@@ -40,7 +41,7 @@ import {GridsterModule} from 'angular-gridster2';
 
 Initialize a simple dashboard:
 ```typescript
-   import {GridsterConfig, GridsterItem}  from 'angular-gridster2';
+   import { GridsterConfig, GridsterItem }  from 'angular-gridster2';
    options: GridsterConfig;
    dashboard: Array<GridsterItem>;
 
@@ -81,7 +82,7 @@ Initialize a simple dashboard:
 
 ##### Default Grid Options:
 ```typescript
-import {GridsterConfig} from 'angular-gridster2';
+import { GridsterConfig } from 'angular-gridster2';
 
 export const GridsterConfigService: GridsterConfig = {
   gridType: 'fit', // 'fit' will fit the items in the container without scroll;
@@ -113,22 +114,28 @@ export const GridsterConfigService: GridsterConfig = {
   scrollSensitivity: 10,  // margin of the dashboard where to start scrolling
   scrollSpeed: 20,  // how much to scroll each mouse move when in the scrollSensitivity zone
   initCallback: undefined, // callback to call after grid has initialized. Arguments: gridsterComponent
+  destroyCallback: undefined, // callback to call after grid has destroyed. Arguments: gridsterComponent
   itemChangeCallback: undefined,  // callback to call for each item when is changes x, y, rows, cols.
   // Arguments: gridsterItem, gridsterItemComponent
   itemResizeCallback: undefined,  // callback to call for each item when width/height changes.
   // Arguments: gridsterItem, gridsterItemComponent
-  itemInitCallback: undefined,  // callback to call for each item when is initialized.
+  itemInitCallback: undefined,  // callback to call for each item when is initialized and has size > 0.
   // Arguments: gridsterItem, gridsterItemComponent
+  itemRemovedCallback: undefined,  // callback to call for each item when is removed.
+    // Arguments: gridsterItem, gridsterItemComponent
   enableEmptyCellClick: false, // enable empty cell click events
+  enableEmptyCellContextMenu: false, // enable empty cell context menu (right click) events
   enableEmptyCellDrop: false, // enable empty cell drop events
   enableEmptyCellDrag: false, // enable empty cell drag events
   emptyCellClickCallback: undefined, // empty cell click callback
+  emptyCellContextMenuCallback: undefined, // empty cell context menu (right click) callback
   emptyCellDropCallback: undefined, // empty cell drag drop callback. HTML5 Drag & Drop
   emptyCellDragCallback: undefined, // empty cell drag and create item like excel cell selection
   // Arguments: event, gridsterItem{x, y, rows: defaultItemRows, cols: defaultItemCols}
   emptyCellDragMaxCols: 50, // limit empty cell drag max cols
   emptyCellDragMaxRows: 50, // limit empty cell drag max rows
   draggable: {
+    delayStart: 0, // milliseconds to delay the start of resize, useful for touch interaction
     enabled: false, // enable/disable draggable items
     ignoreContentClass: 'gridster-item-content', // default content class to ignore the drag event from
     ignoreContent: false, // if true drag will start only from elements from `dragHandleClass`
@@ -138,6 +145,7 @@ export const GridsterConfigService: GridsterConfig = {
     // Arguments: item, gridsterItem, event
   },
   resizable: {
+    delayStart: 0, // milliseconds to delay the start of resize, useful for touch interaction
     enabled: false, // enable/disable resizable items
     handles: {
       s: true,
@@ -155,9 +163,14 @@ export const GridsterConfigService: GridsterConfig = {
   },
   swap: true, // allow items to switch position if drop on top of another
   pushItems: false, // push items when resizing and dragging
+  disablePushOnDrag: false, // disable push on drag
+  disablePushOnResize: false, // disable push on resize
+  pushDirections: {north: true, east: true, south: true, west: true}, // control the directions items are pushed
   pushResizeItems: false, // on resize of item will shrink adjacent items
-  displayGrid: 'onDrag&Resize', // display background grid of rows and columns
-  disableWindowResize: false // disable the window on resize listener. This will stop grid to recalculate on window resize.
+  displayGrid: 'onDrag&Resize', // display background grid of rows and columns. Options: 'always' | 'onDrag&Resize' | 'none'
+  disableWindowResize: false, // disable the window on resize listener. This will stop grid to recalculate on window resize.
+  disableWarnings: false, // disable console log warnings about misplacement of grid items
+  scrollToNewItems: false // scroll to new items placed in a scrollable view
 };
 ```
 
@@ -166,6 +179,20 @@ export const GridsterConfigService: GridsterConfig = {
     this.options.api.resize(); // call if size of container changes. Grid will auto resize on window resize.
     this.options.api.optionsChanged(); // call on change of options after initialization
     this.options.api.getNextPossiblePosition(item: GridsterItem); // call to get a viable position for item. Returns true if found
+
+// if you want to push items from code use the GridsterPush service
+import {GridsterItemComponent, GridsterPush, GridsterPushResize, GridsterSwap} from 'gridster'
+
+myMethod(gridsterItemComponent: GridsterItemComponent) {
+  const push = new GridsterPush(gridsterItemComponent); // init the service
+  gridsterItemComponent.$item.rows += 1; // move your item
+  push.pushItems(push.fromEast);  // push items from a direction
+  push.setPushedItems(); // save the items pushed
+  push.restoreItems(); // restore to initial state the pushed items
+  push.checkPushBack(); // check for items restore to original position
+  
+  // same for GridsterPushResize and GridsterSwap
+}
 ```
 
 ##### Gridster item options:
@@ -175,9 +202,10 @@ export interface GridsterItem {
   y?: number; // y position if missing will auto position
   rows?: number; // number of rows if missing will use grid option defaultItemRows
   cols?: number; // number of columns if missing will use grid option defaultItemCols
-  initCallback?: Function; // initialization callback. Argument: GridsterItem, GridsterItemComponent
+  initCallback?: Function; // initialization callback and has size > 0. Argument: GridsterItem, GridsterItemComponent
   dragEnabled?: boolean; // override grid option draggable.enabled
   resizeEnabled?: boolean; // override grid option resizable.enabled
+  compactEnabled?: boolean; // disable compact
   maxItemRows?: number; // override grid option maxItemRows
   minItemRows?: number; // override grid option minItemRows
   maxItemCols?: number; // override grid option maxItemCols
@@ -186,18 +214,6 @@ export interface GridsterItem {
   maxItemArea?: number; //  override grid option maxItemArea
 }
 ```
-
-### Events 
-
-##### Gridster Item
-```typescript
-  @Output() itemChange: EventEmitter<GridsterItem> = new EventEmitter();
-  @Output() itemResize: EventEmitter<GridsterItem> = new EventEmitter();
-  ....
-  this.itemChange.emit(this.state.item); // triggered when a item cols,rows, x ,y changed
-  this.itemResize.emit(this.state.item); // triggered when a item width/height changed
-```
-Note: When a item changes cols/rows both events get triggered
 
 ### Load dynamic components inside the `gridster-item`
 
@@ -245,4 +261,4 @@ Option 2 (with text selection):
 ### License
  The MIT License
  
- Copyright (c) 2017 Tiberiu Zuld
+ Copyright (c) 2018 Tiberiu Zuld

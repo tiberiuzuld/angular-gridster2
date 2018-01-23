@@ -3,5 +3,6 @@ export interface GridsterItemS {
   y: number;
   rows: number;
   cols: number;
+
   [propName: string]: any;
 }

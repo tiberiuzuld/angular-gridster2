@@ -1,5 +1,5 @@
-import {GridsterItemComponent} from './gridsterItem.component';
 import {GridsterResizeEventType} from './gridsterResizeEventType.interface';
+import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
 
 let scrollSensitivity: number;
 let scrollSpeed: number;
@@ -11,8 +11,9 @@ let intervalE: number;
 let intervalW: number;
 let intervalN: number;
 let intervalS: number;
-export function scroll(gridsterItem: GridsterItemComponent, e: MouseEvent, lastMouse, calculateItemPosition: Function, resize?: boolean,
-                       resizeEventScrollType?: GridsterResizeEventType) {
+
+export function scroll(gridsterItem: GridsterItemComponentInterface, e: MouseEvent, lastMouse: any, calculateItemPosition: Function,
+                       resize?: boolean, resizeEventScrollType?: GridsterResizeEventType) {
   scrollSensitivity = gridsterItem.gridster.$options.scrollSensitivity;
   scrollSpeed = gridsterItem.gridster.$options.scrollSpeed;
   gridsterElement = gridsterItem.gridster.el;
@@ -60,28 +61,28 @@ export function scroll(gridsterItem: GridsterItemComponent, e: MouseEvent, lastM
   }
 }
 
-function startVertical(sign: number, calculateItemPosition: Function, lastMouse): any {
+function startVertical(sign: number, calculateItemPosition: Function, lastMouse: any): any {
   let clientY = lastMouse.clientY;
-  return setInterval(function () {
+  return setInterval(() => {
     if (!gridsterElement || sign === -1 && gridsterElement.scrollTop - scrollSpeed < 0) {
       cancelVertical();
     }
     gridsterElement.scrollTop += sign * scrollSpeed;
     clientY += sign * scrollSpeed;
     calculateItemPosition({clientX: lastMouse.clientX, clientY: clientY});
-  }.bind(this), intervalDuration);
+  }, intervalDuration);
 }
 
-function startHorizontal(sign: number, calculateItemPosition: Function, lastMouse): any {
+function startHorizontal(sign: number, calculateItemPosition: Function, lastMouse: any): any {
   let clientX = lastMouse.clientX;
-  return setInterval(function () {
+  return setInterval(() => {
     if (!gridsterElement || sign === -1 && gridsterElement.scrollLeft - scrollSpeed < 0) {
       cancelHorizontal();
     }
     gridsterElement.scrollLeft += sign * scrollSpeed;
     clientX += sign * scrollSpeed;
     calculateItemPosition({clientX: clientX, clientY: lastMouse.clientY});
-  }.bind(this), intervalDuration);
+  }, intervalDuration);
 }
 
 export function cancelScroll() {

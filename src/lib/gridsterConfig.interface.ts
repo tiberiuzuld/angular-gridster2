@@ -1,14 +1,41 @@
-export type GridType = 'fit' | 'scrollVertical' | 'scrollHorizontal' | 'fixed' | 'verticalFixed' | 'horizontalFixed';
-export type displayGrid = 'always' | 'onDrag&Resize' | 'none';
-export type compactType = 'none' | 'compactUp' | 'compactLeft' | 'compactUp&Left' | 'compactLeft&Up';
+import {GridsterItem} from './gridsterItem.interface';
+import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
+import {GridsterComponentInterface} from './gridster.interface';
+
+export type gridTypes = 'fit' | 'scrollVertical' | 'scrollHorizontal' | 'fixed' | 'verticalFixed' | 'horizontalFixed';
+export type displayGrids = 'always' | 'onDrag&Resize' | 'none';
+export type compactTypes = 'none' | 'compactUp' | 'compactLeft' | 'compactUp&Left' | 'compactLeft&Up';
+
+export enum GridType {
+  Fit = 'fit',
+  ScrollVertical = 'scrollVertical',
+  ScrollHorizontal = 'scrollHorizontal',
+  Fixed = 'fixed',
+  VerticalFixed = 'verticalFixed',
+  HorizontalFixed = 'horizontalFixed'
+}
+
+export enum DisplayGrid {
+  Always = 'always',
+  OnDragAndResize = 'onDrag&Resize',
+  None = 'none'
+}
+
+export enum CompactType {
+  None = 'none',
+  CompactUp = 'compactUp',
+  CompactLeft = 'compactLeft',
+  CompactUpAndLeft = 'compactUp&Left',
+  CompactLeftAndUp = 'compactLeft&Up'
+}
 
 export interface GridsterConfig {
-  gridType?: GridType;
+  gridType?: gridTypes;
   fixedColWidth?: number;
   fixedRowHeight?: number;
   keepFixedHeightInMobile?: boolean;
   keepFixedWidthInMobile?: boolean;
-  compactType?: compactType;
+  compactType?: compactTypes;
   mobileBreakpoint?: number;
   minCols?: number;
   maxCols?: number;
@@ -26,32 +53,48 @@ export interface GridsterConfig {
   outerMargin?: boolean;
   scrollSensitivity?: number;
   scrollSpeed?: number;
-  initCallback?: Function;
-  itemChangeCallback?: Function;
-  itemResizeCallback?: Function;
-  itemInitCallback?: Function;
+  initCallback?: (gridster: GridsterComponentInterface) => void;
+  destroyCallback?: (gridster: GridsterComponentInterface) => void;
+  itemChangeCallback?: (item: GridsterItem, itemComponent: GridsterItemComponentInterface) => void;
+  itemResizeCallback?: (item: GridsterItem, itemComponent: GridsterItemComponentInterface) => void;
+  itemInitCallback?: (item: GridsterItem, itemComponent: GridsterItemComponentInterface) => void;
+  itemRemovedCallback?: (item: GridsterItem, itemComponent: GridsterItemComponentInterface) => void;
   draggable?: Draggable;
   resizable?: Resizable;
   swap?: boolean;
   pushItems?: boolean;
+  disablePushOnDrag?: boolean;
+  disablePushOnResize?: boolean;
+  pushDirections?: PushDirections;
   pushResizeItems?: boolean;
-  displayGrid?: displayGrid;
+  displayGrid?: displayGrids;
   disableWindowResize?: boolean;
+  disableWarnings?: boolean;
+  scrollToNewItems?: boolean;
   enableEmptyCellClick?: boolean;
+  enableEmptyCellContextMenu?: boolean;
   enableEmptyCellDrop?: boolean;
   enableEmptyCellDrag?: boolean;
-  emptyCellClickCallback?: Function;
-  emptyCellDropCallback?: Function;
-  emptyCellDragCallback?: Function;
+  emptyCellClickCallback?: (event: MouseEvent, item: GridsterItem) => void;
+  emptyCellContextMenuCallback?: (event: MouseEvent, item: GridsterItem) => void;
+  emptyCellDropCallback?: (event: MouseEvent, item: GridsterItem) => void;
+  emptyCellDragCallback?: (event: MouseEvent, item: GridsterItem) => void;
   emptyCellDragMaxCols?: number;
   emptyCellDragMaxRows?: number;
   api?: {
-    resize?: Function,
-    optionsChanged?: Function,
-    getNextPossiblePosition?: Function,
+    resize?: () => void,
+    optionsChanged?: () => void,
+    getNextPossiblePosition?: (newItem: GridsterItem) => boolean,
   };
 
   [propName: string]: any;
+}
+
+export interface DragBase {
+  enabled?: boolean;
+  stop?: (item: GridsterItem, itemComponent: GridsterItemComponentInterface, event: MouseEvent) => Promise<any> | void;
+  start?: (item: GridsterItem, itemComponent: GridsterItemComponentInterface, event: MouseEvent) => void;
+  delayStart?: number;
 }
 
 export interface Draggable extends DragBase {
@@ -73,8 +116,9 @@ export interface Resizable extends DragBase {
   };
 }
 
-export interface DragBase {
-  enabled?: boolean;
-  stop?: Function;
-  start?: Function;
+export interface PushDirections {
+  north: boolean;
+  east: boolean;
+  south: boolean;
+  west: boolean;
 }
