@@ -90,6 +90,7 @@ export class AppComponent implements OnInit {
       emptyCellDragCallback: this.emptyCellClick.bind(this),
       emptyCellDragMaxCols: 50,
       emptyCellDragMaxRows: 50,
+      ignoreMarginInRow: false,
       draggable: {
         delayStart: 0,
         enabled: true,

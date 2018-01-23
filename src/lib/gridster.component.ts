@@ -232,20 +232,20 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
       removeClass2 = 'scrollVertical';
       removeClass3 = 'fixed';
     } else if (this.$options.gridType === 'fixed') {
-      this.curColWidth = this.$options.fixedColWidth + this.$options.margin;
-      this.curRowHeight = this.$options.fixedRowHeight + this.$options.margin;
+      this.curColWidth = this.$options.fixedColWidth + (this.$options.ignoreMarginInRow ? 0 : this.$options.margin);
+      this.curRowHeight = this.$options.fixedRowHeight + (this.$options.ignoreMarginInRow ? 0 : this.$options.margin);
       addClass = 'fixed';
       removeClass1 = 'fit';
       removeClass2 = 'scrollVertical';
       removeClass3 = 'scrollHorizontal';
     } else if (this.$options.gridType === 'verticalFixed') {
-      this.curRowHeight = this.$options.fixedRowHeight + this.$options.margin;
+      this.curRowHeight = this.$options.fixedRowHeight + (this.$options.ignoreMarginInRow ? 0 : this.$options.margin);
       addClass = 'scrollVertical';
       removeClass1 = 'fit';
       removeClass2 = 'scrollHorizontal';
       removeClass3 = 'fixed';
     } else if (this.$options.gridType === 'horizontalFixed') {
-      this.curColWidth = this.$options.fixedColWidth + this.$options.margin;
+      this.curColWidth = this.$options.fixedColWidth + (this.$options.ignoreMarginInRow ? 0 : this.$options.margin);
       addClass = 'scrollHorizontal';
       removeClass1 = 'fit';
       removeClass2 = 'scrollVertical';
