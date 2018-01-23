@@ -43,6 +43,7 @@ export interface GridsterConfigS {
   enableEmptyCellDrag: boolean;
   emptyCellDragMaxCols: number;
   emptyCellDragMaxRows: number;
+  ignoreMarginInRow: boolean;
   api: {
     resize: () => void,
     optionsChanged: () => void,

@@ -98,6 +98,9 @@
     <mat-checkbox [(ngModel)]="options.disableWarnings" (ngModelChange)="changedOptions()">
       Disable console warnings
     </mat-checkbox>
+    <mat-checkbox [(ngModel)]="options.ignoreMarginInRow" (ngModelChange)="changedOptions()">
+      Ignore margin in row
+    </mat-checkbox>
     <label class="mat-headline cols-2">Item Settings</label>
     <mat-form-field>
       <input matInput [(ngModel)]="options.maxItemCols" type="number" placeholder="Max Item Cols"

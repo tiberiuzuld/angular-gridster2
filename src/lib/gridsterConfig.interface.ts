@@ -81,6 +81,7 @@ export interface GridsterConfig {
   emptyCellDragCallback?: (event: MouseEvent, item: GridsterItem) => void;
   emptyCellDragMaxCols?: number;
   emptyCellDragMaxRows?: number;
+  ignoreMarginInRow?: boolean;
   api?: {
     resize?: () => void,
     optionsChanged?: () => void,
