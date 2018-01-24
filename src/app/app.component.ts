@@ -1,7 +1,12 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 
 import {
-  CompactType, DisplayGrid, GridsterComponentInterface, GridsterConfig, GridsterItem, GridsterItemComponentInterface,
+  CompactType,
+  DisplayGrid,
+  GridsterComponentInterface,
+  GridsterConfig,
+  GridsterItem,
+  GridsterItemComponentInterface,
   GridType
 } from '../lib';
 

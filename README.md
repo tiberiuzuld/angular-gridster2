@@ -186,14 +186,19 @@ export const GridsterConfigService: GridsterConfig = {
 import {GridsterItemComponent, GridsterPush, GridsterPushResize, GridsterSwap} from 'gridster'
 
 myMethod(gridsterItemComponent: GridsterItemComponent) {
-  const push = new GridsterPush(gridsterItemComponent); // init the service
-  gridsterItemComponent.$item.rows += 1; // move your item
-  push.pushItems(push.fromEast);  // push items from a direction
-  push.setPushedItems(); // save the items pushed
-  push.restoreItems(); // restore to initial state the pushed items
-  push.checkPushBack(); // check for items restore to original position
-  
-  // same for GridsterPushResize and GridsterSwap
+    const push = new GridsterPush(gridsterItemComponent); // init the service
+    gridsterItemComponent.$item.rows += 1; // move/resize your item
+    if (push.pushItems(push.fromNorth)) { // push items from a direction
+      push.checkPushBack(); // check for items can restore to original position
+      push.setPushedItems(); // save the items pushed
+      gridsterItemComponent.setSize(true);
+      gridsterItemComponent.checkItemChanges(gridsterItemComponent.$item, gridsterItemComponent.item);
+    } else {
+      gridsterItemComponent.$item.rows -= 1;
+      push.restoreItems(); // restore to initial state the pushed items
+    }
+    push.destroy(); // destroy push instance
+  // similar for GridsterPushResize and GridsterSwap
 }
 ```
 

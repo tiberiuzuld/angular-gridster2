@@ -49,16 +49,20 @@ export class GridsterPush {
     delete this.gridsterItem;
   }
 
-  pushItems(direction: string, disable?: boolean): void {
+  pushItems(direction: string, disable?: boolean): boolean {
     this.count = 0;
     if (this.gridster.$options.pushItems && !disable) {
       this.pushedItemsOrder = [];
-      if (!this.push(this.gridsterItem, direction)) {
+      const pushed = this.push(this.gridsterItem, direction);
+      if (!pushed) {
         this.restoreTempItems();
       }
       this.pushedItemsOrder = [];
       this.pushedItemsTemp = [];
       this.pushedItemsTempPath = [];
+      return pushed;
+    } else {
+      return false;
     }
   }
 
