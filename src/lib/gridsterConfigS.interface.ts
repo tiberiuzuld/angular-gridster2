@@ -23,6 +23,10 @@ export interface GridsterConfigS {
   maxItemArea: number;
   margin: number;
   outerMargin: boolean;
+  outerMarginTop: number | null;
+  outerMarginRight: number | null;
+  outerMarginBottom: number | null;
+  outerMarginLeft: number | null;
   scrollSensitivity: number;
   scrollSpeed: number;
   draggable: Draggable;

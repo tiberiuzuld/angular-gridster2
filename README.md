@@ -111,6 +111,10 @@ export const GridsterConfigService: GridsterConfig = {
   maxItemArea: 2500, // max item area: cols * rows
   margin: 10,  // margin between grid items
   outerMargin: true,  // if margins will apply to the sides of the container
+  outerMarginTop: null, // override outer margin for grid
+  outerMarginRight: null, // override outer margin for grid
+  outerMarginBottom: null, // override outer margin for grid
+  outerMarginLeft: null, // override outer margin for grid
   scrollSensitivity: 10,  // margin of the dashboard where to start scrolling
   scrollSpeed: 20,  // how much to scroll each mouse move when in the scrollSensitivity zone
   initCallback: undefined, // callback to call after grid has initialized. Arguments: gridsterComponent

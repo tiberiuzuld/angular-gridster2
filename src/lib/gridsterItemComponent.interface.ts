@@ -16,7 +16,7 @@ export abstract class GridsterItemComponentInterface {
   left: number;
   width: number;
   height: number;
-  itemMargin: number;
+  itemMargin: string;
   drag: GridsterDraggable;
   resize: GridsterResizable;
   notPlaced: boolean;

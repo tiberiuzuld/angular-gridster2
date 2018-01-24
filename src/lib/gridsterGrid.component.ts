@@ -1,5 +1,11 @@
 import {
-  ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Host, OnDestroy, Renderer2,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Host,
+  OnDestroy,
+  Renderer2,
   ViewEncapsulation
 } from '@angular/core';
 
@@ -20,7 +26,6 @@ export class GridsterGridComponent implements OnDestroy {
   rows: Array<any>;
   height: number;
   width: number;
-  margin: number;
   columnsHeight: number;
   rowsWidth: number;
 
@@ -52,13 +57,32 @@ export class GridsterGridComponent implements OnDestroy {
       this.renderer.setStyle(this.el, 'display', 'none');
     }
     this.gridster.setGridDimensions();
-    this.margin = this.gridster.$options.margin;
-    this.height = this.gridster.curRowHeight - this.margin;
-    this.width = this.gridster.curColWidth - this.margin;
+    this.height = this.gridster.curRowHeight - this.gridster.$options.margin;
+    this.width = this.gridster.curColWidth - this.gridster.$options.margin;
     this.columns.length = Math.max(this.gridster.columns, Math.floor(this.gridster.curWidth / this.gridster.curColWidth)) || 0;
     this.rows.length = Math.max(this.gridster.rows, Math.floor(this.gridster.curHeight / this.gridster.curRowHeight)) || 0;
-    this.columnsHeight = this.gridster.curRowHeight * this.rows.length;
-    this.rowsWidth = this.gridster.curColWidth * this.columns.length;
+    this.columnsHeight = this.gridster.curRowHeight * this.rows.length + this.getMarginTop(true) - this.gridster.$options.margin;
+    this.rowsWidth = this.gridster.curColWidth * this.columns.length + this.getMarginLeft(true) - this.gridster.$options.margin;
     this.cdRef.markForCheck();
+  }
+
+  getMarginTop(isFirst: boolean): number {
+    if (isFirst && !this.gridster.$options.outerMargin) {
+      return 0;
+    } else if (isFirst && this.gridster.$options.outerMargin && this.gridster.$options.outerMarginTop !== null) {
+      return this.gridster.$options.outerMarginTop;
+    } else {
+      return this.gridster.$options.margin;
+    }
+  }
+
+  getMarginLeft(isFirst: boolean): number {
+    if (isFirst && !this.gridster.$options.outerMargin) {
+      return 0;
+    } else if (isFirst && this.gridster.$options.outerMargin && this.gridster.$options.outerMarginLeft !== null) {
+      return this.gridster.$options.outerMarginLeft;
+    } else {
+      return this.gridster.$options.margin;
+    }
   }
 }

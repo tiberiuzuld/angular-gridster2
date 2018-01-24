@@ -1,5 +1,13 @@
 import {
-  ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, Renderer2, SimpleChanges,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Renderer2,
+  SimpleChanges,
   ViewEncapsulation
 } from '@angular/core';
 
@@ -204,8 +212,30 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
 
     this.setGridDimensions();
     if (this.$options.outerMargin) {
-      this.curColWidth = (this.curWidth - this.$options.margin) / this.columns;
-      this.curRowHeight = (this.curHeight - this.$options.margin) / this.rows;
+      let marginWidth = -this.$options.margin;
+      if (this.$options.outerMarginLeft !== null) {
+        marginWidth += this.$options.outerMarginLeft;
+      } else {
+        marginWidth += this.$options.margin;
+      }
+      if (this.$options.outerMarginRight !== null) {
+        marginWidth += this.$options.outerMarginRight;
+      } else {
+        marginWidth += this.$options.margin;
+      }
+      this.curColWidth = (this.curWidth - marginWidth) / this.columns;
+      let marginHeight = -this.$options.margin;
+      if (this.$options.outerMarginTop !== null) {
+        marginHeight += this.$options.outerMarginTop;
+      } else {
+        marginHeight += this.$options.margin;
+      }
+      if (this.$options.outerMarginBottom !== null) {
+        marginHeight += this.$options.outerMarginBottom;
+      } else {
+        marginHeight += this.$options.margin;
+      }
+      this.curRowHeight = (this.curHeight - marginHeight) / this.rows;
     } else {
       this.curColWidth = (this.curWidth + this.$options.margin) / this.columns;
       this.curRowHeight = (this.curHeight + this.$options.margin) / this.rows;

@@ -51,7 +51,11 @@ export interface GridsterConfig {
   maxItemArea?: number;
   margin?: number;
   outerMargin?: boolean;
-  scrollSensitivity?: number;
+  outerMarginTop?: number | null;
+  outerMarginRight?: number | null;
+  outerMarginBottom?: number | null;
+  outerMarginLeft?: number | null;
+  scrollSensitivity?: number | null;
   scrollSpeed?: number;
   initCallback?: (gridster: GridsterComponentInterface) => void;
   destroyCallback?: (gridster: GridsterComponentInterface) => void;

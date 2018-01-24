@@ -34,16 +34,20 @@
     <mat-checkbox [(ngModel)]="options.disablePushOnResize" (ngModelChange)="changedOptions()">
       Disable Push On Resize
     </mat-checkbox>
-    <mat-checkbox [(ngModel)]="options.pushDirections.north" *ngIf="options.pushDirections" (ngModelChange)="changedOptions()">
+    <mat-checkbox [(ngModel)]="options.pushDirections.north" *ngIf="options.pushDirections"
+                  (ngModelChange)="changedOptions()">
       Push North
     </mat-checkbox>
-    <mat-checkbox [(ngModel)]="options.pushDirections.east" *ngIf="options.pushDirections" (ngModelChange)="changedOptions()">
+    <mat-checkbox [(ngModel)]="options.pushDirections.east" *ngIf="options.pushDirections"
+                  (ngModelChange)="changedOptions()">
       Push East
     </mat-checkbox>
-    <mat-checkbox [(ngModel)]="options.pushDirections.south" *ngIf="options.pushDirections" (ngModelChange)="changedOptions()">
+    <mat-checkbox [(ngModel)]="options.pushDirections.south" *ngIf="options.pushDirections"
+                  (ngModelChange)="changedOptions()">
       Push South
     </mat-checkbox>
-    <mat-checkbox [(ngModel)]="options.pushDirections.west" *ngIf="options.pushDirections" (ngModelChange)="changedOptions()">
+    <mat-checkbox [(ngModel)]="options.pushDirections.west" *ngIf="options.pushDirections"
+                  (ngModelChange)="changedOptions()">
       Push West
     </mat-checkbox>
     <mat-checkbox [(ngModel)]="options.draggable.enabled" *ngIf="options.draggable" (ngModelChange)="changedOptions()">
@@ -85,6 +89,26 @@
              (ngModelChange)="changedOptions()">
     </mat-form-field>
     <mat-checkbox [(ngModel)]="options.outerMargin" (ngModelChange)="changedOptions()">Outer Margin</mat-checkbox>
+    <mat-form-field>
+      <input matInput [(ngModel)]="options.outerMarginTop" min="0" max="30" step="1" type="number"
+             placeholder="Grid Margin Top"
+             (ngModelChange)="changedOptions()">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [(ngModel)]="options.outerMarginRight" min="0" max="30" step="1" type="number"
+             placeholder="Grid Margin Right"
+             (ngModelChange)="changedOptions()">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [(ngModel)]="options.outerMarginBottom" min="0" max="30" step="1" type="number"
+             placeholder="Grid Margin Bottom"
+             (ngModelChange)="changedOptions()">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [(ngModel)]="options.outerMarginLeft" min="0" max="30" step="1" type="number"
+             placeholder="Grid Margin Left"
+             (ngModelChange)="changedOptions()">
+    </mat-form-field>
     <mat-form-field>
       <input matInput [(ngModel)]="options.mobileBreakpoint" type="number" placeholder="Mobile Breakpoint"
              (ngModelChange)="changedOptions()">
