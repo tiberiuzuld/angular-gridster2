@@ -230,6 +230,9 @@ export interface GridsterItem {
 
 You can load dynamic components in Angular4+ with the help of [`ng-dynamic-component` library](https://www.npmjs.com/package/ng-dynamic-component) 
 
+### Having iFrame in widgets content
+iFrames can interfere with drag/resize of widgets. For a workaround please read [this issue #233](https://github.com/tiberiuzuld/angular-gridster2/issues/233)
+
 ### Interact with content without dragging
 
 Option 1 (without text selection):
