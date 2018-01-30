@@ -28,6 +28,9 @@ export class GridsterPreviewComponent implements OnDestroy {
     if (!this.gridster.movingItem) {
       this.renderer.setStyle(this.el, 'display', 'none');
     } else {
+      if (this.gridster.compact) {
+        this.gridster.compact.checkCompact();
+      }
       let margin: string;
       const curRowHeight = this.gridster.curRowHeight;
       const curColWidth = this.gridster.curColWidth;
