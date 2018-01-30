@@ -24,12 +24,12 @@ export class GridsterPreviewComponent implements OnDestroy {
     delete this.gridster;
   }
 
-  previewStyle(): void {
+  previewStyle(drag?: boolean): void {
     if (!this.gridster.movingItem) {
       this.renderer.setStyle(this.el, 'display', 'none');
     } else {
-      if (this.gridster.compact) {
-        this.gridster.compact.checkCompact();
+      if (this.gridster.compact && drag) {
+        this.gridster.compact.checkCompactItem(this.gridster.movingItem);
       }
       let margin: string;
       const curRowHeight = this.gridster.curRowHeight;

@@ -24,7 +24,7 @@ export abstract class GridsterComponentInterface {
   options: GridsterConfig;
   calculateLayoutDebounce: () => void;
   movingItem: GridsterItemS | null;
-  previewStyle: () => void;
+  previewStyle: (drag?: boolean) => void;
   mobile: boolean;
   curWidth: number;
   curHeight: number;

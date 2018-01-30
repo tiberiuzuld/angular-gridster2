@@ -57,7 +57,7 @@ export class GridsterDraggable {
   destroy(): void {
     delete this.gridster.movingItem;
     if (this.gridster.previewStyle) {
-      this.gridster.previewStyle();
+      this.gridster.previewStyle(true);
     }
     delete this.gridsterItem;
     delete this.gridster;
@@ -104,7 +104,7 @@ export class GridsterDraggable {
     this.diffLeft = e.clientX + this.offsetLeft - this.margin - this.left;
     this.diffTop = e.clientY + this.offsetTop - this.margin - this.top;
     this.gridster.movingItem = this.gridsterItem.$item;
-    this.gridster.previewStyle();
+    this.gridster.previewStyle(true);
     this.push = new GridsterPush(this.gridsterItem);
     this.swap = new GridsterSwap(this.gridsterItem);
     this.gridster.dragInProgress = true;
@@ -157,7 +157,7 @@ export class GridsterDraggable {
     setTimeout(() => {
       if (this.gridster) {
         this.gridster.movingItem = null;
-        this.gridster.previewStyle();
+        this.gridster.previewStyle(true);
       }
     });
   }
@@ -222,7 +222,7 @@ export class GridsterDraggable {
         this.gridsterItem.$item.y = this.positionYBackup;
       } else {
         this.path.push({x: this.gridsterItem.$item.x, y: this.gridsterItem.$item.y});
-        this.gridster.previewStyle();
+        this.gridster.previewStyle(true);
       }
       this.push.checkPushBack();
     }

@@ -1,6 +1,6 @@
 {
   "name": "angular-gridster2",
-  "version": "4.6.0",
+  "version": "4.6.1",
   "license": "MIT",
   "main": "dist/index.js",
   "jsnext:main": "dist/index.js",
@@ -47,7 +47,7 @@
   "dependencies": {},
   "devDependencies": {
     "@angular/animations": "5.2.2",
-    "@angular/cdk": "5.1.0",
+    "@angular/cdk": "5.1.1",
     "@angular/cli": "1.6.6",
     "@angular/common": "5.2.2",
     "@angular/compiler": "5.2.2",
@@ -56,7 +56,7 @@
     "@angular/forms": "5.2.2",
     "@angular/http": "5.2.2",
     "@angular/language-service": "5.2.2",
-    "@angular/material": "5.1.0",
+    "@angular/material": "5.1.1",
     "@angular/platform-browser": "5.2.2",
     "@angular/platform-browser-dynamic": "5.2.2",
     "@angular/platform-server": "5.2.2",
