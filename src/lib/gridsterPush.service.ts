@@ -121,6 +121,9 @@ export class GridsterPush {
     if (this.gridster.checkGridCollision(gridsterItem.$item)) {
       return false;
     }
+    if (direction === '') {
+      return false;
+    }
     const a: Array<GridsterItemComponentInterface> = this.gridster.findItemsWithItem(gridsterItem.$item);
     let i = a.length - 1, itemCollision: GridsterItemComponentInterface;
     let makePush = true;
