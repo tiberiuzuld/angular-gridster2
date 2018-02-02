@@ -11,16 +11,16 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 
-import { GridsterConfigService } from './gridsterConfig.constant';
-import { GridsterConfig } from './gridsterConfig.interface';
-import { GridsterUtils } from './gridsterUtils.service';
-import { GridsterGridComponent } from './gridsterGrid.component';
-import { GridsterEmptyCell } from './gridsterEmptyCell.service';
-import { GridsterCompact } from './gridsterCompact.service';
-import { GridsterConfigS } from './gridsterConfigS.interface';
-import { GridsterItemS } from './gridsterItemS.interface';
-import { GridsterComponentInterface } from './gridster.interface';
-import { GridsterItemComponentInterface } from './gridsterItemComponent.interface';
+import {GridsterConfigService} from './gridsterConfig.constant';
+import {GridsterConfig} from './gridsterConfig.interface';
+import {GridsterUtils} from './gridsterUtils.service';
+import {GridsterGridComponent} from './gridsterGrid.component';
+import {GridsterEmptyCell} from './gridsterEmptyCell.service';
+import {GridsterCompact} from './gridsterCompact.service';
+import {GridsterConfigS} from './gridsterConfigS.interface';
+import {GridsterItemS} from './gridsterItemS.interface';
+import {GridsterComponentInterface} from './gridster.interface';
+import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
 
 @Component({
   selector: 'gridster',
