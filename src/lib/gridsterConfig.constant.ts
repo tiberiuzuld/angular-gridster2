@@ -9,7 +9,8 @@ export const GridsterConfigService: GridsterConfig = {
   // 'horizontalFixed' will set the columns to fixedColWidth and rows height will fit the space available
   fixedColWidth: 250, // fixed col width for gridType: 'fixed'
   fixedRowHeight: 250, // fixed row height for gridType: 'fixed'
-  gridsterItemComponent: null,
+  scrollVerticalRowHeight: null, // fixed row height for gridType: 'scrollVertical'
+  gridsterItemComponent: null, 
   keepFixedHeightInMobile: false, // keep the height from fixed gridType in mobile layout
   keepFixedWidthInMobile: false, // keep the width from fixed gridType in mobile layout
   compactType: 'none', // compact items: 'none' | 'compactUp' | 'compactLeft' | 'compactUp&Left' | 'compactLeft&Up'
