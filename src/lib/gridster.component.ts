@@ -11,16 +11,16 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 
-import {GridsterConfigService} from './gridsterConfig.constant';
-import {GridsterConfig} from './gridsterConfig.interface';
-import {GridsterUtils} from './gridsterUtils.service';
-import {GridsterGridComponent} from './gridsterGrid.component';
-import {GridsterEmptyCell} from './gridsterEmptyCell.service';
-import {GridsterCompact} from './gridsterCompact.service';
-import {GridsterConfigS} from './gridsterConfigS.interface';
-import {GridsterItemS} from './gridsterItemS.interface';
-import {GridsterComponentInterface} from './gridster.interface';
-import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
+import { GridsterConfigService } from './gridsterConfig.constant';
+import { GridsterConfig } from './gridsterConfig.interface';
+import { GridsterUtils } from './gridsterUtils.service';
+import { GridsterGridComponent } from './gridsterGrid.component';
+import { GridsterEmptyCell } from './gridsterEmptyCell.service';
+import { GridsterCompact } from './gridsterCompact.service';
+import { GridsterConfigS } from './gridsterConfigS.interface';
+import { GridsterItemS } from './gridsterItemS.interface';
+import { GridsterComponentInterface } from './gridster.interface';
+import { GridsterItemComponentInterface } from './gridsterItemComponent.interface';
 
 @Component({
   selector: 'gridster',
@@ -250,7 +250,12 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
       removeClass2 = 'scrollHorizontal';
       removeClass3 = 'fixed';
     } else if (this.$options.gridType === 'scrollVertical') {
-      this.curRowHeight = this.curColWidth;
+      if (this.$options.scrollVerticalRowHeight) {
+        this.curRowHeight = this.$options.scrollVerticalRowHeight + (this.$options.ignoreMarginInRow ? 0 : this.$options.margin);
+      }
+      else {
+        this.curRowHeight = this.curColWidth;
+      }
       addClass = 'scrollVertical';
       removeClass1 = 'fit';
       removeClass2 = 'scrollHorizontal';

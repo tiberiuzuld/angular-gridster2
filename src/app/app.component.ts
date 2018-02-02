@@ -85,6 +85,7 @@ export class AppComponent implements OnInit {
       defaultItemRows: 1,
       fixedColWidth: 105,
       fixedRowHeight: 105,
+      scrollVerticalRowHeight: null,
       keepFixedHeightInMobile: false,
       keepFixedWidthInMobile: false,
       scrollSensitivity: 10,

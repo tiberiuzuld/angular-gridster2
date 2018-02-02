@@ -33,6 +33,7 @@ export interface GridsterConfig {
   gridType?: gridTypes;
   fixedColWidth?: number;
   fixedRowHeight?: number;
+  scrollVerticalRowHeight: number | null;
   keepFixedHeightInMobile?: boolean;
   keepFixedWidthInMobile?: boolean;
   compactType?: compactTypes;
