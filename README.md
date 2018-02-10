@@ -8,10 +8,10 @@ angular-gridster2
 
 ### Angular implementation of angular-gridster [Demo](http://tiberiuzuld.github.io/angular-gridster2/angular)
 
-### Angular 5.x library is [master branch](https://github.com/tiberiuzuld/angular-gridster2/tree/master) 
-### Angular 4.x library is [4.x branch](https://github.com/tiberiuzuld/angular-gridster2/tree/4.x)
-### Angular 2.x library is [2.4.x branch](https://github.com/tiberiuzuld/angular-gridster2/tree/2.4.x) (no longer maintained) 
-### AngularJS >=1.5.x library is [1.x branch](https://github.com/tiberiuzuld/angular-gridster2/tree/1.x)
+### Angular 5.x library is [master branch](https://github.com/tiberiuzuld/angular-gridster2/tree/master)
+### Angular 4.x library is [4.x branch](https://github.com/tiberiuzuld/angular-gridster2/tree/4.x) v3.19.0 (no longer maintained)
+### Angular 2.x library is [2.4.x branch](https://github.com/tiberiuzuld/angular-gridster2/tree/2.4.x) v2.4.20 (no longer maintained) 
+### AngularJS >=1.5.x library is [1.x branch](https://github.com/tiberiuzuld/angular-gridster2/tree/1.x) v1.21.0 (no longer maintained) 
 
 ## Install
 
