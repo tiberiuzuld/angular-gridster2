@@ -1,4 +1,4 @@
-:host {
+gridster {
   position: relative;
   display: flex;
   overflow: auto;
@@ -6,33 +6,34 @@
   background: grey;
   width: 100%;
   height: 100%;
+  user-select: none;
 }
 
-:host(.fit) {
+gridster.fit {
   overflow-x: hidden;
   overflow-y: hidden;
 }
 
-:host(.scrollVertical) {
+gridster.scrollVertical {
   overflow-x: hidden;
   overflow-y: auto;
 }
 
-:host(.scrollHorizontal) {
+gridster.scrollHorizontal {
   overflow-x: auto;
   overflow-y: hidden;
 }
 
-:host(.fixed) {
+gridster.fixed {
   overflow: auto;
 }
 
-:host(.mobile) {
+gridster.mobile {
   overflow-x: hidden;
   overflow-y: auto;
   display: block;
 }
 
-:host(.mobile) ::ng-deep gridster-item {
+gridster.mobile gridster-item {
   position: relative;
 }

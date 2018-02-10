@@ -63,26 +63,26 @@ export function scroll(gridsterItem: GridsterItemComponentInterface, e: MouseEve
 
 function startVertical(sign: number, calculateItemPosition: Function, lastMouse: any): any {
   let clientY = lastMouse.clientY;
-  return setInterval(function () {
+  return setInterval(() => {
     if (!gridsterElement || sign === -1 && gridsterElement.scrollTop - scrollSpeed < 0) {
       cancelVertical();
     }
     gridsterElement.scrollTop += sign * scrollSpeed;
     clientY += sign * scrollSpeed;
     calculateItemPosition({clientX: lastMouse.clientX, clientY: clientY});
-  }.bind(this), intervalDuration);
+  }, intervalDuration);
 }
 
 function startHorizontal(sign: number, calculateItemPosition: Function, lastMouse: any): any {
   let clientX = lastMouse.clientX;
-  return setInterval(function () {
+  return setInterval(() => {
     if (!gridsterElement || sign === -1 && gridsterElement.scrollLeft - scrollSpeed < 0) {
       cancelHorizontal();
     }
     gridsterElement.scrollLeft += sign * scrollSpeed;
     clientX += sign * scrollSpeed;
     calculateItemPosition({clientX: clientX, clientY: lastMouse.clientY});
-  }.bind(this), intervalDuration);
+  }, intervalDuration);
 }
 
 export function cancelScroll() {

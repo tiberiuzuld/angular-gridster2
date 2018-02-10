@@ -1,11 +1,12 @@
-import {Component, ElementRef, Host, OnDestroy, Renderer2} from '@angular/core';
+import {Component, ElementRef, Host, OnDestroy, Renderer2, ViewEncapsulation} from '@angular/core';
 
 import {GridsterComponent} from './gridster.component';
 
 @Component({
   selector: 'gridster-preview',
   template: '',
-  styleUrls: ['./gridsterPreview.css']
+  styleUrls: ['./gridsterPreview.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class GridsterPreviewComponent implements OnDestroy {
   el: any;
@@ -23,22 +24,46 @@ export class GridsterPreviewComponent implements OnDestroy {
     delete this.gridster;
   }
 
-  previewStyle(): void {
+  previewStyle(drag?: boolean): void {
     if (!this.gridster.movingItem) {
       this.renderer.setStyle(this.el, 'display', 'none');
     } else {
-      let margin = 0;
+      if (this.gridster.compact && drag) {
+        this.gridster.compact.checkCompactItem(this.gridster.movingItem);
+      }
+      let margin: string;
       const curRowHeight = this.gridster.curRowHeight;
       const curColWidth = this.gridster.curColWidth;
       if (this.gridster.$options.outerMargin) {
-        margin = this.gridster.$options.margin;
+        if (this.gridster.$options.outerMarginTop !== null) {
+          margin = this.gridster.$options.outerMarginTop + 'px ';
+        } else {
+          margin = this.gridster.$options.margin + 'px ';
+        }
+        if (this.gridster.$options.outerMarginRight !== null) {
+          margin += this.gridster.$options.outerMarginRight + 'px ';
+        } else {
+          margin += this.gridster.$options.margin + 'px ';
+        }
+        if (this.gridster.$options.outerMarginBottom !== null) {
+          margin += this.gridster.$options.outerMarginBottom + 'px ';
+        } else {
+          margin += this.gridster.$options.margin + 'px ';
+        }
+        if (this.gridster.$options.outerMarginLeft !== null) {
+          margin += this.gridster.$options.outerMarginLeft + 'px';
+        } else {
+          margin += this.gridster.$options.margin + 'px';
+        }
+      } else {
+        margin = 0 + 'px';
       }
       this.renderer.setStyle(this.el, 'display', 'block');
-      this.renderer.setStyle(this.el, 'height', (this.gridster.movingItem.rows * curRowHeight - margin) + 'px');
-      this.renderer.setStyle(this.el, 'width', (this.gridster.movingItem.cols * curColWidth - margin) + 'px');
-      this.renderer.setStyle(this.el, 'top', (this.gridster.movingItem.y * curRowHeight + margin) + 'px');
-      this.renderer.setStyle(this.el, 'left', (this.gridster.movingItem.x * curColWidth + margin) + 'px');
-      this.renderer.setStyle(this.el, 'marginBottom', margin + 'px');
+      this.renderer.setStyle(this.el, 'height', (this.gridster.movingItem.rows * curRowHeight - this.gridster.$options.margin) + 'px');
+      this.renderer.setStyle(this.el, 'width', (this.gridster.movingItem.cols * curColWidth - this.gridster.$options.margin) + 'px');
+      this.renderer.setStyle(this.el, 'top', (this.gridster.movingItem.y * curRowHeight) + 'px');
+      this.renderer.setStyle(this.el, 'left', (this.gridster.movingItem.x * curColWidth) + 'px');
+      this.renderer.setStyle(this.el, 'margin', margin);
     }
   }
 }

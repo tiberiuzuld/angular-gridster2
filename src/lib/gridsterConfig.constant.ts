@@ -27,6 +27,10 @@ export const GridsterConfigService: GridsterConfig = {
   maxItemArea: 2500, // max item area: cols * rows
   margin: 10,  // margin between grid items
   outerMargin: true,  // if margins will apply to the sides of the container
+  outerMarginTop: null, // override outer margin for grid
+  outerMarginRight: null, // override outer margin for grid
+  outerMarginBottom: null, // override outer margin for grid
+  outerMarginLeft: null, // override outer margin for grid
   scrollSensitivity: 10,  // margin of the dashboard where to start scrolling
   scrollSpeed: 20,  // how much to scroll each mouse move when in the scrollSensitivity zone
   initCallback: undefined, // callback to call after grid has initialized. Arguments: gridsterComponent
@@ -49,6 +53,7 @@ export const GridsterConfigService: GridsterConfig = {
   emptyCellDragCallback: undefined, // empty cell drag and create item like excel cell selection
   emptyCellDragMaxCols: 50, // limit empty cell drag max cols
   emptyCellDragMaxRows: 50, // limit empty cell drag max rows
+  ignoreMarginInRow: false, // ignore the gap between rows for items which span multiple rows (see #162, #224)
   // Arguments: event, gridsterItem{x, y, rows: defaultItemRows, cols: defaultItemCols}
   draggable: {
     delayStart: 0, // milliseconds to delay the start of drag, useful for touch interaction

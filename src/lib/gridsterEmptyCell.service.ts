@@ -6,7 +6,7 @@ import {GridsterComponentInterface} from './gridster.interface';
 
 @Injectable()
 export class GridsterEmptyCell {
-  initialItem: GridsterItemS;
+  initialItem: GridsterItemS | null;
   emptyCellClick: Function | null;
   emptyCellClickTouch: Function | null;
   emptyCellContextMenu: Function | null;
@@ -159,20 +159,20 @@ export class GridsterEmptyCell {
     if (item) {
       this.gridster.movingItem = item;
     }
-    if (this.gridster.options.emptyCellDragCallback) {
+    if (this.gridster.options.emptyCellDragCallback && this.gridster.movingItem) {
       this.gridster.options.emptyCellDragCallback(e, this.gridster.movingItem);
     }
-    setTimeout(function () {
+    setTimeout(() => {
       this.initialItem = null;
       if (this.gridster) {
         this.gridster.movingItem = null;
         this.gridster.previewStyle();
       }
-    }.bind(this));
+    });
     this.gridster.cdRef.markForCheck();
   }
 
-  getValidItemFromEvent(e: any, oldItem?: GridsterItemS): GridsterItemS | undefined {
+  getValidItemFromEvent(e: any, oldItem?: GridsterItemS | null): GridsterItemS | undefined {
     e.preventDefault();
     e.stopPropagation();
     GridsterUtils.checkTouchEvent(e);
@@ -191,12 +191,12 @@ export class GridsterEmptyCell {
       if (oldItem.x < item.x) {
         item.x = oldItem.x;
       } else if (oldItem.x - item.x > this.gridster.$options.emptyCellDragMaxCols - 1) {
-        item.x = this.gridster.movingItem.x;
+        item.x = this.gridster.movingItem ? this.gridster.movingItem.x : 0;
       }
       if (oldItem.y < item.y) {
         item.y = oldItem.y;
       } else if (oldItem.y - item.y > this.gridster.$options.emptyCellDragMaxRows - 1) {
-        item.y = this.gridster.movingItem.y;
+        item.y = this.gridster.movingItem ? this.gridster.movingItem.y : 0;
       }
     }
     if (this.gridster.checkCollision(item)) {

@@ -23,6 +23,7 @@ export class GridsterPush {
     fromSouth: Array<Function>,
     [key: string]: Array<Function>
   };
+  private count = 0;
 
   constructor(gridsterItem: GridsterItemComponentInterface) {
     this.pushedItems = [];
@@ -48,15 +49,20 @@ export class GridsterPush {
     delete this.gridsterItem;
   }
 
-  pushItems(direction: string, disable?: boolean): void {
+  pushItems(direction: string, disable?: boolean): boolean {
+    this.count = 0;
     if (this.gridster.$options.pushItems && !disable) {
       this.pushedItemsOrder = [];
-      if (!this.push(this.gridsterItem, direction)) {
+      const pushed = this.push(this.gridsterItem, direction);
+      if (!pushed) {
         this.restoreTempItems();
       }
       this.pushedItemsOrder = [];
       this.pushedItemsTemp = [];
       this.pushedItemsTempPath = [];
+      return pushed;
+    } else {
+      return false;
     }
   }
 
@@ -107,7 +113,15 @@ export class GridsterPush {
   }
 
   private push(gridsterItem: GridsterItemComponentInterface, direction: string): boolean {
+    if (this.count > 50000) {
+      return false;
+    } else {
+      this.count++;
+    }
     if (this.gridster.checkGridCollision(gridsterItem.$item)) {
+      return false;
+    }
+    if (direction === '') {
       return false;
     }
     const a: Array<GridsterItemComponentInterface> = this.gridster.findItemsWithItem(gridsterItem.$item);

@@ -1,7 +1,9 @@
 export {GridsterComponent} from './gridster.component';
 export {GridsterItemComponent} from './gridsterItem.component';
 export {GridsterItem} from './gridsterItem.interface';
-export {GridsterConfig, GridType, Draggable} from './gridsterConfig.interface';
+export {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
+export {GridsterComponentInterface} from './gridster.interface';
+export {GridsterConfig, Draggable, Resizable, PushDirections} from './gridsterConfig.interface';
 export {GridsterModule} from './gridster.module';
 export {GridsterPush} from './gridsterPush.service';
 export {GridsterPushResize} from './gridsterPushResize.service';

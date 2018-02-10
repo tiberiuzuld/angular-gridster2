@@ -9,9 +9,9 @@ angular-gridster2
 ### Angular implementation of angular-gridster [Demo](http://tiberiuzuld.github.io/angular-gridster2/angular)
 
 ### Angular 5.x library is [master branch](https://github.com/tiberiuzuld/angular-gridster2/tree/master) 
-### Angular 4.x library is [4.x branch](https://github.com/tiberiuzuld/angular-gridster2/tree/4.x)
+### Angular 4.x library is [4.x branch](https://github.com/tiberiuzuld/angular-gridster2/tree/4.x) (no longer maintained)
 ### Angular 2.x library is [2.4.x branch](https://github.com/tiberiuzuld/angular-gridster2/tree/2.4.x) (no longer maintained) 
-### AngularJS >=1.5.x library is [1.x branch](https://github.com/tiberiuzuld/angular-gridster2/tree/1.x)
+### AngularJS >=1.5.x library is [1.x branch](https://github.com/tiberiuzuld/angular-gridster2/tree/1.x) (no longer maintained)
 
 ## Install
 
@@ -111,6 +111,10 @@ export const GridsterConfigService: GridsterConfig = {
   maxItemArea: 2500, // max item area: cols * rows
   margin: 10,  // margin between grid items
   outerMargin: true,  // if margins will apply to the sides of the container
+  outerMarginTop: null, // override outer margin for grid
+  outerMarginRight: null, // override outer margin for grid
+  outerMarginBottom: null, // override outer margin for grid
+  outerMarginLeft: null, // override outer margin for grid
   scrollSensitivity: 10,  // margin of the dashboard where to start scrolling
   scrollSpeed: 20,  // how much to scroll each mouse move when in the scrollSensitivity zone
   initCallback: undefined, // callback to call after grid has initialized. Arguments: gridsterComponent
@@ -134,6 +138,8 @@ export const GridsterConfigService: GridsterConfig = {
   // Arguments: event, gridsterItem{x, y, rows: defaultItemRows, cols: defaultItemCols}
   emptyCellDragMaxCols: 50, // limit empty cell drag max cols
   emptyCellDragMaxRows: 50, // limit empty cell drag max rows
+  ignoreMarginInRow: false, // ignore the gap between rows for items which span multiple rows (see #162, #224)
+  // only for gridType: `fixed` , `verticalFixed`, `horizontalFixed`
   draggable: {
     delayStart: 0, // milliseconds to delay the start of resize, useful for touch interaction
     enabled: false, // enable/disable draggable items
@@ -184,14 +190,19 @@ export const GridsterConfigService: GridsterConfig = {
 import {GridsterItemComponent, GridsterPush, GridsterPushResize, GridsterSwap} from 'gridster'
 
 myMethod(gridsterItemComponent: GridsterItemComponent) {
-  const push = new GridsterPush(gridsterItemComponent); // init the service
-  gridsterItemComponent.$item.rows += 1; // move your item
-  push.pushItems(push.fromEast);  // push items from a direction
-  push.setPushedItems(); // save the items pushed
-  push.restoreItems(); // restore to initial state the pushed items
-  push.checkPushBack(); // check for items restore to original position
-  
-  // same for GridsterPushResize and GridsterSwap
+    const push = new GridsterPush(gridsterItemComponent); // init the service
+    gridsterItemComponent.$item.rows += 1; // move/resize your item
+    if (push.pushItems(push.fromNorth)) { // push items from a direction
+      push.checkPushBack(); // check for items can restore to original position
+      push.setPushedItems(); // save the items pushed
+      gridsterItemComponent.setSize(true);
+      gridsterItemComponent.checkItemChanges(gridsterItemComponent.$item, gridsterItemComponent.item);
+    } else {
+      gridsterItemComponent.$item.rows -= 1;
+      push.restoreItems(); // restore to initial state the pushed items
+    }
+    push.destroy(); // destroy push instance
+  // similar for GridsterPushResize and GridsterSwap
 }
 ```
 
@@ -218,6 +229,9 @@ export interface GridsterItem {
 ### Load dynamic components inside the `gridster-item`
 
 You can load dynamic components in Angular4+ with the help of [`ng-dynamic-component` library](https://www.npmjs.com/package/ng-dynamic-component) 
+
+### Having iFrame in widgets content
+iFrames can interfere with drag/resize of widgets. For a workaround please read [this issue #233](https://github.com/tiberiuzuld/angular-gridster2/issues/233)
 
 ### Interact with content without dragging
 
@@ -261,4 +275,4 @@ Option 2 (with text selection):
 ### License
  The MIT License
  
- Copyright (c) 2017 Tiberiu Zuld
+ Copyright (c) 2018 Tiberiu Zuld

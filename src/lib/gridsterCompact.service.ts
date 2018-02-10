@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
 
-import {GridsterItemComponent} from './gridsterItem.component';
 import {GridsterComponentInterface} from './gridster.interface';
+import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
+import {GridsterItemS} from './gridsterItemS.interface';
 
 @Injectable()
 export class GridsterCompact {
@@ -29,15 +30,31 @@ export class GridsterCompact {
     }
   }
 
+  checkCompactItem(item: GridsterItemS): void {
+    if (this.gridster.$options.compactType !== 'none') {
+      if (this.gridster.$options.compactType === 'compactUp') {
+        this.moveUpTillCollision(item);
+      } else if (this.gridster.$options.compactType === 'compactLeft') {
+        this.moveLeftTillCollision(item);
+      } else if (this.gridster.$options.compactType === 'compactUp&Left') {
+        this.moveUpTillCollision(item);
+        this.moveLeftTillCollision(item);
+      } else if (this.gridster.$options.compactType === 'compactLeft&Up') {
+        this.moveLeftTillCollision(item);
+        this.moveUpTillCollision(item);
+      }
+    }
+  }
+
   checkCompactUp(): void {
-    let widgetMovedUp = false, widget: GridsterItemComponent, moved: boolean;
+    let widgetMovedUp = false, widget: GridsterItemComponentInterface, moved: boolean;
     const l = this.gridster.grid.length;
     for (let i = 0; i < l; i++) {
       widget = this.gridster.grid[i];
       if (widget.$item.compactEnabled === false) {
         continue;
       }
-      moved = this.moveUpTillCollision(widget);
+      moved = this.moveUpTillCollision(widget.$item);
       if (moved) {
         widgetMovedUp = true;
         widget.item.y = widget.$item.y;
@@ -49,26 +66,26 @@ export class GridsterCompact {
     }
   }
 
-  moveUpTillCollision(itemComponent: GridsterItemComponent): boolean {
-    itemComponent.$item.y -= 1;
-    if (this.gridster.checkCollision(itemComponent.$item)) {
-      itemComponent.$item.y += 1;
+  moveUpTillCollision(item: GridsterItemS): boolean {
+    item.y -= 1;
+    if (this.gridster.checkCollision(item)) {
+      item.y += 1;
       return false;
     } else {
-      this.moveUpTillCollision(itemComponent);
+      this.moveUpTillCollision(item);
       return true;
     }
   }
 
   checkCompactLeft(): void {
-    let widgetMovedUp = false, widget: GridsterItemComponent, moved: boolean;
+    let widgetMovedUp = false, widget: GridsterItemComponentInterface, moved: boolean;
     const l = this.gridster.grid.length;
     for (let i = 0; i < l; i++) {
       widget = this.gridster.grid[i];
       if (widget.$item.compactEnabled === false) {
         continue;
       }
-      moved = this.moveLeftTillCollision(widget);
+      moved = this.moveLeftTillCollision(widget.$item);
       if (moved) {
         widgetMovedUp = true;
         widget.item.x = widget.$item.x;
@@ -80,13 +97,13 @@ export class GridsterCompact {
     }
   }
 
-  moveLeftTillCollision(itemComponent: GridsterItemComponent): boolean {
-    itemComponent.$item.x -= 1;
-    if (this.gridster.checkCollision(itemComponent.$item)) {
-      itemComponent.$item.x += 1;
+  moveLeftTillCollision(item: GridsterItemS): boolean {
+    item.x -= 1;
+    if (this.gridster.checkCollision(item)) {
+      item.x += 1;
       return false;
     } else {
-      this.moveLeftTillCollision(itemComponent);
+      this.moveLeftTillCollision(item);
       return true;
     }
   }
