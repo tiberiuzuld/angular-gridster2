@@ -14,7 +14,6 @@ import {
 import {GridsterConfigService} from './gridsterConfig.constant';
 import {GridsterConfig} from './gridsterConfig.interface';
 import {GridsterUtils} from './gridsterUtils.service';
-import {GridsterGridComponent} from './gridsterGrid.component';
 import {GridsterEmptyCell} from './gridsterEmptyCell.service';
 import {GridsterCompact} from './gridsterCompact.service';
 import {GridsterConfigS} from './gridsterConfigS.interface';
@@ -43,8 +42,9 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
   rows: number;
   curColWidth: number;
   curRowHeight: number;
+  gridColumns = [];
+  gridRows = [];
   windowResize: (() => void) | null;
-  gridLines: GridsterGridComponent;
   dragInProgress: boolean;
   emptyCell: GridsterEmptyCell;
   compact: GridsterCompact;
@@ -215,31 +215,44 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
       let marginWidth = -this.$options.margin;
       if (this.$options.outerMarginLeft !== null) {
         marginWidth += this.$options.outerMarginLeft;
+        this.renderer.setStyle(this.el, 'padding-left', this.$options.outerMarginLeft + 'px');
       } else {
         marginWidth += this.$options.margin;
+        this.renderer.setStyle(this.el, 'padding-left', this.$options.margin + 'px');
       }
       if (this.$options.outerMarginRight !== null) {
         marginWidth += this.$options.outerMarginRight;
+        this.renderer.setStyle(this.el, 'padding-right', this.$options.outerMarginRight + 'px');
       } else {
         marginWidth += this.$options.margin;
+        this.renderer.setStyle(this.el, 'padding-right', this.$options.margin + 'px');
       }
       this.curColWidth = (this.curWidth - marginWidth) / this.columns;
       let marginHeight = -this.$options.margin;
       if (this.$options.outerMarginTop !== null) {
         marginHeight += this.$options.outerMarginTop;
+        this.renderer.setStyle(this.el, 'padding-top', this.$options.outerMarginTop + 'px');
       } else {
         marginHeight += this.$options.margin;
+        this.renderer.setStyle(this.el, 'padding-top', this.$options.margin + 'px');
       }
       if (this.$options.outerMarginBottom !== null) {
         marginHeight += this.$options.outerMarginBottom;
+        this.renderer.setStyle(this.el, 'padding-bottom', this.$options.outerMarginBottom + 'px');
       } else {
         marginHeight += this.$options.margin;
+        this.renderer.setStyle(this.el, 'padding-bottom', this.$options.margin + 'px');
       }
       this.curRowHeight = (this.curHeight - marginHeight) / this.rows;
     } else {
       this.curColWidth = (this.curWidth + this.$options.margin) / this.columns;
       this.curRowHeight = (this.curHeight + this.$options.margin) / this.rows;
+      this.renderer.setStyle(this.el, 'padding-left', 0 + 'px');
+      this.renderer.setStyle(this.el, 'padding-right', 0 + 'px');
+      this.renderer.setStyle(this.el, 'padding-top', 0 + 'px');
+      this.renderer.setStyle(this.el, 'padding-bottom', 0 + 'px');
     }
+    this.renderer.setStyle(this.el, 'grid-gap', this.$options.margin + 'px');
     let addClass = '';
     let removeClass1 = '';
     let removeClass2 = '';
@@ -287,9 +300,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     this.renderer.removeClass(this.el, removeClass2);
     this.renderer.removeClass(this.el, removeClass3);
 
-    if (this.gridLines) {
-      this.gridLines.updateGrid();
-    }
+    this.updateGrid();
 
     let widgetsIndex: number = this.grid.length - 1, widget: GridsterItemComponentInterface;
     for (; widgetsIndex >= 0; widgetsIndex--) {
@@ -300,6 +311,20 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     }
 
     setTimeout(this.resize.bind(this), 100);
+  }
+
+  updateGrid(): void {
+    if (this.$options.displayGrid === 'always' && !this.mobile) {
+      this.renderer.addClass(this.el, 'display-grid');
+    } else if (this.$options.displayGrid === 'onDrag&Resize' && this.dragInProgress) {
+      this.renderer.addClass(this.el, 'display-grid');
+    } else if (this.$options.displayGrid === 'none' || !this.dragInProgress || this.mobile) {
+      this.renderer.removeClass(this.el, 'display-grid');
+    }
+    this.setGridDimensions();
+    this.gridColumns.length = Math.max(this.columns, Math.floor(this.curWidth / this.curColWidth)) || 0;
+    this.gridRows.length = Math.max(this.rows, Math.floor(this.curHeight / this.curRowHeight)) || 0;
+    this.cdRef.markForCheck();
   }
 
   addItem(itemComponent: GridsterItemComponentInterface): void {

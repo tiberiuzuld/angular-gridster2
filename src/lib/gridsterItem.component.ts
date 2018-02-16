@@ -27,7 +27,6 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
   left: number;
   width: number;
   height: number;
-  itemMargin: string;
   drag: GridsterDraggable;
   resize: GridsterResizable;
   notPlaced: boolean;
@@ -102,38 +101,12 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
       this.width === this.itemWidth && this.height === this.itemHeight) {
       return;
     }
-    if (this.gridster.$options.outerMargin) {
-      if (this.gridster.$options.outerMarginTop !== null) {
-        this.itemMargin = this.gridster.$options.outerMarginTop + 'px ';
-      } else {
-        this.itemMargin = this.gridster.$options.margin + 'px ';
-      }
-      if (this.gridster.$options.outerMarginRight !== null) {
-        this.itemMargin += this.gridster.$options.outerMarginRight + 'px ';
-      } else {
-        this.itemMargin += this.gridster.$options.margin + 'px ';
-      }
-      if (this.gridster.$options.outerMarginBottom !== null) {
-        this.itemMargin += this.gridster.$options.outerMarginBottom + 'px ';
-      } else {
-        this.itemMargin += this.gridster.$options.margin + 'px ';
-      }
-      if (this.gridster.$options.outerMarginLeft !== null) {
-        this.itemMargin += this.gridster.$options.outerMarginLeft + 'px';
-      } else {
-        this.itemMargin += this.gridster.$options.margin + 'px';
-      }
-
-    } else {
-      this.itemMargin = 0 + 'px';
-    }
 
     this.renderer.setStyle(this.el, 'display', this.notPlaced ? 'none' : 'block');
-    this.renderer.setStyle(this.el, 'top', this.top + 'px');
-    this.renderer.setStyle(this.el, 'left', this.left + 'px');
-    this.renderer.setStyle(this.el, 'width', this.width + 'px');
-    this.renderer.setStyle(this.el, 'height', this.height + 'px');
-    this.renderer.setStyle(this.el, 'margin', this.itemMargin);
+    this.renderer.setStyle(this.el, 'grid-column-start', (this.$item.x + 1));
+    this.renderer.setStyle(this.el, 'grid-column-end', ((this.$item.x + 1) + this.$item.cols));
+    this.renderer.setStyle(this.el, 'grid-row-start', (this.$item.y + 1));
+    this.renderer.setStyle(this.el, 'grid-row-end', ((this.$item.y + 1) + this.$item.rows));
     if (!this.init && this.width > 0 && this.height > 0) {
       this.init = true;
       if (this.item.initCallback) {

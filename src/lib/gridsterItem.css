@@ -1,7 +1,7 @@
 gridster-item {
   box-sizing: border-box;
   z-index: 1;
-  position: absolute;
+  position: relative;
   overflow: hidden;
   transition: .3s;
   display: none;

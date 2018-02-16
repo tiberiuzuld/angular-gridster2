@@ -1,3 +1,6 @@
-<gridster-grid class="gridster-grid"></gridster-grid>
+<div class="gridster-column" *ngFor="let column of gridColumns; let i = index;" [style.gridColumn]="(i + 1)"
+     [style.gridRowStart]="1" [style.gridRowEnd]="(gridRows.length + 1)"></div>
+<div class="gridster-row" *ngFor="let row of gridRows; let i = index;" [style.gridRow]="(i + 1)"
+     [style.gridColumnStart]="1" [style.gridColumnEnd]="(gridColumns.length + 1)"></div>
 <ng-content></ng-content>
 <gridster-preview class="gridster-preview"></gridster-preview>

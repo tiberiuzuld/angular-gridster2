@@ -116,7 +116,7 @@ export class GridsterResizable {
     this.push = new GridsterPush(this.gridsterItem);
     this.pushResize = new GridsterPushResize(this.gridsterItem);
     this.gridster.dragInProgress = true;
-    this.gridster.gridLines.updateGrid();
+    this.gridster.updateGrid();
 
     if (e.target.classList.contains('handle-n')) {
       this.resizeEventScrollType.n = true;
@@ -160,7 +160,7 @@ export class GridsterResizable {
 
     this.lastMouse.clientX = e.clientX;
     this.lastMouse.clientY = e.clientY;
-    this.gridster.gridLines.updateGrid();
+    this.gridster.updateGrid();
   }
 
   dragStop(e: any): void {
@@ -175,7 +175,7 @@ export class GridsterResizable {
     this.touchcancel();
     this.gridsterItem.renderer.removeClass(this.gridsterItem.el, 'gridster-item-resizing');
     this.gridster.dragInProgress = false;
-    this.gridster.gridLines.updateGrid();
+    this.gridster.updateGrid();
     if (this.gridster.options.resizable && this.gridster.options.resizable.stop) {
       Promise.resolve(this.gridster.options.resizable.stop(this.gridsterItem.item, this.gridsterItem, e))
         .then(this.makeResize.bind(this), this.cancelResize.bind(this));
