@@ -205,8 +205,8 @@ export class GridsterResizable {
   }
 
   makeResize(): void {
-    this.gridsterItem.setSize(true);
     this.gridsterItem.checkItemChanges(this.gridsterItem.$item, this.gridsterItem.item);
+    this.gridsterItem.setSize(true);
     this.push.setPushedItems();
     this.pushResize.setPushedItems();
     this.push.destroy();
