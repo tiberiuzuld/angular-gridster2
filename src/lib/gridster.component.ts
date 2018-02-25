@@ -52,7 +52,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
   constructor(el: ElementRef, public renderer: Renderer2, public cdRef: ChangeDetectorRef) {
     this.el = el.nativeElement;
     this.$options = JSON.parse(JSON.stringify(GridsterConfigService));
-    this.calculateLayoutDebounce = GridsterUtils.debounce(this.calculateLayout.bind(this), 5);
+    this.calculateLayoutDebounce = GridsterUtils.debounce(this.calculateLayout.bind(this), 0);
     this.mobile = false;
     this.curWidth = 0;
     this.curHeight = 0;
@@ -258,37 +258,49 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     let removeClass2 = '';
     let removeClass3 = '';
     if (this.$options.gridType === 'fit') {
+      this.renderer.setStyle(this.el, 'grid-auto-rows', '1fr');
+      this.renderer.setStyle(this.el, 'grid-auto-columns', '1fr');
       addClass = 'fit';
       removeClass1 = 'scrollVertical';
       removeClass2 = 'scrollHorizontal';
       removeClass3 = 'fixed';
     } else if (this.$options.gridType === 'scrollVertical') {
       this.curRowHeight = this.curColWidth;
+      this.renderer.setStyle(this.el, 'grid-auto-rows', (this.curRowHeight - this.$options.margin) + 'px');
+      this.renderer.setStyle(this.el, 'grid-auto-columns', '1fr');
       addClass = 'scrollVertical';
       removeClass1 = 'fit';
       removeClass2 = 'scrollHorizontal';
       removeClass3 = 'fixed';
     } else if (this.$options.gridType === 'scrollHorizontal') {
       this.curColWidth = this.curRowHeight;
+      this.renderer.setStyle(this.el, 'grid-auto-rows', '1fr');
+      this.renderer.setStyle(this.el, 'grid-auto-columns', (this.curColWidth - this.$options.margin) + 'px');
       addClass = 'scrollHorizontal';
       removeClass1 = 'fit';
       removeClass2 = 'scrollVertical';
       removeClass3 = 'fixed';
     } else if (this.$options.gridType === 'fixed') {
-      this.curColWidth = this.$options.fixedColWidth + (this.$options.ignoreMarginInRow ? 0 : this.$options.margin);
-      this.curRowHeight = this.$options.fixedRowHeight + (this.$options.ignoreMarginInRow ? 0 : this.$options.margin);
+      this.curColWidth = this.$options.fixedColWidth;
+      this.curRowHeight = this.$options.fixedRowHeight;
+      this.renderer.setStyle(this.el, 'grid-auto-rows', this.curRowHeight + 'px');
+      this.renderer.setStyle(this.el, 'grid-auto-columns', this.curColWidth + 'px');
       addClass = 'fixed';
       removeClass1 = 'fit';
       removeClass2 = 'scrollVertical';
       removeClass3 = 'scrollHorizontal';
     } else if (this.$options.gridType === 'verticalFixed') {
-      this.curRowHeight = this.$options.fixedRowHeight + (this.$options.ignoreMarginInRow ? 0 : this.$options.margin);
+      this.curRowHeight = this.$options.fixedRowHeight;
+      this.renderer.setStyle(this.el, 'grid-auto-rows', this.curRowHeight + 'px');
+      this.renderer.setStyle(this.el, 'grid-auto-columns', '1fr');
       addClass = 'scrollVertical';
       removeClass1 = 'fit';
       removeClass2 = 'scrollHorizontal';
       removeClass3 = 'fixed';
     } else if (this.$options.gridType === 'horizontalFixed') {
-      this.curColWidth = this.$options.fixedColWidth + (this.$options.ignoreMarginInRow ? 0 : this.$options.margin);
+      this.curColWidth = this.$options.fixedColWidth;
+      this.renderer.setStyle(this.el, 'grid-auto-rows', '1fr');
+      this.renderer.setStyle(this.el, 'grid-auto-columns', this.curColWidth + 'px');
       addClass = 'scrollHorizontal';
       removeClass1 = 'fit';
       removeClass2 = 'scrollVertical';

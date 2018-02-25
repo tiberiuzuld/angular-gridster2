@@ -102,7 +102,7 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
       return;
     }
 
-    this.renderer.setStyle(this.el, 'display', this.notPlaced ? 'none' : 'block');
+    this.renderer.setStyle(this.el, 'display', this.notPlaced ? null : 'block');
     this.renderer.setStyle(this.el, 'grid-column-start', (this.$item.x + 1));
     this.renderer.setStyle(this.el, 'grid-column-end', ((this.$item.x + 1) + this.$item.cols));
     this.renderer.setStyle(this.el, 'grid-row-start', (this.$item.y + 1));
