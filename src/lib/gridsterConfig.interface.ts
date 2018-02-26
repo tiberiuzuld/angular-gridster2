@@ -86,6 +86,8 @@ export interface GridsterConfig {
     resize?: () => void,
     optionsChanged?: () => void,
     getNextPossiblePosition?: (newItem: GridsterItem) => boolean,
+    getFirstPossiblePosition?: (item: GridsterItem) => GridsterItem,
+    getLastPossiblePosition?: (item: GridsterItem) => GridsterItem,
   };
 
   [propName: string]: any;

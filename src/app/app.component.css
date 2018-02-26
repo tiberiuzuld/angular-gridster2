@@ -29,6 +29,10 @@ mat-sidenav .add-button {
   justify-self: end;
 }
 
+.positions {
+  margin: 5px;
+}
+
 .sidenav-fab {
   position: absolute;
   z-index: 5;

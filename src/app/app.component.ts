@@ -14,6 +14,7 @@ import {
 export class AppComponent implements OnInit {
   options: GridsterConfig;
   dashboard: Array<GridsterItem>;
+  positions: { [key: string]: { first: any, last: any } } = {};
   remove: boolean;
 
   static eventStop(item: GridsterItem, itemComponent: GridsterItemComponentInterface, event: MouseEvent) {
@@ -145,19 +146,31 @@ export class AppComponent implements OnInit {
     if (this.options.api && this.options.api.optionsChanged) {
       this.options.api.optionsChanged();
     }
+    this.positions = {};
   }
 
   removeItem($event, item) {
     $event.preventDefault();
     $event.stopPropagation();
     this.dashboard.splice(this.dashboard.indexOf(item), 1);
+    this.positions = {};
   }
 
   addItem() {
     this.dashboard.push({});
+    this.positions = {};
   }
 
   destroy() {
     this.remove = !this.remove;
+  }
+
+  getPossiblePositions($event, item: GridsterItem, index: number): void {
+    const first = this.options.api.getFirstPossiblePosition(item);
+    const last = this.options.api.getLastPossiblePosition(item);
+    this.positions[index] = {
+      first: first ? { row: first.y, col: first.x, } : '',
+      last: last ? { row: last.y, col: last.x, } : '',
+    };
   }
 }

@@ -176,7 +176,7 @@
     <mat-icon>settings</mat-icon>
   </button>
   <gridster [options]="options" *ngIf="!remove">
-    <gridster-item [item]="item" *ngFor="let item of dashboard">
+    <gridster-item [item]="item" *ngFor="let item of dashboard; let i = index;">
       <div class="button-holder">
         <div class="gridster-item-content" *ngIf="item.hasContent">
           <div class="stuff">
@@ -198,6 +198,13 @@
                 (touchstart)="removeItem($event, item)" matTooltip="Remove">
           <mat-icon>delete</mat-icon>
         </button>
+        <div class="positions">
+          <button  mat-raised-button (click)="getPossiblePositions($event, item, i)" class="cols-12">
+            Get positions
+          </button>
+          <div *ngIf="positions[i]">First: {{ positions[i]?.first | json }}</div>
+          <div *ngIf="positions[i]">Last: {{ positions[i]?.last | json }}</div>
+        </div>
       </div>
     </gridster-item>
   </gridster>
