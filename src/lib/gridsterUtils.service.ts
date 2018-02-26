@@ -66,7 +66,7 @@ export class GridsterUtils {
     if (target === current) {
       return false;
     }
-    if (target.classList && target.classList.contains(contentClass)) {
+    if (target.hasAttribute('class') && target.getAttribute('class').search(contentClass) > -1) {
       return true;
     } else {
       return GridsterUtils.checkContentClass(target.parentNode, current, contentClass);
