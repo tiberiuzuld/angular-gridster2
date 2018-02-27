@@ -9,7 +9,7 @@ angular-gridster2
 ### Angular implementation of angular-gridster [Demo](http://tiberiuzuld.github.io/angular-gridster2/angular)
 
 ### Angular 6.x library is [master branch](https://github.com/tiberiuzuld/angular-gridster2/tree/master)
-### Angular 5.x library is [5.x branch](https://github.com/tiberiuzuld/angular-gridster2/tree/5.x) v4.6.2
+### Angular 5.x library is [5.x branch](https://github.com/tiberiuzuld/angular-gridster2/tree/5.x) v4.6.3
 ### Angular 4.x library is [4.x branch](https://github.com/tiberiuzuld/angular-gridster2/tree/4.x) v3.19.0 (no longer maintained)
 ### Angular 2.x library is [2.4.x branch](https://github.com/tiberiuzuld/angular-gridster2/tree/2.4.x) v2.4.20 (no longer maintained) 
 ### AngularJS >=1.5.x library is [1.x branch](https://github.com/tiberiuzuld/angular-gridster2/tree/1.x) v1.21.0 (no longer maintained) 
@@ -186,6 +186,8 @@ export const GridsterConfigService: GridsterConfig = {
     this.options.api.resize(); // call if size of container changes. Grid will auto resize on window resize.
     this.options.api.optionsChanged(); // call on change of options after initialization
     this.options.api.getNextPossiblePosition(item: GridsterItem); // call to get a viable position for item. Returns true if found
+    this.options.api.getFirstPossiblePosition(item: GridsterItem); // call to get the first viable position for an item. Returns a copy of the item with the future position
+    this.options.api.getLastPossiblePosition(item: GridsterItem); // call to get a viable position for item. Returns a copy of the item with the future position
 
 // if you want to push items from code use the GridsterPush service
 import {GridsterItemComponent, GridsterPush, GridsterPushResize, GridsterSwap} from 'gridster'

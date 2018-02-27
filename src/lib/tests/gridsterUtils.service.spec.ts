@@ -95,3 +95,26 @@ describe('check content class', () => {
     expect(GridsterUtils.checkContentClass(event.target, event.currentTarget, 'body')).toBe(true);
   });
 });
+
+describe('check compare items', () => {
+  it('should return -1, when the first item is further away from origin based on y-value', () => {
+    const firstItem = { x: 2, y: 2 };
+    const secondItem = { x: 1, y: 1 };
+    expect(-1).toBe(GridsterUtils.compareItems(firstItem, secondItem));
+  });
+  it('should return -1, when the first item is further away from origin based on x-value', () => {
+    const firstItem = { x: 2, y: 2 };
+    const secondItem = { x: 1, y: 2 };
+    expect(-1).toBe(GridsterUtils.compareItems(firstItem, secondItem));
+  });
+  it('should return 1, when the second item is further away from origin based on y-value', () => {
+    const firstItem = { x: 1, y: 1 };
+    const secondItem = { x: 2, y: 2 };
+    expect(1).toBe(GridsterUtils.compareItems(firstItem, secondItem));
+  });
+  it('should return 1, when the second item further away from origin based on x-value', () => {
+    const firstItem = { x: 1, y: 2 };
+    const secondItem = { x: 2, y: 2 };
+    expect(1).toBe(GridsterUtils.compareItems(firstItem, secondItem));
+  });
+});

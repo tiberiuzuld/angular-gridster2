@@ -118,31 +118,31 @@ export class GridsterResizable {
     this.gridster.dragInProgress = true;
     this.gridster.gridLines.updateGrid();
 
-    if (e.target.classList.contains('handle-n')) {
+    if (e.target.hasAttribute('class') && e.target.getAttribute('class').search('handle-n') > -1) {
       this.resizeEventScrollType.n = true;
       this.directionFunction = this.handleN.bind(this);
-    } else if (e.target.classList.contains('handle-w')) {
+    } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').search('handle-w') > -1) {
       this.resizeEventScrollType.w = true;
       this.directionFunction = this.handleW.bind(this);
-    } else if (e.target.classList.contains('handle-s')) {
+    } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').search('handle-s') > -1) {
       this.resizeEventScrollType.s = true;
       this.directionFunction = this.handleS.bind(this);
-    } else if (e.target.classList.contains('handle-e')) {
+    } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').search('handle-e') > -1) {
       this.resizeEventScrollType.e = true;
       this.directionFunction = this.handleE.bind(this);
-    } else if (e.target.classList.contains('handle-nw')) {
+    } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').search('handle-nw') > -1) {
       this.resizeEventScrollType.n = true;
       this.resizeEventScrollType.w = true;
       this.directionFunction = this.handleNW.bind(this);
-    } else if (e.target.classList.contains('handle-ne')) {
+    } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').search('handle-ne') > -1) {
       this.resizeEventScrollType.n = true;
       this.resizeEventScrollType.e = true;
       this.directionFunction = this.handleNE.bind(this);
-    } else if (e.target.classList.contains('handle-sw')) {
+    } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').search('handle-sw') > -1) {
       this.resizeEventScrollType.s = true;
       this.resizeEventScrollType.w = true;
       this.directionFunction = this.handleSW.bind(this);
-    } else if (e.target.classList.contains('handle-se')) {
+    } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').search('handle-se') > -1) {
       this.resizeEventScrollType.s = true;
       this.resizeEventScrollType.e = true;
       this.directionFunction = this.handleSE.bind(this);
