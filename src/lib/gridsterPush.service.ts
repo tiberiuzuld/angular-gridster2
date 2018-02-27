@@ -23,7 +23,6 @@ export class GridsterPush {
     fromSouth: Array<Function>,
     [key: string]: Array<Function>
   };
-  private count = 0;
 
   constructor(gridsterItem: GridsterItemComponentInterface) {
     this.pushedItems = [];
