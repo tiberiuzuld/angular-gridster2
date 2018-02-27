@@ -186,6 +186,8 @@ export const GridsterConfigService: GridsterConfig = {
     this.options.api.resize(); // call if size of container changes. Grid will auto resize on window resize.
     this.options.api.optionsChanged(); // call on change of options after initialization
     this.options.api.getNextPossiblePosition(item: GridsterItem); // call to get a viable position for item. Returns true if found
+    this.options.api.getFirstPossiblePosition(item: GridsterItem); // call to get the first viable position for an item. Returns a copy of the item with the future position
+    this.options.api.getLastPossiblePosition(item: GridsterItem); // call to get a viable position for item. Returns a copy of the item with the future position
 
 // if you want to push items from code use the GridsterPush service
 import {GridsterItemComponent, GridsterPush, GridsterPushResize, GridsterSwap} from 'gridster'

@@ -72,4 +72,16 @@ export class GridsterUtils {
       return GridsterUtils.checkContentClass(target.parentNode, current, contentClass);
     }
   }
+
+  static compareItems(item1: { x: number, y: number }, item2: { x: number, y: number }): number {
+      if (item1.y > item2.y) {
+          return -1;
+      } else if (item1.y < item2.y) {
+          return 1;
+      } else if (item1.x > item2.x) {
+          return -1;
+      } else {
+          return 1;
+      }
+  }
 }

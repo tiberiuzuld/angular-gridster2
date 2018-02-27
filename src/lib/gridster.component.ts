@@ -83,7 +83,9 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
       this.options.api = {
         optionsChanged: this.optionsChanged.bind(this),
         resize: this.onResize.bind(this),
-        getNextPossiblePosition: this.getNextPossiblePosition.bind(this)
+        getNextPossiblePosition: this.getNextPossiblePosition.bind(this),
+        getFirstPossiblePosition: this.getFirstPossiblePosition.bind(this),
+        getLastPossiblePosition: this.getLastPossiblePosition.bind(this),
       };
       this.columns = this.$options.minCols;
       this.rows = this.$options.minRows;
@@ -394,7 +396,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     }
   }
 
-  getNextPossiblePosition(newItem: GridsterItemS): boolean {
+  getNextPossiblePosition(newItem: GridsterItemS, startingFrom: { rows?: number, cols?: number } = {}): boolean {
     if (newItem.cols === -1) {
       newItem.cols = this.$options.defaultItemCols;
     }
@@ -402,10 +404,10 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
       newItem.rows = this.$options.defaultItemRows;
     }
     this.setGridDimensions();
-    let rowsIndex = 0, colsIndex;
+    let rowsIndex = startingFrom.rows || 0, colsIndex;
     for (; rowsIndex < this.rows; rowsIndex++) {
       newItem.y = rowsIndex;
-      colsIndex = 0;
+      colsIndex = startingFrom.cols || 0;
       for (; colsIndex < this.columns; colsIndex++) {
         newItem.x = colsIndex;
         if (!this.checkCollision(newItem)) {
@@ -426,6 +428,26 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
       return true;
     }
     return false;
+  }
+
+  getFirstPossiblePosition(item: GridsterItemS): GridsterItemS {
+    const tmpItem = Object.assign({}, item);
+    this.getNextPossiblePosition(tmpItem);
+    return tmpItem;
+  }
+
+
+  getLastPossiblePosition(item: GridsterItemS): GridsterItemS {
+    let farthestItem: { rows: number, cols: number, item: GridsterItemComponentInterface };
+    farthestItem = this.grid.reduce((prev: any, curr: GridsterItemComponentInterface) => {
+      const currCoords = { y: curr.$item.y + curr.$item.rows - 1, x: curr.$item.x + curr.$item.cols - 1 };
+      const cmpResult = GridsterUtils.compareItems({ y: prev.rows, x: prev.cols }, { y: currCoords.y, x: currCoords.x });
+      return cmpResult === 1 ? { rows: currCoords.y, cols: currCoords.x, item: curr } : prev;
+    }, { rows: 0, cols: 0, item: null });
+
+    const tmpItem = Object.assign({}, item);
+    this.getNextPossiblePosition(tmpItem, { rows: farthestItem.rows - farthestItem.item.$item.rows + 1, cols: farthestItem.cols });
+    return tmpItem;
   }
 
   pixelsToPositionX(x: number, roundingMethod: Function): number {
