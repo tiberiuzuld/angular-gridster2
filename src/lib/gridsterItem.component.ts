@@ -103,10 +103,18 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
     }
 
     this.renderer.setStyle(this.el, 'display', this.notPlaced ? null : 'block');
-    this.renderer.setStyle(this.el, 'grid-column-start', (this.$item.x + 1));
-    this.renderer.setStyle(this.el, 'grid-column-end', ((this.$item.x + 1) + this.$item.cols));
-    this.renderer.setStyle(this.el, 'grid-row-start', (this.$item.y + 1));
-    this.renderer.setStyle(this.el, 'grid-row-end', ((this.$item.y + 1) + this.$item.rows));
+    if (this.gridster.mobile) {
+      this.renderer.setStyle(this.el, 'grid-column-start', null);
+      this.renderer.setStyle(this.el, 'grid-column-end', null);
+      this.renderer.setStyle(this.el, 'grid-row-start', null);
+      this.renderer.setStyle(this.el, 'grid-row-end', null);
+    } else {
+      this.renderer.setStyle(this.el, 'grid-column-start', (this.$item.x + 1));
+      this.renderer.setStyle(this.el, 'grid-column-end', ((this.$item.x + 1) + this.$item.cols));
+      this.renderer.setStyle(this.el, 'grid-row-start', (this.$item.y + 1));
+      this.renderer.setStyle(this.el, 'grid-row-end', ((this.$item.y + 1) + this.$item.rows));
+    }
+
     if (!this.init && this.width > 0 && this.height > 0) {
       this.init = true;
       if (this.item.initCallback) {

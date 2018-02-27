@@ -309,7 +309,13 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
       removeClass3 = 'fixed';
     }
 
-    this.renderer.addClass(this.el, addClass);
+    if (this.mobile) {
+      this.renderer.setStyle(this.el, 'grid-auto-rows', null);
+      this.renderer.setStyle(this.el, 'grid-auto-columns', null);
+      this.renderer.removeClass(this.el, addClass);
+    } else {
+      this.renderer.addClass(this.el, addClass);
+    }
     this.renderer.removeClass(this.el, removeClass1);
     this.renderer.removeClass(this.el, removeClass2);
     this.renderer.removeClass(this.el, removeClass3);

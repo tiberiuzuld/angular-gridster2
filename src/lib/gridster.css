@@ -28,6 +28,7 @@ gridster.fixed {
 }
 
 gridster.mobile {
+  grid-auto-rows: 25%;
   overflow-x: hidden;
   overflow-y: auto;
 }
