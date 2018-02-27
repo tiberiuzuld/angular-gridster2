@@ -63,7 +63,7 @@ export class GridsterCompact {
       }
     }
     if (widgetMovedUp) {
-      this.checkCompactUp();
+      this.checkCompact();
     }
   }
 
@@ -94,7 +94,7 @@ export class GridsterCompact {
       }
     }
     if (widgetMovedUp) {
-      this.checkCompactLeft();
+      this.checkCompact();
     }
   }
 

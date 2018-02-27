@@ -436,17 +436,19 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     return tmpItem;
   }
 
-
   getLastPossiblePosition(item: GridsterItemS): GridsterItemS {
     let farthestItem: { rows: number, cols: number, item: GridsterItemComponentInterface };
     farthestItem = this.grid.reduce((prev: any, curr: GridsterItemComponentInterface) => {
-      const currCoords = { y: curr.$item.y + curr.$item.rows - 1, x: curr.$item.x + curr.$item.cols - 1 };
-      const cmpResult = GridsterUtils.compareItems({ y: prev.rows, x: prev.cols }, { y: currCoords.y, x: currCoords.x });
-      return cmpResult === 1 ? { rows: currCoords.y, cols: currCoords.x, item: curr } : prev;
-    }, { rows: 0, cols: 0, item: null });
+      const currCoords = {y: curr.$item.y + curr.$item.rows - 1, x: curr.$item.x + curr.$item.cols - 1};
+      const cmpResult = GridsterUtils.compareItems({y: prev.rows, x: prev.cols}, {y: currCoords.y, x: currCoords.x});
+      return cmpResult === 1 ? {rows: currCoords.y, cols: currCoords.x, item: curr} : prev;
+    }, {rows: 0, cols: 0, item: null});
 
     const tmpItem = Object.assign({}, item);
-    this.getNextPossiblePosition(tmpItem, { rows: farthestItem.rows - farthestItem.item.$item.rows + 1, cols: farthestItem.cols });
+    this.getNextPossiblePosition(tmpItem, {
+      rows: farthestItem.rows - farthestItem.item.$item.rows + 1,
+      cols: farthestItem.cols
+    });
     return tmpItem;
   }
 
