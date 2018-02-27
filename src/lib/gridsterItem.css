@@ -1,7 +1,7 @@
 gridster-item {
   box-sizing: border-box;
   z-index: 1;
-  position: absolute;
+  position: relative;
   overflow: hidden;
   transition: .3s;
   display: none;
@@ -14,6 +14,7 @@ gridster-item.gridster-item-moving {
 }
 
 gridster-item.gridster-item-resizing, gridster-item.gridster-item-moving {
+  position: absolute;
   transition: 0s;
   z-index: 2;
   box-shadow: 0 0 5px 5px rgba(0, 0, 0, .2), 0 6px 10px 0 rgba(0, 0, 0, .14), 0 1px 18px 0 rgba(0, 0, 0, .12);

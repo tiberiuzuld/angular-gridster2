@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 
 import {GridsterSwap} from './gridsterSwap.service';
-import {cancelScroll, scroll} from './gridsterScroll.service';
 import {GridsterPush} from './gridsterPush.service';
 import {GridsterUtils} from './gridsterUtils.service';
 import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
@@ -101,6 +100,8 @@ export class GridsterDraggable {
     this.top = this.gridsterItem.top;
     this.width = this.gridsterItem.width;
     this.height = this.gridsterItem.height;
+    this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'width', this.width + 'px');
+    this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'height', this.height + 'px');
     this.diffLeft = e.clientX + this.offsetLeft - this.margin - this.left;
     this.diffTop = e.clientY + this.offsetTop - this.margin - this.top;
     this.gridster.movingItem = this.gridsterItem.$item;
@@ -108,7 +109,7 @@ export class GridsterDraggable {
     this.push = new GridsterPush(this.gridsterItem);
     this.swap = new GridsterSwap(this.gridsterItem);
     this.gridster.dragInProgress = true;
-    this.gridster.gridLines.updateGrid();
+    this.gridster.updateGrid();
     this.path.push({x: this.gridsterItem.item.x || 0, y: this.gridsterItem.item.y || 0});
   }
 
@@ -118,13 +119,12 @@ export class GridsterDraggable {
     GridsterUtils.checkTouchEvent(e);
     this.offsetLeft = this.gridster.el.scrollLeft - this.gridster.el.offsetLeft;
     this.offsetTop = this.gridster.el.scrollTop - this.gridster.el.offsetTop;
-    scroll(this.gridsterItem, e, this.lastMouse, this.calculateItemPositionFromMousePosition.bind(this));
 
     this.calculateItemPositionFromMousePosition(e);
 
     this.lastMouse.clientX = e.clientX;
     this.lastMouse.clientY = e.clientY;
-    this.gridster.gridLines.updateGrid();
+    this.gridster.updateGrid();
   }
 
   calculateItemPositionFromMousePosition(e: any): void {
@@ -137,7 +137,6 @@ export class GridsterDraggable {
     e.stopPropagation();
     e.preventDefault();
 
-    cancelScroll();
     this.cancelOnBlur();
     this.mousemove();
     this.mouseup();
@@ -145,8 +144,12 @@ export class GridsterDraggable {
     this.touchend();
     this.touchcancel();
     this.gridsterItem.renderer.removeClass(this.gridsterItem.el, 'gridster-item-moving');
+    this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'top', null);
+    this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'left', null);
+    this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'width', null);
+    this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'height', null);
     this.gridster.dragInProgress = false;
-    this.gridster.gridLines.updateGrid();
+    this.gridster.updateGrid();
     this.path = [];
     if (this.gridster.options.draggable && this.gridster.options.draggable.stop) {
       Promise.resolve(this.gridster.options.draggable.stop(this.gridsterItem.item, this.gridsterItem, e))
@@ -194,13 +197,13 @@ export class GridsterDraggable {
     if (this.gridster.checkGridCollision(this.gridsterItem.$item)) {
       this.gridsterItem.$item.x = this.positionXBackup;
     } else {
-      this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'left', this.left + 'px');
+      this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'left', (this.left - this.gridsterItem.left) + 'px');
     }
     this.gridsterItem.$item.y = this.positionY;
     if (this.gridster.checkGridCollision(this.gridsterItem.$item)) {
       this.gridsterItem.$item.y = this.positionYBackup;
     } else {
-      this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'top', this.top + 'px');
+      this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'top', (this.top - this.gridsterItem.top) + 'px');
     }
 
     if (this.positionXBackup !== this.gridsterItem.$item.x || this.positionYBackup !== this.gridsterItem.$item.y) {
