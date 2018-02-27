@@ -50,7 +50,6 @@ export class GridsterPush {
   }
 
   pushItems(direction: string, disable?: boolean): boolean {
-    this.count = 0;
     if (this.gridster.$options.pushItems && !disable) {
       this.pushedItemsOrder = [];
       const pushed = this.push(this.gridsterItem, direction);
@@ -113,11 +112,6 @@ export class GridsterPush {
   }
 
   private push(gridsterItem: GridsterItemComponentInterface, direction: string): boolean {
-    if (this.count > 50000) {
-      return false;
-    } else {
-      this.count++;
-    }
     if (this.gridster.checkGridCollision(gridsterItem.$item)) {
       return false;
     }
@@ -138,7 +132,10 @@ export class GridsterPush {
         makePush = false;
         break;
       }
-      if (this.pushedItemsTemp.indexOf(itemCollision) > -1) {
+      const compare = this.pushedItemsTemp.find((el: GridsterItemComponentInterface) => {
+        return el.$item.x === itemCollision.$item.x && el.$item.y === itemCollision.$item.y;
+      });
+      if (compare) {
         makePush = false;
         break;
       }
