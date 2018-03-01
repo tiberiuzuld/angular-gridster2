@@ -114,21 +114,21 @@ export class GridsterResizable {
     this.gridster.dragInProgress = true;
     this.gridster.updateGrid();
 
-    if (e.target.hasAttribute('class') && e.target.getAttribute('class').search('handle-n') > -1) {
+    if (e.target.hasAttribute('class') && e.target.getAttribute('class').split(' ').indexOf('handle-n') > -1) {
       this.directionFunction = this.handleN;
-    } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').search('handle-w') > -1) {
+    } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').split(' ').indexOf('handle-w') > -1) {
       this.directionFunction = this.handleW;
-    } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').search('handle-s') > -1) {
+    } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').split(' ').indexOf('handle-s') > -1) {
       this.directionFunction = this.handleS;
-    } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').search('handle-e') > -1) {
+    } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').split(' ').indexOf('handle-e') > -1) {
       this.directionFunction = this.handleE;
-    } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').search('handle-nw') > -1) {
+    } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').split(' ').indexOf('handle-nw') > -1) {
       this.directionFunction = this.handleNW;
-    } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').search('handle-ne') > -1) {
+    } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').split(' ').indexOf('handle-ne') > -1) {
       this.directionFunction = this.handleNE;
-    } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').search('handle-sw') > -1) {
+    } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').split(' ').indexOf('handle-sw') > -1) {
       this.directionFunction = this.handleSW;
-    } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').search('handle-se') > -1) {
+    } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').split(' ').indexOf('handle-se') > -1) {
       this.directionFunction = this.handleSE;
     }
   }
