@@ -96,8 +96,6 @@ export class GridsterResizable {
     this.height = this.gridsterItem.height;
     this.bottom = this.gridsterItem.top + this.gridsterItem.height;
     this.right = this.gridsterItem.left + this.gridsterItem.width;
-    this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'width', this.width + 'px');
-    this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'height', this.height + 'px');
     this.margin = this.gridster.$options.margin;
     this.offsetLeft = this.gridster.el.scrollLeft - this.gridster.el.offsetLeft;
     this.offsetTop = this.gridster.el.scrollTop - this.gridster.el.offsetTop;

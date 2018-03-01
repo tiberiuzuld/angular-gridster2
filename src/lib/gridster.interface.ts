@@ -33,6 +33,7 @@ export abstract class GridsterComponentInterface {
   curColWidth: number;
   curRowHeight: number;
   windowResize: (() => void) | null;
+  setGridDimensions: (() => void);
   dragInProgress: boolean;
   emptyCell: GridsterEmptyCell;
   compact: GridsterCompact;
