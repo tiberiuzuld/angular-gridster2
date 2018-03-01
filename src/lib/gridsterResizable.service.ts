@@ -118,31 +118,31 @@ export class GridsterResizable {
     this.gridster.dragInProgress = true;
     this.gridster.gridLines.updateGrid();
 
-    if (e.target.hasAttribute('class') && e.target.getAttribute('class').search('handle-n') > -1) {
+    if (e.target.hasAttribute('class') && e.target.getAttribute('class').split(' ').indexOf('handle-n') > -1) {
       this.resizeEventScrollType.n = true;
       this.directionFunction = this.handleN.bind(this);
-    } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').search('handle-w') > -1) {
+    } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').split(' ').indexOf('handle-w') > -1) {
       this.resizeEventScrollType.w = true;
       this.directionFunction = this.handleW.bind(this);
-    } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').search('handle-s') > -1) {
+    } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').split(' ').indexOf('handle-s') > -1) {
       this.resizeEventScrollType.s = true;
       this.directionFunction = this.handleS.bind(this);
-    } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').search('handle-e') > -1) {
+    } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').split(' ').indexOf('handle-e') > -1) {
       this.resizeEventScrollType.e = true;
       this.directionFunction = this.handleE.bind(this);
-    } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').search('handle-nw') > -1) {
+    } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').split(' ').indexOf('handle-nw') > -1) {
       this.resizeEventScrollType.n = true;
       this.resizeEventScrollType.w = true;
       this.directionFunction = this.handleNW.bind(this);
-    } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').search('handle-ne') > -1) {
+    } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').split(' ').indexOf('handle-ne') > -1) {
       this.resizeEventScrollType.n = true;
       this.resizeEventScrollType.e = true;
       this.directionFunction = this.handleNE.bind(this);
-    } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').search('handle-sw') > -1) {
+    } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').split(' ').indexOf('handle-sw') > -1) {
       this.resizeEventScrollType.s = true;
       this.resizeEventScrollType.w = true;
       this.directionFunction = this.handleSW.bind(this);
-    } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').search('handle-se') > -1) {
+    } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').split(' ').indexOf('handle-se') > -1) {
       this.resizeEventScrollType.s = true;
       this.resizeEventScrollType.e = true;
       this.directionFunction = this.handleSE.bind(this);

@@ -243,7 +243,7 @@ export class GridsterDraggable {
   }
 
   dragStartDelay(e: any): void {
-    if (e.target.hasAttribute('class') && e.target.getAttribute('class').search('gridster-item-resizable-handler') > -1) {
+    if (e.target.hasAttribute('class') && e.target.getAttribute('class').split(' ').indexOf('gridster-item-resizable-handler') > -1) {
       return;
     }
     if (GridsterUtils.checkContentClassForEvent(this.gridster, e)) {

@@ -66,7 +66,7 @@ export class GridsterUtils {
     if (target === current) {
       return false;
     }
-    if (target.hasAttribute('class') && target.getAttribute('class').search(contentClass) > -1) {
+    if (target.hasAttribute('class') && target.getAttribute('class').split(' ').indexOf(contentClass) > -1) {
       return true;
     } else {
       return GridsterUtils.checkContentClass(target.parentNode, current, contentClass);
@@ -74,14 +74,14 @@ export class GridsterUtils {
   }
 
   static compareItems(item1: { x: number, y: number }, item2: { x: number, y: number }): number {
-      if (item1.y > item2.y) {
-          return -1;
-      } else if (item1.y < item2.y) {
-          return 1;
-      } else if (item1.x > item2.x) {
-          return -1;
-      } else {
-          return 1;
-      }
+    if (item1.y > item2.y) {
+      return -1;
+    } else if (item1.y < item2.y) {
+      return 1;
+    } else if (item1.x > item2.x) {
+      return -1;
+    } else {
+      return 1;
+    }
   }
 }
