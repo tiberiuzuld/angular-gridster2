@@ -45,7 +45,9 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
 
   @HostListener('mousedown', ['$event'])
   onMouseDown() {
-    this.select.onMouseDown();
+    if (this.gridster.options.selectable && this.gridster.options.selectable.enabled) {
+      this.select.onMouseDown();
+    }
   }
 
   constructor(el: ElementRef, @Host() gridster: GridsterComponent, public renderer: Renderer2, private zone: NgZone) {
