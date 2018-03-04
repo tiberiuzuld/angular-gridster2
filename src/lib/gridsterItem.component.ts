@@ -1,12 +1,16 @@
-import {Component, ElementRef, Host, Input, NgZone, OnDestroy, OnInit, Renderer2, ViewEncapsulation} from '@angular/core';
+import {
+  Component, ElementRef, Host, Input, OnDestroy, OnInit, Renderer2, ViewEncapsulation,
+  HostBinding, NgZone, HostListener
+} from '@angular/core';
 
-import {GridsterItem} from './gridsterItem.interface';
-import {GridsterComponent} from './gridster.component';
-import {GridsterDraggable} from './gridsterDraggable.service';
-import {GridsterResizable} from './gridsterResizable.service';
-import {GridsterUtils} from './gridsterUtils.service';
-import {GridsterItemS} from './gridsterItemS.interface';
-import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
+import { GridsterItem } from './gridsterItem.interface';
+import { GridsterComponent } from './gridster.component';
+import { GridsterDraggable } from './gridsterDraggable.service';
+import { GridsterResizable } from './gridsterResizable.service';
+import { GridsterUtils } from './gridsterUtils.service';
+import { GridsterItemS } from './gridsterItemS.interface';
+import { GridsterItemComponentInterface } from './gridsterItemComponent.interface';
+import { GridsterSelectable } from 'lib/gridsterSelectable.service';
 
 @Component({
   selector: 'gridster-item',
@@ -25,8 +29,26 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
   height: number;
   drag: GridsterDraggable;
   resize: GridsterResizable;
+  select: GridsterSelectable;
   notPlaced: boolean;
   init: boolean;
+
+  private _isSelected = false;
+  @HostBinding('class.gridster-item-selected')
+  public get isSelected(): boolean {
+    return this._isSelected;
+  }
+  public set isSelected(v: boolean) {
+    this._isSelected = v;
+    this.item.isSelected = v;
+  }
+
+  @HostListener('mousedown', ['$event'])
+  onMouseDown() {
+    if (this.gridster.options.selectable && this.gridster.options.selectable.enabled) {
+      this.select.onMouseDown();
+    }
+  }
 
   constructor(el: ElementRef, @Host() gridster: GridsterComponent, public renderer: Renderer2, private zone: NgZone) {
     this.el = el.nativeElement;
@@ -39,6 +61,7 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
     this.gridster = gridster;
     this.drag = new GridsterDraggable(this, gridster, this.zone);
     this.resize = new GridsterResizable(this, gridster, this.zone);
+    this.select = new GridsterSelectable(this, gridster, this.zone);
   }
 
   ngOnInit(): void {
@@ -71,6 +94,8 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
     delete this.drag;
     this.resize.destroy();
     delete this.resize;
+
+    delete this.select;
   }
 
   setSize(): void {

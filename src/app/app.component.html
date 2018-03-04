@@ -199,7 +199,7 @@
   <button mat-mini-fab class="sidenav-fab" (click)="sidenav.toggle()">
     <mat-icon>settings</mat-icon>
   </button>
-  <gridster [options]="options" *ngIf="!remove">
+  <gridster [options]="options" *ngIf="!remove" [(selectedItem)]="selectedItem">
     <gridster-item [item]="item" *ngFor="let item of dashboard">
       <div class="button-holder">
         <div class="gridster-item-content" *ngIf="item.hasContent">

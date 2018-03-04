@@ -1,9 +1,9 @@
-import {CommonModule} from '@angular/common';
-import {NgModule} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 
-import {GridsterComponent} from './gridster.component';
-import {GridsterItemComponent} from './gridsterItem.component';
-import {GridsterPreviewComponent} from './gridsterPreview.component';
+import { GridsterComponent } from './gridster.component';
+import { GridsterItemComponent } from './gridsterItem.component';
+import { GridsterPreviewComponent } from './gridsterPreview.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +15,6 @@ import {GridsterPreviewComponent} from './gridsterPreview.component';
     CommonModule
   ],
   exports: [GridsterComponent, GridsterItemComponent],
-  providers: [],
   bootstrap: []
 })
 export class GridsterModule {

@@ -9,18 +9,25 @@ import {
   OnInit,
   Renderer2,
   SimpleChanges,
-  ViewEncapsulation
+  ViewEncapsulation,
+  Output,
+  EventEmitter,
+  ViewChildren,
+  forwardRef
 } from '@angular/core';
 
-import {GridsterConfigService} from './gridsterConfig.constant';
-import {GridsterConfig} from './gridsterConfig.interface';
-import {GridsterUtils} from './gridsterUtils.service';
-import {GridsterEmptyCell} from './gridsterEmptyCell.service';
-import {GridsterCompact} from './gridsterCompact.service';
-import {GridsterConfigS} from './gridsterConfigS.interface';
-import {GridsterItemS} from './gridsterItemS.interface';
-import {GridsterComponentInterface} from './gridster.interface';
-import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
+import { GridsterConfigService } from './gridsterConfig.constant';
+import { GridsterConfig } from './gridsterConfig.interface';
+import { GridsterUtils } from './gridsterUtils.service';
+import { GridsterEmptyCell } from './gridsterEmptyCell.service';
+import { GridsterCompact } from './gridsterCompact.service';
+import { GridsterConfigS } from './gridsterConfigS.interface';
+import { GridsterItemS } from './gridsterItemS.interface';
+import { GridsterComponentInterface } from './gridster.interface';
+import { GridsterItemComponentInterface } from './gridsterItemComponent.interface';
+import { GridsterItem, GridsterItemComponent } from 'lib';
+import { QueryList } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'gridster',
@@ -49,6 +56,34 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
   dragInProgress: boolean;
   emptyCell: GridsterEmptyCell;
   compact: GridsterCompact;
+
+  @Output()
+  selectedItemChange = new EventEmitter<GridsterItem>();
+
+
+  private _selectedComponent: GridsterItemComponentInterface;
+  public get selectedComponent(): GridsterItemComponentInterface {
+    return this._selectedComponent;
+  }
+  public set selectedComponent(v: GridsterItemComponentInterface) {
+    if (this._selectedComponent) {
+      this._selectedComponent.isSelected = false;
+    }
+    this._selectedComponent = v;
+    v.isSelected = true;
+    this.selectedItem = v.item;
+  }
+
+  private _selectedItem: GridsterItem;
+
+  @Input()
+  public get selectedItem(): GridsterItem {
+    return this._selectedItem;
+  }
+  public set selectedItem(v: GridsterItem) {
+    this._selectedItem = v;
+    this.selectedItemChange.emit(v);
+  }
 
   constructor(el: ElementRef, public renderer: Renderer2, public cdRef: ChangeDetectorRef, public zone: NgZone) {
     this.el = el.nativeElement;
@@ -132,6 +167,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
   }
 
   ngOnDestroy(): void {
+
     if (this.windowResize) {
       this.windowResize();
     }
@@ -480,9 +516,9 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
   }
 
   getLastPossiblePosition(item: GridsterItemS): GridsterItemS {
-    let farthestItem: { y: number, x: number } = {y: 0, x: 0};
+    let farthestItem: { y: number, x: number } = { y: 0, x: 0 };
     farthestItem = this.grid.reduce((prev: any, curr: GridsterItemComponentInterface) => {
-      const currCoords = {y: curr.$item.y + curr.$item.rows - 1, x: curr.$item.x + curr.$item.cols - 1};
+      const currCoords = { y: curr.$item.y + curr.$item.rows - 1, x: curr.$item.x + curr.$item.cols - 1 };
       if (GridsterUtils.compareItems(prev, currCoords) === 1) {
         return currCoords;
       } else {
