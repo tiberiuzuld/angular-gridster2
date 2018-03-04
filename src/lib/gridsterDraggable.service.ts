@@ -164,7 +164,7 @@ export class GridsterDraggable {
   cancelDrag() {
     this.gridsterItem.$item.x = this.gridsterItem.item.x || 0;
     this.gridsterItem.$item.y = this.gridsterItem.item.y || 0;
-    this.gridsterItem.setSize(true);
+    this.gridsterItem.setSize();
     this.push.restoreItems();
     this.swap.restoreSwapItem();
     this.push.destroy();
@@ -175,7 +175,7 @@ export class GridsterDraggable {
 
   makeDrag() {
     this.gridsterItem.checkItemChanges(this.gridsterItem.$item, this.gridsterItem.item);
-    this.gridsterItem.setSize(true);
+    this.gridsterItem.setSize();
     this.push.setPushedItems();
     this.swap.setSwapItem();
     this.push.destroy();

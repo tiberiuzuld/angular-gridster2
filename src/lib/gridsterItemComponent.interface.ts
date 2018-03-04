@@ -8,10 +8,6 @@ import {GridsterComponentInterface} from './gridster.interface';
 export abstract class GridsterItemComponentInterface {
   item: GridsterItem;
   $item: GridsterItemS;
-  itemTop: number;
-  itemLeft: number;
-  itemWidth: number;
-  itemHeight: number;
   top: number;
   left: number;
   width: number;
@@ -21,7 +17,7 @@ export abstract class GridsterItemComponentInterface {
   notPlaced: boolean;
   updateOptions: () => void;
   itemChanged: () => void;
-  setSize: (noCheck: Boolean) => void;
+  setSize: () => void;
   checkItemChanges: (newValue: GridsterItem, oldValue: GridsterItem) => void;
   canBeDragged: () => boolean;
   canBeResized: () => boolean;

@@ -37,7 +37,7 @@ export class GridsterSwap {
         this.swapedItem.$item.x = x;
         this.swapedItem.$item.y = y;
       } else {
-        this.swapedItem.setSize(true);
+        this.swapedItem.setSize();
         this.gridsterItem.$item.x = this.gridsterItem.item.x || 0;
         this.gridsterItem.$item.y = this.gridsterItem.item.y || 0;
         this.swapedItem = undefined;
@@ -50,7 +50,7 @@ export class GridsterSwap {
     if (this.swapedItem) {
       this.swapedItem.$item.x = this.swapedItem.item.x || 0;
       this.swapedItem.$item.y = this.swapedItem.item.y || 0;
-      this.swapedItem.setSize(true);
+      this.swapedItem.setSize();
       this.swapedItem = undefined;
     }
   }
@@ -80,7 +80,7 @@ export class GridsterSwap {
         gridsterItemCollide.$item.x = copyCollisionX;
         gridsterItemCollide.$item.y = copyCollisionY;
       } else {
-        gridsterItemCollide.setSize(true);
+        gridsterItemCollide.setSize();
         this.swapedItem = gridsterItemCollide;
       }
     }

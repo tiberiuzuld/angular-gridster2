@@ -79,7 +79,7 @@ export class GridsterPush {
       pushedItem = this.pushedItems[i];
       pushedItem.$item.x = pushedItem.item.x || 0;
       pushedItem.$item.y = pushedItem.item.y || 0;
-      pushedItem.setSize(true);
+      pushedItem.setSize();
     }
     this.pushedItems = [];
     this.pushedItemsPath = [];
@@ -177,7 +177,7 @@ export class GridsterPush {
     this.addToTempPushed(gridsterItemCollide);
     gridsterItemCollide.$item.y = gridsterItem.$item.y + gridsterItem.$item.rows;
     if (this.push(gridsterItemCollide, this.fromNorth)) {
-      gridsterItemCollide.setSize(true);
+      gridsterItemCollide.setSize();
       this.addToPushed(gridsterItemCollide);
       return true;
     } else {
@@ -193,7 +193,7 @@ export class GridsterPush {
     this.addToTempPushed(gridsterItemCollide);
     gridsterItemCollide.$item.y = gridsterItem.$item.y - gridsterItemCollide.$item.rows;
     if (this.push(gridsterItemCollide, this.fromSouth)) {
-      gridsterItemCollide.setSize(true);
+      gridsterItemCollide.setSize();
       this.addToPushed(gridsterItemCollide);
       return true;
     } else {
@@ -209,7 +209,7 @@ export class GridsterPush {
     this.addToTempPushed(gridsterItemCollide);
     gridsterItemCollide.$item.x = gridsterItem.$item.x + gridsterItem.$item.cols;
     if (this.push(gridsterItemCollide, this.fromWest)) {
-      gridsterItemCollide.setSize(true);
+      gridsterItemCollide.setSize();
       this.addToPushed(gridsterItemCollide);
       return true;
     } else {
@@ -225,7 +225,7 @@ export class GridsterPush {
     this.addToTempPushed(gridsterItemCollide);
     gridsterItemCollide.$item.x = gridsterItem.$item.x - gridsterItemCollide.$item.cols;
     if (this.push(gridsterItemCollide, this.fromEast)) {
-      gridsterItemCollide.setSize(true);
+      gridsterItemCollide.setSize();
       this.addToPushed(gridsterItemCollide);
       return true;
     } else {
@@ -251,7 +251,7 @@ export class GridsterPush {
     }
     gridsterItem.$item.x = tempPosition.x;
     gridsterItem.$item.y = tempPosition.y;
-    gridsterItem.setSize(true);
+    gridsterItem.setSize();
     if (!this.pushedItemsTempPath[i].length) {
       this.pushedItemsTemp.splice(i, 1);
       this.pushedItemsTempPath.splice(i, 1);
@@ -299,7 +299,7 @@ export class GridsterPush {
       pushedItem.$item.x = lastPosition.x;
       pushedItem.$item.y = lastPosition.y;
       if (!this.gridster.findItemWithItem(pushedItem.$item)) {
-        pushedItem.setSize(true);
+        pushedItem.setSize();
         path.splice(j + 1, path.length - j - 1);
         change = true;
       } else {

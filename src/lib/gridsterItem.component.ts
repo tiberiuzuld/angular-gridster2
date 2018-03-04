@@ -19,10 +19,6 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
   $item: GridsterItemS;
   el: any;
   gridster: GridsterComponent;
-  itemTop: number;
-  itemLeft: number;
-  itemWidth: number;
-  itemHeight: number;
   top: number;
   left: number;
   width: number;
@@ -77,31 +73,7 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
     delete this.resize;
   }
 
-  setSize(noCheck: Boolean): void {
-    if (this.gridster.mobile) {
-      this.top = 0;
-      this.left = 0;
-      if (this.gridster.$options.keepFixedWidthInMobile) {
-        this.width = this.$item.cols * this.gridster.$options.fixedColWidth;
-      } else {
-        this.width = this.gridster.curWidth - (this.gridster.$options.outerMargin ? 2 * this.gridster.$options.margin : 0);
-      }
-      if (this.gridster.$options.keepFixedHeightInMobile) {
-        this.height = this.$item.rows * this.gridster.$options.fixedRowHeight;
-      } else {
-        this.height = this.width / 2;
-      }
-    } else {
-      this.top = this.$item.y * this.gridster.curRowHeight;
-      this.left = this.$item.x * this.gridster.curColWidth;
-      this.width = this.$item.cols * this.gridster.curColWidth - this.gridster.$options.margin;
-      this.height = this.$item.rows * this.gridster.curRowHeight - this.gridster.$options.margin;
-    }
-    if (!noCheck && this.top === this.itemTop && this.left === this.itemLeft &&
-      this.width === this.itemWidth && this.height === this.itemHeight) {
-      return;
-    }
-
+  setSize(): void {
     this.renderer.setStyle(this.el, 'display', this.notPlaced ? null : 'block');
     if (this.gridster.mobile) {
       this.renderer.setStyle(this.el, 'grid-column-start', null);
@@ -114,8 +86,10 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
       this.renderer.setStyle(this.el, 'grid-row-start', (this.$item.y + 1));
       this.renderer.setStyle(this.el, 'grid-row-end', ((this.$item.y + 1) + this.$item.rows));
     }
+    const height = this.el.offsetHeight;
+    const width = this.el.offsetWidth;
 
-    if (!this.init && this.width > 0 && this.height > 0) {
+    if (!this.init && width > 0 && height > 0) {
       this.init = true;
       if (this.item.initCallback) {
         this.item.initCallback(this.item, this);
@@ -127,15 +101,16 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
         this.el.scrollIntoView(false);
       }
     }
-    if (this.width !== this.itemWidth || this.height !== this.itemHeight) {
+    if (width !== this.width || height !== this.height) {
       if (this.gridster.options.itemResizeCallback) {
         this.gridster.options.itemResizeCallback(this.item, this);
       }
     }
-    this.itemTop = this.top;
-    this.itemLeft = this.left;
-    this.itemWidth = this.width;
-    this.itemHeight = this.height;
+
+    this.top = this.el.offsetTop;
+    this.left = this.el.offsetLeft;
+    this.width = width;
+    this.height = height;
   }
 
   itemChanged(): void {

@@ -90,7 +90,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
       this.columns = this.$options.minCols;
       this.rows = this.$options.minRows;
       this.setGridSize();
-      this.calculateLayoutDebounce();
+      this.calculateLayout();
     }
   }
 
@@ -151,7 +151,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
 
   onResize(): void {
     this.setGridSize();
-    this.calculateLayoutDebounce();
+    this.calculateLayout();
   }
 
   checkIfToResize(): boolean {
@@ -207,7 +207,6 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
   }
 
   calculateLayout(): void {
-    // check to compact
     if (this.compact) {
       this.compact.checkCompact();
     }
@@ -325,7 +324,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     let widgetsIndex: number = this.grid.length - 1, widget: GridsterItemComponentInterface;
     for (; widgetsIndex >= 0; widgetsIndex--) {
       widget = this.grid[widgetsIndex];
-      widget.setSize(false);
+      widget.setSize();
       widget.drag.toggle();
       widget.resize.toggle();
     }
