@@ -20,38 +20,49 @@ export class AppComponent implements OnInit {
   options: GridsterConfig;
   dashboard: Array<GridsterItem>;
   remove: boolean;
+  private _selectedItem: GridsterItem;
+
 
   static eventStop(item: GridsterItem, itemComponent: GridsterItemComponentInterface, event: MouseEvent) {
-    console.info('eventStop', item, itemComponent, event);
+    console.log('eventStop', item, itemComponent, event);
   }
 
   static itemChange(item: GridsterItem, itemComponent: GridsterItemComponentInterface) {
-    console.info('itemChanged', item, itemComponent);
+    console.log('itemChanged', item, itemComponent);
   }
 
   static itemResize(item: GridsterItem, itemComponent: GridsterItemComponentInterface) {
-    console.info('itemResized', item, itemComponent);
+    console.log('itemResized', item, itemComponent);
   }
 
   static itemInit(item: GridsterItem, itemComponent: GridsterItemComponentInterface) {
-    console.info('itemInitialized', item, itemComponent);
+    console.log('itemInitialized', item, itemComponent);
   }
 
   static itemRemoved(item: GridsterItem, itemComponent: GridsterItemComponentInterface) {
-    console.info('itemRemoved', item, itemComponent);
+    console.log('itemRemoved', item, itemComponent);
   }
 
   static gridInit(grid: GridsterComponentInterface) {
-    console.info('gridInit', grid);
+    console.log('gridInit', grid);
   }
 
   static gridDestroy(grid: GridsterComponentInterface) {
-    console.info('gridDestroy', grid);
+    console.log('gridDestroy', grid);
   }
 
   emptyCellClick(event: MouseEvent, item: GridsterItem) {
-    console.info('empty cell click', event, item);
+    console.log('empty cell click', event, item);
     this.dashboard.push(item);
+  }
+
+
+  public get selectedItem(): GridsterItem {
+    return this._selectedItem;
+  }
+  public set selectedItem(v: GridsterItem) {
+    this._selectedItem = v;
+    console.log('selected item', v);
   }
 
   ngOnInit() {

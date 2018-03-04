@@ -110,7 +110,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
         }
         item.item.isSelected = true;
         item.isSelected = true;
-        this.selectedItem = item;
+        this.selectedItem = item.item;
       });
 
       this.selectionService.unSelectItem.subscribe((item: GridsterItemComponentInterface) => {
