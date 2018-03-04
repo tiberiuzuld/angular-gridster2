@@ -26,8 +26,8 @@ import { GridsterItemS } from './gridsterItemS.interface';
 import { GridsterComponentInterface } from './gridster.interface';
 import { GridsterItemComponentInterface } from './gridsterItemComponent.interface';
 import { GridsterItem, GridsterItemComponent } from 'lib';
-import { GridsterSelectionService } from './gridsterSelection.service';
 import { QueryList } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'gridster',
@@ -60,6 +60,20 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
   @Output()
   selectedItemChange = new EventEmitter<GridsterItem>();
 
+
+  private _selectedComponent: GridsterItemComponentInterface;
+  public get selectedComponent(): GridsterItemComponentInterface {
+    return this._selectedComponent;
+  }
+  public set selectedComponent(v: GridsterItemComponentInterface) {
+    if (this._selectedComponent) {
+      this._selectedComponent.isSelected = false;
+    }
+    this._selectedComponent = v;
+    v.isSelected = true;
+    this.selectedItem = v.item;
+  }
+
   private _selectedItem: GridsterItem;
 
   @Input()
@@ -71,11 +85,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     this.selectedItemChange.emit(v);
   }
 
-
-  @ViewChildren(forwardRef(() => GridsterItemComponent))
-  gridsterItems: QueryList<GridsterItemComponent>;
-
-  constructor(el: ElementRef, public renderer: Renderer2, public cdRef: ChangeDetectorRef, public zone: NgZone, private selectionService: GridsterSelectionService) {
+  constructor(el: ElementRef, public renderer: Renderer2, public cdRef: ChangeDetectorRef, public zone: NgZone) {
     this.el = el.nativeElement;
     this.$options = JSON.parse(JSON.stringify(GridsterConfigService));
     this.calculateLayoutDebounce = GridsterUtils.debounce(this.calculateLayout.bind(this), 0);
@@ -100,23 +110,6 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
   ngOnInit(): void {
     if (this.options.initCallback) {
       this.options.initCallback(this);
-    }
-
-    if (this.options.selectable && this.options.selectable.enabled) {
-      this.selectionService.selectItem.subscribe((item: GridsterItemComponentInterface) => {
-        for (const x of this.grid) {
-          x.item.isSelected = false;
-          x.isSelected = false;
-        }
-        item.item.isSelected = true;
-        item.isSelected = true;
-        this.selectedItem = item.item;
-      });
-
-      this.selectionService.unSelectItem.subscribe((item: GridsterItemComponentInterface) => {
-        item.item.isSelected = false;
-        item.isSelected = false;
-      });
     }
   }
 
@@ -174,6 +167,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
   }
 
   ngOnDestroy(): void {
+
     if (this.windowResize) {
       this.windowResize();
     }

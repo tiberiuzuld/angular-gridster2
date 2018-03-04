@@ -1,11 +1,10 @@
+import {Injectable, NgZone} from '@angular/core';
 
-import { Injectable, NgZone } from '@angular/core';
-import { GridsterSwap } from './gridsterSwap.service';
-import { GridsterPush } from './gridsterPush.service';
-import { GridsterUtils } from './gridsterUtils.service';
-import { GridsterItemComponentInterface } from './gridsterItemComponent.interface';
-import { GridsterComponentInterface } from './gridster.interface';
-import { GridsterSelectionService } from 'lib/gridsterSelection.service';
+import {GridsterSwap} from './gridsterSwap.service';
+import {GridsterPush} from './gridsterPush.service';
+import {GridsterUtils} from './gridsterUtils.service';
+import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
+import {GridsterComponentInterface} from './gridster.interface';
 
 @Injectable()
 export class GridsterDraggable {
@@ -44,8 +43,7 @@ export class GridsterDraggable {
   swap: GridsterSwap;
   path: Array<{ x: number, y: number }>;
 
-  constructor(gridsterItem: GridsterItemComponentInterface, gridster: GridsterComponentInterface, private zone: NgZone,
-    private selection: GridsterSelectionService) {
+  constructor(gridsterItem: GridsterItemComponentInterface, gridster: GridsterComponentInterface, private zone: NgZone) {
     this.gridsterItem = gridsterItem;
     this.gridster = gridster;
     this.lastMouse = {
@@ -112,7 +110,7 @@ export class GridsterDraggable {
     this.swap = new GridsterSwap(this.gridsterItem);
     this.gridster.dragInProgress = true;
     this.gridster.updateGrid();
-    this.path.push({ x: this.gridsterItem.item.x || 0, y: this.gridsterItem.item.y || 0 });
+    this.path.push({x: this.gridsterItem.item.x || 0, y: this.gridsterItem.item.y || 0});
   }
 
   dragMove(e: any): void {
@@ -226,7 +224,7 @@ export class GridsterDraggable {
         this.gridsterItem.$item.x = this.positionXBackup;
         this.gridsterItem.$item.y = this.positionYBackup;
       } else {
-        this.path.push({ x: this.gridsterItem.$item.x, y: this.gridsterItem.$item.y });
+        this.path.push({x: this.gridsterItem.$item.x, y: this.gridsterItem.$item.y});
         this.gridster.previewStyle(true);
       }
       this.push.checkPushBack();
@@ -245,25 +243,9 @@ export class GridsterDraggable {
       this.mousedown();
       this.touchstart();
     }
-    if (!enableDrag) {
-      this.dragStartFunction = this.onMouseDown.bind(this);
-      this.mousedown = this.gridsterItem.renderer.listen(this.gridsterItem.el, 'mousedown', this.dragStartFunction);
-      this.touchstart = this.gridsterItem.renderer.listen(this.gridsterItem.el, 'touchstart', this.dragStartFunction);
-    }
-  }
-
-  onMouseDown() {
-    if (this.gridsterItem.item.isSelected) {
-      this.selection.unSelectItem.emit(this.gridsterItem);
-    } else {
-      this.selection.selectItem.emit(this.gridsterItem);
-    }
-    this.gridster.updateGrid();
   }
 
   dragStartDelay(e: any): void {
-
-    this.onMouseDown();
     if (e.target.hasAttribute('class') && e.target.getAttribute('class').split(' ').indexOf('gridster-item-resizable-handler') > -1) {
       return;
     }

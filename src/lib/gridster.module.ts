@@ -4,7 +4,6 @@ import { NgModule } from '@angular/core';
 import { GridsterComponent } from './gridster.component';
 import { GridsterItemComponent } from './gridsterItem.component';
 import { GridsterPreviewComponent } from './gridsterPreview.component';
-import { GridsterSelectionService } from './gridsterSelection.service';
 
 @NgModule({
   declarations: [
@@ -16,7 +15,6 @@ import { GridsterSelectionService } from './gridsterSelection.service';
     CommonModule
   ],
   exports: [GridsterComponent, GridsterItemComponent],
-  providers: [GridsterSelectionService],
   bootstrap: []
 })
 export class GridsterModule {

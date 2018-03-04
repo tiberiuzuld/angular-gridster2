@@ -5,7 +5,6 @@ import { GridsterUtils } from './gridsterUtils.service';
 import { GridsterPushResize } from './gridsterPushResize.service';
 import { GridsterItemComponentInterface } from './gridsterItemComponent.interface';
 import { GridsterComponentInterface } from './gridster.interface';
-import { GridsterSelectionService } from './gridsterSelection.service';
 
 @Injectable()
 export class GridsterResizable {

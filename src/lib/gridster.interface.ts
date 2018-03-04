@@ -38,4 +38,5 @@ export abstract class GridsterComponentInterface {
   emptyCell: GridsterEmptyCell;
   compact: GridsterCompact;
   zone: NgZone;
+  selectedComponent: GridsterItemComponentInterface;
 }
