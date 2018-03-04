@@ -1,4 +1,4 @@
-import { Component, ElementRef, Host, Input, OnDestroy, OnInit, Renderer2, ViewEncapsulation, HostBinding } from '@angular/core';
+import { Component, ElementRef, Host, Input, OnDestroy, OnInit, Renderer2, ViewEncapsulation, HostBinding, NgZone } from '@angular/core';
 
 import { GridsterItem } from './gridsterItem.interface';
 import { GridsterComponent } from './gridster.component';
@@ -32,7 +32,7 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
   @HostBinding('class.gridster-item-selected')
   public isSelected = false;
 
-  constructor(el: ElementRef, @Host() gridster: GridsterComponent, public renderer: Renderer2,
+  constructor(el: ElementRef, @Host() gridster: GridsterComponent, public renderer: Renderer2, private zone: NgZone,
     private selection: GridsterSelectionService) {
     this.el = el.nativeElement;
     this.$item = {
@@ -42,8 +42,8 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
       y: -1,
     };
     this.gridster = gridster;
-    this.drag = new GridsterDraggable(this, gridster, selection);
-    this.resize = new GridsterResizable(this, gridster);
+    this.drag = new GridsterDraggable(this, gridster, this.zone, selection);
+    this.resize = new GridsterResizable(this, gridster, this.zone);
   }
 
   ngOnInit(): void {
