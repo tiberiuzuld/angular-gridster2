@@ -1,6 +1,6 @@
-import {GridsterItem} from './gridsterItem.interface';
-import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
-import {GridsterComponentInterface} from './gridster.interface';
+import { GridsterItem } from './gridsterItem.interface';
+import { GridsterItemComponentInterface } from './gridsterItemComponent.interface';
+import { GridsterComponentInterface } from './gridster.interface';
 
 export type gridTypes = 'fit' | 'scrollVertical' | 'scrollHorizontal' | 'fixed' | 'verticalFixed' | 'horizontalFixed';
 export type displayGrids = 'always' | 'onDrag&Resize' | 'none';
@@ -65,6 +65,7 @@ export interface GridsterConfig {
   itemRemovedCallback?: (item: GridsterItem, itemComponent: GridsterItemComponentInterface) => void;
   draggable?: Draggable;
   resizable?: Resizable;
+  selectable?: Selectable;
   swap?: boolean;
   pushItems?: boolean;
   disablePushOnDrag?: boolean;
@@ -108,6 +109,10 @@ export interface Draggable extends DragBase {
   ignoreContentClass?: string;
   ignoreContent?: boolean;
   dragHandleClass?: string;
+}
+
+export interface Selectable {
+  enabled?: boolean;
 }
 
 export interface Resizable extends DragBase {

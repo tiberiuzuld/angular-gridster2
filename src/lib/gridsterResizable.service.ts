@@ -1,10 +1,11 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 
-import {GridsterPush} from './gridsterPush.service';
-import {GridsterUtils} from './gridsterUtils.service';
-import {GridsterPushResize} from './gridsterPushResize.service';
-import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
-import {GridsterComponentInterface} from './gridster.interface';
+import { GridsterPush } from './gridsterPush.service';
+import { GridsterUtils } from './gridsterUtils.service';
+import { GridsterPushResize } from './gridsterPushResize.service';
+import { GridsterItemComponentInterface } from './gridsterItemComponent.interface';
+import { GridsterComponentInterface } from './gridster.interface';
+import { GridsterSelectionService } from './gridsterSelection.service';
 
 @Injectable()
 export class GridsterResizable {
@@ -344,6 +345,7 @@ export class GridsterResizable {
   }
 
   dragStartDelay(e: any): void {
+
     GridsterUtils.checkTouchEvent(e);
     if (!this.gridster.$options.resizable.delayStart) {
       this.dragStart(e);

@@ -1,12 +1,13 @@
-import {Component, ElementRef, Host, Input, OnDestroy, OnInit, Renderer2, ViewEncapsulation} from '@angular/core';
+import { Component, ElementRef, Host, Input, OnDestroy, OnInit, Renderer2, ViewEncapsulation, HostBinding } from '@angular/core';
 
-import {GridsterItem} from './gridsterItem.interface';
-import {GridsterComponent} from './gridster.component';
-import {GridsterDraggable} from './gridsterDraggable.service';
-import {GridsterResizable} from './gridsterResizable.service';
-import {GridsterUtils} from './gridsterUtils.service';
-import {GridsterItemS} from './gridsterItemS.interface';
-import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
+import { GridsterItem } from './gridsterItem.interface';
+import { GridsterComponent } from './gridster.component';
+import { GridsterDraggable } from './gridsterDraggable.service';
+import { GridsterResizable } from './gridsterResizable.service';
+import { GridsterUtils } from './gridsterUtils.service';
+import { GridsterItemS } from './gridsterItemS.interface';
+import { GridsterItemComponentInterface } from './gridsterItemComponent.interface';
+import { GridsterSelectionService } from './gridsterSelection.service';
 
 @Component({
   selector: 'gridster-item',
@@ -28,7 +29,11 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
   notPlaced: boolean;
   init: boolean;
 
-  constructor(el: ElementRef, @Host() gridster: GridsterComponent, public renderer: Renderer2) {
+  @HostBinding('class.gridster-item-selected')
+  public isSelected = false;
+
+  constructor(el: ElementRef, @Host() gridster: GridsterComponent, public renderer: Renderer2,
+    private selection: GridsterSelectionService) {
     this.el = el.nativeElement;
     this.$item = {
       cols: -1,
@@ -37,7 +42,7 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
       y: -1,
     };
     this.gridster = gridster;
-    this.drag = new GridsterDraggable(this, gridster);
+    this.drag = new GridsterDraggable(this, gridster, selection);
     this.resize = new GridsterResizable(this, gridster);
   }
 

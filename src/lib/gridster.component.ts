@@ -8,18 +8,25 @@ import {
   OnInit,
   Renderer2,
   SimpleChanges,
-  ViewEncapsulation
+  ViewEncapsulation,
+  Output,
+  EventEmitter,
+  ViewChildren,
+  forwardRef
 } from '@angular/core';
 
-import {GridsterConfigService} from './gridsterConfig.constant';
-import {GridsterConfig} from './gridsterConfig.interface';
-import {GridsterUtils} from './gridsterUtils.service';
-import {GridsterEmptyCell} from './gridsterEmptyCell.service';
-import {GridsterCompact} from './gridsterCompact.service';
-import {GridsterConfigS} from './gridsterConfigS.interface';
-import {GridsterItemS} from './gridsterItemS.interface';
-import {GridsterComponentInterface} from './gridster.interface';
-import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
+import { GridsterConfigService } from './gridsterConfig.constant';
+import { GridsterConfig } from './gridsterConfig.interface';
+import { GridsterUtils } from './gridsterUtils.service';
+import { GridsterEmptyCell } from './gridsterEmptyCell.service';
+import { GridsterCompact } from './gridsterCompact.service';
+import { GridsterConfigS } from './gridsterConfigS.interface';
+import { GridsterItemS } from './gridsterItemS.interface';
+import { GridsterComponentInterface } from './gridster.interface';
+import { GridsterItemComponentInterface } from './gridsterItemComponent.interface';
+import { GridsterItem, GridsterItemComponent } from 'lib';
+import { GridsterSelectionService } from './gridsterSelection.service';
+import { QueryList } from '@angular/core';
 
 @Component({
   selector: 'gridster',
@@ -49,7 +56,26 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
   emptyCell: GridsterEmptyCell;
   compact: GridsterCompact;
 
-  constructor(el: ElementRef, public renderer: Renderer2, public cdRef: ChangeDetectorRef) {
+  @Output()
+  selectedItemChange = new EventEmitter<GridsterItem>();
+
+  private _selectedItem: GridsterItem;
+
+  @Input()
+  public get selectedItem(): GridsterItem {
+    return this._selectedItem;
+  }
+  public set selectedItem(v: GridsterItem) {
+    this._selectedItem = v;
+    this.selectedItemChange.emit(v);
+  }
+
+
+  @ViewChildren(forwardRef(() => GridsterItemComponent))
+  gridsterItems: QueryList<GridsterItemComponent>;
+
+
+  constructor(el: ElementRef, public renderer: Renderer2, public cdRef: ChangeDetectorRef, private selectionService: GridsterSelectionService) {
     this.el = el.nativeElement;
     this.$options = JSON.parse(JSON.stringify(GridsterConfigService));
     this.calculateLayoutDebounce = GridsterUtils.debounce(this.calculateLayout.bind(this), 0);
@@ -74,6 +100,23 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
   ngOnInit(): void {
     if (this.options.initCallback) {
       this.options.initCallback(this);
+    }
+
+    if (this.options.selectable && this.options.selectable.enabled) {
+      this.selectionService.selectItem.subscribe((item: GridsterItemComponentInterface) => {
+        for (const x of this.grid) {
+          x.item.isSelected = false;
+          x.isSelected = false;
+        }
+        item.item.isSelected = true;
+        item.isSelected = true;
+        this.selectedItem = item;
+      });
+
+      this.selectionService.unSelectItem.subscribe((item: GridsterItemComponentInterface) => {
+        item.item.isSelected = false;
+        item.isSelected = false;
+      });
     }
   }
 
@@ -479,9 +522,9 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
   }
 
   getLastPossiblePosition(item: GridsterItemS): GridsterItemS {
-    let farthestItem: { y: number, x: number } = {y: 0, x: 0};
+    let farthestItem: { y: number, x: number } = { y: 0, x: 0 };
     farthestItem = this.grid.reduce((prev: any, curr: GridsterItemComponentInterface) => {
-      const currCoords = {y: curr.$item.y + curr.$item.rows - 1, x: curr.$item.x + curr.$item.cols - 1};
+      const currCoords = { y: curr.$item.y + curr.$item.rows - 1, x: curr.$item.x + curr.$item.cols - 1 };
       if (GridsterUtils.compareItems(prev, currCoords) === 1) {
         return currCoords;
       } else {

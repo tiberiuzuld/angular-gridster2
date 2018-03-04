@@ -1,4 +1,4 @@
-import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
+import { GridsterItemComponentInterface } from './gridsterItemComponent.interface';
 
 export interface GridsterItem {
   x?: number;
@@ -17,4 +17,6 @@ export interface GridsterItem {
   maxItemArea?: number;
 
   [propName: string]: any;
+
+  isSelected?: boolean;
 }
