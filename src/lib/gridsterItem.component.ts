@@ -1,4 +1,7 @@
-import { Component, ElementRef, Host, Input, OnDestroy, OnInit, Renderer2, ViewEncapsulation, HostBinding, NgZone, HostListener } from '@angular/core';
+import {
+  Component, ElementRef, Host, Input, OnDestroy, OnInit, Renderer2, ViewEncapsulation,
+  HostBinding, NgZone, HostListener
+} from '@angular/core';
 
 import { GridsterItem } from './gridsterItem.interface';
 import { GridsterComponent } from './gridster.component';
@@ -89,6 +92,8 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
     delete this.drag;
     this.resize.destroy();
     delete this.resize;
+
+    delete this.select;
   }
 
   setSize(): void {
