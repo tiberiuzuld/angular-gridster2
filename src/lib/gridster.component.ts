@@ -3,6 +3,7 @@ import {
   Component,
   ElementRef,
   Input,
+  NgZone,
   OnChanges,
   OnDestroy,
   OnInit,
@@ -49,7 +50,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
   emptyCell: GridsterEmptyCell;
   compact: GridsterCompact;
 
-  constructor(el: ElementRef, public renderer: Renderer2, public cdRef: ChangeDetectorRef) {
+  constructor(el: ElementRef, public renderer: Renderer2, public cdRef: ChangeDetectorRef, public zone: NgZone) {
     this.el = el.nativeElement;
     this.$options = JSON.parse(JSON.stringify(GridsterConfigService));
     this.calculateLayoutDebounce = GridsterUtils.debounce(this.calculateLayout.bind(this), 0);
