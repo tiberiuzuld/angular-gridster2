@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, NgZone} from '@angular/core';
 
 import {GridsterSwap} from './gridsterSwap.service';
 import {GridsterPush} from './gridsterPush.service';
@@ -43,7 +43,7 @@ export class GridsterDraggable {
   swap: GridsterSwap;
   path: Array<{ x: number, y: number }>;
 
-  constructor(gridsterItem: GridsterItemComponentInterface, gridster: GridsterComponentInterface) {
+  constructor(gridsterItem: GridsterItemComponentInterface, gridster: GridsterComponentInterface, private zone: NgZone) {
     this.gridsterItem = gridsterItem;
     this.gridster = gridster;
     this.lastMouse = {
@@ -86,12 +86,14 @@ export class GridsterDraggable {
     this.dragFunction = this.dragMove.bind(this);
     this.dragStopFunction = this.dragStop.bind(this);
 
-    this.mousemove = this.gridsterItem.renderer.listen('document', 'mousemove', this.dragFunction);
-    this.mouseup = this.gridsterItem.renderer.listen('document', 'mouseup', this.dragStopFunction);
-    this.cancelOnBlur = this.gridsterItem.renderer.listen('window', 'blur', this.dragStopFunction);
-    this.touchmove = this.gridster.renderer.listen(this.gridster.el, 'touchmove', this.dragFunction);
-    this.touchend = this.gridsterItem.renderer.listen('document', 'touchend', this.dragStopFunction);
-    this.touchcancel = this.gridsterItem.renderer.listen('document', 'touchcancel', this.dragStopFunction);
+    this.zone.runOutsideAngular(() => {
+      this.mousemove = this.gridsterItem.renderer.listen('document', 'mousemove', this.dragFunction);
+      this.mouseup = this.gridsterItem.renderer.listen('document', 'mouseup', this.dragStopFunction);
+      this.cancelOnBlur = this.gridsterItem.renderer.listen('window', 'blur', this.dragStopFunction);
+      this.touchmove = this.gridster.renderer.listen(this.gridster.el, 'touchmove', this.dragFunction);
+      this.touchend = this.gridsterItem.renderer.listen('document', 'touchend', this.dragStopFunction);
+      this.touchcancel = this.gridsterItem.renderer.listen('document', 'touchcancel', this.dragStopFunction);
+    });
     this.gridsterItem.renderer.addClass(this.gridsterItem.el, 'gridster-item-moving');
     this.margin = this.gridster.$options.margin;
     this.offsetLeft = this.gridster.el.scrollLeft - this.gridster.el.offsetLeft;
@@ -122,7 +124,9 @@ export class GridsterDraggable {
 
     this.lastMouse.clientX = e.clientX;
     this.lastMouse.clientY = e.clientY;
-    this.gridster.updateGrid();
+    this.zone.run(() => {
+      this.gridster.updateGrid();
+    });
   }
 
   calculateItemPositionFromMousePosition(e: any): void {

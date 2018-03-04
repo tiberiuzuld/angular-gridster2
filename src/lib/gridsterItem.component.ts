@@ -1,4 +1,4 @@
-import {Component, ElementRef, Host, Input, OnDestroy, OnInit, Renderer2, ViewEncapsulation} from '@angular/core';
+import {Component, ElementRef, Host, Input, NgZone, OnDestroy, OnInit, Renderer2, ViewEncapsulation} from '@angular/core';
 
 import {GridsterItem} from './gridsterItem.interface';
 import {GridsterComponent} from './gridster.component';
@@ -28,7 +28,7 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
   notPlaced: boolean;
   init: boolean;
 
-  constructor(el: ElementRef, @Host() gridster: GridsterComponent, public renderer: Renderer2) {
+  constructor(el: ElementRef, @Host() gridster: GridsterComponent, public renderer: Renderer2, private zone: NgZone) {
     this.el = el.nativeElement;
     this.$item = {
       cols: -1,
@@ -37,8 +37,8 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
       y: -1,
     };
     this.gridster = gridster;
-    this.drag = new GridsterDraggable(this, gridster);
-    this.resize = new GridsterResizable(this, gridster);
+    this.drag = new GridsterDraggable(this, gridster, this.zone);
+    this.resize = new GridsterResizable(this, gridster, this.zone);
   }
 
   ngOnInit(): void {
