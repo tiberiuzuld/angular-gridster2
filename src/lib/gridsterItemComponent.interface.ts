@@ -1,9 +1,9 @@
-import {GridsterItem} from './gridsterItem.interface';
-import {GridsterDraggable} from './gridsterDraggable.service';
-import {Renderer2} from '@angular/core';
-import {GridsterItemS} from './gridsterItemS.interface';
-import {GridsterResizable} from './gridsterResizable.service';
-import {GridsterComponentInterface} from './gridster.interface';
+import { GridsterItem } from './gridsterItem.interface';
+import { GridsterDraggable } from './gridsterDraggable.service';
+import { Renderer2 } from '@angular/core';
+import { GridsterItemS } from './gridsterItemS.interface';
+import { GridsterResizable } from './gridsterResizable.service';
+import { GridsterComponentInterface } from './gridster.interface';
 
 export abstract class GridsterItemComponentInterface {
   item: GridsterItem;
@@ -24,4 +24,5 @@ export abstract class GridsterItemComponentInterface {
   el: any;
   gridster: GridsterComponentInterface;
   renderer: Renderer2;
+  isSelected: boolean;
 }

@@ -97,3 +97,9 @@ gridster-item.gridster-item-resizing, gridster-item.gridster-item-moving {
 gridster-item:hover .gridster-item-resizable-handler.handle-se {
   border-color: transparent transparent #ccc
 }
+
+.gridster-item-selected {
+  border: black;
+  border-width: 2px;
+  border-style: dotted;
+}
