@@ -73,12 +73,12 @@ export class GridsterUtils {
     }
   }
 
-  static compareItems(item1: { x: number, y: number }, item2: { x: number, y: number }): number {
-    if (item1.y > item2.y) {
+  static compareItems(a: { x: number, y: number }, b: { x: number, y: number }): number {
+    if (a.y > b.y) {
       return -1;
-    } else if (item1.y < item2.y) {
+    } else if (a.y < b.y) {
       return 1;
-    } else if (item1.x > item2.x) {
+    } else if (a.x > b.x) {
       return -1;
     } else {
       return 1;
