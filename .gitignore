@@ -4,6 +4,9 @@
 /demo
 /.tmp
 /dist
+/dist-server
+/tmp
+/out-tsc
 
 # dependencies
 /node_modules
@@ -27,9 +30,10 @@
 # misc
 /.sass-cache
 /connect.lock
-/coverage/*
+/coverage
 /libpeerconnection.log
 npm-debug.log
+yarn-error.log
 testem.log
 /typings
 
@@ -37,6 +41,6 @@ testem.log
 /e2e/*.js
 /e2e/*.map
 
-#System Files
+# System Files
 .DS_Store
 Thumbs.db
