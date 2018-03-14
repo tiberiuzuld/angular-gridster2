@@ -1,11 +1,22 @@
 gridster {
   position: relative;
-  display: grid;
   box-sizing: border-box;
   background: grey;
   width: 100%;
   height: 100%;
   user-select: none;
+}
+
+gridster.grid {
+  display: grid;
+}
+
+gridster.absolute {
+  display: block;
+}
+
+gridster.absolute gridster-item, gridster.absolute .gridster-column, gridster.absolute .gridster-row, gridster.absolute gridster-preview {
+  position: absolute;
 }
 
 gridster.fit {
@@ -28,9 +39,12 @@ gridster.fixed {
 }
 
 gridster.mobile {
-  grid-auto-rows: 25%;
   overflow-x: hidden;
   overflow-y: auto;
+}
+
+gridster.grid.mobile {
+  grid-auto-rows: 25%;
 }
 
 gridster.mobile gridster-item {

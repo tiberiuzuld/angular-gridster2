@@ -9,6 +9,10 @@ gridster-item {
   user-select: text;
 }
 
+gridster.absolute {
+  position: absolute;
+}
+
 gridster-item.gridster-item-moving {
   cursor: move;
 }

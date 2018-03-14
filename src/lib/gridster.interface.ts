@@ -38,4 +38,6 @@ export abstract class GridsterComponentInterface {
   emptyCell: GridsterEmptyCell;
   compact: GridsterCompact;
   zone: NgZone;
+  gridRows: Array<number>;
+  gridColumns: Array<number>;
 }

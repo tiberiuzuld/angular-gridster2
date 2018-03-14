@@ -1,7 +1,8 @@
-import {GridsterConfig} from './gridsterConfig.interface';
+import {CompactType, DisplayGrid, GridRenderer, GridsterConfig, GridType} from './gridsterConfig.interface';
 
 export const GridsterConfigService: GridsterConfig = {
-  gridType: 'fit', // 'fit' will fit the items in the container without scroll;
+  gridRenderer: GridRenderer.Absolute,
+  gridType: GridType.Fit, // 'fit' will fit the items in the container without scroll;
   // 'scrollVertical' will fit on width and height of the items will be the same as the width
   // 'scrollHorizontal' will fit on height and width of the items will be the same as the height
   // 'fixed' will set the rows and columns dimensions based on fixedColWidth and fixedRowHeight options
@@ -11,7 +12,7 @@ export const GridsterConfigService: GridsterConfig = {
   fixedRowHeight: 250, // fixed row height for gridType: 'fixed'
   keepFixedHeightInMobile: false, // keep the height from fixed gridType in mobile layout
   keepFixedWidthInMobile: false, // keep the width from fixed gridType in mobile layout
-  compactType: 'none', // compact items: 'none' | 'compactUp' | 'compactLeft' | 'compactUp&Left' | 'compactLeft&Up'
+  compactType: CompactType.None, // compact items: 'none' | 'compactUp' | 'compactLeft' | 'compactUp&Left' | 'compactLeft&Up'
   mobileBreakpoint: 640, // if the screen is not wider that this, remove the grid layout and stack the items
   minCols: 1, // minimum amount of columns in the grid
   maxCols: 100, // maximum amount of columns in the grid
@@ -87,7 +88,7 @@ export const GridsterConfigService: GridsterConfig = {
   disablePushOnResize: false, // disable push on resize
   pushDirections: {north: true, east: true, south: true, west: true}, // control the directions items are pushed
   pushResizeItems: false, // on resize of item will shrink adjacent items
-  displayGrid: 'onDrag&Resize', // display background grid of rows and columns
+  displayGrid: DisplayGrid.OnDragAndResize, // display background grid of rows and columns
   disableWindowResize: false, // disable the window on resize listener. This will stop grid to recalculate on window resize.
   disableWarnings: false, // disable console log warnings about misplacement of grid items
   scrollToNewItems: false // scroll to new items placed in a scrollable view

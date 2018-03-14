@@ -1,10 +1,12 @@
 import {Injectable, NgZone} from '@angular/core';
 
 import {GridsterSwap} from './gridsterSwap.service';
+import {cancelScroll, scroll} from './gridsterScroll.service';
 import {GridsterPush} from './gridsterPush.service';
 import {GridsterUtils} from './gridsterUtils.service';
 import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
 import {GridsterComponentInterface} from './gridster.interface';
+import {GridRenderer} from './gridsterConfig.interface';
 
 @Injectable()
 export class GridsterDraggable {
@@ -88,12 +90,12 @@ export class GridsterDraggable {
 
     this.zone.runOutsideAngular(() => {
       this.mousemove = this.gridsterItem.renderer.listen('document', 'mousemove', this.dragFunction);
-      this.mouseup = this.gridsterItem.renderer.listen('document', 'mouseup', this.dragStopFunction);
-      this.cancelOnBlur = this.gridsterItem.renderer.listen('window', 'blur', this.dragStopFunction);
       this.touchmove = this.gridster.renderer.listen(this.gridster.el, 'touchmove', this.dragFunction);
-      this.touchend = this.gridsterItem.renderer.listen('document', 'touchend', this.dragStopFunction);
-      this.touchcancel = this.gridsterItem.renderer.listen('document', 'touchcancel', this.dragStopFunction);
     });
+    this.mouseup = this.gridsterItem.renderer.listen('document', 'mouseup', this.dragStopFunction);
+    this.cancelOnBlur = this.gridsterItem.renderer.listen('window', 'blur', this.dragStopFunction);
+    this.touchend = this.gridsterItem.renderer.listen('document', 'touchend', this.dragStopFunction);
+    this.touchcancel = this.gridsterItem.renderer.listen('document', 'touchcancel', this.dragStopFunction);
     this.gridsterItem.renderer.addClass(this.gridsterItem.el, 'gridster-item-moving');
     this.margin = this.gridster.$options.margin;
     this.offsetLeft = this.gridster.el.scrollLeft - this.gridster.el.offsetLeft;
@@ -119,6 +121,10 @@ export class GridsterDraggable {
     GridsterUtils.checkTouchEvent(e);
     this.offsetLeft = this.gridster.el.scrollLeft - this.gridster.el.offsetLeft;
     this.offsetTop = this.gridster.el.scrollTop - this.gridster.el.offsetTop;
+    if (this.gridster.$options.gridRenderer === GridRenderer.Absolute) {
+      scroll(this.gridster, this.left, this.top, this.width, this.height, e, this.lastMouse,
+        this.calculateItemPositionFromMousePosition.bind(this));
+    }
 
     this.calculateItemPositionFromMousePosition(e);
 
@@ -130,8 +136,12 @@ export class GridsterDraggable {
   }
 
   calculateItemPositionFromMousePosition(e: any): void {
-    this.left = e.clientX + this.offsetLeft - this.margin - this.diffLeft;
-    this.top = e.clientY + this.offsetTop - this.margin - this.diffTop;
+    this.left = e.clientX + this.offsetLeft - this.diffLeft;
+    this.top = e.clientY + this.offsetTop - this.diffTop;
+    if (this.gridster.$options.gridRenderer === GridRenderer.Grid) {
+      this.left -= this.margin;
+      this.top -= this.margin;
+    }
     this.calculateItemPosition();
   }
 
@@ -139,6 +149,7 @@ export class GridsterDraggable {
     e.stopPropagation();
     e.preventDefault();
 
+    cancelScroll();
     this.cancelOnBlur();
     this.mousemove();
     this.mouseup();

@@ -7,6 +7,7 @@ import {GridsterResizable} from './gridsterResizable.service';
 import {GridsterUtils} from './gridsterUtils.service';
 import {GridsterItemS} from './gridsterItemS.interface';
 import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
+import {GridRenderer} from './gridsterConfig.interface';
 
 @Component({
   selector: 'gridster-item',
@@ -75,17 +76,7 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
 
   setSize(): void {
     this.renderer.setStyle(this.el, 'display', this.notPlaced ? null : 'block');
-    if (this.gridster.mobile) {
-      this.renderer.setStyle(this.el, 'grid-column-start', null);
-      this.renderer.setStyle(this.el, 'grid-column-end', null);
-      this.renderer.setStyle(this.el, 'grid-row-start', null);
-      this.renderer.setStyle(this.el, 'grid-row-end', null);
-    } else {
-      this.renderer.setStyle(this.el, 'grid-column-start', (this.$item.x + 1));
-      this.renderer.setStyle(this.el, 'grid-column-end', ((this.$item.x + 1) + this.$item.cols));
-      this.renderer.setStyle(this.el, 'grid-row-start', (this.$item.y + 1));
-      this.renderer.setStyle(this.el, 'grid-row-end', ((this.$item.y + 1) + this.$item.rows));
-    }
+    this.gridster.gridRenderer.updateItem(this.el, this.$item, this.renderer);
     const height = this.el.offsetHeight;
     const width = this.el.offsetWidth;
 
@@ -106,9 +97,9 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
         this.gridster.options.itemResizeCallback(this.item, this);
       }
     }
-
-    this.top = this.el.offsetTop;
-    this.left = this.el.offsetLeft;
+    const rect = this.el.getBoundingClientRect();
+    this.top = rect.y;
+    this.left = rect.x;
     this.width = width;
     this.height = height;
   }

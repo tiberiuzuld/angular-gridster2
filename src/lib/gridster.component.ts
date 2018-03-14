@@ -21,6 +21,7 @@ import {GridsterConfigS} from './gridsterConfigS.interface';
 import {GridsterItemS} from './gridsterItemS.interface';
 import {GridsterComponentInterface} from './gridster.interface';
 import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
+import {GridsterRenderer} from './gridsterRenderer.service';
 
 @Component({
   selector: 'gridster',
@@ -49,6 +50,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
   dragInProgress: boolean;
   emptyCell: GridsterEmptyCell;
   compact: GridsterCompact;
+  gridRenderer: GridsterRenderer;
 
   constructor(el: ElementRef, public renderer: Renderer2, public cdRef: ChangeDetectorRef, public zone: NgZone) {
     this.el = el.nativeElement;
@@ -63,6 +65,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     this.dragInProgress = false;
     this.emptyCell = new GridsterEmptyCell(this);
     this.compact = new GridsterCompact(this);
+    this.gridRenderer = new GridsterRenderer(this);
   }
 
   static checkCollisionTwoItems(item: GridsterItemS, item2: GridsterItemS): boolean {
@@ -254,71 +257,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
       this.renderer.setStyle(this.el, 'padding-top', 0 + 'px');
       this.renderer.setStyle(this.el, 'padding-bottom', 0 + 'px');
     }
-    this.renderer.setStyle(this.el, 'grid-gap', this.$options.margin + 'px');
-    let addClass = '';
-    let removeClass1 = '';
-    let removeClass2 = '';
-    let removeClass3 = '';
-    if (this.$options.gridType === 'fit') {
-      this.renderer.setStyle(this.el, 'grid-auto-rows', '1fr');
-      this.renderer.setStyle(this.el, 'grid-auto-columns', '1fr');
-      addClass = 'fit';
-      removeClass1 = 'scrollVertical';
-      removeClass2 = 'scrollHorizontal';
-      removeClass3 = 'fixed';
-    } else if (this.$options.gridType === 'scrollVertical') {
-      this.curRowHeight = this.curColWidth;
-      this.renderer.setStyle(this.el, 'grid-auto-rows', (this.curRowHeight - this.$options.margin) + 'px');
-      this.renderer.setStyle(this.el, 'grid-auto-columns', '1fr');
-      addClass = 'scrollVertical';
-      removeClass1 = 'fit';
-      removeClass2 = 'scrollHorizontal';
-      removeClass3 = 'fixed';
-    } else if (this.$options.gridType === 'scrollHorizontal') {
-      this.curColWidth = this.curRowHeight;
-      this.renderer.setStyle(this.el, 'grid-auto-rows', '1fr');
-      this.renderer.setStyle(this.el, 'grid-auto-columns', (this.curColWidth - this.$options.margin) + 'px');
-      addClass = 'scrollHorizontal';
-      removeClass1 = 'fit';
-      removeClass2 = 'scrollVertical';
-      removeClass3 = 'fixed';
-    } else if (this.$options.gridType === 'fixed') {
-      this.curColWidth = this.$options.fixedColWidth;
-      this.curRowHeight = this.$options.fixedRowHeight;
-      this.renderer.setStyle(this.el, 'grid-auto-rows', this.curRowHeight + 'px');
-      this.renderer.setStyle(this.el, 'grid-auto-columns', this.curColWidth + 'px');
-      addClass = 'fixed';
-      removeClass1 = 'fit';
-      removeClass2 = 'scrollVertical';
-      removeClass3 = 'scrollHorizontal';
-    } else if (this.$options.gridType === 'verticalFixed') {
-      this.curRowHeight = this.$options.fixedRowHeight;
-      this.renderer.setStyle(this.el, 'grid-auto-rows', this.curRowHeight + 'px');
-      this.renderer.setStyle(this.el, 'grid-auto-columns', '1fr');
-      addClass = 'scrollVertical';
-      removeClass1 = 'fit';
-      removeClass2 = 'scrollHorizontal';
-      removeClass3 = 'fixed';
-    } else if (this.$options.gridType === 'horizontalFixed') {
-      this.curColWidth = this.$options.fixedColWidth;
-      this.renderer.setStyle(this.el, 'grid-auto-rows', '1fr');
-      this.renderer.setStyle(this.el, 'grid-auto-columns', this.curColWidth + 'px');
-      addClass = 'scrollHorizontal';
-      removeClass1 = 'fit';
-      removeClass2 = 'scrollVertical';
-      removeClass3 = 'fixed';
-    }
-
-    if (this.mobile) {
-      this.renderer.setStyle(this.el, 'grid-auto-rows', null);
-      this.renderer.setStyle(this.el, 'grid-auto-columns', null);
-      this.renderer.removeClass(this.el, addClass);
-    } else {
-      this.renderer.addClass(this.el, addClass);
-    }
-    this.renderer.removeClass(this.el, removeClass1);
-    this.renderer.removeClass(this.el, removeClass2);
-    this.renderer.removeClass(this.el, removeClass3);
+    this.gridRenderer.updateGridster();
 
     this.updateGrid();
 

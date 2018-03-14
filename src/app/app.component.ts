@@ -9,6 +9,7 @@ import {
   GridsterItemComponentInterface,
   GridType
 } from '../lib';
+import {GridRenderer} from '../lib/gridsterConfig.interface';
 
 @Component({
   selector: 'gridster-root',
@@ -57,6 +58,7 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.options = {
       gridType: GridType.Fit,
+      gridRenderer: GridRenderer.Absolute,
       compactType: CompactType.None,
       initCallback: AppComponent.gridInit,
       destroyCallback: AppComponent.gridDestroy,
