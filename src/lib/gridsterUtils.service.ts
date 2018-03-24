@@ -63,7 +63,7 @@ export class GridsterUtils {
   }
 
   static checkContentClass(target: any, current: any, contentClass: string): boolean {
-    if (target === current) {
+    if (!target || target === current) {
       return false;
     }
     if (target.hasAttribute('class') && target.getAttribute('class').split(' ').indexOf(contentClass) > -1) {
