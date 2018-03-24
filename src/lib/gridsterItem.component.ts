@@ -1,12 +1,12 @@
 import {Component, ElementRef, Host, Input, NgZone, OnDestroy, OnInit, Renderer2, ViewEncapsulation} from '@angular/core';
 
 import {GridsterItem} from './gridsterItem.interface';
-import {GridsterComponent} from './gridster.component';
 import {GridsterDraggable} from './gridsterDraggable.service';
 import {GridsterResizable} from './gridsterResizable.service';
 import {GridsterUtils} from './gridsterUtils.service';
 import {GridsterItemS} from './gridsterItemS.interface';
 import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
+import {GridsterComponent} from './gridster.component';
 
 @Component({
   selector: 'gridster-item',
@@ -39,7 +39,6 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
     this.gridster = gridster;
     this.drag = new GridsterDraggable(this, gridster, this.zone);
     this.resize = new GridsterResizable(this, gridster, this.zone);
-    this.renderer.listen(this.el, 'transitionend', this.updateItemSize.bind(this));
   }
 
   ngOnInit(): void {
@@ -81,9 +80,10 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
   }
 
   updateItemSize() {
-    const rect = this.el.getBoundingClientRect();
-    const width = Math.round(rect.width);
-    const height = Math.round(rect.height);
+    const top = this.$item.y * this.gridster.curRowHeight;
+    const left = this.$item.x * this.gridster.curColWidth;
+    const width = this.$item.cols * this.gridster.curColWidth - this.gridster.$options.margin;
+    const height = this.$item.rows * this.gridster.curRowHeight - this.gridster.$options.margin;
 
     if (!this.init && width > 0 && height > 0) {
       this.init = true;
@@ -104,8 +104,8 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
         this.gridster.options.itemResizeCallback(this.item, this);
       }
     }
-    this.top = rect.y;
-    this.left = rect.x;
+    this.top = top;
+    this.left = left;
   }
 
   itemChanged(): void {

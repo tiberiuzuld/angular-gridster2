@@ -6,7 +6,6 @@ import {GridsterPush} from './gridsterPush.service';
 import {GridsterUtils} from './gridsterUtils.service';
 import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
 import {GridsterComponentInterface} from './gridster.interface';
-import {GridRenderer} from './gridsterConfig.interface';
 
 @Injectable()
 export class GridsterDraggable {
@@ -100,8 +99,8 @@ export class GridsterDraggable {
     this.margin = this.gridster.$options.margin;
     this.offsetLeft = this.gridster.el.scrollLeft - this.gridster.el.offsetLeft;
     this.offsetTop = this.gridster.el.scrollTop - this.gridster.el.offsetTop;
-    this.left = this.gridsterItem.left;
-    this.top = this.gridsterItem.top;
+    this.left = this.gridsterItem.left - this.margin;
+    this.top = this.gridsterItem.top - this.margin;
     this.width = this.gridsterItem.width;
     this.height = this.gridsterItem.height;
     this.diffLeft = e.clientX + this.offsetLeft - this.margin - this.left;
@@ -121,10 +120,8 @@ export class GridsterDraggable {
     GridsterUtils.checkTouchEvent(e);
     this.offsetLeft = this.gridster.el.scrollLeft - this.gridster.el.offsetLeft;
     this.offsetTop = this.gridster.el.scrollTop - this.gridster.el.offsetTop;
-    if (this.gridster.$options.gridRenderer === GridRenderer.Absolute) {
-      scroll(this.gridster, this.left, this.top, this.width, this.height, e, this.lastMouse,
-        this.calculateItemPositionFromMousePosition.bind(this));
-    }
+    scroll(this.gridster, this.left, this.top, this.width, this.height, e, this.lastMouse,
+      this.calculateItemPositionFromMousePosition.bind(this));
 
     this.calculateItemPositionFromMousePosition(e);
   }
@@ -132,10 +129,6 @@ export class GridsterDraggable {
   calculateItemPositionFromMousePosition(e: any): void {
     this.left = e.clientX + this.offsetLeft - this.diffLeft;
     this.top = e.clientY + this.offsetTop - this.diffTop;
-    if (this.gridster.$options.gridRenderer === GridRenderer.Grid) {
-      this.left -= this.margin;
-      this.top -= this.margin;
-    }
     this.calculateItemPosition();
     this.lastMouse.clientX = e.clientX;
     this.lastMouse.clientY = e.clientY;
@@ -155,12 +148,7 @@ export class GridsterDraggable {
     this.touchmove();
     this.touchend();
     this.touchcancel();
-    this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'top', null);
-    this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'left', null);
-    if (this.gridster.$options.gridRenderer === GridRenderer.Absolute) {
-      const transform = 'translate3d(' + (this.left - this.margin) + 'px, ' + (this.top - this.margin) + 'px, 0)';
-      this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'transform', transform);
-    }
+    this.gridsterItem.renderer.removeClass(this.gridsterItem.el, 'gridster-item-moving');
     this.gridster.dragInProgress = false;
     this.gridster.updateGrid();
     this.path = [];
@@ -171,7 +159,6 @@ export class GridsterDraggable {
       this.makeDrag();
     }
     setTimeout(() => {
-      this.gridsterItem.renderer.removeClass(this.gridsterItem.el, 'gridster-item-moving');
       if (this.gridster) {
         this.gridster.movingItem = null;
         this.gridster.previewStyle(true);
@@ -192,6 +179,7 @@ export class GridsterDraggable {
   }
 
   makeDrag() {
+    this.gridsterItem.setSize();
     this.gridsterItem.checkItemChanges(this.gridsterItem.$item, this.gridsterItem.item);
     this.push.setPushedItems();
     this.swap.setSwapItem();
@@ -209,15 +197,13 @@ export class GridsterDraggable {
     this.gridsterItem.$item.x = this.positionX;
     if (this.gridster.checkGridCollision(this.gridsterItem.$item)) {
       this.gridsterItem.$item.x = this.positionXBackup;
-    } else {
-      this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'left', (this.left - this.gridsterItem.left) + 'px');
     }
     this.gridsterItem.$item.y = this.positionY;
     if (this.gridster.checkGridCollision(this.gridsterItem.$item)) {
       this.gridsterItem.$item.y = this.positionYBackup;
-    } else {
-      this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'top', (this.top - this.gridsterItem.top) + 'px');
     }
+    const transform = 'translate(' + this.left + 'px, ' + this.top + 'px)';
+    this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'transform', transform);
 
     if (this.positionXBackup !== this.gridsterItem.$item.x || this.positionYBackup !== this.gridsterItem.$item.y) {
       const lastPosition = this.path[this.path.length - 1];

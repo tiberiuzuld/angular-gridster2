@@ -1,7 +1,6 @@
-import {CompactType, DisplayGrid, GridRenderer, GridsterConfig, GridType} from './gridsterConfig.interface';
+import {CompactType, DisplayGrid, GridsterConfig, GridType} from './gridsterConfig.interface';
 
 export const GridsterConfigService: GridsterConfig = {
-  gridRenderer: GridRenderer.Absolute,
   gridType: GridType.Fit, // 'fit' will fit the items in the container without scroll;
   // 'scrollVertical' will fit on width and height of the items will be the same as the width
   // 'scrollHorizontal' will fit on height and width of the items will be the same as the height

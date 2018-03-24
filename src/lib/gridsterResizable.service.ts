@@ -7,7 +7,6 @@ import {GridsterUtils} from './gridsterUtils.service';
 import {GridsterPushResize} from './gridsterPushResize.service';
 import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
 import {GridsterComponentInterface} from './gridster.interface';
-import {GridRenderer} from './gridsterConfig.interface';
 
 @Injectable()
 export class GridsterResizable {
@@ -158,10 +157,8 @@ export class GridsterResizable {
     GridsterUtils.checkTouchEvent(e);
     this.offsetTop = this.gridster.el.scrollTop - this.gridster.el.offsetTop;
     this.offsetLeft = this.gridster.el.scrollLeft - this.gridster.el.offsetLeft;
-    if (this.gridster.$options.gridRenderer === GridRenderer.Absolute) {
-      scroll(this.gridster, this.left, this.top, this.width, this.height, e, this.lastMouse, this.directionFunction.bind(this), true,
-        this.resizeEventScrollType);
-    }
+    scroll(this.gridster, this.left, this.top, this.width, this.height, e, this.lastMouse, this.directionFunction.bind(this), true,
+      this.resizeEventScrollType);
     this.directionFunction(e);
 
     this.lastMouse.clientX = e.clientX;
@@ -181,15 +178,6 @@ export class GridsterResizable {
     this.touchmove();
     this.touchend();
     this.touchcancel();
-    this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'top', null);
-    this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'left', null);
-    if (this.gridster.$options.gridRenderer === GridRenderer.Absolute) {
-      const transform = 'translate3d(' + (this.left - this.margin) + 'px, ' + (this.top - this.margin) + 'px, 0)';
-      this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'transform', transform);
-    } else {
-      this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'width', null);
-      this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'height', null);
-    }
     this.gridster.dragInProgress = false;
     this.gridster.updateGrid();
     if (this.gridster.options.resizable && this.gridster.options.resizable.stop) {
@@ -222,6 +210,7 @@ export class GridsterResizable {
   }
 
   makeResize(): void {
+    this.gridsterItem.setSize();
     this.gridsterItem.checkItemChanges(this.gridsterItem.$item, this.gridsterItem.item);
     this.push.setPushedItems();
     this.pushResize.setPushedItems();
@@ -238,7 +227,7 @@ export class GridsterResizable {
       this.height = this.minHeight;
       this.top = this.bottom - this.minHeight;
     }
-    this.newPosition = this.gridster.pixelsToPositionY(this.top, Math.floor);
+    this.newPosition = this.gridster.pixelsToPositionY(this.top + this.margin, Math.floor);
     if (this.gridsterItem.$item.y !== this.newPosition) {
       this.itemBackup[1] = this.gridsterItem.$item.y;
       this.itemBackup[3] = this.gridsterItem.$item.rows;
@@ -249,7 +238,7 @@ export class GridsterResizable {
       if (this.gridster.checkCollision(this.gridsterItem.$item)) {
         this.gridsterItem.$item.y = this.itemBackup[1];
         this.gridsterItem.$item.rows = this.itemBackup[3];
-        this.setItemTop(this.gridster.positionYToPixels(this.gridsterItem.$item.y) - this.gridsterItem.top);
+        this.setItemTop(this.gridster.positionYToPixels(this.gridsterItem.$item.y));
         this.setItemHeight(this.gridster.positionYToPixels(this.gridsterItem.$item.rows) - this.margin);
         return;
       } else {
@@ -258,7 +247,7 @@ export class GridsterResizable {
       this.pushResize.checkPushBack();
       this.push.checkPushBack();
     }
-    this.setItemTop(this.top - this.gridsterItem.top);
+    this.setItemTop(this.top);
     this.setItemHeight(this.height);
   }
 
@@ -269,7 +258,7 @@ export class GridsterResizable {
       this.width = this.minWidth;
       this.left = this.right - this.minWidth;
     }
-    this.newPosition = this.gridster.pixelsToPositionX(this.left, Math.floor);
+    this.newPosition = this.gridster.pixelsToPositionX(this.left + this.margin, Math.floor);
     if (this.gridsterItem.$item.x !== this.newPosition) {
       this.itemBackup[0] = this.gridsterItem.$item.x;
       this.itemBackup[2] = this.gridsterItem.$item.cols;
@@ -280,7 +269,7 @@ export class GridsterResizable {
       if (this.gridster.checkCollision(this.gridsterItem.$item)) {
         this.gridsterItem.$item.x = this.itemBackup[0];
         this.gridsterItem.$item.cols = this.itemBackup[2];
-        this.setItemLeft(this.gridster.positionXToPixels(this.gridsterItem.$item.x) - this.gridsterItem.left);
+        this.setItemLeft(this.gridster.positionXToPixels(this.gridsterItem.$item.x));
         this.setItemWidth(this.gridster.positionXToPixels(this.gridsterItem.$item.cols) - this.margin);
         return;
       } else {
@@ -289,7 +278,7 @@ export class GridsterResizable {
       this.pushResize.checkPushBack();
       this.push.checkPushBack();
     }
-    this.setItemLeft(this.left - this.gridsterItem.left);
+    this.setItemLeft(this.left);
     this.setItemWidth(this.width);
   }
 
@@ -299,7 +288,7 @@ export class GridsterResizable {
       this.height = this.minHeight;
     }
     this.bottom = this.top + this.height;
-    this.newPosition = this.gridster.pixelsToPositionY(this.bottom - this.margin, Math.ceil);
+    this.newPosition = this.gridster.pixelsToPositionY(this.bottom, Math.ceil);
     if ((this.gridsterItem.$item.y + this.gridsterItem.$item.rows) !== this.newPosition) {
       this.itemBackup[3] = this.gridsterItem.$item.rows;
       this.gridsterItem.$item.rows = this.newPosition - this.gridsterItem.$item.y;
@@ -324,7 +313,7 @@ export class GridsterResizable {
       this.width = this.minWidth;
     }
     this.right = this.left + this.width;
-    this.newPosition = this.gridster.pixelsToPositionX(this.right - this.margin, Math.ceil);
+    this.newPosition = this.gridster.pixelsToPositionX(this.right, Math.ceil);
     if ((this.gridsterItem.$item.x + this.gridsterItem.$item.cols) !== this.newPosition) {
       this.itemBackup[2] = this.gridsterItem.$item.cols;
       this.gridsterItem.$item.cols = this.newPosition - this.gridsterItem.$item.x;
@@ -401,17 +390,13 @@ export class GridsterResizable {
   }
 
   setItemTop(top: number): void {
-    if (this.gridster.$options.gridRenderer === GridRenderer.Absolute) {
-      top += this.margin;
-    }
-    this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'top', top + 'px');
+    const transform = 'translate(' + this.left + 'px, ' + top + 'px)';
+    this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'transform', transform);
   }
 
   setItemLeft(left: number): void {
-    if (this.gridster.$options.gridRenderer === GridRenderer.Absolute) {
-      left += this.margin;
-    }
-    this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'left', left + 'px');
+    const transform = 'translate(' + left + 'px, ' + this.top + 'px)';
+    this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'transform', transform);
   }
 
   setItemHeight(height: number): void {

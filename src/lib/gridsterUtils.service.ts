@@ -7,7 +7,7 @@ export class GridsterUtils {
 
   static merge(obj1: any, obj2: any, properties: any) {
     for (const p in obj2) {
-     if (obj2[p] !== void 0 && properties.hasOwnProperty(p)) {
+      if (obj2[p] !== void 0 && properties.hasOwnProperty(p)) {
         if (typeof obj2[p] === 'object') {
           obj1[p] = GridsterUtils.merge(obj1[p], obj2[p], properties[p]);
         } else {

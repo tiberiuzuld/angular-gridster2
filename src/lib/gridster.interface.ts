@@ -5,6 +5,7 @@ import {GridsterCompact} from './gridsterCompact.service';
 import {GridsterConfig} from './gridsterConfig.interface';
 import {GridsterItemS} from './gridsterItemS.interface';
 import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
+import {GridsterRenderer} from './gridsterRenderer.service';
 
 export abstract class GridsterComponentInterface {
   $options: GridsterConfigS;
@@ -19,11 +20,14 @@ export abstract class GridsterComponentInterface {
   checkGridCollision: (item: GridsterItemS) => boolean;
   el: any;
   renderer: Renderer2;
+  gridRenderer: GridsterRenderer;
   cdRef: ChangeDetectorRef;
   options: GridsterConfig;
   calculateLayoutDebounce: () => void;
   updateGrid: () => void;
   movingItem: GridsterItemS | null;
+  addItem: (item: GridsterItemComponentInterface) => void;
+  removeItem: (item: GridsterItemComponentInterface) => void;
   previewStyle: (drag?: boolean) => void;
   mobile: boolean;
   curWidth: number;

@@ -5,7 +5,6 @@ import {GridsterComponentInterface} from './gridster.interface';
 export type gridTypes = 'fit' | 'scrollVertical' | 'scrollHorizontal' | 'fixed' | 'verticalFixed' | 'horizontalFixed';
 export type displayGrids = 'always' | 'onDrag&Resize' | 'none';
 export type compactTypes = 'none' | 'compactUp' | 'compactLeft' | 'compactUp&Left' | 'compactLeft&Up';
-export type gridRenderer = 'grid' | 'absolute';
 
 export enum GridType {
   Fit = 'fit',
@@ -14,11 +13,6 @@ export enum GridType {
   Fixed = 'fixed',
   VerticalFixed = 'verticalFixed',
   HorizontalFixed = 'horizontalFixed'
-}
-
-export enum GridRenderer {
-  Grid = 'grid',
-  Absolute = 'absolute'
 }
 
 export enum DisplayGrid {
@@ -37,7 +31,6 @@ export enum CompactType {
 
 export interface GridsterConfig {
   gridType?: gridTypes;
-  gridRenderer?: gridRenderer;
   fixedColWidth?: number;
   fixedRowHeight?: number;
   keepFixedHeightInMobile?: boolean;
