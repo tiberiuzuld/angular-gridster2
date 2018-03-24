@@ -181,11 +181,15 @@ export class GridsterResizable {
     this.touchmove();
     this.touchend();
     this.touchcancel();
-    this.gridsterItem.renderer.removeClass(this.gridsterItem.el, 'gridster-item-resizing');
     this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'top', null);
     this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'left', null);
-    this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'width', null);
-    this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'height', null);
+    if (this.gridster.$options.gridRenderer === GridRenderer.Absolute) {
+      const transform = 'translate3d(' + (this.left - this.margin) + 'px, ' + (this.top - this.margin) + 'px, 0)';
+      this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'transform', transform);
+    } else {
+      this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'width', null);
+      this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'height', null);
+    }
     this.gridster.dragInProgress = false;
     this.gridster.updateGrid();
     if (this.gridster.options.resizable && this.gridster.options.resizable.stop) {
@@ -195,6 +199,7 @@ export class GridsterResizable {
       this.makeResize();
     }
     setTimeout(() => {
+      this.gridsterItem.renderer.removeClass(this.gridsterItem.el, 'gridster-item-resizing');
       if (this.gridster) {
         this.gridster.movingItem = null;
         this.gridster.previewStyle();
@@ -218,7 +223,6 @@ export class GridsterResizable {
 
   makeResize(): void {
     this.gridsterItem.checkItemChanges(this.gridsterItem.$item, this.gridsterItem.item);
-    this.gridsterItem.setSize();
     this.push.setPushedItems();
     this.pushResize.setPushedItems();
     this.push.destroy();

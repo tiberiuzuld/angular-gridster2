@@ -7,7 +7,6 @@ import {GridsterResizable} from './gridsterResizable.service';
 import {GridsterUtils} from './gridsterUtils.service';
 import {GridsterItemS} from './gridsterItemS.interface';
 import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
-import {GridRenderer} from './gridsterConfig.interface';
 
 @Component({
   selector: 'gridster-item',
@@ -40,6 +39,7 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
     this.gridster = gridster;
     this.drag = new GridsterDraggable(this, gridster, this.zone);
     this.resize = new GridsterResizable(this, gridster, this.zone);
+    this.renderer.listen(this.el, 'transitionend', this.updateItemSize.bind(this));
   }
 
   ngOnInit(): void {
@@ -77,8 +77,13 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
   setSize(): void {
     this.renderer.setStyle(this.el, 'display', this.notPlaced ? null : 'block');
     this.gridster.gridRenderer.updateItem(this.el, this.$item, this.renderer);
-    const height = this.el.offsetHeight;
-    const width = this.el.offsetWidth;
+    this.updateItemSize();
+  }
+
+  updateItemSize() {
+    const rect = this.el.getBoundingClientRect();
+    const width = Math.round(rect.width);
+    const height = Math.round(rect.height);
 
     if (!this.init && width > 0 && height > 0) {
       this.init = true;
@@ -93,15 +98,14 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
       }
     }
     if (width !== this.width || height !== this.height) {
+      this.width = width;
+      this.height = height;
       if (this.gridster.options.itemResizeCallback) {
         this.gridster.options.itemResizeCallback(this.item, this);
       }
     }
-    const rect = this.el.getBoundingClientRect();
     this.top = rect.y;
     this.left = rect.x;
-    this.width = width;
-    this.height = height;
   }
 
   itemChanged(): void {
@@ -119,12 +123,13 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
       this.$item.y = oldValue.y || 0;
       this.$item.cols = oldValue.cols || 1;
       this.$item.rows = oldValue.rows || 1;
+      this.setSize();
     } else {
       this.item.cols = this.$item.cols;
       this.item.rows = this.$item.rows;
       this.item.x = this.$item.x;
       this.item.y = this.$item.y;
-      this.gridster.calculateLayout();
+      this.gridster.calculateLayoutDebounce();
       this.itemChanged();
     }
   }

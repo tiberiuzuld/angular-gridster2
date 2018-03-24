@@ -127,12 +127,6 @@ export class GridsterDraggable {
     }
 
     this.calculateItemPositionFromMousePosition(e);
-
-    this.lastMouse.clientX = e.clientX;
-    this.lastMouse.clientY = e.clientY;
-    this.zone.run(() => {
-      this.gridster.updateGrid();
-    });
   }
 
   calculateItemPositionFromMousePosition(e: any): void {
@@ -143,6 +137,11 @@ export class GridsterDraggable {
       this.top -= this.margin;
     }
     this.calculateItemPosition();
+    this.lastMouse.clientX = e.clientX;
+    this.lastMouse.clientY = e.clientY;
+    this.zone.run(() => {
+      this.gridster.updateGrid();
+    });
   }
 
   dragStop(e: any): void {
@@ -156,9 +155,12 @@ export class GridsterDraggable {
     this.touchmove();
     this.touchend();
     this.touchcancel();
-    this.gridsterItem.renderer.removeClass(this.gridsterItem.el, 'gridster-item-moving');
     this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'top', null);
     this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'left', null);
+    if (this.gridster.$options.gridRenderer === GridRenderer.Absolute) {
+      const transform = 'translate3d(' + (this.left - this.margin) + 'px, ' + (this.top - this.margin) + 'px, 0)';
+      this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'transform', transform);
+    }
     this.gridster.dragInProgress = false;
     this.gridster.updateGrid();
     this.path = [];
@@ -169,6 +171,7 @@ export class GridsterDraggable {
       this.makeDrag();
     }
     setTimeout(() => {
+      this.gridsterItem.renderer.removeClass(this.gridsterItem.el, 'gridster-item-moving');
       if (this.gridster) {
         this.gridster.movingItem = null;
         this.gridster.previewStyle(true);
@@ -190,7 +193,6 @@ export class GridsterDraggable {
 
   makeDrag() {
     this.gridsterItem.checkItemChanges(this.gridsterItem.$item, this.gridsterItem.item);
-    this.gridsterItem.setSize();
     this.push.setPushedItems();
     this.swap.setSwapItem();
     this.push.destroy();

@@ -56,7 +56,8 @@ export class GridsterRenderer {
 
   updateGridster() {
     this.gridster.renderer.addClass(this.gridster.el, this.gridster.$options.gridRenderer);
-    this.gridster.renderer.removeClass(this.gridster.el, this.gridster.$options.gridRenderer === GridRenderer.Grid ? GridRenderer.Absolute : GridRenderer.Grid);
+    const removeClass = this.gridster.$options.gridRenderer === GridRenderer.Grid ? GridRenderer.Absolute : GridRenderer.Grid;
+    this.gridster.renderer.removeClass(this.gridster.el, removeClass);
 
     if (this.gridster.$options.gridRenderer === GridRenderer.Grid) {
       this.gridster.renderer.setStyle(this.gridster.el, 'grid-gap', this.gridster.$options.margin + 'px');
