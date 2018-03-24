@@ -3,7 +3,7 @@ gridster-item {
   z-index: 1;
   position: relative;
   overflow: hidden;
-  transition: 2s;
+  transition: .3s;
   display: none;
   background: white;
   user-select: text;
