@@ -63,7 +63,7 @@ export class ApiComponent implements OnInit {
 
   pushItem() {
     const push = new GridsterPush(this.itemToPush); // init the service
-    this.itemToPush.$item.rows += 1; // move/resize your item
+    this.itemToPush.$item.rows += 4; // move/resize your item
     if (push.pushItems(push.fromNorth)) { // push items from a direction
       push.checkPushBack(); // check for items can restore to original position
       push.setPushedItems(); // save the items pushed
