@@ -1,6 +1,6 @@
 angular-gridster2
 ==============
-# Angularjs 1.x version [Demo](http://tiberiuzuld.github.io/angular-gridster2/angularjs)
+# Angularjs 1.x version [Demo](http://tiberiuzuld.github.io/angular-gridster2)
 
 ### Requires AngularJS >=1.5.x 
 ### Last version v1.21.0 (no longer maintained)
