@@ -1,0 +1,57 @@
+<div class="options">
+  <markdown>
+    ### Options
+
+    Option | Description | Type | Default
+    ------------ | ------------- | ------------- | -------------
+    enableEmptyCellClick | enable empty cell click events | Boolean | false
+    enableEmptyCellContextMenu | enable empty cell context menu (right click) events | Boolean | false
+    enableEmptyCellDrop | enable empty cell drop events | Boolean | false
+    enableEmptyCellDrag | enable empty cell drag events | Boolean | false
+    emptyCellDragMaxCols | limit empty cell drag max cols | Number | 50
+    emptyCellDragMaxRows | limit empty cell drag max rows | Number | 50
+    emptyCellClickCallback | empty cell click callback | Function(event, gridsterItem) | undefined
+    emptyCellContextMenuCallback | empty cell context menu (right click) callback | Function(event, gridsterItem) |
+    undefined
+    emptyCellDropCallback | empty cell drag drop callback. HTML5 Drag & Drop | Function(event, gridsterItem) | undefined
+    emptyCellDragCallback | empty cell drag and create item like excel cell | Function(event, gridsterItem) | undefined
+  </markdown>
+</div>
+<div class="options-header">
+  <mat-checkbox [(ngModel)]="options.enableEmptyCellClick" (ngModelChange)="changedOptions()">
+    Enable click to add
+  </mat-checkbox>
+  <mat-checkbox [(ngModel)]="options.enableEmptyCellContextMenu" (ngModelChange)="changedOptions()">
+    Enable right click to add
+  </mat-checkbox>
+  <mat-checkbox [(ngModel)]="options.enableEmptyCellDrop" (ngModelChange)="changedOptions()">
+    Enable drop to add
+  </mat-checkbox>
+  <div *ngIf="options.enableEmptyCellDrop" draggable="true">Drag me!</div>
+  <mat-checkbox [(ngModel)]="options.enableEmptyCellDrag" (ngModelChange)="changedOptions()">
+    Enable drag to add
+  </mat-checkbox>
+  <mat-form-field>
+    <input matInput [(ngModel)]="options.emptyCellDragMaxCols" type="number" placeholder="Drag Max Cols"
+           (ngModelChange)="changedOptions()">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput [(ngModel)]="options.emptyCellDragMaxRows" type="number" placeholder="Drag Max Rows"
+           (ngModelChange)="changedOptions()">
+  </mat-form-field>
+  <button mat-mini-fab (click)="addItem()" matTooltip="Add widget" class="add-button cols-2">
+    <mat-icon>add</mat-icon>
+  </button>
+</div>
+
+
+<gridster [options]="options">
+  <gridster-item [item]="item" *ngFor="let item of dashboard">
+    <div class="button-holder">
+      <button mat-mini-fab (mousedown)="removeItem($event, item)"
+              (touchstart)="removeItem($event, item)" matTooltip="Remove">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </gridster-item>
+</gridster>

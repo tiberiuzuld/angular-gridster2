@@ -1,0 +1,68 @@
+<div class="options">
+  <markdown>
+    ### Options
+
+    Option | Description | Type | Default
+    ------------ | ------------- | ------------- | -------------
+    draggable.delayStart | milliseconds to delay the start of drag, useful for touch interaction | Number | 0
+    draggable.enabled | enable/disable draggable items | Boolean | false
+    draggable.ignoreContent | if true drag will start only from elements from `dragHandleClass` | Boolean | false
+    draggable.dragHandleClass | drag event only from this class. If `ignoreContent` is true. | String | 'drag-handler'
+    draggable.ignoreContentClass | default content class to ignore the drag event from | String |
+    'gridster-item-content'
+    draggable.stop | callback when dragging an item stops. Accepts Promise return to cancel/approve drag |
+    Function(item, gridsterItem, event) | undefined
+    draggable.start | callback when dragging an item starts | Function(item, gridsterItem, event) | undefined
+  </markdown>
+</div>
+<div class="options-header" *ngIf="options.draggable">
+  <mat-checkbox [(ngModel)]="options.draggable.enabled" (ngModelChange)="changedOptions()">
+    Drag Items
+  </mat-checkbox>
+  <mat-checkbox [(ngModel)]="options.draggable.ignoreContent" (ngModelChange)="changedOptions()">
+    Ignore Content
+  </mat-checkbox>
+  <mat-form-field>
+    <input matInput [(ngModel)]="options.draggable.delayStart" type="number" placeholder="Delay Start ms"
+           (ngModelChange)="changedOptions()">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput [(ngModel)]="options.draggable.dragHandleClass" type="text" placeholder="Drag Handle Class"
+           (ngModelChange)="changedOptions()">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput [(ngModel)]="options.draggable.ignoreContentClass" type="text" placeholder="Ignore Content Class"
+           (ngModelChange)="changedOptions()">
+  </mat-form-field>
+  <button mat-mini-fab (click)="addItem()" matTooltip="Add widget" class="add-button cols-2">
+    <mat-icon>add</mat-icon>
+  </button>
+</div>
+
+
+<gridster [options]="options">
+  <gridster-item [item]="item" *ngFor="let item of dashboard">
+    <div class="button-holder">
+      <div class="gridster-item-content" *ngIf="item.hasContent">
+        <div class="stuff">
+          <span>Some content to select and click without dragging the widget</span>
+          <a href="https://www.google.com" target="_blank">Link to Google</a>
+        </div>
+      </div>
+      <div class="item-buttons" *ngIf="item.hasContent">
+        <button mat-icon-button mat-raised-button class="drag-handler">
+          <mat-icon>open_with</mat-icon>
+        </button>
+        <button mat-icon-button mat-raised-button class="remove-button" (mousedown)="removeItem($event, item)"
+                (touchstart)="removeItem($event, item)" matTooltip="Remove">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+      <label *ngIf="!item.hasContent">{{item.label}}</label>
+      <button mat-mini-fab *ngIf="!item.hasContent" (mousedown)="removeItem($event, item)"
+              (touchstart)="removeItem($event, item)" matTooltip="Remove">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </gridster-item>
+</gridster>

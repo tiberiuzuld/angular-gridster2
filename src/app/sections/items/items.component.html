@@ -1,0 +1,94 @@
+<div class="options">
+  <markdown>
+    ### Options
+
+    Option | Description | Type | Default
+    ------------ | ------------- | ------------- | -------------
+    x | x position if missing will auto position | Number | undefined
+    y | y position if missing will auto position | Number | undefined
+    rows | number of rows if missing will use grid option `defaultItemRows` | Number | undefined
+    cols | number of columns if missing will use grid option `defaultItemCols` | Number | undefined
+    minItemRows | override grid option `minItemRows` | Number | undefined
+    maxItemRows | override grid option `maxItemRows` | Number | undefined
+    minItemCols | override grid option `minItemCols` | Number | undefined
+    maxItemCols | override grid option `maxItemCols` | Number | undefined
+    minItemArea | override grid option `minItemArea` | Number | undefined
+    maxItemArea | override grid option `maxItemArea` | Number | undefined
+    dragEnabled | override grid option `draggable.enabled` | Boolean | undefined
+    resizeEnabled | override grid option `resizable.enabled` | Boolean | undefined
+    compactEnabled | disable grid option `compact` for this item | Boolean | undefined
+    initCallback | initialization callback and has size > 0 | Function(GridsterItem, GridsterItemComponent) | undefined
+  </markdown>
+</div>
+<div class="options-header" *ngIf="dashboard[0]">
+  <mat-form-field>
+    <input matInput [(ngModel)]="dashboard[0].x" type="number" placeholder="X" (ngModelChange)="changedOptions()">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput [(ngModel)]="dashboard[0].y" type="number" placeholder="Y" (ngModelChange)="changedOptions()">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput [(ngModel)]="dashboard[0].rows" type="number" placeholder="Rows" (ngModelChange)="changedOptions()">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput [(ngModel)]="dashboard[0].cols" type="number" placeholder="Cols" (ngModelChange)="changedOptions()">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput [(ngModel)]="dashboard[0].maxItemCols" type="number" placeholder="Max Item Cols"
+           (ngModelChange)="changedOptions()">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput [(ngModel)]="dashboard[0].minItemCols" type="number" placeholder="Min Item Cols"
+           (ngModelChange)="changedOptions()">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput [(ngModel)]="dashboard[0].maxItemRows" type="number" placeholder="Max Item Rows"
+           (ngModelChange)="changedOptions()">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput [(ngModel)]="dashboard[0].minItemRows" type="number" placeholder="Min Item Rows"
+           (ngModelChange)="changedOptions()">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput [(ngModel)]="dashboard[0].maxItemArea" type="number" placeholder="Max Item Area"
+           (ngModelChange)="changedOptions()">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput [(ngModel)]="dashboard[0].minItemArea" type="number" placeholder="Min Item Area"
+           (ngModelChange)="changedOptions()">
+  </mat-form-field>
+  <mat-checkbox [(ngModel)]="dashboard[0].dragEnabled" (ngModelChange)="changedOptions()">
+    Drag
+  </mat-checkbox>
+  <mat-checkbox [(ngModel)]="dashboard[0].resizeEnabled" (ngModelChange)="changedOptions()">
+    Resize
+  </mat-checkbox>
+  <mat-checkbox [(ngModel)]="dashboard[0].compactEnabled" (ngModelChange)="changedOptions()">
+    Compact
+  </mat-checkbox>
+  <mat-form-field>
+    <mat-select aria-label="Compact type" [(ngModel)]="options.compactType" (ngModelChange)="changedOptions()"
+                placeholder="Compact Type">
+      <mat-option value="none">None</mat-option>
+      <mat-option value="compactUp">Compact Up</mat-option>
+      <mat-option value="compactLeft">Compact Left</mat-option>
+      <mat-option value="compactLeft&Up">Compact Left & Up</mat-option>
+      <mat-option value="compactUp&Left">Compact Up & Left</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <button mat-mini-fab (click)="addItem()" matTooltip="Add widget" class="add-button cols-2">
+    <mat-icon>add</mat-icon>
+  </button>
+</div>
+
+
+<gridster [options]="options">
+  <gridster-item [item]="item" *ngFor="let item of dashboard">
+    <div class="button-holder">
+      <button mat-mini-fab (mousedown)="removeItem($event, item)"
+              (touchstart)="removeItem($event, item)" matTooltip="Remove">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </gridster-item>
+</gridster>

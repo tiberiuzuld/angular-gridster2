@@ -1,0 +1,59 @@
+<div class="options">
+  <markdown>
+    ### Options
+
+    Option | Description | Type | Default
+    ------------ | ------------- | ------------- | -------------
+    pushItems | push items when resizing and dragging | Boolean | false
+    disablePushOnDrag | disable push on drag | Boolean | false
+    disablePushOnResize | disable push on resize | Boolean | false
+    pushResizeItems | on resize of item will shrink adjacent items | Boolean | false
+    pushDirections | control the directions items are pushed | Object | {{ '{north: true, east: true, south: true, west:
+    true}' }}
+  </markdown>
+</div>
+<div class="options-header">
+  <mat-checkbox [(ngModel)]="options.pushItems" (ngModelChange)="changedOptions()">
+    Push Items
+  </mat-checkbox>
+  <mat-checkbox [(ngModel)]="options.disablePushOnDrag" (ngModelChange)="changedOptions()">
+    Disable Push On Drag
+  </mat-checkbox>
+  <mat-checkbox [(ngModel)]="options.disablePushOnResize" (ngModelChange)="changedOptions()">
+    Disable Push On Resize
+  </mat-checkbox>
+  <mat-checkbox [(ngModel)]="options.pushDirections.north" *ngIf="options.pushDirections"
+                (ngModelChange)="changedOptions()">
+    Push North
+  </mat-checkbox>
+  <mat-checkbox [(ngModel)]="options.pushDirections.east" *ngIf="options.pushDirections"
+                (ngModelChange)="changedOptions()">
+    Push East
+  </mat-checkbox>
+  <mat-checkbox [(ngModel)]="options.pushDirections.south" *ngIf="options.pushDirections"
+                (ngModelChange)="changedOptions()">
+    Push South
+  </mat-checkbox>
+  <mat-checkbox [(ngModel)]="options.pushDirections.west" *ngIf="options.pushDirections"
+                (ngModelChange)="changedOptions()">
+    Push West
+  </mat-checkbox>
+  <mat-checkbox [(ngModel)]="options.pushResizeItems" (ngModelChange)="changedOptions()">
+    Push Resize Items
+  </mat-checkbox>
+  <button mat-mini-fab (click)="addItem()" matTooltip="Add widget" class="add-button cols-2">
+    <mat-icon>add</mat-icon>
+  </button>
+</div>
+
+
+<gridster [options]="options">
+  <gridster-item [item]="item" *ngFor="let item of dashboard">
+    <div class="button-holder">
+      <button mat-mini-fab (mousedown)="removeItem($event, item)"
+              (touchstart)="removeItem($event, item)" matTooltip="Remove">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </gridster-item>
+</gridster>

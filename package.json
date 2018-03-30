@@ -16,7 +16,8 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "build-demo": "ng build --prod --base-href=./",
-    "build-npm": "gulp build && ngc -p tsconfig-lib.json"
+    "build-npm": "gulp build && ngc -p tsconfig-lib.json",
+    "deploy-demo": "ngh --dir=demo"
   },
   "homepage": "https://tiberiuzuld.github.io/angular-gridster2/angular",
   "bugs": {
@@ -63,9 +64,10 @@
     "@angular/router": "5.2.9",
     "@types/jasmine": "2.8.6",
     "@types/jasminewd2": "2.0.3",
-    "@types/node": "9.6.0",
+    "@types/node": "9.6.1",
+    "angular-cli-ghpages": "0.5.2",
     "codelyzer": "4.2.1",
-    "core-js": "2.5.3",
+    "core-js": "2.5.4",
     "del": "3.0.0",
     "gulp": "4.0.0",
     "gulp-inline-ng2-template": "4.1.0",
@@ -77,8 +79,9 @@
     "karma-coverage-istanbul-reporter": "1.4.2",
     "karma-jasmine": "1.1.1",
     "karma-jasmine-html-reporter": "1.0.0",
+    "ngx-markdown": "1.5.2",
     "protractor": "5.3.0",
-    "rxjs": "5.5.7",
+    "rxjs": "5.5.8",
     "ts-node": "5.0.1",
     "tslint": "5.9.1",
     "typescript": "2.6.2",

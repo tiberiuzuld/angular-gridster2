@@ -22,7 +22,9 @@
         "styles.css",
         "theme.scss"
       ],
-      "scripts": [],
+      "scripts": [
+        "../node_modules/marked/lib/marked.js"
+      ],
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",
