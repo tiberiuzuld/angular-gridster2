@@ -15,7 +15,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "build-demo": "ng build --prod --base-href=./",
+    "build-demo": "ng build --prod --base-href=/angular-gridster2/",
     "build-npm": "gulp build && ngc -p tsconfig-lib.json",
     "deploy-demo": "ngh --dir=demo --no-silent --name='Tiberiu Zuld' --email='tiberiuzuld@gmail.com'"
   },
