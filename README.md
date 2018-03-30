@@ -6,7 +6,7 @@ angular-gridster2
 [![downloads](https://img.shields.io/npm/dm/angular-gridster2.svg)](https://www.npmjs.com/package/angular-gridster2)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/tiberiuzuld)
 
-### Angular implementation of angular-gridster [Demo](http://tiberiuzuld.github.io/angular-gridster2/angular)
+### Angular implementation of angular-gridster [Demo](http://tiberiuzuld.github.io/angular-gridster2)
 
 ### Requires Angular 2.x
 ### Last version v2.4.20 (no longer maintained) 
