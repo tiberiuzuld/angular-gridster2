@@ -18,7 +18,7 @@ export class GridsterRenderer {
     if (this.gridster.mobile) {
       renderer.setStyle(el, 'transform', null);
       renderer.setStyle(el, 'width', null);
-      renderer.setStyle(el, 'height', '25%');
+      renderer.setStyle(el, 'height', null);
       renderer.setStyle(el, 'margin-bottom', this.gridster.$options.margin + 'px');
     } else {
       const x = Math.round(this.gridster.curColWidth * item.x);
