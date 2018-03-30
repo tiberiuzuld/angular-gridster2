@@ -54,6 +54,7 @@ export const GridsterConfigService: GridsterConfig = {
   emptyCellDragMaxCols: 50, // limit empty cell drag max cols
   emptyCellDragMaxRows: 50, // limit empty cell drag max rows
   // Arguments: event, gridsterItem{x, y, rows: defaultItemRows, cols: defaultItemCols}
+  ignoreMarginInRow: false, // ignore the gap between rows for items which span multiple rows (see #162, #224)
   draggable: {
     delayStart: 0, // milliseconds to delay the start of drag, useful for touch interaction
     enabled: false, // enable/disable draggable items
