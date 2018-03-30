@@ -90,7 +90,7 @@ export class GridsterRenderer {
     this.gridster.renderer.removeClass(this.gridster.el, removeClass3);
   }
 
-  getGridColumnStyle(i) {
+  getGridColumnStyle(i: number) {
     return {
       transform: 'translateX(' + this.gridster.curColWidth * i + 'px)',
       width: this.gridster.curColWidth - this.gridster.$options.margin + 'px',
@@ -98,7 +98,7 @@ export class GridsterRenderer {
     };
   }
 
-  getGridRowStyle(i) {
+  getGridRowStyle(i: number) {
     return {
       transform: 'translateY(' + this.gridster.curRowHeight * i + 'px)',
       width: this.gridster.gridColumns.length * this.gridster.curColWidth - this.gridster.$options.margin + 'px',
