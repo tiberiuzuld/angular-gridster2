@@ -17,7 +17,7 @@
     "e2e": "ng e2e",
     "build-demo": "ng build --prod --base-href=/angular-gridster2/",
     "build-npm": "gulp build && ngc -p tsconfig-lib.json",
-    "deploy-demo": "ngh --dir=demo --no-silent --name='Tiberiu Zuld' --email='tiberiuzuld@gmail.com'"
+    "deploy-demo": "ngh --dir=demo --no-silent"
   },
   "homepage": "https://tiberiuzuld.github.io/angular-gridster2/angular",
   "bugs": {
