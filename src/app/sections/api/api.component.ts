@@ -70,7 +70,7 @@ export class ApiComponent implements OnInit {
       this.itemToPush.setSize();
       this.itemToPush.checkItemChanges(this.itemToPush.$item, this.itemToPush.item);
     } else {
-      this.itemToPush.$item.rows -= 1;
+      this.itemToPush.$item.rows -= 4;
       push.restoreItems(); // restore to initial state the pushed items
     }
     push.destroy(); // destroy push instance
