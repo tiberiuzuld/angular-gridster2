@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation} from '@angular/core';
 
-import {DisplayGrid, GridsterConfig, GridsterItem, GridsterItemComponentInterface, GridType} from '../../../lib';
+import {DisplayGrid, GridsterComponent, GridsterConfig, GridsterItem, GridsterItemComponentInterface, GridType} from '../../../lib';
 
 @Component({
   selector: 'gridster-drag',
@@ -20,11 +20,16 @@ export class DragComponent implements OnInit {
     console.info('eventStop', item, itemComponent, event);
   }
 
+  static overlapEvent(source: GridsterItemComponentInterface, target: GridsterItemComponentInterface, grid: GridsterComponent) {
+    console.log('overlap', source, target, grid);
+  }
+
   ngOnInit() {
     this.options = {
       gridType: GridType.Fit,
       displayGrid: DisplayGrid.Always,
       pushItems: true,
+      swap: false,
       draggable: {
         delayStart: 0,
         enabled: true,
@@ -32,7 +37,9 @@ export class DragComponent implements OnInit {
         ignoreContent: false,
         dragHandleClass: 'drag-handler',
         stop: DragComponent.eventStop,
-        start: DragComponent.eventStart
+        start: DragComponent.eventStart,
+        dropOverItems: false,
+        dropOverItemsCallback: DragComponent.overlapEvent,
       },
       resizable: {
         enabled: true

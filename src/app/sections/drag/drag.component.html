@@ -11,11 +11,19 @@
     draggable.ignoreContentClass | default content class to ignore the drag event from | String | 'gridster-item-content'
     draggable.stop | callback when dragging an item stops. Accepts Promise return to cancel/approve drag | Function(item, gridsterItem, event) | undefined
     draggable.start | callback when dragging an item starts | Function(item, gridsterItem, event) | undefined
+    draggable.dropOverItems | enable items drop over another, will work if swap and push is disabled | Boolean | false
+    draggable.dropOverItemsCallback | callback when dragging an item drops over another item | Function(sourceItem, targetItem, grid) | undefined
   </markdown>
 </div>
 <div class="options-header" *ngIf="options.draggable">
   <mat-checkbox [(ngModel)]="options.draggable.enabled" (ngModelChange)="changedOptions()">
     Drag Items
+  </mat-checkbox>
+  <mat-checkbox [(ngModel)]="options.pushItems" (ngModelChange)="changedOptions()">
+    Push Items
+  </mat-checkbox>
+  <mat-checkbox [(ngModel)]="options.draggable.dropOverItems" (ngModelChange)="changedOptions()">
+    Allow Drop Over Items
   </mat-checkbox>
   <mat-checkbox [(ngModel)]="options.draggable.ignoreContent" (ngModelChange)="changedOptions()">
     Ignore Content

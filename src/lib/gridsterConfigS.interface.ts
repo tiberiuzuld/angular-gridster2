@@ -1,5 +1,6 @@
 import {compactTypes, displayGrids, gridTypes} from './gridsterConfig.interface';
 import {GridsterItem} from './gridsterItem.interface';
+import {GridsterComponentInterface} from './gridster.interface';
 
 export interface GridsterConfigS {
   gridType: gridTypes;
@@ -70,6 +71,8 @@ export interface Draggable extends DragBase {
   ignoreContentClass: string;
   ignoreContent: boolean;
   dragHandleClass: string;
+  dropOverItems: boolean;
+  dropOverItemsCallback: (source: GridsterItem, target: GridsterItem, grid?: GridsterComponentInterface) => void;
 }
 
 export interface Resizable extends DragBase {

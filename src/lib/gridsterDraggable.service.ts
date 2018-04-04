@@ -43,6 +43,7 @@ export class GridsterDraggable {
   push: GridsterPush;
   swap: GridsterSwap;
   path: Array<{ x: number, y: number }>;
+  collision: GridsterItemComponentInterface | boolean;
 
   constructor(gridsterItem: GridsterItemComponentInterface, gridster: GridsterComponentInterface, private zone: NgZone) {
     this.gridsterItem = gridsterItem;
@@ -61,6 +62,7 @@ export class GridsterDraggable {
     }
     delete this.gridsterItem;
     delete this.gridster;
+    delete this.collision;
     if (this.mousedown) {
       this.mousedown();
       this.touchstart();
@@ -179,6 +181,12 @@ export class GridsterDraggable {
   }
 
   makeDrag() {
+    if (this.gridster.$options.draggable.dropOverItems && this.gridster.options.draggable
+      && this.gridster.options.draggable.dropOverItemsCallback
+      && this.collision !== true && this.collision !== false && this.collision.$item) {
+      this.gridster.options.draggable.dropOverItemsCallback(this.gridsterItem.item, this.collision.item, this.gridster);
+    }
+    delete this.collision;
     this.gridsterItem.setSize();
     this.gridsterItem.checkItemChanges(this.gridsterItem.$item, this.gridsterItem.item);
     this.push.setPushedItems();
@@ -190,6 +198,7 @@ export class GridsterDraggable {
   }
 
   calculateItemPosition() {
+    this.gridster.movingItem = this.gridsterItem.$item;
     this.positionX = this.gridster.pixelsToPositionX(this.left, Math.round);
     this.positionY = this.gridster.pixelsToPositionY(this.top, Math.round);
     this.positionXBackup = this.gridsterItem.$item.x;
@@ -219,15 +228,19 @@ export class GridsterDraggable {
       }
       this.push.pushItems(direction, this.gridster.$options.disablePushOnDrag);
       this.swap.swapItems();
-      if (this.gridster.checkCollision(this.gridsterItem.$item)) {
+      this.collision = this.gridster.checkCollision(this.gridsterItem.$item);
+      if (this.collision) {
         this.gridsterItem.$item.x = this.positionXBackup;
         this.gridsterItem.$item.y = this.positionYBackup;
+        if (this.gridster.$options.draggable.dropOverItems && this.collision !== true && this.collision.$item) {
+          this.gridster.movingItem = null;
+        }
       } else {
         this.path.push({x: this.gridsterItem.$item.x, y: this.gridsterItem.$item.y});
-        this.gridster.previewStyle(true);
       }
       this.push.checkPushBack();
     }
+    this.gridster.previewStyle(true);
   }
 
   toggle() {

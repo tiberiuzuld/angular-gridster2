@@ -62,8 +62,11 @@ export const GridsterConfigService: GridsterConfig = {
     ignoreContent: false, // if true drag will start only from elements from `dragHandleClass`
     dragHandleClass: 'drag-handler', // drag event only from this class. If `ignoreContent` is true.
     stop: undefined, // callback when dragging an item stops.  Accepts Promise return to cancel/approve drag.
-    start: undefined // callback when dragging an item starts.
+    start: undefined, // callback when dragging an item starts.
     // Arguments: item, gridsterItem, event
+    dropOverItems: false, // enable drop items on top other item
+    dropOverItemsCallback: undefined // callback on drop over another item
+    // Arguments: source, target, gridComponent
   },
   resizable: {
     delayStart: 0, // milliseconds to delay the start of resize, useful for touch interaction
