@@ -14,6 +14,17 @@
 </div>
 <div class="options-header">
   <mat-form-field>
+    <mat-select aria-label="Grid type" [(ngModel)]="options.gridType" (ngModelChange)="changedOptions()"
+                placeholder="Grid Type">
+      <mat-option value="fit">Fit to screen</mat-option>
+      <mat-option value="scrollVertical">Scroll Vertical</mat-option>
+      <mat-option value="scrollHorizontal">Scroll Horizontal</mat-option>
+      <mat-option value="fixed">Fixed</mat-option>
+      <mat-option value="verticalFixed">Vertical Fixed</mat-option>
+      <mat-option value="horizontalFixed">Horizontal Fixed</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
     <input matInput [(ngModel)]="options.margin" min="0" max="30" step="1" type="number" placeholder="Margin"
            (ngModelChange)="changedOptions()">
   </mat-form-field>

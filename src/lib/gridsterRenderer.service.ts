@@ -29,7 +29,27 @@ export class GridsterRenderer {
       renderer.setStyle(el, 'transform', transform);
       renderer.setStyle(el, 'width', width + 'px');
       renderer.setStyle(el, 'height', height + 'px');
-      renderer.setStyle(el, 'margin-bottom', null);
+      let marginBottom: string | null = null;
+      let marginRight: string | null = null;
+      if (this.gridster.$options.outerMargin) {
+        if (this.gridster.rows === item.rows + item.y) {
+          if (this.gridster.$options.outerMarginBottom !== null) {
+            marginBottom = this.gridster.$options.outerMarginBottom + 'px';
+          } else {
+            marginBottom = this.gridster.$options.margin + 'px';
+          }
+        }
+        if (this.gridster.columns === item.cols + item.x) {
+          if (this.gridster.$options.outerMarginBottom !== null) {
+            marginRight = this.gridster.$options.outerMarginRight + 'px';
+          } else {
+            marginRight = this.gridster.$options.margin + 'px';
+          }
+        }
+      }
+
+      renderer.setStyle(el, 'margin-bottom', marginBottom);
+      renderer.setStyle(el, 'margin-right', marginRight);
     }
   }
 
