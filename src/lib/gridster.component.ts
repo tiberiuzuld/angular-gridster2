@@ -365,7 +365,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
   }
 
   autoPositionItem(itemComponent: GridsterItemComponentInterface): void {
-    if (this.getNextPossiblePosition(itemComponent.$item)) {
+    if (!this.options.disableAutoPositionOnConflict && this.getNextPossiblePosition(itemComponent.$item)) {
       itemComponent.item.x = itemComponent.$item.x;
       itemComponent.item.y = itemComponent.$item.y;
       itemComponent.itemChanged();
