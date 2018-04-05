@@ -18,6 +18,7 @@ export class GridsterEmptyCell {
   emptyCellUp: Function;
   emptyCellUpTouch: Function;
   emptyCellMove: Function | null;
+  emptyCellExit: Function | null;
 
   constructor(private gridster: GridsterComponentInterface) {
   }
@@ -53,11 +54,17 @@ export class GridsterEmptyCell {
       this.gridster.zone.runOutsideAngular(() => {
         this.emptyCellMove = this.gridster.renderer.listen(this.gridster.el, 'dragover', this.emptyCellDragOver.bind(this));
       });
-    } else if (!this.gridster.$options.enableEmptyCellDrop && this.emptyCellDrop && this.emptyCellMove) {
+      this.emptyCellExit = this.gridster.renderer.listen('document', 'dragend', () => {
+        this.gridster.movingItem = null;
+        this.gridster.previewStyle();
+      });
+    } else if (!this.gridster.$options.enableEmptyCellDrop && this.emptyCellDrop && this.emptyCellMove && this.emptyCellExit) {
       this.emptyCellDrop();
       this.emptyCellMove();
+      this.emptyCellExit();
       this.emptyCellMove = null;
       this.emptyCellDrop = null;
+      this.emptyCellExit = null;
     }
     if (this.gridster.$options.enableEmptyCellDrag && !this.emptyCellDrag && this.gridster.options.emptyCellDragCallback) {
       this.emptyCellDrag = this.gridster.renderer.listen(this.gridster.el, 'mousedown', this.emptyCellMouseDown.bind(this));
@@ -185,11 +192,11 @@ export class GridsterEmptyCell {
     e.stopPropagation();
     GridsterUtils.checkTouchEvent(e);
     const rect = this.gridster.el.getBoundingClientRect();
-    const x = e.clientX + this.gridster.el.scrollLeft - rect.left;
-    const y = e.clientY + this.gridster.el.scrollTop - rect.top;
+    const x = e.clientX + this.gridster.el.scrollLeft - rect.left - this.gridster.$options.margin;
+    const y = e.clientY + this.gridster.el.scrollTop - rect.top - this.gridster.$options.margin;
     const item: GridsterItemS = {
-      x: this.gridster.pixelsToPositionX(x, Math.floor),
-      y: this.gridster.pixelsToPositionY(y, Math.floor),
+      x: this.gridster.pixelsToPositionX(x, Math.floor, true),
+      y: this.gridster.pixelsToPositionY(y, Math.floor, true),
       cols: this.gridster.$options.defaultItemCols,
       rows: this.gridster.$options.defaultItemRows
     };

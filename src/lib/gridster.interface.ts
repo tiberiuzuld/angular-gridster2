@@ -12,9 +12,9 @@ export abstract class GridsterComponentInterface {
   grid: Array<GridsterItemComponentInterface>;
   checkCollision: (item: GridsterItemS) => GridsterItemComponentInterface | boolean;
   positionXToPixels: (x: number) => number;
-  pixelsToPositionX: (x: number, roundingMethod: (x: number) => number) => number;
+  pixelsToPositionX: (x: number, roundingMethod: (x: number) => number, noLimit?: boolean) => number;
   positionYToPixels: (y: number) => number;
-  pixelsToPositionY: (y: number, roundingMethod: (x: number) => number) => number;
+  pixelsToPositionY: (y: number, roundingMethod: (x: number) => number, noLimit?: boolean) => number;
   findItemWithItem: (item: GridsterItemS) => GridsterItemComponentInterface | boolean;
   findItemsWithItem: (item: GridsterItemS) => Array<GridsterItemComponentInterface>;
   checkGridCollision: (item: GridsterItemS) => boolean;

@@ -434,12 +434,22 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     return tmpItem;
   }
 
-  pixelsToPositionX(x: number, roundingMethod: Function): number {
-    return Math.max(roundingMethod(x / this.curColWidth), 0);
+  pixelsToPositionX(x: number, roundingMethod: Function, noLimit?: boolean): number {
+    const position = roundingMethod(x / this.curColWidth);
+    if (noLimit) {
+      return position;
+    } else {
+      return Math.max(position, 0);
+    }
   }
 
-  pixelsToPositionY(y: number, roundingMethod: Function): number {
-    return Math.max(roundingMethod(y / this.curRowHeight), 0);
+  pixelsToPositionY(y: number, roundingMethod: Function, noLimit?: boolean): number {
+    const position = roundingMethod(y / this.curRowHeight);
+    if (noLimit) {
+      return position;
+    } else {
+      return Math.max(position, 0);
+    }
   }
 
   positionXToPixels(x: number): number {
