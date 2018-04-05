@@ -50,6 +50,6 @@ export class MiscComponent implements OnInit {
   }
 
   addItem() {
-    this.dashboard.push({});
+    this.dashboard.push({x: 0, y: 0});
   }
 }

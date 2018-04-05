@@ -306,6 +306,8 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
       }
       if (!this.$options.disableAutoPositionOnConflict) {
         this.autoPositionItem(itemComponent);
+      } else {
+        itemComponent.notPlaced = true;
       }
     }
     this.grid.push(itemComponent);
