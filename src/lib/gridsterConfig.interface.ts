@@ -69,6 +69,7 @@ export interface GridsterConfig {
   pushItems?: boolean;
   disablePushOnDrag?: boolean;
   disablePushOnResize?: boolean;
+  disableAutoPositionOnConflict?: boolean;
   pushDirections?: PushDirections;
   pushResizeItems?: boolean;
   displayGrid?: displayGrids;
