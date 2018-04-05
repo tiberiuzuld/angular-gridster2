@@ -123,6 +123,13 @@ Option 2 (with text selection):
   </div>
 </gridster-item>
 ```
+ 
+### Contributors [here](https://github.com/tiberiuzuld/angular-gridster2/graphs/contributors)
+
+### Supporters
+@matpag (Mattia Pagini)
+
+### [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/tiberiuzuld)
 
 ### License
  The MIT License
