@@ -200,10 +200,13 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     }
     let rows = this.$options.minRows, columns = this.$options.minCols;
 
-    let widgetsIndex = this.grid.length - 1;
+    let widgetsIndex = this.grid.length - 1, widget;
     for (; widgetsIndex >= 0; widgetsIndex--) {
-      rows = Math.max(rows, this.grid[widgetsIndex].$item.y + this.grid[widgetsIndex].$item.rows);
-      columns = Math.max(columns, this.grid[widgetsIndex].$item.x + this.grid[widgetsIndex].$item.cols);
+      widget = this.grid[widgetsIndex];
+      if (!widget.notPlaced) {
+        rows = Math.max(rows, widget.$item.y + widget.$item.rows);
+        columns = Math.max(columns, widget.$item.x + widget.$item.cols);
+      }
     }
 
     this.columns = columns;
