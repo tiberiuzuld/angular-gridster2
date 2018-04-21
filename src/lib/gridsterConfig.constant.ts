@@ -43,6 +43,8 @@ export const GridsterConfigService: GridsterConfig = {
   // Arguments: gridsterItem, gridsterItemComponent
   itemRemovedCallback: undefined,  // callback to call for each item when is initialized.
   // Arguments: gridsterItem, gridsterItemComponent
+  itemValidateCallback: undefined,  // callback to call to validate item position/size. Return true if valid.
+  // Arguments: gridsterItem
   enableEmptyCellClick: false, // enable empty cell click events
   enableEmptyCellContextMenu: false, // enable empty cell context menu (right click) events
   enableEmptyCellDrop: false, // enable empty cell drop events
