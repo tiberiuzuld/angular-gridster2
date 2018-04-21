@@ -60,12 +60,6 @@
     <input matInput [(ngModel)]="options.fixedRowHeight" type="number" placeholder="Fixed Row Height"
            (ngModelChange)="changedOptions()">
   </mat-form-field>
-  <mat-checkbox [(ngModel)]="options.enableEmptyCellClick" (ngModelChange)="changedOptions()">
-    Enable click to add
-  </mat-checkbox>
-  <mat-checkbox [(ngModel)]="options.enableEmptyCellDrag" (ngModelChange)="changedOptions()">
-    Enable drag to add
-  </mat-checkbox>
   <button mat-mini-fab (click)="addItem()" matTooltip="Add widget" class="add-button cols-2">
     <mat-icon>add</mat-icon>
   </button>
