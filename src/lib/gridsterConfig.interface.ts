@@ -59,6 +59,7 @@ export interface GridsterConfig {
   scrollSpeed?: number;
   initCallback?: (gridster: GridsterComponentInterface) => void;
   destroyCallback?: (gridster: GridsterComponentInterface) => void;
+  gridSizeChangedCallback?: (gridster: GridsterComponentInterface) => void;
   itemChangeCallback?: (item: GridsterItem, itemComponent: GridsterItemComponentInterface) => void;
   itemResizeCallback?: (item: GridsterItem, itemComponent: GridsterItemComponentInterface) => void;
   itemInitCallback?: (item: GridsterItem, itemComponent: GridsterItemComponentInterface) => void;

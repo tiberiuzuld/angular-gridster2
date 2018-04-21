@@ -49,12 +49,17 @@ export class GridEventsComponent implements OnInit {
     console.info('gridDestroy', grid);
   }
 
+  static gridSizeChanged(grid: GridsterComponentInterface) {
+    console.info('gridSizeChanged', grid);
+  }
+
   ngOnInit() {
     this.options = {
       gridType: GridType.Fit,
       displayGrid: DisplayGrid.Always,
       initCallback: GridEventsComponent.gridInit,
       destroyCallback: GridEventsComponent.gridDestroy,
+      gridSizeChangedCallback: GridEventsComponent.gridSizeChanged,
       itemChangeCallback: GridEventsComponent.itemChange,
       itemResizeCallback: GridEventsComponent.itemResize,
       itemInitCallback: GridEventsComponent.itemInit,

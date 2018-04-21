@@ -209,8 +209,13 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
       }
     }
 
-    this.columns = columns;
-    this.rows = rows;
+    if (this.columns !== columns || this.rows !== rows) {
+      this.columns = columns;
+      this.rows = rows;
+      if (this.options.gridSizeChangedCallback) {
+        this.options.gridSizeChangedCallback(this);
+      }
+    }
   }
 
   calculateLayout(): void {
