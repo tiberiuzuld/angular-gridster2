@@ -45,7 +45,9 @@
   "files": [
     "dist/*"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "mobile-drag-drop": "2.3.0-rc.1"
+  },
   "devDependencies": {
     "@angular/animations": "5.2.10",
     "@angular/cdk": "5.2.5",

@@ -57,3 +57,10 @@ gridster .gridster-row {
   border-top: 1px solid white;
   border-bottom: 1px solid white;
 }
+
+.dnd-poly-drag-image {
+  opacity: .5 !important;
+  transition-property: transform, -webkit-transform !important;
+  transition-duration: 0ms !important;
+  transition-timing-function: ease-out !important;
+}
