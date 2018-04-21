@@ -11,6 +11,7 @@ export const GridsterConfigService: GridsterConfig = {
   fixedRowHeight: 250, // fixed row height for gridType: 'fixed'
   keepFixedHeightInMobile: false, // keep the height from fixed gridType in mobile layout
   keepFixedWidthInMobile: false, // keep the width from fixed gridType in mobile layout
+  setGridSize: false, // sets grid size depending on content
   compactType: CompactType.None, // compact items: 'none' | 'compactUp' | 'compactLeft' | 'compactUp&Left' | 'compactLeft&Up'
   mobileBreakpoint: 640, // if the screen is not wider that this, remove the grid layout and stack the items
   minCols: 1, // minimum amount of columns in the grid
@@ -35,6 +36,7 @@ export const GridsterConfigService: GridsterConfig = {
   scrollSpeed: 20,  // how much to scroll each mouse move when in the scrollSensitivity zone
   initCallback: undefined, // callback to call after grid has initialized. Arguments: gridsterComponent
   destroyCallback: undefined, // callback to call after grid has destroyed. Arguments: gridsterComponent
+  gridSizeChangedCallback: undefined, // callback to call after grid has changed size. Arguments: gridsterComponent
   itemChangeCallback: undefined,  // callback to call for each item when is changes x, y, rows, cols.
   // Arguments: gridsterItem, gridsterItemComponent
   itemResizeCallback: undefined,  // callback to call for each item when width/height changes.
@@ -43,6 +45,8 @@ export const GridsterConfigService: GridsterConfig = {
   // Arguments: gridsterItem, gridsterItemComponent
   itemRemovedCallback: undefined,  // callback to call for each item when is initialized.
   // Arguments: gridsterItem, gridsterItemComponent
+  itemValidateCallback: undefined,  // callback to call to validate item position/size. Return true if valid.
+  // Arguments: gridsterItem
   enableEmptyCellClick: false, // enable empty cell click events
   enableEmptyCellContextMenu: false, // enable empty cell context menu (right click) events
   enableEmptyCellDrop: false, // enable empty cell drop events

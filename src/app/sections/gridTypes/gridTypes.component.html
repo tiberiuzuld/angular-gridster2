@@ -1,4 +1,9 @@
 <div class="options">
+  <a mat-raised-button href="https://github.com/tiberiuzuld/angular-gridster2/tree/master/src/app/sections/gridTypes"
+     target="_blank" class="source-code-button">
+    <mat-icon>open_in_new</mat-icon>
+    Source
+  </a>
   <markdown>
     ### Options
     Option | Description | Type | Default
@@ -8,6 +13,7 @@
     fixedRowHeight | fixed row height for gridType: `fixed` | Number | 250
     keepFixedHeightInMobile | keep the height from fixed gridType in mobile layout | Boolean | false
     keepFixedWidthInMobile | keep the width from fixed gridType in mobile layout | Boolean | false
+    setGridSize | sets grid size depending on content | Boolean | false
     mobileBreakpoint | if the screen is not wider that this, remove the grid layout and stack the items | Number | 640
 
     ### Grid Types
@@ -41,6 +47,9 @@
     <input matInput [(ngModel)]="options.fixedRowHeight" type="number" placeholder="Fixed Row Height"
            (ngModelChange)="changedOptions()">
   </mat-form-field>
+  <mat-checkbox [(ngModel)]="options.setGridSize" (ngModelChange)="changedOptions()">
+    Set Grid Size
+  </mat-checkbox>
   <mat-form-field>
     <input matInput [(ngModel)]="options.mobileBreakpoint" type="number" placeholder="Mobile Breakpoint"
            (ngModelChange)="changedOptions()">

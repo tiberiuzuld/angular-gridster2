@@ -33,6 +33,7 @@ gridster-item div.button-holder {
 
 .options {
   padding: 10px;
+  display: grid;
 }
 
 .options-header {
@@ -42,4 +43,8 @@ gridster-item div.button-holder {
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
+}
+
+.source-code-button {
+  justify-self: end;
 }

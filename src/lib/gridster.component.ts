@@ -200,14 +200,22 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     }
     let rows = this.$options.minRows, columns = this.$options.minCols;
 
-    let widgetsIndex = this.grid.length - 1;
+    let widgetsIndex = this.grid.length - 1, widget;
     for (; widgetsIndex >= 0; widgetsIndex--) {
-      rows = Math.max(rows, this.grid[widgetsIndex].$item.y + this.grid[widgetsIndex].$item.rows);
-      columns = Math.max(columns, this.grid[widgetsIndex].$item.x + this.grid[widgetsIndex].$item.cols);
+      widget = this.grid[widgetsIndex];
+      if (!widget.notPlaced) {
+        rows = Math.max(rows, widget.$item.y + widget.$item.rows);
+        columns = Math.max(columns, widget.$item.x + widget.$item.cols);
+      }
     }
 
-    this.columns = columns;
-    this.rows = rows;
+    if (this.columns !== columns || this.rows !== rows) {
+      this.columns = columns;
+      this.rows = rows;
+      if (this.options.gridSizeChangedCallback) {
+        this.options.gridSizeChangedCallback(this);
+      }
+    }
   }
 
   calculateLayout(): void {
@@ -261,6 +269,14 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
 
     this.updateGrid();
 
+    if (this.$options.setGridSize) {
+      this.renderer.setStyle(this.el, 'width', (this.columns * this.curColWidth + this.$options.margin) + 'px');
+      this.renderer.setStyle(this.el, 'height', (this.rows * this.curRowHeight + this.$options.margin) + 'px');
+    } else {
+      this.renderer.setStyle(this.el, 'width', null);
+      this.renderer.setStyle(this.el, 'height', null);
+    }
+
     let widgetsIndex: number = this.grid.length - 1, widget: GridsterItemComponentInterface;
     for (; widgetsIndex >= 0; widgetsIndex--) {
       widget = this.grid[widgetsIndex];
@@ -301,6 +317,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
       this.autoPositionItem(itemComponent);
     } else if (this.checkCollision(itemComponent.$item)) {
       if (!this.$options.disableWarnings) {
+        itemComponent.notPlaced = true;
         console.warn('Can\'t be placed in the bounds of the dashboard, trying to auto position!/n' +
           JSON.stringify(itemComponent.item, ['cols', 'rows', 'x', 'y']));
       }
@@ -323,7 +340,17 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
   }
 
   checkCollision(item: GridsterItemS): GridsterItemComponentInterface | boolean {
-    return this.checkGridCollision(item) || this.findItemWithItem(item);
+    let collision = false;
+    if (this.options.itemValidateCallback) {
+      collision = !this.options.itemValidateCallback(item);
+    }
+    if (!collision && this.checkGridCollision(item)) {
+      collision = true;
+    }
+    if (!collision && this.findItemWithItem(item)) {
+      collision = true;
+    }
+    return collision;
   }
 
   checkGridCollision(item: GridsterItemS): boolean {

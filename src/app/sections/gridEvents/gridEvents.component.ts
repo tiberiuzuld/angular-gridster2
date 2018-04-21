@@ -8,6 +8,7 @@ import {
   GridsterItemComponentInterface,
   GridType
 } from '../../../lib';
+import {GridsterItemS} from '../../../lib/gridsterItemS.interface';
 
 @Component({
   selector: 'gridster-grid-events',
@@ -36,6 +37,10 @@ export class GridEventsComponent implements OnInit {
     console.info('itemRemoved', item, itemComponent);
   }
 
+  static itemValidate(item: GridsterItemS) {
+    return item.cols > 0 && item.rows > 0;
+  }
+
   static gridInit(grid: GridsterComponentInterface) {
     console.info('gridInit', grid);
   }
@@ -44,16 +49,22 @@ export class GridEventsComponent implements OnInit {
     console.info('gridDestroy', grid);
   }
 
+  static gridSizeChanged(grid: GridsterComponentInterface) {
+    console.info('gridSizeChanged', grid);
+  }
+
   ngOnInit() {
     this.options = {
       gridType: GridType.Fit,
       displayGrid: DisplayGrid.Always,
       initCallback: GridEventsComponent.gridInit,
       destroyCallback: GridEventsComponent.gridDestroy,
+      gridSizeChangedCallback: GridEventsComponent.gridSizeChanged,
       itemChangeCallback: GridEventsComponent.itemChange,
       itemResizeCallback: GridEventsComponent.itemResize,
       itemInitCallback: GridEventsComponent.itemInit,
       itemRemovedCallback: GridEventsComponent.itemRemoved,
+      itemValidateCallback: GridEventsComponent.itemValidate,
       pushItems: true,
       draggable: {
         enabled: true

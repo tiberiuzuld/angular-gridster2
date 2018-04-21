@@ -35,6 +35,7 @@ export interface GridsterConfig {
   fixedRowHeight?: number;
   keepFixedHeightInMobile?: boolean;
   keepFixedWidthInMobile?: boolean;
+  setGridSize?: boolean;
   compactType?: compactTypes;
   mobileBreakpoint?: number;
   minCols?: number;
@@ -59,10 +60,12 @@ export interface GridsterConfig {
   scrollSpeed?: number;
   initCallback?: (gridster: GridsterComponentInterface) => void;
   destroyCallback?: (gridster: GridsterComponentInterface) => void;
+  gridSizeChangedCallback?: (gridster: GridsterComponentInterface) => void;
   itemChangeCallback?: (item: GridsterItem, itemComponent: GridsterItemComponentInterface) => void;
   itemResizeCallback?: (item: GridsterItem, itemComponent: GridsterItemComponentInterface) => void;
   itemInitCallback?: (item: GridsterItem, itemComponent: GridsterItemComponentInterface) => void;
   itemRemovedCallback?: (item: GridsterItem, itemComponent: GridsterItemComponentInterface) => void;
+  itemValidateCallback?: (item: GridsterItem) => boolean;
   draggable?: Draggable;
   resizable?: Resizable;
   swap?: boolean;
