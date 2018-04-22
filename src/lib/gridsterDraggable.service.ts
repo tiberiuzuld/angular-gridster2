@@ -15,8 +15,6 @@ export class GridsterDraggable {
     clientX: number,
     clientY: number
   };
-  offsetLeft: number;
-  offsetTop: number;
   margin: number;
   diffTop: number;
   diffLeft: number;
@@ -89,15 +87,15 @@ export class GridsterDraggable {
     setTimeout(() => {
       this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'display', 'none');
     });
-    this.margin = this.gridster.$options.margin;
-    this.offsetLeft = this.gridster.el.scrollLeft - this.gridster.el.offsetLeft;
-    this.offsetTop = this.gridster.el.scrollTop - this.gridster.el.offsetTop;
-    this.left = this.gridsterItem.left - this.margin;
-    this.top = this.gridsterItem.top - this.margin;
+    this.left = this.gridsterItem.left;
+    this.top = this.gridsterItem.top;
     this.width = this.gridsterItem.width;
     this.height = this.gridsterItem.height;
-    this.diffLeft = e.clientX + this.offsetLeft - this.margin - this.left;
-    this.diffTop = e.clientY + this.offsetTop - this.margin - this.top;
+    const rect = this.gridster.el.getBoundingClientRect();
+    const left = e.clientX - rect.left - this.gridster.el.clientLeft;
+    const top = e.clientY - rect.top - this.gridster.el.clientTop;
+    this.diffLeft = left - this.left;
+    this.diffTop = top - this.top;
     this.gridster.movingItem = this.gridsterItem.$item;
     this.gridster.previewStyle(true);
     this.push = new GridsterPush(this.gridsterItem);
@@ -111,9 +109,6 @@ export class GridsterDraggable {
     if (e.clientX === 0 && e.clientY === 0) {
       return;
     }
-
-    this.offsetLeft = this.gridster.el.scrollLeft - this.gridster.el.offsetLeft;
-    this.offsetTop = this.gridster.el.scrollTop - this.gridster.el.offsetTop;
     scroll(this.gridster, this.left, this.top, this.width, this.height, e, this.lastMouse,
       this.calculateItemPositionFromMousePosition.bind(this));
 
@@ -121,8 +116,9 @@ export class GridsterDraggable {
   }
 
   calculateItemPositionFromMousePosition(e: any): void {
-    this.left = e.clientX + this.offsetLeft - this.diffLeft;
-    this.top = e.clientY + this.offsetTop - this.diffTop;
+    const rect = this.gridster.el.getBoundingClientRect();
+    this.left = e.clientX - rect.left - this.gridster.el.clientLeft - this.diffLeft;
+    this.top = e.clientY - rect.top - this.gridster.el.clientTop - this.diffTop;
     this.calculateItemPosition();
     this.lastMouse.clientX = e.clientX;
     this.lastMouse.clientY = e.clientY;
