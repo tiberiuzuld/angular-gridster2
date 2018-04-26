@@ -11,8 +11,7 @@ import {
   MatInputModule,
   MatListModule,
   MatSelectModule,
-  MatSidenavModule,
-  MatTooltipModule
+  MatSidenavModule
 } from '@angular/material';
 import {MarkdownModule, MarkedOptions} from 'ngx-markdown';
 
@@ -79,7 +78,7 @@ const appRoutes: Routes = [
     RouterModule.forRoot(
       appRoutes,
     ),
-    MatIconModule, MatButtonModule, MatSelectModule, MatInputModule, MatTooltipModule, MatCheckboxModule, MatSidenavModule, MatListModule,
+    MatIconModule, MatButtonModule, MatSelectModule, MatInputModule, MatCheckboxModule, MatSidenavModule, MatListModule,
     GridsterModule,
     MarkdownModule.forRoot({provide: MarkedOptions, useValue: {smartypants: true, breaks: true}}),
   ],

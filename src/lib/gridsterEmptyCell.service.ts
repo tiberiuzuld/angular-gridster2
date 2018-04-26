@@ -30,6 +30,10 @@ export class GridsterEmptyCell {
       this.gridster.previewStyle();
     }
     delete this.gridster;
+    if (this.emptyCellExit) {
+      this.emptyCellExit();
+      this.emptyCellExit = null;
+    }
   }
 
   updateOptions(): void {

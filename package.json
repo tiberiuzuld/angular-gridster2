@@ -1,6 +1,6 @@
 {
   "name": "angular-gridster2",
-  "version": "5.3.1",
+  "version": "5.3.2",
   "license": "MIT",
   "main": "dist/index.js",
   "jsnext:main": "dist/index.js",
@@ -82,7 +82,7 @@
     "ngx-markdown": "1.5.2",
     "protractor": "5.3.1",
     "rxjs": "5.5.10",
-    "ts-node": "6.0.0",
+    "ts-node": "6.0.1",
     "tslint": "5.9.1",
     "typescript": "2.6.2",
     "zone.js": "0.8.26"
