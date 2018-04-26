@@ -16,7 +16,7 @@
   <mat-checkbox [(ngModel)]="options.swap" (ngModelChange)="changedOptions()">
     Swap Items
   </mat-checkbox>
-  <button mat-mini-fab (click)="addItem()" matTooltip="Add widget" class="add-button cols-2">
+  <button mat-mini-fab (click)="addItem()" class="add-button cols-2">
     <mat-icon>add</mat-icon>
   </button>
 </div>
@@ -26,7 +26,7 @@
   <gridster-item [item]="item" *ngFor="let item of dashboard">
     <div class="button-holder">
       <button mat-mini-fab (mousedown)="removeItem($event, item)"
-              (touchstart)="removeItem($event, item)" matTooltip="Remove">
+              (touchstart)="removeItem($event, item)">
         <mat-icon>delete</mat-icon>
       </button>
     </div>

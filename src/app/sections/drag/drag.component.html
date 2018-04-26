@@ -45,7 +45,7 @@
     <input matInput [(ngModel)]="options.draggable.ignoreContentClass" type="text" placeholder="Ignore Content Class"
            (ngModelChange)="changedOptions()">
   </mat-form-field>
-  <button mat-mini-fab (click)="addItem()" matTooltip="Add widget" class="add-button cols-2">
+  <button mat-mini-fab (click)="addItem()" class="add-button cols-2">
     <mat-icon>add</mat-icon>
   </button>
 </div>
@@ -65,13 +65,13 @@
           <mat-icon>open_with</mat-icon>
         </button>
         <button mat-icon-button mat-raised-button class="remove-button" (mousedown)="removeItem($event, item)"
-                (touchstart)="removeItem($event, item)" matTooltip="Remove">
+                (touchstart)="removeItem($event, item)">
           <mat-icon>delete</mat-icon>
         </button>
       </div>
       <label *ngIf="!item.hasContent">{{item.label}}</label>
       <button mat-mini-fab *ngIf="!item.hasContent" (mousedown)="removeItem($event, item)"
-              (touchstart)="removeItem($event, item)" matTooltip="Remove">
+              (touchstart)="removeItem($event, item)">
         <mat-icon>delete</mat-icon>
       </button>
     </div>
