@@ -32,6 +32,7 @@ import {EmptyCellComponent} from './sections/emptyCell/emptyCell.component';
 import {GridEventsComponent} from './sections/gridEvents/gridEvents.component';
 import {ItemsComponent} from './sections/items/items.component';
 import {ApiComponent} from './sections/api/api.component';
+import {DragGridComponent} from './sections/drag2Grid/drag2grid.component';
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
@@ -39,6 +40,7 @@ const appRoutes: Routes = [
   {path: 'compact', component: CompactComponent},
   {path: 'displayGrid', component: DisplayGridComponent},
   {path: 'drag', component: DragComponent},
+  {path: 'drag2grid', component: DragGridComponent},
   {path: 'emptyCell', component: EmptyCellComponent},
   {path: 'gridEvents', component: GridEventsComponent},
   {path: 'gridMargins', component: GridMarginsComponent},
@@ -60,6 +62,7 @@ const appRoutes: Routes = [
     CompactComponent,
     DisplayGridComponent,
     DragComponent,
+    DragGridComponent,
     EmptyCellComponent,
     GridEventsComponent,
     GridMarginsComponent,

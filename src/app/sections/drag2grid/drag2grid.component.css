@@ -1,0 +1,8 @@
+.grid-containers {
+  display: grid;
+  grid-auto-columns: 1fr 1fr;
+  grid-auto-flow: column;
+  height: 70%;
+  grid-gap: 1%;
+  padding: 1%;
+}

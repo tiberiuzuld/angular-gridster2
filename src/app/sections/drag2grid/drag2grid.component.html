@@ -1,0 +1,65 @@
+<div class="options">
+  <a mat-raised-button href="https://github.com/tiberiuzuld/angular-gridster2/tree/master/src/app/sections/drag2grid"
+     target="_blank" class="source-code-button">
+    <mat-icon>open_in_new</mat-icon>
+    Source
+  </a>
+  <markdown>
+    ### Options
+
+    Option | Description | Type | Default
+    ------------ | ------------- | ------------- | -------------
+    draggable.enabled | enable/disable draggable items | Boolean | false
+
+  </markdown>
+  <div draggable="true">Drag me!</div>
+</div>
+
+<div class="grid-containers">
+  <div class="grid-container">
+    <div class="options-header" *ngIf="options.draggable">
+      <mat-checkbox [(ngModel)]="options.draggable.enabled" (ngModelChange)="changedOptions()">
+        Drag Items
+      </mat-checkbox>
+      <mat-checkbox [(ngModel)]="options.pushItems" (ngModelChange)="changedOptions()">
+        Push Items
+      </mat-checkbox>
+      <button mat-mini-fab (click)="addItem()" class="add-button cols-2">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+    <gridster [options]="options">
+      <gridster-item [item]="item" *ngFor="let item of dashboard">
+        <div class="button-holder">
+          <button mat-mini-fab (mousedown)="removeItem($event, item)"
+                  (touchstart)="removeItem($event, item)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </gridster-item>
+    </gridster>
+  </div>
+  <div class="grid-container">
+    <div class="options-header" *ngIf="options2.draggable">
+      <mat-checkbox [(ngModel)]="options2.draggable.enabled" (ngModelChange)="changedOptions2()">
+        Drag Items
+      </mat-checkbox>
+      <mat-checkbox [(ngModel)]="options2.pushItems" (ngModelChange)="changedOptions2()">
+        Push Items
+      </mat-checkbox>
+      <button mat-mini-fab (click)="addItem2()" class="add-button cols-2">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+    <gridster [options]="options2">
+      <gridster-item [item]="item" *ngFor="let item of dashboard2">
+        <div class="button-holder">
+          <button mat-mini-fab (mousedown)="removeItem2($event, item)"
+                  (touchstart)="removeItem2($event, item)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </gridster-item>
+    </gridster>
+  </div>
+</div>

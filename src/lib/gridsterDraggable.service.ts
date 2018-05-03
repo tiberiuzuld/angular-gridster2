@@ -32,6 +32,7 @@ export class GridsterDraggable {
   dragStopFunction: (event: any) => void;
   drag: Function;
   dragend: Function;
+  dragDrop: Function;
   cancelOnBlur: Function;
   dragstart: Function;
   dragOver: Function;
@@ -39,11 +40,6 @@ export class GridsterDraggable {
   swap: GridsterSwap;
   path: Array<{ x: number, y: number }>;
   collision: GridsterItemComponentInterface | boolean;
-
-  static dragOverE(e: any): void {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
-  }
 
   constructor(gridsterItem: GridsterItemComponentInterface, gridster: GridsterComponentInterface, private zone: NgZone) {
     this.gridsterItem = gridsterItem;
@@ -70,6 +66,7 @@ export class GridsterDraggable {
 
   dragStart(e: any): void {
     e.dropEffect = 'move';
+    e.dataTransfer.setData('text/plain', JSON.stringify(this.gridsterItem.item));
     if (this.gridster.options.draggable && this.gridster.options.draggable.start) {
       this.gridster.options.draggable.start(this.gridsterItem.item, this.gridsterItem, e);
     }
@@ -78,9 +75,10 @@ export class GridsterDraggable {
     this.dragStopFunction = this.dragStop.bind(this);
 
     this.zone.runOutsideAngular(() => {
-      this.drag = this.gridsterItem.renderer.listen(this.gridster.el, 'drag', this.dragFunction);
-      this.dragOver = this.gridsterItem.renderer.listen(this.gridster.el, 'dragover', GridsterDraggable.dragOverE);
+      // this.drag = this.gridsterItem.renderer.listen(this.gridster.el, 'drag', this.dragFunction);
+      this.dragOver = this.gridsterItem.renderer.listen(this.gridster.el, 'dragover', this.dragFunction);
     });
+    // this.dragDrop = this.gridsterItem.renderer.listen(this.gridster.el, 'drop', GridsterDraggable.dragOverE);
     this.dragend = this.gridsterItem.renderer.listen('document', 'dragend', this.dragStopFunction);
     this.cancelOnBlur = this.gridsterItem.renderer.listen('window', 'blur', this.dragStopFunction);
     this.gridsterItem.renderer.addClass(this.gridsterItem.el, 'gridster-item-moving');
@@ -106,6 +104,8 @@ export class GridsterDraggable {
   }
 
   dragMove(e: any): void {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
     if (e.clientX === 0 && e.clientY === 0) {
       return;
     }
@@ -131,9 +131,10 @@ export class GridsterDraggable {
     e.preventDefault();
     cancelScroll();
     this.cancelOnBlur();
-    this.drag();
+    // this.drag();
     this.dragOver();
     this.dragend();
+    // this.dragDrop();
     this.gridsterItem.renderer.removeClass(this.gridsterItem.el, 'gridster-item-moving');
     this.gridster.dragInProgress = false;
     this.gridster.updateGrid();
