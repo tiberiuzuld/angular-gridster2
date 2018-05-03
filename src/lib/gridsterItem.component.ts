@@ -74,7 +74,7 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
   }
 
   setSize(): void {
-    this.renderer.setStyle(this.el, 'display', this.notPlaced ? null : 'block');
+    this.renderer.setStyle(this.el, 'display', this.notPlaced ? '' : 'block');
     this.gridster.gridRenderer.updateItem(this.el, this.$item, this.renderer);
     this.updateItemSize();
   }
