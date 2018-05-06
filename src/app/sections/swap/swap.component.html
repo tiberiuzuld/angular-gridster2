@@ -4,13 +4,7 @@
     <mat-icon>open_in_new</mat-icon>
     Source
   </a>
-  <markdown>
-    ### Options
-
-    Option | Description | Type | Default
-    ------------ | ------------- | ------------- | -------------
-    swap | allow items to switch position if drop on top of another | Boolean | true
-  </markdown>
+  <markdown [src]="'assets/swap.md'"></markdown>
 </div>
 <div class="options-header">
   <mat-checkbox [(ngModel)]="options.swap" (ngModelChange)="changedOptions()">

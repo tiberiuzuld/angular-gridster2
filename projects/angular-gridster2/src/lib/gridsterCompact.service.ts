@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 
 import {GridsterComponentInterface} from './gridster.interface';
 import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
-import {GridsterItemS} from './gridsterItemS.interface';
+import {GridsterItem} from './gridsterItem.interface';
 import {CompactType} from './gridsterConfig.interface';
 
 @Injectable()
@@ -31,7 +31,7 @@ export class GridsterCompact {
     }
   }
 
-  checkCompactItem(item: GridsterItemS): void {
+  checkCompactItem(item: GridsterItem): void {
     if (this.gridster.$options.compactType !== CompactType.None) {
       if (this.gridster.$options.compactType === CompactType.CompactUp) {
         this.moveUpTillCollision(item);
@@ -67,7 +67,7 @@ export class GridsterCompact {
     }
   }
 
-  moveUpTillCollision(item: GridsterItemS): boolean {
+  moveUpTillCollision(item: GridsterItem): boolean {
     item.y -= 1;
     if (this.gridster.checkCollision(item)) {
       item.y += 1;
@@ -98,7 +98,7 @@ export class GridsterCompact {
     }
   }
 
-  moveLeftTillCollision(item: GridsterItemS): boolean {
+  moveLeftTillCollision(item: GridsterItem): boolean {
     item.x -= 1;
     if (this.gridster.checkCollision(item)) {
       item.x += 1;

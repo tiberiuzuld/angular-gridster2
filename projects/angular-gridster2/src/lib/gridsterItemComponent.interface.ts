@@ -1,13 +1,12 @@
 import {GridsterItem} from './gridsterItem.interface';
 import {GridsterDraggable} from './gridsterDraggable.service';
 import {Renderer2} from '@angular/core';
-import {GridsterItemS} from './gridsterItemS.interface';
 import {GridsterResizable} from './gridsterResizable.service';
 import {GridsterComponentInterface} from './gridster.interface';
 
 export abstract class GridsterItemComponentInterface {
   item: GridsterItem;
-  $item: GridsterItemS;
+  $item: GridsterItem;
   top: number;
   left: number;
   width: number;

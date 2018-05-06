@@ -18,10 +18,10 @@ import {GridsterUtils} from './gridsterUtils.service';
 import {GridsterEmptyCell} from './gridsterEmptyCell.service';
 import {GridsterCompact} from './gridsterCompact.service';
 import {GridsterConfigS} from './gridsterConfigS.interface';
-import {GridsterItemS} from './gridsterItemS.interface';
 import {GridsterComponentInterface} from './gridster.interface';
 import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
 import {GridsterRenderer} from './gridsterRenderer.service';
+import {GridsterItem} from './gridsterItem.interface';
 
 @Component({
   selector: 'gridster',
@@ -32,7 +32,7 @@ import {GridsterRenderer} from './gridsterRenderer.service';
 export class GridsterComponent implements OnInit, OnChanges, OnDestroy, GridsterComponentInterface {
   @Input() options: GridsterConfig;
   calculateLayoutDebounce: () => void;
-  movingItem: GridsterItemS | null;
+  movingItem: GridsterItem | null;
   previewStyle: () => void;
   el: any;
   $options: GridsterConfigS;
@@ -68,7 +68,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     this.gridRenderer = new GridsterRenderer(this);
   }
 
-  static checkCollisionTwoItems(item: GridsterItemS, item2: GridsterItemS): boolean {
+  static checkCollisionTwoItems(item: GridsterItem, item2: GridsterItem): boolean {
     return item.x < item2.x + item2.cols
       && item.x + item.cols > item2.x
       && item.y < item2.y + item2.rows
@@ -339,7 +339,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     }
   }
 
-  checkCollision(item: GridsterItemS): GridsterItemComponentInterface | boolean {
+  checkCollision(item: GridsterItem): GridsterItemComponentInterface | boolean {
     let collision = false;
     if (this.options.itemValidateCallback) {
       collision = !this.options.itemValidateCallback(item);
@@ -353,7 +353,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     return collision;
   }
 
-  checkGridCollision(item: GridsterItemS): boolean {
+  checkGridCollision(item: GridsterItem): boolean {
     const noNegativePosition = item.y > -1 && item.x > -1;
     const maxGridCols = item.cols + item.x <= this.$options.maxCols;
     const maxGridRows = item.rows + item.y <= this.$options.maxRows;
@@ -371,7 +371,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     return !(noNegativePosition && maxGridCols && maxGridRows && inColsLimits && inRowsLimits && inMinArea && inMaxArea);
   }
 
-  findItemWithItem(item: GridsterItemS): GridsterItemComponentInterface | boolean {
+  findItemWithItem(item: GridsterItem): GridsterItemComponentInterface | boolean {
     let widgetsIndex: number = this.grid.length - 1, widget: GridsterItemComponentInterface;
     for (; widgetsIndex > -1; widgetsIndex--) {
       widget = this.grid[widgetsIndex];
@@ -382,7 +382,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     return false;
   }
 
-  findItemsWithItem(item: GridsterItemS): Array<GridsterItemComponentInterface> {
+  findItemsWithItem(item: GridsterItem): Array<GridsterItemComponentInterface> {
     const a: Array<GridsterItemComponentInterface> = [];
     let widgetsIndex: number = this.grid.length - 1, widget: GridsterItemComponentInterface;
     for (; widgetsIndex > -1; widgetsIndex--) {
@@ -409,7 +409,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     }
   }
 
-  getNextPossiblePosition(newItem: GridsterItemS, startingFrom: { y?: number, x?: number } = {}): boolean {
+  getNextPossiblePosition(newItem: GridsterItem, startingFrom: { y?: number, x?: number } = {}): boolean {
     if (newItem.cols === -1) {
       newItem.cols = this.$options.defaultItemCols;
     }
@@ -443,13 +443,13 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     return false;
   }
 
-  getFirstPossiblePosition(item: GridsterItemS): GridsterItemS {
+  getFirstPossiblePosition(item: GridsterItem): GridsterItem {
     const tmpItem = Object.assign({}, item);
     this.getNextPossiblePosition(tmpItem);
     return tmpItem;
   }
 
-  getLastPossiblePosition(item: GridsterItemS): GridsterItemS {
+  getLastPossiblePosition(item: GridsterItem): GridsterItem {
     let farthestItem: { y: number, x: number } = {y: 0, x: 0};
     farthestItem = this.grid.reduce((prev: any, curr: GridsterItemComponentInterface) => {
       const currCoords = {y: curr.$item.y + curr.$item.rows - 1, x: curr.$item.x + curr.$item.cols - 1};

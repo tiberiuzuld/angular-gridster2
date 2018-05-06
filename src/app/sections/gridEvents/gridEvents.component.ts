@@ -7,11 +7,10 @@ import {
   GridsterItem,
   GridsterItemComponentInterface,
   GridType
-} from '../../../lib';
-import {GridsterItemS} from '../../../lib/gridsterItemS.interface';
+} from 'angular-gridster2';
 
 @Component({
-  selector: 'gridster-grid-events',
+  selector: 'app-grid-events',
   templateUrl: './gridEvents.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None
@@ -37,7 +36,7 @@ export class GridEventsComponent implements OnInit {
     console.info('itemRemoved', item, itemComponent);
   }
 
-  static itemValidate(item: GridsterItemS) {
+  static itemValidate(item: GridsterItem) {
     return item.cols > 0 && item.rows > 0;
   }
 
@@ -102,7 +101,7 @@ export class GridEventsComponent implements OnInit {
   }
 
   addItem() {
-    this.dashboard.push({});
+    this.dashboard.push({x: 0, y: 0, cols: 1, rows: 1});
   }
 
   destroy() {

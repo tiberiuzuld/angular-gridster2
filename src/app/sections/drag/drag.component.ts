@@ -1,9 +1,9 @@
 import {ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation} from '@angular/core';
 
-import {DisplayGrid, GridsterComponent, GridsterConfig, GridsterItem, GridsterItemComponentInterface, GridType} from '../../../lib';
+import {DisplayGrid, GridsterComponent, GridsterConfig, GridsterItem, GridsterItemComponentInterface, GridType} from 'angular-gridster2';
 
 @Component({
-  selector: 'gridster-drag',
+  selector: 'app-drag',
   templateUrl: './drag.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None
@@ -20,7 +20,7 @@ export class DragComponent implements OnInit {
     console.info('eventStop', item, itemComponent, event);
   }
 
-  static overlapEvent(source: GridsterItemComponentInterface, target: GridsterItemComponentInterface, grid: GridsterComponent) {
+  static overlapEvent(source: GridsterItem, target: GridsterItem, grid: GridsterComponent) {
     console.log('overlap', source, target, grid);
   }
 
@@ -51,8 +51,8 @@ export class DragComponent implements OnInit {
       {cols: 2, rows: 2, y: 0, x: 2, hasContent: true},
       {cols: 1, rows: 1, y: 0, x: 4},
       {cols: 1, rows: 1, y: 2, x: 5},
-      {cols: undefined, rows: undefined, y: 1, x: 0},
-      {cols: 1, rows: 1, y: undefined, x: undefined},
+      {cols: 1, rows: 1, y: 1, x: 0},
+      {cols: 1, rows: 1, y: 1, x: 0},
       {cols: 2, rows: 2, y: 3, x: 5, minItemRows: 2, minItemCols: 2, label: 'Min rows & cols = 2'},
       {cols: 2, rows: 2, y: 2, x: 0, maxItemRows: 2, maxItemCols: 2, label: 'Max rows & cols = 2'},
       {cols: 2, rows: 1, y: 2, x: 2, dragEnabled: true, resizeEnabled: true, label: 'Drag&Resize Enabled'},
@@ -74,6 +74,6 @@ export class DragComponent implements OnInit {
   }
 
   addItem() {
-    this.dashboard.push({});
+    this.dashboard.push({x: 0, y: 0, cols: 1, rows: 1});
   }
 }

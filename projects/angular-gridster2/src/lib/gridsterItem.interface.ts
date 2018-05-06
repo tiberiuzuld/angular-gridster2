@@ -1,10 +1,10 @@
 import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
 
 export interface GridsterItem {
-  x?: number;
-  y?: number;
-  rows?: number;
-  cols?: number;
+  x: number;
+  y: number;
+  rows: number;
+  cols: number;
   initCallback?: (item: GridsterItem, itemComponent: GridsterItemComponentInterface) => void;
   dragEnabled?: boolean;
   resizeEnabled?: boolean;

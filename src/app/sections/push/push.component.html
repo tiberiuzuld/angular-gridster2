@@ -4,17 +4,7 @@
     <mat-icon>open_in_new</mat-icon>
     Source
   </a>
-  <markdown>
-    ### Options
-
-    Option | Description | Type | Default
-    ------------ | ------------- | ------------- | -------------
-    pushItems | push items when resizing and dragging | Boolean | false
-    disablePushOnDrag | disable push on drag | Boolean | false
-    disablePushOnResize | disable push on resize | Boolean | false
-    pushResizeItems | on resize of item will shrink adjacent items | Boolean | false
-    pushDirections | control the directions items are pushed | Object | {{ '{north: true, east: true, south: true, west:true}' }}
-  </markdown>
+  <markdown [src]="'assets/push.md'"></markdown>
 </div>
 <div class="options-header">
   <mat-checkbox [(ngModel)]="options.pushItems" (ngModelChange)="changedOptions()">

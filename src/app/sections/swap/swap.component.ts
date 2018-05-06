@@ -1,9 +1,9 @@
 import {ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation} from '@angular/core';
 
-import {DisplayGrid, GridsterConfig, GridsterItem, GridType} from '../../../lib';
+import {DisplayGrid, GridsterConfig, GridsterItem, GridType} from 'angular-gridster2';
 
 @Component({
-  selector: 'gridster-swap',
+  selector: 'app-swap',
   templateUrl: './swap.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None
@@ -54,6 +54,6 @@ export class SwapComponent implements OnInit {
   }
 
   addItem() {
-    this.dashboard.push({});
+    this.dashboard.push({x: 0, y: 0, cols: 1, rows: 1});
   }
 }

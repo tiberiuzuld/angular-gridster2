@@ -4,7 +4,6 @@ import {GridsterItem} from './gridsterItem.interface';
 import {GridsterDraggable} from './gridsterDraggable.service';
 import {GridsterResizable} from './gridsterResizable.service';
 import {GridsterUtils} from './gridsterUtils.service';
-import {GridsterItemS} from './gridsterItemS.interface';
 import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
 import {GridsterComponent} from './gridster.component';
 
@@ -16,7 +15,7 @@ import {GridsterComponent} from './gridster.component';
 })
 export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemComponentInterface {
   @Input() item: GridsterItem;
-  $item: GridsterItemS;
+  $item: GridsterItem;
   el: any;
   gridster: GridsterComponent;
   top: number;
