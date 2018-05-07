@@ -340,15 +340,18 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
   }
 
   checkCollision(item: GridsterItem): GridsterItemComponentInterface | boolean {
-    let collision = false;
+    let collision: GridsterItemComponentInterface | boolean = false;
     if (this.options.itemValidateCallback) {
       collision = !this.options.itemValidateCallback(item);
     }
     if (!collision && this.checkGridCollision(item)) {
       collision = true;
     }
-    if (!collision && this.findItemWithItem(item)) {
-      collision = true;
+    if (!collision) {
+      const c = this.findItemWithItem(item);
+      if (c) {
+        collision = c;
+      }
     }
     return collision;
   }
