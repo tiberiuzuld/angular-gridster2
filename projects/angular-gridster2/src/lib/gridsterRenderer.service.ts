@@ -58,7 +58,7 @@ export class GridsterRenderer {
     let removeClass1 = '';
     let removeClass2 = '';
     let removeClass3 = '';
-    if (this.gridster.$options.setGridSize || this.gridster.$options.gridType === GridType.Fit) {
+    if (this.gridster.$options.gridType === GridType.Fit) {
       addClass = GridType.Fit;
       removeClass1 = GridType.ScrollVertical;
       removeClass2 = GridType.ScrollHorizontal;
