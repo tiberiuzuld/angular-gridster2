@@ -63,4 +63,9 @@ export class EmptyCellComponent implements OnInit {
   addItem() {
     this.dashboard.push({x: 0, y: 0, cols: 1, rows: 1});
   }
+
+  dragStartHandler(ev) {
+    ev.dataTransfer.setData('text/plain', 'Drag Me Button');
+    ev.dataTransfer.dropEffect = 'copy';
+  }
 }

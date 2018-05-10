@@ -48,3 +48,8 @@ gridster-item div.button-holder {
 .source-code-button {
   justify-self: end;
 }
+
+[draggable] {
+  user-select: none;
+  cursor: pointer;
+}
