@@ -44,7 +44,8 @@
   "dependencies": {
     "@angular/common": "^6.0.0",
     "@angular/core": "^6.0.0",
-    "@angular/compiler": "^6.0.0"
+    "@angular/compiler": "^6.0.0",
+    "mobile-drag-drop": "2.3.0-rc.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "0.6.0",
