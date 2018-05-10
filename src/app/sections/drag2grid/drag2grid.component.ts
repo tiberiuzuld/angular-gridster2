@@ -1,9 +1,9 @@
 import {ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation} from '@angular/core';
 
-import {DisplayGrid, GridsterConfig, GridsterItem, GridType} from '../../../lib';
+import {DisplayGrid, GridsterConfig, GridsterItem, GridType} from 'angular-gridster2';
 
 @Component({
-  selector: 'gridster-drag-grid',
+  selector: 'app-drag-grid',
   templateUrl: './drag2grid.component.html',
   styleUrls: ['./drag2grid.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -70,7 +70,7 @@ export class DragGridComponent implements OnInit {
   }
 
   addItem() {
-    this.dashboard.push({});
+    this.dashboard.push({cols: 1, rows: 1, y: 1, x: 0});
   }
 
   changedOptions2() {
@@ -86,6 +86,6 @@ export class DragGridComponent implements OnInit {
   }
 
   addItem2() {
-    this.dashboard2.push({});
+    this.dashboard2.push({cols: 1, rows: 1, y: 1, x: 0});
   }
 }
