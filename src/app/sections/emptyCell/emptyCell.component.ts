@@ -1,9 +1,9 @@
 import {ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation} from '@angular/core';
 
-import {DisplayGrid, GridsterConfig, GridsterItem, GridType} from '../../../lib';
+import {DisplayGrid, GridsterConfig, GridsterItem, GridType} from 'angular-gridster2';
 
 @Component({
-  selector: 'gridster-empty-cell',
+  selector: 'app-empty-cell',
   templateUrl: './emptyCell.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None
@@ -61,6 +61,11 @@ export class EmptyCellComponent implements OnInit {
   }
 
   addItem() {
-    this.dashboard.push({});
+    this.dashboard.push({x: 0, y: 0, cols: 1, rows: 1});
+  }
+
+  dragStartHandler(ev) {
+    ev.dataTransfer.setData('text/plain', 'Drag Me Button');
+    ev.dataTransfer.dropEffect = 'copy';
   }
 }

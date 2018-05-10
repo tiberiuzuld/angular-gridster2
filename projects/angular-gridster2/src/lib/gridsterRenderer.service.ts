@@ -2,7 +2,7 @@ import {Injectable, Renderer2} from '@angular/core';
 
 import {GridsterComponentInterface} from './gridster.interface';
 import {GridType} from './gridsterConfig.interface';
-import {GridsterItemS} from './gridsterItemS.interface';
+import {GridsterItem} from './gridsterItem.interface';
 
 @Injectable()
 export class GridsterRenderer {
@@ -14,11 +14,11 @@ export class GridsterRenderer {
     delete this.gridster;
   }
 
-  updateItem(el: any, item: GridsterItemS, renderer: Renderer2) {
+  updateItem(el: any, item: GridsterItem, renderer: Renderer2) {
     if (this.gridster.mobile) {
-      renderer.setStyle(el, 'transform', null);
-      renderer.setStyle(el, 'width', null);
-      renderer.setStyle(el, 'height', null);
+      renderer.setStyle(el, 'transform', '');
+      renderer.setStyle(el, 'width', '');
+      renderer.setStyle(el, 'height', '');
       renderer.setStyle(el, 'margin-bottom', this.gridster.$options.margin + 'px');
     } else {
       const x = Math.round(this.gridster.curColWidth * item.x);

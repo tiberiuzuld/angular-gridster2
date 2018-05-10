@@ -4,7 +4,6 @@ import {GridsterItem} from './gridsterItem.interface';
 import {GridsterDraggable} from './gridsterDraggable.service';
 import {GridsterResizable} from './gridsterResizable.service';
 import {GridsterUtils} from './gridsterUtils.service';
-import {GridsterItemS} from './gridsterItemS.interface';
 import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
 import {GridsterComponent} from './gridster.component';
 
@@ -16,7 +15,7 @@ import {GridsterComponent} from './gridster.component';
 })
 export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemComponentInterface {
   @Input() item: GridsterItem;
-  $item: GridsterItemS;
+  $item: GridsterItem;
   el: any;
   gridster: GridsterComponent;
   top: number;
@@ -74,7 +73,7 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
   }
 
   setSize(): void {
-    this.renderer.setStyle(this.el, 'display', this.notPlaced ? null : 'block');
+    this.renderer.setStyle(this.el, 'display', this.notPlaced ? '' : 'block');
     this.gridster.gridRenderer.updateItem(this.el, this.$item, this.renderer);
     this.updateItemSize();
   }

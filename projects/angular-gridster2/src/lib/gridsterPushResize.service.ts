@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 
-import {GridsterItemS} from './gridsterItemS.interface';
+import {GridsterItem} from './gridsterItem.interface';
 import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
 import {GridsterComponentInterface} from './gridster.interface';
 import {GridsterComponent} from './gridster.component';
@@ -12,7 +12,7 @@ export class GridsterPushResize {
   public fromEast: string;
   public fromWest: string;
   private pushedItems: Array<GridsterItemComponentInterface>;
-  private pushedItemsPath: Array<Array<GridsterItemS>>;
+  private pushedItemsPath: Array<Array<GridsterItem>>;
   private gridsterItem: GridsterItemComponentInterface;
   private gridster: GridsterComponentInterface;
   private tryPattern: {

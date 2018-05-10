@@ -1,9 +1,9 @@
 import {ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation} from '@angular/core';
 
-import {CompactType, GridsterConfig, GridsterItem, GridsterItemComponent, GridsterPush, GridType} from '../../../lib';
+import {CompactType, GridsterConfig, GridsterItem, GridsterItemComponent, GridsterPush, GridType} from 'angular-gridster2';
 
 @Component({
-  selector: 'gridster-api',
+  selector: 'app-api',
   templateUrl: './api.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None
@@ -54,7 +54,7 @@ export class ApiComponent implements OnInit {
   }
 
   addItem() {
-    this.dashboard.push({});
+    this.dashboard.push({x: 0, y: 0, cols: 1, rows: 1});
   }
 
   initItem(item: GridsterItem, itemComponent: GridsterItemComponent) {

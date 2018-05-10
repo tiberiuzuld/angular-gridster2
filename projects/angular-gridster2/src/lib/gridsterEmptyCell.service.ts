@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
 
 import {GridsterUtils} from './gridsterUtils.service';
-import {GridsterItemS} from './gridsterItemS.interface';
+import {GridsterItem} from './gridsterItem.interface';
 import {GridsterComponentInterface} from './gridster.interface';
 
 @Injectable()
 export class GridsterEmptyCell {
-  initialItem: GridsterItemS | null;
+  initialItem: GridsterItem | null;
   emptyCellClick: Function | null;
   emptyCellClickTouch: Function | null;
   emptyCellContextMenu: Function | null;
@@ -191,14 +191,14 @@ export class GridsterEmptyCell {
     this.gridster.cdRef.markForCheck();
   }
 
-  getValidItemFromEvent(e: any, oldItem?: GridsterItemS | null): GridsterItemS | undefined {
+  getValidItemFromEvent(e: any, oldItem?: GridsterItem | null): GridsterItem | undefined {
     e.preventDefault();
     e.stopPropagation();
     GridsterUtils.checkTouchEvent(e);
     const rect = this.gridster.el.getBoundingClientRect();
     const x = e.clientX + this.gridster.el.scrollLeft - rect.left - this.gridster.$options.margin;
     const y = e.clientY + this.gridster.el.scrollTop - rect.top - this.gridster.$options.margin;
-    const item: GridsterItemS = {
+    const item: GridsterItem = {
       x: this.gridster.pixelsToPositionX(x, Math.floor, true),
       y: this.gridster.pixelsToPositionY(y, Math.floor, true),
       cols: this.gridster.$options.defaultItemCols,

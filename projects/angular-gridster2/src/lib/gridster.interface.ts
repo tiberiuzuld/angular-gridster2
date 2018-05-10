@@ -3,21 +3,21 @@ import {ChangeDetectorRef, NgZone, Renderer2} from '@angular/core';
 import {GridsterEmptyCell} from './gridsterEmptyCell.service';
 import {GridsterCompact} from './gridsterCompact.service';
 import {GridsterConfig} from './gridsterConfig.interface';
-import {GridsterItemS} from './gridsterItemS.interface';
+import {GridsterItem} from './gridsterItem.interface';
 import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
 import {GridsterRenderer} from './gridsterRenderer.service';
 
 export abstract class GridsterComponentInterface {
   $options: GridsterConfigS;
   grid: Array<GridsterItemComponentInterface>;
-  checkCollision: (item: GridsterItemS) => GridsterItemComponentInterface | boolean;
+  checkCollision: (item: GridsterItem) => GridsterItemComponentInterface | boolean;
   positionXToPixels: (x: number) => number;
   pixelsToPositionX: (x: number, roundingMethod: (x: number) => number, noLimit?: boolean) => number;
   positionYToPixels: (y: number) => number;
   pixelsToPositionY: (y: number, roundingMethod: (x: number) => number, noLimit?: boolean) => number;
-  findItemWithItem: (item: GridsterItemS) => GridsterItemComponentInterface | boolean;
-  findItemsWithItem: (item: GridsterItemS) => Array<GridsterItemComponentInterface>;
-  checkGridCollision: (item: GridsterItemS) => boolean;
+  findItemWithItem: (item: GridsterItem) => GridsterItemComponentInterface | boolean;
+  findItemsWithItem: (item: GridsterItem) => Array<GridsterItemComponentInterface>;
+  checkGridCollision: (item: GridsterItem) => boolean;
   el: any;
   renderer: Renderer2;
   gridRenderer: GridsterRenderer;
@@ -25,7 +25,7 @@ export abstract class GridsterComponentInterface {
   options: GridsterConfig;
   calculateLayoutDebounce: () => void;
   updateGrid: () => void;
-  movingItem: GridsterItemS | null;
+  movingItem: GridsterItem | null;
   addItem: (item: GridsterItemComponentInterface) => void;
   removeItem: (item: GridsterItemComponentInterface) => void;
   previewStyle: (drag?: boolean) => void;

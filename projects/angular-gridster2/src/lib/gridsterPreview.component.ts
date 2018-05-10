@@ -26,7 +26,7 @@ export class GridsterPreviewComponent implements OnDestroy {
 
   previewStyle(drag?: boolean): void {
     if (!this.gridster.movingItem) {
-      this.renderer.setStyle(this.el, 'display', null);
+      this.renderer.setStyle(this.el, 'display', '');
     } else {
       if (this.gridster.compact && drag) {
         this.gridster.compact.checkCompactItem(this.gridster.movingItem);
