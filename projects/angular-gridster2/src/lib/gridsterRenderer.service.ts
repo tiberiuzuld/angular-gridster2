@@ -17,9 +17,19 @@ export class GridsterRenderer {
   updateItem(el: any, item: GridsterItem, renderer: Renderer2) {
     if (this.gridster.mobile) {
       renderer.setStyle(el, 'transform', '');
-      renderer.setStyle(el, 'width', '');
-      renderer.setStyle(el, 'height', '');
+      if (this.gridster.$options.keepFixedHeightInMobile) {
+        renderer.setStyle(el, 'height', this.gridster.$options.fixedRowHeight + 'px');
+      } else {
+        renderer.setStyle(el, 'height', '');
+      }
+      if (this.gridster.$options.keepFixedWidthInMobile) {
+        renderer.setStyle(el, 'width', this.gridster.$options.fixedColWidth + 'px');
+      } else {
+        renderer.setStyle(el, 'width', '');
+      }
+
       renderer.setStyle(el, 'margin-bottom', this.gridster.$options.margin + 'px');
+      renderer.setStyle(el, 'margin-right', '');
     } else {
       const x = Math.round(this.gridster.curColWidth * item.x);
       const y = Math.round(this.gridster.curRowHeight * item.y);
