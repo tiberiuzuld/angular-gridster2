@@ -18,6 +18,8 @@ export class GridTypesComponent implements OnInit {
       displayGrid: DisplayGrid.Always,
       fixedColWidth: 105,
       fixedRowHeight: 105,
+      keepFixedHeightInMobile: false,
+      keepFixedWidthInMobile: false,
       mobileBreakpoint: 640,
       pushItems: true,
       draggable: {

@@ -29,6 +29,12 @@
   <mat-checkbox [(ngModel)]="options.setGridSize" (ngModelChange)="changedOptions()">
     Set Grid Size
   </mat-checkbox>
+  <mat-checkbox [(ngModel)]="options.keepFixedHeightInMobile" (ngModelChange)="changedOptions()">
+    Keep Fixed Height In Mobile
+  </mat-checkbox>
+  <mat-checkbox [(ngModel)]="options.keepFixedWidthInMobile" (ngModelChange)="changedOptions()">
+    Keep Fixed Width In Mobile
+  </mat-checkbox>
   <mat-form-field>
     <input matInput [(ngModel)]="options.mobileBreakpoint" type="number" placeholder="Mobile Breakpoint"
            (ngModelChange)="changedOptions()">
