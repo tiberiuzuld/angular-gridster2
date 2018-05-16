@@ -18,9 +18,9 @@ export class GridsterRenderer {
     if (this.gridster.mobile) {
       renderer.setStyle(el, 'transform', '');
       if (this.gridster.$options.keepFixedHeightInMobile) {
-        renderer.setStyle(el, 'height', this.gridster.$options.fixedRowHeight + 'px');
+        renderer.setStyle(el, 'height', (item.rows * this.gridster.$options.fixedRowHeight) + 'px');
       } else {
-        renderer.setStyle(el, 'height', '');
+        renderer.setStyle(el, 'height', (this.gridster.curWidth / 2 * item.rows) + 'px');
       }
       if (this.gridster.$options.keepFixedWidthInMobile) {
         renderer.setStyle(el, 'width', this.gridster.$options.fixedColWidth + 'px');

@@ -34,7 +34,6 @@ gridster.mobile {
 
 gridster.mobile gridster-item {
   position: relative;
-  height: 25%;
 }
 
 gridster .gridster-column, gridster .gridster-row {

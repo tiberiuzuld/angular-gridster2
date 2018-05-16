@@ -1,6 +1,6 @@
 {
   "name": "angular-gridster2",
-  "version": "6.0.3",
+  "version": "6.0.4",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
@@ -74,7 +74,7 @@
     "karma-coverage-istanbul-reporter": "1.4.2",
     "karma-jasmine": "1.1.2",
     "karma-jasmine-html-reporter": "1.1.0",
-    "ng-packagr": "3.0.0-rc.2",
+    "ng-packagr": "3.0.0-rc.5",
     "ngx-markdown": "1.6.0",
     "protractor": "5.3.2",
     "rxjs": "6.1.0",
