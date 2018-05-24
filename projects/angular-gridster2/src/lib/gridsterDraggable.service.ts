@@ -43,7 +43,7 @@ export class GridsterDraggable {
   push: GridsterPush;
   swap: GridsterSwap;
   path: Array<{ x: number, y: number }>;
-  collision: GridsterItemComponentInterface | boolean;
+  collision: GridsterItemComponentInterface | boolean = false;
 
   constructor(gridsterItem: GridsterItemComponentInterface, gridster: GridsterComponentInterface, private zone: NgZone) {
     this.gridsterItem = gridsterItem;
@@ -183,10 +183,10 @@ export class GridsterDraggable {
   makeDrag() {
     if (this.gridster.$options.draggable.dropOverItems && this.gridster.options.draggable
       && this.gridster.options.draggable.dropOverItemsCallback
-      && this.collision !== true && this.collision !== false && this.collision.$item) {
+      && this.collision && this.collision !== true && this.collision.$item) {
       this.gridster.options.draggable.dropOverItemsCallback(this.gridsterItem.item, this.collision.item, this.gridster);
     }
-    delete this.collision;
+    this.collision = false;
     this.gridsterItem.setSize();
     this.gridsterItem.checkItemChanges(this.gridsterItem.$item, this.gridsterItem.item);
     this.push.setPushedItems();
