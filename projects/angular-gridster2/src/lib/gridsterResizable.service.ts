@@ -59,7 +59,6 @@ export class GridsterResizable {
   }
 
   destroy(): void {
-    delete this.gridster.movingItem;
     if (this.gridster.previewStyle) {
       this.gridster.previewStyle();
     }
