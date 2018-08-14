@@ -114,7 +114,6 @@ export class GridsterCompact {
       }
       moved = this.moveRightTillCollision(widget.$item);
       if (moved) {
-        debugger
         widgetMovedUp = true;
         widget.item.x = widget.$item.x;
         widget.itemChanged();
