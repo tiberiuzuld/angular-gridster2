@@ -4,7 +4,7 @@ import {GridsterComponentInterface} from './gridster.interface';
 
 export type gridTypes = 'fit' | 'scrollVertical' | 'scrollHorizontal' | 'fixed' | 'verticalFixed' | 'horizontalFixed';
 export type displayGrids = 'always' | 'onDrag&Resize' | 'none';
-export type compactTypes = 'none' | 'compactUp' | 'compactLeft' | 'compactUp&Left' | 'compactLeft&Up';
+export type compactTypes = 'none' | 'compactUp' | 'compactLeft' | 'compactUp&Left' | 'compactLeft&Up' | 'compactUp&Right';
 
 export enum GridType {
   Fit = 'fit',
@@ -26,7 +26,8 @@ export enum CompactType {
   CompactUp = 'compactUp',
   CompactLeft = 'compactLeft',
   CompactUpAndLeft = 'compactUp&Left',
-  CompactLeftAndUp = 'compactLeft&Up'
+  CompactLeftAndUp = 'compactLeft&Up',
+  CompactUpAndRight = 'compactUp&Right'
 }
 
 export interface GridsterConfig {

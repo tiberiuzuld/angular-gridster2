@@ -27,7 +27,10 @@ export class GridsterCompact {
       } else if (this.gridster.$options.compactType === CompactType.CompactLeftAndUp) {
         this.checkCompactLeft();
         this.checkCompactUp();
-      }
+      } else if(this.gridster.$options.compactType === CompactType.CompactUpAndRight) {
+        this.checkCompactUp();
+        this.checkCompactRight();               
+    }
     }
   }
 
@@ -98,6 +101,27 @@ export class GridsterCompact {
     }
   }
 
+  checkCompactRight = function() {
+    var widgetMovedUp = false, widget, moved;
+    var l = this.gridster.grid.length;
+    for (var i = 0; i < l; i++) {
+        widget = this.gridster.grid[i];
+        if (widget.$item.compactEnabled === false) {
+            continue;
+        }
+        moved = this.moveRightTillCollision(widget.$item);
+        if (moved) {
+            debugger
+            widgetMovedUp = true;
+            widget.item.x = widget.$item.x;
+            widget.itemChanged();
+        }
+    }
+    if (widgetMovedUp) {
+        this.checkCompact();
+    }
+}
+
   moveLeftTillCollision(item: GridsterItem): boolean {
     item.x -= 1;
     if (this.gridster.checkCollision(item)) {
@@ -108,4 +132,16 @@ export class GridsterCompact {
       return true;
     }
   }
+
+   moveRightTillCollision = function (item) {
+    item.x += 1;
+    if (this.gridster.checkCollision(item)) {
+        item.x -= 1;
+        return false;
+    }
+    else {
+        this.moveRightTillCollision(item);
+        return true;
+    }
+};
 }
