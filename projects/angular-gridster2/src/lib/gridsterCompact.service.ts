@@ -104,8 +104,8 @@ export class GridsterCompact {
     }
   }
 
-  checkCompactRight = function () {
-    var widgetMovedUp = false, widget, moved;
+  checkCompactRight(): void {
+    let widgetMovedUp = false, widget: GridsterItemComponentInterface, moved: boolean;
     var l = this.gridster.grid.length;
     for (var i = 0; i < l; i++) {
       widget = this.gridster.grid[i];
