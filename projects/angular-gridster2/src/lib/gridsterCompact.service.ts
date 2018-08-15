@@ -1,9 +1,9 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 
-import {GridsterComponentInterface} from './gridster.interface';
-import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
-import {GridsterItem} from './gridsterItem.interface';
-import {CompactType} from './gridsterConfig.interface';
+import { GridsterComponentInterface } from './gridster.interface';
+import { GridsterItemComponentInterface } from './gridsterItemComponent.interface';
+import { GridsterItem } from './gridsterItem.interface';
+import { CompactType } from './gridsterConfig.interface';
 
 @Injectable()
 export class GridsterCompact {
@@ -27,6 +27,9 @@ export class GridsterCompact {
       } else if (this.gridster.$options.compactType === CompactType.CompactLeftAndUp) {
         this.checkCompactLeft();
         this.checkCompactUp();
+      } else if (this.gridster.$options.compactType === CompactType.CompactUpAndRight) {
+        this.checkCompactUp();
+        this.checkCompactRight();
       }
     }
   }
@@ -43,6 +46,9 @@ export class GridsterCompact {
       } else if (this.gridster.$options.compactType === CompactType.CompactLeftAndUp) {
         this.moveLeftTillCollision(item);
         this.moveUpTillCollision(item);
+      } else if (this.gridster.$options.compactType === CompactType.CompactUpAndRight) {
+        this.moveUpTillCollision(item);
+        this.moveRightTillCollision(item);
       }
     }
   }
@@ -98,6 +104,26 @@ export class GridsterCompact {
     }
   }
 
+  checkCompactRight(): void {
+    let widgetMovedUp = false, widget: GridsterItemComponentInterface, moved: boolean;
+    var l = this.gridster.grid.length;
+    for (var i = 0; i < l; i++) {
+      widget = this.gridster.grid[i];
+      if (widget.$item.compactEnabled === false) {
+        continue;
+      }
+      moved = this.moveRightTillCollision(widget.$item);
+      if (moved) {
+        widgetMovedUp = true;
+        widget.item.x = widget.$item.x;
+        widget.itemChanged();
+      }
+    }
+    if (widgetMovedUp) {
+      this.checkCompact();
+    }
+  }
+
   moveLeftTillCollision(item: GridsterItem): boolean {
     item.x -= 1;
     if (this.gridster.checkCollision(item)) {
@@ -108,4 +134,16 @@ export class GridsterCompact {
       return true;
     }
   }
+
+  moveRightTillCollision = function (item) {
+    item.x += 1;
+    if (this.gridster.checkCollision(item)) {
+      item.x -= 1;
+      return false;
+    }
+    else {
+      this.moveRightTillCollision(item);
+      return true;
+    }
+  };
 }
