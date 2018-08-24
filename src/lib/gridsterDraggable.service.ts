@@ -293,7 +293,7 @@ export class GridsterDraggable {
       cancelDrag();
     }, this.gridster.$options.draggable.delayStart);
     const cancelMouse = this.gridsterItem.renderer.listen('document', 'mouseup', cancelDrag);
-    const cancelMouseLeave = this.gridsterItem.renderer.listen('document', 'mouseupleave', cancelDrag);
+    const cancelMouseLeave = this.gridsterItem.renderer.listen('document', 'mouseleave', cancelDrag);
     const cancelOnBlur = this.gridsterItem.renderer.listen('window', 'blur', cancelDrag);
     const cancelTouchMove = this.gridsterItem.renderer.listen('document', 'touchmove', cancelMove);
     const cancelTouchEnd = this.gridsterItem.renderer.listen('document', 'touchend', cancelDrag);
