@@ -32,6 +32,7 @@ import {EmptyCellComponent} from './sections/emptyCell/emptyCell.component';
 import {GridEventsComponent} from './sections/gridEvents/gridEvents.component';
 import {ItemsComponent} from './sections/items/items.component';
 import {ApiComponent} from './sections/api/api.component';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
@@ -75,12 +76,11 @@ const appRoutes: Routes = [
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
-    RouterModule.forRoot(
-      appRoutes,
-    ),
+    HttpClientModule,
+    RouterModule.forRoot(appRoutes),
     MatIconModule, MatButtonModule, MatSelectModule, MatInputModule, MatCheckboxModule, MatSidenavModule, MatListModule,
     GridsterModule,
-    MarkdownModule.forRoot({provide: MarkedOptions, useValue: {smartypants: true, breaks: true}}),
+    MarkdownModule.forRoot({loader: HttpClient, markedOptions: {provide: MarkedOptions, useValue: {smartypants: true, breaks: true}}}),
   ],
   providers: [],
   bootstrap: [AppComponent]
