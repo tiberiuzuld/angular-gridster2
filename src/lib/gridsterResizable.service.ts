@@ -1,12 +1,12 @@
-import {Injectable, NgZone} from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 
-import {cancelScroll, scroll} from './gridsterScroll.service';
-import {GridsterResizeEventType} from './gridsterResizeEventType.interface';
-import {GridsterPush} from './gridsterPush.service';
-import {GridsterUtils} from './gridsterUtils.service';
-import {GridsterPushResize} from './gridsterPushResize.service';
-import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
-import {GridsterComponentInterface} from './gridster.interface';
+import { cancelScroll, scroll } from './gridsterScroll.service';
+import { GridsterResizeEventType } from './gridsterResizeEventType.interface';
+import { GridsterPush } from './gridsterPush.service';
+import { GridsterUtils } from './gridsterUtils.service';
+import { GridsterPushResize } from './gridsterPushResize.service';
+import { GridsterItemComponentInterface } from './gridsterItemComponent.interface';
+import { GridsterComponentInterface } from './gridster.interface';
 
 @Injectable()
 export class GridsterResizable {
@@ -24,6 +24,7 @@ export class GridsterResizable {
   resizeEnabled: boolean;
   mousemove: Function;
   mouseup: Function;
+  mouseleave: Function;
   cancelOnBlur: Function;
   touchmove: Function;
   touchend: Function;
@@ -55,7 +56,7 @@ export class GridsterResizable {
       clientY: 0
     };
     this.itemBackup = [0, 0, 0, 0];
-    this.resizeEventScrollType = {w: false, e: false, n: false, s: false};
+    this.resizeEventScrollType = { w: false, e: false, n: false, s: false };
   }
 
   destroy(): void {
@@ -89,6 +90,7 @@ export class GridsterResizable {
       this.touchmove = this.gridster.renderer.listen(this.gridster.el, 'touchmove', this.dragFunction);
     });
     this.mouseup = this.gridsterItem.renderer.listen('document', 'mouseup', this.dragStopFunction);
+    this.mouseleave = this.gridsterItem.renderer.listen('document', 'mouseleave', this.dragStopFunction);
     this.cancelOnBlur = this.gridsterItem.renderer.listen('window', 'blur', this.dragStopFunction);
     this.touchend = this.gridsterItem.renderer.listen('document', 'touchend', this.dragStopFunction);
     this.touchcancel = this.gridsterItem.renderer.listen('document', 'touchcancel', this.dragStopFunction);
@@ -174,6 +176,7 @@ export class GridsterResizable {
     cancelScroll();
     this.mousemove();
     this.mouseup();
+    this.mouseleave();
     this.cancelOnBlur();
     this.touchmove();
     this.touchend();
@@ -367,6 +370,7 @@ export class GridsterResizable {
       cancelDrag();
     }, this.gridster.$options.resizable.delayStart);
     const cancelMouse = this.gridsterItem.renderer.listen('document', 'mouseup', cancelDrag);
+    const cancelMouseLeave = this.gridsterItem.renderer.listen('document', 'mouseleave', cancelDrag);
     const cancelOnBlur = this.gridsterItem.renderer.listen('window', 'blur', cancelDrag);
     const cancelTouchMove = this.gridsterItem.renderer.listen('document', 'touchmove', cancelMove);
     const cancelTouchEnd = this.gridsterItem.renderer.listen('document', 'touchend', cancelDrag);
@@ -383,6 +387,7 @@ export class GridsterResizable {
       clearTimeout(timeout);
       cancelOnBlur();
       cancelMouse();
+      cancelMouseLeave();
       cancelTouchMove();
       cancelTouchEnd();
       cancelTouchCancel();
