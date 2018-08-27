@@ -177,34 +177,6 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
 
   setGridSize(): void {
     let el = this.el;
-    let widthOffset = 0;
-    let heightOffset = 0;
-
-    if (this.el.parentElement) {
-      const elStyle = document.defaultView.getComputedStyle(this.el);
-      const parentElStyle = document.defaultView.getComputedStyle(this.el.parentElement);
-
-      widthOffset += parseFloat(elStyle.getPropertyValue('margin-left'));
-      widthOffset += parseFloat(elStyle.getPropertyValue('margin-right'));
-      widthOffset += parseFloat(parentElStyle.getPropertyValue('padding-left'));
-      widthOffset += parseFloat(parentElStyle.getPropertyValue('padding-right'));
-
-      if (this.el.clientWidth < this.el.offsetWidth && this.el.scrollHeight > this.el.offsetHeight) {
-        widthOffset += this.el.offsetWidth - this.el.clientWidth;
-      }
-
-      heightOffset += parseFloat(elStyle.getPropertyValue('margin-top'));
-      heightOffset += parseFloat(elStyle.getPropertyValue('margin-bottom'));
-      heightOffset += parseFloat(parentElStyle.getPropertyValue('padding-top'));
-      heightOffset += parseFloat(parentElStyle.getPropertyValue('padding-bottom'));
-
-      if (this.el.clientHeight < this.el.offsetHeight && this.el.scrollWidth > this.el.offsetWidth) {
-        heightOffset += this.el.offsetHeight - this.el.clientHeight;
-      }
-
-      el = this.el.parentElement;
-    }
-
     let width = el.clientWidth;
     let height = el.clientHeight;
     if (this.$options.setGridSize || this.$options.gridType === 'fit' && !this.mobile) {
@@ -214,8 +186,8 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
       width = el.clientWidth;
       height = el.clientHeight;
     }
-    this.curWidth = width - widthOffset;
-    this.curHeight = height - heightOffset;
+    this.curWidth = width;
+    this.curHeight = height;
   }
 
   setGridDimensions(): void {
