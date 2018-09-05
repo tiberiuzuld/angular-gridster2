@@ -32,6 +32,7 @@ export enum CompactType {
 
 export interface GridsterConfig {
   gridType?: gridTypes;
+  rtl?: boolean;
   fixedColWidth?: number;
   fixedRowHeight?: number;
   keepFixedHeightInMobile?: boolean;

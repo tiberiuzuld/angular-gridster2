@@ -79,6 +79,10 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     if (this.options.initCallback) {
       this.options.initCallback(this);
     }
+    if (this.$options.rtl) {
+      this.renderer.setStyle(this.el, 'direction', 'rtl');
+
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -176,7 +180,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
   }
 
   setGridSize(): void {
-    let el = this.el;
+    const el = this.el;
     let width = el.clientWidth;
     let height = el.clientHeight;
     if (this.$options.setGridSize || this.$options.gridType === 'fit' && !this.mobile) {

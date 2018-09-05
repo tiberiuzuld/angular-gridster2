@@ -6,6 +6,8 @@ import {GridsterItem} from './gridsterItem.interface';
 
 @Injectable()
 export class GridsterRenderer {
+  x: number;
+  marginLeft: string;
 
   constructor(private gridster: GridsterComponentInterface) {
   }
@@ -31,11 +33,15 @@ export class GridsterRenderer {
       renderer.setStyle(el, 'margin-bottom', this.gridster.$options.margin + 'px');
       renderer.setStyle(el, 'margin-right', '');
     } else {
-      const x = Math.round(this.gridster.curColWidth * item.x);
+      if (this.gridster.$options.rtl) {
+        this.x = Math.round(this.gridster.curColWidth * (item.x * -1));
+      } else {
+        this.x = Math.round(this.gridster.curColWidth * item.x);
+      }
       const y = Math.round(this.gridster.curRowHeight * item.y);
       const width = this.gridster.curColWidth * item.cols - this.gridster.$options.margin;
       const height = (this.gridster.curRowHeight * item.rows - this.gridster.$options.margin);
-      const transform = 'translate3d(' + x + 'px, ' + y + 'px, 0)';
+      const transform = 'translate3d(' + this.x + 'px, ' + y + 'px, 0)';
       renderer.setStyle(el, 'transform', transform);
       renderer.setStyle(el, 'width', width + 'px');
       renderer.setStyle(el, 'height', height + 'px');
@@ -51,15 +57,25 @@ export class GridsterRenderer {
         }
         if (this.gridster.columns === item.cols + item.x) {
           if (this.gridster.$options.outerMarginBottom !== null) {
+            if (this.gridster.$options.rtl) {
+              this.marginLeft = this.gridster.$options.outerMarginLeft + 'px';
+            }
             marginRight = this.gridster.$options.outerMarginRight + 'px';
           } else {
+            if (this.gridster.$options.rtl) {
+              this.marginLeft = this.gridster.$options.margin + 'px';
+            }
             marginRight = this.gridster.$options.margin + 'px';
           }
         }
       }
 
       renderer.setStyle(el, 'margin-bottom', marginBottom);
-      renderer.setStyle(el, 'margin-right', marginRight);
+      if (this.gridster.$options.rtl) {
+        renderer.setStyle(el, 'margin-left', this.marginLeft);
+      } else {
+        renderer.setStyle(el, 'margin-right', marginRight);
+      }
     }
   }
 
@@ -121,11 +137,19 @@ export class GridsterRenderer {
   }
 
   getGridColumnStyle(i: number) {
-    return {
-      transform: 'translateX(' + this.gridster.curColWidth * i + 'px)',
-      width: this.gridster.curColWidth - this.gridster.$options.margin + 'px',
-      height: this.gridster.gridRows.length * this.gridster.curRowHeight - this.gridster.$options.margin + 'px'
-    };
+    if (this.gridster.$options.rtl) {
+      return {
+        transform: 'translateX(' + this.gridster.curColWidth * i * -1 + 'px)',
+        width: this.gridster.curColWidth - this.gridster.$options.margin + 'px',
+        height: this.gridster.gridRows.length * this.gridster.curRowHeight - this.gridster.$options.margin + 'px'
+      };
+    } else {
+      return {
+        transform: 'translateX(' + this.gridster.curColWidth * i + 'px)',
+        width: this.gridster.curColWidth - this.gridster.$options.margin + 'px',
+        height: this.gridster.gridRows.length * this.gridster.curRowHeight - this.gridster.$options.margin + 'px'
+      };
+    }
   }
 
   getGridRowStyle(i: number) {

@@ -1,20 +1,23 @@
 {
-  "name": "angular-gridster2",
-  "version": "6.0.6",
+  "name": "angular-gridster2-kn",
+  "version": "6.0.10",
   "license": "MIT",
   "peerDependencies": {
     "@angular/common": "^6.0.0",
     "@angular/core": "^6.0.0"
   },
-  "homepage": "https://tiberiuzuld.github.io/angular-gridster2",
+  "homepage": "https://github.com/Shadyelshrief/angular-gridster2",
   "bugs": {
     "url": "https://github.com/tiberiuzuld/angular-gridster2/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/tiberiuzuld/angular-gridster2.git"
+    "url": "https://github.com/Shadyelshrief/angular-gridster2.git"
   },
-  "description": "Angular gridster 2",
+  "publishConfig": {
+    "registry": "http://imore-pn.tradenet.com:8081/repository/kn-npm-hosted/"
+  },
+  "description": "Angular gridster 2 supports RTL",
   "keywords": [
     "angular",
     "angular2",

@@ -4,6 +4,7 @@ import {GridsterComponentInterface} from './gridster.interface';
 
 export interface GridsterConfigS {
   gridType: gridTypes;
+  rtl?: boolean;
   fixedColWidth: number;
   fixedRowHeight: number;
   keepFixedHeightInMobile: boolean;
