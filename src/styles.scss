@@ -1,0 +1,41 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body {
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+blockquote {
+  padding: 0 1em;
+  color: rgba(0, 0, 0, 0.535);
+  border-left: 0.25em solid rgba(0, 0, 0, 0.11);
+}
+
+table {
+  border-spacing: 0;
+  border-collapse: collapse;
+  margin-bottom: 16px;
+  th,
+  td {
+    padding: 6px 13px;
+    border: 1px solid #ddd;
+    &[align="left"] {
+      text-align: left;
+    }
+    &[align="center"] {
+      text-align: center;
+    }
+    &[align="right"] {
+      text-align: right;
+    }
+  }
+  tr:nth-child(2n) {
+    background-color: rgba(0, 0, 0, 0.03);
+  }
+}
