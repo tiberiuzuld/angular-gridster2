@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 
-import { GridsterComponentInterface } from './gridster.interface';
-import { GridsterItemComponentInterface } from './gridsterItemComponent.interface';
-import { GridsterItem } from './gridsterItem.interface';
-import { CompactType } from './gridsterConfig.interface';
+import {GridsterComponentInterface} from './gridster.interface';
+import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
+import {GridsterItem} from './gridsterItem.interface';
+import {CompactType} from './gridsterConfig.interface';
 
 @Injectable()
 export class GridsterCompact {
@@ -27,9 +27,14 @@ export class GridsterCompact {
       } else if (this.gridster.$options.compactType === CompactType.CompactLeftAndUp) {
         this.checkCompactLeft();
         this.checkCompactUp();
+      } else if (this.gridster.$options.compactType === CompactType.CompactRight) {
+        this.checkCompactRight();
       } else if (this.gridster.$options.compactType === CompactType.CompactUpAndRight) {
         this.checkCompactUp();
         this.checkCompactRight();
+      } else if (this.gridster.$options.compactType === CompactType.CompactRightAndUp) {
+        this.checkCompactRight();
+        this.checkCompactUp();
       }
     }
   }
@@ -106,8 +111,8 @@ export class GridsterCompact {
 
   checkCompactRight(): void {
     let widgetMovedUp = false, widget: GridsterItemComponentInterface, moved: boolean;
-    var l = this.gridster.grid.length;
-    for (var i = 0; i < l; i++) {
+    const l = this.gridster.grid.length;
+    for (let i = 0; i < l; i++) {
       widget = this.gridster.grid[i];
       if (widget.$item.compactEnabled === false) {
         continue;
@@ -135,15 +140,14 @@ export class GridsterCompact {
     }
   }
 
-  moveRightTillCollision = function (item) {
+  moveRightTillCollision(item) {
     item.x += 1;
     if (this.gridster.checkCollision(item)) {
       item.x -= 1;
       return false;
-    }
-    else {
+    } else {
       this.moveRightTillCollision(item);
       return true;
     }
-  };
+  }
 }

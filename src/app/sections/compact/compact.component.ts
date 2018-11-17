@@ -16,6 +16,7 @@ export class CompactComponent implements OnInit {
     this.options = {
       gridType: GridType.Fit,
       compactType: CompactType.None,
+      maxCols: 10,
       pushItems: true,
       draggable: {
         enabled: true
