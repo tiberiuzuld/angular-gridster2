@@ -229,8 +229,8 @@ export class GridsterDraggable {
     if (this.gridster.checkGridCollision(this.gridsterItem.$item)) {
       this.gridsterItem.$item.y = this.positionYBackup;
     }
-    const transform = 'translate(' + this.left + 'px, ' + this.top + 'px)';
-    this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'transform', transform);
+    this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'top', this.top + 'px');
+    this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'left', this.left + 'px');
 
     if (this.positionXBackup !== this.gridsterItem.$item.x || this.positionYBackup !== this.gridsterItem.$item.y) {
       const lastPosition = this.path[this.path.length - 1];

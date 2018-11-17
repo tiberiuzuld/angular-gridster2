@@ -394,13 +394,11 @@ export class GridsterResizable {
   }
 
   setItemTop(top: number): void {
-    const transform = 'translate(' + this.left + 'px, ' + top + 'px)';
-    this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'transform', transform);
+    this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'top', top + 'px');
   }
 
   setItemLeft(left: number): void {
-    const transform = 'translate(' + left + 'px, ' + this.top + 'px)';
-    this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'transform', transform);
+    this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'left', left + 'px');
   }
 
   setItemHeight(height: number): void {

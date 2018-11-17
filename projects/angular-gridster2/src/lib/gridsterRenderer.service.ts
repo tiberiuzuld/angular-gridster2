@@ -16,7 +16,8 @@ export class GridsterRenderer {
 
   updateItem(el: any, item: GridsterItem, renderer: Renderer2) {
     if (this.gridster.mobile) {
-      renderer.setStyle(el, 'transform', '');
+      renderer.setStyle(el, 'top', '');
+      renderer.setStyle(el, 'left', '');
       if (this.gridster.$options.keepFixedHeightInMobile) {
         renderer.setStyle(el, 'height', (item.rows * this.gridster.$options.fixedRowHeight) + 'px');
       } else {
@@ -35,8 +36,9 @@ export class GridsterRenderer {
       const y = Math.round(this.gridster.curRowHeight * item.y);
       const width = this.gridster.curColWidth * item.cols - this.gridster.$options.margin;
       const height = (this.gridster.curRowHeight * item.rows - this.gridster.$options.margin);
-      const transform = 'translate3d(' + x + 'px, ' + y + 'px, 0)';
-      renderer.setStyle(el, 'transform', transform);
+      // set the cell style
+      renderer.setStyle(el, 'left', this.gridster.$options.margin + x + 'px');
+      renderer.setStyle(el, 'top', this.gridster.$options.margin + y + 'px');
       renderer.setStyle(el, 'width', width + 'px');
       renderer.setStyle(el, 'height', height + 'px');
       let marginBottom: string | null = null;
@@ -122,7 +124,7 @@ export class GridsterRenderer {
 
   getGridColumnStyle(i: number) {
     return {
-      transform: 'translateX(' + this.gridster.curColWidth * i + 'px)',
+      left: this.gridster.$options.margin + this.gridster.curColWidth * i + 'px',
       width: this.gridster.curColWidth - this.gridster.$options.margin + 'px',
       height: this.gridster.gridRows.length * this.gridster.curRowHeight - this.gridster.$options.margin + 'px'
     };
@@ -130,7 +132,7 @@ export class GridsterRenderer {
 
   getGridRowStyle(i: number) {
     return {
-      transform: 'translateY(' + this.gridster.curRowHeight * i + 'px)',
+      top: this.gridster.$options.margin + this.gridster.curRowHeight * i + 'px',
       width: this.gridster.gridColumns.length * this.gridster.curColWidth - this.gridster.$options.margin + 'px',
       height: this.gridster.curRowHeight - this.gridster.$options.margin + 'px'
     };
