@@ -176,7 +176,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
   }
 
   setGridSize(): void {
-    let el = this.el;
+    const el = this.el;
     let width = el.clientWidth;
     let height = el.clientHeight;
     if (this.$options.setGridSize || this.$options.gridType === 'fit' && !this.mobile) {
