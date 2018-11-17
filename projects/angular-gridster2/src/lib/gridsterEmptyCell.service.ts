@@ -143,7 +143,8 @@ export class GridsterEmptyCell {
     e.preventDefault();
     e.stopPropagation();
     const item = this.getValidItemFromEvent(e);
-    if (!item) {
+    const leftMouseButtonCode = 1;
+    if (!item || e.buttons !== leftMouseButtonCode) {
       return;
     }
     this.initialItem = item;
