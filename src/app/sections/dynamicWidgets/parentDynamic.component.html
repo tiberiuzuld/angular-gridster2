@@ -1,0 +1,3 @@
+<app-widget-a *ngIf="widget.type === 'widgetA'" [resizeEvent]="resizeEvent" [widget]="widget"></app-widget-a>
+<app-widget-b [widget]="widget" [resizeEvent]="resizeEvent" *ngIf="widget.type === 'widgetB'"></app-widget-b>
+<app-widget-c [widget]="widget" [resizeEvent]="resizeEvent" *ngIf="widget.type === 'widgetC'"></app-widget-c>

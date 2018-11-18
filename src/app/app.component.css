@@ -53,3 +53,30 @@ gridster-item div.button-holder {
   user-select: none;
   cursor: pointer;
 }
+
+app-parent-dynamic, app-widget-a, app-widget-b, app-widget-c {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  color: white;
+  font-weight: bold;
+  font-size: 24px;
+  align-items: center;
+  justify-content: center;
+}
+
+code {
+  background: darkgrey;
+}
+
+app-widget-a {
+  background: red;
+}
+
+app-widget-b {
+  background: blue;
+}
+
+app-widget-c {
+  background: lawngreen;
+}

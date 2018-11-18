@@ -33,6 +33,11 @@ import {GridEventsComponent} from './sections/gridEvents/gridEvents.component';
 import {ItemsComponent} from './sections/items/items.component';
 import {ApiComponent} from './sections/api/api.component';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
+import {DynamicWidgetsComponent} from './sections/dynamicWidgets/dynamicWidgets.component';
+import {ParentDynamicComponent} from './sections/dynamicWidgets/parentDynamic.component';
+import {WidgetAComponent} from './sections/dynamicWidgets/widgetA.component';
+import {WidgetBComponent} from './sections/dynamicWidgets/widgetB.component';
+import {WidgetCComponent} from './sections/dynamicWidgets/widgetC.component';
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
@@ -40,6 +45,7 @@ const appRoutes: Routes = [
   {path: 'compact', component: CompactComponent},
   {path: 'displayGrid', component: DisplayGridComponent},
   {path: 'drag', component: DragComponent},
+  {path: 'dynamicWidgets', component: DynamicWidgetsComponent},
   {path: 'emptyCell', component: EmptyCellComponent},
   {path: 'gridEvents', component: GridEventsComponent},
   {path: 'gridMargins', component: GridMarginsComponent},
@@ -61,6 +67,11 @@ const appRoutes: Routes = [
     CompactComponent,
     DisplayGridComponent,
     DragComponent,
+    DynamicWidgetsComponent,
+    ParentDynamicComponent,
+    WidgetAComponent,
+    WidgetBComponent,
+    WidgetCComponent,
     EmptyCellComponent,
     GridEventsComponent,
     GridMarginsComponent,

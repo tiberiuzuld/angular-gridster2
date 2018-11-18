@@ -79,10 +79,6 @@ Initialize a simple dashboard:
 ##### Note: The gridster will take all the available space from the parent. It will not size depending on content. The parent of the component needs to have a size.
 
 
-### Load dynamic components inside the `gridster-item`
-
-You can load dynamic components in Angular4+ with the help of [`ng-dynamic-component` library](https://www.npmjs.com/package/ng-dynamic-component) 
-
 ### Having iFrame in widgets content
 iFrames can interfere with drag/resize of widgets. For a workaround please read [this issue #233](https://github.com/tiberiuzuld/angular-gridster2/issues/233)
 
