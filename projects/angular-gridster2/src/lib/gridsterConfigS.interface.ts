@@ -29,6 +29,7 @@ export interface GridsterConfigS {
   outerMarginRight: number | null;
   outerMarginBottom: number | null;
   outerMarginLeft: number | null;
+  useTransformPositioning: boolean;
   scrollSensitivity: number;
   scrollSpeed: number;
   draggable: Draggable;

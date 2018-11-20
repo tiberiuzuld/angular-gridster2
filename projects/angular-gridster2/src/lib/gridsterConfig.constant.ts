@@ -32,6 +32,7 @@ export const GridsterConfigService: GridsterConfig = {
   outerMarginRight: null, // override outer margin for grid
   outerMarginBottom: null, // override outer margin for grid
   outerMarginLeft: null, // override outer margin for grid
+  useTransformPositioning: true, // toggle between transform or top/left positioning of items
   scrollSensitivity: 10,  // margin of the dashboard where to start scrolling
   scrollSpeed: 20,  // how much to scroll each mouse move when in the scrollSensitivity zone
   initCallback: undefined, // callback to call after grid has initialized. Arguments: gridsterComponent

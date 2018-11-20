@@ -1,11 +1,11 @@
-import { Injectable, NgZone } from '@angular/core';
+import {Injectable, NgZone} from '@angular/core';
 
-import { GridsterSwap } from './gridsterSwap.service';
-import { cancelScroll, scroll } from './gridsterScroll.service';
-import { GridsterPush } from './gridsterPush.service';
-import { GridsterUtils } from './gridsterUtils.service';
-import { GridsterItemComponentInterface } from './gridsterItemComponent.interface';
-import { GridsterComponentInterface } from './gridster.interface';
+import {GridsterSwap} from './gridsterSwap.service';
+import {cancelScroll, scroll} from './gridsterScroll.service';
+import {GridsterPush} from './gridsterPush.service';
+import {GridsterUtils} from './gridsterUtils.service';
+import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
+import {GridsterComponentInterface} from './gridster.interface';
 
 @Injectable()
 export class GridsterDraggable {
@@ -114,7 +114,7 @@ export class GridsterDraggable {
     this.swap = new GridsterSwap(this.gridsterItem);
     this.gridster.dragInProgress = true;
     this.gridster.updateGrid();
-    this.path.push({ x: this.gridsterItem.item.x || 0, y: this.gridsterItem.item.y || 0 });
+    this.path.push({x: this.gridsterItem.item.x || 0, y: this.gridsterItem.item.y || 0});
   }
 
   dragMove(e: any): void {
@@ -229,8 +229,7 @@ export class GridsterDraggable {
     if (this.gridster.checkGridCollision(this.gridsterItem.$item)) {
       this.gridsterItem.$item.y = this.positionYBackup;
     }
-    this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'top', this.top + 'px');
-    this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'left', this.left + 'px');
+    this.gridster.gridRenderer.setCellPosition(this.gridsterItem.renderer, this.gridsterItem.el, this.left, this.top);
 
     if (this.positionXBackup !== this.gridsterItem.$item.x || this.positionYBackup !== this.gridsterItem.$item.y) {
       const lastPosition = this.path[this.path.length - 1];
@@ -254,7 +253,7 @@ export class GridsterDraggable {
           this.gridster.movingItem = null;
         }
       } else {
-        this.path.push({ x: this.gridsterItem.$item.x, y: this.gridsterItem.$item.y });
+        this.path.push({x: this.gridsterItem.$item.x, y: this.gridsterItem.$item.y});
       }
       this.push.checkPushBack();
     }

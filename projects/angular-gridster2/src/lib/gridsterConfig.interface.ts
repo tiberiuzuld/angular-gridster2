@@ -67,6 +67,7 @@ export interface GridsterConfig {
   outerMarginRight?: number | null;
   outerMarginBottom?: number | null;
   outerMarginLeft?: number | null;
+  useTransformPositioning?: boolean;
   scrollSensitivity?: number | null;
   scrollSpeed?: number;
   initCallback?: (gridster: GridsterComponentInterface) => void;
