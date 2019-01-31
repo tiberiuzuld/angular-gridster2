@@ -138,10 +138,10 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     if (this.windowResize) {
       this.windowResize();
     }
-    if (this.options.destroyCallback) {
+    if (this.options && this.options.destroyCallback) {
       this.options.destroyCallback(this);
     }
-    if (this.options.api) {
+    if (this.options && this.options.api) {
       this.options.api.resize = undefined;
       this.options.api.optionsChanged = undefined;
       this.options.api.getNextPossiblePosition = undefined;
