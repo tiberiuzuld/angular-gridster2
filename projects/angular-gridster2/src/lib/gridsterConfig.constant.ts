@@ -100,5 +100,7 @@ export const GridsterConfigService: GridsterConfig = {
   disableWindowResize: false, // disable the window on resize listener. This will stop grid to recalculate on window resize.
   disableWarnings: false, // disable console log warnings about misplacement of grid items
   scrollToNewItems: false, // scroll to new items placed in a scrollable view
+  disableScrollHorizontal: false, // disable horizontal scrolling
+  disableScrollVertical: false, // disable vertical scrolling
   disableAutoPositionOnConflict: false  // disable auto-position of items on conflict state
 };
