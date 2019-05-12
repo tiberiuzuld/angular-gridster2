@@ -91,6 +91,8 @@ export interface GridsterConfig {
   disableWindowResize?: boolean;
   disableWarnings?: boolean;
   scrollToNewItems?: boolean;
+  disableScrollHorizontal?: boolean;
+  disableScrollVertical?: boolean;
   enableEmptyCellClick?: boolean;
   enableEmptyCellContextMenu?: boolean;
   enableEmptyCellDrop?: boolean;
