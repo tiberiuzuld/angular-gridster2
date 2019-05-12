@@ -19,6 +19,12 @@
   <mat-checkbox [(ngModel)]="options.draggable.ignoreContent" (ngModelChange)="changedOptions()">
     Ignore Content
   </mat-checkbox>
+  <mat-checkbox [(ngModel)]="options.disableScrollVertical" (ngModelChange)="changedOptions()">
+    Disable Vertical Scroll
+  </mat-checkbox>
+  <mat-checkbox [(ngModel)]="options.disableScrollHorizontal" (ngModelChange)="changedOptions()">
+    Disable Horizontal Scroll
+  </mat-checkbox>
   <mat-form-field>
     <input matInput [(ngModel)]="options.draggable.delayStart" type="number" placeholder="Delay Start ms"
            (ngModelChange)="changedOptions()">
