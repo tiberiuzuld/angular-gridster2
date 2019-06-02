@@ -4,15 +4,13 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {FormsModule} from '@angular/forms';
 import 'hammerjs';
-import {
-  MatButtonModule,
-  MatCheckboxModule,
-  MatIconModule,
-  MatInputModule,
-  MatListModule,
-  MatSelectModule,
-  MatSidenavModule
-} from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import {MarkdownModule, MarkedOptions} from 'ngx-markdown';
 
 import {AppComponent} from './app.component';

@@ -8,7 +8,7 @@ angular-gridster2
 
 ### Angular implementation of angular-gridster [Demo](http://tiberiuzuld.github.io/angular-gridster2)
 
-### Requires Angular 7.x
+### Requires Angular 8.x
 ### For other Angular versions check the other branches.
 
 ## Install
