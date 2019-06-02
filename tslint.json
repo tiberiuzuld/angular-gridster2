@@ -1,8 +1,8 @@
 {
-  "rulesDirectory": [
-    "node_modules/codelyzer"
-  ],
+  "extends": "tslint:recommended",
   "rules": {
+    "array-type": false,
+    "arrow-parens": false,
     "arrow-return-shorthand": true,
     "callable-types": true,
     "class-name": true,
@@ -10,10 +10,25 @@
       true,
       "check-space"
     ],
+    "component-class-suffix": true,
+    "component-selector": [
+      true,
+      "element",
+      "app",
+      "kebab-case"
+    ],
+    "contextual-lifecycle": true,
     "curly": true,
     "deprecation": {
       "severity": "warn"
     },
+    "directive-class-suffix": true,
+    "directive-selector": [
+      true,
+      "attribute",
+      "app",
+      "camelCase"
+    ],
     "eofline": true,
     "forin": true,
     "import-blacklist": [
@@ -25,8 +40,10 @@
       true,
       "spaces"
     ],
+    "interface-name": false,
     "interface-over-type-literal": true,
     "label-position": true,
+    "max-classes-per-file": false,
     "max-line-length": [
       true,
       140
@@ -45,6 +62,8 @@
     ],
     "no-arg": true,
     "no-bitwise": true,
+    "no-conflicting-lifecycle": true,
+    "no-consecutive-blank-lines": false,
     "no-console": [
       true,
       "debug",
@@ -59,12 +78,20 @@
     "no-empty": false,
     "no-empty-interface": true,
     "no-eval": true,
+    "no-host-metadata-property": true,
     "no-inferrable-types": [
       true,
       "ignore-params"
     ],
+    "no-input-rename": true,
+    "no-inputs-metadata-property": true,
     "no-misused-new": true,
     "no-non-null-assertion": true,
+    "no-output-native": true,
+    "no-output-on-prefix": true,
+    "no-output-rename": true,
+    "no-outputs-metadata-property": true,
+    "no-redundant-jsdoc": true,
     "no-shadowed-variable": true,
     "no-string-literal": false,
     "no-string-throw": true,
@@ -74,6 +101,11 @@
     "no-unused-expression": true,
     "no-use-before-declare": true,
     "no-var-keyword": true,
+    "no-var-requires": false,
+    "object-literal-key-quotes": [
+      true,
+      "as-needed"
+    ],
     "object-literal-sort-keys": false,
     "one-line": [
       true,
@@ -82,6 +114,7 @@
       "check-else",
       "check-whitespace"
     ],
+    "ordered-imports": false,
     "prefer-const": true,
     "quotemark": [
       true,
@@ -92,6 +125,9 @@
       true,
       "always"
     ],
+    "template-banana-in-box": true,
+    "template-no-negated-async": true,
+    "trailing-comma": false,
     "triple-equals": [
       true,
       "allow-null-check"
@@ -107,6 +143,8 @@
       }
     ],
     "unified-signatures": true,
+    "use-lifecycle-interface": true,
+    "use-pipe-transform-interface": true,
     "variable-name": false,
     "whitespace": [
       true,
@@ -115,16 +153,9 @@
       "check-operator",
       "check-separator",
       "check-type"
-    ],
-    "no-output-on-prefix": true,
-    "no-inputs-metadata-property": true,
-    "no-outputs-metadata-property": true,
-    "no-host-metadata-property": true,
-    "no-input-rename": true,
-    "no-output-rename": true,
-    "use-lifecycle-interface": true,
-    "use-pipe-transform-interface": true,
-    "component-class-suffix": true,
-    "directive-class-suffix": true
-  }
+    ]
+  },
+  "rulesDirectory": [
+    "node_modules/codelyzer"
+  ]
 }
