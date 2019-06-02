@@ -124,6 +124,7 @@ Option 2 (with text selection):
 
 ### Supporters
 @matpag (Mattia Pagini)
+Derek
 
 ### [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/tiberiuzuld)
 
