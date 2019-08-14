@@ -131,13 +131,6 @@ export class GridsterPush {
         makePush = false;
         break;
       }
-      const compare = this.pushedItemsTemp.find((el: GridsterItemComponentInterface) => {
-        return el.$item.x === itemCollision.$item.x && el.$item.y === itemCollision.$item.y;
-      });
-      if (compare) {
-        makePush = false;
-        break;
-      }
       if (this.tryPattern[direction][0].call(this, itemCollision, gridsterItem)) {
         this.pushedItemsOrder.push(itemCollision);
         b.push(itemCollision);
