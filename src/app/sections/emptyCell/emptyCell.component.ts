@@ -20,6 +20,7 @@ export class EmptyCellComponent implements OnInit {
       enableEmptyCellContextMenu: false,
       enableEmptyCellDrop: false,
       enableEmptyCellDrag: false,
+      enableOccupiedCellDrop: false,
       emptyCellClickCallback: this.emptyCellClick.bind(this),
       emptyCellContextMenuCallback: this.emptyCellClick.bind(this),
       emptyCellDropCallback: this.emptyCellClick.bind(this),

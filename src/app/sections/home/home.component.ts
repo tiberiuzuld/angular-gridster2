@@ -46,6 +46,7 @@ export class HomeComponent implements OnInit {
       enableEmptyCellContextMenu: false,
       enableEmptyCellDrop: false,
       enableEmptyCellDrag: false,
+      enableOccupiedCellDrop: false,
       emptyCellDragMaxCols: 50,
       emptyCellDragMaxRows: 50,
       ignoreMarginInRow: false,

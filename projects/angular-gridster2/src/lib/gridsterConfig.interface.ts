@@ -97,6 +97,7 @@ export interface GridsterConfig {
   enableEmptyCellContextMenu?: boolean;
   enableEmptyCellDrop?: boolean;
   enableEmptyCellDrag?: boolean;
+  enableOccupiedCellDrop?: boolean;
   emptyCellClickCallback?: (event: MouseEvent, item: GridsterItem) => void;
   emptyCellContextMenuCallback?: (event: MouseEvent, item: GridsterItem) => void;
   emptyCellDropCallback?: (event: MouseEvent, item: GridsterItem) => void;
