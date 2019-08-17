@@ -29,6 +29,7 @@ export class GridsterPush {
     this.pushedItemsTemp = [];
     this.pushedItemsTempPath = [];
     this.pushedItemsPath = [];
+    gridsterItem['id'] = this.generateTempRandomId();
     this.gridsterItem = gridsterItem;
     this.gridster = gridsterItem.gridster;
     this.tryPattern = {
@@ -58,6 +59,7 @@ export class GridsterPush {
       this.pushedItemsOrder = [];
       this.pushedItemsTemp = [];
       this.pushedItemsTempPath = [];
+      this.cleanTempIds();
       return pushed;
     } else {
       return false;
@@ -110,6 +112,15 @@ export class GridsterPush {
     }
   }
 
+  private generateTempRandomId() : string {
+    return Math.random().toString(36).replace(/[^a-z]+/g, '').substr(2, 10);
+  }
+
+  private cleanTempIds(){
+    const allItemsWithIds = this.gridster.grid.filter((el:GridsterItemComponentInterface) => el['id']);
+    allItemsWithIds.forEach((el: GridsterItemComponentInterface) => delete el['id']);
+  }
+
   private push(gridsterItem: GridsterItemComponentInterface, direction: string): boolean {
     if (this.gridster.checkGridCollision(gridsterItem.$item)) {
       return false;
@@ -123,11 +134,21 @@ export class GridsterPush {
     const b: Array<GridsterItemComponentInterface> = [];
     for (; i > -1; i--) {
       itemCollision = a[i];
+      if (!itemCollision['id']) {
+        itemCollision['id'] = this.generateTempRandomId();
+      }
       if (itemCollision === this.gridsterItem) {
         makePush = false;
         break;
       }
       if (!itemCollision.canBeDragged()) {
+        makePush = false;
+        break;
+      }
+      const compare = this.pushedItemsTemp.find((el: GridsterItemComponentInterface) => {
+        return el['id'] === itemCollision['id'];
+      });
+      if (compare) {
         makePush = false;
         break;
       }
