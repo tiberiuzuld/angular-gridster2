@@ -35,6 +35,7 @@ export interface GridsterConfigS {
   draggable: Draggable;
   resizable: Resizable;
   swap: boolean;
+  swapWhileDragging: boolean;
   pushItems: boolean;
   disablePushOnDrag: boolean;
   disablePushOnResize: boolean;
