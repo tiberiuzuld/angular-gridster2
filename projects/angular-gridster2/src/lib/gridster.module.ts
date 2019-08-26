@@ -16,7 +16,8 @@ import {GridsterPreviewComponent} from './gridsterPreview.component';
   ],
   exports: [GridsterComponent, GridsterItemComponent],
   providers: [],
-  bootstrap: []
+  bootstrap: [],
+  entryComponents: [GridsterComponent, GridsterItemComponent]
 })
 export class GridsterModule {
 }
