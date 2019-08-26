@@ -82,6 +82,10 @@ export class GridsterSwap {
       } else {
         gridsterItemCollide.setSize();
         this.swapedItem = gridsterItemCollide;
+        if (this.gridster.$options.swapWhileDragging) {
+          this.gridsterItem.checkItemChanges(this.gridsterItem.$item, this.gridsterItem.item);
+          this.setSwapItem();
+        }
       }
     }
   }
