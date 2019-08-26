@@ -17,6 +17,9 @@
     Enable drop to add
   </mat-checkbox>
   <div *ngIf="options.enableEmptyCellDrop" draggable="true" (dragstart)="dragStartHandler($event)">Drag me!</div>
+  <mat-checkbox [(ngModel)]="options.enableOccupiedCellDrop" (ngModelChange)="changedOptions()" [disabled]="!options.enableEmptyCellDrop">
+    Enable drop on occupied cell
+  </mat-checkbox>
   <mat-checkbox [(ngModel)]="options.enableEmptyCellDrag" (ngModelChange)="changedOptions()">
     Enable drag to add
   </mat-checkbox>

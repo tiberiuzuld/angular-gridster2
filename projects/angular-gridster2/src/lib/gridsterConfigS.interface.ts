@@ -52,6 +52,7 @@ export interface GridsterConfigS {
   enableEmptyCellContextMenu: boolean;
   enableEmptyCellDrop: boolean;
   enableEmptyCellDrag: boolean;
+  enableOccupiedCellDrop: boolean;
   emptyCellDragMaxCols: number;
   emptyCellDragMaxRows: number;
   ignoreMarginInRow: boolean;
