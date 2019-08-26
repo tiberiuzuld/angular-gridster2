@@ -219,7 +219,7 @@ export class GridsterEmptyCell {
         item.y = this.gridster.movingItem ? this.gridster.movingItem.y : 0;
       }
     }
-    if (this.gridster.checkCollision(item)) {
+    if (!this.gridster.$options.enableOccupiedCellDrop && this.gridster.checkCollision(item)) {
       return;
     }
     return item;

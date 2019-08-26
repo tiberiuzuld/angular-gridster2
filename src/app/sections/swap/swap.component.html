@@ -10,6 +10,9 @@
   <mat-checkbox [(ngModel)]="options.swap" (ngModelChange)="changedOptions()">
     Swap Items
   </mat-checkbox>
+  <mat-checkbox [(ngModel)]="options.swapWhileDragging" (ngModelChange)="changedOptions()">
+    Swap Items While Dragging
+  </mat-checkbox>
   <button mat-mini-fab (click)="addItem()" class="add-button cols-2">
     <mat-icon>add</mat-icon>
   </button>

@@ -52,6 +52,7 @@ export const GridsterConfigService: GridsterConfig = {
   enableEmptyCellContextMenu: false, // enable empty cell context menu (right click) events
   enableEmptyCellDrop: false, // enable empty cell drop events
   enableEmptyCellDrag: false, // enable empty cell drag events
+  enableOccupiedCellDrop: false, // enable occupied cell drop events
   emptyCellClickCallback: undefined, // empty cell click callback
   emptyCellContextMenuCallback: undefined, // empty cell context menu (right click) callback
   emptyCellDropCallback: undefined, // empty cell drag drop callback. HTML5 Drag & Drop
@@ -91,7 +92,7 @@ export const GridsterConfigService: GridsterConfig = {
     // Arguments: item, gridsterItem, event
   },
   swap: true, // allow items to switch position if drop on top of another
-  swapWhileDragging: true, // allow items to switch position while dragging
+  swapWhileDragging: false, // allow items to switch position while dragging
   pushItems: false, // push items when resizing and dragging
   disablePushOnDrag: false, // disable push on drag
   disablePushOnResize: false, // disable push on resize

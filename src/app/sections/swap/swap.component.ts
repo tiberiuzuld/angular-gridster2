@@ -18,6 +18,7 @@ export class SwapComponent implements OnInit {
       displayGrid: DisplayGrid.Always,
       pushItems: false,
       swap: true,
+      swapWhileDragging: false,
       draggable: {
         enabled: true
       },

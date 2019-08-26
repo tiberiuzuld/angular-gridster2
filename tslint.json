@@ -20,7 +20,7 @@
     "contextual-lifecycle": true,
     "curly": true,
     "deprecation": {
-      "severity": "warn"
+      "severity": "warning"
     },
     "directive-class-suffix": true,
     "directive-selector": [
