@@ -40,8 +40,8 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
   curWidth: number;
   curHeight: number;
   grid: Array<GridsterItemComponentInterface>;
-  columns: number;
-  rows: number;
+  columns = 0;
+  rows = 0;
   curColWidth: number;
   curRowHeight: number;
   gridColumns = [];
