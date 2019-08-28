@@ -63,7 +63,12 @@ export class GridsterSwap {
   }
 
   checkSwap(pushedBy: GridsterItemComponentInterface): void {
-    const gridsterItemCollision: any = this.gridster.checkCollision(pushedBy.$item);
+    let gridsterItemCollision;
+    if (this.gridster.$options.swapWhileDragging) {
+      gridsterItemCollision = this.gridster.checkCollisionForSwaping(pushedBy.$item);
+    }else{
+      gridsterItemCollision = this.gridster.checkCollision(pushedBy.$item);
+    }
     if (gridsterItemCollision && gridsterItemCollision !== true && gridsterItemCollision.canBeDragged()) {
       const gridsterItemCollide: GridsterItemComponentInterface = gridsterItemCollision;
       const copyCollisionX = gridsterItemCollide.$item.x;

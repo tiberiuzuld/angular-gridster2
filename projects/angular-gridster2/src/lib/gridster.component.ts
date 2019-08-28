@@ -357,6 +357,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     return collision;
   }
 
+
   checkGridCollision(item: GridsterItem): boolean {
     const noNegativePosition = item.y > -1 && item.x > -1;
     const maxGridCols = item.cols + item.x <= this.$options.maxCols;
@@ -386,6 +387,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     return false;
   }
 
+
   findItemsWithItem(item: GridsterItem): Array<GridsterItemComponentInterface> {
     const a: Array<GridsterItemComponentInterface> = [];
     let widgetsIndex: number = this.grid.length - 1, widget: GridsterItemComponentInterface;
@@ -397,6 +399,8 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     }
     return a;
   }
+
+
 
   autoPositionItem(itemComponent: GridsterItemComponentInterface): void {
     if (this.getNextPossiblePosition(itemComponent.$item)) {
@@ -494,4 +498,52 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
   positionYToPixels(y: number): number {
     return y * this.curRowHeight;
   }
+
+  // ------ Functions for swapWhileDragging option
+
+  // identical to checkCollision() except that here we add bondaries. 
+  static checkCollisionTwoItemsForSwaping(item: GridsterItem, item2: GridsterItem): boolean {
+    // if the cols or rows of the items are 1 , doesnt make any sense to set a boundary. Only if the item is bigger we set a boundary
+    const horizontalBoundaryItem1 = item.cols === 1 ? 0 : 1;
+    const horizontalBoundaryItem2 = item2.cols === 1 ? 0 : 1;
+    const verticalBoundaryItem1 = item.rows === 1 ? 0 : 1;
+    const verticalBoundaryItem2 = item2.rows === 1 ? 0 : 1;
+    return item.x + horizontalBoundaryItem1 < item2.x + item2.cols
+      && item.x + item.cols > item2.x + horizontalBoundaryItem2
+      && item.y + verticalBoundaryItem1 < item2.y + item2.rows
+      && item.y + item.rows > item2.y + verticalBoundaryItem2;
+  }
+
+  // identical to checkCollision() except that this function calls findItemWithItemForSwaping() instead of findItemWithItem()
+  checkCollisionForSwaping(item: GridsterItem): GridsterItemComponentInterface | boolean {
+    let collision: GridsterItemComponentInterface | boolean = false;
+    if (this.options.itemValidateCallback) {
+      collision = !this.options.itemValidateCallback(item);
+    }
+    if (!collision && this.checkGridCollision(item)) {
+      collision = true;
+    }
+    if (!collision) {
+      const c = this.findItemWithItemForSwaping(item);
+      if (c) {
+        collision = c;
+      }
+    }
+    return collision;
+  }
+
+  // identical to findItemWithItem() except that this function calls checkCollisionTwoItemsForSwaping() instead of checkCollisionTwoItems()
+  findItemWithItemForSwaping(item: GridsterItem): GridsterItemComponentInterface | boolean {
+    let widgetsIndex: number = this.grid.length - 1, widget: GridsterItemComponentInterface;
+    for (; widgetsIndex > -1; widgetsIndex--) {
+      widget = this.grid[widgetsIndex];
+      if (widget.$item !== item && GridsterComponent.checkCollisionTwoItemsForSwaping(widget.$item, item)) {
+        return widget;
+      }
+    }
+    return false;
+  }
+
+  // ------ End of functions for swapWhileDragging option
+
 }

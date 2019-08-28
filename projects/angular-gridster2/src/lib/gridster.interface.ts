@@ -11,6 +11,7 @@ export abstract class GridsterComponentInterface {
   $options: GridsterConfigS;
   grid: Array<GridsterItemComponentInterface>;
   checkCollision: (item: GridsterItem) => GridsterItemComponentInterface | boolean;
+  checkCollisionForSwaping: (item: GridsterItem) => GridsterItemComponentInterface | boolean;
   positionXToPixels: (x: number) => number;
   pixelsToPositionX: (x: number, roundingMethod: (x: number) => number, noLimit?: boolean) => number;
   positionYToPixels: (y: number) => number;
