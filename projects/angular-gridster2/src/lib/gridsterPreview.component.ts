@@ -1,4 +1,4 @@
-import {Component, ElementRef, Host, OnDestroy, Renderer2, ViewEncapsulation} from '@angular/core';
+import {Component, ElementRef, Host, OnDestroy, Renderer2, ViewEncapsulation, Inject} from '@angular/core';
 
 import {GridsterComponent} from './gridster.component';
 
@@ -12,7 +12,7 @@ export class GridsterPreviewComponent implements OnDestroy {
   el: any;
   gridster: GridsterComponent;
 
-  constructor(el: ElementRef, @Host() gridster: GridsterComponent, public renderer: Renderer2) {
+  constructor(@Inject(ElementRef)  el: ElementRef,  gridster: GridsterComponent, @Inject(Renderer2) public renderer: Renderer2) {
     this.el = el.nativeElement;
     this.gridster = gridster;
     this.gridster.previewStyle = this.previewStyle.bind(this);
