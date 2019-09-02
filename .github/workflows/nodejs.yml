@@ -18,11 +18,10 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - name: npm install, build, and deploy
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         npm install
         npm run build-npm
         npm run build-demo
       env:
         CI: true
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
