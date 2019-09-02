@@ -1,4 +1,4 @@
-import {Component, ElementRef, Host, Input, NgZone, OnDestroy, OnInit, Renderer2, ViewEncapsulation} from '@angular/core';
+import {Component, ElementRef, Host, Input, NgZone, OnDestroy, OnInit, Renderer2, ViewEncapsulation, Inject} from '@angular/core';
 
 import {GridsterItem} from './gridsterItem.interface';
 import {GridsterDraggable} from './gridsterDraggable.service';
@@ -27,7 +27,7 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
   notPlaced: boolean;
   init: boolean;
 
-  constructor(el: ElementRef, @Host() gridster: GridsterComponent, public renderer: Renderer2, private zone: NgZone) {
+  constructor(@Inject(ElementRef) el: ElementRef,  gridster: GridsterComponent, @Inject(Renderer2) public renderer: Renderer2, @Inject(NgZone) private zone: NgZone) {
     this.el = el.nativeElement;
     this.$item = {
       cols: -1,

@@ -9,7 +9,8 @@ import {
   OnInit,
   Renderer2,
   SimpleChanges,
-  ViewEncapsulation
+  ViewEncapsulation,
+  Inject
 } from '@angular/core';
 
 import {GridsterConfigService} from './gridsterConfig.constant';
@@ -52,7 +53,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
   compact: GridsterCompact;
   gridRenderer: GridsterRenderer;
 
-  constructor(el: ElementRef, public renderer: Renderer2, public cdRef: ChangeDetectorRef, public zone: NgZone) {
+  constructor(@Inject(ElementRef) el: ElementRef, @Inject(Renderer2) public renderer: Renderer2, @Inject(ChangeDetectorRef) public cdRef: ChangeDetectorRef, @Inject(NgZone) public zone: NgZone) {
     this.el = el.nativeElement;
     this.$options = JSON.parse(JSON.stringify(GridsterConfigService));
     this.calculateLayoutDebounce = GridsterUtils.debounce(this.calculateLayout.bind(this), 0);
