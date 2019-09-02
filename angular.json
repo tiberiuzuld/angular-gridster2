@@ -16,7 +16,6 @@
             "outputPath": "dist/demo",
             "index": "src/index.html",
             "main": "src/main.ts",
-            "baseHref": "/angular-gridster2/",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "assets": [
@@ -39,6 +38,7 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
+              "baseHref": "/angular-gridster2/",
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
