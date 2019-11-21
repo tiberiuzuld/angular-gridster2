@@ -197,8 +197,8 @@ export class GridsterEmptyCell {
     e.stopPropagation();
     GridsterUtils.checkTouchEvent(e);
     const rect = this.gridster.el.getBoundingClientRect();
-    const x = e.clientX + this.gridster.el.scrollLeft - rect.left - this.gridster.$options.margin;
-    const y = e.clientY + this.gridster.el.scrollTop - rect.top - this.gridster.$options.margin;
+    const x = e.clientX + this.gridster.el.scrollLeft - rect.left - this.gridster.gridRenderer.getLeftMargin();
+    const y = e.clientY + this.gridster.el.scrollTop - rect.top - this.gridster.gridRenderer.getTopMargin();
     const item: GridsterItem = {
       x: this.gridster.pixelsToPositionX(x, Math.floor, true),
       y: this.gridster.pixelsToPositionY(y, Math.floor, true),
