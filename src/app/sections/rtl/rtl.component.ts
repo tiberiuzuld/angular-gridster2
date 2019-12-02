@@ -66,7 +66,7 @@ export class RtlComponent implements OnInit {
       disableWindowResize: false,
       disableWarnings: false,
       scrollToNewItems: false,
-      dir: "rtl"
+      dirType: "rtl"
     };
 
     this.dashboard = [

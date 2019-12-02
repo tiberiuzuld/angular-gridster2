@@ -137,7 +137,7 @@ export class GridsterRenderer {
   }
 
   getLeftPosition(d: number): Object {
-    if (this.gridster.$options.dir === "rtl") {
+    if (this.gridster.$options.dirType === "rtl") {
       if (this.gridster.$options.useTransformPositioning) {
         return {
           transform: 'translateX(' + (-d) + 'px)',
@@ -182,7 +182,7 @@ export class GridsterRenderer {
   }
 
   setCellPosition(renderer: Renderer2, el: any, x: number, y: number): void {
-    if (this.gridster.$options.dir === "rtl") {
+    if (this.gridster.$options.dirType === "rtl") {
       if (this.gridster.$options.useTransformPositioning) {
         const transform = 'translate3d(' + (- x) + 'px, ' + y + 'px, 0)';
         renderer.setStyle(el, 'transform', transform);
