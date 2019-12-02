@@ -13,6 +13,7 @@ export class HomeComponent implements OnInit {
   dashboard: Array<GridsterItem>;
 
   ngOnInit() {
+    document.body.removeAttribute("dir");
     this.options = {
       gridType: GridType.Fit,
       compactType: CompactType.None,

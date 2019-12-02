@@ -14,6 +14,7 @@ export class ApiComponent implements OnInit {
   itemToPush: GridsterItemComponent;
 
   ngOnInit() {
+    document.body.removeAttribute("dir");
     this.options = {
       gridType: GridType.Fit,
       compactType: CompactType.None,

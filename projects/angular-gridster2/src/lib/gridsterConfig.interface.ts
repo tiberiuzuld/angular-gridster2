@@ -40,6 +40,8 @@ export enum CompactType {
   CompactRightAndUp = 'compactRight&Up',
 }
 
+export type dir = 'ltr' | 'rtl';
+
 export interface GridsterConfig {
   gridType?: gridTypes;
   fixedColWidth?: number;
@@ -115,6 +117,8 @@ export interface GridsterConfig {
   };
 
   [propName: string]: any;
+
+  dir: dir;
 }
 
 export interface DragBase {

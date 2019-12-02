@@ -104,5 +104,6 @@ export const GridsterConfigService: GridsterConfig = {
   scrollToNewItems: false, // scroll to new items placed in a scrollable view
   disableScrollHorizontal: false, // disable horizontal scrolling
   disableScrollVertical: false, // disable vertical scrolling
-  disableAutoPositionOnConflict: false  // disable auto-position of items on conflict state
+  disableAutoPositionOnConflict: false,  // disable auto-position of items on conflict state,
+  dir: "ltr"
 };
