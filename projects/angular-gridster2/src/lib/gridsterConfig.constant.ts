@@ -105,5 +105,5 @@ export const GridsterConfigService: GridsterConfig = {
   disableScrollHorizontal: false, // disable horizontal scrolling
   disableScrollVertical: false, // disable vertical scrolling
   disableAutoPositionOnConflict: false,  // disable auto-position of items on conflict state,
-  dir: "ltr"
+  dirType: "ltr"
 };

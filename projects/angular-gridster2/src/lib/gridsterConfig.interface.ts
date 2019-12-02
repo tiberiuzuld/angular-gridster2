@@ -40,7 +40,7 @@ export enum CompactType {
   CompactRightAndUp = 'compactRight&Up',
 }
 
-export type dir = 'ltr' | 'rtl';
+export type dirTypes = 'ltr' | 'rtl';
 
 export interface GridsterConfig {
   gridType?: gridTypes;
@@ -118,7 +118,7 @@ export interface GridsterConfig {
 
   [propName: string]: any;
 
-  dir: dir;
+  dirType?: dirTypes;
 }
 
 export interface DragBase {
