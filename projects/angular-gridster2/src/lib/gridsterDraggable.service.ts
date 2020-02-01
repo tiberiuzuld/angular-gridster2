@@ -32,15 +32,15 @@ export class GridsterDraggable {
   dragStartFunction: (event: any) => void;
   dragFunction: (event: any) => void;
   dragStopFunction: (event: any) => void;
-  mousemove: Function;
-  mouseup: Function;
-  mouseleave: Function;
-  cancelOnBlur: Function;
-  touchmove: Function;
-  touchend: Function;
-  touchcancel: Function;
-  mousedown: Function;
-  touchstart: Function;
+  mousemove: () => void;
+  mouseup: () => void;
+  mouseleave: () => void;
+  cancelOnBlur: () => void;
+  touchmove: () => void;
+  touchend: () => void;
+  touchcancel: () => void;
+  mousedown: () => void;
+  touchstart: () => void;
   push: GridsterPush;
   swap: GridsterSwap;
   path: Array<{ x: number, y: number }>;
@@ -70,7 +70,7 @@ export class GridsterDraggable {
   }
 
   dragStart(e: any): void {
-    if (e.which !== 1) {
+    if (e.which && e.which !== 1) {
       return;
     }
 

@@ -1,12 +1,12 @@
 import {Injectable, NgZone} from '@angular/core';
+import {GridsterComponentInterface} from './gridster.interface';
+import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
+import {GridsterPush} from './gridsterPush.service';
+import {GridsterPushResize} from './gridsterPushResize.service';
+import {GridsterResizeEventType} from './gridsterResizeEventType.interface';
 
 import {cancelScroll, scroll} from './gridsterScroll.service';
-import {GridsterResizeEventType} from './gridsterResizeEventType.interface';
-import {GridsterPush} from './gridsterPush.service';
 import {GridsterUtils} from './gridsterUtils.service';
-import {GridsterPushResize} from './gridsterPushResize.service';
-import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
-import {GridsterComponentInterface} from './gridster.interface';
 
 @Injectable()
 export class GridsterResizable {
@@ -18,17 +18,17 @@ export class GridsterResizable {
   };
   itemBackup: Array<number>;
   resizeEventScrollType: GridsterResizeEventType;
-  directionFunction: Function;
+  directionFunction: (e: any) => void;
   dragFunction: (event: any) => void;
   dragStopFunction: (event: any) => void;
   resizeEnabled: boolean;
-  mousemove: Function;
-  mouseup: Function;
-  mouseleave: Function;
-  cancelOnBlur: Function;
-  touchmove: Function;
-  touchend: Function;
-  touchcancel: Function;
+  mousemove: () => void;
+  mouseup: () => void;
+  mouseleave: () => void;
+  cancelOnBlur: () => void;
+  touchmove: () => void;
+  touchend: () => void;
+  touchcancel: () => void;
   push: GridsterPush;
   pushResize: GridsterPushResize;
   minHeight: number;
@@ -68,14 +68,8 @@ export class GridsterResizable {
   }
 
   dragStart(e: any): void {
-    switch (e.which) {
-      case 1:
-        // left mouse button
-        break;
-      case 2:
-      case 3:
-        // right or middle mouse button
-        return;
+    if (e.which && e.which !== 1) {
+      return;
     }
     if (this.gridster.options.resizable && this.gridster.options.resizable.start) {
       this.gridster.options.resizable.start(this.gridsterItem.item, this.gridsterItem, e);
