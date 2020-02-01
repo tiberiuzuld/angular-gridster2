@@ -70,14 +70,8 @@ export class GridsterDraggable {
   }
 
   dragStart(e: any): void {
-    switch (e.which) {
-      case 1:
-        // left mouse button
-        break;
-      case 2:
-      case 3:
-        // right or middle mouse button
-        return;
+    if (e.which !== 1) {
+      return;
     }
 
     if (this.gridster.options.draggable && this.gridster.options.draggable.start) {
