@@ -1,8 +1,8 @@
-import {Injectable, Renderer2} from '@angular/core';
+import { Injectable, Renderer2 } from '@angular/core';
 
-import {GridsterComponentInterface} from './gridster.interface';
-import {GridType} from './gridsterConfig.interface';
-import {GridsterItem} from './gridsterItem.interface';
+import { GridsterComponentInterface } from './gridster.interface';
+import { GridType } from './gridsterConfig.interface';
+import { GridsterItem } from './gridsterItem.interface';
 
 @Injectable()
 export class GridsterRenderer {
@@ -20,7 +20,7 @@ export class GridsterRenderer {
       if (this.gridster.$options.keepFixedHeightInMobile) {
         renderer.setStyle(el, 'height', (item.rows * this.gridster.$options.fixedRowHeight) + 'px');
       } else {
-        renderer.setStyle(el, 'height',  (item.rows * this.gridster.curWidth / item.cols ) + 'px');
+        renderer.setStyle(el, 'height', (item.rows * this.gridster.curWidth / item.cols) + 'px');
       }
       if (this.gridster.$options.keepFixedWidthInMobile) {
         renderer.setStyle(el, 'width', this.gridster.$options.fixedColWidth + 'px');
@@ -137,14 +137,26 @@ export class GridsterRenderer {
   }
 
   getLeftPosition(d: number): Object {
-    if (this.gridster.$options.useTransformPositioning) {
-      return {
-        transform: 'translateX(' + d + 'px)',
-      };
+    if (this.gridster.$options.dirType === "rtl") {
+      if (this.gridster.$options.useTransformPositioning) {
+        return {
+          transform: 'translateX(' + (-d) + 'px)',
+        };
+      } else {
+        return {
+          left: -(this.getLeftMargin() + d) + 'px'
+        };
+      }
     } else {
-      return {
-        left: (this.getLeftMargin() + d) + 'px'
-      };
+      if (this.gridster.$options.useTransformPositioning) {
+        return {
+          transform: 'translateX(' + d + 'px)',
+        };
+      } else {
+        return {
+          left: (this.getLeftMargin() + d) + 'px'
+        };
+      }
     }
   }
 
@@ -170,12 +182,22 @@ export class GridsterRenderer {
   }
 
   setCellPosition(renderer: Renderer2, el: any, x: number, y: number): void {
-    if (this.gridster.$options.useTransformPositioning) {
-      const transform = 'translate3d(' + x + 'px, ' + y + 'px, 0)';
-      renderer.setStyle(el, 'transform', transform);
+    if (this.gridster.$options.dirType === "rtl") {
+      if (this.gridster.$options.useTransformPositioning) {
+        const transform = 'translate3d(' + (- x) + 'px, ' + y + 'px, 0)';
+        renderer.setStyle(el, 'transform', transform);
+      } else {
+        renderer.setStyle(el, 'left', -(this.getLeftMargin() + x) + 'px');
+        renderer.setStyle(el, 'top', this.getTopMargin() + y + 'px');
+      }
     } else {
-      renderer.setStyle(el, 'left', this.getLeftMargin() + x + 'px');
-      renderer.setStyle(el, 'top', this.getTopMargin() + y + 'px');
+      if (this.gridster.$options.useTransformPositioning) {
+        const transform = 'translate3d(' + x + 'px, ' + y + 'px, 0)';
+        renderer.setStyle(el, 'transform', transform);
+      } else {
+        renderer.setStyle(el, 'left', this.getLeftMargin() + x + 'px');
+        renderer.setStyle(el, 'top', this.getTopMargin() + y + 'px');
+      }
     }
   }
 

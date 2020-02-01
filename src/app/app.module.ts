@@ -36,6 +36,7 @@ import {MiscComponent} from './sections/misc/misc.component';
 import {PushComponent} from './sections/push/push.component';
 import {ResizeComponent} from './sections/resize/resize.component';
 import {SwapComponent} from './sections/swap/swap.component';
+import { RtlComponent } from './sections/rtl/rtl.component';
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
@@ -54,6 +55,7 @@ const appRoutes: Routes = [
   {path: 'resize', component: ResizeComponent},
   {path: 'swap', component: SwapComponent},
   {path: 'misc', component: MiscComponent},
+  {path: 'rtl', component: RtlComponent},
   {path: '**', redirectTo: ''}
 ];
 
@@ -80,6 +82,7 @@ const appRoutes: Routes = [
     ResizeComponent,
     SwapComponent,
     MiscComponent,
+    RtlComponent,
   ],
   imports: [
     BrowserModule,

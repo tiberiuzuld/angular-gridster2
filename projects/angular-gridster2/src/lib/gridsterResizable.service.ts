@@ -119,30 +119,64 @@ export class GridsterResizable {
       this.resizeEventScrollType.n = true;
       this.directionFunction = this.handleN;
     } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').split(' ').indexOf('handle-w') > -1) {
-      this.resizeEventScrollType.w = true;
-      this.directionFunction = this.handleW;
+      if (this.gridster.$options.dirType === "rtl") {
+        this.resizeEventScrollType.e = true;
+        this.directionFunction = this.handleE;
+      } else {
+        this.resizeEventScrollType.w = true;
+        this.directionFunction = this.handleW;
+      }
     } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').split(' ').indexOf('handle-s') > -1) {
       this.resizeEventScrollType.s = true;
       this.directionFunction = this.handleS;
     } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').split(' ').indexOf('handle-e') > -1) {
-      this.resizeEventScrollType.e = true;
-      this.directionFunction = this.handleE;
+      if (this.gridster.$options.dirType === "rtl") {
+        this.resizeEventScrollType.w = true;
+        this.directionFunction = this.handleW;
+      } else {
+        this.resizeEventScrollType.e = true;
+        this.directionFunction = this.handleE;
+      }
     } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').split(' ').indexOf('handle-nw') > -1) {
-      this.resizeEventScrollType.n = true;
-      this.resizeEventScrollType.w = true;
-      this.directionFunction = this.handleNW;
+      if (this.gridster.$options.dirType === "rtl") {
+        this.resizeEventScrollType.n = true;
+        this.resizeEventScrollType.e = true;
+        this.directionFunction = this.handleNE;
+      } else {
+        this.resizeEventScrollType.n = true;
+        this.resizeEventScrollType.w = true;
+        this.directionFunction = this.handleNW;
+      }
     } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').split(' ').indexOf('handle-ne') > -1) {
-      this.resizeEventScrollType.n = true;
-      this.resizeEventScrollType.e = true;
-      this.directionFunction = this.handleNE;
+      if (this.gridster.$options.dirType === "rtl") {
+        this.resizeEventScrollType.n = true;
+        this.resizeEventScrollType.w = true;
+        this.directionFunction = this.handleNW;
+      } else {
+        this.resizeEventScrollType.n = true;
+        this.resizeEventScrollType.e = true;
+        this.directionFunction = this.handleNE;
+      }
     } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').split(' ').indexOf('handle-sw') > -1) {
-      this.resizeEventScrollType.s = true;
-      this.resizeEventScrollType.w = true;
-      this.directionFunction = this.handleSW;
+      if (this.gridster.$options.dirType === "rtl") {
+        this.resizeEventScrollType.s = true;
+        this.resizeEventScrollType.e = true;
+        this.directionFunction = this.handleSE;
+      } else {
+        this.resizeEventScrollType.s = true;
+        this.resizeEventScrollType.w = true;
+        this.directionFunction = this.handleSW;
+      }
     } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').split(' ').indexOf('handle-se') > -1) {
-      this.resizeEventScrollType.s = true;
-      this.resizeEventScrollType.e = true;
-      this.directionFunction = this.handleSE;
+      if (this.gridster.$options.dirType === "rtl") {
+        this.resizeEventScrollType.s = true;
+        this.resizeEventScrollType.w = true;
+        this.directionFunction = this.handleSW;
+      } else {
+        this.resizeEventScrollType.s = true;
+        this.resizeEventScrollType.e = true;
+        this.directionFunction = this.handleSE;
+      }
     }
   }
 

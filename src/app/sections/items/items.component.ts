@@ -17,6 +17,7 @@ export class ItemsComponent implements OnInit {
   }
 
   ngOnInit() {
+    document.body.removeAttribute("dir");
     this.options = {
       gridType: GridType.Fit,
       displayGrid: DisplayGrid.Always,

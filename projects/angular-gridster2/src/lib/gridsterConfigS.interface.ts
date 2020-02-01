@@ -1,6 +1,6 @@
-import {compactTypes, displayGrids, gridTypes} from './gridsterConfig.interface';
 import {GridsterItem} from './gridsterItem.interface';
 import {GridsterComponentInterface} from './gridster.interface';
+import { compactTypes, displayGrids, gridTypes, dirTypes } from './gridsterConfig.interface';
 
 export interface GridsterConfigS {
   gridType: gridTypes;
@@ -65,6 +65,7 @@ export interface GridsterConfigS {
   };
 
   [propName: string]: any;
+  dirType: dirTypes;
 }
 
 export interface DragBase {
