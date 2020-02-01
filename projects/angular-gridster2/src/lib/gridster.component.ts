@@ -299,8 +299,8 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
       this.renderer.removeClass(this.el, 'display-grid');
     }
     this.setGridDimensions();
-    this.gridColumns.length = Math.max(this.columns, Math.floor(this.curWidth / this.curColWidth)) || 0;
-    this.gridRows.length = Math.max(this.rows, Math.floor(this.curHeight / this.curRowHeight)) || 0;
+    this.gridColumns.length = this.getNewArrayLength(this.columns, this.curWidth, this.curColWidth);
+    this.gridRows.length = this.getNewArrayLength(this.rows, this.curHeight, this.curRowHeight);
     this.cdRef.markForCheck();
   }
 
@@ -547,4 +547,13 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
 
   // ------ End of functions for swapWhileDragging option
 
+  private getNewArrayLength(length: number, overallSize: number, size: number): number {
+    const newLength = Math.max(length, Math.floor(overallSize / size));
+
+    if (newLength < 0) {
+      return 0;
+    }
+
+    return newLength || 0;
+  }
 }
