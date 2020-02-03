@@ -1,6 +1,5 @@
 import {ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
-import {CompactType, DisplayGrid, GridsterConfig, GridsterItem, GridType} from 'angular-gridster2';
-import {DirTypes} from '../../../../projects/angular-gridster2/src/lib/gridsterConfig.interface';
+import {CompactType, DisplayGrid, GridsterConfig, GridsterItem, GridType, DirTypes} from 'angular-gridster2';
 
 @Component({
   selector: 'app-rtl',
