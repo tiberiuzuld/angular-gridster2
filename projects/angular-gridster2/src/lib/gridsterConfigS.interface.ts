@@ -1,6 +1,6 @@
-import {GridsterItem} from './gridsterItem.interface';
 import {GridsterComponentInterface} from './gridster.interface';
-import { compactTypes, displayGrids, gridTypes, dirTypes } from './gridsterConfig.interface';
+import {compactTypes, dirTypes, displayGrids, gridTypes} from './gridsterConfig.interface';
+import {GridsterItem} from './gridsterItem.interface';
 
 export interface GridsterConfigS {
   gridType: gridTypes;
@@ -56,6 +56,7 @@ export interface GridsterConfigS {
   emptyCellDragMaxCols: number;
   emptyCellDragMaxRows: number;
   ignoreMarginInRow: boolean;
+  dirType: dirTypes;
   api: {
     resize: () => void,
     optionsChanged: () => void,
@@ -65,7 +66,6 @@ export interface GridsterConfigS {
   };
 
   [propName: string]: any;
-  dirType: dirTypes;
 }
 
 export interface DragBase {

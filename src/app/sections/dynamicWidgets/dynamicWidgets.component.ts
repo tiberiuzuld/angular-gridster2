@@ -14,7 +14,6 @@ export class DynamicWidgetsComponent implements OnInit {
   resizeEvent: EventEmitter<any> = new EventEmitter<any>();
 
   ngOnInit() {
-    document.body.removeAttribute("dir");
     this.options = {
       gridType: GridType.Fit,
       displayGrid: DisplayGrid.Always,

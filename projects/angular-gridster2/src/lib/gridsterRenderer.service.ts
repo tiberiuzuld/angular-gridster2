@@ -1,8 +1,8 @@
-import { Injectable, Renderer2 } from '@angular/core';
+import {Injectable, Renderer2} from '@angular/core';
 
-import { GridsterComponentInterface } from './gridster.interface';
-import { GridType } from './gridsterConfig.interface';
-import { GridsterItem } from './gridsterItem.interface';
+import {GridsterComponentInterface} from './gridster.interface';
+import {DirTypes, GridType} from './gridsterConfig.interface';
+import {GridsterItem} from './gridsterItem.interface';
 
 @Injectable()
 export class GridsterRenderer {
@@ -136,31 +136,20 @@ export class GridsterRenderer {
     };
   }
 
-  getLeftPosition(d: number): Object {
-    if (this.gridster.$options.dirType === "rtl") {
-      if (this.gridster.$options.useTransformPositioning) {
-        return {
-          transform: 'translateX(' + (-d) + 'px)',
-        };
-      } else {
-        return {
-          left: -(this.getLeftMargin() + d) + 'px'
-        };
-      }
+  getLeftPosition(d: number): { left?: string, transform?: string } {
+    const dPosition = this.gridster.$options.dirType === DirTypes.RTL ? -d : d;
+    if (this.gridster.$options.useTransformPositioning) {
+      return {
+        transform: 'translateX(' + dPosition + 'px)',
+      };
     } else {
-      if (this.gridster.$options.useTransformPositioning) {
-        return {
-          transform: 'translateX(' + d + 'px)',
-        };
-      } else {
-        return {
-          left: (this.getLeftMargin() + d) + 'px'
-        };
-      }
+      return {
+        left: (this.getLeftMargin() + dPosition) + 'px'
+      };
     }
   }
 
-  getTopPosition(d: number): Object {
+  getTopPosition(d: number): { top?: string, transform?: string } {
     if (this.gridster.$options.useTransformPositioning) {
       return {
         transform: 'translateY(' + d + 'px)',
@@ -182,22 +171,13 @@ export class GridsterRenderer {
   }
 
   setCellPosition(renderer: Renderer2, el: any, x: number, y: number): void {
-    if (this.gridster.$options.dirType === "rtl") {
-      if (this.gridster.$options.useTransformPositioning) {
-        const transform = 'translate3d(' + (- x) + 'px, ' + y + 'px, 0)';
-        renderer.setStyle(el, 'transform', transform);
-      } else {
-        renderer.setStyle(el, 'left', -(this.getLeftMargin() + x) + 'px');
-        renderer.setStyle(el, 'top', this.getTopMargin() + y + 'px');
-      }
+    const xPosition = this.gridster.$options.dirType === DirTypes.RTL ? -x : x;
+    if (this.gridster.$options.useTransformPositioning) {
+      const transform = 'translate3d(' + xPosition + 'px, ' + y + 'px, 0)';
+      renderer.setStyle(el, 'transform', transform);
     } else {
-      if (this.gridster.$options.useTransformPositioning) {
-        const transform = 'translate3d(' + x + 'px, ' + y + 'px, 0)';
-        renderer.setStyle(el, 'transform', transform);
-      } else {
-        renderer.setStyle(el, 'left', this.getLeftMargin() + x + 'px');
-        renderer.setStyle(el, 'top', this.getTopMargin() + y + 'px');
-      }
+      renderer.setStyle(el, 'left', this.getLeftMargin() + xPosition + 'px');
+      renderer.setStyle(el, 'top', this.getTopMargin() + y + 'px');
     }
   }
 

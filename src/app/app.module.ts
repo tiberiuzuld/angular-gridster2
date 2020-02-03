@@ -35,8 +35,8 @@ import {ItemsComponent} from './sections/items/items.component';
 import {MiscComponent} from './sections/misc/misc.component';
 import {PushComponent} from './sections/push/push.component';
 import {ResizeComponent} from './sections/resize/resize.component';
+import {RtlComponent} from './sections/rtl/rtl.component';
 import {SwapComponent} from './sections/swap/swap.component';
-import { RtlComponent } from './sections/rtl/rtl.component';
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},

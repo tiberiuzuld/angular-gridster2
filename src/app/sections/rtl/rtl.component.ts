@@ -1,17 +1,19 @@
-import { Component, OnInit, ChangeDetectionStrategy, ViewEncapsulation } from '@angular/core';
-import { CompactType, DisplayGrid, GridsterConfig, GridsterItem, GridType } from 'angular-gridster2';
+import {ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
+import {CompactType, DisplayGrid, GridsterConfig, GridsterItem, GridType} from 'angular-gridster2';
+import {DirTypes} from '../../../../projects/angular-gridster2/src/lib/gridsterConfig.interface';
+
 @Component({
   selector: 'app-rtl',
   templateUrl: './rtl.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None
 })
-export class RtlComponent implements OnInit {
+export class RtlComponent implements OnInit, OnDestroy {
   options: GridsterConfig;
   dashboard: Array<GridsterItem>;
 
   ngOnInit() {
-    document.body.setAttribute("dir", "rtl");
+    document.body.setAttribute('dir', 'rtl');
 
     this.options = {
       gridType: GridType.Fit,
@@ -60,41 +62,41 @@ export class RtlComponent implements OnInit {
       pushItems: true,
       disablePushOnDrag: false,
       disablePushOnResize: false,
-      pushDirections: { north: true, east: true, south: true, west: true },
+      pushDirections: {north: true, east: true, south: true, west: true},
       pushResizeItems: false,
       displayGrid: DisplayGrid.Always,
       disableWindowResize: false,
       disableWarnings: false,
       scrollToNewItems: false,
-      dirType: "rtl"
+      dirType: DirTypes.RTL
     };
 
     this.dashboard = [
-      { cols: 2, rows: 1, y: 0, x: 0 },
-      { cols: 2, rows: 2, y: 0, x: 2, hasContent: true },
-      { cols: 1, rows: 1, y: 0, x: 4 },
-      { cols: 1, rows: 1, y: 2, x: 5 },
-      { cols: 1, rows: 1, y: 1, x: 0 },
-      { cols: 1, rows: 1, y: 1, x: 0 },
-      { cols: 2, rows: 2, y: 3, x: 5, minItemRows: 2, minItemCols: 2, label: 'Min rows & cols = 2' },
-      { cols: 2, rows: 2, y: 2, x: 0, maxItemRows: 2, maxItemCols: 2, label: 'Max rows & cols = 2' },
-      { cols: 2, rows: 1, y: 2, x: 2, dragEnabled: true, resizeEnabled: true, label: 'Drag&Resize Enabled' },
-      { cols: 1, rows: 1, y: 2, x: 4, dragEnabled: false, resizeEnabled: false, label: 'Drag&Resize Disabled' },
-      { cols: 1, rows: 1, y: 2, x: 6 }
+      {cols: 2, rows: 1, y: 0, x: 0},
+      {cols: 2, rows: 2, y: 0, x: 2, hasContent: true},
+      {cols: 1, rows: 1, y: 0, x: 4},
+      {cols: 1, rows: 1, y: 2, x: 5},
+      {cols: 1, rows: 1, y: 1, x: 0},
+      {cols: 1, rows: 1, y: 1, x: 0},
+      {cols: 2, rows: 2, y: 3, x: 5, minItemRows: 2, minItemCols: 2, label: 'Min rows & cols = 2'},
+      {cols: 2, rows: 2, y: 2, x: 0, maxItemRows: 2, maxItemCols: 2, label: 'Max rows & cols = 2'},
+      {cols: 2, rows: 1, y: 2, x: 2, dragEnabled: true, resizeEnabled: true, label: 'Drag&Resize Enabled'},
+      {cols: 1, rows: 1, y: 2, x: 4, dragEnabled: false, resizeEnabled: false, label: 'Drag&Resize Disabled'},
+      {cols: 1, rows: 1, y: 2, x: 6}
     ];
 
     this.dashboard = [
-      { cols: 2, rows: 1, y: 0, x: 0 },
-      { cols: 2, rows: 2, y: 0, x: 2, hasContent: true },
-      { cols: 1, rows: 1, y: 0, x: 4 },
-      { cols: 1, rows: 1, y: 2, x: 5 },
-      { cols: 1, rows: 1, y: 1, x: 0 },
-      { cols: 1, rows: 1, y: 1, x: 0 },
-      { cols: 2, rows: 2, y: 3, x: 5, minItemRows: 2, minItemCols: 2, label: 'Min rows & cols = 2' },
-      { cols: 2, rows: 2, y: 2, x: 0, maxItemRows: 2, maxItemCols: 2, label: 'Max rows & cols = 2' },
-      { cols: 2, rows: 1, y: 2, x: 2, dragEnabled: true, resizeEnabled: true, label: 'Drag&Resize Enabled' },
-      { cols: 1, rows: 1, y: 2, x: 4, dragEnabled: false, resizeEnabled: false, label: 'Drag&Resize Disabled' },
-      { cols: 1, rows: 1, y: 2, x: 6 }
+      {cols: 2, rows: 1, y: 0, x: 0},
+      {cols: 2, rows: 2, y: 0, x: 2, hasContent: true},
+      {cols: 1, rows: 1, y: 0, x: 4},
+      {cols: 1, rows: 1, y: 2, x: 5},
+      {cols: 1, rows: 1, y: 1, x: 0},
+      {cols: 1, rows: 1, y: 1, x: 0},
+      {cols: 2, rows: 2, y: 3, x: 5, minItemRows: 2, minItemCols: 2, label: 'Min rows & cols = 2'},
+      {cols: 2, rows: 2, y: 2, x: 0, maxItemRows: 2, maxItemCols: 2, label: 'Max rows & cols = 2'},
+      {cols: 2, rows: 1, y: 2, x: 2, dragEnabled: true, resizeEnabled: true, label: 'Drag&Resize Enabled'},
+      {cols: 1, rows: 1, y: 2, x: 4, dragEnabled: false, resizeEnabled: false, label: 'Drag&Resize Disabled'},
+      {cols: 1, rows: 1, y: 2, x: 6}
     ];
   }
 
@@ -111,6 +113,10 @@ export class RtlComponent implements OnInit {
   }
 
   addItem() {
-    this.dashboard.push({ x: 0, y: 0, cols: 1, rows: 1 });
+    this.dashboard.push({x: 0, y: 0, cols: 1, rows: 1});
+  }
+
+  ngOnDestroy(): void {
+    document.body.removeAttribute('dir');
   }
 }

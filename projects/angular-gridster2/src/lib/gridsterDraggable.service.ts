@@ -1,11 +1,12 @@
 import {Injectable, NgZone} from '@angular/core';
+import {GridsterComponentInterface} from './gridster.interface';
+import {DirTypes} from './gridsterConfig.interface';
+import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
+import {GridsterPush} from './gridsterPush.service';
+import {cancelScroll, scroll} from './gridsterScroll.service';
 
 import {GridsterSwap} from './gridsterSwap.service';
-import {cancelScroll, scroll} from './gridsterScroll.service';
-import {GridsterPush} from './gridsterPush.service';
 import {GridsterUtils} from './gridsterUtils.service';
-import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
-import {GridsterComponentInterface} from './gridster.interface';
 
 @Injectable()
 export class GridsterDraggable {
@@ -100,7 +101,7 @@ export class GridsterDraggable {
     this.top = this.gridsterItem.top - this.margin;
     this.width = this.gridsterItem.width;
     this.height = this.gridsterItem.height;
-    if (this.gridster.$options.dirType === "rtl") {
+    if (this.gridster.$options.dirType === DirTypes.RTL) {
       this.diffLeft = (e.clientX - this.gridster.el.scrollWidth + this.gridsterItem.left);
     } else {
       this.diffLeft = e.clientX + this.offsetLeft - this.margin - this.left;
@@ -128,7 +129,7 @@ export class GridsterDraggable {
   }
 
   calculateItemPositionFromMousePosition(e: any): void {
-    if (this.gridster.$options.dirType === "rtl") {
+    if (this.gridster.$options.dirType === DirTypes.RTL) {
       this.left = this.gridster.el.scrollWidth - e.clientX + this.diffLeft;
     } else {
       this.left = e.clientX + this.offsetLeft - this.diffLeft;

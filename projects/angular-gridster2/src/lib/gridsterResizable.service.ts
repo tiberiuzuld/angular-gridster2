@@ -1,5 +1,6 @@
 import {Injectable, NgZone} from '@angular/core';
 import {GridsterComponentInterface} from './gridster.interface';
+import {DirTypes} from './gridsterConfig.interface';
 import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
 import {GridsterPush} from './gridsterPush.service';
 import {GridsterPushResize} from './gridsterPushResize.service';
@@ -119,7 +120,7 @@ export class GridsterResizable {
       this.resizeEventScrollType.n = true;
       this.directionFunction = this.handleN;
     } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').split(' ').indexOf('handle-w') > -1) {
-      if (this.gridster.$options.dirType === "rtl") {
+      if (this.gridster.$options.dirType === DirTypes.RTL) {
         this.resizeEventScrollType.e = true;
         this.directionFunction = this.handleE;
       } else {
@@ -130,7 +131,7 @@ export class GridsterResizable {
       this.resizeEventScrollType.s = true;
       this.directionFunction = this.handleS;
     } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').split(' ').indexOf('handle-e') > -1) {
-      if (this.gridster.$options.dirType === "rtl") {
+      if (this.gridster.$options.dirType === DirTypes.RTL) {
         this.resizeEventScrollType.w = true;
         this.directionFunction = this.handleW;
       } else {
@@ -138,7 +139,7 @@ export class GridsterResizable {
         this.directionFunction = this.handleE;
       }
     } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').split(' ').indexOf('handle-nw') > -1) {
-      if (this.gridster.$options.dirType === "rtl") {
+      if (this.gridster.$options.dirType === DirTypes.RTL) {
         this.resizeEventScrollType.n = true;
         this.resizeEventScrollType.e = true;
         this.directionFunction = this.handleNE;
@@ -148,7 +149,7 @@ export class GridsterResizable {
         this.directionFunction = this.handleNW;
       }
     } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').split(' ').indexOf('handle-ne') > -1) {
-      if (this.gridster.$options.dirType === "rtl") {
+      if (this.gridster.$options.dirType === DirTypes.RTL) {
         this.resizeEventScrollType.n = true;
         this.resizeEventScrollType.w = true;
         this.directionFunction = this.handleNW;
@@ -158,7 +159,7 @@ export class GridsterResizable {
         this.directionFunction = this.handleNE;
       }
     } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').split(' ').indexOf('handle-sw') > -1) {
-      if (this.gridster.$options.dirType === "rtl") {
+      if (this.gridster.$options.dirType === DirTypes.RTL) {
         this.resizeEventScrollType.s = true;
         this.resizeEventScrollType.e = true;
         this.directionFunction = this.handleSE;
@@ -168,7 +169,7 @@ export class GridsterResizable {
         this.directionFunction = this.handleSW;
       }
     } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').split(' ').indexOf('handle-se') > -1) {
-      if (this.gridster.$options.dirType === "rtl") {
+      if (this.gridster.$options.dirType === DirTypes.RTL) {
         this.resizeEventScrollType.s = true;
         this.resizeEventScrollType.w = true;
         this.directionFunction = this.handleSW;

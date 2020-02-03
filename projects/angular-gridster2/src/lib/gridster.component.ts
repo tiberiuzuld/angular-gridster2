@@ -2,6 +2,7 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  Inject,
   Input,
   NgZone,
   OnChanges,
@@ -9,20 +10,19 @@ import {
   OnInit,
   Renderer2,
   SimpleChanges,
-  ViewEncapsulation,
-  Inject
+  ViewEncapsulation
 } from '@angular/core';
+import {GridsterComponentInterface} from './gridster.interface';
+import {GridsterCompact} from './gridsterCompact.service';
 
 import {GridsterConfigService} from './gridsterConfig.constant';
 import {GridsterConfig} from './gridsterConfig.interface';
-import {GridsterUtils} from './gridsterUtils.service';
-import {GridsterEmptyCell} from './gridsterEmptyCell.service';
-import {GridsterCompact} from './gridsterCompact.service';
 import {GridsterConfigS} from './gridsterConfigS.interface';
-import {GridsterComponentInterface} from './gridster.interface';
+import {GridsterEmptyCell} from './gridsterEmptyCell.service';
+import {GridsterItem} from './gridsterItem.interface';
 import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
 import {GridsterRenderer} from './gridsterRenderer.service';
-import {GridsterItem} from './gridsterItem.interface';
+import {GridsterUtils} from './gridsterUtils.service';
 
 @Component({
   selector: 'gridster',
@@ -53,7 +53,9 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
   compact: GridsterCompact;
   gridRenderer: GridsterRenderer;
 
-  constructor(@Inject(ElementRef) el: ElementRef, @Inject(Renderer2) public renderer: Renderer2, @Inject(ChangeDetectorRef) public cdRef: ChangeDetectorRef, @Inject(NgZone) public zone: NgZone) {
+  constructor(@Inject(ElementRef) el: ElementRef, @Inject(Renderer2) public renderer: Renderer2,
+              @Inject(ChangeDetectorRef) public cdRef: ChangeDetectorRef,
+              @Inject(NgZone) public zone: NgZone) {
     this.el = el.nativeElement;
     this.$options = JSON.parse(JSON.stringify(GridsterConfigService));
     this.calculateLayoutDebounce = GridsterUtils.debounce(this.calculateLayout.bind(this), 0);
@@ -127,7 +129,8 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
 
   optionsChanged(): void {
     this.setOptions();
-    let widgetsIndex: number = this.grid.length - 1, widget: GridsterItemComponentInterface;
+    let widgetsIndex: number = this.grid.length - 1;
+    let widget: GridsterItemComponentInterface;
     for (; widgetsIndex >= 0; widgetsIndex--) {
       widget = this.grid[widgetsIndex];
       widget.updateOptions();
@@ -178,8 +181,8 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
 
   setGridSize(): void {
     const el = this.el;
-    let width = el.clientWidth;
-    let height = el.clientHeight;
+    let width;
+    let height;
     if (this.$options.setGridSize || this.$options.gridType === 'fit' && !this.mobile) {
       width = el.offsetWidth;
       height = el.offsetHeight;
@@ -200,9 +203,11 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
       this.mobile = !this.mobile;
       this.renderer.removeClass(this.el, 'mobile');
     }
-    let rows = this.$options.minRows, columns = this.$options.minCols;
+    let rows = this.$options.minRows;
+    let columns = this.$options.minCols;
 
-    let widgetsIndex = this.grid.length - 1, widget;
+    let widgetsIndex = this.grid.length - 1;
+    let widget;
     for (; widgetsIndex >= 0; widgetsIndex--) {
       widget = this.grid[widgetsIndex];
       if (!widget.notPlaced) {
@@ -279,7 +284,8 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
       this.renderer.setStyle(this.el, 'height', '');
     }
 
-    let widgetsIndex: number = this.grid.length - 1, widget: GridsterItemComponentInterface;
+    let widgetsIndex: number = this.grid.length - 1;
+    let widget: GridsterItemComponentInterface;
     for (; widgetsIndex >= 0; widgetsIndex--) {
       widget = this.grid[widgetsIndex];
       widget.setSize();
@@ -299,8 +305,8 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
       this.renderer.removeClass(this.el, 'display-grid');
     }
     this.setGridDimensions();
-    this.gridColumns.length = this.getNewArrayLength(this.columns, this.curWidth, this.curColWidth);
-    this.gridRows.length = this.getNewArrayLength(this.rows, this.curHeight, this.curRowHeight);
+    this.gridColumns.length = GridsterComponent.getNewArrayLength(this.columns, this.curWidth, this.curColWidth);
+    this.gridRows.length = GridsterComponent.getNewArrayLength(this.rows, this.curHeight, this.curRowHeight);
     this.cdRef.markForCheck();
   }
 
@@ -358,7 +364,6 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     return collision;
   }
 
-
   checkGridCollision(item: GridsterItem): boolean {
     const noNegativePosition = item.y > -1 && item.x > -1;
     const maxGridCols = item.cols + item.x <= this.$options.maxCols;
@@ -378,7 +383,8 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
   }
 
   findItemWithItem(item: GridsterItem): GridsterItemComponentInterface | boolean {
-    let widgetsIndex: number = this.grid.length - 1, widget: GridsterItemComponentInterface;
+    let widgetsIndex: number = this.grid.length - 1;
+    let widget: GridsterItemComponentInterface;
     for (; widgetsIndex > -1; widgetsIndex--) {
       widget = this.grid[widgetsIndex];
       if (widget.$item !== item && GridsterComponent.checkCollisionTwoItems(widget.$item, item)) {
@@ -388,10 +394,10 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     return false;
   }
 
-
   findItemsWithItem(item: GridsterItem): Array<GridsterItemComponentInterface> {
     const a: Array<GridsterItemComponentInterface> = [];
-    let widgetsIndex: number = this.grid.length - 1, widget: GridsterItemComponentInterface;
+    let widgetsIndex: number = this.grid.length - 1;
+    let widget: GridsterItemComponentInterface;
     for (; widgetsIndex > -1; widgetsIndex--) {
       widget = this.grid[widgetsIndex];
       if (widget.$item !== item && GridsterComponent.checkCollisionTwoItems(widget.$item, item)) {
@@ -400,8 +406,6 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     }
     return a;
   }
-
-
 
   autoPositionItem(itemComponent: GridsterItemComponentInterface): void {
     if (this.getNextPossiblePosition(itemComponent.$item)) {
@@ -426,7 +430,8 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
       newItem.rows = this.$options.defaultItemRows;
     }
     this.setGridDimensions();
-    let rowsIndex = startingFrom.y || 0, colsIndex;
+    let rowsIndex = startingFrom.y || 0;
+    let colsIndex;
     for (; rowsIndex < this.rows; rowsIndex++) {
       newItem.y = rowsIndex;
       colsIndex = startingFrom.x || 0;
@@ -474,7 +479,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     return tmpItem;
   }
 
-  pixelsToPositionX(x: number, roundingMethod: Function, noLimit?: boolean): number {
+  pixelsToPositionX(x: number, roundingMethod: (x: number) => number, noLimit?: boolean): number {
     const position = roundingMethod(x / this.curColWidth);
     if (noLimit) {
       return position;
@@ -483,7 +488,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     }
   }
 
-  pixelsToPositionY(y: number, roundingMethod: Function, noLimit?: boolean): number {
+  pixelsToPositionY(y: number, roundingMethod: (x: number) => number, noLimit?: boolean): number {
     const position = roundingMethod(y / this.curRowHeight);
     if (noLimit) {
       return position;
@@ -502,7 +507,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
 
   // ------ Functions for swapWhileDragging option
 
-  // identical to checkCollision() except that here we add bondaries. 
+  // identical to checkCollision() except that here we add bondaries.
   static checkCollisionTwoItemsForSwaping(item: GridsterItem, item2: GridsterItem): boolean {
     // if the cols or rows of the items are 1 , doesnt make any sense to set a boundary. Only if the item is bigger we set a boundary
     const horizontalBoundaryItem1 = item.cols === 1 ? 0 : 1;
@@ -535,7 +540,8 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
 
   // identical to findItemWithItem() except that this function calls checkCollisionTwoItemsForSwaping() instead of checkCollisionTwoItems()
   findItemWithItemForSwaping(item: GridsterItem): GridsterItemComponentInterface | boolean {
-    let widgetsIndex: number = this.grid.length - 1, widget: GridsterItemComponentInterface;
+    let widgetsIndex: number = this.grid.length - 1;
+    let widget: GridsterItemComponentInterface;
     for (; widgetsIndex > -1; widgetsIndex--) {
       widget = this.grid[widgetsIndex];
       if (widget.$item !== item && GridsterComponent.checkCollisionTwoItemsForSwaping(widget.$item, item)) {
@@ -547,7 +553,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
 
   // ------ End of functions for swapWhileDragging option
 
-  private getNewArrayLength(length: number, overallSize: number, size: number): number {
+  private static getNewArrayLength(length: number, overallSize: number, size: number): number {
     const newLength = Math.max(length, Math.floor(overallSize / size));
 
     if (newLength < 0) {
