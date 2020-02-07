@@ -12,7 +12,6 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule, Routes} from '@angular/router';
 import {GridsterModule} from 'angular-gridster2';
-import 'hammerjs';
 import {MarkdownModule, MarkedOptions} from 'ngx-markdown';
 
 import {AppComponent} from './app.component';
