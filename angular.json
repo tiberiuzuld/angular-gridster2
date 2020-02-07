@@ -13,6 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "aot": true,
             "outputPath": "dist/demo",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -144,7 +145,8 @@
           },
           "configurations": {
             "production": {
-              "project": "projects/angular-gridster2/ng-package.prod.json"
+              "project": "projects/angular-gridster2/ng-package.prod.json",
+              "tsConfig": "projects/angular-gridster2/tsconfig.lib.prod.json"
             }
           }
         },
