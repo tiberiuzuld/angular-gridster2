@@ -1,6 +1,12 @@
 import {ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation} from '@angular/core';
 
-import {DisplayGrid, GridsterConfig, GridsterItem, GridType} from 'angular-gridster2';
+import {DisplayGrid, Draggable, GridsterConfig, GridsterItem, GridType, PushDirections, Resizable} from 'angular-gridster2';
+
+interface Safe extends GridsterConfig {
+  draggable: Draggable;
+  resizable: Resizable;
+  pushDirections: PushDirections;
+}
 
 @Component({
   selector: 'app-push',
@@ -9,7 +15,7 @@ import {DisplayGrid, GridsterConfig, GridsterItem, GridType} from 'angular-grids
   encapsulation: ViewEncapsulation.None
 })
 export class PushComponent implements OnInit {
-  options: GridsterConfig;
+  options: Safe;
   dashboard: Array<GridsterItem>;
 
   ngOnInit() {

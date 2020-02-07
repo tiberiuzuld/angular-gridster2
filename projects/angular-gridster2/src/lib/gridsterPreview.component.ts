@@ -1,4 +1,4 @@
-import {Component, ElementRef, Host, OnDestroy, Renderer2, ViewEncapsulation, Inject} from '@angular/core';
+import {Component, ElementRef, OnDestroy, Renderer2, ViewEncapsulation, Inject} from '@angular/core';
 
 import {GridsterComponent} from './gridster.component';
 

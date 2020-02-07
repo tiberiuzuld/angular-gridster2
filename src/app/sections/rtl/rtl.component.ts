@@ -1,5 +1,10 @@
 import {ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
-import {CompactType, DisplayGrid, GridsterConfig, GridsterItem, GridType, DirTypes} from 'angular-gridster2';
+import {CompactType, DirTypes, DisplayGrid, Draggable, GridsterConfig, GridsterItem, GridType, Resizable} from 'angular-gridster2';
+
+interface Safe extends GridsterConfig {
+  draggable: Draggable;
+  resizable: Resizable;
+}
 
 @Component({
   selector: 'app-rtl',
@@ -8,7 +13,7 @@ import {CompactType, DisplayGrid, GridsterConfig, GridsterItem, GridType, DirTyp
   encapsulation: ViewEncapsulation.None
 })
 export class RtlComponent implements OnInit, OnDestroy {
-  options: GridsterConfig;
+  options: Safe;
   dashboard: Array<GridsterItem>;
 
   ngOnInit() {

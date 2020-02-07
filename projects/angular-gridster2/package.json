@@ -1,10 +1,10 @@
 {
   "name": "angular-gridster2",
-  "version": "8.3.0",
+  "version": "9.0.0",
   "license": "MIT",
   "peerDependencies": {
-    "@angular/common": "^8.0.0",
-    "@angular/core": "^8.0.0"
+    "@angular/common": "^9.0.0",
+    "@angular/core": "^9.0.0"
   },
   "homepage": "https://tiberiuzuld.github.io/angular-gridster2",
   "bugs": {

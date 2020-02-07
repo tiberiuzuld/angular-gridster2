@@ -1,6 +1,18 @@
 import {ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation} from '@angular/core';
 
-import {DisplayGrid, GridsterComponent, GridsterConfig, GridsterItem, GridsterItemComponentInterface, GridType} from 'angular-gridster2';
+import {
+  DisplayGrid,
+  Draggable,
+  GridsterComponent,
+  GridsterConfig,
+  GridsterItem,
+  GridsterItemComponentInterface,
+  GridType
+} from 'angular-gridster2';
+
+interface Safe extends GridsterConfig {
+  draggable: Draggable;
+}
 
 @Component({
   selector: 'app-drag',
@@ -9,7 +21,7 @@ import {DisplayGrid, GridsterComponent, GridsterConfig, GridsterItem, GridsterIt
   encapsulation: ViewEncapsulation.None
 })
 export class DragComponent implements OnInit {
-  options: GridsterConfig;
+  options: Safe;
   dashboard: Array<GridsterItem>;
 
   static eventStart(item: GridsterItem, itemComponent: GridsterItemComponentInterface, event: MouseEvent) {

@@ -1,4 +1,4 @@
-import {Component, ElementRef, Host, Input, NgZone, OnDestroy, OnInit, Renderer2, ViewEncapsulation, Inject} from '@angular/core';
+import {Component, ElementRef, Input, NgZone, OnDestroy, OnInit, Renderer2, ViewEncapsulation, Inject} from '@angular/core';
 
 import {GridsterItem} from './gridsterItem.interface';
 import {GridsterDraggable} from './gridsterDraggable.service';

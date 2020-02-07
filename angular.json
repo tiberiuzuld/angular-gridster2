@@ -175,6 +175,7 @@
   },
   "defaultProject": "gridster-app",
   "cli": {
-    "packageManager": "npm"
+    "packageManager": "npm",
+    "analytics": "43f0cc4d-52e0-4bb5-a18d-b0bb569a75d1"
   }
 }

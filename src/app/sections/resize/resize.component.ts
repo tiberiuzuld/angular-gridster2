@@ -1,6 +1,23 @@
 import {ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation} from '@angular/core';
 
-import {DisplayGrid, GridsterConfig, GridsterItem, GridsterItemComponentInterface, GridType} from 'angular-gridster2';
+import {DisplayGrid, GridsterConfig, GridsterItem, GridsterItemComponentInterface, GridType, Resizable} from 'angular-gridster2';
+
+interface SafeResizable extends Resizable {
+  handles: {
+    s: boolean,
+    e: boolean,
+    n: boolean,
+    w: boolean,
+    se: boolean,
+    ne: boolean,
+    sw: boolean,
+    nw: boolean
+  };
+}
+
+interface Safe extends GridsterConfig {
+  resizable: SafeResizable;
+}
 
 @Component({
   selector: 'app-resize',
@@ -9,7 +26,7 @@ import {DisplayGrid, GridsterConfig, GridsterItem, GridsterItemComponentInterfac
   encapsulation: ViewEncapsulation.None
 })
 export class ResizeComponent implements OnInit {
-  options: GridsterConfig;
+  options: Safe;
   dashboard: Array<GridsterItem>;
 
   static eventStop(item: GridsterItem, itemComponent: GridsterItemComponentInterface, event: MouseEvent) {
