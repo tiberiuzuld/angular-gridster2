@@ -46,7 +46,7 @@ export class GridsterUtils {
 
   static checkContentClassForEvent(gridster: GridsterComponentInterface, e: any): boolean {
     if (gridster.$options.draggable.ignoreContent) {
-      if (!GridsterUtils.checkContentClass(e.target, e.currentTarget, gridster.$options.draggable.dragHandleClass)) {
+      if (!GridsterUtils.checkDragHandleClass(e.target, e.currentTarget, gridster.$options.draggable.dragHandleClass, gridster.$options.draggable.ignoreContentClass)) {
         return true;
       }
     } else {
@@ -62,6 +62,21 @@ export class GridsterUtils {
       || GridsterUtils.checkContentClass(e.target, e.currentTarget, gridster.$options.draggable.dragHandleClass);
   }
 
+  static checkDragHandleClass(target: any, current: any, dragHandleClass: string, ignoreContentClass): boolean {
+    if (!target || target === current) {
+      return false;
+    }
+    if (target.hasAttribute('class') ) {
+      const classnames = target.getAttribute('class').split(' ');
+      if (classnames.indexOf(dragHandleClass) > -1) {
+        return true;
+      }
+      if (classnames.indexOf(ignoreContentClass) > -1) {
+        return false;
+      }
+    }
+    return GridsterUtils.checkDragHandleClass(target.parentNode, current, dragHandleClass, ignoreContentClass);
+  }
   static checkContentClass(target: any, current: any, contentClass: string): boolean {
     if (!target || target === current) {
       return false;
