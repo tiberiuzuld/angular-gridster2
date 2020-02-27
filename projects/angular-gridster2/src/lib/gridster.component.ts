@@ -561,9 +561,9 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     }
 
     if (Number.isFinite(newLength)) {
-      return newLength;
+      return Math.floor(newLength);
     }
 
-    return newLength || 0;
+    return 0;
   }
 }
