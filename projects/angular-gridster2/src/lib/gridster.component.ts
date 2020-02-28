@@ -71,11 +71,21 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     this.gridRenderer = new GridsterRenderer(this);
   }
 
-  static checkCollisionTwoItems(item: GridsterItem, item2: GridsterItem): boolean {
-    return item.x < item2.x + item2.cols
+  checkCollisionTwoItems(item: GridsterItem, item2: GridsterItem): boolean {
+    const collision = item.x < item2.x + item2.cols
       && item.x + item.cols > item2.x
       && item.y < item2.y + item2.rows
-      && item.y + item.rows > item2.y;
+      && item.y + item.rows > item2.y; // 有冲突返回true
+    if (!collision) {
+      return false;
+    }
+    if (!this.$options.allowMultiLayer) {
+      return true;
+    }
+    const defaultLayerIndex = this.$options.defaultLayerIndex;
+    const layerIndex = item.layerIndex === undefined ? defaultLayerIndex : item.layerIndex;
+    const layerIndex2 = item2.layerIndex === undefined ? defaultLayerIndex : item2.layerIndex;
+    return layerIndex === layerIndex2;
   }
 
   ngOnInit(): void {
@@ -387,7 +397,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     let widget: GridsterItemComponentInterface;
     for (; widgetsIndex > -1; widgetsIndex--) {
       widget = this.grid[widgetsIndex];
-      if (widget.$item !== item && GridsterComponent.checkCollisionTwoItems(widget.$item, item)) {
+      if (widget.$item !== item && this.checkCollisionTwoItems(widget.$item, item)) {
         return widget;
       }
     }
@@ -400,7 +410,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     let widget: GridsterItemComponentInterface;
     for (; widgetsIndex > -1; widgetsIndex--) {
       widget = this.grid[widgetsIndex];
-      if (widget.$item !== item && GridsterComponent.checkCollisionTwoItems(widget.$item, item)) {
+      if (widget.$item !== item && this.checkCollisionTwoItems(widget.$item, item)) {
         a.push(widget);
       }
     }
@@ -553,6 +563,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
 
   // ------ End of functions for swapWhileDragging option
 
+  // tslint:disable-next-line:member-ordering
   private static getNewArrayLength(length: number, overallSize: number, size: number): number {
     const newLength = Math.max(length, Math.floor(overallSize / size));
 

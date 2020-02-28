@@ -5,6 +5,7 @@ export interface GridsterItem {
   y: number;
   rows: number;
   cols: number;
+  layerIndex?: number;
   initCallback?: (item: GridsterItem, itemComponent: GridsterItemComponentInterface) => void;
   dragEnabled?: boolean;
   resizeEnabled?: boolean;

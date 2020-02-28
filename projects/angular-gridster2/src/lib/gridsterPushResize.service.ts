@@ -113,7 +113,7 @@ export class GridsterPushResize {
     const backUpRows = gridsterItemCollide.$item.rows;
     gridsterItemCollide.$item.y = gridsterItem.$item.y + gridsterItem.$item.rows;
     gridsterItemCollide.$item.rows = backUpRows + backUpY - gridsterItemCollide.$item.y;
-    if (!GridsterComponent.checkCollisionTwoItems(gridsterItemCollide.$item, gridsterItem.$item)
+    if (!this.gridster.checkCollisionTwoItems(gridsterItemCollide.$item, gridsterItem.$item)
       && !this.gridster.checkGridCollision(gridsterItemCollide.$item)) {
       gridsterItemCollide.setSize();
       this.addToPushed(gridsterItemCollide);
@@ -130,7 +130,7 @@ export class GridsterPushResize {
                    direction: string): boolean {
     const backUpRows = gridsterItemCollide.$item.rows;
     gridsterItemCollide.$item.rows = gridsterItem.$item.y - gridsterItemCollide.$item.y;
-    if (!GridsterComponent.checkCollisionTwoItems(gridsterItemCollide.$item, gridsterItem.$item)
+    if (!this.gridster.checkCollisionTwoItems(gridsterItemCollide.$item, gridsterItem.$item)
       && !this.gridster.checkGridCollision(gridsterItemCollide.$item)) {
       gridsterItemCollide.setSize();
       this.addToPushed(gridsterItemCollide);
@@ -148,7 +148,7 @@ export class GridsterPushResize {
     const backUpCols = gridsterItemCollide.$item.cols;
     gridsterItemCollide.$item.x = gridsterItem.$item.x + gridsterItem.$item.cols;
     gridsterItemCollide.$item.cols = backUpCols + backUpX - gridsterItemCollide.$item.x;
-    if (!GridsterComponent.checkCollisionTwoItems(gridsterItemCollide.$item, gridsterItem.$item)
+    if (!this.gridster.checkCollisionTwoItems(gridsterItemCollide.$item, gridsterItem.$item)
       && !this.gridster.checkGridCollision(gridsterItemCollide.$item)) {
       gridsterItemCollide.setSize();
       this.addToPushed(gridsterItemCollide);
@@ -165,7 +165,7 @@ export class GridsterPushResize {
                   direction: string): boolean {
     const backUpCols = gridsterItemCollide.$item.cols;
     gridsterItemCollide.$item.cols = gridsterItem.$item.x - gridsterItemCollide.$item.x;
-    if (!GridsterComponent.checkCollisionTwoItems(gridsterItemCollide.$item, gridsterItem.$item)
+    if (!this.gridster.checkCollisionTwoItems(gridsterItemCollide.$item, gridsterItem.$item)
       && !this.gridster.checkGridCollision(gridsterItemCollide.$item)) {
       gridsterItemCollide.setSize();
       this.addToPushed(gridsterItemCollide);

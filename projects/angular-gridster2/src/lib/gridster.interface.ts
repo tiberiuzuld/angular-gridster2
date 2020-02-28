@@ -19,6 +19,7 @@ export abstract class GridsterComponentInterface {
   findItemWithItem: (item: GridsterItem) => GridsterItemComponentInterface | boolean;
   findItemsWithItem: (item: GridsterItem) => Array<GridsterItemComponentInterface>;
   checkGridCollision: (item: GridsterItem) => boolean;
+  checkCollisionTwoItems: (item: GridsterItem, item2: GridsterItem) => boolean;
   el: any;
   renderer: Renderer2;
   gridRenderer: GridsterRenderer;

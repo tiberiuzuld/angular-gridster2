@@ -14,6 +14,8 @@ export const GridsterConfigService: GridsterConfig = {
   setGridSize: false, // sets grid size depending on content
   compactType: CompactType.None, // compact items: 'none' | 'compactUp' | 'compactLeft' | 'compactUp&Left' | 'compactLeft&Up'
   mobileBreakpoint: 640, // if the screen is not wider that this, remove the grid layout and stack the items
+  allowMultiLayer: false,
+  defaultLayerIndex: 1,
   minCols: 1, // minimum amount of columns in the grid
   maxCols: 100, // maximum amount of columns in the grid
   minRows: 1, // minimum amount of rows in the grid
