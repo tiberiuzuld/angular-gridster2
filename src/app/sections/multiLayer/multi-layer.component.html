@@ -29,11 +29,11 @@
         <mat-icon>more_vert</mat-icon>
       </button>
       <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="bringToFront(item);gridsterItem.updateOptions()">
+        <button mat-menu-item (click)="gridsterItem.bringToFront(1);">
           <mat-icon>arrow_upward</mat-icon>
           <span>Bring To Front</span>
         </button>
-        <button mat-menu-item (click)="sendToBack(item);gridsterItem.updateOptions()">
+        <button mat-menu-item (click)="gridsterItem.sendToBack(1);">
           <mat-icon>arrow_downward</mat-icon>
           <span>Send To Back</span>
         </button>

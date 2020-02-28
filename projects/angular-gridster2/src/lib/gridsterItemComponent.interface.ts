@@ -20,6 +20,8 @@ export abstract class GridsterItemComponentInterface {
   checkItemChanges: (newValue: GridsterItem, oldValue: GridsterItem) => void;
   canBeDragged: () => boolean;
   canBeResized: () => boolean;
+  bringToFront: (offset: number) => void;
+  sendToBack: (v: number) => void ;
   el: any;
   gridster: GridsterComponentInterface;
   renderer: Renderer2;

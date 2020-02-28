@@ -23,6 +23,8 @@ export class MultiLayerComponent implements OnInit {
       swap: true,
       allowMultiLayer: true,
       defaultLayerIndex: 1,
+      baseLayerIndex: 2,
+      maxLayerIndex: 2,
       swapWhileDragging: false,
       draggable: {
         enabled: true
@@ -74,6 +76,6 @@ export class MultiLayerComponent implements OnInit {
   }
 
   addItem() {
-    this.dashboard.push({x: 0, y: 0, cols: 1, rows: 1});
+    this.dashboard.push({x: 0, y: 0, cols: 2, rows: 1});
   }
 }

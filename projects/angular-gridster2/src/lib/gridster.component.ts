@@ -75,7 +75,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     const collision = item.x < item2.x + item2.cols
       && item.x + item.cols > item2.x
       && item.y < item2.y + item2.rows
-      && item.y + item.rows > item2.y; // 有冲突返回true
+      && item.y + item.rows > item2.y;
     if (!collision) {
       return false;
     }
