@@ -40,7 +40,7 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
 
   @HostBinding('style.z-index')
   get zIndex(): number {
-    return this.getLayerIndexIndex() + this.gridster.$options.baseLayerIndex;
+    return this.getLayerIndex() + this.gridster.$options.baseLayerIndex;
   }
 
   constructor(@Inject(ElementRef) el: ElementRef,  gridster: GridsterComponent, @Inject(Renderer2) public renderer: Renderer2, @Inject(NgZone) private zone: NgZone) {
@@ -164,7 +164,7 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
     if (offset && offset <= 0) {
       return;
     }
-    const layerIndex = this.getLayerIndexIndex();
+    const layerIndex = this.getLayerIndex();
     const topIndex = this.gridster.$options.maxLayerIndex;
     if (layerIndex < topIndex) {
       const targetIndex = offset ? layerIndex + offset : topIndex;
@@ -175,14 +175,14 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
     if (offset && offset <= 0) {
       return;
     }
-    const layerIndex = this.getLayerIndexIndex();
+    const layerIndex = this.getLayerIndex();
     if (layerIndex > 0) {
       const targetIndex = offset ? layerIndex - offset : 0;
       this.item.layerIndex = this.$item.layerIndex = targetIndex < 0 ? 0 : targetIndex;
     }
   }
 
-  private getLayerIndexIndex(): number {
+  private getLayerIndex(): number {
     if (this.item.layerIndex !== undefined) {
       return this.item.layerIndex;
     }
