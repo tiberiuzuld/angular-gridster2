@@ -1,4 +1,15 @@
-import {Component, ElementRef, Input, NgZone, OnDestroy, OnInit, Renderer2, ViewEncapsulation, Inject} from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  NgZone,
+  OnDestroy,
+  OnInit,
+  Renderer2,
+  ViewEncapsulation,
+  Inject,
+  HostBinding
+} from '@angular/core';
 
 import {GridsterItem} from './gridsterItem.interface';
 import {GridsterDraggable} from './gridsterDraggable.service';
@@ -27,6 +38,11 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
   notPlaced: boolean;
   init: boolean;
 
+  @HostBinding('style.z-index')
+  get zIndex(): number {
+    return this.getLayerIndex() + this.gridster.$options.baseLayerIndex;
+  }
+
   constructor(@Inject(ElementRef) el: ElementRef,  gridster: GridsterComponent, @Inject(Renderer2) public renderer: Renderer2, @Inject(NgZone) private zone: NgZone) {
     this.el = el.nativeElement;
     this.$item = {
@@ -51,6 +67,7 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
       rows: undefined,
       x: undefined,
       y: undefined,
+      layerIndex: undefined,
       dragEnabled: undefined,
       resizeEnabled: undefined,
       compactEnabled: undefined,
@@ -141,6 +158,38 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
   canBeResized(): boolean {
     return !this.gridster.mobile &&
       (this.$item.resizeEnabled === undefined ? this.gridster.$options.resizable.enabled : this.$item.resizeEnabled);
+  }
+
+  bringToFront(offset: number): void {
+    if (offset && offset <= 0) {
+      return;
+    }
+    const layerIndex = this.getLayerIndex();
+    const topIndex = this.gridster.$options.maxLayerIndex;
+    if (layerIndex < topIndex) {
+      const targetIndex = offset ? layerIndex + offset : topIndex;
+      this.item.layerIndex = this.$item.layerIndex = targetIndex > topIndex ? topIndex : targetIndex;
+    }
+  }
+  sendToBack(offset: number): void {
+    if (offset && offset <= 0) {
+      return;
+    }
+    const layerIndex = this.getLayerIndex();
+    if (layerIndex > 0) {
+      const targetIndex = offset ? layerIndex - offset : 0;
+      this.item.layerIndex = this.$item.layerIndex = targetIndex < 0 ? 0 : targetIndex;
+    }
+  }
+
+  private getLayerIndex(): number {
+    if (this.item.layerIndex !== undefined) {
+      return this.item.layerIndex;
+    }
+    if (this.gridster.$options.defaultLayerIndex !== undefined) {
+      return this.gridster.$options.defaultLayerIndex;
+    }
+    return 0;
   }
 
 }

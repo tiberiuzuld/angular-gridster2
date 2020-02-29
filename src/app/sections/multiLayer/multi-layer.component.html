@@ -1,0 +1,52 @@
+<div class="options">
+  <a mat-raised-button href="https://github.com/tiberiuzuld/angular-gridster2/tree/master/src/app/sections/swap"
+     target="_blank" class="source-code-button">
+    <mat-icon>open_in_new</mat-icon>
+    Source
+  </a>
+  <markdown [src]="'assets/multiLayer.md'"></markdown>
+</div>
+<div class="options-header">
+  <mat-checkbox [(ngModel)]="options.allowMultiLayer" (ngModelChange)="changedOptions()">
+    Allow Multi Layer
+  </mat-checkbox>
+  <mat-checkbox [(ngModel)]="options.swap" (ngModelChange)="changedOptions()">
+    Swap Items
+  </mat-checkbox>
+  <mat-checkbox [(ngModel)]="options.swapWhileDragging" (ngModelChange)="changedOptions()">
+    Swap Items While Dragging
+  </mat-checkbox>
+  <button mat-mini-fab (click)="addItem()" class="add-button cols-2">
+    <mat-icon>add</mat-icon>
+  </button>
+</div>
+
+
+<gridster [options]="options">
+  <gridster-item #gridsterItem [item]="item" *ngFor="let item of dashboard">
+    <div>
+      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="gridsterItem.bringToFront(1);">
+          <mat-icon>arrow_upward</mat-icon>
+          <span>Bring To Front</span>
+        </button>
+        <button mat-menu-item (click)="gridsterItem.sendToBack(1);">
+          <mat-icon>arrow_downward</mat-icon>
+          <span>Send To Back</span>
+        </button>
+      </mat-menu>
+
+      <span>LayerIndex: <span style="margin-left: 10px; color: blueviolet">{{item.layerIndex === undefined ? 1 : item.layerIndex}}</span></span>
+
+      <div class="button-holder">
+        <button mat-mini-fab (mousedown)="removeItem($event, item)"
+                (touchstart)="removeItem($event, item)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+  </gridster-item>
+</gridster>

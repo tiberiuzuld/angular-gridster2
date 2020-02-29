@@ -36,6 +36,8 @@ import {PushComponent} from './sections/push/push.component';
 import {ResizeComponent} from './sections/resize/resize.component';
 import {RtlComponent} from './sections/rtl/rtl.component';
 import {SwapComponent} from './sections/swap/swap.component';
+import {MultiLayerComponent} from './sections/multiLayer/multi-layer.component';
+import {MatMenuModule} from "@angular/material/menu";
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
@@ -53,6 +55,7 @@ const appRoutes: Routes = [
   {path: 'push', component: PushComponent},
   {path: 'resize', component: ResizeComponent},
   {path: 'swap', component: SwapComponent},
+  {path: 'multiLayer', component: MultiLayerComponent},
   {path: 'misc', component: MiscComponent},
   {path: 'rtl', component: RtlComponent},
   {path: '**', redirectTo: ''}
@@ -78,6 +81,7 @@ const appRoutes: Routes = [
     GridTypesComponent,
     ItemsComponent,
     PushComponent,
+    MultiLayerComponent,
     ResizeComponent,
     SwapComponent,
     MiscComponent,
@@ -90,7 +94,7 @@ const appRoutes: Routes = [
     HttpClientModule,
     RouterModule.forRoot(appRoutes),
     MatIconModule, MatButtonModule, MatSelectModule, MatInputModule, MatCheckboxModule, MatSidenavModule, MatListModule,
-    GridsterModule,
+    GridsterModule, MatMenuModule,
     MarkdownModule.forRoot({loader: HttpClient, markedOptions: {provide: MarkedOptions, useValue: {smartypants: true, breaks: true}}}),
   ],
   providers: [],

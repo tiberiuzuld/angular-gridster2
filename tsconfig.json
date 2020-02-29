@@ -22,7 +22,8 @@
     ],
     "paths": {
       "angular-gridster2": [
-        "dist/angular-gridster2"
+        "dist/angular-gridster2",
+//        "projects/angular-gridster2/src/public_api.ts"
       ]
     }
   },
