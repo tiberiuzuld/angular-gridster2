@@ -134,7 +134,7 @@ export class GridsterDraggable {
 
   calculateItemPositionFromMousePosition(e: any): void {
     if (this.gridster.options.scale) {
-      this.calculateItemPositionWithScale(e);
+      this.calculateItemPositionWithScale(e, this.gridster.options.scale);
     } else {
       this.calculateItemPositionWithoutScale(e);
     }
@@ -146,12 +146,12 @@ export class GridsterDraggable {
     });
   }
 
-  calculateItemPositionWithScale(e) {
-    this.left = this.originalClientX + ((e.clientX - this.originalClientX) / this.gridster.options.scale) + this.offsetLeft - this.diffLeft;
-    this.top = this.originalClientY + ((e.clientY - this.originalClientY) / this.gridster.options.scale)  + this.offsetTop - this.diffTop;
+  calculateItemPositionWithScale(e: any, scale: number): void {
+    this.left = this.originalClientX + ((e.clientX - this.originalClientX) / scale) + this.offsetLeft - this.diffLeft;
+    this.top = this.originalClientY + ((e.clientY - this.originalClientY) / scale)  + this.offsetTop - this.diffTop;
   }
 
-  calculateItemPositionWithoutScale(e) {
+  calculateItemPositionWithoutScale(e: any): void {
     if (this.gridster.$options.dirType === DirTypes.RTL) {
       this.left = this.gridster.el.scrollWidth - e.clientX + this.diffLeft;
     } else {
