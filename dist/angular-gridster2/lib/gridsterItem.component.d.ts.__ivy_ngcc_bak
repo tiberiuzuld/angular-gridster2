@@ -1,0 +1,36 @@
+import { ElementRef, NgZone, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { GridsterItem } from './gridsterItem.interface';
+import { GridsterDraggable } from './gridsterDraggable.service';
+import { GridsterResizable } from './gridsterResizable.service';
+import { GridsterItemComponentInterface } from './gridsterItemComponent.interface';
+import { GridsterComponent } from './gridster.component';
+export declare class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemComponentInterface {
+    renderer: Renderer2;
+    private zone;
+    item: GridsterItem;
+    $item: GridsterItem;
+    el: any;
+    gridster: GridsterComponent;
+    top: number;
+    left: number;
+    width: number;
+    height: number;
+    drag: GridsterDraggable;
+    resize: GridsterResizable;
+    notPlaced: boolean;
+    init: boolean;
+    get zIndex(): number;
+    constructor(el: ElementRef, gridster: GridsterComponent, renderer: Renderer2, zone: NgZone);
+    ngOnInit(): void;
+    updateOptions(): void;
+    ngOnDestroy(): void;
+    setSize(): void;
+    updateItemSize(): void;
+    itemChanged(): void;
+    checkItemChanges(newValue: GridsterItem, oldValue: GridsterItem): void;
+    canBeDragged(): boolean;
+    canBeResized(): boolean;
+    bringToFront(offset: number): void;
+    sendToBack(offset: number): void;
+    private getLayerIndex;
+}
