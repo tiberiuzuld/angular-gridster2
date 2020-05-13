@@ -14,7 +14,6 @@
     "build-demo": "ng build --prod",
     "build-npm": "ng build angular-gridster2 --prod",
     "deploy": "npm run build-npm && ng deploy",
-    "postinstall": "npm i && ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points"
   },
   "homepage": "https://tiberiuzuld.github.io/angular-gridster2",
   "bugs": {
