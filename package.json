@@ -13,7 +13,7 @@
     "e2e": "ng e2e",
     "build-demo": "ng build --prod",
     "build-npm": "ng build angular-gridster2 --prod",
-    "deploy": "npm run build-npm && ng deploy",
+    "deploy": "npm run build-npm && ng deploy"
   },
   "homepage": "https://tiberiuzuld.github.io/angular-gridster2",
   "bugs": {
