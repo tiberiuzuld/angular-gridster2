@@ -32,22 +32,14 @@
   ],
   "main": "bundles/angular-gridster2.umd.js",
   "module": "fesm5/angular-gridster2.js",
-  "es2015_ivy_ngcc": "__ivy_ngcc__/fesm2015/angular-gridster2.js",
   "es2015": "fesm2015/angular-gridster2.js",
   "esm5": "esm5/angular-gridster2.js",
   "esm2015": "esm2015/angular-gridster2.js",
   "fesm5": "fesm5/angular-gridster2.js",
-  "fesm2015_ivy_ngcc": "__ivy_ngcc__/fesm2015/angular-gridster2.js",
   "fesm2015": "fesm2015/angular-gridster2.js",
   "typings": "angular-gridster2.d.ts",
-  "metadata": "angular-gridster2.metadata.json",
   "sideEffects": false,
-  "__processed_by_ivy_ngcc__": {
-    "es2015": "9.1.0",
-    "fesm2015": "9.1.0",
-    "typings": "9.1.0"
-  },
   "scripts": {
-    "prepublishOnly": "node --eval \"console.error('ERROR: Trying to publish a package that has been compiled by NGCC. This is not allowed.\\nPlease delete and rebuild the package, without compiling with NGCC, before attempting to publish.\\nNote that NGCC may have been run by importing this package into another project that is being built with Ivy enabled.\\n')\" && exit 1"
+    "prepublishOnly": "node --eval \"console.error('ERROR: Trying to publish a package that has been compiled by Ivy. This is not allowed.\\nPlease delete and rebuild the package, without compiling with Ivy, before attempting to publish.\\n')\" && exit 1"
   }
 }

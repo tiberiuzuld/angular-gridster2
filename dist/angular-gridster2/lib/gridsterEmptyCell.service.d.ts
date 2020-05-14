@@ -1,5 +1,6 @@
 import { GridsterItem } from './gridsterItem.interface';
 import { GridsterComponentInterface } from './gridster.interface';
+import * as i0 from "@angular/core";
 export declare class GridsterEmptyCell {
     private gridster;
     initialItem: GridsterItem | null;
@@ -26,4 +27,6 @@ export declare class GridsterEmptyCell {
     emptyCellMouseMove(e: any): void;
     emptyCellMouseUp(e: any): void;
     getValidItemFromEvent(e: any, oldItem?: GridsterItem | null): GridsterItem | undefined;
+    static ɵfac: i0.ɵɵFactoryDef<GridsterEmptyCell, never>;
+    static ɵprov: i0.ɵɵInjectableDef<GridsterEmptyCell>;
 }
