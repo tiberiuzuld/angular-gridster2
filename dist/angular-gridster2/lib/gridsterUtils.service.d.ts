@@ -1,5 +1,4 @@
 import { GridsterComponentInterface } from './gridster.interface';
-import * as i0 from "@angular/core";
 export declare class GridsterUtils {
     static merge(obj1: any, obj2: any, properties: any): any;
     static debounce(func: Function, wait: number): () => void;
@@ -15,6 +14,4 @@ export declare class GridsterUtils {
         x: number;
         y: number;
     }): number;
-    static ɵfac: i0.ɵɵFactoryDef<GridsterUtils, never>;
-    static ɵprov: i0.ɵɵInjectableDef<GridsterUtils>;
 }

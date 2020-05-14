@@ -3,8 +3,8 @@
   "version": "9.1.0",
   "license": "MIT",
   "peerDependencies": {
-    "@angular/common": "^9.1.0",
-    "@angular/core": "^9.1.0",
+    "@angular/common": "^8.2.14",
+    "@angular/core": "^8.2.14",
     "tslib": "^1.10.0"
   },
   "homepage": "https://tiberiuzuld.github.io/angular-gridster2",
