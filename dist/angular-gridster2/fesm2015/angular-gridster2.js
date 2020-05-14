@@ -1,6 +1,5 @@
-import { __decorate, __metadata, __param } from 'tslib';
-import { Injectable, ElementRef, Inject, Renderer2, ChangeDetectorRef, NgZone, Input, Component, ViewEncapsulation, HostBinding, NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ɵɵinject, ɵɵdefineInjectable, ɵsetClassMetadata, Injectable, ɵɵelement, ɵɵnextContext, ɵɵproperty, ɵɵdirectiveInject, ElementRef, Renderer2, ChangeDetectorRef, NgZone, ɵɵdefineComponent, ɵɵNgOnChangesFeature, ɵɵprojectionDef, ɵɵtemplate, ɵɵprojection, ɵɵadvance, Component, ViewEncapsulation, Inject, Input, ɵɵgetCurrentView, ɵɵelementStart, ɵɵlistener, ɵɵrestoreView, ɵɵelementEnd, ɵɵstyleProp, HostBinding, ɵɵdefineNgModule, ɵɵdefineInjector, ɵɵsetNgModuleScope, NgModule, ɵɵsetComponentScope } from '@angular/core';
+import { NgIf, CommonModule, NgClass, NgComponentOutlet, NgForOf, NgTemplateOutlet, NgStyle, NgSwitch, NgSwitchCase, NgSwitchDefault, NgPlural, NgPluralCase, AsyncPipe, UpperCasePipe, LowerCasePipe, JsonPipe, SlicePipe, DecimalPipe, PercentPipe, TitleCasePipe, CurrencyPipe, DatePipe, I18nPluralPipe, I18nSelectPipe, KeyValuePipe } from '@angular/common';
 
 class GridsterComponentInterface {
 }
@@ -37,7 +36,7 @@ var DirTypes;
     DirTypes["RTL"] = "rtl";
 })(DirTypes || (DirTypes = {}));
 
-let GridsterCompact = class GridsterCompact {
+class GridsterCompact {
     constructor(gridster) {
         this.gridster = gridster;
     }
@@ -185,14 +184,12 @@ let GridsterCompact = class GridsterCompact {
             return true;
         }
     }
-};
-GridsterCompact.ctorParameters = () => [
-    { type: GridsterComponentInterface }
-];
-GridsterCompact = __decorate([
-    Injectable(),
-    __metadata("design:paramtypes", [GridsterComponentInterface])
-], GridsterCompact);
+}
+GridsterCompact.ɵfac = function GridsterCompact_Factory(t) { return new (t || GridsterCompact)(ɵɵinject(GridsterComponentInterface)); };
+GridsterCompact.ɵprov = ɵɵdefineInjectable({ token: GridsterCompact, factory: GridsterCompact.ɵfac });
+/*@__PURE__*/ (function () { ɵsetClassMetadata(GridsterCompact, [{
+        type: Injectable
+    }], function () { return [{ type: GridsterComponentInterface }]; }, null); })();
 
 const GridsterConfigService = {
     gridType: GridType.Fit,
@@ -307,13 +304,12 @@ const GridsterConfigService = {
     dirType: DirTypes.LTR,
 };
 
-var GridsterUtils_1;
-let GridsterUtils = GridsterUtils_1 = class GridsterUtils {
+class GridsterUtils {
     static merge(obj1, obj2, properties) {
         for (const p in obj2) {
             if (obj2[p] !== void 0 && properties.hasOwnProperty(p)) {
                 if (typeof obj2[p] === 'object') {
-                    obj1[p] = GridsterUtils_1.merge(obj1[p], obj2[p], properties[p]);
+                    obj1[p] = GridsterUtils.merge(obj1[p], obj2[p], properties[p]);
                 }
                 else {
                     obj1[p] = obj2[p];
@@ -348,20 +344,20 @@ let GridsterUtils = GridsterUtils_1 = class GridsterUtils {
     }
     static checkContentClassForEvent(gridster, e) {
         if (gridster.$options.draggable.ignoreContent) {
-            if (!GridsterUtils_1.checkDragHandleClass(e.target, e.currentTarget, gridster.$options.draggable.dragHandleClass, gridster.$options.draggable.ignoreContentClass)) {
+            if (!GridsterUtils.checkDragHandleClass(e.target, e.currentTarget, gridster.$options.draggable.dragHandleClass, gridster.$options.draggable.ignoreContentClass)) {
                 return true;
             }
         }
         else {
-            if (GridsterUtils_1.checkContentClass(e.target, e.currentTarget, gridster.$options.draggable.ignoreContentClass)) {
+            if (GridsterUtils.checkContentClass(e.target, e.currentTarget, gridster.$options.draggable.ignoreContentClass)) {
                 return true;
             }
         }
         return false;
     }
     static checkContentClassForEmptyCellClickEvent(gridster, e) {
-        return GridsterUtils_1.checkContentClass(e.target, e.currentTarget, gridster.$options.draggable.ignoreContentClass)
-            || GridsterUtils_1.checkContentClass(e.target, e.currentTarget, gridster.$options.draggable.dragHandleClass);
+        return GridsterUtils.checkContentClass(e.target, e.currentTarget, gridster.$options.draggable.ignoreContentClass)
+            || GridsterUtils.checkContentClass(e.target, e.currentTarget, gridster.$options.draggable.dragHandleClass);
     }
     static checkDragHandleClass(target, current, dragHandleClass, ignoreContentClass) {
         if (!target || target === current) {
@@ -376,7 +372,7 @@ let GridsterUtils = GridsterUtils_1 = class GridsterUtils {
                 return false;
             }
         }
-        return GridsterUtils_1.checkDragHandleClass(target.parentNode, current, dragHandleClass, ignoreContentClass);
+        return GridsterUtils.checkDragHandleClass(target.parentNode, current, dragHandleClass, ignoreContentClass);
     }
     static checkContentClass(target, current, contentClass) {
         if (!target || target === current) {
@@ -386,7 +382,7 @@ let GridsterUtils = GridsterUtils_1 = class GridsterUtils {
             return true;
         }
         else {
-            return GridsterUtils_1.checkContentClass(target.parentNode, current, contentClass);
+            return GridsterUtils.checkContentClass(target.parentNode, current, contentClass);
         }
     }
     static compareItems(a, b) {
@@ -403,12 +399,14 @@ let GridsterUtils = GridsterUtils_1 = class GridsterUtils {
             return 1;
         }
     }
-};
-GridsterUtils = GridsterUtils_1 = __decorate([
-    Injectable()
-], GridsterUtils);
+}
+GridsterUtils.ɵfac = function GridsterUtils_Factory(t) { return new (t || GridsterUtils)(); };
+GridsterUtils.ɵprov = ɵɵdefineInjectable({ token: GridsterUtils, factory: GridsterUtils.ɵfac });
+/*@__PURE__*/ (function () { ɵsetClassMetadata(GridsterUtils, [{
+        type: Injectable
+    }], null, null); })();
 
-let GridsterEmptyCell = class GridsterEmptyCell {
+class GridsterEmptyCell {
     constructor(gridster) {
         this.gridster = gridster;
     }
@@ -610,16 +608,14 @@ let GridsterEmptyCell = class GridsterEmptyCell {
         }
         return item;
     }
-};
-GridsterEmptyCell.ctorParameters = () => [
-    { type: GridsterComponentInterface }
-];
-GridsterEmptyCell = __decorate([
-    Injectable(),
-    __metadata("design:paramtypes", [GridsterComponentInterface])
-], GridsterEmptyCell);
+}
+GridsterEmptyCell.ɵfac = function GridsterEmptyCell_Factory(t) { return new (t || GridsterEmptyCell)(ɵɵinject(GridsterComponentInterface)); };
+GridsterEmptyCell.ɵprov = ɵɵdefineInjectable({ token: GridsterEmptyCell, factory: GridsterEmptyCell.ɵfac });
+/*@__PURE__*/ (function () { ɵsetClassMetadata(GridsterEmptyCell, [{
+        type: Injectable
+    }], function () { return [{ type: GridsterComponentInterface }]; }, null); })();
 
-let GridsterRenderer = class GridsterRenderer {
+class GridsterRenderer {
     constructor(gridster) {
         this.gridster = gridster;
     }
@@ -815,17 +811,29 @@ let GridsterRenderer = class GridsterRenderer {
             return 0;
         }
     }
-};
-GridsterRenderer.ctorParameters = () => [
-    { type: GridsterComponentInterface }
-];
-GridsterRenderer = __decorate([
-    Injectable(),
-    __metadata("design:paramtypes", [GridsterComponentInterface])
-], GridsterRenderer);
+}
+GridsterRenderer.ɵfac = function GridsterRenderer_Factory(t) { return new (t || GridsterRenderer)(ɵɵinject(GridsterComponentInterface)); };
+GridsterRenderer.ɵprov = ɵɵdefineInjectable({ token: GridsterRenderer, factory: GridsterRenderer.ɵfac });
+/*@__PURE__*/ (function () { ɵsetClassMetadata(GridsterRenderer, [{
+        type: Injectable
+    }], function () { return [{ type: GridsterComponentInterface }]; }, null); })();
 
-var GridsterComponent_1;
-let GridsterComponent = GridsterComponent_1 = class GridsterComponent {
+function GridsterComponent_div_0_Template(rf, ctx) { if (rf & 1) {
+    ɵɵelement(0, "div", 3);
+} if (rf & 2) {
+    const i_r3 = ctx.index;
+    const ctx_r0 = ɵɵnextContext();
+    ɵɵproperty("ngStyle", ctx_r0.gridRenderer.getGridColumnStyle(i_r3));
+} }
+function GridsterComponent_div_1_Template(rf, ctx) { if (rf & 1) {
+    ɵɵelement(0, "div", 4);
+} if (rf & 2) {
+    const i_r5 = ctx.index;
+    const ctx_r1 = ɵɵnextContext();
+    ɵɵproperty("ngStyle", ctx_r1.gridRenderer.getGridRowStyle(i_r5));
+} }
+const _c0 = ["*"];
+class GridsterComponent {
     constructor(el, renderer, cdRef, zone) {
         this.renderer = renderer;
         this.cdRef = cdRef;
@@ -1085,8 +1093,8 @@ let GridsterComponent = GridsterComponent_1 = class GridsterComponent {
             this.renderer.removeClass(this.el, 'display-grid');
         }
         this.setGridDimensions();
-        this.gridColumns.length = GridsterComponent_1.getNewArrayLength(this.columns, this.curWidth, this.curColWidth);
-        this.gridRows.length = GridsterComponent_1.getNewArrayLength(this.rows, this.curHeight, this.curRowHeight);
+        this.gridColumns.length = GridsterComponent.getNewArrayLength(this.columns, this.curWidth, this.curColWidth);
+        this.gridRows.length = GridsterComponent.getNewArrayLength(this.rows, this.curHeight, this.curRowHeight);
         this.cdRef.markForCheck();
     }
     addItem(itemComponent) {
@@ -1312,7 +1320,7 @@ let GridsterComponent = GridsterComponent_1 = class GridsterComponent {
         let widget;
         for (; widgetsIndex > -1; widgetsIndex--) {
             widget = this.grid[widgetsIndex];
-            if (widget.$item !== item && GridsterComponent_1.checkCollisionTwoItemsForSwaping(widget.$item, item)) {
+            if (widget.$item !== item && GridsterComponent.checkCollisionTwoItemsForSwaping(widget.$item, item)) {
                 return widget;
             }
         }
@@ -1330,36 +1338,47 @@ let GridsterComponent = GridsterComponent_1 = class GridsterComponent {
         }
         return 0;
     }
-};
-GridsterComponent.ctorParameters = () => [
-    { type: ElementRef, decorators: [{ type: Inject, args: [ElementRef,] }] },
-    { type: Renderer2, decorators: [{ type: Inject, args: [Renderer2,] }] },
-    { type: ChangeDetectorRef, decorators: [{ type: Inject, args: [ChangeDetectorRef,] }] },
-    { type: NgZone, decorators: [{ type: Inject, args: [NgZone,] }] }
-];
-__decorate([
-    Input(),
-    __metadata("design:type", Object)
-], GridsterComponent.prototype, "options", void 0);
-GridsterComponent = GridsterComponent_1 = __decorate([
-    Component({
-        selector: 'gridster',
-        template: "<div class=\"gridster-column\" *ngFor=\"let column of gridColumns; let i = index;\"\n     [ngStyle]=\"gridRenderer.getGridColumnStyle(i)\"></div>\n<div class=\"gridster-row\" *ngFor=\"let row of gridRows; let i = index;\"\n     [ngStyle]=\"gridRenderer.getGridRowStyle(i)\"></div>\n<ng-content></ng-content>\n<gridster-preview class=\"gridster-preview\"></gridster-preview>\n",
-        encapsulation: ViewEncapsulation.None,
-        styles: ["gridster{position:relative;box-sizing:border-box;background:grey;width:100%;height:100%;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;display:block}gridster.fit{overflow-x:hidden;overflow-y:hidden}gridster.scrollVertical{overflow-x:hidden;overflow-y:auto}gridster.scrollHorizontal{overflow-x:auto;overflow-y:hidden}gridster.fixed{overflow:auto}gridster.mobile{overflow-x:hidden;overflow-y:auto}gridster.mobile gridster-item{position:relative}gridster .gridster-column,gridster .gridster-row{position:absolute;display:none;transition:.3s;box-sizing:border-box}gridster.display-grid .gridster-column,gridster.display-grid .gridster-row{display:block}gridster .gridster-column{border-left:1px solid #fff;border-right:1px solid #fff}gridster .gridster-row{border-top:1px solid #fff;border-bottom:1px solid #fff}"]
-    }),
-    __param(0, Inject(ElementRef)), __param(1, Inject(Renderer2)),
-    __param(2, Inject(ChangeDetectorRef)),
-    __param(3, Inject(NgZone)),
-    __metadata("design:paramtypes", [ElementRef, Renderer2,
-        ChangeDetectorRef,
-        NgZone])
-], GridsterComponent);
+}
+GridsterComponent.ɵfac = function GridsterComponent_Factory(t) { return new (t || GridsterComponent)(ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(Renderer2), ɵɵdirectiveInject(ChangeDetectorRef), ɵɵdirectiveInject(NgZone)); };
+GridsterComponent.ɵcmp = ɵɵdefineComponent({ type: GridsterComponent, selectors: [["gridster"]], inputs: { options: "options" }, features: [ɵɵNgOnChangesFeature], ngContentSelectors: _c0, decls: 4, vars: 2, consts: [["class", "gridster-column", 3, "ngStyle", 4, "ngFor", "ngForOf"], ["class", "gridster-row", 3, "ngStyle", 4, "ngFor", "ngForOf"], [1, "gridster-preview"], [1, "gridster-column", 3, "ngStyle"], [1, "gridster-row", 3, "ngStyle"]], template: function GridsterComponent_Template(rf, ctx) { if (rf & 1) {
+        ɵɵprojectionDef();
+        ɵɵtemplate(0, GridsterComponent_div_0_Template, 1, 1, "div", 0);
+        ɵɵtemplate(1, GridsterComponent_div_1_Template, 1, 1, "div", 1);
+        ɵɵprojection(2);
+        ɵɵelement(3, "gridster-preview", 2);
+    } if (rf & 2) {
+        ɵɵproperty("ngForOf", ctx.gridColumns);
+        ɵɵadvance(1);
+        ɵɵproperty("ngForOf", ctx.gridRows);
+    } }, styles: ["gridster{position:relative;box-sizing:border-box;background:grey;width:100%;height:100%;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;display:block}gridster.fit{overflow-x:hidden;overflow-y:hidden}gridster.scrollVertical{overflow-x:hidden;overflow-y:auto}gridster.scrollHorizontal{overflow-x:auto;overflow-y:hidden}gridster.fixed{overflow:auto}gridster.mobile{overflow-x:hidden;overflow-y:auto}gridster.mobile gridster-item{position:relative}gridster .gridster-column,gridster .gridster-row{position:absolute;display:none;transition:.3s;box-sizing:border-box}gridster.display-grid .gridster-column,gridster.display-grid .gridster-row{display:block}gridster .gridster-column{border-left:1px solid #fff;border-right:1px solid #fff}gridster .gridster-row{border-top:1px solid #fff;border-bottom:1px solid #fff}"], encapsulation: 2 });
+/*@__PURE__*/ (function () { ɵsetClassMetadata(GridsterComponent, [{
+        type: Component,
+        args: [{
+                selector: 'gridster',
+                templateUrl: './gridster.html',
+                styleUrls: ['./gridster.css'],
+                encapsulation: ViewEncapsulation.None
+            }]
+    }], function () { return [{ type: ElementRef, decorators: [{
+                type: Inject,
+                args: [ElementRef]
+            }] }, { type: Renderer2, decorators: [{
+                type: Inject,
+                args: [Renderer2]
+            }] }, { type: ChangeDetectorRef, decorators: [{
+                type: Inject,
+                args: [ChangeDetectorRef]
+            }] }, { type: NgZone, decorators: [{
+                type: Inject,
+                args: [NgZone]
+            }] }]; }, { options: [{
+            type: Input
+        }] }); })();
 
 class GridsterItemComponentInterface {
 }
 
-let GridsterPush = class GridsterPush {
+class GridsterPush {
     constructor(gridsterItem) {
         this.pushedItems = [];
         this.pushedItemsTemp = [];
@@ -1654,14 +1673,12 @@ let GridsterPush = class GridsterPush {
         }
         return change;
     }
-};
-GridsterPush.ctorParameters = () => [
-    { type: GridsterItemComponentInterface }
-];
-GridsterPush = __decorate([
-    Injectable(),
-    __metadata("design:paramtypes", [GridsterItemComponentInterface])
-], GridsterPush);
+}
+GridsterPush.ɵfac = function GridsterPush_Factory(t) { return new (t || GridsterPush)(ɵɵinject(GridsterItemComponentInterface)); };
+GridsterPush.ɵprov = ɵɵdefineInjectable({ token: GridsterPush, factory: GridsterPush.ɵfac });
+/*@__PURE__*/ (function () { ɵsetClassMetadata(GridsterPush, [{
+        type: Injectable
+    }], function () { return [{ type: GridsterItemComponentInterface }]; }, null); })();
 
 let scrollSensitivity;
 let scrollSpeed;
@@ -1786,7 +1803,7 @@ function cancelN() {
     }
 }
 
-let GridsterSwap = class GridsterSwap {
+class GridsterSwap {
     constructor(gridsterItem) {
         this.gridsterItem = gridsterItem;
         this.gridster = gridsterItem.gridster;
@@ -1868,16 +1885,14 @@ let GridsterSwap = class GridsterSwap {
             }
         }
     }
-};
-GridsterSwap.ctorParameters = () => [
-    { type: GridsterItemComponentInterface }
-];
-GridsterSwap = __decorate([
-    Injectable(),
-    __metadata("design:paramtypes", [GridsterItemComponentInterface])
-], GridsterSwap);
+}
+GridsterSwap.ɵfac = function GridsterSwap_Factory(t) { return new (t || GridsterSwap)(ɵɵinject(GridsterItemComponentInterface)); };
+GridsterSwap.ɵprov = ɵɵdefineInjectable({ token: GridsterSwap, factory: GridsterSwap.ɵfac });
+/*@__PURE__*/ (function () { ɵsetClassMetadata(GridsterSwap, [{
+        type: Injectable
+    }], function () { return [{ type: GridsterItemComponentInterface }]; }, null); })();
 
-let GridsterDraggable = class GridsterDraggable {
+class GridsterDraggable {
     constructor(gridsterItem, gridster, zone) {
         this.zone = zone;
         this.collision = false;
@@ -2153,18 +2168,14 @@ let GridsterDraggable = class GridsterDraggable {
             cancelTouchCancel();
         }
     }
-};
-GridsterDraggable.ctorParameters = () => [
-    { type: GridsterItemComponentInterface },
-    { type: GridsterComponentInterface },
-    { type: NgZone }
-];
-GridsterDraggable = __decorate([
-    Injectable(),
-    __metadata("design:paramtypes", [GridsterItemComponentInterface, GridsterComponentInterface, NgZone])
-], GridsterDraggable);
+}
+GridsterDraggable.ɵfac = function GridsterDraggable_Factory(t) { return new (t || GridsterDraggable)(ɵɵinject(GridsterItemComponentInterface), ɵɵinject(GridsterComponentInterface), ɵɵinject(NgZone)); };
+GridsterDraggable.ɵprov = ɵɵdefineInjectable({ token: GridsterDraggable, factory: GridsterDraggable.ɵfac });
+/*@__PURE__*/ (function () { ɵsetClassMetadata(GridsterDraggable, [{
+        type: Injectable
+    }], function () { return [{ type: GridsterItemComponentInterface }, { type: GridsterComponentInterface }, { type: NgZone }]; }, null); })();
 
-let GridsterPushResize = class GridsterPushResize {
+class GridsterPushResize {
     constructor(gridsterItem) {
         this.pushedItems = [];
         this.pushedItemsPath = [];
@@ -2375,16 +2386,14 @@ let GridsterPushResize = class GridsterPushResize {
         }
         return false;
     }
-};
-GridsterPushResize.ctorParameters = () => [
-    { type: GridsterItemComponentInterface }
-];
-GridsterPushResize = __decorate([
-    Injectable(),
-    __metadata("design:paramtypes", [GridsterItemComponentInterface])
-], GridsterPushResize);
+}
+GridsterPushResize.ɵfac = function GridsterPushResize_Factory(t) { return new (t || GridsterPushResize)(ɵɵinject(GridsterItemComponentInterface)); };
+GridsterPushResize.ɵprov = ɵɵdefineInjectable({ token: GridsterPushResize, factory: GridsterPushResize.ɵfac });
+/*@__PURE__*/ (function () { ɵsetClassMetadata(GridsterPushResize, [{
+        type: Injectable
+    }], function () { return [{ type: GridsterItemComponentInterface }]; }, null); })();
 
-let GridsterResizable = class GridsterResizable {
+class GridsterResizable {
     constructor(gridsterItem, gridster, zone) {
         this.zone = zone;
         this.gridsterItem = gridsterItem;
@@ -2766,18 +2775,63 @@ let GridsterResizable = class GridsterResizable {
     setItemWidth(width) {
         this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'width', width + 'px');
     }
-};
-GridsterResizable.ctorParameters = () => [
-    { type: GridsterItemComponentInterface },
-    { type: GridsterComponentInterface },
-    { type: NgZone }
-];
-GridsterResizable = __decorate([
-    Injectable(),
-    __metadata("design:paramtypes", [GridsterItemComponentInterface, GridsterComponentInterface, NgZone])
-], GridsterResizable);
+}
+GridsterResizable.ɵfac = function GridsterResizable_Factory(t) { return new (t || GridsterResizable)(ɵɵinject(GridsterItemComponentInterface), ɵɵinject(GridsterComponentInterface), ɵɵinject(NgZone)); };
+GridsterResizable.ɵprov = ɵɵdefineInjectable({ token: GridsterResizable, factory: GridsterResizable.ɵfac });
+/*@__PURE__*/ (function () { ɵsetClassMetadata(GridsterResizable, [{
+        type: Injectable
+    }], function () { return [{ type: GridsterItemComponentInterface }, { type: GridsterComponentInterface }, { type: NgZone }]; }, null); })();
 
-let GridsterItemComponent = class GridsterItemComponent {
+function GridsterItemComponent_div_1_Template(rf, ctx) { if (rf & 1) {
+    const _r15 = ɵɵgetCurrentView();
+    ɵɵelementStart(0, "div", 8);
+    ɵɵlistener("mousedown", function GridsterItemComponent_div_1_Template_div_mousedown_0_listener($event) { ɵɵrestoreView(_r15); const ctx_r14 = ɵɵnextContext(); return ctx_r14.resize.dragStartDelay($event); })("touchstart", function GridsterItemComponent_div_1_Template_div_touchstart_0_listener($event) { ɵɵrestoreView(_r15); const ctx_r16 = ɵɵnextContext(); return ctx_r16.resize.dragStartDelay($event); });
+    ɵɵelementEnd();
+} }
+function GridsterItemComponent_div_2_Template(rf, ctx) { if (rf & 1) {
+    const _r18 = ɵɵgetCurrentView();
+    ɵɵelementStart(0, "div", 9);
+    ɵɵlistener("mousedown", function GridsterItemComponent_div_2_Template_div_mousedown_0_listener($event) { ɵɵrestoreView(_r18); const ctx_r17 = ɵɵnextContext(); return ctx_r17.resize.dragStartDelay($event); })("touchstart", function GridsterItemComponent_div_2_Template_div_touchstart_0_listener($event) { ɵɵrestoreView(_r18); const ctx_r19 = ɵɵnextContext(); return ctx_r19.resize.dragStartDelay($event); });
+    ɵɵelementEnd();
+} }
+function GridsterItemComponent_div_3_Template(rf, ctx) { if (rf & 1) {
+    const _r21 = ɵɵgetCurrentView();
+    ɵɵelementStart(0, "div", 10);
+    ɵɵlistener("mousedown", function GridsterItemComponent_div_3_Template_div_mousedown_0_listener($event) { ɵɵrestoreView(_r21); const ctx_r20 = ɵɵnextContext(); return ctx_r20.resize.dragStartDelay($event); })("touchstart", function GridsterItemComponent_div_3_Template_div_touchstart_0_listener($event) { ɵɵrestoreView(_r21); const ctx_r22 = ɵɵnextContext(); return ctx_r22.resize.dragStartDelay($event); });
+    ɵɵelementEnd();
+} }
+function GridsterItemComponent_div_4_Template(rf, ctx) { if (rf & 1) {
+    const _r24 = ɵɵgetCurrentView();
+    ɵɵelementStart(0, "div", 11);
+    ɵɵlistener("mousedown", function GridsterItemComponent_div_4_Template_div_mousedown_0_listener($event) { ɵɵrestoreView(_r24); const ctx_r23 = ɵɵnextContext(); return ctx_r23.resize.dragStartDelay($event); })("touchstart", function GridsterItemComponent_div_4_Template_div_touchstart_0_listener($event) { ɵɵrestoreView(_r24); const ctx_r25 = ɵɵnextContext(); return ctx_r25.resize.dragStartDelay($event); });
+    ɵɵelementEnd();
+} }
+function GridsterItemComponent_div_5_Template(rf, ctx) { if (rf & 1) {
+    const _r27 = ɵɵgetCurrentView();
+    ɵɵelementStart(0, "div", 12);
+    ɵɵlistener("mousedown", function GridsterItemComponent_div_5_Template_div_mousedown_0_listener($event) { ɵɵrestoreView(_r27); const ctx_r26 = ɵɵnextContext(); return ctx_r26.resize.dragStartDelay($event); })("touchstart", function GridsterItemComponent_div_5_Template_div_touchstart_0_listener($event) { ɵɵrestoreView(_r27); const ctx_r28 = ɵɵnextContext(); return ctx_r28.resize.dragStartDelay($event); });
+    ɵɵelementEnd();
+} }
+function GridsterItemComponent_div_6_Template(rf, ctx) { if (rf & 1) {
+    const _r30 = ɵɵgetCurrentView();
+    ɵɵelementStart(0, "div", 13);
+    ɵɵlistener("mousedown", function GridsterItemComponent_div_6_Template_div_mousedown_0_listener($event) { ɵɵrestoreView(_r30); const ctx_r29 = ɵɵnextContext(); return ctx_r29.resize.dragStartDelay($event); })("touchstart", function GridsterItemComponent_div_6_Template_div_touchstart_0_listener($event) { ɵɵrestoreView(_r30); const ctx_r31 = ɵɵnextContext(); return ctx_r31.resize.dragStartDelay($event); });
+    ɵɵelementEnd();
+} }
+function GridsterItemComponent_div_7_Template(rf, ctx) { if (rf & 1) {
+    const _r33 = ɵɵgetCurrentView();
+    ɵɵelementStart(0, "div", 14);
+    ɵɵlistener("mousedown", function GridsterItemComponent_div_7_Template_div_mousedown_0_listener($event) { ɵɵrestoreView(_r33); const ctx_r32 = ɵɵnextContext(); return ctx_r32.resize.dragStartDelay($event); })("touchstart", function GridsterItemComponent_div_7_Template_div_touchstart_0_listener($event) { ɵɵrestoreView(_r33); const ctx_r34 = ɵɵnextContext(); return ctx_r34.resize.dragStartDelay($event); });
+    ɵɵelementEnd();
+} }
+function GridsterItemComponent_div_8_Template(rf, ctx) { if (rf & 1) {
+    const _r36 = ɵɵgetCurrentView();
+    ɵɵelementStart(0, "div", 15);
+    ɵɵlistener("mousedown", function GridsterItemComponent_div_8_Template_div_mousedown_0_listener($event) { ɵɵrestoreView(_r36); const ctx_r35 = ɵɵnextContext(); return ctx_r35.resize.dragStartDelay($event); })("touchstart", function GridsterItemComponent_div_8_Template_div_touchstart_0_listener($event) { ɵɵrestoreView(_r36); const ctx_r37 = ɵɵnextContext(); return ctx_r37.resize.dragStartDelay($event); });
+    ɵɵelementEnd();
+} }
+const _c0$1 = ["*"];
+class GridsterItemComponent {
     constructor(el, gridster, renderer, zone) {
         this.renderer = renderer;
         this.zone = zone;
@@ -2920,34 +2974,64 @@ let GridsterItemComponent = class GridsterItemComponent {
         }
         return 0;
     }
-};
-GridsterItemComponent.ctorParameters = () => [
-    { type: ElementRef, decorators: [{ type: Inject, args: [ElementRef,] }] },
-    { type: GridsterComponent },
-    { type: Renderer2, decorators: [{ type: Inject, args: [Renderer2,] }] },
-    { type: NgZone, decorators: [{ type: Inject, args: [NgZone,] }] }
-];
-__decorate([
-    Input(),
-    __metadata("design:type", Object)
-], GridsterItemComponent.prototype, "item", void 0);
-__decorate([
-    HostBinding('style.z-index'),
-    __metadata("design:type", Number),
-    __metadata("design:paramtypes", [])
-], GridsterItemComponent.prototype, "zIndex", null);
-GridsterItemComponent = __decorate([
-    Component({
-        selector: 'gridster-item',
-        template: "<ng-content></ng-content>\n<div (mousedown)=\"resize.dragStartDelay($event)\" (touchstart)=\"resize.dragStartDelay($event)\"\n     *ngIf=\"gridster.$options.resizable.handles.s && resize.resizeEnabled\"\n     class=\"gridster-item-resizable-handler handle-s\"></div>\n<div (mousedown)=\"resize.dragStartDelay($event)\" (touchstart)=\"resize.dragStartDelay($event)\"\n     *ngIf=\"gridster.$options.resizable.handles.e && resize.resizeEnabled\"\n     class=\"gridster-item-resizable-handler handle-e\"></div>\n<div (mousedown)=\"resize.dragStartDelay($event)\" (touchstart)=\"resize.dragStartDelay($event)\"\n     *ngIf=\"gridster.$options.resizable.handles.n && resize.resizeEnabled\"\n     class=\"gridster-item-resizable-handler handle-n\"></div>\n<div (mousedown)=\"resize.dragStartDelay($event)\" (touchstart)=\"resize.dragStartDelay($event)\"\n     *ngIf=\"gridster.$options.resizable.handles.w && resize.resizeEnabled\"\n     class=\"gridster-item-resizable-handler handle-w\"></div>\n<div (mousedown)=\"resize.dragStartDelay($event)\" (touchstart)=\"resize.dragStartDelay($event)\"\n     *ngIf=\"gridster.$options.resizable.handles.se && resize.resizeEnabled\"\n     class=\"gridster-item-resizable-handler handle-se\"></div>\n<div (mousedown)=\"resize.dragStartDelay($event)\" (touchstart)=\"resize.dragStartDelay($event)\"\n     *ngIf=\"gridster.$options.resizable.handles.ne && resize.resizeEnabled\"\n     class=\"gridster-item-resizable-handler handle-ne\"></div>\n<div (mousedown)=\"resize.dragStartDelay($event)\" (touchstart)=\"resize.dragStartDelay($event)\"\n     *ngIf=\"gridster.$options.resizable.handles.sw && resize.resizeEnabled\"\n     class=\"gridster-item-resizable-handler handle-sw\"></div>\n<div (mousedown)=\"resize.dragStartDelay($event)\" (touchstart)=\"resize.dragStartDelay($event)\"\n     *ngIf=\"gridster.$options.resizable.handles.nw && resize.resizeEnabled\"\n     class=\"gridster-item-resizable-handler handle-nw\"></div>\n",
-        encapsulation: ViewEncapsulation.None,
-        styles: ["gridster-item{box-sizing:border-box;z-index:1;position:absolute;overflow:hidden;transition:.3s;display:none;background:#fff;-webkit-user-select:text;-moz-user-select:text;-ms-user-select:text;user-select:text}gridster-item.gridster-item-moving{cursor:move}gridster-item.gridster-item-moving,gridster-item.gridster-item-resizing{transition:none;z-index:2;box-shadow:0 0 5px 5px rgba(0,0,0,.2),0 6px 10px 0 rgba(0,0,0,.14),0 1px 18px 0 rgba(0,0,0,.12)}.gridster-item-resizable-handler{position:absolute;z-index:2}.gridster-item-resizable-handler.handle-n{cursor:ns-resize;height:10px;right:0;top:0;left:0}.gridster-item-resizable-handler.handle-e{cursor:ew-resize;width:10px;bottom:0;right:0;top:0}.gridster-item-resizable-handler.handle-s{cursor:ns-resize;height:10px;right:0;bottom:0;left:0}.gridster-item-resizable-handler.handle-w{cursor:ew-resize;width:10px;left:0;top:0;bottom:0}.gridster-item-resizable-handler.handle-ne{cursor:ne-resize;width:10px;height:10px;right:0;top:0}.gridster-item-resizable-handler.handle-nw{cursor:nw-resize;width:10px;height:10px;left:0;top:0}.gridster-item-resizable-handler.handle-se{cursor:se-resize;width:0;height:0;right:0;bottom:0;border-style:solid;border-width:0 0 10px 10px;border-color:transparent}.gridster-item-resizable-handler.handle-sw{cursor:sw-resize;width:10px;height:10px;left:0;bottom:0}gridster-item:hover .gridster-item-resizable-handler.handle-se{border-color:transparent transparent #ccc}"]
-    }),
-    __param(0, Inject(ElementRef)), __param(2, Inject(Renderer2)), __param(3, Inject(NgZone)),
-    __metadata("design:paramtypes", [ElementRef, GridsterComponent, Renderer2, NgZone])
-], GridsterItemComponent);
+}
+GridsterItemComponent.ɵfac = function GridsterItemComponent_Factory(t) { return new (t || GridsterItemComponent)(ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(GridsterComponent), ɵɵdirectiveInject(Renderer2), ɵɵdirectiveInject(NgZone)); };
+GridsterItemComponent.ɵcmp = ɵɵdefineComponent({ type: GridsterItemComponent, selectors: [["gridster-item"]], hostVars: 2, hostBindings: function GridsterItemComponent_HostBindings(rf, ctx) { if (rf & 2) {
+        ɵɵstyleProp("z-index", ctx.zIndex);
+    } }, inputs: { item: "item" }, ngContentSelectors: _c0$1, decls: 9, vars: 8, consts: [["class", "gridster-item-resizable-handler handle-s", 3, "mousedown", "touchstart", 4, "ngIf"], ["class", "gridster-item-resizable-handler handle-e", 3, "mousedown", "touchstart", 4, "ngIf"], ["class", "gridster-item-resizable-handler handle-n", 3, "mousedown", "touchstart", 4, "ngIf"], ["class", "gridster-item-resizable-handler handle-w", 3, "mousedown", "touchstart", 4, "ngIf"], ["class", "gridster-item-resizable-handler handle-se", 3, "mousedown", "touchstart", 4, "ngIf"], ["class", "gridster-item-resizable-handler handle-ne", 3, "mousedown", "touchstart", 4, "ngIf"], ["class", "gridster-item-resizable-handler handle-sw", 3, "mousedown", "touchstart", 4, "ngIf"], ["class", "gridster-item-resizable-handler handle-nw", 3, "mousedown", "touchstart", 4, "ngIf"], [1, "gridster-item-resizable-handler", "handle-s", 3, "mousedown", "touchstart"], [1, "gridster-item-resizable-handler", "handle-e", 3, "mousedown", "touchstart"], [1, "gridster-item-resizable-handler", "handle-n", 3, "mousedown", "touchstart"], [1, "gridster-item-resizable-handler", "handle-w", 3, "mousedown", "touchstart"], [1, "gridster-item-resizable-handler", "handle-se", 3, "mousedown", "touchstart"], [1, "gridster-item-resizable-handler", "handle-ne", 3, "mousedown", "touchstart"], [1, "gridster-item-resizable-handler", "handle-sw", 3, "mousedown", "touchstart"], [1, "gridster-item-resizable-handler", "handle-nw", 3, "mousedown", "touchstart"]], template: function GridsterItemComponent_Template(rf, ctx) { if (rf & 1) {
+        ɵɵprojectionDef();
+        ɵɵprojection(0);
+        ɵɵtemplate(1, GridsterItemComponent_div_1_Template, 1, 0, "div", 0);
+        ɵɵtemplate(2, GridsterItemComponent_div_2_Template, 1, 0, "div", 1);
+        ɵɵtemplate(3, GridsterItemComponent_div_3_Template, 1, 0, "div", 2);
+        ɵɵtemplate(4, GridsterItemComponent_div_4_Template, 1, 0, "div", 3);
+        ɵɵtemplate(5, GridsterItemComponent_div_5_Template, 1, 0, "div", 4);
+        ɵɵtemplate(6, GridsterItemComponent_div_6_Template, 1, 0, "div", 5);
+        ɵɵtemplate(7, GridsterItemComponent_div_7_Template, 1, 0, "div", 6);
+        ɵɵtemplate(8, GridsterItemComponent_div_8_Template, 1, 0, "div", 7);
+    } if (rf & 2) {
+        ɵɵadvance(1);
+        ɵɵproperty("ngIf", ctx.gridster.$options.resizable.handles.s && ctx.resize.resizeEnabled);
+        ɵɵadvance(1);
+        ɵɵproperty("ngIf", ctx.gridster.$options.resizable.handles.e && ctx.resize.resizeEnabled);
+        ɵɵadvance(1);
+        ɵɵproperty("ngIf", ctx.gridster.$options.resizable.handles.n && ctx.resize.resizeEnabled);
+        ɵɵadvance(1);
+        ɵɵproperty("ngIf", ctx.gridster.$options.resizable.handles.w && ctx.resize.resizeEnabled);
+        ɵɵadvance(1);
+        ɵɵproperty("ngIf", ctx.gridster.$options.resizable.handles.se && ctx.resize.resizeEnabled);
+        ɵɵadvance(1);
+        ɵɵproperty("ngIf", ctx.gridster.$options.resizable.handles.ne && ctx.resize.resizeEnabled);
+        ɵɵadvance(1);
+        ɵɵproperty("ngIf", ctx.gridster.$options.resizable.handles.sw && ctx.resize.resizeEnabled);
+        ɵɵadvance(1);
+        ɵɵproperty("ngIf", ctx.gridster.$options.resizable.handles.nw && ctx.resize.resizeEnabled);
+    } }, directives: [NgIf], styles: ["gridster-item{box-sizing:border-box;z-index:1;position:absolute;overflow:hidden;transition:.3s;display:none;background:#fff;-webkit-user-select:text;-moz-user-select:text;-ms-user-select:text;user-select:text}gridster-item.gridster-item-moving{cursor:move}gridster-item.gridster-item-moving,gridster-item.gridster-item-resizing{transition:none;z-index:2;box-shadow:0 0 5px 5px rgba(0,0,0,.2),0 6px 10px 0 rgba(0,0,0,.14),0 1px 18px 0 rgba(0,0,0,.12)}.gridster-item-resizable-handler{position:absolute;z-index:2}.gridster-item-resizable-handler.handle-n{cursor:ns-resize;height:10px;right:0;top:0;left:0}.gridster-item-resizable-handler.handle-e{cursor:ew-resize;width:10px;bottom:0;right:0;top:0}.gridster-item-resizable-handler.handle-s{cursor:ns-resize;height:10px;right:0;bottom:0;left:0}.gridster-item-resizable-handler.handle-w{cursor:ew-resize;width:10px;left:0;top:0;bottom:0}.gridster-item-resizable-handler.handle-ne{cursor:ne-resize;width:10px;height:10px;right:0;top:0}.gridster-item-resizable-handler.handle-nw{cursor:nw-resize;width:10px;height:10px;left:0;top:0}.gridster-item-resizable-handler.handle-se{cursor:se-resize;width:0;height:0;right:0;bottom:0;border-style:solid;border-width:0 0 10px 10px;border-color:transparent}.gridster-item-resizable-handler.handle-sw{cursor:sw-resize;width:10px;height:10px;left:0;bottom:0}gridster-item:hover .gridster-item-resizable-handler.handle-se{border-color:transparent transparent #ccc}"], encapsulation: 2 });
+/*@__PURE__*/ (function () { ɵsetClassMetadata(GridsterItemComponent, [{
+        type: Component,
+        args: [{
+                selector: 'gridster-item',
+                templateUrl: './gridsterItem.html',
+                styleUrls: ['./gridsterItem.css'],
+                encapsulation: ViewEncapsulation.None
+            }]
+    }], function () { return [{ type: ElementRef, decorators: [{
+                type: Inject,
+                args: [ElementRef]
+            }] }, { type: GridsterComponent }, { type: Renderer2, decorators: [{
+                type: Inject,
+                args: [Renderer2]
+            }] }, { type: NgZone, decorators: [{
+                type: Inject,
+                args: [NgZone]
+            }] }]; }, { item: [{
+            type: Input
+        }], zIndex: [{
+            type: HostBinding,
+            args: ['style.z-index']
+        }] }); })();
 
-let GridsterPreviewComponent = class GridsterPreviewComponent {
+class GridsterPreviewComponent {
     constructor(el, gridster, renderer) {
         this.renderer = renderer;
         this.el = el.nativeElement;
@@ -2971,41 +3055,54 @@ let GridsterPreviewComponent = class GridsterPreviewComponent {
             this.gridster.gridRenderer.updateItem(this.el, this.gridster.movingItem, this.renderer);
         }
     }
-};
-GridsterPreviewComponent.ctorParameters = () => [
-    { type: ElementRef, decorators: [{ type: Inject, args: [ElementRef,] }] },
-    { type: GridsterComponent },
-    { type: Renderer2, decorators: [{ type: Inject, args: [Renderer2,] }] }
-];
-GridsterPreviewComponent = __decorate([
-    Component({
-        selector: 'gridster-preview',
-        template: '',
-        encapsulation: ViewEncapsulation.None,
-        styles: ["gridster-preview{position:absolute;display:none;background:rgba(0,0,0,.15)}"]
-    }),
-    __param(0, Inject(ElementRef)), __param(2, Inject(Renderer2)),
-    __metadata("design:paramtypes", [ElementRef, GridsterComponent, Renderer2])
-], GridsterPreviewComponent);
+}
+GridsterPreviewComponent.ɵfac = function GridsterPreviewComponent_Factory(t) { return new (t || GridsterPreviewComponent)(ɵɵdirectiveInject(ElementRef), ɵɵdirectiveInject(GridsterComponent), ɵɵdirectiveInject(Renderer2)); };
+GridsterPreviewComponent.ɵcmp = ɵɵdefineComponent({ type: GridsterPreviewComponent, selectors: [["gridster-preview"]], decls: 0, vars: 0, template: function GridsterPreviewComponent_Template(rf, ctx) { }, styles: ["gridster-preview{position:absolute;display:none;background:rgba(0,0,0,.15)}"], encapsulation: 2 });
+/*@__PURE__*/ (function () { ɵsetClassMetadata(GridsterPreviewComponent, [{
+        type: Component,
+        args: [{
+                selector: 'gridster-preview',
+                template: '',
+                styleUrls: ['./gridsterPreview.css'],
+                encapsulation: ViewEncapsulation.None
+            }]
+    }], function () { return [{ type: ElementRef, decorators: [{
+                type: Inject,
+                args: [ElementRef]
+            }] }, { type: GridsterComponent }, { type: Renderer2, decorators: [{
+                type: Inject,
+                args: [Renderer2]
+            }] }]; }, null); })();
 
-let GridsterModule = class GridsterModule {
-};
-GridsterModule = __decorate([
-    NgModule({
-        declarations: [
-            GridsterComponent,
-            GridsterItemComponent,
-            GridsterPreviewComponent
-        ],
-        imports: [
+class GridsterModule {
+}
+GridsterModule.ɵmod = ɵɵdefineNgModule({ type: GridsterModule });
+GridsterModule.ɵinj = ɵɵdefineInjector({ factory: function GridsterModule_Factory(t) { return new (t || GridsterModule)(); }, providers: [], imports: [[
             CommonModule
-        ],
-        exports: [GridsterComponent, GridsterItemComponent],
-        providers: [],
-        bootstrap: [],
-        entryComponents: [GridsterComponent, GridsterItemComponent]
-    })
-], GridsterModule);
+        ]] });
+(function () { (typeof ngJitMode === "undefined" || ngJitMode) && ɵɵsetNgModuleScope(GridsterModule, { declarations: [GridsterComponent,
+        GridsterItemComponent,
+        GridsterPreviewComponent], imports: [CommonModule], exports: [GridsterComponent, GridsterItemComponent] }); })();
+/*@__PURE__*/ (function () { ɵsetClassMetadata(GridsterModule, [{
+        type: NgModule,
+        args: [{
+                declarations: [
+                    GridsterComponent,
+                    GridsterItemComponent,
+                    GridsterPreviewComponent
+                ],
+                imports: [
+                    CommonModule
+                ],
+                exports: [GridsterComponent, GridsterItemComponent],
+                providers: [],
+                bootstrap: [],
+                entryComponents: [GridsterComponent, GridsterItemComponent]
+            }]
+    }], null, null); })();
+ɵɵsetComponentScope(GridsterComponent, [NgClass, NgComponentOutlet, NgForOf, NgIf, NgTemplateOutlet, NgStyle, NgSwitch, NgSwitchCase, NgSwitchDefault, NgPlural, NgPluralCase, GridsterComponent,
+    GridsterItemComponent,
+    GridsterPreviewComponent], [AsyncPipe, UpperCasePipe, LowerCasePipe, JsonPipe, SlicePipe, DecimalPipe, PercentPipe, TitleCasePipe, CurrencyPipe, DatePipe, I18nPluralPipe, I18nSelectPipe, KeyValuePipe]);
 
 /*
  * Public API Surface of gridster
@@ -3015,5 +3112,5 @@ GridsterModule = __decorate([
  * Generated bundle index. Do not edit.
  */
 
-export { CompactType, DirTypes, DisplayGrid, GridType, GridsterComponent, GridsterComponentInterface, GridsterConfigService, GridsterItemComponent, GridsterItemComponentInterface, GridsterModule, GridsterPush, GridsterPushResize, GridsterSwap, GridsterPreviewComponent as ɵa };
+export { CompactType, DirTypes, DisplayGrid, GridType, GridsterComponent, GridsterComponentInterface, GridsterConfigService, GridsterItemComponent, GridsterItemComponentInterface, GridsterModule, GridsterPush, GridsterPushResize, GridsterSwap };
 //# sourceMappingURL=angular-gridster2.js.map
