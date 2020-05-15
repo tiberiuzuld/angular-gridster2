@@ -4,7 +4,6 @@ import { GridsterItemComponentInterface } from './gridsterItemComponent.interfac
 import { GridsterPush } from './gridsterPush.service';
 import { GridsterPushResize } from './gridsterPushResize.service';
 import { GridsterResizeEventType } from './gridsterResizeEventType.interface';
-import * as i0 from "@angular/core";
 export declare class GridsterResizable {
     private zone;
     gridsterItem: GridsterItemComponentInterface;
@@ -65,6 +64,4 @@ export declare class GridsterResizable {
     setItemLeft(left: number): void;
     setItemHeight(height: number): void;
     setItemWidth(width: number): void;
-    static ɵfac: i0.ɵɵFactoryDef<GridsterResizable, never>;
-    static ɵprov: i0.ɵɵInjectableDef<GridsterResizable>;
 }

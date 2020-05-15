@@ -4,7 +4,6 @@ import { GridsterDraggable } from './gridsterDraggable.service';
 import { GridsterResizable } from './gridsterResizable.service';
 import { GridsterItemComponentInterface } from './gridsterItemComponent.interface';
 import { GridsterComponent } from './gridster.component';
-import * as i0 from "@angular/core";
 export declare class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemComponentInterface {
     renderer: Renderer2;
     private zone;
@@ -20,7 +19,7 @@ export declare class GridsterItemComponent implements OnInit, OnDestroy, Gridste
     resize: GridsterResizable;
     notPlaced: boolean;
     init: boolean;
-    get zIndex(): number;
+    readonly zIndex: number;
     constructor(el: ElementRef, gridster: GridsterComponent, renderer: Renderer2, zone: NgZone);
     ngOnInit(): void;
     updateOptions(): void;
@@ -34,6 +33,4 @@ export declare class GridsterItemComponent implements OnInit, OnDestroy, Gridste
     bringToFront(offset: number): void;
     sendToBack(offset: number): void;
     private getLayerIndex;
-    static ɵfac: i0.ɵɵFactoryDef<GridsterItemComponent, never>;
-    static ɵcmp: i0.ɵɵComponentDefWithMeta<GridsterItemComponent, "gridster-item", never, { "item": "item"; }, {}, never, ["*"]>;
 }

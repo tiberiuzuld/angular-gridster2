@@ -38,8 +38,9 @@
   "fesm5": "fesm5/angular-gridster2.js",
   "fesm2015": "fesm2015/angular-gridster2.js",
   "typings": "angular-gridster2.d.ts",
+  "metadata": "angular-gridster2.metadata.json",
   "sideEffects": false,
-  "scripts": {
-    "prepublishOnly": "node --eval \"console.error('ERROR: Trying to publish a package that has been compiled by Ivy. This is not allowed.\\nPlease delete and rebuild the package, without compiling with Ivy, before attempting to publish.\\n')\" && exit 1"
+  "dependencies": {
+    "tslib": "^1.9.0"
   }
 }

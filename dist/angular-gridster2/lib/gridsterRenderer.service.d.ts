@@ -1,7 +1,6 @@
 import { Renderer2 } from '@angular/core';
 import { GridsterComponentInterface } from './gridster.interface';
 import { GridsterItem } from './gridsterItem.interface';
-import * as i0 from "@angular/core";
 export declare class GridsterRenderer {
     private gridster;
     constructor(gridster: GridsterComponentInterface);
@@ -32,6 +31,4 @@ export declare class GridsterRenderer {
     setCellPosition(renderer: Renderer2, el: any, x: number, y: number): void;
     getLeftMargin(): number;
     getTopMargin(): number;
-    static ɵfac: i0.ɵɵFactoryDef<GridsterRenderer, never>;
-    static ɵprov: i0.ɵɵInjectableDef<GridsterRenderer>;
 }

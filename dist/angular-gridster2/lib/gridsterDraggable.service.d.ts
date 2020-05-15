@@ -3,7 +3,6 @@ import { GridsterComponentInterface } from './gridster.interface';
 import { GridsterItemComponentInterface } from './gridsterItemComponent.interface';
 import { GridsterPush } from './gridsterPush.service';
 import { GridsterSwap } from './gridsterSwap.service';
-import * as i0 from "@angular/core";
 export declare class GridsterDraggable {
     private zone;
     gridsterItem: GridsterItemComponentInterface;
@@ -60,6 +59,4 @@ export declare class GridsterDraggable {
     calculateItemPosition(): void;
     toggle(): void;
     dragStartDelay(e: any): void;
-    static ɵfac: i0.ɵɵFactoryDef<GridsterDraggable, never>;
-    static ɵprov: i0.ɵɵInjectableDef<GridsterDraggable>;
 }

@@ -1,5 +1,4 @@
 import { GridsterItemComponentInterface } from './gridsterItemComponent.interface';
-import * as i0 from "@angular/core";
 export declare class GridsterPushResize {
     fromSouth: string;
     fromNorth: string;
@@ -24,6 +23,4 @@ export declare class GridsterPushResize {
     private addToPushed;
     private removeFromPushed;
     private checkPushedItem;
-    static ɵfac: i0.ɵɵFactoryDef<GridsterPushResize, never>;
-    static ɵprov: i0.ɵɵInjectableDef<GridsterPushResize>;
 }

@@ -7,7 +7,6 @@ import { GridsterEmptyCell } from './gridsterEmptyCell.service';
 import { GridsterItem } from './gridsterItem.interface';
 import { GridsterItemComponentInterface } from './gridsterItemComponent.interface';
 import { GridsterRenderer } from './gridsterRenderer.service';
-import * as i0 from "@angular/core";
 export declare class GridsterComponent implements OnInit, OnChanges, OnDestroy, GridsterComponentInterface {
     renderer: Renderer2;
     cdRef: ChangeDetectorRef;
@@ -68,6 +67,4 @@ export declare class GridsterComponent implements OnInit, OnChanges, OnDestroy, 
     checkCollisionForSwaping(item: GridsterItem): GridsterItemComponentInterface | boolean;
     findItemWithItemForSwaping(item: GridsterItem): GridsterItemComponentInterface | boolean;
     private static getNewArrayLength;
-    static ɵfac: i0.ɵɵFactoryDef<GridsterComponent, never>;
-    static ɵcmp: i0.ɵɵComponentDefWithMeta<GridsterComponent, "gridster", never, { "options": "options"; }, {}, never, ["*"]>;
 }
