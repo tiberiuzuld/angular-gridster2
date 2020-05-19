@@ -25,5 +25,7 @@ export declare class GridsterEmptyCell {
     emptyCellMouseDown(e: any): void;
     emptyCellMouseMove(e: any): void;
     emptyCellMouseUp(e: any): void;
+    getPixelsX(e: any, rect: ClientRect): number;
+    getPixelsY(e: any, rect: ClientRect): number;
     getValidItemFromEvent(e: any, oldItem?: GridsterItem | null): GridsterItem | undefined;
 }

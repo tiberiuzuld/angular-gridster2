@@ -576,13 +576,27 @@ let GridsterEmptyCell = class GridsterEmptyCell {
         });
         this.gridster.cdRef.markForCheck();
     }
+    getPixelsX(e, rect) {
+        const scale = this.gridster.$options.scale;
+        if (scale) {
+            return (e.clientX + this.gridster.el.scrollLeft - rect.left - this.gridster.gridRenderer.getLeftMargin()) / scale;
+        }
+        return e.clientX + this.gridster.el.scrollLeft - rect.left - this.gridster.gridRenderer.getLeftMargin();
+    }
+    getPixelsY(e, rect) {
+        const scale = this.gridster.$options.scale;
+        if (scale) {
+            return (e.clientY + this.gridster.el.scrollTop - rect.top - this.gridster.gridRenderer.getTopMargin()) / scale;
+        }
+        return e.clientY + this.gridster.el.scrollTop - rect.top - this.gridster.gridRenderer.getTopMargin();
+    }
     getValidItemFromEvent(e, oldItem) {
         e.preventDefault();
         e.stopPropagation();
         GridsterUtils.checkTouchEvent(e);
         const rect = this.gridster.el.getBoundingClientRect();
-        const x = e.clientX + this.gridster.el.scrollLeft - rect.left - this.gridster.gridRenderer.getLeftMargin();
-        const y = e.clientY + this.gridster.el.scrollTop - rect.top - this.gridster.gridRenderer.getTopMargin();
+        const x = this.getPixelsX(e, rect);
+        const y = this.getPixelsY(e, rect);
         const item = {
             x: this.gridster.pixelsToPositionX(x, Math.floor, true),
             y: this.gridster.pixelsToPositionY(y, Math.floor, true),
