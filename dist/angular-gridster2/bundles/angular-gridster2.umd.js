@@ -787,16 +787,16 @@
             this.gridster.cdRef.markForCheck();
         };
         GridsterEmptyCell.prototype.getPixelsX = function (e, rect) {
-            var scale = this.gridster.$options.scale;
+            var scale = this.gridster.options.scale;
             if (scale) {
-                return (e.clientX + this.gridster.el.scrollLeft - rect.left - this.gridster.gridRenderer.getLeftMargin()) / scale;
+                return (e.clientX - rect.left) / scale + this.gridster.el.scrollLeft - this.gridster.gridRenderer.getLeftMargin();
             }
             return e.clientX + this.gridster.el.scrollLeft - rect.left - this.gridster.gridRenderer.getLeftMargin();
         };
         GridsterEmptyCell.prototype.getPixelsY = function (e, rect) {
-            var scale = this.gridster.$options.scale;
+            var scale = this.gridster.options.scale;
             if (scale) {
-                return (e.clientY + this.gridster.el.scrollTop - rect.top - this.gridster.gridRenderer.getTopMargin()) / scale;
+                return (e.clientY - rect.top) / scale + this.gridster.el.scrollTop - this.gridster.gridRenderer.getTopMargin();
             }
             return e.clientY + this.gridster.el.scrollTop - rect.top - this.gridster.gridRenderer.getTopMargin();
         };
