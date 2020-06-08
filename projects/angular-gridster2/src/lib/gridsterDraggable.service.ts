@@ -147,8 +147,12 @@ export class GridsterDraggable {
   }
 
   calculateItemPositionWithScale(e: any, scale: number): void {
-    this.left = this.originalClientX + ((e.clientX - this.originalClientX) / scale) + this.offsetLeft - this.diffLeft;
-    this.top = this.originalClientY + ((e.clientY - this.originalClientY) / scale)  + this.offsetTop - this.diffTop;
+    if (this.gridster.$options.dirType === DirTypes.RTL) {
+      this.left = this.gridster.el.scrollWidth - this.originalClientX + ((e.clientX - this.originalClientX) / scale) + this.diffLeft;
+    } else {
+      this.left = this.originalClientX + ((e.clientX - this.originalClientX) / scale) + this.offsetLeft - this.diffLeft;
+    }
+    this.top = this.originalClientY + ((e.clientY - this.originalClientY) / scale) + this.offsetTop - this.diffTop;
   }
 
   calculateItemPositionWithoutScale(e: any): void {

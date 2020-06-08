@@ -16,10 +16,12 @@ export class MiscComponent implements OnInit {
     this.options = {
       gridType: GridType.Fit,
       displayGrid: DisplayGrid.Always,
+      draggable: {enabled: true},
       disableWindowResize: false,
       scrollToNewItems: false,
       disableWarnings: false,
-      ignoreMarginInRow: false
+      ignoreMarginInRow: false,
+      scale: 1
     };
 
     this.dashboard = [

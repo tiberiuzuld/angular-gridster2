@@ -1,15 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  Input,
-  NgZone,
-  OnDestroy,
-  OnInit,
-  Renderer2,
-  ViewEncapsulation,
-  Inject,
-  HostBinding
-} from '@angular/core';
+import {Component, ElementRef, HostBinding, Inject, Input, NgZone, OnDestroy, OnInit, Renderer2, ViewEncapsulation} from '@angular/core';
 
 import {GridsterItem} from './gridsterItem.interface';
 import {GridsterDraggable} from './gridsterDraggable.service';
@@ -43,7 +32,8 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
     return this.getLayerIndex() + this.gridster.$options.baseLayerIndex;
   }
 
-  constructor(@Inject(ElementRef) el: ElementRef,  gridster: GridsterComponent, @Inject(Renderer2) public renderer: Renderer2, @Inject(NgZone) private zone: NgZone) {
+  constructor(@Inject(ElementRef) el: ElementRef, gridster: GridsterComponent, @Inject(Renderer2) public renderer: Renderer2,
+              @Inject(NgZone) private zone: NgZone) {
     this.el = el.nativeElement;
     this.$item = {
       cols: -1,
@@ -171,6 +161,7 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
       this.item.layerIndex = this.$item.layerIndex = targetIndex > topIndex ? topIndex : targetIndex;
     }
   }
+
   sendToBack(offset: number): void {
     if (offset && offset <= 0) {
       return;

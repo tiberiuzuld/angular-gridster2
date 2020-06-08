@@ -23,6 +23,10 @@
     Disable auto position on conflict
   </mat-checkbox>
   <mat-form-field>
+    <mat-label>Scale</mat-label>
+    <input (ngModelChange)="changedOptions()" [(ngModel)]="options.scale" matInput type="number">
+  </mat-form-field>
+  <mat-form-field>
     <mat-select aria-label="Grid type" [(ngModel)]="options.gridType" (ngModelChange)="changedOptions()"
                 placeholder="Grid Type">
       <mat-option value="fit">Fit to screen</mat-option>
