@@ -49,6 +49,7 @@ export type dirTypes = 'ltr' | 'rtl';
 
 export interface GridsterConfig {
   gridType?: gridTypes;
+  scale?: number;
   fixedColWidth?: number;
   fixedRowHeight?: number;
   keepFixedHeightInMobile?: boolean;
