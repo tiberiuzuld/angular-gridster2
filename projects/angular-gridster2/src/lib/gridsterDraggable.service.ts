@@ -21,6 +21,8 @@ export class GridsterDraggable {
   margin: number;
   diffTop: number;
   diffLeft: number;
+  originalClientX: number;
+  originalClientY: number;
   top: number;
   left: number;
   height: number;
@@ -99,6 +101,8 @@ export class GridsterDraggable {
     this.offsetTop = this.gridster.el.scrollTop - this.gridster.el.offsetTop;
     this.left = this.gridsterItem.left - this.margin;
     this.top = this.gridsterItem.top - this.margin;
+    this.originalClientX = e.clientX;
+    this.originalClientY = e.clientY;
     this.width = this.gridsterItem.width;
     this.height = this.gridsterItem.height;
     if (this.gridster.$options.dirType === DirTypes.RTL) {
@@ -129,6 +133,25 @@ export class GridsterDraggable {
   }
 
   calculateItemPositionFromMousePosition(e: any): void {
+    if (this.gridster.options.scale) {
+      this.calculateItemPositionWithScale(e, this.gridster.options.scale);
+    } else {
+      this.calculateItemPositionWithoutScale(e);
+    }
+    this.calculateItemPosition();
+    this.lastMouse.clientX = e.clientX;
+    this.lastMouse.clientY = e.clientY;
+    this.zone.run(() => {
+      this.gridster.updateGrid();
+    });
+  }
+
+  calculateItemPositionWithScale(e: any, scale: number): void {
+    this.left = this.originalClientX + ((e.clientX - this.originalClientX) / scale) + this.offsetLeft - this.diffLeft;
+    this.top = this.originalClientY + ((e.clientY - this.originalClientY) / scale)  + this.offsetTop - this.diffTop;
+  }
+
+  calculateItemPositionWithoutScale(e: any): void {
     if (this.gridster.$options.dirType === DirTypes.RTL) {
       this.left = this.gridster.el.scrollWidth - e.clientX + this.diffLeft;
     } else {
@@ -136,12 +159,6 @@ export class GridsterDraggable {
     }
 
     this.top = e.clientY + this.offsetTop - this.diffTop;
-    this.calculateItemPosition();
-    this.lastMouse.clientX = e.clientX;
-    this.lastMouse.clientY = e.clientY;
-    this.zone.run(() => {
-      this.gridster.updateGrid();
-    });
   }
 
   dragStop(e: any): void {
