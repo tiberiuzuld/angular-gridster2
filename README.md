@@ -132,4 +132,4 @@ Derek
 ### License
  The MIT License
  
- Copyright (c) 2019 Tiberiu Zuld
+ Copyright (c) 2020 Tiberiu Zuld

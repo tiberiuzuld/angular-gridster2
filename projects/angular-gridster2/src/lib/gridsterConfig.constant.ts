@@ -2,7 +2,6 @@ import {CompactType, DirTypes, DisplayGrid, GridsterConfig, GridType} from './gr
 
 export const GridsterConfigService: GridsterConfig = {
   gridType: GridType.Fit, // 'fit' will fit the items in the container without scroll;
-  scale: 1, // scale param to zoom in/zoom out
   // 'scrollVertical' will fit on width and height of the items will be the same as the width
   // 'scrollHorizontal' will fit on height and width of the items will be the same as the height
   // 'fixed' will set the rows and columns dimensions based on fixedColWidth and fixedRowHeight options
@@ -60,6 +59,7 @@ export const GridsterConfigService: GridsterConfig = {
   emptyCellDragCallback: undefined, // empty cell drag and create item like excel cell selection
   emptyCellDragMaxCols: 50, // limit empty cell drag max cols
   emptyCellDragMaxRows: 50, // limit empty cell drag max rows
+  scale: 1, // scale param to zoom in/zoom out
   // Arguments: event, gridsterItem{x, y, rows: defaultItemRows, cols: defaultItemCols}
   ignoreMarginInRow: false, // ignore the gap between rows for items which span multiple rows (see #162, #224)
   draggable: {
