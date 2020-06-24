@@ -13,6 +13,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule, Routes} from '@angular/router';
 import {GridsterModule} from 'angular-gridster2';
 import {MarkdownModule, MarkedOptions} from 'ngx-markdown';
+import {TrackByComponent} from './sections/trackBy/trackBy.component';
 
 import {AppComponent} from './app.component';
 import {ApiComponent} from './sections/api/api.component';
@@ -38,6 +39,7 @@ import {RtlComponent} from './sections/rtl/rtl.component';
 import {SwapComponent} from './sections/swap/swap.component';
 import {MultiLayerComponent} from './sections/multiLayer/multi-layer.component';
 import {MatMenuModule} from "@angular/material/menu";
+import { TrackByItemComponent } from './sections/trackBy/trackByItem.component';
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
@@ -52,6 +54,7 @@ const appRoutes: Routes = [
   {path: 'gridSizes', component: GridSizesComponent},
   {path: 'gridTypes', component: GridTypesComponent},
   {path: 'items', component: ItemsComponent},
+  {path: 'trackBy', component: TrackByComponent},
   {path: 'push', component: PushComponent},
   {path: 'resize', component: ResizeComponent},
   {path: 'swap', component: SwapComponent},
@@ -84,6 +87,8 @@ const appRoutes: Routes = [
     MultiLayerComponent,
     ResizeComponent,
     SwapComponent,
+    TrackByComponent,
+    TrackByItemComponent,
     MiscComponent,
     RtlComponent,
   ],
