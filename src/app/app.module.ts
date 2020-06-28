@@ -38,8 +38,8 @@ import {ResizeComponent} from './sections/resize/resize.component';
 import {RtlComponent} from './sections/rtl/rtl.component';
 import {SwapComponent} from './sections/swap/swap.component';
 import {MultiLayerComponent} from './sections/multiLayer/multi-layer.component';
-import {MatMenuModule} from "@angular/material/menu";
-import { TrackByItemComponent } from './sections/trackBy/trackByItem.component';
+import {MatMenuModule} from '@angular/material/menu';
+import {TrackByItemComponent} from './sections/trackBy/trackByItem.component';
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
