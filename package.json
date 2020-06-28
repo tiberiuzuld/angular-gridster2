@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --prod",
+    "start": "ng serve",
     "serve": "ng serve",
     "build": "ng build",
     "build-lib": "ng build angular-gridster2",
