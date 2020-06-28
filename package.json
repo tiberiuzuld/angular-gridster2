@@ -1,6 +1,6 @@
 {
   "name": "angular-gridster2",
-  "version": "10.0.0",
+  "version": "10.0.1",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
@@ -48,7 +48,6 @@
     "@angular/cdk": "10.0.0",
     "@angular/common": "10.0.1",
     "@angular/compiler": "10.0.1",
-    "@angular/compiler-cli": "10.0.1",
     "@angular/core": "10.0.1",
     "@angular/forms": "10.0.1",
     "@angular/material": "10.0.0",
@@ -56,6 +55,7 @@
     "@angular/platform-browser-dynamic": "10.0.1",
     "@angular/router": "10.0.1",
     "ngx-markdown": "9.1.1",
+    "rxjs": "6.5.5",
     "tslib": "2.0.0",
     "zone.js": "0.10.3"
   },
@@ -63,6 +63,7 @@
     "@angular-devkit/build-angular": "0.1000.0",
     "@angular-devkit/build-ng-packagr": "0.1000.0",
     "@angular/cli": "10.0.0",
+    "@angular/compiler-cli": "10.0.1",
     "@types/jasmine": "3.5.11",
     "@types/jasminewd2": "2.0.8",
     "@types/node": "14.0.14",
@@ -77,7 +78,6 @@
     "karma-jasmine-html-reporter": "1.5.4",
     "ng-packagr": "10.0.0",
     "protractor": "7.0.0",
-    "rxjs": "6.5.5",
     "ts-node": "8.10.2",
     "tslint": "6.1.2",
     "typescript": "3.9.5"
