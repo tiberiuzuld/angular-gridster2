@@ -43,7 +43,7 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
-              "baseHref": "/angular-gridster2//",
+              "baseHref": "/angular-gridster2/",
               "optimization": false,
               "outputHashing": "all",
               "sourceMap": true,
