@@ -1,0 +1,21 @@
+<div class="options">
+    <a mat-raised-button href="https://github.com/tiberiuzuld/angular-gridster2/tree/master/src/app/sections/items"
+       target="_blank" class="source-code-button">
+      <mat-icon>open_in_new</mat-icon>
+      Source
+    </a>
+    <markdown [src]="'assets/trackBy.md'"></markdown>
+  </div>
+  <div class="options-header" *ngIf="dashboard[0]">
+    <button mat-raised-button color="accent" (click)="reset()" class="cols-2">
+      Reset
+    </button>
+  </div>
+  
+  
+  <gridster [options]="options">
+    <gridster-item [item]="item" *ngFor="let item of dashboard; trackBy: trackBy">
+      <app-trackby-item [id]="item.id"></app-trackby-item>
+    </gridster-item>
+  </gridster>
+  

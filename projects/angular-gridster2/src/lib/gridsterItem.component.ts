@@ -1,4 +1,4 @@
-import {Component, ElementRef, HostBinding, Inject, Input, NgZone, OnDestroy, OnInit, Renderer2, ViewEncapsulation} from '@angular/core';
+import {Component, ElementRef, HostBinding, Inject, Input, NgZone, OnDestroy, Renderer2, ViewEncapsulation, SimpleChanges, OnChanges} from '@angular/core';
 
 import {GridsterItem} from './gridsterItem.interface';
 import {GridsterDraggable} from './gridsterDraggable.service';
@@ -13,7 +13,7 @@ import {GridsterComponent} from './gridster.component';
   styleUrls: ['./gridsterItem.css'],
   encapsulation: ViewEncapsulation.None
 })
-export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemComponentInterface {
+export class GridsterItemComponent implements OnDestroy, OnChanges, GridsterItemComponentInterface {
   @Input() item: GridsterItem;
   $item: GridsterItem;
   el: any;
@@ -46,9 +46,17 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
     this.resize = new GridsterResizable(this, gridster, this.zone);
   }
 
-  ngOnInit(): void {
-    this.updateOptions();
-    this.gridster.addItem(this);
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['item']) {
+      this.updateOptions();
+
+      if (!this.init) {
+        this.gridster.addItem(this);
+      } else {
+        // Other items might have been changed as well in the same call.
+        this.gridster.calculateLayoutDebounce();
+      }
+    }
   }
 
   updateOptions(): void {
