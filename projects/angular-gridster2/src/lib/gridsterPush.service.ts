@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 
-import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
+import {GridsterItemComponentInterface} from './gridsterItem.interface';
 import {GridsterComponentInterface} from './gridster.interface';
 
 @Injectable()
@@ -17,11 +17,10 @@ export class GridsterPush {
   private gridster: GridsterComponentInterface;
   private pushedItemsOrder: Array<GridsterItemComponentInterface>;
   private tryPattern: {
-    fromEast: Array<Function>,
-    fromWest: Array<Function>,
-    fromNorth: Array<Function>,
-    fromSouth: Array<Function>,
-    [key: string]: Array<Function>
+    fromEast: ((gridsterItemCollide: GridsterItemComponentInterface, gridsterItem: GridsterItemComponentInterface) => boolean)[],
+    fromWest: ((gridsterItemCollide: GridsterItemComponentInterface, gridsterItem: GridsterItemComponentInterface) => boolean)[],
+    fromNorth: ((gridsterItemCollide: GridsterItemComponentInterface, gridsterItem: GridsterItemComponentInterface) => boolean)[],
+    fromSouth: ((gridsterItemCollide: GridsterItemComponentInterface, gridsterItem: GridsterItemComponentInterface) => boolean)[]
   };
 
   constructor(gridsterItem: GridsterItemComponentInterface) {
@@ -29,7 +28,7 @@ export class GridsterPush {
     this.pushedItemsTemp = [];
     this.pushedItemsTempPath = [];
     this.pushedItemsPath = [];
-    gridsterItem['id'] = this.generateTempRandomId();
+    gridsterItem['id'] = GridsterPush.generateTempRandomId();
     this.gridsterItem = gridsterItem;
     this.gridster = gridsterItem.gridster;
     this.tryPattern = {
@@ -42,6 +41,10 @@ export class GridsterPush {
     this.fromNorth = 'fromNorth';
     this.fromEast = 'fromEast';
     this.fromWest = 'fromWest';
+  }
+
+  private static generateTempRandomId(): string {
+    return Math.random().toString(36).replace(new RegExp('[^a-z]+', 'g'), '').substr(2, 10);
   }
 
   destroy(): void {
@@ -87,7 +90,7 @@ export class GridsterPush {
     this.pushedItemsPath = [];
   }
 
-  setPushedItems() {
+  setPushedItems(): void {
     let i = 0;
     const l: number = this.pushedItems.length;
     let pushedItem: GridsterItemComponentInterface;
@@ -112,12 +115,8 @@ export class GridsterPush {
     }
   }
 
-  private generateTempRandomId() : string {
-    return Math.random().toString(36).replace(/[^a-z]+/g, '').substr(2, 10);
-  }
-
-  private cleanTempIds(){
-    const allItemsWithIds = this.gridster.grid.filter((el:GridsterItemComponentInterface) => el['id']);
+  private cleanTempIds(): void {
+    const allItemsWithIds = this.gridster.grid.filter((el: GridsterItemComponentInterface) => el['id']);
     allItemsWithIds.forEach((el: GridsterItemComponentInterface) => delete el['id']);
   }
 
@@ -129,13 +128,14 @@ export class GridsterPush {
       return false;
     }
     const a: Array<GridsterItemComponentInterface> = this.gridster.findItemsWithItem(gridsterItem.$item);
-    let i = a.length - 1, itemCollision: GridsterItemComponentInterface;
+    let i = a.length - 1;
+    let itemCollision: GridsterItemComponentInterface;
     let makePush = true;
     const b: Array<GridsterItemComponentInterface> = [];
     for (; i > -1; i--) {
       itemCollision = a[i];
       if (!itemCollision['id']) {
-        itemCollision['id'] = this.generateTempRandomId();
+        itemCollision['id'] = GridsterPush.generateTempRandomId();
       }
       if (itemCollision === this.gridsterItem) {
         makePush = false;
@@ -304,7 +304,9 @@ export class GridsterPush {
   private checkPushedItem(pushedItem: GridsterItemComponentInterface, i: number): boolean {
     const path = this.pushedItemsPath[i];
     let j = path.length - 2;
-    let lastPosition, x, y;
+    let lastPosition;
+    let x;
+    let y;
     let change = false;
     for (; j > -1; j--) {
       lastPosition = path[j];

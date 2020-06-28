@@ -3,13 +3,12 @@ import {ChangeDetectorRef, NgZone, Renderer2} from '@angular/core';
 import {GridsterEmptyCell} from './gridsterEmptyCell.service';
 import {GridsterCompact} from './gridsterCompact.service';
 import {GridsterConfig} from './gridsterConfig.interface';
-import {GridsterItem} from './gridsterItem.interface';
-import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
+import {GridsterItem, GridsterItemComponentInterface} from './gridsterItem.interface';
 import {GridsterRenderer} from './gridsterRenderer.service';
 
 export abstract class GridsterComponentInterface {
   $options: GridsterConfigS;
-  grid: Array<GridsterItemComponentInterface>;
+  grid: GridsterItemComponentInterface[];
   checkCollision: (item: GridsterItem) => GridsterItemComponentInterface | boolean;
   checkCollisionForSwaping: (item: GridsterItem) => GridsterItemComponentInterface | boolean;
   positionXToPixels: (x: number) => number;
@@ -17,10 +16,10 @@ export abstract class GridsterComponentInterface {
   positionYToPixels: (y: number) => number;
   pixelsToPositionY: (y: number, roundingMethod: (x: number) => number, noLimit?: boolean) => number;
   findItemWithItem: (item: GridsterItem) => GridsterItemComponentInterface | boolean;
-  findItemsWithItem: (item: GridsterItem) => Array<GridsterItemComponentInterface>;
+  findItemsWithItem: (item: GridsterItem) => GridsterItemComponentInterface[];
   checkGridCollision: (item: GridsterItem) => boolean;
   checkCollisionTwoItems: (item: GridsterItem, item2: GridsterItem) => boolean;
-  el: any;
+  el: HTMLElement;
   renderer: Renderer2;
   gridRenderer: GridsterRenderer;
   cdRef: ChangeDetectorRef;

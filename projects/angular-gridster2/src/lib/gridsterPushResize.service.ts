@@ -1,9 +1,7 @@
 import {Injectable} from '@angular/core';
 
-import {GridsterItem} from './gridsterItem.interface';
-import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
+import {GridsterItem, GridsterItemComponentInterface} from './gridsterItem.interface';
 import {GridsterComponentInterface} from './gridster.interface';
-import {GridsterComponent} from './gridster.component';
 
 @Injectable()
 export class GridsterPushResize {
@@ -16,11 +14,14 @@ export class GridsterPushResize {
   private gridsterItem: GridsterItemComponentInterface;
   private gridster: GridsterComponentInterface;
   private tryPattern: {
-    fromEast: Function,
-    fromWest: Function,
-    fromNorth: Function,
-    fromSouth: Function,
-    [key: string]: Function
+    fromEast:
+      (gridsterItemCollide: GridsterItemComponentInterface, gridsterItem: GridsterItemComponentInterface, direction: string) => boolean,
+    fromWest:
+      (gridsterItemCollide: GridsterItemComponentInterface, gridsterItem: GridsterItemComponentInterface, direction: string) => boolean,
+    fromNorth:
+      (gridsterItemCollide: GridsterItemComponentInterface, gridsterItem: GridsterItemComponentInterface, direction: string) => boolean,
+    fromSouth:
+      (gridsterItemCollide: GridsterItemComponentInterface, gridsterItem: GridsterItemComponentInterface, direction: string) => boolean
   };
 
   constructor(gridsterItem: GridsterItemComponentInterface) {
@@ -69,7 +70,7 @@ export class GridsterPushResize {
     this.pushedItemsPath = [];
   }
 
-  setPushedItems() {
+  setPushedItems(): void {
     let i = 0;
     const l: number = this.pushedItems.length;
     let pushedItem: GridsterItemComponentInterface;
@@ -95,7 +96,7 @@ export class GridsterPushResize {
   }
 
   private push(gridsterItem: GridsterItemComponentInterface, direction: string): boolean {
-    const gridsterItemCollision: any = this.gridster.checkCollision(gridsterItem.$item);
+    const gridsterItemCollision: GridsterItemComponentInterface | boolean = this.gridster.checkCollision(gridsterItem.$item);
     if (gridsterItemCollision && gridsterItemCollision !== true &&
       gridsterItemCollision !== this.gridsterItem && gridsterItemCollision.canBeResized()) {
       if (this.tryPattern[direction].call(this, gridsterItemCollision, gridsterItem, direction)) {
@@ -215,7 +216,11 @@ export class GridsterPushResize {
   private checkPushedItem(pushedItem: GridsterItemComponentInterface, i: number): boolean {
     const path = this.pushedItemsPath[i];
     let j = path.length - 2;
-    let lastPosition: { x: number, y: number, cols: number, rows: number }, x, y, cols, rows;
+    let lastPosition: { x: number, y: number, cols: number, rows: number };
+    let x;
+    let y;
+    let cols;
+    let rows;
     for (; j > -1; j--) {
       lastPosition = path[j];
       x = pushedItem.$item.x;

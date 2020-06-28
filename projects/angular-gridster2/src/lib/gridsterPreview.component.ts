@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnDestroy, Renderer2, ViewEncapsulation, Inject} from '@angular/core';
+import {Component, ElementRef, Inject, OnDestroy, Renderer2, ViewEncapsulation} from '@angular/core';
 
 import {GridsterComponent} from './gridster.component';
 
@@ -9,7 +9,7 @@ import {GridsterComponent} from './gridster.component';
   encapsulation: ViewEncapsulation.None
 })
 export class GridsterPreviewComponent implements OnDestroy {
-  el: any;
+  el: HTMLElement;
   gridster: GridsterComponent;
 
   constructor(@Inject(ElementRef)  el: ElementRef,  gridster: GridsterComponent, @Inject(Renderer2) public renderer: Renderer2) {

@@ -15,7 +15,7 @@ export class MultiLayerComponent implements OnInit {
   dashboard: Array<GridsterItem>;
 
   // noinspection DuplicatedCode
-  ngOnInit() {
+  ngOnInit(): void {
     this.options = {
       gridType: GridType.Fit,
       displayGrid: DisplayGrid.Always,
@@ -49,33 +49,19 @@ export class MultiLayerComponent implements OnInit {
     ];
   }
 
-  changedOptions() {
+  changedOptions(): void {
     if (this.options.api && this.options.api.optionsChanged) {
       this.options.api.optionsChanged();
     }
   }
-  bringToFront(item: GridsterItem) {
-    if (item.layerIndex === undefined) {
-      item.layerIndex = 2;
-    } else {
-      item.layerIndex += 1;
-    }
-  }
-  sendToBack(item: GridsterItem) {
-    if (item.layerIndex === undefined) {
-      item.layerIndex = 0;
-    } else {
-      item.layerIndex -= 1;
-    }
-  }
 
-  removeItem($event, item: GridsterItem) {
+  removeItem($event: MouseEvent | TouchEvent, item: GridsterItem): void {
     $event.preventDefault();
     $event.stopPropagation();
     this.dashboard.splice(this.dashboard.indexOf(item), 1);
   }
 
-  addItem() {
+  addItem(): void {
     this.dashboard.push({x: 0, y: 0, cols: 2, rows: 1});
   }
 }

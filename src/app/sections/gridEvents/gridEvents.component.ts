@@ -20,39 +20,46 @@ export class GridEventsComponent implements OnInit {
   dashboard: Array<GridsterItem>;
   remove: boolean;
 
-  static itemChange(item: GridsterItem, itemComponent: GridsterItemComponentInterface) {
+  static itemChange(item: GridsterItem, itemComponent: GridsterItemComponentInterface): void {
+    // tslint:disable-next-line:no-console
     console.info('itemChanged', item, itemComponent);
   }
 
-  static itemResize(item: GridsterItem, itemComponent: GridsterItemComponentInterface) {
+  static itemResize(item: GridsterItem, itemComponent: GridsterItemComponentInterface): void {
+    // tslint:disable-next-line:no-console
     console.info('itemResized', item, itemComponent);
   }
 
-  static itemInit(item: GridsterItem, itemComponent: GridsterItemComponentInterface) {
+  static itemInit(item: GridsterItem, itemComponent: GridsterItemComponentInterface): void {
+    // tslint:disable-next-line:no-console
     console.info('itemInitialized', item, itemComponent);
   }
 
-  static itemRemoved(item: GridsterItem, itemComponent: GridsterItemComponentInterface) {
+  static itemRemoved(item: GridsterItem, itemComponent: GridsterItemComponentInterface): void {
+    // tslint:disable-next-line:no-console
     console.info('itemRemoved', item, itemComponent);
   }
 
-  static itemValidate(item: GridsterItem) {
+  static itemValidate(item: GridsterItem): boolean {
     return item.cols > 0 && item.rows > 0;
   }
 
-  static gridInit(grid: GridsterComponentInterface) {
+  static gridInit(grid: GridsterComponentInterface): void {
+    // tslint:disable-next-line:no-console
     console.info('gridInit', grid);
   }
 
-  static gridDestroy(grid: GridsterComponentInterface) {
+  static gridDestroy(grid: GridsterComponentInterface): void {
+    // tslint:disable-next-line:no-console
     console.info('gridDestroy', grid);
   }
 
-  static gridSizeChanged(grid: GridsterComponentInterface) {
+  static gridSizeChanged(grid: GridsterComponentInterface): void {
+    // tslint:disable-next-line:no-console
     console.info('gridSizeChanged', grid);
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.options = {
       gridType: GridType.Fit,
       displayGrid: DisplayGrid.Always,
@@ -88,23 +95,23 @@ export class GridEventsComponent implements OnInit {
     ];
   }
 
-  changedOptions() {
+  changedOptions(): void {
     if (this.options.api && this.options.api.optionsChanged) {
       this.options.api.optionsChanged();
     }
   }
 
-  removeItem($event, item) {
+  removeItem($event: MouseEvent | TouchEvent, item): void {
     $event.preventDefault();
     $event.stopPropagation();
     this.dashboard.splice(this.dashboard.indexOf(item), 1);
   }
 
-  addItem() {
+  addItem(): void {
     this.dashboard.push({x: 0, y: 0, cols: 1, rows: 1});
   }
 
-  destroy() {
+  destroy(): void {
     this.remove = !this.remove;
   }
 }

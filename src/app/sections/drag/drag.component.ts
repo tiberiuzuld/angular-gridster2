@@ -24,19 +24,21 @@ export class DragComponent implements OnInit {
   options: Safe;
   dashboard: Array<GridsterItem>;
 
-  static eventStart(item: GridsterItem, itemComponent: GridsterItemComponentInterface, event: MouseEvent) {
+  static eventStart(item: GridsterItem, itemComponent: GridsterItemComponentInterface, event: MouseEvent): void {
+    // tslint:disable-next-line:no-console
     console.info('eventStart', item, itemComponent, event);
   }
 
-  static eventStop(item: GridsterItem, itemComponent: GridsterItemComponentInterface, event: MouseEvent) {
+  static eventStop(item: GridsterItem, itemComponent: GridsterItemComponentInterface, event: MouseEvent): void {
+    // tslint:disable-next-line:no-console
     console.info('eventStop', item, itemComponent, event);
   }
 
-  static overlapEvent(source: GridsterItem, target: GridsterItem, grid: GridsterComponent) {
+  static overlapEvent(source: GridsterItem, target: GridsterItem, grid: GridsterComponent): void {
     console.log('overlap', source, target, grid);
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.options = {
       gridType: GridType.Fit,
       displayGrid: DisplayGrid.Always,
@@ -73,19 +75,19 @@ export class DragComponent implements OnInit {
     ];
   }
 
-  changedOptions() {
+  changedOptions(): void {
     if (this.options.api && this.options.api.optionsChanged) {
       this.options.api.optionsChanged();
     }
   }
 
-  removeItem($event, item) {
+  removeItem($event: MouseEvent | TouchEvent, item): void {
     $event.preventDefault();
     $event.stopPropagation();
     this.dashboard.splice(this.dashboard.indexOf(item), 1);
   }
 
-  addItem() {
+  addItem(): void {
     this.dashboard.push({x: 0, y: 0, cols: 1, rows: 1});
   }
 }

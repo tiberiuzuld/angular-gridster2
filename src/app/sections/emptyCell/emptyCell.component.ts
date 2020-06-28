@@ -12,7 +12,7 @@ export class EmptyCellComponent implements OnInit {
   options: GridsterConfig;
   dashboard: Array<GridsterItem>;
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.options = {
       gridType: GridType.Fit,
       displayGrid: DisplayGrid.Always,
@@ -44,29 +44,32 @@ export class EmptyCellComponent implements OnInit {
     ];
   }
 
-  changedOptions() {
+  changedOptions(): void {
     if (this.options.api && this.options.api.optionsChanged) {
       this.options.api.optionsChanged();
     }
   }
 
-  emptyCellClick(event: MouseEvent, item: GridsterItem) {
+  emptyCellClick(event: MouseEvent, item: GridsterItem): void {
+    // tslint:disable-next-line:no-console
     console.info('empty cell click', event, item);
     this.dashboard.push(item);
   }
 
-  removeItem($event, item) {
+  removeItem($event: MouseEvent | TouchEvent, item): void {
     $event.preventDefault();
     $event.stopPropagation();
     this.dashboard.splice(this.dashboard.indexOf(item), 1);
   }
 
-  addItem() {
+  addItem(): void {
     this.dashboard.push({x: 0, y: 0, cols: 1, rows: 1});
   }
 
-  dragStartHandler(ev) {
-    ev.dataTransfer.setData('text/plain', 'Drag Me Button');
-    ev.dataTransfer.dropEffect = 'copy';
+  dragStartHandler(ev: DragEvent): void {
+    if (ev.dataTransfer) {
+      ev.dataTransfer.setData('text/plain', 'Drag Me Button');
+      ev.dataTransfer.dropEffect = 'copy';
+    }
   }
 }

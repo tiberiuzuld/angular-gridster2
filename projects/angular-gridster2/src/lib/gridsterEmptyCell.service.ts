@@ -1,24 +1,24 @@
 import {Injectable} from '@angular/core';
 
 import {GridsterUtils} from './gridsterUtils.service';
-import {GridsterItem} from './gridsterItem.interface';
 import {GridsterComponentInterface} from './gridster.interface';
+import {GridsterItem} from './gridsterItem.interface';
 
 @Injectable()
 export class GridsterEmptyCell {
   initialItem: GridsterItem | null;
-  emptyCellClick: Function | null;
-  emptyCellClickTouch: Function | null;
-  emptyCellContextMenu: Function | null;
-  emptyCellDrop: Function | null;
-  emptyCellDrag: Function | null;
-  emptyCellDragTouch: Function | null;
-  emptyCellMMove: Function;
-  emptyCellMMoveTouch: Function;
-  emptyCellUp: Function;
-  emptyCellUpTouch: Function;
-  emptyCellMove: Function | null;
-  emptyCellExit: Function | null;
+  emptyCellClick: (() => void) | null;
+  emptyCellClickTouch: (() => void) | null;
+  emptyCellContextMenu: (() => void) | null;
+  emptyCellDrop: (() => void) | null;
+  emptyCellDrag: (() => void) | null;
+  emptyCellDragTouch: (() => void) | null;
+  emptyCellMMove: () => void;
+  emptyCellMMoveTouch: () => void;
+  emptyCellUp: () => void;
+  emptyCellUpTouch: () => void;
+  emptyCellMove: (() => void) | null;
+  emptyCellExit: (() => void) | null;
 
   constructor(private gridster: GridsterComponentInterface) {
   }
@@ -81,7 +81,7 @@ export class GridsterEmptyCell {
     }
   }
 
-  emptyCellClickCb(e: any): void {
+  emptyCellClickCb(e: MouseEvent): void {
     if (this.gridster.movingItem || GridsterUtils.checkContentClassForEmptyCellClickEvent(this.gridster, e)) {
       return;
     }
@@ -95,7 +95,7 @@ export class GridsterEmptyCell {
     this.gridster.cdRef.markForCheck();
   }
 
-  emptyCellContextMenuCb(e: any): void {
+  emptyCellContextMenuCb(e: MouseEvent): void {
     if (this.gridster.movingItem || GridsterUtils.checkContentClassForEmptyCellClickEvent(this.gridster, e)) {
       return;
     }
@@ -111,7 +111,7 @@ export class GridsterEmptyCell {
     this.gridster.cdRef.markForCheck();
   }
 
-  emptyCellDragDrop(e: any): void {
+  emptyCellDragDrop(e: DragEvent): void {
     const item = this.getValidItemFromEvent(e);
     if (!item) {
       return;
@@ -122,21 +122,25 @@ export class GridsterEmptyCell {
     this.gridster.cdRef.markForCheck();
   }
 
-  emptyCellDragOver(e: any): void {
+  emptyCellDragOver(e: DragEvent): void {
     e.preventDefault();
     e.stopPropagation();
     const item = this.getValidItemFromEvent(e);
     if (item) {
-      e.dataTransfer.dropEffect = 'move';
+      if (e.dataTransfer) {
+        e.dataTransfer.dropEffect = 'move';
+      }
       this.gridster.movingItem = item;
     } else {
-      e.dataTransfer.dropEffect = 'none';
+      if (e.dataTransfer) {
+        e.dataTransfer.dropEffect = 'none';
+      }
       this.gridster.movingItem = null;
     }
     this.gridster.previewStyle();
   }
 
-  emptyCellMouseDown(e: any): void {
+  emptyCellMouseDown(e: MouseEvent): void {
     if (GridsterUtils.checkContentClassForEmptyCellClickEvent(this.gridster, e)) {
       return;
     }
@@ -158,7 +162,7 @@ export class GridsterEmptyCell {
     this.emptyCellUpTouch = this.gridster.renderer.listen('window', 'touchend', this.emptyCellMouseUp.bind(this));
   }
 
-  emptyCellMouseMove(e: any): void {
+  emptyCellMouseMove(e: MouseEvent): void {
     e.preventDefault();
     e.stopPropagation();
     const item = this.getValidItemFromEvent(e, this.initialItem);
@@ -170,7 +174,7 @@ export class GridsterEmptyCell {
     this.gridster.previewStyle();
   }
 
-  emptyCellMouseUp(e: any): void {
+  emptyCellMouseUp(e: MouseEvent): void {
     this.emptyCellMMove();
     this.emptyCellMMoveTouch();
     this.emptyCellUp();
@@ -192,7 +196,7 @@ export class GridsterEmptyCell {
     this.gridster.cdRef.markForCheck();
   }
 
-  getPixelsX(e: any, rect: ClientRect): number {
+  getPixelsX(e: MouseEvent, rect: ClientRect): number {
     const scale = this.gridster.options.scale;
     if (scale) {
       return (e.clientX - rect.left) / scale + this.gridster.el.scrollLeft - this.gridster.gridRenderer.getLeftMargin();
@@ -200,7 +204,7 @@ export class GridsterEmptyCell {
     return e.clientX + this.gridster.el.scrollLeft - rect.left - this.gridster.gridRenderer.getLeftMargin();
   }
 
-  getPixelsY(e: any, rect: ClientRect): number {
+  getPixelsY(e: MouseEvent, rect: ClientRect): number {
     const scale = this.gridster.options.scale;
     if (scale) {
       return (e.clientY - rect.top) / scale + this.gridster.el.scrollTop - this.gridster.gridRenderer.getTopMargin();
@@ -208,7 +212,7 @@ export class GridsterEmptyCell {
     return e.clientY + this.gridster.el.scrollTop - rect.top - this.gridster.gridRenderer.getTopMargin();
   }
 
-  getValidItemFromEvent(e: any, oldItem?: GridsterItem | null): GridsterItem | undefined {
+  getValidItemFromEvent(e: MouseEvent, oldItem?: GridsterItem | null): GridsterItem | undefined {
     e.preventDefault();
     e.stopPropagation();
     GridsterUtils.checkTouchEvent(e);

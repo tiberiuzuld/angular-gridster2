@@ -1,8 +1,7 @@
 import {Injectable} from '@angular/core';
 
 import {GridsterComponentInterface} from './gridster.interface';
-import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
-import {GridsterItem} from './gridsterItem.interface';
+import {GridsterItem, GridsterItemComponentInterface} from './gridsterItem.interface';
 import {CompactType} from './gridsterConfig.interface';
 
 @Injectable()
@@ -59,7 +58,9 @@ export class GridsterCompact {
   }
 
   checkCompactUp(): void {
-    let widgetMovedUp = false, widget: GridsterItemComponentInterface, moved: boolean;
+    let widgetMovedUp = false;
+    let widget: GridsterItemComponentInterface;
+    let moved: boolean;
     const l = this.gridster.grid.length;
     for (let i = 0; i < l; i++) {
       widget = this.gridster.grid[i];
@@ -90,7 +91,9 @@ export class GridsterCompact {
   }
 
   checkCompactLeft(): void {
-    let widgetMovedUp = false, widget: GridsterItemComponentInterface, moved: boolean;
+    let widgetMovedUp = false;
+    let widget: GridsterItemComponentInterface;
+    let moved: boolean;
     const l = this.gridster.grid.length;
     for (let i = 0; i < l; i++) {
       widget = this.gridster.grid[i];
@@ -110,7 +113,9 @@ export class GridsterCompact {
   }
 
   checkCompactRight(): void {
-    let widgetMovedUp = false, widget: GridsterItemComponentInterface, moved: boolean;
+    let widgetMovedUp = false;
+    let widget: GridsterItemComponentInterface;
+    let moved: boolean;
     const l = this.gridster.grid.length;
     for (let i = 0; i < l; i++) {
       widget = this.gridster.grid[i];
@@ -140,7 +145,7 @@ export class GridsterCompact {
     }
   }
 
-  moveRightTillCollision(item) {
+  moveRightTillCollision(item: GridsterItem): boolean {
     item.x += 1;
     if (this.gridster.checkCollision(item)) {
       item.x -= 1;

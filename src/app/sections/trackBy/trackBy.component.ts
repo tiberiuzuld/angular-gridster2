@@ -13,11 +13,12 @@ export class TrackByComponent implements OnInit {
   dashboard: Array<GridsterItem>;
   dashboardOriginal: Array<GridsterItem>;
 
-  static itemInit(item: GridsterItem, itemComponent: GridsterItemComponentInterface) {
+  static itemInit(item: GridsterItem, itemComponent: GridsterItemComponentInterface): void {
+    // tslint:disable-next-line:no-console
     console.info('itemInitialized', item, itemComponent);
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.options = {
       gridType: GridType.Fit,
       displayGrid: DisplayGrid.Always,
@@ -66,20 +67,20 @@ export class TrackByComponent implements OnInit {
       {cols: 3, rows: 2, y: 1, x: 4, id: '3'},
       {cols: 1, rows: 1, y: 2, x: 1, id: '4'}
     ];
-    this.dashboardOriginal = this.dashboard.map(x => ({ ...x }));
+    this.dashboardOriginal = this.dashboard.map(x => ({...x}));
   }
 
-  changedOptions() {
+  changedOptions(): void {
     if (this.options.api && this.options.api.optionsChanged) {
       this.options.api.optionsChanged();
     }
   }
 
-  reset() {
-    this.dashboard = this.dashboardOriginal.map(x => ({ ...x }));
+  reset(): void {
+    this.dashboard = this.dashboardOriginal.map(x => ({...x}));
   }
 
-  trackBy(index: number, item: GridsterItem) {
-      return item.id;
+  trackBy(index: number, item: GridsterItem): number {
+    return item.id;
   }
 }

@@ -10,10 +10,10 @@ import {DisplayGrid, GridsterConfig, GridsterItem, GridType} from 'angular-grids
 })
 export class DynamicWidgetsComponent implements OnInit {
   options: GridsterConfig;
-  dashboard: Array<GridsterItem>;
-  resizeEvent: EventEmitter<any> = new EventEmitter<any>();
+  dashboard: GridsterItem[];
+  resizeEvent: EventEmitter<GridsterItem> = new EventEmitter<GridsterItem>();
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.options = {
       gridType: GridType.Fit,
       displayGrid: DisplayGrid.Always,

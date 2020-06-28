@@ -13,7 +13,7 @@ export class ApiComponent implements OnInit {
   dashboard: Array<GridsterItem>;
   itemToPush: GridsterItemComponent;
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.options = {
       gridType: GridType.Fit,
       compactType: CompactType.None,
@@ -41,27 +41,27 @@ export class ApiComponent implements OnInit {
     ];
   }
 
-  changedOptions() {
+  changedOptions(): void {
     if (this.options.api && this.options.api.optionsChanged) {
       this.options.api.optionsChanged();
     }
   }
 
-  removeItem($event, item) {
+  removeItem($event: MouseEvent | TouchEvent, item): void {
     $event.preventDefault();
     $event.stopPropagation();
     this.dashboard.splice(this.dashboard.indexOf(item), 1);
   }
 
-  addItem() {
+  addItem(): void {
     this.dashboard.push({x: 0, y: 0, cols: 1, rows: 1});
   }
 
-  initItem(item: GridsterItem, itemComponent: GridsterItemComponent) {
+  initItem(item: GridsterItem, itemComponent: GridsterItemComponent): void {
     this.itemToPush = itemComponent;
   }
 
-  pushItem() {
+  pushItem(): void {
     const push = new GridsterPush(this.itemToPush); // init the service
     this.itemToPush.$item.rows += 4; // move/resize your item
     if (push.pushItems(push.fromNorth)) { // push items from a direction

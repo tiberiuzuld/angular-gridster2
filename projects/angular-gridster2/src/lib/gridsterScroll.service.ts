@@ -4,7 +4,7 @@ import {GridsterComponentInterface} from './gridster.interface';
 let scrollSensitivity: number;
 let scrollSpeed: number;
 const intervalDuration = 50;
-let gridsterElement: any;
+let gridsterElement: HTMLElement | null;
 let resizeEvent: boolean | undefined;
 let resizeEventType: GridsterResizeEventType | undefined;
 let intervalE: number;
@@ -12,9 +12,16 @@ let intervalW: number;
 let intervalN: number;
 let intervalS: number;
 
+interface Position {
+  clientX: number;
+  clientY: number;
+}
+
+type CalculatePosition = (position: Position) => void;
+
 export function scroll(gridster: GridsterComponentInterface, left: number, top: number, width: number, height: number,
-                       e: MouseEvent, lastMouse: any,
-                       calculateItemPosition: Function, resize?: boolean, resizeEventScrollType?: GridsterResizeEventType) {
+                       e: MouseEvent, lastMouse: Position,
+                       calculateItemPosition: CalculatePosition, resize?: boolean, resizeEventScrollType?: GridsterResizeEventType): void {
   scrollSensitivity = gridster.$options.scrollSensitivity;
   scrollSpeed = gridster.$options.scrollSpeed;
   gridsterElement = gridster.el;
@@ -68,68 +75,70 @@ export function scroll(gridster: GridsterComponentInterface, left: number, top: 
   }
 }
 
-function startVertical(sign: number, calculateItemPosition: Function, lastMouse: any): any {
+function startVertical(sign: number, calculateItemPosition: CalculatePosition, lastMouse: Position): number {
   let clientY = lastMouse.clientY;
   return setInterval(() => {
     if (!gridsterElement || sign === -1 && gridsterElement.scrollTop - scrollSpeed < 0) {
       cancelVertical();
     }
+    // @ts-ignore
     gridsterElement.scrollTop += sign * scrollSpeed;
     clientY += sign * scrollSpeed;
-    calculateItemPosition({clientX: lastMouse.clientX, clientY: clientY});
+    calculateItemPosition({clientX: lastMouse.clientX, clientY});
   }, intervalDuration);
 }
 
-function startHorizontal(sign: number, calculateItemPosition: Function, lastMouse: any): any {
+function startHorizontal(sign: number, calculateItemPosition: CalculatePosition, lastMouse: Position): number {
   let clientX = lastMouse.clientX;
   return setInterval(() => {
     if (!gridsterElement || sign === -1 && gridsterElement.scrollLeft - scrollSpeed < 0) {
       cancelHorizontal();
     }
+    // @ts-ignore
     gridsterElement.scrollLeft += sign * scrollSpeed;
     clientX += sign * scrollSpeed;
-    calculateItemPosition({clientX: clientX, clientY: lastMouse.clientY});
+    calculateItemPosition({clientX, clientY: lastMouse.clientY});
   }, intervalDuration);
 }
 
-export function cancelScroll() {
+export function cancelScroll(): void {
   cancelHorizontal();
   cancelVertical();
-  gridsterElement = undefined;
+  gridsterElement = null;
 }
 
-function cancelHorizontal() {
+function cancelHorizontal(): void {
   cancelE();
   cancelW();
 }
 
-function cancelVertical() {
+function cancelVertical(): void {
   cancelN();
   cancelS();
 }
 
-function cancelE() {
+function cancelE(): void {
   if (intervalE) {
     clearInterval(intervalE);
     intervalE = 0;
   }
 }
 
-function cancelW() {
+function cancelW(): void {
   if (intervalW) {
     clearInterval(intervalW);
     intervalW = 0;
   }
 }
 
-function cancelS() {
+function cancelS(): void {
   if (intervalS) {
     clearInterval(intervalS);
     intervalS = 0;
   }
 }
 
-function cancelN() {
+function cancelN(): void {
   if (intervalN) {
     clearInterval(intervalN);
     intervalN = 0;

@@ -19,12 +19,12 @@ import {GridsterConfigService} from './gridsterConfig.constant';
 import {GridsterConfig} from './gridsterConfig.interface';
 import {GridsterConfigS} from './gridsterConfigS.interface';
 import {GridsterEmptyCell} from './gridsterEmptyCell.service';
-import {GridsterItem} from './gridsterItem.interface';
-import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
+import {GridsterItem, GridsterItemComponentInterface} from './gridsterItem.interface';
 import {GridsterRenderer} from './gridsterRenderer.service';
 import {GridsterUtils} from './gridsterUtils.service';
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'gridster',
   templateUrl: './gridster.html',
   styleUrls: ['./gridster.css'],
@@ -35,7 +35,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
   calculateLayoutDebounce: () => void;
   movingItem: GridsterItem | null;
   previewStyle: () => void;
-  el: any;
+  el: HTMLElement;
   $options: GridsterConfigS;
   mobile: boolean;
   curWidth: number;
@@ -71,6 +71,21 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     this.gridRenderer = new GridsterRenderer(this);
   }
 
+  // ------ Function for swapWhileDragging option
+
+  // identical to checkCollision() except that here we add boundaries.
+  static checkCollisionTwoItemsForSwaping(item: GridsterItem, item2: GridsterItem): boolean {
+    // if the cols or rows of the items are 1 , doesnt make any sense to set a boundary. Only if the item is bigger we set a boundary
+    const horizontalBoundaryItem1 = item.cols === 1 ? 0 : 1;
+    const horizontalBoundaryItem2 = item2.cols === 1 ? 0 : 1;
+    const verticalBoundaryItem1 = item.rows === 1 ? 0 : 1;
+    const verticalBoundaryItem2 = item2.rows === 1 ? 0 : 1;
+    return item.x + horizontalBoundaryItem1 < item2.x + item2.cols
+      && item.x + item.cols > item2.x + horizontalBoundaryItem2
+      && item.y + verticalBoundaryItem1 < item2.y + item2.rows
+      && item.y + item.rows > item2.y + verticalBoundaryItem2;
+  }
+
   checkCollisionTwoItems(item: GridsterItem, item2: GridsterItem): boolean {
     const collision = item.x < item2.x + item2.cols
       && item.x + item.cols > item2.x
@@ -94,7 +109,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     }
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges(changes: SimpleChanges): void {
     if (changes.options) {
       this.setOptions();
       this.options.api = {
@@ -475,7 +490,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
 
   getLastPossiblePosition(item: GridsterItem): GridsterItem {
     let farthestItem: { y: number, x: number } = {y: 0, x: 0};
-    farthestItem = this.grid.reduce((prev: any, curr: GridsterItemComponentInterface) => {
+    farthestItem = this.grid.reduce((prev: { y: number, x: number }, curr: GridsterItemComponentInterface) => {
       const currCoords = {y: curr.$item.y + curr.$item.rows - 1, x: curr.$item.x + curr.$item.cols - 1};
       if (GridsterUtils.compareItems(prev, currCoords) === 1) {
         return currCoords;
@@ -516,19 +531,6 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
   }
 
   // ------ Functions for swapWhileDragging option
-
-  // identical to checkCollision() except that here we add bondaries.
-  static checkCollisionTwoItemsForSwaping(item: GridsterItem, item2: GridsterItem): boolean {
-    // if the cols or rows of the items are 1 , doesnt make any sense to set a boundary. Only if the item is bigger we set a boundary
-    const horizontalBoundaryItem1 = item.cols === 1 ? 0 : 1;
-    const horizontalBoundaryItem2 = item2.cols === 1 ? 0 : 1;
-    const verticalBoundaryItem1 = item.rows === 1 ? 0 : 1;
-    const verticalBoundaryItem2 = item2.rows === 1 ? 0 : 1;
-    return item.x + horizontalBoundaryItem1 < item2.x + item2.cols
-      && item.x + item.cols > item2.x + horizontalBoundaryItem2
-      && item.y + verticalBoundaryItem1 < item2.y + item2.rows
-      && item.y + item.rows > item2.y + verticalBoundaryItem2;
-  }
 
   // identical to checkCollision() except that this function calls findItemWithItemForSwaping() instead of findItemWithItem()
   checkCollisionForSwaping(item: GridsterItem): GridsterItemComponentInterface | boolean {

@@ -14,7 +14,7 @@ export class GridsterRenderer {
     delete this.gridster;
   }
 
-  updateItem(el: any, item: GridsterItem, renderer: Renderer2) {
+  updateItem(el: Element, item: GridsterItem, renderer: Renderer2): void {
     if (this.gridster.mobile) {
       this.clearCellPosition(renderer, el);
       if (this.gridster.$options.keepFixedHeightInMobile) {
@@ -63,7 +63,7 @@ export class GridsterRenderer {
     }
   }
 
-  updateGridster() {
+  updateGridster(): void {
     let addClass = '';
     let removeClass1 = '';
     let removeClass2 = '';
@@ -120,7 +120,7 @@ export class GridsterRenderer {
     this.gridster.renderer.removeClass(this.gridster.el, removeClass3);
   }
 
-  getGridColumnStyle(i: number) {
+  getGridColumnStyle(i: number): { [key: string]: string } {
     return {
       ...this.getLeftPosition(this.gridster.curColWidth * i),
       width: this.gridster.curColWidth - this.gridster.$options.margin + 'px',
@@ -128,7 +128,7 @@ export class GridsterRenderer {
     };
   }
 
-  getGridRowStyle(i: number) {
+  getGridRowStyle(i: number): { [key: string]: string } {
     return {
       ...this.getTopPosition(this.gridster.curRowHeight * i),
       width: this.gridster.gridColumns.length * this.gridster.curColWidth - this.gridster.$options.margin + 'px',
@@ -136,7 +136,7 @@ export class GridsterRenderer {
     };
   }
 
-  getLeftPosition(d: number): { left?: string, transform?: string } {
+  getLeftPosition(d: number): { left: string } | { transform: string } {
     const dPosition = this.gridster.$options.dirType === DirTypes.RTL ? -d : d;
     if (this.gridster.$options.useTransformPositioning) {
       return {
@@ -149,7 +149,7 @@ export class GridsterRenderer {
     }
   }
 
-  getTopPosition(d: number): { top?: string, transform?: string } {
+  getTopPosition(d: number): { top: string } | { transform: string } {
     if (this.gridster.$options.useTransformPositioning) {
       return {
         transform: 'translateY(' + d + 'px)',
@@ -161,7 +161,7 @@ export class GridsterRenderer {
     }
   }
 
-  clearCellPosition(renderer: Renderer2, el: any): void {
+  clearCellPosition(renderer: Renderer2, el: Element): void {
     if (this.gridster.$options.useTransformPositioning) {
       renderer.setStyle(el, 'transform', '');
     } else {
@@ -170,7 +170,7 @@ export class GridsterRenderer {
     }
   }
 
-  setCellPosition(renderer: Renderer2, el: any, x: number, y: number): void {
+  setCellPosition(renderer: Renderer2, el: Element, x: number, y: number): void {
     const xPosition = this.gridster.$options.dirType === DirTypes.RTL ? -x : x;
     if (this.gridster.$options.useTransformPositioning) {
       const transform = 'translate3d(' + xPosition + 'px, ' + y + 'px, 0)';

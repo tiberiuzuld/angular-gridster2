@@ -70,6 +70,7 @@
     "no-bitwise": true,
     "no-conflicting-lifecycle": true,
     "no-consecutive-blank-lines": false,
+    "no-any": true,
     "no-console": [
       true,
       "debug",
@@ -145,6 +146,10 @@
     "triple-equals": [
       true,
       "allow-null-check"
+    ],
+    "typedef": [
+      true,
+      "call-signature"
     ],
     "typedef-whitespace": [
       true,

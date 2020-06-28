@@ -1,10 +1,21 @@
-import {Component, ElementRef, HostBinding, Inject, Input, NgZone, OnDestroy, Renderer2, ViewEncapsulation, SimpleChanges, OnChanges} from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostBinding,
+  Inject,
+  Input,
+  NgZone,
+  OnChanges,
+  OnDestroy,
+  Renderer2,
+  SimpleChanges,
+  ViewEncapsulation
+} from '@angular/core';
 
-import {GridsterItem} from './gridsterItem.interface';
 import {GridsterDraggable} from './gridsterDraggable.service';
 import {GridsterResizable} from './gridsterResizable.service';
 import {GridsterUtils} from './gridsterUtils.service';
-import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
+import {GridsterItem, GridsterItemComponentInterface} from './gridsterItem.interface';
 import {GridsterComponent} from './gridster.component';
 
 @Component({
@@ -16,7 +27,7 @@ import {GridsterComponent} from './gridster.component';
 export class GridsterItemComponent implements OnDestroy, OnChanges, GridsterItemComponentInterface {
   @Input() item: GridsterItem;
   $item: GridsterItem;
-  el: any;
+  el: HTMLElement;
   gridster: GridsterComponent;
   top: number;
   left: number;
@@ -46,7 +57,7 @@ export class GridsterItemComponent implements OnDestroy, OnChanges, GridsterItem
     this.resize = new GridsterResizable(this, gridster, this.zone);
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges(changes: SimpleChanges): void {
     if (changes['item']) {
       this.updateOptions();
 
@@ -93,7 +104,7 @@ export class GridsterItemComponent implements OnDestroy, OnChanges, GridsterItem
     this.updateItemSize();
   }
 
-  updateItemSize() {
+  updateItemSize(): void {
     const top = this.$item.y * this.gridster.curRowHeight;
     const left = this.$item.x * this.gridster.curColWidth;
     const width = this.$item.cols * this.gridster.curColWidth - this.gridster.$options.margin;

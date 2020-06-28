@@ -16,7 +16,7 @@ export class RtlComponent implements OnInit, OnDestroy {
   options: Safe;
   dashboard: Array<GridsterItem>;
 
-  ngOnInit() {
+  ngOnInit(): void {
     document.body.setAttribute('dir', 'rtl');
 
     this.options = {
@@ -104,19 +104,19 @@ export class RtlComponent implements OnInit, OnDestroy {
     ];
   }
 
-  changedOptions() {
+  changedOptions(): void {
     if (this.options.api && this.options.api.optionsChanged) {
       this.options.api.optionsChanged();
     }
   }
 
-  removeItem($event, item) {
+  removeItem($event: MouseEvent | TouchEvent, item): void {
     $event.preventDefault();
     $event.stopPropagation();
     this.dashboard.splice(this.dashboard.indexOf(item), 1);
   }
 
-  addItem() {
+  addItem(): void {
     this.dashboard.push({x: 0, y: 0, cols: 1, rows: 1});
   }
 

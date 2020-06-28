@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 
-import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
+import {GridsterItemComponentInterface} from './gridsterItem.interface';
 import {GridsterComponentInterface} from './gridster.interface';
 
 @Injectable()
@@ -66,7 +66,7 @@ export class GridsterSwap {
     let gridsterItemCollision;
     if (this.gridster.$options.swapWhileDragging) {
       gridsterItemCollision = this.gridster.checkCollisionForSwaping(pushedBy.$item);
-    }else{
+    } else {
       gridsterItemCollision = this.gridster.checkCollision(pushedBy.$item);
     }
     if (gridsterItemCollision && gridsterItemCollision !== true && gridsterItemCollision.canBeDragged()) {

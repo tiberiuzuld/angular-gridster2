@@ -1,10 +1,10 @@
 import {Injectable, NgZone} from '@angular/core';
 import {GridsterComponentInterface} from './gridster.interface';
 import {DirTypes} from './gridsterConfig.interface';
-import {GridsterItemComponentInterface} from './gridsterItemComponent.interface';
+import {GridsterItemComponentInterface} from './gridsterItem.interface';
 import {GridsterPush} from './gridsterPush.service';
 import {GridsterPushResize} from './gridsterPushResize.service';
-import {GridsterResizeEventType} from './gridsterResizeEventType.interface';
+import {GridsterResizeEventType, MouseEvent2} from './gridsterResizeEventType.interface';
 
 import {cancelScroll, scroll} from './gridsterScroll.service';
 import {GridsterUtils} from './gridsterUtils.service';
@@ -19,9 +19,9 @@ export class GridsterResizable {
   };
   itemBackup: Array<number>;
   resizeEventScrollType: GridsterResizeEventType;
-  directionFunction: (e: any) => void;
-  dragFunction: (event: any) => void;
-  dragStopFunction: (event: any) => void;
+  directionFunction: (e: MouseEvent) => void;
+  dragFunction: (event: MouseEvent) => void;
+  dragStopFunction: (event: MouseEvent2) => void;
   resizeEnabled: boolean;
   mousemove: () => void;
   mouseup: () => void;
@@ -68,7 +68,7 @@ export class GridsterResizable {
     delete this.gridster;
   }
 
-  dragStart(e: any): void {
+  dragStart(e: MouseEvent2): void {
     if (e.which && e.which !== 1) {
       return;
     }
@@ -116,10 +116,10 @@ export class GridsterResizable {
     this.gridster.dragInProgress = true;
     this.gridster.updateGrid();
 
-    if (e.target.hasAttribute('class') && e.target.getAttribute('class').split(' ').indexOf('handle-n') > -1) {
+    if (e.target?.hasAttribute('class') && e.target.getAttribute('class').split(' ').indexOf('handle-n') > -1) {
       this.resizeEventScrollType.n = true;
       this.directionFunction = this.handleN;
-    } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').split(' ').indexOf('handle-w') > -1) {
+    } else if (e.target?.hasAttribute('class') && e.target.getAttribute('class').split(' ').indexOf('handle-w') > -1) {
       if (this.gridster.$options.dirType === DirTypes.RTL) {
         this.resizeEventScrollType.e = true;
         this.directionFunction = this.handleE;
@@ -127,7 +127,7 @@ export class GridsterResizable {
         this.resizeEventScrollType.w = true;
         this.directionFunction = this.handleW;
       }
-    } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').split(' ').indexOf('handle-s') > -1) {
+    } else if (e.target?.hasAttribute('class') && e.target.getAttribute('class').split(' ').indexOf('handle-s') > -1) {
       this.resizeEventScrollType.s = true;
       this.directionFunction = this.handleS;
     } else if (e.target.hasAttribute('class') && e.target.getAttribute('class').split(' ').indexOf('handle-e') > -1) {
@@ -181,7 +181,7 @@ export class GridsterResizable {
     }
   }
 
-  dragMove(e: any): void {
+  dragMove(e: MouseEvent): void {
     e.stopPropagation();
     e.preventDefault();
     GridsterUtils.checkTouchEvent(e);
@@ -198,7 +198,7 @@ export class GridsterResizable {
     });
   }
 
-  dragStop(e: any): void {
+  dragStop(e: MouseEvent): void {
     e.stopPropagation();
     e.preventDefault();
     cancelScroll();
@@ -251,7 +251,7 @@ export class GridsterResizable {
     delete this.pushResize;
   }
 
-  handleN(e: any): void {
+  handleN(e: MouseEvent): void {
     this.top = e.clientY + this.offsetTop - this.diffTop;
     this.height = this.bottom - this.top;
     if (this.minHeight > this.height) {
@@ -282,7 +282,7 @@ export class GridsterResizable {
     this.setItemHeight(this.height);
   }
 
-  handleW(e: any): void {
+  handleW(e: MouseEvent): void {
     this.left = e.clientX + this.offsetLeft - this.diffLeft;
     this.width = this.right - this.left;
     if (this.minWidth > this.width) {
@@ -313,7 +313,7 @@ export class GridsterResizable {
     this.setItemWidth(this.width);
   }
 
-  handleS(e: any): void {
+  handleS(e: MouseEvent): void {
     this.height = e.clientY + this.offsetTop - this.diffBottom - this.top;
     if (this.minHeight > this.height) {
       this.height = this.minHeight;
@@ -338,7 +338,7 @@ export class GridsterResizable {
     this.setItemHeight(this.height);
   }
 
-  handleE(e: any): void {
+  handleE(e: MouseEvent): void {
     this.width = e.clientX + this.offsetLeft - this.diffRight - this.left;
     if (this.minWidth > this.width) {
       this.width = this.minWidth;
@@ -363,22 +363,22 @@ export class GridsterResizable {
     this.setItemWidth(this.width);
   }
 
-  handleNW(e: any): void {
+  handleNW(e: MouseEvent): void {
     this.handleN(e);
     this.handleW(e);
   }
 
-  handleNE(e: any): void {
+  handleNE(e: MouseEvent): void {
     this.handleN(e);
     this.handleE(e);
   }
 
-  handleSW(e: any): void {
+  handleSW(e: MouseEvent): void {
     this.handleS(e);
     this.handleW(e);
   }
 
-  handleSE(e: any): void {
+  handleSE(e: MouseEvent): void {
     this.handleS(e);
     this.handleE(e);
   }
@@ -387,14 +387,14 @@ export class GridsterResizable {
     this.resizeEnabled = this.gridsterItem.canBeResized();
   }
 
-  dragStartDelay(e: any): void {
+  dragStartDelay(e: MouseEvent | TouchEvent): void {
     GridsterUtils.checkTouchEvent(e);
     if (!this.gridster.$options.resizable.delayStart) {
-      this.dragStart(e);
+      this.dragStart(e as MouseEvent2);
       return;
     }
     const timeout = setTimeout(() => {
-      this.dragStart(e);
+      this.dragStart(e as MouseEvent2);
       cancelDrag();
     }, this.gridster.$options.resizable.delayStart);
     const cancelMouse = this.gridsterItem.renderer.listen('document', 'mouseup', cancelDrag);
@@ -404,14 +404,15 @@ export class GridsterResizable {
     const cancelTouchEnd = this.gridsterItem.renderer.listen('document', 'touchend', cancelDrag);
     const cancelTouchCancel = this.gridsterItem.renderer.listen('document', 'touchcancel', cancelDrag);
 
-    function cancelMove(eventMove: any) {
+    function cancelMove(eventMove: MouseEvent): void {
       GridsterUtils.checkTouchEvent(eventMove);
-      if (Math.abs(eventMove.clientX - e.clientX) > 9 || Math.abs(eventMove.clientY - e.clientY) > 9) {
+      if (Math.abs(eventMove.clientX - (e as MouseEvent).clientX) > 9
+        || Math.abs(eventMove.clientY - (e as MouseEvent).clientY) > 9) {
         cancelDrag();
       }
     }
 
-    function cancelDrag() {
+    function cancelDrag(): void {
       clearTimeout(timeout);
       cancelOnBlur();
       cancelMouse();
