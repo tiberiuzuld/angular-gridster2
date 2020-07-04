@@ -183,6 +183,10 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
   }
 
   onResize(): void {
+    if (this.options.setGridSize) { // reset width/height so the size is recalculated afterwards
+      this.renderer.setStyle(this.el, 'width', '');
+      this.renderer.setStyle(this.el, 'height', '');
+    }
     this.setGridSize();
     this.calculateLayout();
   }
