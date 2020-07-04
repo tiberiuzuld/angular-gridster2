@@ -124,8 +124,9 @@ Option 2 (with text selection):
 ### Contributors [here](https://github.com/tiberiuzuld/angular-gridster2/graphs/contributors)
 
 ### Supporters
+@ea20140129
 @matpag (Mattia Pagini)
-Derek
+@DerekJDev (Derek Johnson)
 
 ### [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/tiberiuzuld)
 
