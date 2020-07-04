@@ -40,7 +40,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
   mobile: boolean;
   curWidth: number;
   curHeight: number;
-  grid: Array<GridsterItemComponentInterface>;
+  grid: GridsterItemComponentInterface[];
   columns = 0;
   rows = 0;
   curColWidth: number;
@@ -118,6 +118,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
         getNextPossiblePosition: this.getNextPossiblePosition.bind(this),
         getFirstPossiblePosition: this.getFirstPossiblePosition.bind(this),
         getLastPossiblePosition: this.getLastPossiblePosition.bind(this),
+        getItemComponent: (item: GridsterItem) => this.getItemComponent(item)
       };
       this.columns = this.$options.minCols;
       this.rows = this.$options.minRows;
@@ -532,6 +533,10 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
 
   positionYToPixels(y: number): number {
     return y * this.curRowHeight;
+  }
+
+  getItemComponent(item: GridsterItem): GridsterItemComponentInterface | undefined {
+    return this.grid.find(c => c.item === item);
   }
 
   // ------ Functions for swapWhileDragging option

@@ -1,6 +1,6 @@
 import {GridsterComponentInterface} from './gridster.interface';
 import {compactTypes, dirTypes, displayGrids, gridTypes} from './gridsterConfig.interface';
-import {GridsterItem} from './gridsterItem.interface';
+import {GridsterItem, GridsterItemComponentInterface} from './gridsterItem.interface';
 
 export interface GridsterConfigS {
   gridType: gridTypes;
@@ -68,6 +68,7 @@ export interface GridsterConfigS {
     getNextPossiblePosition: (newItem: GridsterItem) => boolean,
     getFirstPossiblePosition: (item: GridsterItem) => GridsterItem,
     getLastPossiblePosition: (item: GridsterItem) => GridsterItem,
+    getItemComponent: (item: GridsterItem) => GridsterItemComponentInterface | undefined;
   };
 
   // tslint:disable-next-line:no-any

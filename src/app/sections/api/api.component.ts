@@ -10,7 +10,7 @@ import {CompactType, GridsterConfig, GridsterItem, GridsterItemComponent, Gridst
 })
 export class ApiComponent implements OnInit {
   options: GridsterConfig;
-  dashboard: Array<GridsterItem>;
+  dashboard: GridsterItem[];
   itemToPush: GridsterItemComponent;
 
   ngOnInit(): void {
@@ -75,5 +75,11 @@ export class ApiComponent implements OnInit {
     }
     push.destroy(); // destroy push instance
     // similar for GridsterPushResize and GridsterSwap
+  }
+
+  getItemComponent(): void {
+    if (this.options.api && this.options.api.getItemComponent) {
+      console.log(this.options.api.getItemComponent(this.dashboard[0]));
+    }
   }
 }

@@ -124,6 +124,7 @@ export interface GridsterConfig {
     getNextPossiblePosition?: (newItem: GridsterItem) => boolean,
     getFirstPossiblePosition?: (item: GridsterItem) => GridsterItem,
     getLastPossiblePosition?: (item: GridsterItem) => GridsterItem,
+    getItemComponent?: (item: GridsterItem) => GridsterItemComponentInterface | undefined
   };
 
   // tslint:disable-next-line:no-any
