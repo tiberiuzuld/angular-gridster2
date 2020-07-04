@@ -44,7 +44,7 @@
                 }
               ],
               "baseHref": "/angular-gridster2/",
-              "optimization": false,
+              "optimization": true,
               "outputHashing": "all",
               "sourceMap": true,
               "extractCss": true,
