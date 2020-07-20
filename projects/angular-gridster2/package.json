@@ -1,6 +1,6 @@
 {
   "name": "angular-gridster2",
-  "version": "10.0.2",
+  "version": "10.1.0",
   "license": "MIT",
   "sideEffects": false,
   "dependencies": {
