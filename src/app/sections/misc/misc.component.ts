@@ -17,6 +17,7 @@ export class MiscComponent implements OnInit {
       gridType: GridType.Fit,
       displayGrid: DisplayGrid.Always,
       draggable: {enabled: true},
+      resizable: {enabled: true},
       disableWindowResize: false,
       scrollToNewItems: false,
       disableWarnings: false,
