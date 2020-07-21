@@ -58,7 +58,7 @@ export class GridsterItemComponent implements OnDestroy, OnChanges, GridsterItem
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['item']) {
+    if (changes.item) {
       this.updateOptions();
 
       if (!this.init) {

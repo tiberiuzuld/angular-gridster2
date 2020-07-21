@@ -7,15 +7,22 @@
   </a>
   <markdown [src]="'assets/trackBy.md'"></markdown>
 </div>
-<div *ngIf="dashboard[0]" class="options-header">
+<div class="options-header">
   <button (click)="reset()" class="cols-2" color="accent" mat-raised-button>
     Reset
+  </button>
+  <button (click)="addItem()" class="add-button cols-2" mat-mini-fab>
+    <mat-icon>add</mat-icon>
   </button>
 </div>
 
 
 <gridster [options]="options">
   <gridster-item *ngFor="let item of dashboard; trackBy: trackBy" [item]="item">
+    <button (mousedown)="removeItem($event, item)" (touchstart)="removeItem($event, item)"
+            mat-mini-fab style="position: absolute; right: 10px; top: 10px">
+      <mat-icon>delete</mat-icon>
+    </button>
     <app-trackby-item [id]="item.id"></app-trackby-item>
   </gridster-item>
 </gridster>

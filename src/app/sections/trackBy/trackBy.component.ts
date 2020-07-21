@@ -60,12 +60,12 @@ export class TrackByComponent implements OnInit {
         dragEnabled: true,
         resizeEnabled: true,
         compactEnabled: true,
-        id: '0',
+        id: 0,
       },
-      {cols: 2, rows: 2, y: 0, x: 2, id: '1'},
-      {cols: 1, rows: 1, y: 0, x: 4, id: '2'},
-      {cols: 3, rows: 2, y: 1, x: 4, id: '3'},
-      {cols: 1, rows: 1, y: 2, x: 1, id: '4'}
+      {cols: 2, rows: 2, y: 0, x: 2, id: 1},
+      {cols: 1, rows: 1, y: 0, x: 4, id: 2},
+      {cols: 3, rows: 2, y: 1, x: 4, id: 3},
+      {cols: 1, rows: 1, y: 2, x: 1, id: 4}
     ];
     this.dashboardOriginal = this.dashboard.map(x => ({...x}));
   }
@@ -82,5 +82,15 @@ export class TrackByComponent implements OnInit {
 
   trackBy(index: number, item: GridsterItem): number {
     return item.id;
+  }
+
+  addItem(): void {
+    this.dashboard.push({x: 0, y: 0, cols: 1, rows: 1, id: this.dashboard.length});
+  }
+
+  removeItem($event: MouseEvent | TouchEvent, item): void {
+    $event.preventDefault();
+    $event.stopPropagation();
+    this.dashboard.splice(this.dashboard.indexOf(item), 1);
   }
 }
