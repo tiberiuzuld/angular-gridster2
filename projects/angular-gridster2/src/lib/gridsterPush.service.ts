@@ -9,13 +9,13 @@ export class GridsterPush {
   public fromNorth: string;
   public fromEast: string;
   public fromWest: string;
-  private pushedItems: Array<GridsterItemComponentInterface>;
-  private pushedItemsTemp: Array<GridsterItemComponentInterface>;
-  private pushedItemsTempPath: Array<Array<{ x: number, y: number }>>;
-  private pushedItemsPath: Array<Array<{ x: number, y: number }>>;
+  private pushedItems: GridsterItemComponentInterface[];
+  private pushedItemsTemp: GridsterItemComponentInterface[];
+  private pushedItemsTempPath: { x: number, y: number }[][];
+  private pushedItemsPath: { x: number, y: number }[][];
   private gridsterItem: GridsterItemComponentInterface;
   private gridster: GridsterComponentInterface;
-  private pushedItemsOrder: Array<GridsterItemComponentInterface>;
+  private pushedItemsOrder: GridsterItemComponentInterface[];
   private tryPattern: {
     fromEast: ((gridsterItemCollide: GridsterItemComponentInterface, gridsterItem: GridsterItemComponentInterface) => boolean)[],
     fromWest: ((gridsterItemCollide: GridsterItemComponentInterface, gridsterItem: GridsterItemComponentInterface) => boolean)[],
@@ -28,7 +28,6 @@ export class GridsterPush {
     this.pushedItemsTemp = [];
     this.pushedItemsTempPath = [];
     this.pushedItemsPath = [];
-    gridsterItem['id'] = GridsterPush.generateTempRandomId();
     this.gridsterItem = gridsterItem;
     this.gridster = gridsterItem.gridster;
     this.tryPattern = {
@@ -41,10 +40,6 @@ export class GridsterPush {
     this.fromNorth = 'fromNorth';
     this.fromEast = 'fromEast';
     this.fromWest = 'fromWest';
-  }
-
-  private static generateTempRandomId(): string {
-    return Math.random().toString(36).replace(new RegExp('[^a-z]+', 'g'), '').substr(2, 10);
   }
 
   destroy(): void {
@@ -62,7 +57,6 @@ export class GridsterPush {
       this.pushedItemsOrder = [];
       this.pushedItemsTemp = [];
       this.pushedItemsTempPath = [];
-      this.cleanTempIds();
       return pushed;
     } else {
       return false;
@@ -115,11 +109,6 @@ export class GridsterPush {
     }
   }
 
-  private cleanTempIds(): void {
-    const allItemsWithIds = this.gridster.grid.filter((el: GridsterItemComponentInterface) => el['id']);
-    allItemsWithIds.forEach((el: GridsterItemComponentInterface) => delete el['id']);
-  }
-
   private push(gridsterItem: GridsterItemComponentInterface, direction: string): boolean {
     if (this.gridster.checkGridCollision(gridsterItem.$item)) {
       return false;
@@ -127,16 +116,13 @@ export class GridsterPush {
     if (direction === '') {
       return false;
     }
-    const a: Array<GridsterItemComponentInterface> = this.gridster.findItemsWithItem(gridsterItem.$item);
+    const a: GridsterItemComponentInterface[] = this.gridster.findItemsWithItem(gridsterItem.$item);
     let i = a.length - 1;
     let itemCollision: GridsterItemComponentInterface;
     let makePush = true;
-    const b: Array<GridsterItemComponentInterface> = [];
+    const b: GridsterItemComponentInterface[] = [];
     for (; i > -1; i--) {
       itemCollision = a[i];
-      if (!itemCollision['id']) {
-        itemCollision['id'] = GridsterPush.generateTempRandomId();
-      }
       if (itemCollision === this.gridsterItem) {
         makePush = false;
         break;
@@ -145,10 +131,8 @@ export class GridsterPush {
         makePush = false;
         break;
       }
-      const compare = this.pushedItemsTemp.find((el: GridsterItemComponentInterface) => {
-        return el['id'] === itemCollision['id'];
-      });
-      if (compare) {
+      const p = this.pushedItemsTemp.indexOf(itemCollision);
+      if (p > -1 && this.pushedItemsTempPath[p].length > 10) { // stop if item is pushed more than 10 times to break infinite loops
         makePush = false;
         break;
       }
