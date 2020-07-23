@@ -110,7 +110,7 @@ export class GridsterRenderer {
       removeClass3 = GridType.Fixed;
     }
 
-    if (this.gridster.mobile) {
+    if (this.gridster.mobile || this.gridster.$options.setGridSize && this.gridster.$options.gridType !== GridType.Fit) {
       this.gridster.renderer.removeClass(this.gridster.el, addClass);
     } else {
       this.gridster.renderer.addClass(this.gridster.el, addClass);

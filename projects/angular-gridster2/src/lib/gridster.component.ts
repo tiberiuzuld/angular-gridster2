@@ -16,7 +16,7 @@ import {GridsterComponentInterface} from './gridster.interface';
 import {GridsterCompact} from './gridsterCompact.service';
 
 import {GridsterConfigService} from './gridsterConfig.constant';
-import {GridsterConfig} from './gridsterConfig.interface';
+import {GridsterConfig, GridType} from './gridsterConfig.interface';
 import {GridsterConfigS} from './gridsterConfigS.interface';
 import {GridsterEmptyCell} from './gridsterEmptyCell.service';
 import {GridsterItem, GridsterItemComponentInterface} from './gridsterItem.interface';
@@ -213,7 +213,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     const el = this.el;
     let width;
     let height;
-    if (this.$options.setGridSize || this.$options.gridType === 'fit' && !this.mobile) {
+    if (this.$options.setGridSize || this.$options.gridType === GridType.Fit && !this.mobile) {
       width = el.offsetWidth;
       height = el.offsetHeight;
     } else {
@@ -307,9 +307,13 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     this.updateGrid();
 
     if (this.$options.setGridSize) {
-      this.renderer.setStyle(this.el, 'width', (this.columns * this.curColWidth + this.$options.margin) + 'px');
-      this.renderer.setStyle(this.el, 'height', (this.rows * this.curRowHeight + this.$options.margin) + 'px');
+      this.renderer.addClass(this.el, 'gridSize');
+      if (!this.mobile) {
+        this.renderer.setStyle(this.el, 'width', (this.columns * this.curColWidth + this.$options.margin) + 'px');
+        this.renderer.setStyle(this.el, 'height', (this.rows * this.curRowHeight + this.$options.margin) + 'px');
+      }
     } else {
+      this.renderer.removeClass(this.el, 'gridSize');
       this.renderer.setStyle(this.el, 'width', '');
       this.renderer.setStyle(this.el, 'height', '');
     }
