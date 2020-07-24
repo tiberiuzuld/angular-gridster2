@@ -117,11 +117,11 @@ export class GridsterPush {
       return false;
     }
     const a: GridsterItemComponentInterface[] = this.gridster.findItemsWithItem(gridsterItem.$item);
-    let i = a.length - 1;
+    let i = 0;
     let itemCollision: GridsterItemComponentInterface;
     let makePush = true;
     const b: GridsterItemComponentInterface[] = [];
-    for (; i > -1; i--) {
+    for (; i < a.length; i++) {
       itemCollision = a[i];
       if (itemCollision === this.gridsterItem) {
         makePush = false;
