@@ -116,13 +116,24 @@ export class GridsterPush {
     if (direction === '') {
       return false;
     }
-    const a: GridsterItemComponentInterface[] = this.gridster.findItemsWithItem(gridsterItem.$item);
+    const conflicts: GridsterItemComponentInterface[] = this.gridster.findItemsWithItem(gridsterItem.$item);
+    const invert = direction === this.fromNorth || direction === this.fromWest;
+    // sort the list of conflicts in order of [y,x]. Invert when the push is from north and west
+    // this is done so they don't conflict witch each other and revert positions, keeping the previous order
+    conflicts.sort((a, b) => {
+      if (invert) {
+        return b.$item.y - a.$item.y || b.$item.x - a.$item.x;
+      } else {
+        return a.$item.y - b.$item.y || a.$item.x - b.$item.x;
+      }
+
+    });
     let i = 0;
     let itemCollision: GridsterItemComponentInterface;
     let makePush = true;
-    const b: GridsterItemComponentInterface[] = [];
-    for (; i < a.length; i++) {
-      itemCollision = a[i];
+    const pushedItems: GridsterItemComponentInterface[] = [];
+    for (; i < conflicts.length; i++) {
+      itemCollision = conflicts[i];
       if (itemCollision === this.gridsterItem) {
         makePush = false;
         break;
@@ -138,23 +149,23 @@ export class GridsterPush {
       }
       if (this.tryPattern[direction][0].call(this, itemCollision, gridsterItem)) {
         this.pushedItemsOrder.push(itemCollision);
-        b.push(itemCollision);
+        pushedItems.push(itemCollision);
       } else if (this.tryPattern[direction][1].call(this, itemCollision, gridsterItem)) {
         this.pushedItemsOrder.push(itemCollision);
-        b.push(itemCollision);
+        pushedItems.push(itemCollision);
       } else if (this.tryPattern[direction][2].call(this, itemCollision, gridsterItem)) {
         this.pushedItemsOrder.push(itemCollision);
-        b.push(itemCollision);
+        pushedItems.push(itemCollision);
       } else if (this.tryPattern[direction][3].call(this, itemCollision, gridsterItem)) {
         this.pushedItemsOrder.push(itemCollision);
-        b.push(itemCollision);
+        pushedItems.push(itemCollision);
       } else {
         makePush = false;
         break;
       }
     }
     if (!makePush) {
-      i = this.pushedItemsOrder.lastIndexOf(b[0]);
+      i = this.pushedItemsOrder.lastIndexOf(pushedItems[0]);
       if (i > -1) {
         let j = this.pushedItemsOrder.length - 1;
         for (; j >= i; j--) {

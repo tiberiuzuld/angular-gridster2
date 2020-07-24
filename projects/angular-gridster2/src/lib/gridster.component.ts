@@ -417,9 +417,9 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
   }
 
   findItemWithItem(item: GridsterItem): GridsterItemComponentInterface | boolean {
-    let widgetsIndex: number = this.grid.length - 1;
+    let widgetsIndex = 0;
     let widget: GridsterItemComponentInterface;
-    for (; widgetsIndex > -1; widgetsIndex--) {
+    for (; widgetsIndex < this.grid.length; widgetsIndex++) {
       widget = this.grid[widgetsIndex];
       if (widget.$item !== item && this.checkCollisionTwoItems(widget.$item, item)) {
         return widget;
@@ -430,9 +430,9 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
 
   findItemsWithItem(item: GridsterItem): Array<GridsterItemComponentInterface> {
     const a: Array<GridsterItemComponentInterface> = [];
-    let widgetsIndex: number = this.grid.length - 1;
+    let widgetsIndex = 0;
     let widget: GridsterItemComponentInterface;
-    for (; widgetsIndex > -1; widgetsIndex--) {
+    for (; widgetsIndex < this.grid.length; widgetsIndex++) {
       widget = this.grid[widgetsIndex];
       if (widget.$item !== item && this.checkCollisionTwoItems(widget.$item, item)) {
         a.push(widget);
