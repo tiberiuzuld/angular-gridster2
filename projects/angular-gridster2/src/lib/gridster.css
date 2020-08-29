@@ -39,7 +39,6 @@ gridster.mobile gridster-item {
 gridster.gridSize {
   height: initial;
   width: initial;
-  overflow: hidden;
 }
 
 gridster.gridSize.fit {

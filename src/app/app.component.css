@@ -66,7 +66,7 @@ app-parent-dynamic, app-widget-a, app-widget-b, app-widget-c {
 }
 
 code {
-  background: darkgrey;
+  background: lightgrey;
 }
 
 app-widget-a {
