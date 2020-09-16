@@ -10,6 +10,9 @@
   <mat-checkbox [(ngModel)]="options.disableWindowResize" (ngModelChange)="changedOptions()">
     Disable window resize
   </mat-checkbox>
+  <mat-checkbox (ngModelChange)="changedOptions()" [(ngModel)]="options.setGridSize">
+    Set grid size
+  </mat-checkbox>
   <mat-checkbox [(ngModel)]="options.scrollToNewItems" (ngModelChange)="changedOptions()">
     Scroll to new items
   </mat-checkbox>

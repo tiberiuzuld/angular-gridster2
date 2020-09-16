@@ -18,10 +18,11 @@ export class MiscComponent implements OnInit {
       displayGrid: DisplayGrid.Always,
       draggable: {enabled: true},
       resizable: {enabled: true},
-      disableWindowResize: false,
+      disableWindowResize: true,
       scrollToNewItems: false,
       disableWarnings: false,
       ignoreMarginInRow: false,
+      setGridSize: false,
       scale: 1
     };
 
