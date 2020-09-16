@@ -11,6 +11,7 @@ export class GridsterRenderer {
   }
 
   destroy(): void {
+    // @ts-ignore
     delete this.gridster;
   }
 

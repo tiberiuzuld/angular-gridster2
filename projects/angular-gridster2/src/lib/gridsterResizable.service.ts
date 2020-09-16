@@ -66,7 +66,9 @@ export class GridsterResizable {
     if (this.gridster.previewStyle) {
       this.gridster.previewStyle();
     }
+    // @ts-ignore
     delete this.gridsterItem;
+    // @ts-ignore
     delete this.gridster;
   }
 
@@ -244,8 +246,10 @@ export class GridsterResizable {
     this.push.restoreItems();
     this.pushResize.restoreItems();
     this.push.destroy();
+    // @ts-ignore
     delete this.push;
     this.pushResize.destroy();
+    // @ts-ignore
     delete this.pushResize;
   }
 
@@ -255,8 +259,10 @@ export class GridsterResizable {
     this.push.setPushedItems();
     this.pushResize.setPushedItems();
     this.push.destroy();
+    // @ts-ignore
     delete this.push;
     this.pushResize.destroy();
+    // @ts-ignore
     delete this.pushResize;
   }
 

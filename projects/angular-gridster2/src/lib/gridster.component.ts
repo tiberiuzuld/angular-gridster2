@@ -178,8 +178,10 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
       this.options.api = undefined;
     }
     this.emptyCell.destroy();
+    // @ts-ignore
     delete this.emptyCell;
     this.compact.destroy();
+    // @ts-ignore
     delete this.compact;
   }
 

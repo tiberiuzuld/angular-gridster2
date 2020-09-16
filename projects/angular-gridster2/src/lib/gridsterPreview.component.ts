@@ -19,8 +19,11 @@ export class GridsterPreviewComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
+    // @ts-ignore
     delete this.el;
+    // @ts-ignore
     delete this.gridster.previewStyle;
+    // @ts-ignore
     delete this.gridster;
   }
 

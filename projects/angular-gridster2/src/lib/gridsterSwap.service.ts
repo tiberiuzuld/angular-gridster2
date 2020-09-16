@@ -15,7 +15,9 @@ export class GridsterSwap {
   }
 
   destroy(): void {
+    // @ts-ignore
     delete this.gridster;
+    // @ts-ignore
     delete this.gridsterItem;
     delete this.swapedItem;
   }

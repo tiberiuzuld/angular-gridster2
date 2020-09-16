@@ -24,11 +24,14 @@ export class GridsterEmptyCell {
   }
 
   destroy(): void {
+    // @ts-ignore
     delete this.initialItem;
+    // @ts-ignore
     delete this.gridster.movingItem;
     if (this.gridster.previewStyle) {
       this.gridster.previewStyle();
     }
+    // @ts-ignore
     delete this.gridster;
     if (this.emptyCellExit) {
       this.emptyCellExit();

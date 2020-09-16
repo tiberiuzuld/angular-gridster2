@@ -42,7 +42,9 @@ export class GridsterPushResize {
   }
 
   destroy(): void {
+    // @ts-ignore
     delete this.gridster;
+    // @ts-ignore
     delete this.gridsterItem;
   }
 
