@@ -115,6 +115,9 @@ export class GridsterItemComponent implements OnInit, OnDestroy, OnChanges, Grid
     const width = this.$item.cols * this.gridster.curColWidth - this.gridster.$options.margin;
     const height = this.$item.rows * this.gridster.curRowHeight - this.gridster.$options.margin;
 
+    this.top = top;
+    this.left = left;
+
     if (!this.init && width > 0 && height > 0) {
       this.init = true;
       if (this.item.initCallback) {
@@ -134,8 +137,6 @@ export class GridsterItemComponent implements OnInit, OnDestroy, OnChanges, Grid
         this.gridster.options.itemResizeCallback(this.item, this);
       }
     }
-    this.top = top;
-    this.left = left;
   }
 
   itemChanged(): void {
