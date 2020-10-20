@@ -306,8 +306,6 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     }
     this.gridRenderer.updateGridster();
 
-    this.updateGrid();
-
     if (this.$options.setGridSize) {
       this.renderer.addClass(this.el, 'gridSize');
       if (!this.mobile) {
@@ -319,6 +317,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
       this.renderer.setStyle(this.el, 'width', '');
       this.renderer.setStyle(this.el, 'height', '');
     }
+    this.updateGrid();
 
     let widgetsIndex: number = this.grid.length - 1;
     let widget: GridsterItemComponentInterface;
