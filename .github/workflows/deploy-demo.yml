@@ -18,10 +18,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: npm install, build, and deploy
-        run: |
-          npm install
-          npm run build-npm
-          npm run deploy
+      - run: npm ci
+      - run: npm run build-npm
+      - run: npm run deploy
         env:
-          CI: true
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
