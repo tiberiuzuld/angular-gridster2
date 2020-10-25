@@ -21,11 +21,14 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           registry-url: 'https://registry.npmjs.org'
-      - run: npm ci
-      - run: npm run build-npm
+      - name: npm install and build
+        run: |
+          npm install
+          npm run build-npm
+          cd dist/angular-gridster2
       # Publish to npm
-      - run: cd dist/angular-gridster2
-      - run: npm publish
+      - name: npm publish
+        run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       # Setup .npmrc file to publish to GitHub Packages
@@ -34,7 +37,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           registry-url: 'https://npm.pkg.github.com'
       # Publish to GitHub Packages
-      - run: cd dist/angular-gridster2
-      - run: npm publish
+      - name: GitHub publish
+        run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GH_TOKEN }}
