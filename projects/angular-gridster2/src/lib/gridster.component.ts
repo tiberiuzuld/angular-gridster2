@@ -158,6 +158,11 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
   }
 
   onResize(): void {
+    //Fix from https://github.com/tiberiuzuld/angular-gridster2/commit/3e4f5acc2066c0257cf51b5a1f2998628776da6b
+    if (this.options.setGridSize) { // reset width/height so the size is recalculated afterwards
+      this.renderer.setStyle(this.el, 'width', '');
+      this.renderer.setStyle(this.el, 'height', '');
+    }
     this.setGridSize();
     this.calculateLayout();
   }
