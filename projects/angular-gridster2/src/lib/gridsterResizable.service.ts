@@ -298,7 +298,9 @@ export class GridsterResizable {
   }
 
   handleW(e: MouseEvent): void {
-    this.left = e.clientX + this.offsetLeft - this.diffLeft;
+    const clientX = this.gridster.$options.dirType === DirTypes.RTL ? this.originalClientX + (this.originalClientX - e.clientX) : e.clientX;
+    this.left = clientX + this.offsetLeft - this.diffLeft;
+
     this.width = this.right - this.left;
     if (this.minWidth > this.width) {
       this.width = this.minWidth;
@@ -354,7 +356,9 @@ export class GridsterResizable {
   }
 
   handleE(e: MouseEvent): void {
-    this.width = e.clientX + this.offsetLeft - this.diffRight - this.left;
+    const clientX = this.gridster.$options.dirType === DirTypes.RTL ? this.originalClientX + (this.originalClientX - e.clientX) : e.clientX;
+    this.width = clientX + this.offsetLeft - this.diffRight - this.left;
+    
     if (this.minWidth > this.width) {
       this.width = this.minWidth;
     }
