@@ -31,6 +31,7 @@ export const GridsterConfigService: GridsterConfig = {
   minItemRows: 1, // min item number of rows
   minItemArea: 1, // min item area: cols * rows
   maxItemArea: 2500, // max item area: cols * rows
+  rowHeightRatio: 1,
   margin: 10,  // margin between grid items
   outerMargin: true,  // if margins will apply to the sides of the container
   outerMarginTop: null, // override outer margin for grid

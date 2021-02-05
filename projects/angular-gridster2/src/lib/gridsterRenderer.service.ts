@@ -75,13 +75,15 @@ export class GridsterRenderer {
       removeClass2 = GridType.ScrollHorizontal;
       removeClass3 = GridType.Fixed;
     } else if (this.gridster.$options.gridType === GridType.ScrollVertical) {
-      this.gridster.curRowHeight = this.gridster.curColWidth;
+      this.gridster.curRowHeight = this.gridster.curColWidth * this.gridster.$options.rowHeightRatio;
       addClass = GridType.ScrollVertical;
       removeClass1 = GridType.Fit;
       removeClass2 = GridType.ScrollHorizontal;
       removeClass3 = GridType.Fixed;
     } else if (this.gridster.$options.gridType === GridType.ScrollHorizontal) {
-      this.gridster.curColWidth = this.gridster.curRowHeight;
+      const widthRatio = this.gridster.$options.rowHeightRatio
+      const calWidthRatio = widthRatio >= 1 ? widthRatio : widthRatio + 1; 
+      this.gridster.curColWidth = this.gridster.curRowHeight * calWidthRatio;
       addClass = GridType.ScrollHorizontal;
       removeClass1 = GridType.Fit;
       removeClass2 = GridType.ScrollVertical;

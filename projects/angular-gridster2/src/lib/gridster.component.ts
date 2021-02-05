@@ -295,10 +295,10 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
         marginHeight += this.$options.margin;
         this.renderer.setStyle(this.el, 'padding-bottom', this.$options.margin + 'px');
       }
-      this.curRowHeight = (this.curHeight - marginHeight) / this.rows;
+      this.curRowHeight = ((this.curHeight - marginHeight) / this.rows) * this.$options.rowHeightRatio;
     } else {
       this.curColWidth = (this.curWidth + this.$options.margin) / this.columns;
-      this.curRowHeight = (this.curHeight + this.$options.margin) / this.rows;
+      this.curRowHeight = ((this.curHeight + this.$options.margin) / this.rows) * this.$options.rowHeightRatio;
       this.renderer.setStyle(this.el, 'padding-left', 0 + 'px');
       this.renderer.setStyle(this.el, 'padding-right', 0 + 'px');
       this.renderer.setStyle(this.el, 'padding-top', 0 + 'px');
