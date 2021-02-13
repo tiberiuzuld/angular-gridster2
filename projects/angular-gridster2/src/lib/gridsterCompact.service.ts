@@ -18,23 +18,23 @@ export class GridsterCompact {
   checkCompact(): void {
     if (this.gridster.$options.compactType !== CompactType.None) {
       if (this.gridster.$options.compactType === CompactType.CompactUp) {
-        this.checkCompactMovement(this.moveTillCollision, 'y', -1);
+        this.checkCompactMovement('y', -1);
       } else if (this.gridster.$options.compactType === CompactType.CompactLeft) {
-        this.checkCompactMovement(this.moveTillCollision, 'x', -1);
+        this.checkCompactMovement('x', -1);
       } else if (this.gridster.$options.compactType === CompactType.CompactUpAndLeft) {
-        this.checkCompactMovement(this.moveTillCollision, 'y', -1);
-        this.checkCompactMovement(this.moveTillCollision, 'x', -1);
+        this.checkCompactMovement('y', -1);
+        this.checkCompactMovement('x', -1);
       } else if (this.gridster.$options.compactType === CompactType.CompactLeftAndUp) {
-        this.checkCompactMovement(this.moveTillCollision, 'x', -1);
-        this.checkCompactMovement(this.moveTillCollision, 'y', -1);
+        this.checkCompactMovement('x', -1);
+        this.checkCompactMovement('y', -1);
       } else if (this.gridster.$options.compactType === CompactType.CompactRight) {
-        this.checkCompactMovement(this.moveTillCollision, 'x', 1);
+        this.checkCompactMovement('x', 1);
       } else if (this.gridster.$options.compactType === CompactType.CompactUpAndRight) {
-        this.checkCompactMovement(this.moveTillCollision, 'y', -1);
-        this.checkCompactMovement(this.moveTillCollision, 'x', 1);
+        this.checkCompactMovement('y', -1);
+        this.checkCompactMovement('x', 1);
       } else if (this.gridster.$options.compactType === CompactType.CompactRightAndUp) {
-        this.checkCompactMovement(this.moveTillCollision, 'x', 1);
-        this.checkCompactMovement(this.moveTillCollision, 'y', -1);
+        this.checkCompactMovement('x', 1);
+        this.checkCompactMovement('y', -1);
       }
     }
   }
@@ -58,13 +58,11 @@ export class GridsterCompact {
     }
   }
 
-  private checkCompactMovement(moveTillCollision: (item: GridsterItem, direction: string, delta: number) => boolean,
-                               direction: string,
-                               delta: number): void {
+  private checkCompactMovement(direction: 'x' | 'y', delta: number): void {
     let widgetMoved = false;
     this.gridster.grid.forEach((widget: GridsterItemComponentInterface) => {
       if (widget.$item.compactEnabled) {
-        const moved = moveTillCollision(widget.$item, direction, delta);
+        const moved = this.moveTillCollision(widget.$item, direction, delta);
         if (moved) {
           widgetMoved = true;
           widget.item[direction] = widget.$item[direction];
@@ -77,7 +75,7 @@ export class GridsterCompact {
     }
   }
 
-  private moveTillCollision(item: GridsterItem, direction: string, delta: number): boolean {
+  private moveTillCollision(item: GridsterItem, direction: 'x' | 'y', delta: number): boolean {
     item[direction] += delta;
     if (this.gridster.checkCollision(item)) {
       item[direction] -= delta;
