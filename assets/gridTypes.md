@@ -4,6 +4,7 @@ Option | Description | Type | Default
 gridType | different types for layout for the grid. See Grid Types table | String | 'fit'
 fixedColWidth | fixed col width for gridType: `fixed` | Number | 250
 fixedRowHeight | fixed row height for gridType: `fixed` | Number | 250
+rowHeightRatio | row height ratio from column width for gridType: `scrollVertical` and `scrollHorizontal` | Number | 1
 keepFixedHeightInMobile | keep the height from fixed gridType in mobile layout | Boolean | false
 keepFixedWidthInMobile | keep the width from fixed gridType in mobile layout | Boolean | false
 setGridSize | sets grid size depending on content | Boolean | false
