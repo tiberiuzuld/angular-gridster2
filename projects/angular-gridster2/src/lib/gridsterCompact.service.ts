@@ -61,7 +61,7 @@ export class GridsterCompact {
   private checkCompactMovement(direction: 'x' | 'y', delta: number): void {
     let widgetMoved = false;
     this.gridster.grid.forEach((widget: GridsterItemComponentInterface) => {
-      if (widget.$item.compactEnabled) {
+      if (widget.$item.compactEnabled !== false) {
         const moved = this.moveTillCollision(widget.$item, direction, delta);
         if (moved) {
           widgetMoved = true;
