@@ -26,6 +26,11 @@
     <input matInput [(ngModel)]="options.fixedRowHeight" type="number" placeholder="Fixed Row Height"
            (ngModelChange)="changedOptions()">
   </mat-form-field>
+  <mat-form-field>
+    <input (ngModelChange)="changedOptions()" [(ngModel)]="options.rowHeightRatio" matInput
+           placeholder="Row Height Ratio" step="0.1"
+           type="number">
+  </mat-form-field>
   <mat-checkbox [(ngModel)]="options.setGridSize" (ngModelChange)="changedOptions()">
     Set Grid Size
   </mat-checkbox>
