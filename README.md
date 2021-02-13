@@ -132,6 +132,7 @@ Option 2 (with text selection):
 ### [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/tiberiuzuld)
 
 ### License
- The MIT License
- 
- Copyright (c) 2020 Tiberiu Zuld
+
+The MIT License
+
+Copyright (c) 2021 Tiberiu Zuld
