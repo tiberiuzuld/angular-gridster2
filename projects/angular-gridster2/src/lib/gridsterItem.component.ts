@@ -70,6 +70,9 @@ export class GridsterItemComponent implements OnInit, OnDestroy, OnChanges, Grid
         this.gridster.calculateLayoutDebounce();
       }
     }
+    if (changes.item && changes.item.previousValue) {
+      this.setSize();
+    }
   }
 
   updateOptions(): void {
@@ -89,7 +92,6 @@ export class GridsterItemComponent implements OnInit, OnDestroy, OnChanges, Grid
       maxItemArea: undefined,
       minItemArea: undefined,
     });
-    this.setSize();
   }
 
   ngOnDestroy(): void {
