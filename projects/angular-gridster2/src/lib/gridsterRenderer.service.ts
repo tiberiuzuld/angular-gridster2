@@ -81,8 +81,8 @@ export class GridsterRenderer {
       removeClass2 = GridType.ScrollHorizontal;
       removeClass3 = GridType.Fixed;
     } else if (this.gridster.$options.gridType === GridType.ScrollHorizontal) {
-      const widthRatio = this.gridster.$options.rowHeightRatio
-      const calWidthRatio = widthRatio >= 1 ? widthRatio : widthRatio + 1; 
+      const widthRatio = this.gridster.$options.rowHeightRatio;
+      const calWidthRatio = widthRatio >= 1 ? widthRatio : widthRatio + 1;
       this.gridster.curColWidth = this.gridster.curRowHeight * calWidthRatio;
       addClass = GridType.ScrollHorizontal;
       removeClass1 = GridType.Fit;
