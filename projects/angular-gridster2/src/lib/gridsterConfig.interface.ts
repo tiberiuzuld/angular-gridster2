@@ -113,7 +113,7 @@ export interface GridsterConfig {
   enableOccupiedCellDrop?: boolean;
   emptyCellClickCallback?: (event: MouseEvent, item: GridsterItem) => void;
   emptyCellContextMenuCallback?: (event: MouseEvent, item: GridsterItem) => void;
-  emptyCellDropCallback?: (event: MouseEvent, item: GridsterItem) => void;
+  emptyCellDropCallback?: (event: DragEvent, item: GridsterItem) => void;
   emptyCellDragCallback?: (event: MouseEvent, item: GridsterItem) => void;
   emptyCellDragMaxCols?: number;
   emptyCellDragMaxRows?: number;
