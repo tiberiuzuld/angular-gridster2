@@ -85,17 +85,19 @@ export class GridsterEmptyCell {
   }
 
   emptyCellClickCb(e: MouseEvent): void {
-    if (this.gridster.movingItem || GridsterUtils.checkContentClassForEmptyCellClickEvent(this.gridster, e)) {
-      return;
-    }
-    const item = this.getValidItemFromEvent(e);
-    if (!item) {
-      return;
-    }
-    if (this.gridster.options.emptyCellClickCallback) {
-      this.gridster.options.emptyCellClickCallback(e, item);
-    }
-    this.gridster.cdRef.markForCheck();
+    if(this.gridster !== undefined){
+            if (this.gridster.movingItem || GridsterUtils.checkContentClassForEmptyCellClickEvent(this.gridster, e)) {
+                return;
+            }
+            const item = this.getValidItemFromEvent(e);
+            if (!item) {
+                return;
+            }
+            if (this.gridster.options.emptyCellClickCallback) {
+                this.gridster.options.emptyCellClickCallback(e, item);
+            }
+            this.gridster.cdRef.markForCheck();
+        }
   }
 
   emptyCellContextMenuCb(e: MouseEvent): void {
