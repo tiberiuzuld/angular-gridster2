@@ -1,4 +1,4 @@
-import {Injectable, NgZone} from '@angular/core';
+import {NgZone} from '@angular/core';
 import {GridsterComponentInterface} from './gridster.interface';
 import {DirTypes} from './gridsterConfig.interface';
 import {GridsterItemComponentInterface} from './gridsterItem.interface';
@@ -9,7 +9,6 @@ import {GridsterResizeEventType, MouseEvent2} from './gridsterResizeEventType.in
 import {cancelScroll, scroll} from './gridsterScroll.service';
 import {GridsterUtils} from './gridsterUtils.service';
 
-@Injectable()
 export class GridsterResizable {
   gridsterItem: GridsterItemComponentInterface;
   gridster: GridsterComponentInterface;
@@ -358,7 +357,7 @@ export class GridsterResizable {
   handleE(e: MouseEvent): void {
     const clientX = this.gridster.$options.dirType === DirTypes.RTL ? this.originalClientX + (this.originalClientX - e.clientX) : e.clientX;
     this.width = clientX + this.offsetLeft - this.diffRight - this.left;
-    
+
     if (this.minWidth > this.width) {
       this.width = this.minWidth;
     }

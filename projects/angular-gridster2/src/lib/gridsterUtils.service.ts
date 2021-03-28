@@ -1,8 +1,5 @@
-import {Injectable} from '@angular/core';
-
 import {GridsterComponentInterface} from './gridster.interface';
 
-@Injectable()
 export class GridsterUtils {
 
   // tslint:disable-next-line:no-any

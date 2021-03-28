@@ -1,10 +1,7 @@
-import {Injectable} from '@angular/core';
-
 import {GridsterComponentInterface} from './gridster.interface';
 import {GridsterItem, GridsterItemComponentInterface} from './gridsterItem.interface';
 import {CompactType} from './gridsterConfig.interface';
 
-@Injectable()
 export class GridsterCompact {
 
   constructor(private gridster: GridsterComponentInterface) {

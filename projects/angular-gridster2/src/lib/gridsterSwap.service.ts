@@ -1,9 +1,6 @@
-import {Injectable} from '@angular/core';
-
 import {GridsterItemComponentInterface} from './gridsterItem.interface';
 import {GridsterComponentInterface} from './gridster.interface';
 
-@Injectable()
 export class GridsterSwap {
   private swapedItem: GridsterItemComponentInterface | undefined;
   private gridsterItem: GridsterItemComponentInterface;

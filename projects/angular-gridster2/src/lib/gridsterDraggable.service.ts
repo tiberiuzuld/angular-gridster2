@@ -1,4 +1,4 @@
-import {Injectable, NgZone} from '@angular/core';
+import {NgZone} from '@angular/core';
 import {GridsterComponentInterface} from './gridster.interface';
 import {DirTypes} from './gridsterConfig.interface';
 import {GridsterItemComponentInterface} from './gridsterItem.interface';
@@ -9,7 +9,6 @@ import {GridsterSwap} from './gridsterSwap.service';
 import {GridsterUtils} from './gridsterUtils.service';
 import {MouseEvent2} from './gridsterResizeEventType.interface';
 
-@Injectable()
 export class GridsterDraggable {
   gridsterItem: GridsterItemComponentInterface;
   gridster: GridsterComponentInterface;

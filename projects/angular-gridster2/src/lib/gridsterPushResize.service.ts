@@ -1,9 +1,6 @@
-import {Injectable} from '@angular/core';
-
 import {GridsterItem, GridsterItemComponentInterface} from './gridsterItem.interface';
 import {GridsterComponentInterface} from './gridster.interface';
 
-@Injectable()
 export class GridsterPushResize {
   public fromSouth: string;
   public fromNorth: string;

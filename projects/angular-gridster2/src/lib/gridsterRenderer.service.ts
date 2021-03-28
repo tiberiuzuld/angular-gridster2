@@ -1,10 +1,9 @@
-import {Injectable, Renderer2} from '@angular/core';
+import {Renderer2} from '@angular/core';
 
 import {GridsterComponentInterface} from './gridster.interface';
 import {DirTypes, GridType} from './gridsterConfig.interface';
 import {GridsterItem} from './gridsterItem.interface';
 
-@Injectable()
 export class GridsterRenderer {
 
   constructor(private gridster: GridsterComponentInterface) {

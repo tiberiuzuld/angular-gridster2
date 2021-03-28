@@ -1,10 +1,7 @@
-import {Injectable} from '@angular/core';
-
 import {GridsterUtils} from './gridsterUtils.service';
 import {GridsterComponentInterface} from './gridster.interface';
 import {GridsterItem} from './gridsterItem.interface';
 
-@Injectable()
 export class GridsterEmptyCell {
   initialItem: GridsterItem | null;
   emptyCellClick: (() => void) | null;
