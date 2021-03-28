@@ -77,10 +77,12 @@ export class GridsterSwap {
       const copyCollisionY = gridsterItemCollide.$item.y;
       const copyX = pushedBy.$item.x;
       const copyY = pushedBy.$item.y;
-      gridsterItemCollide.$item.x = pushedBy.item.x || 0;
-      gridsterItemCollide.$item.y = pushedBy.item.y || 0;
-      pushedBy.$item.x = gridsterItemCollide.item.x || 0;
-      pushedBy.$item.y = gridsterItemCollide.item.y || 0;
+      const diffX = copyX - copyCollisionX;
+      const diffY = copyY - copyCollisionY;
+      gridsterItemCollide.$item.x = pushedBy.item.x - diffX;
+      gridsterItemCollide.$item.y = pushedBy.item.y - diffY;
+      pushedBy.$item.x = gridsterItemCollide.item.x + diffX;
+      pushedBy.$item.y = gridsterItemCollide.item.y + diffY;
       if (this.gridster.checkCollision(gridsterItemCollide.$item) || this.gridster.checkCollision(pushedBy.$item)) {
         pushedBy.$item.x = copyX;
         pushedBy.$item.y = copyY;
