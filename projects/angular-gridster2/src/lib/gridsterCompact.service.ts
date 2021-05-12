@@ -32,6 +32,20 @@ export class GridsterCompact {
       } else if (this.gridster.$options.compactType === CompactType.CompactRightAndUp) {
         this.checkCompactMovement('x', 1);
         this.checkCompactMovement('y', -1);
+      } else if (this.gridster.$options.compactType === CompactType.CompactDown) {
+        this.checkCompactMovement('y', 1);
+      } else if (this.gridster.$options.compactType === CompactType.CompactDownAndLeft) {
+        this.checkCompactMovement('y', 1);
+        this.checkCompactMovement('x', -1);
+      } else if (this.gridster.$options.compactType === CompactType.CompactDownAndRight) {
+        this.checkCompactMovement('y', 1);
+        this.checkCompactMovement('x', 1);
+      } else if (this.gridster.$options.compactType === CompactType.CompactLeftAndDown) {
+        this.checkCompactMovement('x', -1);
+        this.checkCompactMovement('y', 1);
+      } else if (this.gridster.$options.compactType === CompactType.CompactRightAndDown) {
+        this.checkCompactMovement('x', 1);
+        this.checkCompactMovement('y', 1);
       }
     }
   }
@@ -51,6 +65,20 @@ export class GridsterCompact {
       } else if (this.gridster.$options.compactType === CompactType.CompactUpAndRight) {
         this.moveTillCollision(item, 'y', -1);
         this.moveTillCollision(item, 'x', 1);
+      } else if (this.gridster.$options.compactType === CompactType.CompactDown) {
+        this.moveTillCollision(item, 'y', 1);
+      } else if (this.gridster.$options.compactType === CompactType.CompactDownAndLeft) {
+        this.moveTillCollision(item, 'y', 1);
+        this.moveTillCollision(item, 'x', -1);
+      } else if (this.gridster.$options.compactType === CompactType.CompactLeftAndDown) {
+        this.moveTillCollision(item, 'x', -1);
+        this.moveTillCollision(item, 'y', 1);
+      } else if (this.gridster.$options.compactType === CompactType.CompactDownAndRight) {
+        this.moveTillCollision(item, 'y', 1);
+        this.moveTillCollision(item, 'x', 1);
+      } else if (this.gridster.$options.compactType === CompactType.CompactRightAndDown) {
+        this.moveTillCollision(item, 'x', 1);
+        this.moveTillCollision(item, 'y', 1);
       }
     }
   }
