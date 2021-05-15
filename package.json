@@ -63,7 +63,7 @@
     "@angular-devkit/build-angular": "12.0.0",
     "@angular/cli": "12.0.0",
     "@angular/compiler-cli": "12.0.0",
-    "@types/jasmine": "3.7.2",
+    "@types/jasmine": "3.7.4",
     "@types/node": "14.14.37",
     "angular-cli-ghpages": "1.0.0-rc.1",
     "codelyzer": "6.0.2",
