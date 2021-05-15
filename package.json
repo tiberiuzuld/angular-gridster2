@@ -11,8 +11,8 @@
     "test": "ng test",
     "test-lib": "ng test angular-gridster2",
     "lint": "ng lint",
-    "build-demo": "ng build --prod",
-    "build-npm": "ng build angular-gridster2 --prod",
+    "build-demo": "ng build",
+    "build-npm": "ng build angular-gridster2",
     "watch": "ng build --watch --configuration development",
     "deploy": "ng deploy",
     "postinstall": "ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points"

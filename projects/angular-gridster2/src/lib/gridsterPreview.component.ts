@@ -1,6 +1,7 @@
-import {Component, ElementRef, Inject, OnDestroy, Renderer2, ViewEncapsulation} from '@angular/core';
-
-import {GridsterComponent} from './gridster.component';
+import {Component, ElementRef, EventEmitter, Inject, Input, OnDestroy, OnInit, Renderer2, ViewEncapsulation} from '@angular/core';
+import {Subscription} from 'rxjs';
+import {GridsterRenderer} from './gridsterRenderer.service';
+import {GridsterItem} from './gridsterItem.interface';
 
 @Component({
   selector: 'gridster-preview',
@@ -8,34 +9,32 @@ import {GridsterComponent} from './gridster.component';
   styleUrls: ['./gridsterPreview.css'],
   encapsulation: ViewEncapsulation.None
 })
-export class GridsterPreviewComponent implements OnDestroy {
-  el: HTMLElement;
-  gridster: GridsterComponent;
+export class GridsterPreviewComponent implements OnInit, OnDestroy {
+  @Input() previewStyle$: EventEmitter<GridsterItem>;
+  @Input() gridRenderer: GridsterRenderer;
+  private el: HTMLElement;
+  private sub: Subscription;
 
-  constructor(@Inject(ElementRef)  el: ElementRef,  gridster: GridsterComponent, @Inject(Renderer2) public renderer: Renderer2) {
+  constructor(@Inject(ElementRef) el: ElementRef, @Inject(Renderer2) private renderer: Renderer2) {
     this.el = el.nativeElement;
-    this.gridster = gridster;
-    this.gridster.previewStyle = this.previewStyle.bind(this);
+  }
+
+  ngOnInit(): void {
+    this.sub = this.previewStyle$.subscribe(options => this.previewStyle(options));
   }
 
   ngOnDestroy(): void {
+    this.sub.unsubscribe();
     // @ts-ignore
     delete this.el;
-    // @ts-ignore
-    delete this.gridster.previewStyle;
-    // @ts-ignore
-    delete this.gridster;
   }
 
-  previewStyle(drag?: boolean): void {
-    if (!this.gridster.movingItem) {
-      this.renderer.setStyle(this.el, 'display', '');
-    } else {
-      if (this.gridster.compact && drag) {
-        this.gridster.compact.checkCompactItem(this.gridster.movingItem);
-      }
+  private previewStyle(item: GridsterItem): void {
+    if (item) {
       this.renderer.setStyle(this.el, 'display', 'block');
-      this.gridster.gridRenderer.updateItem(this.el, this.gridster.movingItem, this.renderer);
+      this.gridRenderer.updateItem(this.el, item, this.renderer);
+    } else {
+      this.renderer.setStyle(this.el, 'display', '');
     }
   }
 }

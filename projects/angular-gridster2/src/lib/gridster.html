@@ -3,4 +3,5 @@
 <div class="gridster-row" *ngFor="let row of gridRows; let i = index;"
      [ngStyle]="gridRenderer.getGridRowStyle(i)"></div>
 <ng-content></ng-content>
-<gridster-preview class="gridster-preview"></gridster-preview>
+<gridster-preview [gridRenderer]="gridRenderer" [previewStyle$]="previewStyle$"
+                  class="gridster-preview"></gridster-preview>
