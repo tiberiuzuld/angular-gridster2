@@ -169,13 +169,15 @@ export class GridsterItemComponent implements OnInit, OnDestroy, OnChanges, Grid
   }
 
   canBeDragged(): boolean {
-    return !this.gridster.mobile &&
-      (this.$item.dragEnabled === undefined ? this.gridster.$options.draggable.enabled : this.$item.dragEnabled);
+    const gridDragEnabled = this.gridster.$options.draggable.enabled;
+    const itemDragEnabled = this.$item.dragEnabled === undefined ? gridDragEnabled : this.$item.dragEnabled;
+    return !this.gridster.mobile && gridDragEnabled && itemDragEnabled;
   }
 
   canBeResized(): boolean {
-    return !this.gridster.mobile &&
-      (this.$item.resizeEnabled === undefined ? this.gridster.$options.resizable.enabled : this.$item.resizeEnabled);
+    const gridResizable = this.gridster.$options.resizable.enabled;
+    const itemResizable = this.$item.resizeEnabled === undefined ? gridResizable : this.$item.resizeEnabled;
+    return !this.gridster.mobile && gridResizable && itemResizable;
   }
 
   bringToFront(offset: number): void {
