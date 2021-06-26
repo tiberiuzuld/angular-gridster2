@@ -14,7 +14,6 @@ export class TrackByItemComponent implements OnInit {
   @Input() id: string;
 
   ngOnInit(): void {
-    // tslint:disable-next-line:no-console
     console.info(`Init ${this.id}`);
   }
 }

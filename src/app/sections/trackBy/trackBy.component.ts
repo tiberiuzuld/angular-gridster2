@@ -14,7 +14,6 @@ export class TrackByComponent implements OnInit {
   dashboardOriginal: Array<GridsterItem>;
 
   static itemInit(item: GridsterItem, itemComponent: GridsterItemComponentInterface): void {
-    // tslint:disable-next-line:no-console
     console.info('itemInitialized', item, itemComponent);
   }
 

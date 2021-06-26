@@ -43,6 +43,6 @@ export interface GridsterItem {
   minItemArea?: number;
   maxItemArea?: number;
 
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [propName: string]: any;
 }

@@ -25,12 +25,10 @@ export class DragComponent implements OnInit {
   dashboard: Array<GridsterItem>;
 
   static eventStart(item: GridsterItem, itemComponent: GridsterItemComponentInterface, event: MouseEvent): void {
-    // tslint:disable-next-line:no-console
     console.info('eventStart', item, itemComponent, event);
   }
 
   static eventStop(item: GridsterItem, itemComponent: GridsterItemComponentInterface, event: MouseEvent): void {
-    // tslint:disable-next-line:no-console
     console.info('eventStop', item, itemComponent, event);
   }
 

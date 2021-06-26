@@ -13,7 +13,6 @@ export class ItemsComponent implements OnInit {
   dashboard: Array<GridsterItem>;
 
   static itemInit(item: GridsterItem, itemComponent: GridsterItemComponentInterface): void {
-    // tslint:disable-next-line:no-console
     console.info('itemInitialized', item, itemComponent);
   }
 

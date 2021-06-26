@@ -25,7 +25,7 @@ import {GridsterRenderer} from './gridsterRenderer.service';
 import {GridsterUtils} from './gridsterUtils.service';
 
 @Component({
-  // tslint:disable-next-line:component-selector
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'gridster',
   templateUrl: './gridster.html',
   styleUrls: ['./gridster.css'],
@@ -594,7 +594,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
 
   // ------ End of functions for swapWhileDragging option
 
-  // tslint:disable-next-line:member-ordering
+  // eslint-disable-next-line @typescript-eslint/member-ordering
   private static getNewArrayLength(length: number, overallSize: number, size: number): number {
     const newLength = Math.max(length, Math.floor(overallSize / size));
 

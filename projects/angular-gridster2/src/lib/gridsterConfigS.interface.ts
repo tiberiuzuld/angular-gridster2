@@ -72,7 +72,7 @@ export interface GridsterConfigS {
     getItemComponent: (item: GridsterItem) => GridsterItemComponentInterface | undefined;
   };
 
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [propName: string]: any;
 }
 
@@ -80,7 +80,7 @@ export interface DragBase {
   enabled: boolean;
   delayStart: number;
 
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [propName: string]: any;
 }
 

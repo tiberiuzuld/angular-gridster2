@@ -51,7 +51,6 @@ export class EmptyCellComponent implements OnInit {
   }
 
   emptyCellClick(event: MouseEvent, item: GridsterItem): void {
-    // tslint:disable-next-line:no-console
     console.info('empty cell click', event, item);
     this.dashboard.push(item);
   }

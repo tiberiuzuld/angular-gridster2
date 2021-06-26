@@ -21,22 +21,18 @@ export class GridEventsComponent implements OnInit {
   remove: boolean;
 
   static itemChange(item: GridsterItem, itemComponent: GridsterItemComponentInterface): void {
-    // tslint:disable-next-line:no-console
     console.info('itemChanged', item, itemComponent);
   }
 
   static itemResize(item: GridsterItem, itemComponent: GridsterItemComponentInterface): void {
-    // tslint:disable-next-line:no-console
     console.info('itemResized', item, itemComponent);
   }
 
   static itemInit(item: GridsterItem, itemComponent: GridsterItemComponentInterface): void {
-    // tslint:disable-next-line:no-console
     console.info('itemInitialized', item, itemComponent);
   }
 
   static itemRemoved(item: GridsterItem, itemComponent: GridsterItemComponentInterface): void {
-    // tslint:disable-next-line:no-console
     console.info('itemRemoved', item, itemComponent);
   }
 
@@ -45,17 +41,14 @@ export class GridEventsComponent implements OnInit {
   }
 
   static gridInit(grid: GridsterComponentInterface): void {
-    // tslint:disable-next-line:no-console
     console.info('gridInit', grid);
   }
 
   static gridDestroy(grid: GridsterComponentInterface): void {
-    // tslint:disable-next-line:no-console
     console.info('gridDestroy', grid);
   }
 
   static gridSizeChanged(grid: GridsterComponentInterface): void {
-    // tslint:disable-next-line:no-console
     console.info('gridSizeChanged', grid);
   }
 

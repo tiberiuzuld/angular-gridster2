@@ -52,7 +52,7 @@ describe('check content class for event', () => {
   body.setAttribute('class', 'body');
   const event: any = document.createEvent('Event');
   event.initEvent('testing', true, true);
-  div.addEventListener('testing', function () {
+  div.addEventListener('testing', function() {
   });
   div.dispatchEvent(event);
 
@@ -80,7 +80,7 @@ describe('check content class', () => {
   body.setAttribute('class', 'body');
   const event: any = document.createEvent('Event');
   event.initEvent('testing', true, true);
-  div.addEventListener('testing', function () {
+  div.addEventListener('testing', function() {
   });
   div.dispatchEvent(event);
 

@@ -2,7 +2,7 @@ import {GridsterComponentInterface} from './gridster.interface';
 
 export class GridsterUtils {
 
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static merge(obj1: any, obj2: any, properties: any): any {
     for (const p in obj2) {
       if (obj2[p] !== void 0 && properties.hasOwnProperty(p)) {
@@ -31,7 +31,7 @@ export class GridsterUtils {
     };
   }
 
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static checkTouchEvent(e: any): void {
     if (e.clientX === undefined && e.touches) {
       if (e.touches && e.touches.length) {

@@ -107,15 +107,11 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": [
-              "tsconfig.app.json",
-              "tsconfig.spec.json",
-              "e2e/tsconfig.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
             ]
           }
         },
@@ -160,14 +156,11 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": [
-              "projects/angular-gridster2/tsconfig.lib.json",
-              "projects/angular-gridster2/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
+            "lintFilePatterns": [
+              "projects/angular-gridster2/**/*.ts",
+              "projects/angular-gridster2/**/*.html"
             ]
           }
         }
@@ -177,6 +170,7 @@
   "defaultProject": "gridster-app",
   "cli": {
     "packageManager": "npm",
-    "analytics": "43f0cc4d-52e0-4bb5-a18d-b0bb569a75d1"
+    "analytics": "43f0cc4d-52e0-4bb5-a18d-b0bb569a75d1",
+    "defaultCollection": "@angular-eslint/schematics"
   }
 }
