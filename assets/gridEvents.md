@@ -1,4 +1,5 @@
 ### Options
+
 Option | Description | Type | Default
 ------------ | ------------- | ------------- | -------------
 initCallback | callback to call after grid has initialized | Function(gridsterComponent) | undefined

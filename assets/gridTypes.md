@@ -1,4 +1,5 @@
 ### Options
+
 Option | Description | Type | Default
 ------------ | ------------- | ------------- | -------------
 gridType | different types for layout for the grid. See Grid Types table | String | 'fit'
@@ -11,6 +12,7 @@ setGridSize | sets grid size depending on content | Boolean | false
 mobileBreakpoint | if the screen is not wider that this, remove the grid layout and stack the items | Number | 640
 
 ### Grid Types
+
 Type | Description
 ------------ | -------------
 fit | will fit the items in the container without scroll
