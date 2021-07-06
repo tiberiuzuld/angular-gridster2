@@ -7,11 +7,12 @@ import {
   NgZone,
   OnChanges,
   OnDestroy,
-  OnInit,
+  OnInit, Output,
   Renderer2,
   SimpleChanges,
-  ViewEncapsulation
-} from '@angular/core';
+  ViewEncapsulation,
+  EventEmitter
+} from "@angular/core";
 
 import {GridsterDraggable} from './gridsterDraggable.service';
 import {GridsterResizable} from './gridsterResizable.service';
@@ -27,6 +28,9 @@ import {GridsterComponent} from './gridster.component';
 })
 export class GridsterItemComponent implements OnInit, OnDestroy, OnChanges, GridsterItemComponentInterface {
   @Input() item: GridsterItem;
+  @Output() itemInit = new EventEmitter<{ item: GridsterItem, itemComponent: GridsterItemComponentInterface }> ();
+  @Output() itemChange = new EventEmitter<{ item: GridsterItem, itemComponent: GridsterItemComponentInterface }> ();
+  @Output() itemResize = new EventEmitter<{ item: GridsterItem, itemComponent: GridsterItemComponentInterface }> ();
   $item: GridsterItem;
   el: HTMLElement;
   gridster: GridsterComponent;
@@ -129,6 +133,7 @@ export class GridsterItemComponent implements OnInit, OnDestroy, OnChanges, Grid
       if (this.gridster.options.itemInitCallback) {
         this.gridster.options.itemInitCallback(this.item, this);
       }
+      this.itemInit.next({ item: this.item, itemComponent: this })
       if (this.gridster.$options.scrollToNewItems) {
         this.el.scrollIntoView(false);
       }
@@ -139,6 +144,7 @@ export class GridsterItemComponent implements OnInit, OnDestroy, OnChanges, Grid
       if (this.gridster.options.itemResizeCallback) {
         this.gridster.options.itemResizeCallback(this.item, this);
       }
+      this.itemResize.next({ item: this.item, itemComponent: this });
     }
   }
 
@@ -146,6 +152,7 @@ export class GridsterItemComponent implements OnInit, OnDestroy, OnChanges, Grid
     if (this.gridster.options.itemChangeCallback) {
       this.gridster.options.itemChangeCallback(this.item, this);
     }
+    this.itemChange.next({ item: this.item, itemComponent: this });
   }
 
   checkItemChanges(newValue: GridsterItem, oldValue: GridsterItem): void {
