@@ -9,7 +9,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [ 14.x ]
+        node-version: [ 16.x ]
 
     steps:
       - uses: actions/checkout@v1
@@ -19,7 +19,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: npm install, build, and deploy
         run: |
-          npm install
+          npm ci --legacy-peer-deps
           npm run build-npm
           npm run deploy
         env:
