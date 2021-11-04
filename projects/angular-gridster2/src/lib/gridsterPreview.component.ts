@@ -10,7 +10,7 @@ import {GridsterItem} from './gridsterItem.interface';
   encapsulation: ViewEncapsulation.None
 })
 export class GridsterPreviewComponent implements OnInit, OnDestroy {
-  @Input() previewStyle$: EventEmitter<GridsterItem>;
+  @Input() previewStyle$: EventEmitter<GridsterItem | null>;
   @Input() gridRenderer: GridsterRenderer;
   private el: HTMLElement;
   private sub: Subscription;
@@ -29,7 +29,7 @@ export class GridsterPreviewComponent implements OnInit, OnDestroy {
     delete this.el;
   }
 
-  private previewStyle(item: GridsterItem): void {
+  private previewStyle(item: GridsterItem | null): void {
     if (item) {
       this.renderer.setStyle(this.el, 'display', 'block');
       this.gridRenderer.updateItem(this.el, item, this.renderer);

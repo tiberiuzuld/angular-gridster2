@@ -3,7 +3,6 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "../../out-tsc/angular-gridster2",
-    "target": "es2017",
     "module": "es2020",
     "moduleResolution": "node",
     "declaration": true,
@@ -14,11 +13,7 @@
     "downlevelIteration": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "types": [],
-    "lib": [
-      "dom",
-      "es2018"
-    ]
+    "types": []
   },
   "angularCompilerOptions": {
     "skipTemplateCodegen": true,

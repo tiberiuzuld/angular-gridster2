@@ -52,7 +52,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
   emptyCell: GridsterEmptyCell;
   compact: GridsterCompact;
   gridRenderer: GridsterRenderer;
-  previewStyle$: EventEmitter<GridsterItem> = new EventEmitter<GridsterItem>();
+  previewStyle$: EventEmitter<GridsterItem | null> = new EventEmitter<GridsterItem | null>();
 
   constructor(@Inject(ElementRef) el: ElementRef, @Inject(Renderer2) public renderer: Renderer2,
               @Inject(ChangeDetectorRef) public cdRef: ChangeDetectorRef,
@@ -588,7 +588,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
       }
       this.previewStyle$.next(this.movingItem);
     } else {
-      this.previewStyle$.next();
+      this.previewStyle$.next(null);
     }
   }
 
