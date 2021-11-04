@@ -142,7 +142,7 @@
               "tsConfig": "projects/angular-gridster2/tsconfig.lib.prod.json"
             },
             "development": {
-              "tsConfig": "projects/ponyracer-lib/tsconfig.lib.json"
+              "tsConfig": "projects/angular-gridster2/tsconfig.lib.json"
             }
           },
           "defaultConfiguration": "production"
