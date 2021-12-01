@@ -46,6 +46,10 @@
     <input matInput [(ngModel)]="options.margin" min="0" max="30" step="1" type="number" placeholder="Margin"
            (ngModelChange)="changedOptions()">
   </mat-form-field>
+  <mat-form-field>
+    <input matInput [(ngModel)]="options.addEmptyRowsCount"
+           min="0" max="30" step="1" type="number" placeholder="Add Empty Rows Count" (ngModelChange)="changedOptions()">
+  </mat-form-field>
   <mat-checkbox [(ngModel)]="options.outerMargin" (ngModelChange)="changedOptions()">Outer Margin</mat-checkbox>
   <mat-form-field>
     <input matInput [(ngModel)]="options.mobileBreakpoint" type="number" placeholder="Mobile Breakpoint"
