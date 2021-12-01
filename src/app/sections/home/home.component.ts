@@ -23,6 +23,7 @@ export class HomeComponent implements OnInit {
       gridType: GridType.Fit,
       compactType: CompactType.None,
       margin: 10,
+      addEmptyRowsCount: 2,
       outerMargin: true,
       outerMarginTop: null,
       outerMarginRight: null,
