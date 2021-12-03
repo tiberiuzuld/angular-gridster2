@@ -34,7 +34,8 @@ export class GridSizesComponent implements OnInit {
       maxItemArea: 2500,
       minItemArea: 1,
       defaultItemCols: 1,
-      defaultItemRows: 1
+      defaultItemRows: 1,
+      addEmptyRowsCount: 2
     };
 
     this.dashboard = [

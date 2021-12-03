@@ -122,7 +122,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
         getItemComponent: (item: GridsterItem) => this.getItemComponent(item)
       };
       this.columns = this.$options.minCols;
-      this.rows = this.$options.minRows;
+      this.rows = this.$options.minRows + this.$options.addEmptyRowsCount;
       this.setGridSize();
       this.calculateLayout();
     }
@@ -251,7 +251,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
         columns = Math.max(columns, widget.$item.x + widget.$item.cols);
       }
     }
-
+    rows += this.$options.addEmptyRowsCount;
     if (this.columns !== columns || this.rows !== rows) {
       this.columns = columns;
       this.rows = rows;

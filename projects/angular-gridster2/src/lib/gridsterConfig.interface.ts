@@ -82,6 +82,7 @@ export interface GridsterConfig {
   minItemRows?: number;
   minItemArea?: number;
   maxItemArea?: number;
+  addEmptyRowsCount?: number;
   rowHeightRatio?: number;
   margin?: number;
   outerMargin?: boolean;

@@ -55,6 +55,11 @@
     <input matInput [(ngModel)]="options.defaultItemCols" type="number" placeholder="Default Item Cols"
            (ngModelChange)="changedOptions()">
   </mat-form-field>
+  <mat-form-field>
+    <input (ngModelChange)="changedOptions()" [(ngModel)]="options.addEmptyRowsCount"
+           matInput max="30" min="0" placeholder="Add Empty Rows Count" step="1"
+           type="number">
+  </mat-form-field>
   <button mat-mini-fab (click)="addItem()" class="add-button cols-2">
     <mat-icon>add</mat-icon>
   </button>
