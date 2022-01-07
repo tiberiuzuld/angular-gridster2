@@ -135,4 +135,4 @@ Option 2 (with text selection):
 
 The MIT License
 
-Copyright (c) 2021 Tiberiu Zuld
+Copyright (c) 2022 Tiberiu Zuld
