@@ -18,7 +18,7 @@ export class GridsterRenderer {
     if (this.gridster.mobile) {
       this.clearCellPosition(renderer, el);
       if (this.gridster.$options.keepFixedHeightInMobile) {
-        renderer.setStyle(el, 'height', (item.rows * this.gridster.$options.fixedRowHeight) + 'px');
+        renderer.setStyle(el, 'height', ((item.rows - 1) *this.gridster.$options.margin + item.rows * this.gridster.$options.fixedRowHeight) + 'px');
       } else {
         renderer.setStyle(el, 'height', (item.rows * this.gridster.curWidth / item.cols) + 'px');
       }
