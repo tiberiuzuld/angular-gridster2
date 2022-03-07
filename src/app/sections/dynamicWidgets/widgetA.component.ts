@@ -1,32 +1,41 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
-import {Subscription} from 'rxjs';
-import {GridsterItem} from 'angular-gridster2';
-
+import {
+    ChangeDetectionStrategy,
+    Component,
+    EventEmitter,
+    Input,
+    OnDestroy,
+    OnInit,
+    ViewEncapsulation,
+} from '@angular/core';
+import { Subscription } from 'rxjs';
+import { GridsterItem } from 'angular-gridster2';
 
 @Component({
-  selector: 'app-widget-a',
-  template: '{{widget.type}}',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None
+    selector: 'app-widget-a',
+    template: '{{widget.type}}',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    encapsulation: ViewEncapsulation.None,
 })
 export class WidgetAComponent implements OnInit, OnDestroy {
-  @Input()
-  widget;
-  @Input()
-  resizeEvent: EventEmitter<GridsterItem>;
+    @Input()
+    widget;
 
-  resizeSub: Subscription;
+    @Input()
+    resizeEvent: EventEmitter<GridsterItem>;
 
-  ngOnInit(): void {
-    this.resizeSub = this.resizeEvent.subscribe((widget) => {
-      if (widget === this.widget) { // or check id , type or whatever you have there
-        // resize your widget, chart, map , etc.
-        console.log(widget);
-      }
-    });
-  }
+    resizeSub: Subscription;
 
-  ngOnDestroy(): void {
-    this.resizeSub.unsubscribe();
-  }
+    ngOnInit(): void {
+        this.resizeSub = this.resizeEvent.subscribe((widget) => {
+            if (widget === this.widget) {
+                // or check id , type or whatever you have there
+                // resize your widget, chart, map , etc.
+                console.log(widget);
+            }
+        });
+    }
+
+    ngOnDestroy(): void {
+        this.resizeSub.unsubscribe();
+    }
 }

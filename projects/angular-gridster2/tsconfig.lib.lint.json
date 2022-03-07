@@ -1,7 +1,8 @@
 {
-  "extends": "./tsconfig.lib.json",
-  "include": [
-    // adjust "includes" to what makes sense for you and your project
-    "src/**/*.ts"
-  ]
+    "extends": "./tsconfig.lib.json",
+    "include": [
+        // adjust "includes" to what makes sense for you and your project
+        "src/**/*.ts",
+        "index.ts"
+    ]
 }

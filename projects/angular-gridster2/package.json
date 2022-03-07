@@ -1,36 +1,39 @@
 {
-  "name": "angular-gridster2",
-  "version": "13.1.1",
-  "license": "MIT",
-  "sideEffects": false,
-  "dependencies": {
-    "tslib": "^2.3.0"
-  },
-  "peerDependencies": {
-    "@angular/common": "^13.0.0",
-    "@angular/core": "^13.0.0"
-  },
-  "homepage": "https://tiberiuzuld.github.io/angular-gridster2",
-  "bugs": {
-    "url": "https://github.com/tiberiuzuld/angular-gridster2/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/tiberiuzuld/angular-gridster2.git"
-  },
-  "description": "Angular gridster 2",
-  "keywords": [
-    "angular",
-    "angular2",
-    "typescript",
-    "dashboard",
-    "gridster",
-    "gridster2",
-    "resize",
-    "drag&drop",
-    "widgets"
-  ],
-  "authors": [
-    "Tiberiu Zuld"
-  ]
+    "name": "angular-gridster2",
+    "version": "13.1.1",
+    "license": "MIT",
+    "sideEffects": false,
+    "dependencies": {
+        "tslib": "^2.3.0"
+    },
+    "peerDependencies": {
+        "@angular/common": "^13.0.0",
+        "@angular/core": "^13.0.0",
+        "@angular/platform-browser-dynamic": "^13.0.0",
+        "rxjs": "^7.0.0",
+        "zone.js": "0.11.4"
+    },
+    "homepage": "https://tiberiuzuld.github.io/angular-gridster2",
+    "bugs": {
+        "url": "https://github.com/tiberiuzuld/angular-gridster2/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/tiberiuzuld/angular-gridster2.git"
+    },
+    "description": "Angular gridster 2",
+    "keywords": [
+        "angular",
+        "angular2",
+        "typescript",
+        "dashboard",
+        "gridster",
+        "gridster2",
+        "resize",
+        "drag&drop",
+        "widgets"
+    ],
+    "authors": [
+        "Tiberiu Zuld"
+    ]
 }
