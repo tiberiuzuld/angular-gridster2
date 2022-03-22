@@ -47,6 +47,8 @@
            (ngModelChange)="changedOptions()">
   </mat-form-field>
   <mat-checkbox [(ngModel)]="options.outerMargin" (ngModelChange)="changedOptions()">Outer Margin</mat-checkbox>
+
+  <mat-checkbox [(ngModel)]="options.useBodyForBreakpoint" (ngModelChange)="changedOptions()">Use Body Width as Breakpoint</mat-checkbox>
   <mat-form-field>
     <input matInput [(ngModel)]="options.mobileBreakpoint" type="number" placeholder="Mobile Breakpoint"
            (ngModelChange)="changedOptions()">

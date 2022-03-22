@@ -215,6 +215,14 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
     return !horizontalScrollPresent;
   }
 
+  checkIfMobile(): boolean {
+    if (this.$options.useBodyForBreakpoint) {
+      return this.$options.mobileBreakpoint > document.body.clientWidth;
+    } else {
+      return this.$options.mobileBreakpoint > this.curWidth;
+    }
+  }
+
   setGridSize(): void {
     const el = this.el;
     let width;
@@ -232,10 +240,10 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
 
   setGridDimensions(): void {
     this.setGridSize();
-    if (!this.mobile && this.$options.mobileBreakpoint > this.curWidth) {
+    if (!this.mobile && this.checkIfMobile()) {
       this.mobile = !this.mobile;
       this.renderer.addClass(this.el, 'mobile');
-    } else if (this.mobile && this.$options.mobileBreakpoint < this.curWidth) {
+    } else if (this.mobile && !this.checkIfMobile()) {
       this.mobile = !this.mobile;
       this.renderer.removeClass(this.el, 'mobile');
     }

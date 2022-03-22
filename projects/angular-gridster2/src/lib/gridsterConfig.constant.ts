@@ -15,6 +15,7 @@ export const GridsterConfigService: GridsterConfig = {
   setGridSize: false, // sets grid size depending on content
   compactType: CompactType.None, // compact items: 'none' | 'compactUp' | 'compactLeft' | 'compactUp&Left' | 'compactLeft&Up'
   mobileBreakpoint: 640, // if the screen is not wider that this, remove the grid layout and stack the items
+  useBodyForBreakpoint: false, // whether to use the body width to determine the mobile breakpoint. Uses the element width when false.
   allowMultiLayer: false,
   defaultLayerIndex: 0,
   maxLayerIndex: 2,
