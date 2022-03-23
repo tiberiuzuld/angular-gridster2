@@ -8,6 +8,7 @@
 | rowHeightRatio          | row height ratio from column width for gridType: `scrollVertical` and `scrollHorizontal` | Number  | 1       |
 | keepFixedHeightInMobile | keep the height from fixed gridType in mobile layout                                     | Boolean | false   |
 | keepFixedWidthInMobile  | keep the width from fixed gridType in mobile layout                                      | Boolean | false   |
+| useBodyForBreakpoint    | use the width of the `<body>` element to determine when to switch to the mobile layout   | Boolean | false   |
 | setGridSize             | sets grid size depending on content                                                      | Boolean | false   |
 | mobileBreakpoint        | if the screen is not wider that this, remove the grid layout and stack the items         | Number  | 640     |
 
