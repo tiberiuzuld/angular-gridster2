@@ -12,6 +12,7 @@ export interface GridsterConfigS {
   setGridSize: boolean;
   compactType: compactTypes;
   mobileBreakpoint: number;
+  useBodyForBreakpoint: boolean;
   allowMultiLayer: boolean;
   defaultLayerIndex: number;
   maxLayerIndex: number;

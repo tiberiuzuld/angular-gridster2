@@ -21,6 +21,7 @@ export class GridTypesComponent implements OnInit {
       keepFixedHeightInMobile: false,
       keepFixedWidthInMobile: false,
       mobileBreakpoint: 640,
+      useBodyForBreakpoint: false,
       pushItems: true,
       rowHeightRatio: 1,
       draggable: {

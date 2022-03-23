@@ -30,6 +30,7 @@ export class HomeComponent implements OnInit {
       outerMarginLeft: null,
       useTransformPositioning: true,
       mobileBreakpoint: 640,
+      useBodyForBreakpoint: false,
       minCols: 1,
       maxCols: 100,
       minRows: 1,
