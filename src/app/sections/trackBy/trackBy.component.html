@@ -1,7 +1,10 @@
 <div class="options">
-  <a class="source-code-button"
-     href="https://github.com/tiberiuzuld/angular-gridster2/tree/master/src/app/sections/trackBy"
-     mat-raised-button target="_blank">
+  <a
+    class="source-code-button"
+    href="https://github.com/tiberiuzuld/angular-gridster2/tree/master/src/app/sections/trackBy"
+    mat-raised-button
+    target="_blank"
+  >
     <mat-icon>open_in_new</mat-icon>
     Source
   </a>
@@ -16,14 +19,16 @@
   </button>
 </div>
 
-
 <gridster [options]="options">
   <gridster-item *ngFor="let item of dashboard; trackBy: trackBy" [item]="item">
-    <button (mousedown)="removeItem($event, item)" (touchstart)="removeItem($event, item)"
-            mat-mini-fab style="position: absolute; right: 10px; top: 10px">
+    <button
+      (mousedown)="removeItem($event, item)"
+      (touchstart)="removeItem($event, item)"
+      mat-mini-fab
+      style="position: absolute; right: 10px; top: 10px"
+    >
       <mat-icon>delete</mat-icon>
     </button>
     <app-trackby-item [id]="item.id"></app-trackby-item>
   </gridster-item>
 </gridster>
-

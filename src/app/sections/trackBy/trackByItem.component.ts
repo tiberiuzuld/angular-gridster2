@@ -1,10 +1,16 @@
-import {ChangeDetectionStrategy, Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnInit,
+  ViewEncapsulation
+} from '@angular/core';
 
 @Component({
   selector: 'app-trackby-item',
   template: `
     <div class="button-holder">
-      <div style="font-size: 30px">ID: {{id}}</div>
+      <div style="font-size: 30px">ID: {{ id }}</div>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

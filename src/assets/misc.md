@@ -1,7 +1,7 @@
 ### Options
 
 | Option                        | Description                                                                                                                                     | Type    | Default |
-|-------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|---------|---------|
+| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ------- | ------- |
 | disableWindowResize           | disable the window on resize listener. This will stop grid to recalculate on window resize.                                                     | Boolean | false   |
 | scrollToNewItems              | scroll to new items placed in a scrollable view                                                                                                 | Boolean | false   |
 | disableWarnings               | disable console log warnings about misplacement of grid items                                                                                   | Boolean | false   |

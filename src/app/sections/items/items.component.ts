@@ -1,6 +1,18 @@
-import {ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  ViewEncapsulation
+} from '@angular/core';
 
-import {CompactType, DisplayGrid, GridsterConfig, GridsterItem, GridsterItemComponentInterface, GridType} from 'angular-gridster2';
+import {
+  CompactType,
+  DisplayGrid,
+  GridsterConfig,
+  GridsterItem,
+  GridsterItemComponentInterface,
+  GridType
+} from 'angular-gridster2';
 
 @Component({
   selector: 'app-items',
@@ -12,7 +24,10 @@ export class ItemsComponent implements OnInit {
   options: GridsterConfig;
   dashboard: Array<GridsterItem>;
 
-  static itemInit(item: GridsterItem, itemComponent: GridsterItemComponentInterface): void {
+  static itemInit(
+    item: GridsterItem,
+    itemComponent: GridsterItemComponentInterface
+  ): void {
     console.info('itemInitialized', item, itemComponent);
   }
 
@@ -59,10 +74,10 @@ export class ItemsComponent implements OnInit {
         resizeEnabled: true,
         compactEnabled: true
       },
-      {cols: 2, rows: 2, y: 0, x: 2},
-      {cols: 1, rows: 1, y: 0, x: 4},
-      {cols: 3, rows: 2, y: 1, x: 4},
-      {cols: 1, rows: 1, y: 2, x: 1}
+      { cols: 2, rows: 2, y: 0, x: 2 },
+      { cols: 1, rows: 1, y: 0, x: 4 },
+      { cols: 3, rows: 2, y: 1, x: 4 },
+      { cols: 1, rows: 1, y: 2, x: 1 }
     ];
   }
 
@@ -79,6 +94,6 @@ export class ItemsComponent implements OnInit {
   }
 
   addItem(): void {
-    this.dashboard.push({x: 0, y: 0, cols: 1, rows: 1});
+    this.dashboard.push({ x: 0, y: 0, cols: 1, rows: 1 });
   }
 }

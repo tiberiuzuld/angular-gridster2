@@ -1,4 +1,9 @@
-import {ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  ViewEncapsulation
+} from '@angular/core';
 
 import {
   DisplayGrid,
@@ -24,15 +29,27 @@ export class DragComponent implements OnInit {
   options: Safe;
   dashboard: Array<GridsterItem>;
 
-  static eventStart(item: GridsterItem, itemComponent: GridsterItemComponentInterface, event: MouseEvent): void {
+  static eventStart(
+    item: GridsterItem,
+    itemComponent: GridsterItemComponentInterface,
+    event: MouseEvent
+  ): void {
     console.info('eventStart', item, itemComponent, event);
   }
 
-  static eventStop(item: GridsterItem, itemComponent: GridsterItemComponentInterface, event: MouseEvent): void {
+  static eventStop(
+    item: GridsterItem,
+    itemComponent: GridsterItemComponentInterface,
+    event: MouseEvent
+  ): void {
     console.info('eventStop', item, itemComponent, event);
   }
 
-  static overlapEvent(source: GridsterItem, target: GridsterItem, grid: GridsterComponent): void {
+  static overlapEvent(
+    source: GridsterItem,
+    target: GridsterItem,
+    grid: GridsterComponent
+  ): void {
     console.log('overlap', source, target, grid);
   }
 
@@ -51,7 +68,7 @@ export class DragComponent implements OnInit {
         stop: DragComponent.eventStop,
         start: DragComponent.eventStart,
         dropOverItems: false,
-        dropOverItemsCallback: DragComponent.overlapEvent,
+        dropOverItemsCallback: DragComponent.overlapEvent
       },
       resizable: {
         enabled: true
@@ -59,17 +76,49 @@ export class DragComponent implements OnInit {
     };
 
     this.dashboard = [
-      {cols: 2, rows: 1, y: 0, x: 0},
-      {cols: 2, rows: 2, y: 0, x: 2, hasContent: true},
-      {cols: 1, rows: 1, y: 0, x: 4},
-      {cols: 1, rows: 1, y: 2, x: 5},
-      {cols: 1, rows: 1, y: 1, x: 0},
-      {cols: 1, rows: 1, y: 1, x: 0},
-      {cols: 2, rows: 2, y: 3, x: 5, minItemRows: 2, minItemCols: 2, label: 'Min rows & cols = 2'},
-      {cols: 2, rows: 2, y: 2, x: 0, maxItemRows: 2, maxItemCols: 2, label: 'Max rows & cols = 2'},
-      {cols: 2, rows: 1, y: 2, x: 2, dragEnabled: true, resizeEnabled: true, label: 'Drag&Resize Enabled'},
-      {cols: 1, rows: 1, y: 2, x: 4, dragEnabled: false, resizeEnabled: false, label: 'Drag&Resize Disabled'},
-      {cols: 1, rows: 1, y: 2, x: 6}
+      { cols: 2, rows: 1, y: 0, x: 0 },
+      { cols: 2, rows: 2, y: 0, x: 2, hasContent: true },
+      { cols: 1, rows: 1, y: 0, x: 4 },
+      { cols: 1, rows: 1, y: 2, x: 5 },
+      { cols: 1, rows: 1, y: 1, x: 0 },
+      { cols: 1, rows: 1, y: 1, x: 0 },
+      {
+        cols: 2,
+        rows: 2,
+        y: 3,
+        x: 5,
+        minItemRows: 2,
+        minItemCols: 2,
+        label: 'Min rows & cols = 2'
+      },
+      {
+        cols: 2,
+        rows: 2,
+        y: 2,
+        x: 0,
+        maxItemRows: 2,
+        maxItemCols: 2,
+        label: 'Max rows & cols = 2'
+      },
+      {
+        cols: 2,
+        rows: 1,
+        y: 2,
+        x: 2,
+        dragEnabled: true,
+        resizeEnabled: true,
+        label: 'Drag&Resize Enabled'
+      },
+      {
+        cols: 1,
+        rows: 1,
+        y: 2,
+        x: 4,
+        dragEnabled: false,
+        resizeEnabled: false,
+        label: 'Drag&Resize Disabled'
+      },
+      { cols: 1, rows: 1, y: 2, x: 6 }
     ];
   }
 
@@ -86,6 +135,6 @@ export class DragComponent implements OnInit {
   }
 
   addItem(): void {
-    this.dashboard.push({x: 0, y: 0, cols: 1, rows: 1});
+    this.dashboard.push({ x: 0, y: 0, cols: 1, rows: 1 });
   }
 }

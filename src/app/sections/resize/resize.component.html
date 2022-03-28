@@ -1,49 +1,80 @@
 <div class="options">
-  <a mat-raised-button href="https://github.com/tiberiuzuld/angular-gridster2/tree/master/src/app/sections/resize"
-     target="_blank" class="source-code-button">
+  <a
+    mat-raised-button
+    href="https://github.com/tiberiuzuld/angular-gridster2/tree/master/src/app/sections/resize"
+    target="_blank"
+    class="source-code-button"
+  >
     <mat-icon>open_in_new</mat-icon>
     Source
   </a>
   <markdown [src]="'assets/resize.md'"></markdown>
 </div>
-<div class="options-header" *ngIf="options.resizable && options.resizable.handles">
-  <mat-checkbox [(ngModel)]="options.resizable.enabled" (ngModelChange)="changedOptions()">
+<div
+  class="options-header"
+  *ngIf="options.resizable && options.resizable.handles"
+>
+  <mat-checkbox
+    [(ngModel)]="options.resizable.enabled"
+    (ngModelChange)="changedOptions()"
+  >
     Resize Items
   </mat-checkbox>
   <mat-form-field>
-    <input matInput [(ngModel)]="options.resizable.delayStart" type="number" placeholder="Delay Start ms"
-           (ngModelChange)="changedOptions()">
+    <input
+      matInput
+      [(ngModel)]="options.resizable.delayStart"
+      type="number"
+      placeholder="Delay Start ms"
+      (ngModelChange)="changedOptions()"
+    />
   </mat-form-field>
-  <mat-checkbox [(ngModel)]="options.resizable.handles.s"
-                (ngModelChange)="changedOptions()">
+  <mat-checkbox
+    [(ngModel)]="options.resizable.handles.s"
+    (ngModelChange)="changedOptions()"
+  >
     Resize South
   </mat-checkbox>
-  <mat-checkbox [(ngModel)]="options.resizable.handles.e"
-                (ngModelChange)="changedOptions()">
+  <mat-checkbox
+    [(ngModel)]="options.resizable.handles.e"
+    (ngModelChange)="changedOptions()"
+  >
     Resize East
   </mat-checkbox>
-  <mat-checkbox [(ngModel)]="options.resizable.handles.n"
-                (ngModelChange)="changedOptions()">
+  <mat-checkbox
+    [(ngModel)]="options.resizable.handles.n"
+    (ngModelChange)="changedOptions()"
+  >
     Resize North
   </mat-checkbox>
-  <mat-checkbox [(ngModel)]="options.resizable.handles.w"
-                (ngModelChange)="changedOptions()">
+  <mat-checkbox
+    [(ngModel)]="options.resizable.handles.w"
+    (ngModelChange)="changedOptions()"
+  >
     Resize West
   </mat-checkbox>
-  <mat-checkbox [(ngModel)]="options.resizable.handles.se"
-                (ngModelChange)="changedOptions()">
+  <mat-checkbox
+    [(ngModel)]="options.resizable.handles.se"
+    (ngModelChange)="changedOptions()"
+  >
     Resize South-East
   </mat-checkbox>
-  <mat-checkbox [(ngModel)]="options.resizable.handles.ne"
-                (ngModelChange)="changedOptions()">
+  <mat-checkbox
+    [(ngModel)]="options.resizable.handles.ne"
+    (ngModelChange)="changedOptions()"
+  >
     Resize North-East
   </mat-checkbox>
-  <mat-checkbox [(ngModel)]="options.resizable.handles.sw"
-                (ngModelChange)="changedOptions()">
+  <mat-checkbox
+    [(ngModel)]="options.resizable.handles.sw"
+    (ngModelChange)="changedOptions()"
+  >
     Resize South-West
   </mat-checkbox>
-  <mat-checkbox [(ngModel)]="options.resizable.handles.nw"
-                (ngModelChange)="changedOptions()">
+  <mat-checkbox
+    [(ngModel)]="options.resizable.handles.nw"
+    (ngModelChange)="changedOptions()"
+  >
     Resize North-West
   </mat-checkbox>
   <button mat-mini-fab (click)="addItem()" class="add-button cols-2">
@@ -51,12 +82,14 @@
   </button>
 </div>
 
-
 <gridster [options]="options">
   <gridster-item [item]="item" *ngFor="let item of dashboard">
     <div class="button-holder">
-      <button mat-mini-fab (mousedown)="removeItem($event, item)"
-              (touchstart)="removeItem($event, item)">
+      <button
+        mat-mini-fab
+        (mousedown)="removeItem($event, item)"
+        (touchstart)="removeItem($event, item)"
+      >
         <mat-icon>delete</mat-icon>
       </button>
     </div>

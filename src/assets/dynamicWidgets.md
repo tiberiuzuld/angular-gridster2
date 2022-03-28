@@ -7,4 +7,4 @@ EventEmitters. For more info look at source code of this demo.
 ### Alternative
 
 You can load dynamic components in Angular4+ with the help
-of [ng-dynamic-component library](https://www.npmjs.com/package/ng-dynamic-component) 
+of [ng-dynamic-component library](https://www.npmjs.com/package/ng-dynamic-component)

@@ -1,7 +1,16 @@
-<div class="gridster-column" *ngFor="let column of gridColumns; let i = index;"
-     [ngStyle]="gridRenderer.getGridColumnStyle(i)"></div>
-<div class="gridster-row" *ngFor="let row of gridRows; let i = index;"
-     [ngStyle]="gridRenderer.getGridRowStyle(i)"></div>
+<div
+  class="gridster-column"
+  *ngFor="let column of gridColumns; let i = index;"
+  [ngStyle]="gridRenderer.getGridColumnStyle(i)"
+></div>
+<div
+  class="gridster-row"
+  *ngFor="let row of gridRows; let i = index;"
+  [ngStyle]="gridRenderer.getGridRowStyle(i)"
+></div>
 <ng-content></ng-content>
-<gridster-preview [gridRenderer]="gridRenderer" [previewStyle$]="previewStyle$"
-                  class="gridster-preview"></gridster-preview>
+<gridster-preview
+  [gridRenderer]="gridRenderer"
+  [previewStyle$]="previewStyle$"
+  class="gridster-preview"
+></gridster-preview>

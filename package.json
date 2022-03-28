@@ -3,6 +3,9 @@
   "version": "13.2.0",
   "license": "MIT",
   "scripts": {
+    "husky": "husky",
+    "commitlint": "commitlint",
+    "lint-staged": "lint-staged",
     "ng": "ng",
     "start": "ng serve",
     "serve": "ng serve",
@@ -14,7 +17,8 @@
     "build-demo": "ng build",
     "build-npm": "ng build angular-gridster2",
     "watch": "ng build --watch --configuration development",
-    "deploy": "ng deploy"
+    "deploy": "ng deploy",
+    "postinstall": "husky install"
   },
   "homepage": "https://tiberiuzuld.github.io/angular-gridster2",
   "bugs": {
@@ -67,19 +71,34 @@
     "@angular-eslint/template-parser": "13.1.0",
     "@angular/cli": "13.3.0",
     "@angular/compiler-cli": "13.3.0",
+    "@commitlint/cli": "^16.2.3",
+    "@commitlint/config-conventional": "^16.2.1",
     "@types/jasmine": "4.0.0",
     "@types/node": "17.0.22",
     "@typescript-eslint/eslint-plugin": "5.16.0",
     "@typescript-eslint/parser": "5.16.0",
     "angular-cli-ghpages": "1.0.0",
     "eslint": "8.11.0",
+    "husky": "^7.0.4",
     "jasmine-core": "4.0.1",
     "karma": "6.3.17",
     "karma-chrome-launcher": "3.1.1",
     "karma-coverage": "2.2.0",
     "karma-jasmine": "4.0.1",
     "karma-jasmine-html-reporter": "1.7.0",
+    "lint-staged": "^12.3.7",
     "ng-packagr": "13.3.0",
+    "prettier": "^2.6.1",
     "typescript": "4.6.2"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "lint-staged": {
+    "*.{html,scss,js,ts,md}": [
+      "prettier --write"
+    ]
   }
 }

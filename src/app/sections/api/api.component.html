@@ -1,16 +1,30 @@
 <div class="options">
-  <a mat-raised-button href="https://github.com/tiberiuzuld/angular-gridster2/tree/master/src/app/sections/api"
-     target="_blank" class="source-code-button">
+  <a
+    mat-raised-button
+    href="https://github.com/tiberiuzuld/angular-gridster2/tree/master/src/app/sections/api"
+    target="_blank"
+    class="source-code-button"
+  >
     <mat-icon>open_in_new</mat-icon>
     Source
   </a>
   <markdown [src]="'assets/api.md'"></markdown>
 </div>
 <div class="options-header">
-  <button mat-raised-button color="accent" (click)="pushItem()" class="add-button cols-2">
+  <button
+    mat-raised-button
+    color="accent"
+    (click)="pushItem()"
+    class="add-button cols-2"
+  >
     Resize first item and push others
   </button>
-  <button (click)="getItemComponent()" class="add-button cols-2" color="accent" mat-raised-button>
+  <button
+    (click)="getItemComponent()"
+    class="add-button cols-2"
+    color="accent"
+    mat-raised-button
+  >
     Get item component in console
   </button>
   <button mat-mini-fab (click)="addItem()" class="add-button cols-2">
@@ -18,12 +32,14 @@
   </button>
 </div>
 
-
 <gridster [options]="options">
   <gridster-item [item]="item" *ngFor="let item of dashboard">
     <div class="button-holder">
-      <button mat-mini-fab (mousedown)="removeItem($event, item)"
-              (touchstart)="removeItem($event, item)">
+      <button
+        mat-mini-fab
+        (mousedown)="removeItem($event, item)"
+        (touchstart)="removeItem($event, item)"
+      >
         <mat-icon>delete</mat-icon>
       </button>
     </div>

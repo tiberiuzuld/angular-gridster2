@@ -1,7 +1,7 @@
 ### Options
 
 | Option                  | Description                                                                              | Type    | Default |
-|-------------------------|------------------------------------------------------------------------------------------|---------|---------|
+| ----------------------- | ---------------------------------------------------------------------------------------- | ------- | ------- |
 | gridType                | different types for layout for the grid. See Grid Types table                            | String  | 'fit'   |
 | fixedColWidth           | fixed col width for gridType: `fixed`                                                    | Number  | 250     |
 | fixedRowHeight          | fixed row height for gridType: `fixed`                                                   | Number  | 250     |
@@ -15,7 +15,7 @@
 ### Grid Types
 
 | Type             | Description                                                                                    |
-|------------------|------------------------------------------------------------------------------------------------|
+| ---------------- | ---------------------------------------------------------------------------------------------- |
 | fit              | will fit the items in the container without scroll                                             |
 | scrollVertical   | will fit on width and height of the items will be the same as the width                        |
 | scrollHorizontal | will fit on height and width of the items will be the same as the height                       |

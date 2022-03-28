@@ -1,6 +1,10 @@
 <div class="options">
-  <a mat-raised-button href="https://github.com/tiberiuzuld/angular-gridster2/tree/master/src/app/sections/gridMargins"
-     target="_blank" class="source-code-button">
+  <a
+    mat-raised-button
+    href="https://github.com/tiberiuzuld/angular-gridster2/tree/master/src/app/sections/gridMargins"
+    target="_blank"
+    class="source-code-button"
+  >
     <mat-icon>open_in_new</mat-icon>
     Source
   </a>
@@ -8,8 +12,12 @@
 </div>
 <div class="options-header">
   <mat-form-field>
-    <mat-select aria-label="Grid type" [(ngModel)]="options.gridType" (ngModelChange)="changedOptions()"
-                placeholder="Grid Type">
+    <mat-select
+      aria-label="Grid type"
+      [(ngModel)]="options.gridType"
+      (ngModelChange)="changedOptions()"
+      placeholder="Grid Type"
+    >
       <mat-option value="fit">Fit to screen</mat-option>
       <mat-option value="scrollVertical">Scroll Vertical</mat-option>
       <mat-option value="scrollHorizontal">Scroll Horizontal</mat-option>
@@ -19,41 +27,83 @@
     </mat-select>
   </mat-form-field>
   <mat-form-field>
-    <input matInput [(ngModel)]="options.margin" min="0" max="30" step="1" type="number" placeholder="Margin"
-           (ngModelChange)="changedOptions()">
+    <input
+      matInput
+      [(ngModel)]="options.margin"
+      min="0"
+      max="30"
+      step="1"
+      type="number"
+      placeholder="Margin"
+      (ngModelChange)="changedOptions()"
+    />
   </mat-form-field>
-  <mat-checkbox [(ngModel)]="options.outerMargin" (ngModelChange)="changedOptions()">Outer Margin</mat-checkbox>
+  <mat-checkbox
+    [(ngModel)]="options.outerMargin"
+    (ngModelChange)="changedOptions()"
+    >Outer Margin</mat-checkbox
+  >
   <mat-form-field>
-    <input matInput [(ngModel)]="options.outerMarginTop" min="0" max="30" step="1" type="number"
-           placeholder="Grid Margin Top"
-           (ngModelChange)="changedOptions()">
+    <input
+      matInput
+      [(ngModel)]="options.outerMarginTop"
+      min="0"
+      max="30"
+      step="1"
+      type="number"
+      placeholder="Grid Margin Top"
+      (ngModelChange)="changedOptions()"
+    />
   </mat-form-field>
   <mat-form-field>
-    <input matInput [(ngModel)]="options.outerMarginRight" min="0" max="30" step="1" type="number"
-           placeholder="Grid Margin Right"
-           (ngModelChange)="changedOptions()">
+    <input
+      matInput
+      [(ngModel)]="options.outerMarginRight"
+      min="0"
+      max="30"
+      step="1"
+      type="number"
+      placeholder="Grid Margin Right"
+      (ngModelChange)="changedOptions()"
+    />
   </mat-form-field>
   <mat-form-field>
-    <input matInput [(ngModel)]="options.outerMarginBottom" min="0" max="30" step="1" type="number"
-           placeholder="Grid Margin Bottom"
-           (ngModelChange)="changedOptions()">
+    <input
+      matInput
+      [(ngModel)]="options.outerMarginBottom"
+      min="0"
+      max="30"
+      step="1"
+      type="number"
+      placeholder="Grid Margin Bottom"
+      (ngModelChange)="changedOptions()"
+    />
   </mat-form-field>
   <mat-form-field>
-    <input matInput [(ngModel)]="options.outerMarginLeft" min="0" max="30" step="1" type="number"
-           placeholder="Grid Margin Left"
-           (ngModelChange)="changedOptions()">
+    <input
+      matInput
+      [(ngModel)]="options.outerMarginLeft"
+      min="0"
+      max="30"
+      step="1"
+      type="number"
+      placeholder="Grid Margin Left"
+      (ngModelChange)="changedOptions()"
+    />
   </mat-form-field>
   <button mat-mini-fab (click)="addItem()" class="add-button cols-2">
     <mat-icon>add</mat-icon>
   </button>
 </div>
 
-
 <gridster [options]="options">
   <gridster-item [item]="item" *ngFor="let item of dashboard">
     <div class="button-holder">
-      <button mat-mini-fab (mousedown)="removeItem($event, item)"
-              (touchstart)="removeItem($event, item)">
+      <button
+        mat-mini-fab
+        (mousedown)="removeItem($event, item)"
+        (touchstart)="removeItem($event, item)"
+      >
         <mat-icon>delete</mat-icon>
       </button>
     </div>

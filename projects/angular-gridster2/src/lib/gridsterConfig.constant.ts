@@ -1,4 +1,10 @@
-import {CompactType, DirTypes, DisplayGrid, GridsterConfig, GridType} from './gridsterConfig.interface';
+import {
+  CompactType,
+  DirTypes,
+  DisplayGrid,
+  GridsterConfig,
+  GridType
+} from './gridsterConfig.interface';
 
 export const GridsterConfigService: GridsterConfig = {
   gridType: GridType.Fit, // 'fit' will fit the items in the container without scroll;
@@ -34,27 +40,27 @@ export const GridsterConfigService: GridsterConfig = {
   maxItemArea: 2500, // max item area: cols * rows
   addEmptyRowsCount: 0, // add a number of extra empty rows at the end
   rowHeightRatio: 1, // row height ratio from column width
-  margin: 10,  // margin between grid items
-  outerMargin: true,  // if margins will apply to the sides of the container
+  margin: 10, // margin between grid items
+  outerMargin: true, // if margins will apply to the sides of the container
   outerMarginTop: null, // override outer margin for grid
   outerMarginRight: null, // override outer margin for grid
   outerMarginBottom: null, // override outer margin for grid
   outerMarginLeft: null, // override outer margin for grid
   useTransformPositioning: true, // toggle between transform or top/left positioning of items
-  scrollSensitivity: 10,  // margin of the dashboard where to start scrolling
-  scrollSpeed: 20,  // how much to scroll each mouse move when in the scrollSensitivity zone
+  scrollSensitivity: 10, // margin of the dashboard where to start scrolling
+  scrollSpeed: 20, // how much to scroll each mouse move when in the scrollSensitivity zone
   initCallback: undefined, // callback to call after grid has initialized. Arguments: gridsterComponent
   destroyCallback: undefined, // callback to call after grid has destroyed. Arguments: gridsterComponent
   gridSizeChangedCallback: undefined, // callback to call after grid has changed size. Arguments: gridsterComponent
-  itemChangeCallback: undefined,  // callback to call for each item when is changes x, y, rows, cols.
+  itemChangeCallback: undefined, // callback to call for each item when is changes x, y, rows, cols.
   // Arguments: gridsterItem, gridsterItemComponent
-  itemResizeCallback: undefined,  // callback to call for each item when width/height changes.
+  itemResizeCallback: undefined, // callback to call for each item when width/height changes.
   // Arguments: gridsterItem, gridsterItemComponent
-  itemInitCallback: undefined,  // callback to call for each item when is initialized.
+  itemInitCallback: undefined, // callback to call for each item when is initialized.
   // Arguments: gridsterItem, gridsterItemComponent
-  itemRemovedCallback: undefined,  // callback to call for each item when is initialized.
+  itemRemovedCallback: undefined, // callback to call for each item when is initialized.
   // Arguments: gridsterItem, gridsterItemComponent
-  itemValidateCallback: undefined,  // callback to call to validate item position/size. Return true if valid.
+  itemValidateCallback: undefined, // callback to call to validate item position/size. Return true if valid.
   // Arguments: gridsterItem
   enableEmptyCellClick: false, // enable empty cell click events
   enableEmptyCellContextMenu: false, // enable empty cell context menu (right click) events
@@ -104,7 +110,7 @@ export const GridsterConfigService: GridsterConfig = {
   pushItems: false, // push items when resizing and dragging
   disablePushOnDrag: false, // disable push on drag
   disablePushOnResize: false, // disable push on resize
-  pushDirections: {north: true, east: true, south: true, west: true}, // control the directions items are pushed
+  pushDirections: { north: true, east: true, south: true, west: true }, // control the directions items are pushed
   pushResizeItems: false, // on resize of item will shrink adjacent items
   displayGrid: DisplayGrid.OnDragAndResize, // display background grid of rows and columns
   disableWindowResize: false, // disable the window on resize listener. This will stop grid to recalculate on window resize.
@@ -112,6 +118,6 @@ export const GridsterConfigService: GridsterConfig = {
   scrollToNewItems: false, // scroll to new items placed in a scrollable view
   disableScrollHorizontal: false, // disable horizontal scrolling
   disableScrollVertical: false, // disable vertical scrolling
-  disableAutoPositionOnConflict: false,  // disable auto-position of items on conflict state,
-  dirType: DirTypes.LTR, // page direction, rtl=right to left ltr= left to right, if you use rtl language set dirType to rtl
+  disableAutoPositionOnConflict: false, // disable auto-position of items on conflict state,
+  dirType: DirTypes.LTR // page direction, rtl=right to left ltr= left to right, if you use rtl language set dirType to rtl
 };

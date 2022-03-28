@@ -1,37 +1,68 @@
 <div class="options">
-  <a mat-raised-button href="https://github.com/tiberiuzuld/angular-gridster2/tree/master/src/app/sections/misc"
-     target="_blank" class="source-code-button">
+  <a
+    mat-raised-button
+    href="https://github.com/tiberiuzuld/angular-gridster2/tree/master/src/app/sections/misc"
+    target="_blank"
+    class="source-code-button"
+  >
     <mat-icon>open_in_new</mat-icon>
     Source
   </a>
   <markdown [src]="'assets/misc.md'"></markdown>
 </div>
 <div class="options-header">
-  <mat-checkbox [(ngModel)]="options.disableWindowResize" (ngModelChange)="changedOptions()">
+  <mat-checkbox
+    [(ngModel)]="options.disableWindowResize"
+    (ngModelChange)="changedOptions()"
+  >
     Disable window resize
   </mat-checkbox>
-  <mat-checkbox (ngModelChange)="changedOptions()" [(ngModel)]="options.setGridSize">
+  <mat-checkbox
+    (ngModelChange)="changedOptions()"
+    [(ngModel)]="options.setGridSize"
+  >
     Set grid size
   </mat-checkbox>
-  <mat-checkbox [(ngModel)]="options.scrollToNewItems" (ngModelChange)="changedOptions()">
+  <mat-checkbox
+    [(ngModel)]="options.scrollToNewItems"
+    (ngModelChange)="changedOptions()"
+  >
     Scroll to new items
   </mat-checkbox>
-  <mat-checkbox [(ngModel)]="options.disableWarnings" (ngModelChange)="changedOptions()">
+  <mat-checkbox
+    [(ngModel)]="options.disableWarnings"
+    (ngModelChange)="changedOptions()"
+  >
     Disable console warnings
   </mat-checkbox>
-  <mat-checkbox [(ngModel)]="options.ignoreMarginInRow" (ngModelChange)="changedOptions()">
+  <mat-checkbox
+    [(ngModel)]="options.ignoreMarginInRow"
+    (ngModelChange)="changedOptions()"
+  >
     Ignore margin in row
   </mat-checkbox>
-  <mat-checkbox [(ngModel)]="options.disableAutoPositionOnConflict" (ngModelChange)="changedOptions()">
+  <mat-checkbox
+    [(ngModel)]="options.disableAutoPositionOnConflict"
+    (ngModelChange)="changedOptions()"
+  >
     Disable auto position on conflict
   </mat-checkbox>
   <mat-form-field>
     <mat-label>Scale</mat-label>
-    <input (ngModelChange)="changedOptions()" [(ngModel)]="options.scale" matInput type="number">
+    <input
+      (ngModelChange)="changedOptions()"
+      [(ngModel)]="options.scale"
+      matInput
+      type="number"
+    />
   </mat-form-field>
   <mat-form-field>
-    <mat-select aria-label="Grid type" [(ngModel)]="options.gridType" (ngModelChange)="changedOptions()"
-                placeholder="Grid Type">
+    <mat-select
+      aria-label="Grid type"
+      [(ngModel)]="options.gridType"
+      (ngModelChange)="changedOptions()"
+      placeholder="Grid Type"
+    >
       <mat-option value="fit">Fit to screen</mat-option>
       <mat-option value="scrollVertical">Scroll Vertical</mat-option>
       <mat-option value="scrollHorizontal">Scroll Horizontal</mat-option>
@@ -45,12 +76,14 @@
   </button>
 </div>
 
-
 <gridster [options]="options">
   <gridster-item [item]="item" *ngFor="let item of dashboard">
     <div class="button-holder">
-      <button mat-mini-fab (mousedown)="removeItem($event, item)"
-              (touchstart)="removeItem($event, item)">
+      <button
+        mat-mini-fab
+        (mousedown)="removeItem($event, item)"
+        (touchstart)="removeItem($event, item)"
+      >
         <mat-icon>delete</mat-icon>
       </button>
     </div>

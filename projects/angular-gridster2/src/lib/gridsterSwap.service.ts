@@ -1,5 +1,5 @@
-import {GridsterItemComponentInterface} from './gridsterItem.interface';
-import {GridsterComponentInterface} from './gridster.interface';
+import { GridsterItemComponentInterface } from './gridsterItem.interface';
+import { GridsterComponentInterface } from './gridster.interface';
 
 export class GridsterSwap {
   private swapedItem: GridsterItemComponentInterface | undefined;
@@ -41,7 +41,6 @@ export class GridsterSwap {
         this.gridsterItem.$item.y = this.gridsterItem.item.y || 0;
         this.swapedItem = undefined;
       }
-
     }
   }
 
@@ -56,7 +55,10 @@ export class GridsterSwap {
 
   setSwapItem(): void {
     if (this.swapedItem) {
-      this.swapedItem.checkItemChanges(this.swapedItem.$item, this.swapedItem.item);
+      this.swapedItem.checkItemChanges(
+        this.swapedItem.$item,
+        this.swapedItem.item
+      );
       this.swapedItem = undefined;
     }
   }
@@ -64,12 +66,19 @@ export class GridsterSwap {
   checkSwap(pushedBy: GridsterItemComponentInterface): void {
     let gridsterItemCollision;
     if (this.gridster.$options.swapWhileDragging) {
-      gridsterItemCollision = this.gridster.checkCollisionForSwaping(pushedBy.$item);
+      gridsterItemCollision = this.gridster.checkCollisionForSwaping(
+        pushedBy.$item
+      );
     } else {
       gridsterItemCollision = this.gridster.checkCollision(pushedBy.$item);
     }
-    if (gridsterItemCollision && gridsterItemCollision !== true && gridsterItemCollision.canBeDragged()) {
-      const gridsterItemCollide: GridsterItemComponentInterface = gridsterItemCollision;
+    if (
+      gridsterItemCollision &&
+      gridsterItemCollision !== true &&
+      gridsterItemCollision.canBeDragged()
+    ) {
+      const gridsterItemCollide: GridsterItemComponentInterface =
+        gridsterItemCollision;
       const copyCollisionX = gridsterItemCollide.$item.x;
       const copyCollisionY = gridsterItemCollide.$item.y;
       const copyX = pushedBy.$item.x;
@@ -80,7 +89,10 @@ export class GridsterSwap {
       gridsterItemCollide.$item.y = pushedBy.item.y - diffY;
       pushedBy.$item.x = gridsterItemCollide.item.x + diffX;
       pushedBy.$item.y = gridsterItemCollide.item.y + diffY;
-      if (this.gridster.checkCollision(gridsterItemCollide.$item) || this.gridster.checkCollision(pushedBy.$item)) {
+      if (
+        this.gridster.checkCollision(gridsterItemCollide.$item) ||
+        this.gridster.checkCollision(pushedBy.$item)
+      ) {
         pushedBy.$item.x = copyX;
         pushedBy.$item.y = copyY;
         gridsterItemCollide.$item.x = copyCollisionX;
@@ -89,7 +101,10 @@ export class GridsterSwap {
         gridsterItemCollide.setSize();
         this.swapedItem = gridsterItemCollide;
         if (this.gridster.$options.swapWhileDragging) {
-          this.gridsterItem.checkItemChanges(this.gridsterItem.$item, this.gridsterItem.item);
+          this.gridsterItem.checkItemChanges(
+            this.gridsterItem.$item,
+            this.gridsterItem.item
+          );
           this.setSwapItem();
         }
       }

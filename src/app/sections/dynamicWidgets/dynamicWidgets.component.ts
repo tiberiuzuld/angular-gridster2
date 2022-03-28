@@ -1,6 +1,17 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, OnInit, ViewEncapsulation} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  OnInit,
+  ViewEncapsulation
+} from '@angular/core';
 
-import {DisplayGrid, GridsterConfig, GridsterItem, GridType} from 'angular-gridster2';
+import {
+  DisplayGrid,
+  GridsterConfig,
+  GridsterItem,
+  GridType
+} from 'angular-gridster2';
 
 @Component({
   selector: 'app-dynamic-widgets',
@@ -21,7 +32,7 @@ export class DynamicWidgetsComponent implements OnInit {
       scrollToNewItems: false,
       disableWarnings: false,
       ignoreMarginInRow: false,
-      itemResizeCallback: (item) => {
+      itemResizeCallback: item => {
         // update DB with new size
         // send the update to widgets
         this.resizeEvent.emit(item);
@@ -29,9 +40,9 @@ export class DynamicWidgetsComponent implements OnInit {
     };
 
     this.dashboard = [
-      {cols: 2, rows: 1, y: 0, x: 0, type: 'widgetA'},
-      {cols: 2, rows: 2, y: 0, x: 2, type: 'widgetB'},
-      {cols: 2, rows: 1, y: 1, x: 0, type: 'widgetC'},
+      { cols: 2, rows: 1, y: 0, x: 0, type: 'widgetA' },
+      { cols: 2, rows: 2, y: 0, x: 2, type: 'widgetB' },
+      { cols: 2, rows: 1, y: 1, x: 0, type: 'widgetC' }
     ];
   }
 }

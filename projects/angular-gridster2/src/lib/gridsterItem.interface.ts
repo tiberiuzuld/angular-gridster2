@@ -1,7 +1,7 @@
-import {GridsterDraggable} from './gridsterDraggable.service';
-import {Renderer2} from '@angular/core';
-import {GridsterResizable} from './gridsterResizable.service';
-import {GridsterComponentInterface} from './gridster.interface';
+import { GridsterDraggable } from './gridsterDraggable.service';
+import { Renderer2 } from '@angular/core';
+import { GridsterResizable } from './gridsterResizable.service';
+import { GridsterComponentInterface } from './gridster.interface';
 
 export abstract class GridsterItemComponentInterface {
   item: GridsterItem;
@@ -32,7 +32,10 @@ export interface GridsterItem {
   rows: number;
   cols: number;
   layerIndex?: number;
-  initCallback?: (item: GridsterItem, itemComponent: GridsterItemComponentInterface) => void;
+  initCallback?: (
+    item: GridsterItem,
+    itemComponent: GridsterItemComponentInterface
+  ) => void;
   dragEnabled?: boolean;
   resizeEnabled?: boolean;
   compactEnabled?: boolean;
