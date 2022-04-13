@@ -109,8 +109,8 @@ export class GridsterUtils {
         return false;
       }
     }
-    // @ts-ignore
     return GridsterUtils.checkDragHandleClass(
+      // @ts-ignore
       target.parentNode,
       current,
       dragHandleClass,
@@ -126,15 +126,15 @@ export class GridsterUtils {
     if (!target || target === current) {
       return false;
     }
-    // @ts-ignore
     if (
       target.hasAttribute('class') &&
+      // @ts-ignore
       target.getAttribute('class').split(' ').indexOf(contentClass) > -1
     ) {
       return true;
     } else {
-      // @ts-ignore
       return GridsterUtils.checkContentClass(
+        // @ts-ignore
         target.parentNode,
         current,
         contentClass
