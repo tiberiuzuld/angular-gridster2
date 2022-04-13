@@ -7,7 +7,8 @@ import { cancelScroll, scroll } from './gridsterScroll.service';
 
 import { GridsterSwap } from './gridsterSwap.service';
 import { GridsterUtils } from './gridsterUtils.service';
-import { MouseEvent2 } from './gridsterResizeEventType.interface';
+
+const GRIDSTER_ITEM_RESIZABLE_HANDLER_CLASS = 'gridster-item-resizable-handler';
 
 export class GridsterDraggable {
   gridsterItem: GridsterItemComponentInterface;
@@ -412,14 +413,9 @@ export class GridsterDraggable {
     }
   }
 
-  dragStartDelay = (e: MouseEvent2): void => {
-    if (
-      e.target.hasAttribute('class') &&
-      e.target
-        .getAttribute('class')
-        .split(' ')
-        .indexOf('gridster-item-resizable-handler') > -1
-    ) {
+  dragStartDelay = (e: MouseEvent): void => {
+    const target = e.target as HTMLElement;
+    if (target.classList.contains(GRIDSTER_ITEM_RESIZABLE_HANDLER_CLASS)) {
       return;
     }
     if (GridsterUtils.checkContentClassForEvent(this.gridster, e)) {
