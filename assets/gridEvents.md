@@ -1,7 +1,7 @@
 ### Options
 
 | Option                  | Description                                                            | Type                                          | Default   |
-|-------------------------|------------------------------------------------------------------------|-----------------------------------------------|-----------|
+| ----------------------- | ---------------------------------------------------------------------- | --------------------------------------------- | --------- |
 | initCallback            | callback to call after grid has initialized                            | Function(gridsterComponent)                   | undefined |
 | destroyCallback         | callback to call after grid has destroyed                              | Function(gridsterComponent)                   | undefined |
 | gridSizeChangedCallback | callback to call after grid has changed size cols/rows                 | Function(gridsterComponent)                   | undefined |
