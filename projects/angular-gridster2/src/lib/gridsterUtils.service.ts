@@ -16,20 +16,6 @@ export class GridsterUtils {
     return obj1;
   }
 
-  static debounce(func: () => void, wait: number): () => void {
-    let timeout: number | undefined;
-    return function (): void {
-      const context = this;
-      const args = arguments;
-      const later = () => {
-        timeout = undefined;
-        func.apply(context, args);
-      };
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
-    };
-  }
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static checkTouchEvent(e: any): void {
     if (e.clientX === undefined && e.touches) {

@@ -90,7 +90,7 @@ export class GridsterItemComponent
       this.updateOptions();
 
       if (!this.init) {
-        this.gridster.calculateLayoutDebounce();
+        this.gridster.calculateLayout$.next();
       }
     }
     if (changes.item && changes.item.previousValue) {
@@ -198,7 +198,7 @@ export class GridsterItemComponent
       this.item.rows = this.$item.rows;
       this.item.x = this.$item.x;
       this.item.y = this.$item.y;
-      this.gridster.calculateLayoutDebounce();
+      this.gridster.calculateLayout$.next();
       this.itemChanged();
     }
   }

@@ -13,6 +13,7 @@ import {
   SimpleChanges,
   ViewEncapsulation
 } from '@angular/core';
+import { debounceTime, Subject, switchMap, takeUntil, timer } from 'rxjs';
 import { GridsterComponentInterface } from './gridster.interface';
 import { GridsterCompact } from './gridsterCompact.service';
 
@@ -38,7 +39,6 @@ export class GridsterComponent
   implements OnInit, OnChanges, OnDestroy, GridsterComponentInterface
 {
   @Input() options: GridsterConfig;
-  calculateLayoutDebounce: () => void;
   movingItem: GridsterItem | null;
   el: HTMLElement;
   $options: GridsterConfigS;
@@ -60,6 +60,11 @@ export class GridsterComponent
   previewStyle$: EventEmitter<GridsterItem | null> =
     new EventEmitter<GridsterItem | null>();
 
+  calculateLayout$ = new Subject<void>();
+
+  private resize$ = new Subject<void>();
+  private destroy$ = new Subject<void>();
+
   constructor(
     @Inject(ElementRef) el: ElementRef,
     @Inject(Renderer2) public renderer: Renderer2,
@@ -68,10 +73,6 @@ export class GridsterComponent
   ) {
     this.el = el.nativeElement;
     this.$options = JSON.parse(JSON.stringify(GridsterConfigService));
-    this.calculateLayoutDebounce = GridsterUtils.debounce(
-      this.calculateLayout.bind(this),
-      0
-    );
     this.mobile = false;
     this.curWidth = 0;
     this.curHeight = 0;
@@ -128,6 +129,19 @@ export class GridsterComponent
     if (this.options.initCallback) {
       this.options.initCallback(this);
     }
+
+    this.calculateLayout$
+      .pipe(debounceTime(0), takeUntil(this.destroy$))
+      .subscribe(() => this.calculateLayout());
+
+    this.resize$
+      .pipe(
+        // Cancel previously scheduled DOM timer if `calculateLayout()` has been called
+        // within this time range.
+        switchMap(() => timer(100)),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(() => this.resize());
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -148,7 +162,7 @@ export class GridsterComponent
     }
   }
 
-  resize(): void {
+  private resize(): void {
     let height;
     let width;
     if (this.$options.gridType === 'fit' && !this.mobile) {
@@ -197,6 +211,7 @@ export class GridsterComponent
   }
 
   ngOnDestroy(): void {
+    this.destroy$.next();
     this.previewStyle$.complete();
     if (this.windowResize) {
       this.windowResize();
@@ -308,7 +323,7 @@ export class GridsterComponent
     }
   }
 
-  calculateLayout(): void {
+  private calculateLayout(): void {
     if (this.compact) {
       this.compact.checkCompact();
     }
@@ -423,7 +438,7 @@ export class GridsterComponent
       widget.resize.toggle();
     }
 
-    setTimeout(this.resize.bind(this), 100);
+    this.resize$.next();
   }
 
   updateGrid(): void {
@@ -483,12 +498,12 @@ export class GridsterComponent
       }
     }
     this.grid.push(itemComponent);
-    this.calculateLayoutDebounce();
+    this.calculateLayout$.next();
   }
 
   removeItem(itemComponent: GridsterItemComponentInterface): void {
     this.grid.splice(this.grid.indexOf(itemComponent), 1);
-    this.calculateLayoutDebounce();
+    this.calculateLayout$.next();
     if (this.options.itemRemovedCallback) {
       this.options.itemRemovedCallback(itemComponent.item, itemComponent);
     }
