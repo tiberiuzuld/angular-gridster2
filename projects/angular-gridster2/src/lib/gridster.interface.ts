@@ -1,5 +1,6 @@
 import { GridsterConfigS } from './gridsterConfigS.interface';
 import { ChangeDetectorRef, NgZone, Renderer2 } from '@angular/core';
+import { Subject } from 'rxjs';
 import { GridsterEmptyCell } from './gridsterEmptyCell.service';
 import { GridsterCompact } from './gridsterCompact.service';
 import { GridsterConfig } from './gridsterConfig.interface';
@@ -44,7 +45,7 @@ export abstract class GridsterComponentInterface {
   gridRenderer: GridsterRenderer;
   cdRef: ChangeDetectorRef;
   options: GridsterConfig;
-  calculateLayoutDebounce: () => void;
+  calculateLayout$: Subject<void>;
   updateGrid: () => void;
   movingItem: GridsterItem | null;
   addItem: (item: GridsterItemComponentInterface) => void;
