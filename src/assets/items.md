@@ -1,7 +1,7 @@
 ### Options
 
 | Option         | Description                                                         | Type                                          | Default   |
-|----------------|---------------------------------------------------------------------|-----------------------------------------------|-----------|
+| -------------- | ------------------------------------------------------------------- | --------------------------------------------- | --------- |
 | x              | x position if missing will auto position                            | Number                                        | undefined |
 | y              | y position if missing will auto position                            | Number                                        | undefined |
 | rows           | number of rows if missing will use grid option `defaultItemRows`    | Number                                        | undefined |

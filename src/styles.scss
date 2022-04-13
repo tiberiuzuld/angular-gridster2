@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body {
+html,
+body {
   height: 100vh;
   margin: 0;
   padding: 0;
@@ -27,15 +28,15 @@ table {
     padding: 6px 13px;
     border: 1px solid #ddd;
 
-    &[align="left"] {
+    &[align='left'] {
       text-align: left;
     }
 
-    &[align="center"] {
+    &[align='center'] {
       text-align: center;
     }
 
-    &[align="right"] {
+    &[align='right'] {
       text-align: right;
     }
   }

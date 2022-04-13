@@ -1,7 +1,7 @@
 ### Options
 
 | Option              | Description                                  | Type    | Default                                           |
-|---------------------|----------------------------------------------|---------|---------------------------------------------------|
+| ------------------- | -------------------------------------------- | ------- | ------------------------------------------------- |
 | pushItems           | push items when resizing and dragging        | Boolean | false                                             |
 | disablePushOnDrag   | disable push on drag                         | Boolean | false                                             |
 | disablePushOnResize | disable push on resize                       | Boolean | false                                             |

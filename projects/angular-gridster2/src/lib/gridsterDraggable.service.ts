@@ -1,20 +1,20 @@
-import {NgZone} from '@angular/core';
-import {GridsterComponentInterface} from './gridster.interface';
-import {DirTypes} from './gridsterConfig.interface';
-import {GridsterItemComponentInterface} from './gridsterItem.interface';
-import {GridsterPush} from './gridsterPush.service';
-import {cancelScroll, scroll} from './gridsterScroll.service';
+import { NgZone } from '@angular/core';
+import { GridsterComponentInterface } from './gridster.interface';
+import { DirTypes } from './gridsterConfig.interface';
+import { GridsterItemComponentInterface } from './gridsterItem.interface';
+import { GridsterPush } from './gridsterPush.service';
+import { cancelScroll, scroll } from './gridsterScroll.service';
 
-import {GridsterSwap} from './gridsterSwap.service';
-import {GridsterUtils} from './gridsterUtils.service';
-import {MouseEvent2} from './gridsterResizeEventType.interface';
+import { GridsterSwap } from './gridsterSwap.service';
+import { GridsterUtils } from './gridsterUtils.service';
+import { MouseEvent2 } from './gridsterResizeEventType.interface';
 
 export class GridsterDraggable {
   gridsterItem: GridsterItemComponentInterface;
   gridster: GridsterComponentInterface;
   lastMouse: {
-    clientX: number,
-    clientY: number
+    clientX: number;
+    clientY: number;
   };
   offsetLeft: number;
   offsetTop: number;
@@ -43,10 +43,14 @@ export class GridsterDraggable {
   touchstart: () => void;
   push: GridsterPush;
   swap: GridsterSwap;
-  path: Array<{ x: number, y: number }>;
+  path: Array<{ x: number; y: number }>;
   collision: GridsterItemComponentInterface | boolean = false;
 
-  constructor(gridsterItem: GridsterItemComponentInterface, gridster: GridsterComponentInterface, private zone: NgZone) {
+  constructor(
+    gridsterItem: GridsterItemComponentInterface,
+    gridster: GridsterComponentInterface,
+    private zone: NgZone
+  ) {
     this.gridsterItem = gridsterItem;
     this.gridster = gridster;
     this.lastMouse = {
@@ -77,23 +81,61 @@ export class GridsterDraggable {
       return;
     }
 
-    if (this.gridster.options.draggable && this.gridster.options.draggable.start) {
-      this.gridster.options.draggable.start(this.gridsterItem.item, this.gridsterItem, e);
+    if (
+      this.gridster.options.draggable &&
+      this.gridster.options.draggable.start
+    ) {
+      this.gridster.options.draggable.start(
+        this.gridsterItem.item,
+        this.gridsterItem,
+        e
+      );
     }
 
     e.stopPropagation();
     e.preventDefault();
 
     this.zone.runOutsideAngular(() => {
-      this.mousemove = this.gridsterItem.renderer.listen('document', 'mousemove', this.dragMove);
-      this.touchmove = this.gridster.renderer.listen(this.gridster.el, 'touchmove', this.dragMove);
+      this.mousemove = this.gridsterItem.renderer.listen(
+        'document',
+        'mousemove',
+        this.dragMove
+      );
+      this.touchmove = this.gridster.renderer.listen(
+        this.gridster.el,
+        'touchmove',
+        this.dragMove
+      );
     });
-    this.mouseup = this.gridsterItem.renderer.listen('document', 'mouseup', this.dragStop);
-    this.mouseleave = this.gridsterItem.renderer.listen('document', 'mouseleave', this.dragStop);
-    this.cancelOnBlur = this.gridsterItem.renderer.listen('window', 'blur', this.dragStop);
-    this.touchend = this.gridsterItem.renderer.listen('document', 'touchend', this.dragStop);
-    this.touchcancel = this.gridsterItem.renderer.listen('document', 'touchcancel', this.dragStop);
-    this.gridsterItem.renderer.addClass(this.gridsterItem.el, 'gridster-item-moving');
+    this.mouseup = this.gridsterItem.renderer.listen(
+      'document',
+      'mouseup',
+      this.dragStop
+    );
+    this.mouseleave = this.gridsterItem.renderer.listen(
+      'document',
+      'mouseleave',
+      this.dragStop
+    );
+    this.cancelOnBlur = this.gridsterItem.renderer.listen(
+      'window',
+      'blur',
+      this.dragStop
+    );
+    this.touchend = this.gridsterItem.renderer.listen(
+      'document',
+      'touchend',
+      this.dragStop
+    );
+    this.touchcancel = this.gridsterItem.renderer.listen(
+      'document',
+      'touchcancel',
+      this.dragStop
+    );
+    this.gridsterItem.renderer.addClass(
+      this.gridsterItem.el,
+      'gridster-item-moving'
+    );
     this.margin = this.gridster.$options.margin;
     this.offsetLeft = this.gridster.el.scrollLeft - this.gridster.el.offsetLeft;
     this.offsetTop = this.gridster.el.scrollTop - this.gridster.el.offsetTop;
@@ -104,7 +146,8 @@ export class GridsterDraggable {
     this.width = this.gridsterItem.width;
     this.height = this.gridsterItem.height;
     if (this.gridster.$options.dirType === DirTypes.RTL) {
-      this.diffLeft = (e.clientX - this.gridster.el.scrollWidth + this.gridsterItem.left);
+      this.diffLeft =
+        e.clientX - this.gridster.el.scrollWidth + this.gridsterItem.left;
     } else {
       this.diffLeft = e.clientX + this.offsetLeft - this.margin - this.left;
     }
@@ -115,7 +158,10 @@ export class GridsterDraggable {
     this.swap = new GridsterSwap(this.gridsterItem);
     this.gridster.dragInProgress = true;
     this.gridster.updateGrid();
-    this.path.push({x: this.gridsterItem.item.x || 0, y: this.gridsterItem.item.y || 0});
+    this.path.push({
+      x: this.gridsterItem.item.x || 0,
+      y: this.gridsterItem.item.y || 0
+    });
   }
 
   dragMove = (e: MouseEvent): void => {
@@ -124,8 +170,16 @@ export class GridsterDraggable {
     GridsterUtils.checkTouchEvent(e);
     this.offsetLeft = this.gridster.el.scrollLeft - this.gridster.el.offsetLeft;
     this.offsetTop = this.gridster.el.scrollTop - this.gridster.el.offsetTop;
-    scroll(this.gridster, this.left, this.top, this.width, this.height, e, this.lastMouse,
-      this.calculateItemPositionFromMousePosition.bind(this));
+    scroll(
+      this.gridster,
+      this.left,
+      this.top,
+      this.width,
+      this.height,
+      e,
+      this.lastMouse,
+      this.calculateItemPositionFromMousePosition.bind(this)
+    );
 
     this.calculateItemPositionFromMousePosition(e);
   };
@@ -146,11 +200,23 @@ export class GridsterDraggable {
 
   calculateItemPositionWithScale(e: MouseEvent, scale: number): void {
     if (this.gridster.$options.dirType === DirTypes.RTL) {
-      this.left = this.gridster.el.scrollWidth - this.originalClientX + ((e.clientX - this.originalClientX) / scale) + this.diffLeft;
+      this.left =
+        this.gridster.el.scrollWidth -
+        this.originalClientX +
+        (e.clientX - this.originalClientX) / scale +
+        this.diffLeft;
     } else {
-      this.left = this.originalClientX + ((e.clientX - this.originalClientX) / scale) + this.offsetLeft - this.diffLeft;
+      this.left =
+        this.originalClientX +
+        (e.clientX - this.originalClientX) / scale +
+        this.offsetLeft -
+        this.diffLeft;
     }
-    this.top = this.originalClientY + ((e.clientY - this.originalClientY) / scale) + this.offsetTop - this.diffTop;
+    this.top =
+      this.originalClientY +
+      (e.clientY - this.originalClientY) / scale +
+      this.offsetTop -
+      this.diffTop;
   }
 
   calculateItemPositionWithoutScale(e: MouseEvent): void {
@@ -175,13 +241,24 @@ export class GridsterDraggable {
     this.touchmove();
     this.touchend();
     this.touchcancel();
-    this.gridsterItem.renderer.removeClass(this.gridsterItem.el, 'gridster-item-moving');
+    this.gridsterItem.renderer.removeClass(
+      this.gridsterItem.el,
+      'gridster-item-moving'
+    );
     this.gridster.dragInProgress = false;
     this.gridster.updateGrid();
     this.path = [];
-    if (this.gridster.options.draggable && this.gridster.options.draggable.stop) {
-      Promise.resolve(this.gridster.options.draggable.stop(this.gridsterItem.item, this.gridsterItem, e))
-        .then(this.makeDrag.bind(this), this.cancelDrag.bind(this));
+    if (
+      this.gridster.options.draggable &&
+      this.gridster.options.draggable.stop
+    ) {
+      Promise.resolve(
+        this.gridster.options.draggable.stop(
+          this.gridsterItem.item,
+          this.gridsterItem,
+          e
+        )
+      ).then(this.makeDrag.bind(this), this.cancelDrag.bind(this));
     } else {
       this.makeDrag();
     }
@@ -216,14 +293,26 @@ export class GridsterDraggable {
   }
 
   makeDrag(): void {
-    if (this.gridster.$options.draggable.dropOverItems && this.gridster.options.draggable
-      && this.gridster.options.draggable.dropOverItemsCallback
-      && this.collision && this.collision !== true && this.collision.$item) {
-      this.gridster.options.draggable.dropOverItemsCallback(this.gridsterItem.item, this.collision.item, this.gridster);
+    if (
+      this.gridster.$options.draggable.dropOverItems &&
+      this.gridster.options.draggable &&
+      this.gridster.options.draggable.dropOverItemsCallback &&
+      this.collision &&
+      this.collision !== true &&
+      this.collision.$item
+    ) {
+      this.gridster.options.draggable.dropOverItemsCallback(
+        this.gridsterItem.item,
+        this.collision.item,
+        this.gridster
+      );
     }
     this.collision = false;
     this.gridsterItem.setSize();
-    this.gridsterItem.checkItemChanges(this.gridsterItem.$item, this.gridsterItem.item);
+    this.gridsterItem.checkItemChanges(
+      this.gridsterItem.$item,
+      this.gridsterItem.item
+    );
     if (this.push) {
       this.push.setPushedItems();
     }
@@ -256,9 +345,17 @@ export class GridsterDraggable {
     if (this.gridster.checkGridCollision(this.gridsterItem.$item)) {
       this.gridsterItem.$item.y = this.positionYBackup;
     }
-    this.gridster.gridRenderer.setCellPosition(this.gridsterItem.renderer, this.gridsterItem.el, this.left, this.top);
+    this.gridster.gridRenderer.setCellPosition(
+      this.gridsterItem.renderer,
+      this.gridsterItem.el,
+      this.left,
+      this.top
+    );
 
-    if (this.positionXBackup !== this.gridsterItem.$item.x || this.positionYBackup !== this.gridsterItem.$item.y) {
+    if (
+      this.positionXBackup !== this.gridsterItem.$item.x ||
+      this.positionYBackup !== this.gridsterItem.$item.y
+    ) {
       const lastPosition = this.path[this.path.length - 1];
       let direction = '';
       if (lastPosition.x < this.gridsterItem.$item.x) {
@@ -276,11 +373,18 @@ export class GridsterDraggable {
       if (this.collision) {
         this.gridsterItem.$item.x = this.positionXBackup;
         this.gridsterItem.$item.y = this.positionYBackup;
-        if (this.gridster.$options.draggable.dropOverItems && this.collision !== true && this.collision.$item) {
+        if (
+          this.gridster.$options.draggable.dropOverItems &&
+          this.collision !== true &&
+          this.collision.$item
+        ) {
           this.gridster.movingItem = null;
         }
       } else {
-        this.path.push({x: this.gridsterItem.$item.x, y: this.gridsterItem.$item.y});
+        this.path.push({
+          x: this.gridsterItem.$item.x,
+          y: this.gridsterItem.$item.y
+        });
       }
       this.push.checkPushBack();
     }
@@ -291,8 +395,16 @@ export class GridsterDraggable {
     const enableDrag = this.gridsterItem.canBeDragged();
     if (!this.enabled && enableDrag) {
       this.enabled = !this.enabled;
-      this.mousedown = this.gridsterItem.renderer.listen(this.gridsterItem.el, 'mousedown', this.dragStartDelay);
-      this.touchstart = this.gridsterItem.renderer.listen(this.gridsterItem.el, 'touchstart', this.dragStartDelay);
+      this.mousedown = this.gridsterItem.renderer.listen(
+        this.gridsterItem.el,
+        'mousedown',
+        this.dragStartDelay
+      );
+      this.touchstart = this.gridsterItem.renderer.listen(
+        this.gridsterItem.el,
+        'touchstart',
+        this.dragStartDelay
+      );
     } else if (this.enabled && !enableDrag) {
       this.enabled = !this.enabled;
       this.mousedown();
@@ -301,7 +413,13 @@ export class GridsterDraggable {
   }
 
   dragStartDelay = (e: MouseEvent2): void => {
-    if (e.target.hasAttribute('class') && e.target.getAttribute('class').split(' ').indexOf('gridster-item-resizable-handler') > -1) {
+    if (
+      e.target.hasAttribute('class') &&
+      e.target
+        .getAttribute('class')
+        .split(' ')
+        .indexOf('gridster-item-resizable-handler') > -1
+    ) {
       return;
     }
     if (GridsterUtils.checkContentClassForEvent(this.gridster, e)) {
@@ -316,16 +434,43 @@ export class GridsterDraggable {
       this.dragStart(e);
       cancelDrag();
     }, this.gridster.$options.draggable.delayStart);
-    const cancelMouse = this.gridsterItem.renderer.listen('document', 'mouseup', cancelDrag);
-    const cancelMouseLeave = this.gridsterItem.renderer.listen('document', 'mouseleave', cancelDrag);
-    const cancelOnBlur = this.gridsterItem.renderer.listen('window', 'blur', cancelDrag);
-    const cancelTouchMove = this.gridsterItem.renderer.listen('document', 'touchmove', cancelMove);
-    const cancelTouchEnd = this.gridsterItem.renderer.listen('document', 'touchend', cancelDrag);
-    const cancelTouchCancel = this.gridsterItem.renderer.listen('document', 'touchcancel', cancelDrag);
+    const cancelMouse = this.gridsterItem.renderer.listen(
+      'document',
+      'mouseup',
+      cancelDrag
+    );
+    const cancelMouseLeave = this.gridsterItem.renderer.listen(
+      'document',
+      'mouseleave',
+      cancelDrag
+    );
+    const cancelOnBlur = this.gridsterItem.renderer.listen(
+      'window',
+      'blur',
+      cancelDrag
+    );
+    const cancelTouchMove = this.gridsterItem.renderer.listen(
+      'document',
+      'touchmove',
+      cancelMove
+    );
+    const cancelTouchEnd = this.gridsterItem.renderer.listen(
+      'document',
+      'touchend',
+      cancelDrag
+    );
+    const cancelTouchCancel = this.gridsterItem.renderer.listen(
+      'document',
+      'touchcancel',
+      cancelDrag
+    );
 
     function cancelMove(eventMove: MouseEvent): void {
       GridsterUtils.checkTouchEvent(eventMove);
-      if (Math.abs(eventMove.clientX - e.clientX) > 9 || Math.abs(eventMove.clientY - e.clientY) > 9) {
+      if (
+        Math.abs(eventMove.clientX - e.clientX) > 9 ||
+        Math.abs(eventMove.clientY - e.clientY) > 9
+      ) {
         cancelDrag();
       }
     }

@@ -1,7 +1,7 @@
 ### Options
 
 | Option                       | Description                                         | Type                          | Default   |
-|------------------------------|-----------------------------------------------------|-------------------------------|-----------|
+| ---------------------------- | --------------------------------------------------- | ----------------------------- | --------- |
 | enableEmptyCellClick         | enable empty cell click events                      | Boolean                       | false     |
 | enableEmptyCellContextMenu   | enable empty cell context menu (right click) events | Boolean                       | false     |
 | enableEmptyCellDrop          | enable empty cell drop events                       | Boolean                       | false     |

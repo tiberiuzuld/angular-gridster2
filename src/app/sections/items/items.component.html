@@ -1,6 +1,10 @@
 <div class="options">
-  <a mat-raised-button href="https://github.com/tiberiuzuld/angular-gridster2/tree/master/src/app/sections/items"
-     target="_blank" class="source-code-button">
+  <a
+    mat-raised-button
+    href="https://github.com/tiberiuzuld/angular-gridster2/tree/master/src/app/sections/items"
+    target="_blank"
+    class="source-code-button"
+  >
     <mat-icon>open_in_new</mat-icon>
     Source
   </a>
@@ -8,53 +12,120 @@
 </div>
 <div class="options-header" *ngIf="dashboard[0]">
   <mat-form-field>
-    <input matInput [(ngModel)]="dashboard[0].x" type="number" placeholder="X" (ngModelChange)="changedOptions()">
+    <input
+      matInput
+      [(ngModel)]="dashboard[0].x"
+      type="number"
+      placeholder="X"
+      (ngModelChange)="changedOptions()"
+    />
   </mat-form-field>
   <mat-form-field>
-    <input matInput [(ngModel)]="dashboard[0].y" type="number" placeholder="Y" (ngModelChange)="changedOptions()">
+    <input
+      matInput
+      [(ngModel)]="dashboard[0].y"
+      type="number"
+      placeholder="Y"
+      (ngModelChange)="changedOptions()"
+    />
   </mat-form-field>
   <mat-form-field>
-    <input matInput [(ngModel)]="dashboard[0].rows" type="number" placeholder="Rows" (ngModelChange)="changedOptions()">
+    <input
+      matInput
+      [(ngModel)]="dashboard[0].rows"
+      type="number"
+      placeholder="Rows"
+      (ngModelChange)="changedOptions()"
+    />
   </mat-form-field>
   <mat-form-field>
-    <input matInput [(ngModel)]="dashboard[0].cols" type="number" placeholder="Cols" (ngModelChange)="changedOptions()">
+    <input
+      matInput
+      [(ngModel)]="dashboard[0].cols"
+      type="number"
+      placeholder="Cols"
+      (ngModelChange)="changedOptions()"
+    />
   </mat-form-field>
   <mat-form-field>
-    <input matInput [(ngModel)]="dashboard[0].maxItemCols" type="number" placeholder="Max Item Cols"
-           (ngModelChange)="changedOptions()">
+    <input
+      matInput
+      [(ngModel)]="dashboard[0].maxItemCols"
+      type="number"
+      placeholder="Max Item Cols"
+      (ngModelChange)="changedOptions()"
+    />
   </mat-form-field>
   <mat-form-field>
-    <input matInput [(ngModel)]="dashboard[0].minItemCols" type="number" placeholder="Min Item Cols"
-           (ngModelChange)="changedOptions()">
+    <input
+      matInput
+      [(ngModel)]="dashboard[0].minItemCols"
+      type="number"
+      placeholder="Min Item Cols"
+      (ngModelChange)="changedOptions()"
+    />
   </mat-form-field>
   <mat-form-field>
-    <input matInput [(ngModel)]="dashboard[0].maxItemRows" type="number" placeholder="Max Item Rows"
-           (ngModelChange)="changedOptions()">
+    <input
+      matInput
+      [(ngModel)]="dashboard[0].maxItemRows"
+      type="number"
+      placeholder="Max Item Rows"
+      (ngModelChange)="changedOptions()"
+    />
   </mat-form-field>
   <mat-form-field>
-    <input matInput [(ngModel)]="dashboard[0].minItemRows" type="number" placeholder="Min Item Rows"
-           (ngModelChange)="changedOptions()">
+    <input
+      matInput
+      [(ngModel)]="dashboard[0].minItemRows"
+      type="number"
+      placeholder="Min Item Rows"
+      (ngModelChange)="changedOptions()"
+    />
   </mat-form-field>
   <mat-form-field>
-    <input matInput [(ngModel)]="dashboard[0].maxItemArea" type="number" placeholder="Max Item Area"
-           (ngModelChange)="changedOptions()">
+    <input
+      matInput
+      [(ngModel)]="dashboard[0].maxItemArea"
+      type="number"
+      placeholder="Max Item Area"
+      (ngModelChange)="changedOptions()"
+    />
   </mat-form-field>
   <mat-form-field>
-    <input matInput [(ngModel)]="dashboard[0].minItemArea" type="number" placeholder="Min Item Area"
-           (ngModelChange)="changedOptions()">
+    <input
+      matInput
+      [(ngModel)]="dashboard[0].minItemArea"
+      type="number"
+      placeholder="Min Item Area"
+      (ngModelChange)="changedOptions()"
+    />
   </mat-form-field>
-  <mat-checkbox [(ngModel)]="dashboard[0].dragEnabled" (ngModelChange)="changedOptions()">
+  <mat-checkbox
+    [(ngModel)]="dashboard[0].dragEnabled"
+    (ngModelChange)="changedOptions()"
+  >
     Drag
   </mat-checkbox>
-  <mat-checkbox [(ngModel)]="dashboard[0].resizeEnabled" (ngModelChange)="changedOptions()">
+  <mat-checkbox
+    [(ngModel)]="dashboard[0].resizeEnabled"
+    (ngModelChange)="changedOptions()"
+  >
     Resize
   </mat-checkbox>
-  <mat-checkbox [(ngModel)]="dashboard[0].compactEnabled" (ngModelChange)="changedOptions()">
+  <mat-checkbox
+    [(ngModel)]="dashboard[0].compactEnabled"
+    (ngModelChange)="changedOptions()"
+  >
     Compact
   </mat-checkbox>
   <mat-form-field>
-    <mat-select aria-label="Compact type" [(ngModel)]="options.compactType" (ngModelChange)="changedOptions()"
-                placeholder="Compact Type">
+    <mat-select
+      aria-label="Compact type"
+      [(ngModel)]="options.compactType"
+      (ngModelChange)="changedOptions()"
+      placeholder="Compact Type"
+    >
       <mat-option value="none">None</mat-option>
       <mat-option value="compactUp">Compact Up</mat-option>
       <mat-option value="compactLeft">Compact Left</mat-option>
@@ -67,12 +138,14 @@
   </button>
 </div>
 
-
 <gridster [options]="options">
   <gridster-item [item]="item" *ngFor="let item of dashboard">
     <div class="button-holder">
-      <button mat-mini-fab (mousedown)="removeItem($event, item)"
-              (touchstart)="removeItem($event, item)">
+      <button
+        mat-mini-fab
+        (mousedown)="removeItem($event, item)"
+        (touchstart)="removeItem($event, item)"
+      >
         <mat-icon>delete</mat-icon>
       </button>
     </div>

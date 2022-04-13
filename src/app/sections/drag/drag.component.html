@@ -1,54 +1,92 @@
 <div class="options">
-  <a mat-raised-button href="https://github.com/tiberiuzuld/angular-gridster2/tree/master/src/app/sections/drag"
-     target="_blank" class="source-code-button">
+  <a
+    mat-raised-button
+    href="https://github.com/tiberiuzuld/angular-gridster2/tree/master/src/app/sections/drag"
+    target="_blank"
+    class="source-code-button"
+  >
     <mat-icon>open_in_new</mat-icon>
     Source
   </a>
   <markdown [src]="'assets/drag.md'"></markdown>
 </div>
 <div class="options-header" *ngIf="options.draggable">
-  <mat-checkbox [(ngModel)]="options.draggable.enabled" (ngModelChange)="changedOptions()">
+  <mat-checkbox
+    [(ngModel)]="options.draggable.enabled"
+    (ngModelChange)="changedOptions()"
+  >
     Drag Items
   </mat-checkbox>
-  <mat-checkbox [(ngModel)]="options.pushItems" (ngModelChange)="changedOptions()">
+  <mat-checkbox
+    [(ngModel)]="options.pushItems"
+    (ngModelChange)="changedOptions()"
+  >
     Push Items
   </mat-checkbox>
-  <mat-checkbox [(ngModel)]="options.draggable.dropOverItems" (ngModelChange)="changedOptions()">
+  <mat-checkbox
+    [(ngModel)]="options.draggable.dropOverItems"
+    (ngModelChange)="changedOptions()"
+  >
     Allow Drop Over Items
   </mat-checkbox>
-  <mat-checkbox [(ngModel)]="options.draggable.ignoreContent" (ngModelChange)="changedOptions()">
+  <mat-checkbox
+    [(ngModel)]="options.draggable.ignoreContent"
+    (ngModelChange)="changedOptions()"
+  >
     Ignore Content
   </mat-checkbox>
-  <mat-checkbox [(ngModel)]="options.disableScrollVertical" (ngModelChange)="changedOptions()">
+  <mat-checkbox
+    [(ngModel)]="options.disableScrollVertical"
+    (ngModelChange)="changedOptions()"
+  >
     Disable Vertical Scroll
   </mat-checkbox>
-  <mat-checkbox [(ngModel)]="options.disableScrollHorizontal" (ngModelChange)="changedOptions()">
+  <mat-checkbox
+    [(ngModel)]="options.disableScrollHorizontal"
+    (ngModelChange)="changedOptions()"
+  >
     Disable Horizontal Scroll
   </mat-checkbox>
   <mat-form-field>
-    <input matInput [(ngModel)]="options.draggable.delayStart" type="number" placeholder="Delay Start ms"
-           (ngModelChange)="changedOptions()">
+    <input
+      matInput
+      [(ngModel)]="options.draggable.delayStart"
+      type="number"
+      placeholder="Delay Start ms"
+      (ngModelChange)="changedOptions()"
+    />
   </mat-form-field>
   <mat-form-field>
-    <input matInput [(ngModel)]="options.draggable.dragHandleClass" type="text" placeholder="Drag Handle Class"
-           (ngModelChange)="changedOptions()">
+    <input
+      matInput
+      [(ngModel)]="options.draggable.dragHandleClass"
+      type="text"
+      placeholder="Drag Handle Class"
+      (ngModelChange)="changedOptions()"
+    />
   </mat-form-field>
   <mat-form-field>
-    <input matInput [(ngModel)]="options.draggable.ignoreContentClass" type="text" placeholder="Ignore Content Class"
-           (ngModelChange)="changedOptions()">
+    <input
+      matInput
+      [(ngModel)]="options.draggable.ignoreContentClass"
+      type="text"
+      placeholder="Ignore Content Class"
+      (ngModelChange)="changedOptions()"
+    />
   </mat-form-field>
   <button mat-mini-fab (click)="addItem()" class="add-button cols-2">
     <mat-icon>add</mat-icon>
   </button>
 </div>
 
-
 <gridster [options]="options">
   <gridster-item [item]="item" *ngFor="let item of dashboard">
     <div class="button-holder">
       <div class="gridster-item-content" *ngIf="item.hasContent">
         <div class="stuff">
-          <span>Some content to select and click without dragging the widget</span>
+          <span
+            >Some content to select and click without dragging the widget</span
+          >
           <a href="https://www.google.com" target="_blank">Link to Google</a>
         </div>
       </div>
@@ -56,14 +94,23 @@
         <button mat-icon-button mat-raised-button class="drag-handler">
           <mat-icon>open_with</mat-icon>
         </button>
-        <button mat-icon-button mat-raised-button class="remove-button" (mousedown)="removeItem($event, item)"
-                (touchstart)="removeItem($event, item)">
+        <button
+          mat-icon-button
+          mat-raised-button
+          class="remove-button"
+          (mousedown)="removeItem($event, item)"
+          (touchstart)="removeItem($event, item)"
+        >
           <mat-icon>delete</mat-icon>
         </button>
       </div>
-      <label *ngIf="!item.hasContent">{{item.label}}</label>
-      <button mat-mini-fab *ngIf="!item.hasContent" (mousedown)="removeItem($event, item)"
-              (touchstart)="removeItem($event, item)">
+      <label *ngIf="!item.hasContent">{{ item.label }}</label>
+      <button
+        mat-mini-fab
+        *ngIf="!item.hasContent"
+        (mousedown)="removeItem($event, item)"
+        (touchstart)="removeItem($event, item)"
+      >
         <mat-icon>delete</mat-icon>
       </button>
     </div>

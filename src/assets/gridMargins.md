@@ -1,7 +1,7 @@
 ### Options
 
 | Option            | Description                                         | Type    | Default |
-|-------------------|-----------------------------------------------------|---------|---------|
+| ----------------- | --------------------------------------------------- | ------- | ------- |
 | margin            | margin between grid items                           | Number  | 10      |
 | outerMargin       | if margins will apply to the sides of the container | Boolean | true    |
 | outerMarginTop    | override top outer margin for grid                  | Number  | null    |

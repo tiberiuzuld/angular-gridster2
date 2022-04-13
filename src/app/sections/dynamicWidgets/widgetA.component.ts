@@ -1,7 +1,14 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
-import {Subscription} from 'rxjs';
-import {GridsterItem} from 'angular-gridster2';
-
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewEncapsulation
+} from '@angular/core';
+import { Subscription } from 'rxjs';
+import { GridsterItem } from 'angular-gridster2';
 
 @Component({
   selector: 'app-widget-a',
@@ -18,8 +25,9 @@ export class WidgetAComponent implements OnInit, OnDestroy {
   resizeSub: Subscription;
 
   ngOnInit(): void {
-    this.resizeSub = this.resizeEvent.subscribe((widget) => {
-      if (widget === this.widget) { // or check id , type or whatever you have there
+    this.resizeSub = this.resizeEvent.subscribe(widget => {
+      if (widget === this.widget) {
+        // or check id , type or whatever you have there
         // resize your widget, chart, map , etc.
         console.log(widget);
       }

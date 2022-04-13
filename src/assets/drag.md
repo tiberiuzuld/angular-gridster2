@@ -1,7 +1,7 @@
 ### Options
 
 | Option                          | Description                                                                         | Type                                   | Default                 |
-|---------------------------------|-------------------------------------------------------------------------------------|----------------------------------------|-------------------------|
+| ------------------------------- | ----------------------------------------------------------------------------------- | -------------------------------------- | ----------------------- |
 | draggable.delayStart            | milliseconds to delay the start of drag, useful for touch interaction               | Number                                 | 0                       |
 | draggable.enabled               | enable/disable draggable items                                                      | Boolean                                | false                   |
 | draggable.ignoreContent         | if true drag will start only from elements from `dragHandleClass`                   | Boolean                                | false                   |

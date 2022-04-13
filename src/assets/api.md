@@ -3,7 +3,7 @@
 Can be access from `this.options.api` after the grid has initialized.
 
 | API                                          | Description                                                                                             | Return                |
-|----------------------------------------------|---------------------------------------------------------------------------------------------------------|-----------------------|
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------- | --------------------- |
 | resize()                                     | call if size of container changes. Grid will auto resize on window resize                               | Void                  |
 | optionsChanged()                             | call on change of options after initialization                                                          | Void                  |
 | getNextPossiblePosition(item: GridsterItem)  | call to get a viable position for item. Returns true if found.                                          | Boolean               |

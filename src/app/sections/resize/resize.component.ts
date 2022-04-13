@@ -1,17 +1,29 @@
-import {ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  ViewEncapsulation
+} from '@angular/core';
 
-import {DisplayGrid, GridsterConfig, GridsterItem, GridsterItemComponentInterface, GridType, Resizable} from 'angular-gridster2';
+import {
+  DisplayGrid,
+  GridsterConfig,
+  GridsterItem,
+  GridsterItemComponentInterface,
+  GridType,
+  Resizable
+} from 'angular-gridster2';
 
 interface SafeResizable extends Resizable {
   handles: {
-    s: boolean,
-    e: boolean,
-    n: boolean,
-    w: boolean,
-    se: boolean,
-    ne: boolean,
-    sw: boolean,
-    nw: boolean
+    s: boolean;
+    e: boolean;
+    n: boolean;
+    w: boolean;
+    se: boolean;
+    ne: boolean;
+    sw: boolean;
+    nw: boolean;
   };
 }
 
@@ -29,11 +41,19 @@ export class ResizeComponent implements OnInit {
   options: Safe;
   dashboard: Array<GridsterItem>;
 
-  static eventStop(item: GridsterItem, itemComponent: GridsterItemComponentInterface, event: MouseEvent): void {
+  static eventStop(
+    item: GridsterItem,
+    itemComponent: GridsterItemComponentInterface,
+    event: MouseEvent
+  ): void {
     console.info('eventStop', item, itemComponent, event);
   }
 
-  static eventStart(item: GridsterItem, itemComponent: GridsterItemComponentInterface, event: MouseEvent): void {
+  static eventStart(
+    item: GridsterItem,
+    itemComponent: GridsterItemComponentInterface,
+    event: MouseEvent
+  ): void {
     console.info('eventStart', item, itemComponent, event);
   }
 
@@ -56,21 +76,21 @@ export class ResizeComponent implements OnInit {
           sw: true,
           nw: true
         }
-      },
+      }
     };
 
     this.dashboard = [
-      {cols: 2, rows: 1, y: 0, x: 0},
-      {cols: 2, rows: 2, y: 0, x: 2},
-      {cols: 1, rows: 1, y: 0, x: 4},
-      {cols: 3, rows: 2, y: 1, x: 4},
-      {cols: 1, rows: 1, y: 4, x: 5},
-      {cols: 1, rows: 1, y: 2, x: 1},
-      {cols: 2, rows: 2, y: 5, x: 5},
-      {cols: 2, rows: 2, y: 3, x: 2},
-      {cols: 2, rows: 1, y: 2, x: 2},
-      {cols: 1, rows: 1, y: 3, x: 4},
-      {cols: 1, rows: 1, y: 0, x: 6}
+      { cols: 2, rows: 1, y: 0, x: 0 },
+      { cols: 2, rows: 2, y: 0, x: 2 },
+      { cols: 1, rows: 1, y: 0, x: 4 },
+      { cols: 3, rows: 2, y: 1, x: 4 },
+      { cols: 1, rows: 1, y: 4, x: 5 },
+      { cols: 1, rows: 1, y: 2, x: 1 },
+      { cols: 2, rows: 2, y: 5, x: 5 },
+      { cols: 2, rows: 2, y: 3, x: 2 },
+      { cols: 2, rows: 1, y: 2, x: 2 },
+      { cols: 1, rows: 1, y: 3, x: 4 },
+      { cols: 1, rows: 1, y: 0, x: 6 }
     ];
   }
 
@@ -87,6 +107,6 @@ export class ResizeComponent implements OnInit {
   }
 
   addItem(): void {
-    this.dashboard.push({x: 0, y: 0, cols: 1, rows: 1});
+    this.dashboard.push({ x: 0, y: 0, cols: 1, rows: 1 });
   }
 }

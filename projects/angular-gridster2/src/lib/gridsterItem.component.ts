@@ -7,18 +7,22 @@ import {
   NgZone,
   OnChanges,
   OnDestroy,
-  OnInit, Output,
+  OnInit,
+  Output,
   Renderer2,
   SimpleChanges,
   ViewEncapsulation,
   EventEmitter
-} from "@angular/core";
+} from '@angular/core';
 
-import {GridsterDraggable} from './gridsterDraggable.service';
-import {GridsterResizable} from './gridsterResizable.service';
-import {GridsterUtils} from './gridsterUtils.service';
-import {GridsterItem, GridsterItemComponentInterface} from './gridsterItem.interface';
-import {GridsterComponent} from './gridster.component';
+import { GridsterDraggable } from './gridsterDraggable.service';
+import { GridsterResizable } from './gridsterResizable.service';
+import { GridsterUtils } from './gridsterUtils.service';
+import {
+  GridsterItem,
+  GridsterItemComponentInterface
+} from './gridsterItem.interface';
+import { GridsterComponent } from './gridster.component';
 
 @Component({
   selector: 'gridster-item',
@@ -26,11 +30,22 @@ import {GridsterComponent} from './gridster.component';
   styleUrls: ['./gridsterItem.css'],
   encapsulation: ViewEncapsulation.None
 })
-export class GridsterItemComponent implements OnInit, OnDestroy, OnChanges, GridsterItemComponentInterface {
+export class GridsterItemComponent
+  implements OnInit, OnDestroy, OnChanges, GridsterItemComponentInterface
+{
   @Input() item: GridsterItem;
-  @Output() itemInit = new EventEmitter<{ item: GridsterItem, itemComponent: GridsterItemComponentInterface }> ();
-  @Output() itemChange = new EventEmitter<{ item: GridsterItem, itemComponent: GridsterItemComponentInterface }> ();
-  @Output() itemResize = new EventEmitter<{ item: GridsterItem, itemComponent: GridsterItemComponentInterface }> ();
+  @Output() itemInit = new EventEmitter<{
+    item: GridsterItem;
+    itemComponent: GridsterItemComponentInterface;
+  }>();
+  @Output() itemChange = new EventEmitter<{
+    item: GridsterItem;
+    itemComponent: GridsterItemComponentInterface;
+  }>();
+  @Output() itemResize = new EventEmitter<{
+    item: GridsterItem;
+    itemComponent: GridsterItemComponentInterface;
+  }>();
   $item: GridsterItem;
   el: HTMLElement;
   gridster: GridsterComponent;
@@ -48,14 +63,18 @@ export class GridsterItemComponent implements OnInit, OnDestroy, OnChanges, Grid
     return this.getLayerIndex() + this.gridster.$options.baseLayerIndex;
   }
 
-  constructor(@Inject(ElementRef) el: ElementRef, gridster: GridsterComponent, @Inject(Renderer2) public renderer: Renderer2,
-              @Inject(NgZone) private zone: NgZone) {
+  constructor(
+    @Inject(ElementRef) el: ElementRef,
+    gridster: GridsterComponent,
+    @Inject(Renderer2) public renderer: Renderer2,
+    @Inject(NgZone) private zone: NgZone
+  ) {
     this.el = el.nativeElement;
     this.$item = {
       cols: -1,
       rows: -1,
       x: -1,
-      y: -1,
+      y: -1
     };
     this.gridster = gridster;
     this.drag = new GridsterDraggable(this, gridster, this.zone);
@@ -94,7 +113,7 @@ export class GridsterItemComponent implements OnInit, OnDestroy, OnChanges, Grid
       maxItemCols: undefined,
       minItemCols: undefined,
       maxItemArea: undefined,
-      minItemArea: undefined,
+      minItemArea: undefined
     });
   }
 
@@ -119,8 +138,12 @@ export class GridsterItemComponent implements OnInit, OnDestroy, OnChanges, Grid
   updateItemSize(): void {
     const top = this.$item.y * this.gridster.curRowHeight;
     const left = this.$item.x * this.gridster.curColWidth;
-    const width = this.$item.cols * this.gridster.curColWidth - this.gridster.$options.margin;
-    const height = this.$item.rows * this.gridster.curRowHeight - this.gridster.$options.margin;
+    const width =
+      this.$item.cols * this.gridster.curColWidth -
+      this.gridster.$options.margin;
+    const height =
+      this.$item.rows * this.gridster.curRowHeight -
+      this.gridster.$options.margin;
 
     this.top = top;
     this.left = left;
@@ -133,7 +156,7 @@ export class GridsterItemComponent implements OnInit, OnDestroy, OnChanges, Grid
       if (this.gridster.options.itemInitCallback) {
         this.gridster.options.itemInitCallback(this.item, this);
       }
-      this.itemInit.next({ item: this.item, itemComponent: this })
+      this.itemInit.next({ item: this.item, itemComponent: this });
       if (this.gridster.$options.scrollToNewItems) {
         this.el.scrollIntoView(false);
       }
@@ -156,7 +179,12 @@ export class GridsterItemComponent implements OnInit, OnDestroy, OnChanges, Grid
   }
 
   checkItemChanges(newValue: GridsterItem, oldValue: GridsterItem): void {
-    if (newValue.rows === oldValue.rows && newValue.cols === oldValue.cols && newValue.x === oldValue.x && newValue.y === oldValue.y) {
+    if (
+      newValue.rows === oldValue.rows &&
+      newValue.cols === oldValue.cols &&
+      newValue.x === oldValue.x &&
+      newValue.y === oldValue.y
+    ) {
       return;
     }
     if (this.gridster.checkCollision(this.$item)) {
@@ -177,13 +205,19 @@ export class GridsterItemComponent implements OnInit, OnDestroy, OnChanges, Grid
 
   canBeDragged(): boolean {
     const gridDragEnabled = this.gridster.$options.draggable.enabled;
-    const itemDragEnabled = this.$item.dragEnabled === undefined ? gridDragEnabled : this.$item.dragEnabled;
+    const itemDragEnabled =
+      this.$item.dragEnabled === undefined
+        ? gridDragEnabled
+        : this.$item.dragEnabled;
     return !this.gridster.mobile && gridDragEnabled && itemDragEnabled;
   }
 
   canBeResized(): boolean {
     const gridResizable = this.gridster.$options.resizable.enabled;
-    const itemResizable = this.$item.resizeEnabled === undefined ? gridResizable : this.$item.resizeEnabled;
+    const itemResizable =
+      this.$item.resizeEnabled === undefined
+        ? gridResizable
+        : this.$item.resizeEnabled;
     return !this.gridster.mobile && gridResizable && itemResizable;
   }
 
@@ -195,7 +229,8 @@ export class GridsterItemComponent implements OnInit, OnDestroy, OnChanges, Grid
     const topIndex = this.gridster.$options.maxLayerIndex;
     if (layerIndex < topIndex) {
       const targetIndex = offset ? layerIndex + offset : topIndex;
-      this.item.layerIndex = this.$item.layerIndex = targetIndex > topIndex ? topIndex : targetIndex;
+      this.item.layerIndex = this.$item.layerIndex =
+        targetIndex > topIndex ? topIndex : targetIndex;
     }
   }
 
@@ -206,7 +241,8 @@ export class GridsterItemComponent implements OnInit, OnDestroy, OnChanges, Grid
     const layerIndex = this.getLayerIndex();
     if (layerIndex > 0) {
       const targetIndex = offset ? layerIndex - offset : 0;
-      this.item.layerIndex = this.$item.layerIndex = targetIndex < 0 ? 0 : targetIndex;
+      this.item.layerIndex = this.$item.layerIndex =
+        targetIndex < 0 ? 0 : targetIndex;
     }
   }
 
@@ -219,5 +255,4 @@ export class GridsterItemComponent implements OnInit, OnDestroy, OnChanges, Grid
     }
     return 0;
   }
-
 }

@@ -1,6 +1,14 @@
-import {GridsterComponentInterface} from './gridster.interface';
-import {compactTypes, dirTypes, displayGrids, gridTypes} from './gridsterConfig.interface';
-import {GridsterItem, GridsterItemComponentInterface} from './gridsterItem.interface';
+import { GridsterComponentInterface } from './gridster.interface';
+import {
+  compactTypes,
+  dirTypes,
+  displayGrids,
+  gridTypes
+} from './gridsterConfig.interface';
+import {
+  GridsterItem,
+  GridsterItemComponentInterface
+} from './gridsterItem.interface';
 
 export interface GridsterConfigS {
   gridType: gridTypes;
@@ -66,12 +74,14 @@ export interface GridsterConfigS {
   ignoreMarginInRow: boolean;
   dirType: dirTypes;
   api: {
-    resize: () => void,
-    optionsChanged: () => void,
-    getNextPossiblePosition: (newItem: GridsterItem) => boolean,
-    getFirstPossiblePosition: (item: GridsterItem) => GridsterItem,
-    getLastPossiblePosition: (item: GridsterItem) => GridsterItem,
-    getItemComponent: (item: GridsterItem) => GridsterItemComponentInterface | undefined;
+    resize: () => void;
+    optionsChanged: () => void;
+    getNextPossiblePosition: (newItem: GridsterItem) => boolean;
+    getFirstPossiblePosition: (item: GridsterItem) => GridsterItem;
+    getLastPossiblePosition: (item: GridsterItem) => GridsterItem;
+    getItemComponent: (
+      item: GridsterItem
+    ) => GridsterItemComponentInterface | undefined;
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -91,19 +101,23 @@ export interface Draggable extends DragBase {
   ignoreContent: boolean;
   dragHandleClass: string;
   dropOverItems: boolean;
-  dropOverItemsCallback: (source: GridsterItem, target: GridsterItem, grid?: GridsterComponentInterface) => void;
+  dropOverItemsCallback: (
+    source: GridsterItem,
+    target: GridsterItem,
+    grid?: GridsterComponentInterface
+  ) => void;
 }
 
 export interface Resizable extends DragBase {
   handles: {
-    s: boolean,
-    e: boolean,
-    n: boolean,
-    w: boolean,
-    se: boolean,
-    ne: boolean,
-    sw: boolean,
-    nw: boolean
+    s: boolean;
+    e: boolean;
+    n: boolean;
+    w: boolean;
+    se: boolean;
+    ne: boolean;
+    sw: boolean;
+    nw: boolean;
   };
 }
 

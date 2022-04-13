@@ -15,7 +15,11 @@ $gridster-app-accent: mat.define-palette(mat.$blue-palette);
 $gridster-app-warn: mat.define-palette(mat.$red-palette);
 
 // Create the theme object (a Sass map containing all of the palettes).
-$gridster-app-theme: mat.define-light-theme($gridster-app-primary, $gridster-app-accent, $gridster-app-warn);
+$gridster-app-theme: mat.define-light-theme(
+  $gridster-app-primary,
+  $gridster-app-accent,
+  $gridster-app-warn
+);
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
