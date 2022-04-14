@@ -4,10 +4,7 @@ import { DirTypes } from './gridsterConfig.interface';
 import { GridsterItemComponentInterface } from './gridsterItem.interface';
 import { GridsterPush } from './gridsterPush.service';
 import { GridsterPushResize } from './gridsterPushResize.service';
-import {
-  GridsterResizeEventType,
-  MouseEvent2
-} from './gridsterResizeEventType.interface';
+import { GridsterResizeEventType } from './gridsterResizeEventType.interface';
 
 import { cancelScroll, scroll } from './gridsterScroll.service';
 import { GridsterUtils } from './gridsterUtils.service';
@@ -23,7 +20,7 @@ export class GridsterResizable {
   resizeEventScrollType: GridsterResizeEventType;
   directionFunction: (e: { clientX: number; clientY: number }) => void;
   dragFunction: (event: MouseEvent) => void;
-  dragStopFunction: (event: MouseEvent2) => void;
+  dragStopFunction: (event: MouseEvent) => void;
   resizeEnabled: boolean;
   mousemove: () => void;
   mouseup: () => void;
@@ -69,16 +66,11 @@ export class GridsterResizable {
   }
 
   destroy(): void {
-    if (this.gridster.previewStyle) {
-      this.gridster.previewStyle();
-    }
-    // @ts-ignore
-    delete this.gridsterItem;
-    // @ts-ignore
-    delete this.gridster;
+    this.gridster?.previewStyle();
+    this.gridster = this.gridsterItem = null!;
   }
 
-  dragStart(e: MouseEvent2): void {
+  dragStart(e: MouseEvent): void {
     if (e.which && e.which !== 1) {
       return;
     }
@@ -172,16 +164,12 @@ export class GridsterResizable {
     this.gridster.dragInProgress = true;
     this.gridster.updateGrid();
 
-    if (
-      e.target?.hasAttribute('class') &&
-      e.target.getAttribute('class').split(' ').indexOf('handle-n') > -1
-    ) {
+    const { classList } = e.target as HTMLElement;
+
+    if (classList.contains('handle-n')) {
       this.resizeEventScrollType.n = true;
       this.directionFunction = this.handleN;
-    } else if (
-      e.target?.hasAttribute('class') &&
-      e.target.getAttribute('class').split(' ').indexOf('handle-w') > -1
-    ) {
+    } else if (classList.contains('handle-w')) {
       if (this.gridster.$options.dirType === DirTypes.RTL) {
         this.resizeEventScrollType.e = true;
         this.directionFunction = this.handleE;
@@ -189,16 +177,10 @@ export class GridsterResizable {
         this.resizeEventScrollType.w = true;
         this.directionFunction = this.handleW;
       }
-    } else if (
-      e.target?.hasAttribute('class') &&
-      e.target.getAttribute('class').split(' ').indexOf('handle-s') > -1
-    ) {
+    } else if (classList.contains('handle-s')) {
       this.resizeEventScrollType.s = true;
       this.directionFunction = this.handleS;
-    } else if (
-      e.target.hasAttribute('class') &&
-      e.target.getAttribute('class').split(' ').indexOf('handle-e') > -1
-    ) {
+    } else if (classList.contains('handle-e')) {
       if (this.gridster.$options.dirType === DirTypes.RTL) {
         this.resizeEventScrollType.w = true;
         this.directionFunction = this.handleW;
@@ -206,10 +188,7 @@ export class GridsterResizable {
         this.resizeEventScrollType.e = true;
         this.directionFunction = this.handleE;
       }
-    } else if (
-      e.target.hasAttribute('class') &&
-      e.target.getAttribute('class').split(' ').indexOf('handle-nw') > -1
-    ) {
+    } else if (classList.contains('handle-nw')) {
       if (this.gridster.$options.dirType === DirTypes.RTL) {
         this.resizeEventScrollType.n = true;
         this.resizeEventScrollType.e = true;
@@ -219,10 +198,7 @@ export class GridsterResizable {
         this.resizeEventScrollType.w = true;
         this.directionFunction = this.handleNW;
       }
-    } else if (
-      e.target.hasAttribute('class') &&
-      e.target.getAttribute('class').split(' ').indexOf('handle-ne') > -1
-    ) {
+    } else if (classList.contains('handle-ne')) {
       if (this.gridster.$options.dirType === DirTypes.RTL) {
         this.resizeEventScrollType.n = true;
         this.resizeEventScrollType.w = true;
@@ -232,10 +208,7 @@ export class GridsterResizable {
         this.resizeEventScrollType.e = true;
         this.directionFunction = this.handleNE;
       }
-    } else if (
-      e.target.hasAttribute('class') &&
-      e.target.getAttribute('class').split(' ').indexOf('handle-sw') > -1
-    ) {
+    } else if (classList.contains('handle-sw')) {
       if (this.gridster.$options.dirType === DirTypes.RTL) {
         this.resizeEventScrollType.s = true;
         this.resizeEventScrollType.e = true;
@@ -245,10 +218,7 @@ export class GridsterResizable {
         this.resizeEventScrollType.w = true;
         this.directionFunction = this.handleSW;
       }
-    } else if (
-      e.target.hasAttribute('class') &&
-      e.target.getAttribute('class').split(' ').indexOf('handle-se') > -1
-    ) {
+    } else if (classList.contains('handle-se')) {
       if (this.gridster.$options.dirType === DirTypes.RTL) {
         this.resizeEventScrollType.s = true;
         this.resizeEventScrollType.w = true;
@@ -557,44 +527,69 @@ export class GridsterResizable {
 
   dragStartDelay(e: MouseEvent | TouchEvent): void {
     GridsterUtils.checkTouchEvent(e);
+
     if (!this.gridster.$options.resizable.delayStart) {
-      this.dragStart(e as MouseEvent2);
+      this.dragStart(e as MouseEvent);
       return;
     }
+
     const timeout = setTimeout(() => {
-      this.dragStart(e as MouseEvent2);
+      this.dragStart(e as MouseEvent);
       cancelDrag();
     }, this.gridster.$options.resizable.delayStart);
-    const cancelMouse = this.gridsterItem.renderer.listen(
-      'document',
-      'mouseup',
-      cancelDrag
-    );
-    const cancelMouseLeave = this.gridsterItem.renderer.listen(
-      'document',
-      'mouseleave',
-      cancelDrag
-    );
-    const cancelOnBlur = this.gridsterItem.renderer.listen(
-      'window',
-      'blur',
-      cancelDrag
-    );
-    const cancelTouchMove = this.gridsterItem.renderer.listen(
-      'document',
-      'touchmove',
-      cancelMove
-    );
-    const cancelTouchEnd = this.gridsterItem.renderer.listen(
-      'document',
-      'touchend',
-      cancelDrag
-    );
-    const cancelTouchCancel = this.gridsterItem.renderer.listen(
-      'document',
-      'touchcancel',
-      cancelDrag
-    );
+
+    const {
+      cancelMouse,
+      cancelMouseLeave,
+      cancelOnBlur,
+      cancelTouchMove,
+      cancelTouchEnd,
+      cancelTouchCancel
+    } = this.zone.runOutsideAngular(() => {
+      // Note: all of these events are being added within the `<root>` zone since they all
+      // don't do any view updates and don't require Angular running change detection.
+      // All event listeners call `cancelDrag` once the event is dispatched, the `cancelDrag`
+      // is responsible only for removing event listeners.
+
+      const cancelMouse = this.gridsterItem.renderer.listen(
+        'document',
+        'mouseup',
+        cancelDrag
+      );
+      const cancelMouseLeave = this.gridsterItem.renderer.listen(
+        'document',
+        'mouseleave',
+        cancelDrag
+      );
+      const cancelOnBlur = this.gridsterItem.renderer.listen(
+        'window',
+        'blur',
+        cancelDrag
+      );
+      const cancelTouchMove = this.gridsterItem.renderer.listen(
+        'document',
+        'touchmove',
+        cancelMove
+      );
+      const cancelTouchEnd = this.gridsterItem.renderer.listen(
+        'document',
+        'touchend',
+        cancelDrag
+      );
+      const cancelTouchCancel = this.gridsterItem.renderer.listen(
+        'document',
+        'touchcancel',
+        cancelDrag
+      );
+      return {
+        cancelMouse,
+        cancelMouseLeave,
+        cancelOnBlur,
+        cancelTouchMove,
+        cancelTouchEnd,
+        cancelTouchCancel
+      };
+    });
 
     function cancelMove(eventMove: MouseEvent): void {
       GridsterUtils.checkTouchEvent(eventMove);
