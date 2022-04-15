@@ -65,12 +65,7 @@ export class GridsterDraggable {
     if (this.gridster.previewStyle) {
       this.gridster.previewStyle(true);
     }
-    // @ts-ignore
-    delete this.gridsterItem;
-    // @ts-ignore
-    delete this.gridster;
-    // @ts-ignore
-    delete this.collision;
+    this.gridsterItem = this.gridster = this.collision = null!;
     if (this.mousedown) {
       this.mousedown();
       this.touchstart();
@@ -283,13 +278,11 @@ export class GridsterDraggable {
     }
     if (this.push) {
       this.push.destroy();
-      // @ts-ignore
-      delete this.push;
+      this.push = null!;
     }
     if (this.swap) {
       this.swap.destroy();
-      // @ts-ignore
-      delete this.swap;
+      this.swap = null!;
     }
   }
 
@@ -322,13 +315,11 @@ export class GridsterDraggable {
     }
     if (this.push) {
       this.push.destroy();
-      // @ts-ignore
-      delete this.push;
+      this.push = null!;
     }
     if (this.swap) {
       this.swap.destroy();
-      // @ts-ignore
-      delete this.swap;
+      this.swap = null!;
     }
   }
 

@@ -12,11 +12,7 @@ export class GridsterSwap {
   }
 
   destroy(): void {
-    // @ts-ignore
-    delete this.gridster;
-    // @ts-ignore
-    delete this.gridsterItem;
-    delete this.swapedItem;
+    this.gridster = this.gridsterItem = this.swapedItem = null!;
   }
 
   swapItems(): void {

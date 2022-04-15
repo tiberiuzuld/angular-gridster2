@@ -226,11 +226,9 @@ export class GridsterComponent
       this.options.api = undefined;
     }
     this.emptyCell.destroy();
-    // @ts-ignore
-    delete this.emptyCell;
+    this.emptyCell = null!;
     this.compact.destroy();
-    // @ts-ignore
-    delete this.compact;
+    this.compact = null!;
   }
 
   onResize(): void {

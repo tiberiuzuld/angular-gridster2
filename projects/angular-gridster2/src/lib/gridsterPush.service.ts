@@ -53,10 +53,7 @@ export class GridsterPush {
   }
 
   destroy(): void {
-    // @ts-ignore
-    delete this.gridster;
-    // @ts-ignore
-    delete this.gridsterItem;
+    this.gridster = this.gridsterItem = null!;
   }
 
   pushItems(direction: string, disable?: boolean): boolean {

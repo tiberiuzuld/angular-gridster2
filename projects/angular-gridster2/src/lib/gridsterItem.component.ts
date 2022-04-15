@@ -119,14 +119,9 @@ export class GridsterItemComponent
 
   ngOnDestroy(): void {
     this.gridster.removeItem(this);
-    // @ts-ignore
-    delete this.gridster;
     this.drag.destroy();
-    // @ts-ignore
-    delete this.drag;
     this.resize.destroy();
-    // @ts-ignore
-    delete this.resize;
+    this.gridster = this.drag = this.resize = null!;
   }
 
   setSize(): void {

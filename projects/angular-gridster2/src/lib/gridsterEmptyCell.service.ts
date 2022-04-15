@@ -20,15 +20,11 @@ export class GridsterEmptyCell {
   constructor(private gridster: GridsterComponentInterface) {}
 
   destroy(): void {
-    // @ts-ignore
-    delete this.initialItem;
-    // @ts-ignore
-    delete this.gridster.movingItem;
     if (this.gridster.previewStyle) {
       this.gridster.previewStyle();
     }
-    // @ts-ignore
-    delete this.gridster;
+    this.gridster.movingItem = null;
+    this.initialItem = this.gridster = null!;
     if (this.removeDocumentDragendListenerFn) {
       this.removeDocumentDragendListenerFn();
       this.removeDocumentDragendListenerFn = null;
