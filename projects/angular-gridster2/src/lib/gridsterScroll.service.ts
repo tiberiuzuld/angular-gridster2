@@ -12,10 +12,7 @@ let intervalW: number;
 let intervalN: number;
 let intervalS: number;
 
-interface Position {
-  clientX: number;
-  clientY: number;
-}
+type Position = Pick<MouseEvent, 'clientX' | 'clientY'>;
 
 type CalculatePosition = (position: Position) => void;
 
@@ -25,7 +22,7 @@ export function scroll(
   top: number,
   width: number,
   height: number,
-  e: MouseEvent,
+  event: MouseEvent,
   lastMouse: Position,
   calculateItemPosition: CalculatePosition,
   resize?: boolean,
@@ -44,24 +41,32 @@ export function scroll(
   const elemTopOffset = top - offsetTop;
   const elemBottomOffset = offsetHeight + offsetTop - top - height;
 
+  const { clientX, clientY } = event;
+
   if (!gridster.$options.disableScrollVertical) {
-    if (lastMouse.clientY < e.clientY && elemBottomOffset < scrollSensitivity) {
+    if (lastMouse.clientY < clientY && elemBottomOffset < scrollSensitivity) {
       cancelN();
-      if ((resizeEvent && resizeEventType && !resizeEventType.s) || intervalS) {
+      if (
+        (resizeEvent && resizeEventType && !resizeEventType.south) ||
+        intervalS
+      ) {
         return;
       }
       intervalS = startVertical(1, calculateItemPosition, lastMouse);
     } else if (
-      lastMouse.clientY > e.clientY &&
+      lastMouse.clientY > clientY &&
       offsetTop > 0 &&
       elemTopOffset < scrollSensitivity
     ) {
       cancelS();
-      if ((resizeEvent && resizeEventType && !resizeEventType.n) || intervalN) {
+      if (
+        (resizeEvent && resizeEventType && !resizeEventType.north) ||
+        intervalN
+      ) {
         return;
       }
       intervalN = startVertical(-1, calculateItemPosition, lastMouse);
-    } else if (lastMouse.clientY !== e.clientY) {
+    } else if (lastMouse.clientY !== clientY) {
       cancelVertical();
     }
   }
@@ -70,23 +75,29 @@ export function scroll(
   const elemLeftOffset = left - offsetLeft;
 
   if (!gridster.$options.disableScrollHorizontal) {
-    if (lastMouse.clientX < e.clientX && elemRightOffset <= scrollSensitivity) {
+    if (lastMouse.clientX < clientX && elemRightOffset <= scrollSensitivity) {
       cancelW();
-      if ((resizeEvent && resizeEventType && !resizeEventType.e) || intervalE) {
+      if (
+        (resizeEvent && resizeEventType && !resizeEventType.east) ||
+        intervalE
+      ) {
         return;
       }
       intervalE = startHorizontal(1, calculateItemPosition, lastMouse);
     } else if (
-      lastMouse.clientX > e.clientX &&
+      lastMouse.clientX > clientX &&
       offsetLeft > 0 &&
       elemLeftOffset < scrollSensitivity
     ) {
       cancelE();
-      if ((resizeEvent && resizeEventType && !resizeEventType.w) || intervalW) {
+      if (
+        (resizeEvent && resizeEventType && !resizeEventType.west) ||
+        intervalW
+      ) {
         return;
       }
       intervalW = startHorizontal(-1, calculateItemPosition, lastMouse);
-    } else if (lastMouse.clientX !== e.clientX) {
+    } else if (lastMouse.clientX !== clientX) {
       cancelHorizontal();
     }
   }
@@ -98,7 +109,7 @@ function startVertical(
   lastMouse: Position
 ): number {
   let clientY = lastMouse.clientY;
-  return setInterval(() => {
+  return window.setInterval(() => {
     if (
       !gridsterElement ||
       (sign === -1 && gridsterElement.scrollTop - scrollSpeed < 0)
@@ -117,7 +128,7 @@ function startHorizontal(
   lastMouse: Position
 ): number {
   let clientX = lastMouse.clientX;
-  return setInterval(() => {
+  return window.setInterval(() => {
     if (
       !gridsterElement ||
       (sign === -1 && gridsterElement.scrollLeft - scrollSpeed < 0)
