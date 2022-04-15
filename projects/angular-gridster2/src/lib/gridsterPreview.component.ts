@@ -2,7 +2,6 @@ import {
   Component,
   ElementRef,
   EventEmitter,
-  Inject,
   Input,
   OnDestroy,
   OnInit,
@@ -25,10 +24,7 @@ export class GridsterPreviewComponent implements OnInit, OnDestroy {
   private el: HTMLElement;
   private sub: Subscription;
 
-  constructor(
-    @Inject(ElementRef) el: ElementRef,
-    @Inject(Renderer2) private renderer: Renderer2
-  ) {
+  constructor(el: ElementRef, private renderer: Renderer2) {
     this.el = el.nativeElement;
   }
 
@@ -40,8 +36,6 @@ export class GridsterPreviewComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.sub.unsubscribe();
-    // @ts-ignore
-    delete this.el;
   }
 
   private previewStyle(item: GridsterItem | null): void {

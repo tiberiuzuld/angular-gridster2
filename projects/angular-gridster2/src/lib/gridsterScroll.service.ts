@@ -105,8 +105,7 @@ function startVertical(
     ) {
       cancelVertical();
     }
-    // @ts-ignore
-    gridsterElement.scrollTop += sign * scrollSpeed;
+    gridsterElement!.scrollTop += sign * scrollSpeed;
     clientY += sign * scrollSpeed;
     calculateItemPosition({ clientX: lastMouse.clientX, clientY });
   }, intervalDuration);
@@ -125,8 +124,7 @@ function startHorizontal(
     ) {
       cancelHorizontal();
     }
-    // @ts-ignore
-    gridsterElement.scrollLeft += sign * scrollSpeed;
+    gridsterElement!.scrollLeft += sign * scrollSpeed;
     clientX += sign * scrollSpeed;
     calculateItemPosition({ clientX, clientY: lastMouse.clientY });
   }, intervalDuration);

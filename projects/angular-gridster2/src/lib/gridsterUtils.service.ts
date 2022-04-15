@@ -86,8 +86,7 @@ export class GridsterUtils {
       return false;
     }
     if (target.hasAttribute('class')) {
-      // @ts-ignore
-      const classnames = target.getAttribute('class').split(' ');
+      const classnames = target.getAttribute('class')!.split(' ');
       if (classnames.indexOf(dragHandleClass) > -1) {
         return true;
       }
@@ -96,8 +95,7 @@ export class GridsterUtils {
       }
     }
     return GridsterUtils.checkDragHandleClass(
-      // @ts-ignore
-      target.parentNode,
+      target.parentNode as HTMLElement,
       current,
       dragHandleClass,
       ignoreContentClass
@@ -114,14 +112,12 @@ export class GridsterUtils {
     }
     if (
       target.hasAttribute('class') &&
-      // @ts-ignore
-      target.getAttribute('class').split(' ').indexOf(contentClass) > -1
+      target.getAttribute('class')!.split(' ').indexOf(contentClass) > -1
     ) {
       return true;
     } else {
       return GridsterUtils.checkContentClass(
-        // @ts-ignore
-        target.parentNode,
+        target.parentNode as HTMLElement,
         current,
         contentClass
       );

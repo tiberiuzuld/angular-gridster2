@@ -9,8 +9,7 @@ export class GridsterCompact {
   constructor(private gridster: GridsterComponentInterface) {}
 
   destroy(): void {
-    // @ts-ignore
-    delete this.gridster;
+    this.gridster = null!;
   }
 
   checkCompact(): void {

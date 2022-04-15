@@ -8,8 +8,7 @@ export class GridsterRenderer {
   constructor(private gridster: GridsterComponentInterface) {}
 
   destroy(): void {
-    // @ts-ignore
-    delete this.gridster;
+    this.gridster = null!;
   }
 
   updateItem(el: Element, item: GridsterItem, renderer: Renderer2): void {

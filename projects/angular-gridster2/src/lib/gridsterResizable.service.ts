@@ -312,11 +312,9 @@ export class GridsterResizable {
     this.push.restoreItems();
     this.pushResize.restoreItems();
     this.push.destroy();
-    // @ts-ignore
-    delete this.push;
+    this.push = null!;
     this.pushResize.destroy();
-    // @ts-ignore
-    delete this.pushResize;
+    this.pushResize = null!;
   }
 
   makeResize(): void {
@@ -328,11 +326,9 @@ export class GridsterResizable {
     this.push.setPushedItems();
     this.pushResize.setPushedItems();
     this.push.destroy();
-    // @ts-ignore
-    delete this.push;
+    this.push = null!;
     this.pushResize.destroy();
-    // @ts-ignore
-    delete this.pushResize;
+    this.pushResize = null!;
   }
 
   handleN(e: MouseEvent): void {
