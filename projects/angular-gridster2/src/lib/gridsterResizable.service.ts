@@ -18,9 +18,16 @@ export class GridsterResizable {
   };
   itemBackup: number[];
   resizeEventScrollType: GridsterResizeEventType;
-  directionFunction: (e: { clientX: number; clientY: number }) => void;
-  dragFunction: (event: MouseEvent) => void;
-  dragStopFunction: (event: MouseEvent) => void;
+
+  /**
+   * The direction function may reference any of the `GridsterResizable` class methods, that are
+   * responsible for gridster resize when the `dragmove` event is being handled. E.g. it may reference
+   * the `handleNorth` method when the north handle is pressed and moved by a mouse.
+   */
+  private directionFunction:
+    | ((event: Pick<MouseEvent, 'clientX' | 'clientY'>) => void)
+    | null = null;
+
   resizeEnabled: boolean;
   mousemove: () => void;
   mouseup: () => void;
@@ -62,7 +69,12 @@ export class GridsterResizable {
       clientY: 0
     };
     this.itemBackup = [0, 0, 0, 0];
-    this.resizeEventScrollType = { w: false, e: false, n: false, s: false };
+    this.resizeEventScrollType = {
+      west: false,
+      east: false,
+      north: false,
+      south: false
+    };
   }
 
   destroy(): void {
@@ -86,44 +98,43 @@ export class GridsterResizable {
     }
     e.stopPropagation();
     e.preventDefault();
-    this.dragFunction = this.dragMove.bind(this);
-    this.dragStopFunction = this.dragStop.bind(this);
+
     this.zone.runOutsideAngular(() => {
       this.mousemove = this.gridsterItem.renderer.listen(
         'document',
         'mousemove',
-        this.dragFunction
+        this.dragMove
       );
       this.touchmove = this.gridster.renderer.listen(
         this.gridster.el,
         'touchmove',
-        this.dragFunction
+        this.dragMove
       );
     });
     this.mouseup = this.gridsterItem.renderer.listen(
       'document',
       'mouseup',
-      this.dragStopFunction
+      this.dragStop
     );
     this.mouseleave = this.gridsterItem.renderer.listen(
       'document',
       'mouseleave',
-      this.dragStopFunction
+      this.dragStop
     );
     this.cancelOnBlur = this.gridsterItem.renderer.listen(
       'window',
       'blur',
-      this.dragStopFunction
+      this.dragStop
     );
     this.touchend = this.gridsterItem.renderer.listen(
       'document',
       'touchend',
-      this.dragStopFunction
+      this.dragStop
     );
     this.touchcancel = this.gridsterItem.renderer.listen(
       'document',
       'touchcancel',
-      this.dragStopFunction
+      this.dragStop
     );
 
     this.gridsterItem.renderer.addClass(
@@ -167,71 +178,77 @@ export class GridsterResizable {
     const { classList } = e.target as HTMLElement;
 
     if (classList.contains('handle-n')) {
-      this.resizeEventScrollType.n = true;
-      this.directionFunction = this.handleN;
+      this.resizeEventScrollType.north = true;
+      this.directionFunction = this.handleNorth;
     } else if (classList.contains('handle-w')) {
       if (this.gridster.$options.dirType === DirTypes.RTL) {
-        this.resizeEventScrollType.e = true;
-        this.directionFunction = this.handleE;
+        this.resizeEventScrollType.east = true;
+        this.directionFunction = this.handleEast;
       } else {
-        this.resizeEventScrollType.w = true;
-        this.directionFunction = this.handleW;
+        this.resizeEventScrollType.west = true;
+        this.directionFunction = this.handleWest;
       }
     } else if (classList.contains('handle-s')) {
-      this.resizeEventScrollType.s = true;
-      this.directionFunction = this.handleS;
+      this.resizeEventScrollType.south = true;
+      this.directionFunction = this.handleSouth;
     } else if (classList.contains('handle-e')) {
       if (this.gridster.$options.dirType === DirTypes.RTL) {
-        this.resizeEventScrollType.w = true;
-        this.directionFunction = this.handleW;
+        this.resizeEventScrollType.west = true;
+        this.directionFunction = this.handleWest;
       } else {
-        this.resizeEventScrollType.e = true;
-        this.directionFunction = this.handleE;
+        this.resizeEventScrollType.east = true;
+        this.directionFunction = this.handleEast;
       }
     } else if (classList.contains('handle-nw')) {
       if (this.gridster.$options.dirType === DirTypes.RTL) {
-        this.resizeEventScrollType.n = true;
-        this.resizeEventScrollType.e = true;
-        this.directionFunction = this.handleNE;
+        this.resizeEventScrollType.north = true;
+        this.resizeEventScrollType.east = true;
+        this.directionFunction = this.handleNorthEast;
       } else {
-        this.resizeEventScrollType.n = true;
-        this.resizeEventScrollType.w = true;
-        this.directionFunction = this.handleNW;
+        this.resizeEventScrollType.north = true;
+        this.resizeEventScrollType.west = true;
+        this.directionFunction = this.handleNorthWest;
       }
     } else if (classList.contains('handle-ne')) {
       if (this.gridster.$options.dirType === DirTypes.RTL) {
-        this.resizeEventScrollType.n = true;
-        this.resizeEventScrollType.w = true;
-        this.directionFunction = this.handleNW;
+        this.resizeEventScrollType.north = true;
+        this.resizeEventScrollType.west = true;
+        this.directionFunction = this.handleNorthWest;
       } else {
-        this.resizeEventScrollType.n = true;
-        this.resizeEventScrollType.e = true;
-        this.directionFunction = this.handleNE;
+        this.resizeEventScrollType.north = true;
+        this.resizeEventScrollType.east = true;
+        this.directionFunction = this.handleNorthEast;
       }
     } else if (classList.contains('handle-sw')) {
       if (this.gridster.$options.dirType === DirTypes.RTL) {
-        this.resizeEventScrollType.s = true;
-        this.resizeEventScrollType.e = true;
-        this.directionFunction = this.handleSE;
+        this.resizeEventScrollType.south = true;
+        this.resizeEventScrollType.east = true;
+        this.directionFunction = this.handleSouthEast;
       } else {
-        this.resizeEventScrollType.s = true;
-        this.resizeEventScrollType.w = true;
-        this.directionFunction = this.handleSW;
+        this.resizeEventScrollType.south = true;
+        this.resizeEventScrollType.west = true;
+        this.directionFunction = this.handleSouthWest;
       }
     } else if (classList.contains('handle-se')) {
       if (this.gridster.$options.dirType === DirTypes.RTL) {
-        this.resizeEventScrollType.s = true;
-        this.resizeEventScrollType.w = true;
-        this.directionFunction = this.handleSW;
+        this.resizeEventScrollType.south = true;
+        this.resizeEventScrollType.west = true;
+        this.directionFunction = this.handleSouthWest;
       } else {
-        this.resizeEventScrollType.s = true;
-        this.resizeEventScrollType.e = true;
-        this.directionFunction = this.handleSE;
+        this.resizeEventScrollType.south = true;
+        this.resizeEventScrollType.east = true;
+        this.directionFunction = this.handleSouthEast;
       }
     }
   }
 
-  dragMove(e: MouseEvent): void {
+  dragMove = (e: MouseEvent): void => {
+    if (this.directionFunction === null) {
+      throw new Error(
+        'The `directionFunction` has not been set before calling `dragMove`.'
+      );
+    }
+
     e.stopPropagation();
     e.preventDefault();
     GridsterUtils.checkTouchEvent(e);
@@ -245,7 +262,7 @@ export class GridsterResizable {
       this.height,
       e,
       this.lastMouse,
-      this.directionFunction.bind(this),
+      this.directionFunction,
       true,
       this.resizeEventScrollType
     );
@@ -262,9 +279,9 @@ export class GridsterResizable {
     this.zone.run(() => {
       this.gridster.updateGrid();
     });
-  }
+  };
 
-  dragStop(e: MouseEvent): void {
+  dragStop = (e: MouseEvent): void => {
     e.stopPropagation();
     e.preventDefault();
     cancelScroll();
@@ -287,7 +304,7 @@ export class GridsterResizable {
           this.gridsterItem,
           e
         )
-      ).then(this.makeResize.bind(this), this.cancelResize.bind(this));
+      ).then(this.makeResize, this.cancelResize);
     } else {
       this.makeResize();
     }
@@ -301,9 +318,9 @@ export class GridsterResizable {
         this.gridster.previewStyle();
       }
     });
-  }
+  };
 
-  cancelResize(): void {
+  cancelResize = (): void => {
     this.gridsterItem.$item.cols = this.gridsterItem.item.cols || 1;
     this.gridsterItem.$item.rows = this.gridsterItem.item.rows || 1;
     this.gridsterItem.$item.x = this.gridsterItem.item.x || 0;
@@ -317,7 +334,7 @@ export class GridsterResizable {
     this.pushResize = null!;
   }
 
-  makeResize(): void {
+  makeResize = (): void => {
     this.gridsterItem.setSize();
     this.gridsterItem.checkItemChanges(
       this.gridsterItem.$item,
@@ -331,7 +348,7 @@ export class GridsterResizable {
     this.pushResize = null!;
   }
 
-  handleN(e: MouseEvent): void {
+  private handleNorth = (e: MouseEvent): void => {
     this.top = e.clientY + this.offsetTop - this.diffTop;
     this.height = this.bottom - this.top;
     if (this.minHeight > this.height) {
@@ -372,9 +389,9 @@ export class GridsterResizable {
     }
     this.setItemTop(this.top);
     this.setItemHeight(this.height);
-  }
+  };
 
-  handleW(e: MouseEvent): void {
+  private handleWest = (e: MouseEvent): void => {
     const clientX =
       this.gridster.$options.dirType === DirTypes.RTL
         ? this.originalClientX + (this.originalClientX - e.clientX)
@@ -420,9 +437,9 @@ export class GridsterResizable {
     }
     this.setItemLeft(this.left);
     this.setItemWidth(this.width);
-  }
+  };
 
-  handleS(e: MouseEvent): void {
+  private handleSouth = (e: MouseEvent): void => {
     this.height = e.clientY + this.offsetTop - this.diffBottom - this.top;
     if (this.minHeight > this.height) {
       this.height = this.minHeight;
@@ -455,9 +472,9 @@ export class GridsterResizable {
       this.push.checkPushBack();
     }
     this.setItemHeight(this.height);
-  }
+  };
 
-  handleE(e: MouseEvent): void {
+  private handleEast = (e: MouseEvent): void => {
     const clientX =
       this.gridster.$options.dirType === DirTypes.RTL
         ? this.originalClientX + (this.originalClientX - e.clientX)
@@ -495,27 +512,27 @@ export class GridsterResizable {
       this.push.checkPushBack();
     }
     this.setItemWidth(this.width);
-  }
+  };
 
-  handleNW(e: MouseEvent): void {
-    this.handleN(e);
-    this.handleW(e);
-  }
+  private handleNorthWest = (e: MouseEvent): void => {
+    this.handleNorth(e);
+    this.handleWest(e);
+  };
 
-  handleNE(e: MouseEvent): void {
-    this.handleN(e);
-    this.handleE(e);
-  }
+  private handleNorthEast = (e: MouseEvent): void => {
+    this.handleNorth(e);
+    this.handleEast(e);
+  };
 
-  handleSW(e: MouseEvent): void {
-    this.handleS(e);
-    this.handleW(e);
-  }
+  private handleSouthWest = (e: MouseEvent): void => {
+    this.handleSouth(e);
+    this.handleWest(e);
+  };
 
-  handleSE(e: MouseEvent): void {
-    this.handleS(e);
-    this.handleE(e);
-  }
+  private handleSouthEast = (e: MouseEvent): void => {
+    this.handleSouth(e);
+    this.handleEast(e);
+  };
 
   toggle(): void {
     this.resizeEnabled = this.gridsterItem.canBeResized();

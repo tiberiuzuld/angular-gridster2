@@ -174,13 +174,13 @@ export class GridsterDraggable {
       this.height,
       e,
       this.lastMouse,
-      this.calculateItemPositionFromMousePosition.bind(this)
+      this.calculateItemPositionFromMousePosition
     );
 
     this.calculateItemPositionFromMousePosition(e);
   };
 
-  calculateItemPositionFromMousePosition(e: MouseEvent): void {
+  calculateItemPositionFromMousePosition = (e: MouseEvent): void => {
     if (this.gridster.options.scale) {
       this.calculateItemPositionWithScale(e, this.gridster.options.scale);
     } else {
@@ -192,7 +192,7 @@ export class GridsterDraggable {
     this.zone.run(() => {
       this.gridster.updateGrid();
     });
-  }
+  };
 
   calculateItemPositionWithScale(e: MouseEvent, scale: number): void {
     if (this.gridster.$options.dirType === DirTypes.RTL) {
@@ -254,7 +254,7 @@ export class GridsterDraggable {
           this.gridsterItem,
           e
         )
-      ).then(this.makeDrag.bind(this), this.cancelDrag.bind(this));
+      ).then(this.makeDrag, this.cancelDrag);
     } else {
       this.makeDrag();
     }
@@ -266,7 +266,7 @@ export class GridsterDraggable {
     });
   };
 
-  cancelDrag(): void {
+  cancelDrag = (): void => {
     this.gridsterItem.$item.x = this.gridsterItem.item.x || 0;
     this.gridsterItem.$item.y = this.gridsterItem.item.y || 0;
     this.gridsterItem.setSize();
@@ -284,9 +284,9 @@ export class GridsterDraggable {
       this.swap.destroy();
       this.swap = null!;
     }
-  }
+  };
 
-  makeDrag(): void {
+  makeDrag = (): void => {
     if (
       this.gridster.$options.draggable.dropOverItems &&
       this.gridster.options.draggable &&
@@ -321,7 +321,7 @@ export class GridsterDraggable {
       this.swap.destroy();
       this.swap = null!;
     }
-  }
+  };
 
   calculateItemPosition(): void {
     this.gridster.movingItem = this.gridsterItem.$item;

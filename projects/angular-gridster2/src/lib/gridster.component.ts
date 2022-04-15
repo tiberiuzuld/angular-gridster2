@@ -148,11 +148,11 @@ export class GridsterComponent
     if (changes.options) {
       this.setOptions();
       this.options.api = {
-        optionsChanged: this.optionsChanged.bind(this),
-        resize: this.onResize.bind(this),
-        getNextPossiblePosition: this.getNextPossiblePosition.bind(this),
-        getFirstPossiblePosition: this.getFirstPossiblePosition.bind(this),
-        getLastPossiblePosition: this.getLastPossiblePosition.bind(this),
+        optionsChanged: this.optionsChanged,
+        resize: this.onResize,
+        getNextPossiblePosition: this.getNextPossiblePosition,
+        getFirstPossiblePosition: this.getFirstPossiblePosition,
+        getLastPossiblePosition: this.getLastPossiblePosition,
         getItemComponent: (item: GridsterItem) => this.getItemComponent(item)
       };
       this.columns = this.$options.minCols;
@@ -190,7 +190,7 @@ export class GridsterComponent
       this.windowResize = this.renderer.listen(
         'window',
         'resize',
-        this.onResize.bind(this)
+        this.onResize
       );
     } else if (this.$options.disableWindowResize && this.windowResize) {
       this.windowResize();
@@ -199,7 +199,7 @@ export class GridsterComponent
     this.emptyCell.updateOptions();
   }
 
-  optionsChanged(): void {
+  optionsChanged = (): void => {
     this.setOptions();
     let widgetsIndex: number = this.grid.length - 1;
     let widget: GridsterItemComponentInterface;
@@ -208,7 +208,7 @@ export class GridsterComponent
       widget.updateOptions();
     }
     this.calculateLayout();
-  }
+  };
 
   ngOnDestroy(): void {
     this.destroy$.next();
@@ -231,7 +231,7 @@ export class GridsterComponent
     this.compact = null!;
   }
 
-  onResize(): void {
+  onResize = (): void => {
     if (this.el.clientWidth) {
       if (this.options.setGridSize) {
         // reset width/height so the size is recalculated afterwards
@@ -241,7 +241,7 @@ export class GridsterComponent
       this.setGridSize();
       this.calculateLayout();
     }
-  }
+  };
 
   checkIfToResize(): boolean {
     const clientWidth = this.el.clientWidth;
@@ -618,10 +618,10 @@ export class GridsterComponent
     }
   }
 
-  getNextPossiblePosition(
+  getNextPossiblePosition = (
     newItem: GridsterItem,
     startingFrom: { y?: number; x?: number } = {}
-  ): boolean {
+  ): boolean => {
     if (newItem.cols === -1) {
       newItem.cols = this.$options.defaultItemCols;
     }
@@ -655,15 +655,15 @@ export class GridsterComponent
       return true;
     }
     return false;
-  }
+  };
 
-  getFirstPossiblePosition(item: GridsterItem): GridsterItem {
+  getFirstPossiblePosition = (item: GridsterItem): GridsterItem => {
     const tmpItem = Object.assign({}, item);
     this.getNextPossiblePosition(tmpItem);
     return tmpItem;
-  }
+  };
 
-  getLastPossiblePosition(item: GridsterItem): GridsterItem {
+  getLastPossiblePosition = (item: GridsterItem): GridsterItem => {
     let farthestItem: { y: number; x: number } = { y: 0, x: 0 };
     farthestItem = this.grid.reduce(
       (
@@ -686,7 +686,7 @@ export class GridsterComponent
     const tmpItem = Object.assign({}, item);
     this.getNextPossiblePosition(tmpItem, farthestItem);
     return tmpItem;
-  }
+  };
 
   pixelsToPositionX(
     x: number,
