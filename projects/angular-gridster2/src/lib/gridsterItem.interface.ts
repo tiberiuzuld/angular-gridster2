@@ -24,6 +24,7 @@ export abstract class GridsterItemComponentInterface {
   el: HTMLElement;
   gridster: GridsterComponentInterface;
   renderer: Renderer2;
+  loadItem: () => void;
 }
 
 export interface GridsterItem {

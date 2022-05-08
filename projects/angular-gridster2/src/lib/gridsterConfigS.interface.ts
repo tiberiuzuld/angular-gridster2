@@ -11,6 +11,7 @@ import {
 } from './gridsterItem.interface';
 
 export interface GridsterConfigS {
+  customLoad?: boolean;
   gridType: gridTypes;
   scale?: number;
   fixedColWidth: number;

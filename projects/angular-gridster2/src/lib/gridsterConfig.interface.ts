@@ -66,6 +66,7 @@ export enum DirTypes {
 export type dirTypes = 'ltr' | 'rtl';
 
 export interface GridsterConfig {
+  customLoad?: boolean;
   gridType?: gridTypes;
   scale?: number;
   fixedColWidth?: number;

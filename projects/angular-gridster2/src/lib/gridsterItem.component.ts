@@ -82,9 +82,13 @@ export class GridsterItemComponent
   }
 
   ngOnInit(): void {
+    if (!this.gridster.options['customLoad']) {
+      this.gridster.addItem(this);
+    }
+  }
+  loadItem(): void {
     this.gridster.addItem(this);
   }
-
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.item) {
       this.updateOptions();
