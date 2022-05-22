@@ -10,6 +10,13 @@ import { GridsterUtils } from './gridsterUtils.service';
 
 const GRIDSTER_ITEM_RESIZABLE_HANDLER_CLASS = 'gridster-item-resizable-handler';
 
+enum Direction {
+  UP = 'UP',
+  DOWN = 'DOWN',
+  LEFT = 'LEFT',
+  RIGHT = 'RIGHT'
+}
+
 export class GridsterDraggable {
   gridsterItem: GridsterItemComponentInterface;
   gridster: GridsterComponentInterface;
@@ -163,21 +170,86 @@ export class GridsterDraggable {
   dragMove = (e: MouseEvent): void => {
     e.stopPropagation();
     e.preventDefault();
-    GridsterUtils.checkTouchEvent(e);
-    this.offsetLeft = this.gridster.el.scrollLeft - this.gridster.el.offsetLeft;
-    this.offsetTop = this.gridster.el.scrollTop - this.gridster.el.offsetTop;
-    scroll(
-      this.gridster,
-      this.left,
-      this.top,
-      this.width,
-      this.height,
-      e,
-      this.lastMouse,
-      this.calculateItemPositionFromMousePosition
-    );
 
-    this.calculateItemPositionFromMousePosition(e);
+    // get the directions of the mouse event
+    let directions = this.getDirections(e);
+
+    if (this.gridster.options.enableBoundaryControl) {
+      // prevent moving up at the top of gridster
+      if (
+        directions.includes(Direction.UP) &&
+        this.gridsterItem.el.getBoundingClientRect().top <=
+          this.gridster.el.getBoundingClientRect().top + this.margin
+      ) {
+        directions = directions.filter(direction => direction != Direction.UP);
+        e = new MouseEvent(e.type, {
+          clientX: e.clientX,
+          clientY: this.lastMouse.clientY
+        });
+      }
+      // prevent moving left at the leftmost column of gridster
+      if (
+        directions.includes(Direction.LEFT) &&
+        this.gridsterItem.el.getBoundingClientRect().left <=
+          this.gridster.el.getBoundingClientRect().left + this.margin
+      ) {
+        directions = directions.filter(
+          direction => direction != Direction.LEFT
+        );
+        e = new MouseEvent(e.type, {
+          clientX: this.lastMouse.clientX,
+          clientY: e.clientY
+        });
+      }
+      // prevent moving right at the rightmost column of gridster
+      if (
+        directions.includes(Direction.RIGHT) &&
+        this.gridsterItem.el.getBoundingClientRect().right >=
+          this.gridster.el.getBoundingClientRect().right - this.margin
+      ) {
+        directions = directions.filter(
+          direction => direction != Direction.RIGHT
+        );
+        e = new MouseEvent(e.type, {
+          clientX: this.lastMouse.clientX,
+          clientY: e.clientY
+        });
+      }
+      // prevent moving down at the bottom of gridster
+      if (
+        directions.includes(Direction.DOWN) &&
+        this.gridsterItem.el.getBoundingClientRect().bottom >=
+          this.gridster.el.getBoundingClientRect().bottom - this.margin
+      ) {
+        directions = directions.filter(
+          direction => direction != Direction.DOWN
+        );
+        e = new MouseEvent(e.type, {
+          clientX: e.clientX,
+          clientY: this.lastMouse.clientY
+        });
+      }
+    }
+
+    // do not change item location when there is no direction to go
+    if (directions.length) {
+      GridsterUtils.checkTouchEvent(e);
+      this.offsetLeft =
+        this.gridster.el.scrollLeft - this.gridster.el.offsetLeft;
+      this.offsetTop = this.gridster.el.scrollTop - this.gridster.el.offsetTop;
+      scroll(
+        this.gridster,
+        this.left,
+        this.top,
+        this.width,
+        this.height,
+        e,
+        this.lastMouse,
+        this.calculateItemPositionFromMousePosition
+      );
+
+      this.calculateItemPositionFromMousePosition(e);
+    }
   };
 
   calculateItemPositionFromMousePosition = (e: MouseEvent): void => {
@@ -472,4 +544,25 @@ export class GridsterDraggable {
       cancelTouchCancel();
     }
   };
+
+  /**
+   * Returns the list of directions for given mouse event
+   * @param e Mouse event
+   * */
+  private getDirections(e: MouseEvent) {
+    const directions: string[] = [];
+    if (this.lastMouse.clientY > e.clientY) {
+      directions.push(Direction.UP);
+    }
+    if (this.lastMouse.clientY < e.clientY) {
+      directions.push(Direction.DOWN);
+    }
+    if (this.lastMouse.clientX < e.clientX) {
+      directions.push(Direction.RIGHT);
+    }
+    if (this.lastMouse.clientX > e.clientX) {
+      directions.push(Direction.LEFT);
+    }
+    return directions;
+  }
 }

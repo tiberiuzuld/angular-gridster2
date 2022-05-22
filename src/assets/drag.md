@@ -13,3 +13,4 @@
 | draggable.dropOverItemsCallback | callback when dragging an item drops over another item                              | Function(sourceItem, targetItem, grid) | undefined               |
 | disableScrollHorizontal         | enable/disable auto horizontal scrolling when on edge of grid                       | Boolean                                | false                   |
 | disableScrollVertical           | enable/disable auto vertical scrolling when on edge of grid                         | Boolean                                | false                   |
+| enableBoundaryControl           | enable/disable boundary control while dragging items                                | Boolean                                | false                   |
