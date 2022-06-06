@@ -16,7 +16,7 @@
     "importHelpers": true,
     "skipLibCheck": true,
     "strictNullChecks": true,
-    "target": "es2017",
+    "target": "es2020",
     "module": "es2020",
     "lib": [
       "es2020",
@@ -24,7 +24,6 @@
     ],
     "paths": {
       "angular-gridster2": [
-        "dist/angular-gridster2/angular-gridster2",
         "dist/angular-gridster2",
         "projects/angular-gridster2/src/public_api.ts"
       ]

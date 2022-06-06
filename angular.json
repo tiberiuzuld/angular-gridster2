@@ -167,10 +167,11 @@
       }
     }
   },
-  "defaultProject": "gridster-app",
   "cli": {
     "packageManager": "npm",
     "analytics": "43f0cc4d-52e0-4bb5-a18d-b0bb569a75d1",
-    "defaultCollection": "@angular-eslint/schematics"
+    "schematicCollections": [
+      "@angular-eslint/schematics"
+    ]
   }
 }
