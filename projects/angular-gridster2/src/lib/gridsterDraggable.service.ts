@@ -170,6 +170,7 @@ export class GridsterDraggable {
   dragMove = (e: MouseEvent): void => {
     e.stopPropagation();
     e.preventDefault();
+    GridsterUtils.checkTouchEvent(e);
 
     // get the directions of the mouse event
     let directions = this.getDirections(e);
@@ -233,7 +234,6 @@ export class GridsterDraggable {
 
     // do not change item location when there is no direction to go
     if (directions.length) {
-      GridsterUtils.checkTouchEvent(e);
       this.offsetLeft =
         this.gridster.el.scrollLeft - this.gridster.el.offsetLeft;
       this.offsetTop = this.gridster.el.scrollTop - this.gridster.el.offsetTop;
