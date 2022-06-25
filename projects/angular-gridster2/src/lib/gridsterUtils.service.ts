@@ -6,6 +6,10 @@ export class GridsterUtils {
     for (const p in obj2) {
       if (obj2[p] !== void 0 && properties.hasOwnProperty(p)) {
         if (typeof obj2[p] === 'object') {
+          // create an empty object for the property if obj1 does not already have one.
+          if (!(p in obj1)) {
+            obj1[p] = {};
+          }
           obj1[p] = GridsterUtils.merge(obj1[p], obj2[p], properties[p]);
         } else {
           obj1[p] = obj2[p];

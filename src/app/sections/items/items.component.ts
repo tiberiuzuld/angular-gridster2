@@ -72,7 +72,17 @@ export class ItemsComponent implements OnInit {
         maxItemArea: 2500,
         dragEnabled: true,
         resizeEnabled: true,
-        compactEnabled: true
+        compactEnabled: true,
+        resizableHandles: {
+          s: true,
+          e: true,
+          n: true,
+          w: true,
+          se: true,
+          ne: true,
+          sw: true,
+          nw: true
+        }
       },
       { cols: 2, rows: 2, y: 0, x: 2 },
       { cols: 1, rows: 1, y: 0, x: 4 },

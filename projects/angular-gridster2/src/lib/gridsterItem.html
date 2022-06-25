@@ -2,48 +2,48 @@
 <div
   (mousedown)="resize.dragStartDelay($event)"
   (touchstart)="resize.dragStartDelay($event)"
-  *ngIf="gridster.$options.resizable.handles.s && resize.resizeEnabled"
+  *ngIf="resize.resizableHandles?.s && resize.resizeEnabled"
   class="gridster-item-resizable-handler handle-s"
 ></div>
 <div
   (mousedown)="resize.dragStartDelay($event)"
   (touchstart)="resize.dragStartDelay($event)"
-  *ngIf="gridster.$options.resizable.handles.e && resize.resizeEnabled"
+  *ngIf="resize.resizableHandles?.e && resize.resizeEnabled"
   class="gridster-item-resizable-handler handle-e"
 ></div>
 <div
   (mousedown)="resize.dragStartDelay($event)"
   (touchstart)="resize.dragStartDelay($event)"
-  *ngIf="gridster.$options.resizable.handles.n && resize.resizeEnabled"
+  *ngIf="resize.resizableHandles?.n && resize.resizeEnabled"
   class="gridster-item-resizable-handler handle-n"
 ></div>
 <div
   (mousedown)="resize.dragStartDelay($event)"
   (touchstart)="resize.dragStartDelay($event)"
-  *ngIf="gridster.$options.resizable.handles.w && resize.resizeEnabled"
+  *ngIf="resize.resizableHandles?.w && resize.resizeEnabled"
   class="gridster-item-resizable-handler handle-w"
 ></div>
 <div
   (mousedown)="resize.dragStartDelay($event)"
   (touchstart)="resize.dragStartDelay($event)"
-  *ngIf="gridster.$options.resizable.handles.se && resize.resizeEnabled"
+  *ngIf="resize.resizableHandles?.se && resize.resizeEnabled"
   class="gridster-item-resizable-handler handle-se"
 ></div>
 <div
   (mousedown)="resize.dragStartDelay($event)"
   (touchstart)="resize.dragStartDelay($event)"
-  *ngIf="gridster.$options.resizable.handles.ne && resize.resizeEnabled"
+  *ngIf="resize.resizableHandles?.ne && resize.resizeEnabled"
   class="gridster-item-resizable-handler handle-ne"
 ></div>
 <div
   (mousedown)="resize.dragStartDelay($event)"
   (touchstart)="resize.dragStartDelay($event)"
-  *ngIf="gridster.$options.resizable.handles.sw && resize.resizeEnabled"
+  *ngIf="resize.resizableHandles?.sw && resize.resizeEnabled"
   class="gridster-item-resizable-handler handle-sw"
 ></div>
 <div
   (mousedown)="resize.dragStartDelay($event)"
   (touchstart)="resize.dragStartDelay($event)"
-  *ngIf="gridster.$options.resizable.handles.nw && resize.resizeEnabled"
+  *ngIf="resize.resizableHandles?.nw && resize.resizeEnabled"
   class="gridster-item-resizable-handler handle-nw"
 ></div>

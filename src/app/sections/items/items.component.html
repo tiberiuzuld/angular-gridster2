@@ -119,6 +119,56 @@
   >
     Compact
   </mat-checkbox>
+  <ng-container *ngIf="dashboard[0].resizableHandles">
+    <mat-checkbox
+      [(ngModel)]="dashboard[0].resizableHandles.s"
+      (ngModelChange)="changedOptions()"
+    >
+      Resize South
+    </mat-checkbox>
+    <mat-checkbox
+      [(ngModel)]="dashboard[0].resizableHandles.e"
+      (ngModelChange)="changedOptions()"
+    >
+      Resize East
+    </mat-checkbox>
+    <mat-checkbox
+      [(ngModel)]="dashboard[0].resizableHandles.n"
+      (ngModelChange)="changedOptions()"
+    >
+      Resize North
+    </mat-checkbox>
+    <mat-checkbox
+      [(ngModel)]="dashboard[0].resizableHandles.w"
+      (ngModelChange)="changedOptions()"
+    >
+      Resize West
+    </mat-checkbox>
+    <mat-checkbox
+      [(ngModel)]="dashboard[0].resizableHandles.se"
+      (ngModelChange)="changedOptions()"
+    >
+      Resize South-East
+    </mat-checkbox>
+    <mat-checkbox
+      [(ngModel)]="dashboard[0].resizableHandles.ne"
+      (ngModelChange)="changedOptions()"
+    >
+      Resize North-East
+    </mat-checkbox>
+    <mat-checkbox
+      [(ngModel)]="dashboard[0].resizableHandles.sw"
+      (ngModelChange)="changedOptions()"
+    >
+      Resize South-West
+    </mat-checkbox>
+    <mat-checkbox
+      [(ngModel)]="dashboard[0].resizableHandles.nw"
+      (ngModelChange)="changedOptions()"
+    >
+      Resize North-West
+    </mat-checkbox>
+  </ng-container>
   <mat-form-field>
     <mat-select
       aria-label="Compact type"

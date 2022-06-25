@@ -38,6 +38,21 @@ describe('merge method', () => {
       JSON.stringify(GridsterUtils.merge(obj1, obj2, properties))
     ).not.toBe(JSON.stringify(properties));
   });
+  it("should check obj1 when typeof obj2['p'] == 'object and obj1 does not include 'p'", () => {
+    const obj1 = { key1: 'value1' };
+    const obj2 = { key1: 'value3', key2: 'value4', key3: { key4: 'value10' } };
+    const properties = { key1: 'value3', key3: { key4: 'value11' } };
+    const output = { key1: 'value3', key3: { key4: 'value10' } };
+    expect(JSON.stringify(GridsterUtils.merge(obj1, obj2, properties))).toBe(
+      JSON.stringify(output)
+    );
+    expect(
+      JSON.stringify(GridsterUtils.merge(obj1, obj2, properties))
+    ).not.toBe(JSON.stringify(obj2));
+    expect(
+      JSON.stringify(GridsterUtils.merge(obj1, obj2, properties))
+    ).not.toBe(JSON.stringify(properties));
+  });
 });
 
 describe('check touch event', () => {

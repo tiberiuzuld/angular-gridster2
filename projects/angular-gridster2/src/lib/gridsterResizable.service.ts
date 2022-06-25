@@ -29,6 +29,16 @@ export class GridsterResizable {
     | null = null;
 
   resizeEnabled: boolean;
+  resizableHandles: {
+    s: boolean;
+    e: boolean;
+    n: boolean;
+    w: boolean;
+    se: boolean;
+    ne: boolean;
+    sw: boolean;
+    nw: boolean;
+  };
   mousemove: () => void;
   mouseup: () => void;
   mouseleave: () => void;
@@ -332,7 +342,7 @@ export class GridsterResizable {
     this.push = null!;
     this.pushResize.destroy();
     this.pushResize = null!;
-  }
+  };
 
   makeResize = (): void => {
     this.gridsterItem.setSize();
@@ -346,7 +356,7 @@ export class GridsterResizable {
     this.push = null!;
     this.pushResize.destroy();
     this.pushResize = null!;
-  }
+  };
 
   private handleNorth = (e: MouseEvent): void => {
     this.top = e.clientY + this.offsetTop - this.diffTop;
@@ -536,6 +546,7 @@ export class GridsterResizable {
 
   toggle(): void {
     this.resizeEnabled = this.gridsterItem.canBeResized();
+    this.resizableHandles = this.gridsterItem.getResizableHandles();
   }
 
   dragStartDelay(e: MouseEvent | TouchEvent): void {
