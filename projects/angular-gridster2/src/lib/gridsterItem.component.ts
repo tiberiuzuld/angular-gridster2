@@ -113,7 +113,17 @@ export class GridsterItemComponent
       maxItemCols: undefined,
       minItemCols: undefined,
       maxItemArea: undefined,
-      minItemArea: undefined
+      minItemArea: undefined,
+      resizableHandles: {
+        s: undefined,
+        e: undefined,
+        n: undefined,
+        w: undefined,
+        se: undefined,
+        ne: undefined,
+        sw: undefined,
+        nw: undefined
+      }
     });
   }
 
@@ -214,6 +224,21 @@ export class GridsterItemComponent
         ? gridResizable
         : this.$item.resizeEnabled;
     return !this.gridster.mobile && gridResizable && itemResizable;
+  }
+
+  getResizableHandles() {
+    const gridResizableHandles = this.gridster.$options.resizable.handles;
+    const itemResizableHandles = this.$item.resizableHandles;
+    // use grid settings if no settings are provided for the item.
+    if (itemResizableHandles === undefined) {
+      return gridResizableHandles;
+    }
+    // else merge the settings
+    return GridsterUtils.merge(
+      gridResizableHandles,
+      itemResizableHandles,
+      itemResizableHandles
+    );
   }
 
   bringToFront(offset: number): void {
