@@ -451,6 +451,11 @@ export class GridsterDraggable {
         });
       }
       this.push.checkPushBack();
+    } else {
+      // reset the collision when you drag and drop on an adjacent cell that is not empty
+      // and go back to the cell you were in from the beginning,
+      // this is to prevent `dropOverItemsCallback'
+      this.collision = false;
     }
     this.gridster.previewStyle(true);
   }
