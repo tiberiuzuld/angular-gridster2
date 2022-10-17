@@ -234,11 +234,10 @@ export class GridsterItemComponent
       return gridResizableHandles;
     }
     // else merge the settings
-    return GridsterUtils.merge(
-      gridResizableHandles,
-      itemResizableHandles,
-      itemResizableHandles
-    );
+    return {
+      ...gridResizableHandles,
+      ...itemResizableHandles
+    };
   }
 
   bringToFront(offset: number): void {
