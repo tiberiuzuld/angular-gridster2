@@ -1,24 +1,51 @@
+import { NgForOf, NgIf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
   OnInit,
   ViewEncapsulation
 } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 
 import {
   CompactType,
   DisplayGrid,
+  GridsterComponent,
   GridsterConfig,
   GridsterItem,
+  GridsterItemComponent,
   GridsterItemComponentInterface,
   GridType
 } from 'angular-gridster2';
+import { MarkdownModule } from 'ngx-markdown';
 
 @Component({
   selector: 'app-items',
   templateUrl: './items.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  standalone: true,
+  imports: [
+    FormsModule,
+    NgForOf,
+    NgIf,
+
+    MatButtonModule,
+    MatCheckboxModule,
+    MatIconModule,
+    MatInputModule,
+    MatSelectModule,
+
+    MarkdownModule,
+
+    GridsterComponent,
+    GridsterItemComponent
+  ]
 })
 export class ItemsComponent implements OnInit {
   options: GridsterConfig;

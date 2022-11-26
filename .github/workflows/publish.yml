@@ -24,7 +24,7 @@ jobs:
       - name: npm install and build
         run: |
           npm install
-          npm run build-npm
+          npm run build-lib
           cd dist/angular-gridster2
       # Publish to npm
       - name: npm publish

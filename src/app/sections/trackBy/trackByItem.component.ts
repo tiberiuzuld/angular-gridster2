@@ -14,7 +14,8 @@ import {
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  standalone: true
 })
 export class TrackByItemComponent implements OnInit {
   @Input() id: string;

@@ -1,3 +1,4 @@
+import { NgForOf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -5,19 +6,39 @@ import {
   OnInit,
   ViewEncapsulation
 } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 import {
   DisplayGrid,
+  GridsterComponent,
   GridsterConfig,
   GridsterItem,
+  GridsterItemComponent,
   GridType
 } from 'angular-gridster2';
+import { MarkdownModule } from 'ngx-markdown';
+import { ParentDynamicComponent } from './parentDynamic.component';
 
 @Component({
   selector: 'app-dynamic-widgets',
   templateUrl: './dynamicWidgets.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  standalone: true,
+  imports: [
+    NgForOf,
+
+    MatButtonModule,
+    MatIconModule,
+
+    MarkdownModule,
+
+    GridsterComponent,
+    GridsterItemComponent,
+
+    ParentDynamicComponent
+  ]
 })
 export class DynamicWidgetsComponent implements OnInit {
   options: GridsterConfig;

@@ -1,22 +1,44 @@
+import { NgForOf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
   OnInit,
   ViewEncapsulation
 } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
 
 import {
   DisplayGrid,
+  GridsterComponent,
   GridsterConfig,
   GridsterItem,
+  GridsterItemComponent,
   GridType
 } from 'angular-gridster2';
+import { MarkdownModule } from 'ngx-markdown';
 
 @Component({
   selector: 'app-display-grid',
   templateUrl: './displayGrid.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  standalone: true,
+  imports: [
+    FormsModule,
+    NgForOf,
+
+    MatButtonModule,
+    MatIconModule,
+    MatSelectModule,
+
+    MarkdownModule,
+
+    GridsterComponent,
+    GridsterItemComponent
+  ]
 })
 export class DisplayGridComponent implements OnInit {
   options: GridsterConfig;

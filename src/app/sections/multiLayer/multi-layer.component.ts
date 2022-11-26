@@ -1,24 +1,48 @@
 /**
  * Created by YISH on 2020/02/28.
  */
+import { NgForOf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
   OnInit,
   ViewEncapsulation
 } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
 import {
   DisplayGrid,
+  GridsterComponent,
   GridsterConfig,
   GridsterItem,
+  GridsterItemComponent,
   GridType
 } from 'angular-gridster2';
+import { MarkdownModule } from 'ngx-markdown';
 
 @Component({
   selector: 'app-swap',
   templateUrl: './multi-layer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  standalone: true,
+  imports: [
+    FormsModule,
+    NgForOf,
+
+    MatButtonModule,
+    MatCheckboxModule,
+    MatIconModule,
+    MatMenuModule,
+
+    MarkdownModule,
+
+    GridsterComponent,
+    GridsterItemComponent
+  ]
 })
 export class MultiLayerComponent implements OnInit {
   options: GridsterConfig;

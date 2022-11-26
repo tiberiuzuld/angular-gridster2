@@ -1,3 +1,4 @@
+import { NgForOf, NgStyle } from '@angular/common';
 import {
   ChangeDetectorRef,
   Component,
@@ -25,6 +26,7 @@ import {
   GridsterItem,
   GridsterItemComponentInterface
 } from './gridsterItem.interface';
+import { GridsterPreviewComponent } from './gridsterPreview.component';
 import { GridsterRenderer } from './gridsterRenderer.service';
 import { GridsterUtils } from './gridsterUtils.service';
 
@@ -33,7 +35,9 @@ import { GridsterUtils } from './gridsterUtils.service';
   selector: 'gridster',
   templateUrl: './gridster.html',
   styleUrls: ['./gridster.css'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  standalone: true,
+  imports: [NgForOf, NgStyle, GridsterPreviewComponent]
 })
 export class GridsterComponent
   implements OnInit, OnChanges, OnDestroy, GridsterComponentInterface

@@ -1,6 +1,8 @@
+import { NgIf } from '@angular/common';
 import {
   Component,
   ElementRef,
+  EventEmitter,
   HostBinding,
   Inject,
   Input,
@@ -11,24 +13,25 @@ import {
   Output,
   Renderer2,
   SimpleChanges,
-  ViewEncapsulation,
-  EventEmitter
+  ViewEncapsulation
 } from '@angular/core';
+import { GridsterComponent } from './gridster.component';
 
 import { GridsterDraggable } from './gridsterDraggable.service';
-import { GridsterResizable } from './gridsterResizable.service';
-import { GridsterUtils } from './gridsterUtils.service';
 import {
   GridsterItem,
   GridsterItemComponentInterface
 } from './gridsterItem.interface';
-import { GridsterComponent } from './gridster.component';
+import { GridsterResizable } from './gridsterResizable.service';
+import { GridsterUtils } from './gridsterUtils.service';
 
 @Component({
   selector: 'gridster-item',
   templateUrl: './gridsterItem.html',
   styleUrls: ['./gridsterItem.css'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  standalone: true,
+  imports: [NgIf]
 })
 export class GridsterItemComponent
   implements OnInit, OnDestroy, OnChanges, GridsterItemComponentInterface

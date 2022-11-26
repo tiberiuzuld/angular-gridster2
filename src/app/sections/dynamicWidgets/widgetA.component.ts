@@ -7,14 +7,15 @@ import {
   OnInit,
   ViewEncapsulation
 } from '@angular/core';
-import { Subscription } from 'rxjs';
 import { GridsterItem } from 'angular-gridster2';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-widget-a',
   template: '{{widget.type}}',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  standalone: true
 })
 export class WidgetAComponent implements OnInit, OnDestroy {
   @Input()

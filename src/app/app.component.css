@@ -13,7 +13,7 @@ mat-nav-list {
   overflow: auto;
 }
 
-mat-nav-list .active, mat-nav-list .mat-list-item-focus.active:focus {
+mat-nav-list .active {
   background: #afddff;
 }
 

@@ -1,4 +1,5 @@
-import { GridsterCompact } from '../gridsterCompact.service';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
   CompactType,
   DisplayGrid,
@@ -6,14 +7,10 @@ import {
   GridsterItem,
   GridsterItemComponent,
   GridsterItemComponentInterface,
-  GridsterModule,
   GridType
 } from 'angular-gridster2';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { GridsterUtils } from '../gridsterUtils.service';
+import { GridsterCompact } from '../gridsterCompact.service';
 import { GridsterPreviewComponent } from '../gridsterPreview.component';
-import { GridsterRenderer } from '../gridsterRenderer.service';
 
 function emptyCellClick(event: MouseEvent, item): void {}
 
@@ -32,15 +29,13 @@ describe('gridsterCompact service', () => {
   let compactType = CompactType.None;
   let collision: boolean;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [
         GridsterComponent,
         GridsterItemComponent,
         GridsterPreviewComponent
       ],
-      providers: [GridsterCompact, GridsterRenderer, GridsterUtils],
-      imports: [GridsterModule],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
 
@@ -110,15 +105,13 @@ describe('gridsterCompact service', () => {
 
     gridsterComponent.grid = { $item: { y: 5, x: 5, rows: 30, cols: 30 } };
 
-    gridsterComponent.ngOnInit();
+    fixture.detectChanges();
 
     gridsterCompact = new GridsterCompact(gridsterComponent);
-  }));
+  });
 
   it('should create gridsterComponent', () => {
-    expect(gridsterComponent).toBeTruthy(
-      'gridsterComponent has not been created'
-    );
+    expect(gridsterComponent).toBeTruthy();
   });
 
   it('should check if checkCompactUp called', () => {

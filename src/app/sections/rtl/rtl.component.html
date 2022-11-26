@@ -8,6 +8,7 @@
     <mat-icon>open_in_new</mat-icon>
     Source
   </a>
+  <markdown [src]="'assets/rtl.md'"></markdown>
 </div>
 <div class="options-header">
   <mat-form-field>
@@ -129,12 +130,11 @@
         </div>
       </div>
       <div class="item-buttons" *ngIf="item.hasContent">
-        <button mat-icon-button mat-raised-button class="drag-handler">
+        <button class="drag-handler" mat-icon-button>
           <mat-icon>open_with</mat-icon>
         </button>
         <button
           mat-icon-button
-          mat-raised-button
           class="remove-button"
           (mousedown)="removeItem($event, item)"
           (touchstart)="removeItem($event, item)"

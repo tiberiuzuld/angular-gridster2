@@ -1,22 +1,47 @@
+import { NgForOf, NgIf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
   OnInit,
   ViewEncapsulation
 } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 
 import {
   DisplayGrid,
+  GridsterComponent,
   GridsterConfig,
   GridsterItem,
+  GridsterItemComponent,
   GridType
 } from 'angular-gridster2';
+import { MarkdownModule } from 'ngx-markdown';
 
 @Component({
   selector: 'app-empty-cell',
   templateUrl: './emptyCell.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  standalone: true,
+  imports: [
+    FormsModule,
+    NgForOf,
+    NgIf,
+
+    MatButtonModule,
+    MatCheckboxModule,
+    MatIconModule,
+    MatInputModule,
+
+    MarkdownModule,
+
+    GridsterComponent,
+    GridsterItemComponent
+  ]
 })
 export class EmptyCellComponent implements OnInit {
   options: GridsterConfig;

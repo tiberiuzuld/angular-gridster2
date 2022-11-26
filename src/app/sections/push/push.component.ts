@@ -1,19 +1,27 @@
+import { NgForOf, NgIf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
   OnInit,
   ViewEncapsulation
 } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIconModule } from '@angular/material/icon';
 
 import {
   DisplayGrid,
   Draggable,
+  GridsterComponent,
   GridsterConfig,
   GridsterItem,
+  GridsterItemComponent,
   GridType,
   PushDirections,
   Resizable
 } from 'angular-gridster2';
+import { MarkdownModule } from 'ngx-markdown';
 
 interface Safe extends GridsterConfig {
   draggable: Draggable;
@@ -25,7 +33,22 @@ interface Safe extends GridsterConfig {
   selector: 'app-push',
   templateUrl: './push.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  standalone: true,
+  imports: [
+    FormsModule,
+    NgForOf,
+    NgIf,
+
+    MatButtonModule,
+    MatCheckboxModule,
+    MatIconModule,
+
+    MarkdownModule,
+
+    GridsterComponent,
+    GridsterItemComponent
+  ]
 })
 export class PushComponent implements OnInit {
   options: Safe;

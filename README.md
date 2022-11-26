@@ -7,30 +7,31 @@
 
 ### Angular implementation of angular-gridster [Demo](http://tiberiuzuld.github.io/angular-gridster2)
 
-### Requires Angular 14.x
+### Requires Angular 15.x
 
 ### For other Angular versions check the other branches.
-
-## Install
-
-`npm install angular-gridster2 --save`
-
-Should work out of the box with webpack, respectively angular-cli.
-
-```javascript
-import { GridsterModule } from 'angular-gridster2';
-
-@NgModule({
-  imports: [ GridsterModule ],
-  ...
-})
-```
 
 ## Browser support
 
 What Angular supports [here](https://github.com/angular/angular)
 
+## Install
+
+`npm install angular-gridster2 --save`
+
 ## How to use
+
+```javascript
+import {NgForOf} from '@angular/common';
+import {Component} from '@angular/core';
+import {GridsterComponent, GridsterItemComponent} from 'angular-gridster2';
+
+@Component({
+  standalone: true,
+  imports: [NgForOf, GridsterComponent, GridsterItemComponent],
+  ...
+})
+```
 
 ```html
 <gridster [options]="options">

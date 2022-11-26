@@ -1,0 +1,43 @@
+import { Routes } from '@angular/router';
+import { ApiComponent } from './sections/api/api.component';
+import { CompactComponent } from './sections/compact/compact.component';
+import { DisplayGridComponent } from './sections/displayGrid/displayGrid.component';
+import { DragComponent } from './sections/drag/drag.component';
+import { DynamicWidgetsComponent } from './sections/dynamicWidgets/dynamicWidgets.component';
+import { EmptyCellComponent } from './sections/emptyCell/emptyCell.component';
+import { GridEventsComponent } from './sections/gridEvents/gridEvents.component';
+import { GridMarginsComponent } from './sections/gridMargins/gridMargins.component';
+import { GridSizesComponent } from './sections/gridSizes/gridSizes.component';
+import { GridTypesComponent } from './sections/gridTypes/gridTypes.component';
+import { HomeComponent } from './sections/home/home.component';
+import { ItemsComponent } from './sections/items/items.component';
+import { MiscComponent } from './sections/misc/misc.component';
+import { MultiLayerComponent } from './sections/multiLayer/multi-layer.component';
+import { PushComponent } from './sections/push/push.component';
+import { ResizeComponent } from './sections/resize/resize.component';
+import { RtlComponent } from './sections/rtl/rtl.component';
+import { SwapComponent } from './sections/swap/swap.component';
+import { TrackByComponent } from './sections/trackBy/trackBy.component';
+
+export const appRoutes: Routes = [
+  { path: '', component: HomeComponent },
+  { path: 'api', component: ApiComponent },
+  { path: 'compact', component: CompactComponent },
+  { path: 'displayGrid', component: DisplayGridComponent },
+  { path: 'drag', component: DragComponent },
+  { path: 'dynamicWidgets', component: DynamicWidgetsComponent },
+  { path: 'emptyCell', component: EmptyCellComponent },
+  { path: 'gridEvents', component: GridEventsComponent },
+  { path: 'gridMargins', component: GridMarginsComponent },
+  { path: 'gridSizes', component: GridSizesComponent },
+  { path: 'gridTypes', component: GridTypesComponent },
+  { path: 'items', component: ItemsComponent },
+  { path: 'trackBy', component: TrackByComponent },
+  { path: 'push', component: PushComponent },
+  { path: 'resize', component: ResizeComponent },
+  { path: 'swap', component: SwapComponent },
+  { path: 'multiLayer', component: MultiLayerComponent },
+  { path: 'misc', component: MiscComponent },
+  { path: 'rtl', component: RtlComponent },
+  { path: '**', redirectTo: '' }
+];

@@ -1,24 +1,41 @@
+import { NgForOf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
   OnInit,
   ViewEncapsulation
 } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 import {
   CompactType,
+  GridsterComponent,
   GridsterConfig,
   GridsterItem,
   GridsterItemComponent,
   GridsterPush,
   GridType
 } from 'angular-gridster2';
+import { MarkdownModule } from 'ngx-markdown';
 
 @Component({
   selector: 'app-api',
   templateUrl: './api.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  standalone: true,
+  imports: [
+    NgForOf,
+
+    MatButtonModule,
+    MatIconModule,
+
+    MarkdownModule,
+
+    GridsterComponent,
+    GridsterItemComponent
+  ]
 })
 export class ApiComponent implements OnInit {
   options: GridsterConfig;

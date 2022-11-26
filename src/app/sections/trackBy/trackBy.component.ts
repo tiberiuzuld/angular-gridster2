@@ -1,24 +1,45 @@
+import { NgForOf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
   OnInit,
   ViewEncapsulation
 } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 import {
   CompactType,
   DisplayGrid,
+  GridsterComponent,
   GridsterConfig,
   GridsterItem,
+  GridsterItemComponent,
   GridsterItemComponentInterface,
   GridType
 } from 'angular-gridster2';
+import { MarkdownModule } from 'ngx-markdown';
+import { TrackByItemComponent } from './trackByItem.component';
 
 @Component({
   selector: 'app-trackby',
   templateUrl: './trackBy.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  standalone: true,
+  imports: [
+    NgForOf,
+
+    MatButtonModule,
+    MatIconModule,
+
+    MarkdownModule,
+
+    GridsterComponent,
+    GridsterItemComponent,
+
+    TrackByItemComponent
+  ]
 })
 export class TrackByComponent implements OnInit {
   options: GridsterConfig;

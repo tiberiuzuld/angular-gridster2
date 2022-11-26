@@ -1,9 +1,15 @@
+import { NgForOf, NgIf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
   OnInit,
   ViewEncapsulation
 } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 
 import {
   DisplayGrid,
@@ -11,9 +17,11 @@ import {
   GridsterComponent,
   GridsterConfig,
   GridsterItem,
+  GridsterItemComponent,
   GridsterItemComponentInterface,
   GridType
 } from 'angular-gridster2';
+import { MarkdownModule } from 'ngx-markdown';
 
 interface Safe extends GridsterConfig {
   draggable: Draggable;
@@ -23,7 +31,23 @@ interface Safe extends GridsterConfig {
   selector: 'app-drag',
   templateUrl: './drag.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  standalone: true,
+  imports: [
+    FormsModule,
+    NgForOf,
+    NgIf,
+
+    MatButtonModule,
+    MatCheckboxModule,
+    MatIconModule,
+    MatInputModule,
+
+    MarkdownModule,
+
+    GridsterComponent,
+    GridsterItemComponent
+  ]
 })
 export class DragComponent implements OnInit {
   options: Safe;
