@@ -179,7 +179,7 @@ export class GridsterDraggable {
       // prevent moving up at the top of gridster
       if (
         directions.includes(Direction.UP) &&
-        this.gridsterItem.el.getBoundingClientRect().top <=
+        this.gridsterItem.el.getBoundingClientRect().top <
           this.gridster.el.getBoundingClientRect().top + this.margin
       ) {
         directions = directions.filter(direction => direction != Direction.UP);
@@ -191,7 +191,7 @@ export class GridsterDraggable {
       // prevent moving left at the leftmost column of gridster
       if (
         directions.includes(Direction.LEFT) &&
-        this.gridsterItem.el.getBoundingClientRect().left <=
+        this.gridsterItem.el.getBoundingClientRect().left <
           this.gridster.el.getBoundingClientRect().left + this.margin
       ) {
         directions = directions.filter(
@@ -205,7 +205,7 @@ export class GridsterDraggable {
       // prevent moving right at the rightmost column of gridster
       if (
         directions.includes(Direction.RIGHT) &&
-        this.gridsterItem.el.getBoundingClientRect().right >=
+        this.gridsterItem.el.getBoundingClientRect().right >
           this.gridster.el.getBoundingClientRect().right - this.margin
       ) {
         directions = directions.filter(
@@ -219,7 +219,7 @@ export class GridsterDraggable {
       // prevent moving down at the bottom of gridster
       if (
         directions.includes(Direction.DOWN) &&
-        this.gridsterItem.el.getBoundingClientRect().bottom >=
+        this.gridsterItem.el.getBoundingClientRect().bottom >
           this.gridster.el.getBoundingClientRect().bottom - this.margin
       ) {
         directions = directions.filter(
@@ -556,7 +556,7 @@ export class GridsterDraggable {
    * */
   private getDirections(e: MouseEvent) {
     const directions: string[] = [];
-     if (this.lastMouse.clientX === 0 && this.lastMouse.clientY === 0) {
+    if (this.lastMouse.clientX === 0 && this.lastMouse.clientY === 0) {
       this.lastMouse.clientY = e.clientY;
       this.lastMouse.clientX = e.clientY;
     }
