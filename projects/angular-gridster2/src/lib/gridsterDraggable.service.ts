@@ -558,7 +558,7 @@ export class GridsterDraggable {
     const directions: string[] = [];
     if (this.lastMouse.clientX === 0 && this.lastMouse.clientY === 0) {
       this.lastMouse.clientY = e.clientY;
-      this.lastMouse.clientX = e.clientY;
+      this.lastMouse.clientX = e.clientX;
     }
     if (this.lastMouse.clientY > e.clientY) {
       directions.push(Direction.UP);
