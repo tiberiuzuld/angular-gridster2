@@ -35,7 +35,7 @@ export class GridsterPreviewComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.sub.unsubscribe();
+    this.sub?.unsubscribe();
   }
 
   private previewStyle(item: GridsterItem | null): void {
