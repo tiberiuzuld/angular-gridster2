@@ -1,9 +1,7 @@
 # angular-gridster2
 
 [![npm version](https://badge.fury.io/js/angular-gridster2.svg)](https://badge.fury.io/js/angular-gridster2)
-[![dependencies Status](https://david-dm.org/tiberiuzuld/angular-gridster2/status.svg)](https://david-dm.org/tiberiuzuld/angular-gridster2)
-[![devDependencies Status](https://david-dm.org/tiberiuzuld/angular-gridster2/dev-status.svg)](https://david-dm.org/tiberiuzuld/angular-gridster2?type=dev)
-![Node CI](https://github.com/tiberiuzuld/angular-gridster2/workflows/Node%20CI/badge.svg)
+![Node CI](https://github.com/tiberiuzuld/angular-gridster2/actions/workflows/deploy-demo.yml/badge.svg)
 [![downloads](https://img.shields.io/npm/dm/angular-gridster2.svg)](https://www.npmjs.com/package/angular-gridster2)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/tiberiuzuld)
 
@@ -145,16 +143,10 @@ Option 2 (with text selection):
 
 ### Contributors [here](https://github.com/tiberiuzuld/angular-gridster2/graphs/contributors)
 
-### Supporters
-
-@ea20140129
-@matpag (Mattia Pagini)
-@DerekJDev (Derek Johnson)
-
 ### [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/tiberiuzuld)
 
 ### License
 
 The MIT License
 
-Copyright (c) 2022 Tiberiu Zuld
+Copyright (c) 2023 Tiberiu Zuld
