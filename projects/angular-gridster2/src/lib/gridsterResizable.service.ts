@@ -364,6 +364,9 @@ export class GridsterResizable {
     if (this.minHeight > this.height) {
       this.height = this.minHeight;
       this.top = this.bottom - this.minHeight;
+    } else if (this.gridster.options.enableBoundaryControl) {
+      this.top = Math.max(0, this.top);
+      this.height = this.bottom - this.top;
     }
     this.newPosition = this.gridster.pixelsToPositionY(
       this.top + this.margin,
@@ -412,6 +415,9 @@ export class GridsterResizable {
     if (this.minWidth > this.width) {
       this.width = this.minWidth;
       this.left = this.right - this.minWidth;
+    } else if (this.gridster.options.enableBoundaryControl) {
+      this.left = Math.max(0, this.left);
+      this.width = this.right - this.left;
     }
     this.newPosition = this.gridster.pixelsToPositionX(
       this.left + this.margin,
@@ -455,6 +461,15 @@ export class GridsterResizable {
       this.height = this.minHeight;
     }
     this.bottom = this.top + this.height;
+    if (this.gridster.options.enableBoundaryControl) {
+      this.bottom = Math.min(
+        this.bottom,
+        this.gridster.el.getBoundingClientRect().bottom -
+          this.gridster.el.getBoundingClientRect().top -
+          2 * this.margin
+      );
+      this.height = this.bottom - this.top;
+    }
     this.newPosition = this.gridster.pixelsToPositionY(this.bottom, Math.ceil);
     if (
       this.gridsterItem.$item.y + this.gridsterItem.$item.rows !==
@@ -495,6 +510,15 @@ export class GridsterResizable {
       this.width = this.minWidth;
     }
     this.right = this.left + this.width;
+    if (this.gridster.options.enableBoundaryControl) {
+      this.right = Math.min(
+        this.right,
+        this.gridster.el.getBoundingClientRect().right -
+          this.gridster.el.getBoundingClientRect().left -
+          2 * this.margin
+      );
+      this.width = this.right - this.left;
+    }
     this.newPosition = this.gridster.pixelsToPositionX(this.right, Math.ceil);
     if (
       this.gridsterItem.$item.x + this.gridsterItem.$item.cols !==
