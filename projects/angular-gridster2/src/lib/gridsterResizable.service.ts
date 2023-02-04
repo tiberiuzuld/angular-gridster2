@@ -368,8 +368,9 @@ export class GridsterResizable {
       this.top = Math.max(0, this.top);
       this.height = this.bottom - this.top;
     }
+    const marginTop = this.gridster.options.pushItems ? this.margin : 0;
     this.newPosition = this.gridster.pixelsToPositionY(
-      this.top + this.margin,
+      this.top + marginTop,
       Math.floor
     );
     if (this.gridsterItem.$item.y !== this.newPosition) {
@@ -419,8 +420,9 @@ export class GridsterResizable {
       this.left = Math.max(0, this.left);
       this.width = this.right - this.left;
     }
+    const marginLeft = this.gridster.options.pushItems ? this.margin : 0;
     this.newPosition = this.gridster.pixelsToPositionX(
-      this.left + this.margin,
+      this.left + marginLeft,
       Math.floor
     );
     if (this.gridsterItem.$item.x !== this.newPosition) {
@@ -470,7 +472,11 @@ export class GridsterResizable {
       );
       this.height = this.bottom - this.top;
     }
-    this.newPosition = this.gridster.pixelsToPositionY(this.bottom, Math.ceil);
+    const marginBottom = this.gridster.options.pushItems ? 0 : this.margin;
+    this.newPosition = this.gridster.pixelsToPositionY(
+      this.bottom + marginBottom,
+      Math.ceil
+    );
     if (
       this.gridsterItem.$item.y + this.gridsterItem.$item.rows !==
       this.newPosition
@@ -519,7 +525,11 @@ export class GridsterResizable {
       );
       this.width = this.right - this.left;
     }
-    this.newPosition = this.gridster.pixelsToPositionX(this.right, Math.ceil);
+    const marginRight = this.gridster.options.pushItems ? 0 : this.margin;
+    this.newPosition = this.gridster.pixelsToPositionX(
+      this.right + marginRight,
+      Math.ceil
+    );
     if (
       this.gridsterItem.$item.x + this.gridsterItem.$item.cols !==
       this.newPosition
