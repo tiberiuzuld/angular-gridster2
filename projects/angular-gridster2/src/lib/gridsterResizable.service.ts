@@ -466,11 +466,10 @@ export class GridsterResizable {
     }
     this.bottom = this.top + this.height;
     if (this.gridster.options.enableBoundaryControl) {
+      const box = this.gridster.el.getBoundingClientRect();
       this.bottom = Math.min(
         this.bottom,
-        this.gridster.el.getBoundingClientRect().bottom -
-          this.gridster.el.getBoundingClientRect().top -
-          2 * this.margin
+        box.bottom - box.top - 2 * this.margin
       );
       this.height = this.bottom - this.top;
     }
@@ -519,12 +518,8 @@ export class GridsterResizable {
     }
     this.right = this.left + this.width;
     if (this.gridster.options.enableBoundaryControl) {
-      this.right = Math.min(
-        this.right,
-        this.gridster.el.getBoundingClientRect().right -
-          this.gridster.el.getBoundingClientRect().left -
-          2 * this.margin
-      );
+      const box = this.gridster.el.getBoundingClientRect();
+      this.right = Math.min(this.right, box.right - box.left - 2 * this.margin);
       this.width = this.right - this.left;
     }
     const marginRight = this.gridster.options.pushItems ? 0 : this.margin;
