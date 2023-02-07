@@ -387,6 +387,7 @@ export class GridsterResizable {
       if (this.gridster.checkCollision(this.gridsterItem.$item)) {
         this.gridsterItem.$item.y = this.itemBackup[1];
         this.gridsterItem.$item.rows = this.itemBackup[3];
+        this.top = this.gridster.positionYToPixels(this.gridsterItem.$item.y);
         this.setItemTop(
           this.gridster.positionYToPixels(this.gridsterItem.$item.y)
         );
@@ -439,6 +440,7 @@ export class GridsterResizable {
       if (this.gridster.checkCollision(this.gridsterItem.$item)) {
         this.gridsterItem.$item.x = this.itemBackup[0];
         this.gridsterItem.$item.cols = this.itemBackup[2];
+        this.left = this.gridster.positionXToPixels(this.gridsterItem.$item.x);
         this.setItemLeft(
           this.gridster.positionXToPixels(this.gridsterItem.$item.x)
         );
