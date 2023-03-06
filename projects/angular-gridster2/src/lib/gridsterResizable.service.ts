@@ -57,6 +57,10 @@ export class GridsterResizable {
   diffRight: number;
   diffBottom: number;
   margin: number;
+  outerMarginTop: number | null;
+  outerMarginRight: number | null;
+  outerMarginBottom: number | null;
+  outerMarginLeft: number | null;
   originalClientX: number;
   originalClientY: number;
   top: number;
@@ -162,6 +166,10 @@ export class GridsterResizable {
     this.bottom = this.gridsterItem.top + this.gridsterItem.height;
     this.right = this.gridsterItem.left + this.gridsterItem.width;
     this.margin = this.gridster.$options.margin;
+    this.outerMarginTop = this.gridster.$options.outerMarginTop;
+    this.outerMarginRight = this.gridster.$options.outerMarginRight;
+    this.outerMarginBottom = this.gridster.$options.outerMarginBottom;
+    this.outerMarginLeft = this.gridster.$options.outerMarginLeft;
     this.offsetLeft = this.gridster.el.scrollLeft - this.gridster.el.offsetLeft;
     this.offsetTop = this.gridster.el.scrollTop - this.gridster.el.offsetTop;
     this.diffLeft = e.clientX + this.offsetLeft - this.left;
@@ -466,10 +474,11 @@ export class GridsterResizable {
     }
     this.bottom = this.top + this.height;
     if (this.gridster.options.enableBoundaryControl) {
+      const margin = this.outerMarginBottom ?? this.margin;
       const box = this.gridster.el.getBoundingClientRect();
       this.bottom = Math.min(
         this.bottom,
-        box.bottom - box.top - 2 * this.margin
+        box.bottom - box.top - 2 * margin
       );
       this.height = this.bottom - this.top;
     }
@@ -518,8 +527,9 @@ export class GridsterResizable {
     }
     this.right = this.left + this.width;
     if (this.gridster.options.enableBoundaryControl) {
+      const margin = this.outerMarginRight ?? this.margin;
       const box = this.gridster.el.getBoundingClientRect();
-      this.right = Math.min(this.right, box.right - box.left - 2 * this.margin);
+      this.right = Math.min(this.right, box.right - box.left - 2 * margin);
       this.width = this.right - this.left;
     }
     const marginRight = this.gridster.options.pushItems ? 0 : this.margin;
