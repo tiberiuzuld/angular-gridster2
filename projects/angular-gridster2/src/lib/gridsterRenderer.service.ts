@@ -14,13 +14,13 @@ export class GridsterRenderer {
    * Caches the last grid column styles.
    * This improves the grid responsiveness by caching and reusing the last style object instead of creating a new one.
    */
-  private lastGridColumnStyles: { [key: number]: GridColumnCachedStyle } = {};
+  private lastGridColumnStyles: Record<number, GridColumnCachedStyle> = {};
 
   /**
    * Caches the last grid row styles.
    * This improves the grid responsiveness by caching and reusing the last style object instead of creating a new one.
    */
-  private lastGridRowStyles: { [key: number]: GridRowCachedStyle } = {};
+  private lastGridRowStyles: Record<number, GridRowCachedStyle> = {};
 
   constructor(private gridster: GridsterComponentInterface) {}
 
