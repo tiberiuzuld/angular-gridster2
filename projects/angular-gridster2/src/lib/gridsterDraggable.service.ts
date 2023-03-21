@@ -27,6 +27,10 @@ export class GridsterDraggable {
   offsetLeft: number;
   offsetTop: number;
   margin: number;
+  outerMarginTop: number | null;
+  outerMarginRight: number | null;
+  outerMarginBottom: number | null;
+  outerMarginLeft: number | null;
   diffTop: number;
   diffLeft: number;
   originalClientX: number;
@@ -140,6 +144,10 @@ export class GridsterDraggable {
       'gridster-item-moving'
     );
     this.margin = this.gridster.$options.margin;
+    this.outerMarginTop = this.gridster.$options.outerMarginTop;
+    this.outerMarginRight = this.gridster.$options.outerMarginRight;
+    this.outerMarginBottom = this.gridster.$options.outerMarginBottom;
+    this.outerMarginLeft = this.gridster.$options.outerMarginLeft;
     this.offsetLeft = this.gridster.el.scrollLeft - this.gridster.el.offsetLeft;
     this.offsetTop = this.gridster.el.scrollTop - this.gridster.el.offsetTop;
     this.left = this.gridsterItem.left - this.margin;
@@ -180,7 +188,8 @@ export class GridsterDraggable {
       if (
         directions.includes(Direction.UP) &&
         this.gridsterItem.el.getBoundingClientRect().top <
-          this.gridster.el.getBoundingClientRect().top + this.margin
+          this.gridster.el.getBoundingClientRect().top +
+            (this.outerMarginTop ?? this.margin)
       ) {
         directions = directions.filter(direction => direction != Direction.UP);
         e = new MouseEvent(e.type, {
@@ -192,7 +201,8 @@ export class GridsterDraggable {
       if (
         directions.includes(Direction.LEFT) &&
         this.gridsterItem.el.getBoundingClientRect().left <
-          this.gridster.el.getBoundingClientRect().left + this.margin
+          this.gridster.el.getBoundingClientRect().left +
+            (this.outerMarginLeft ?? this.margin)
       ) {
         directions = directions.filter(
           direction => direction != Direction.LEFT
@@ -206,7 +216,8 @@ export class GridsterDraggable {
       if (
         directions.includes(Direction.RIGHT) &&
         this.gridsterItem.el.getBoundingClientRect().right >
-          this.gridster.el.getBoundingClientRect().right - this.margin
+          this.gridster.el.getBoundingClientRect().right -
+            (this.outerMarginRight ?? this.margin)
       ) {
         directions = directions.filter(
           direction => direction != Direction.RIGHT
@@ -220,7 +231,8 @@ export class GridsterDraggable {
       if (
         directions.includes(Direction.DOWN) &&
         this.gridsterItem.el.getBoundingClientRect().bottom >
-          this.gridster.el.getBoundingClientRect().bottom - this.margin
+          this.gridster.el.getBoundingClientRect().bottom - 
+            (this.outerMarginBottom ?? this.margin)
       ) {
         directions = directions.filter(
           direction => direction != Direction.DOWN
