@@ -3,8 +3,25 @@ import { Renderer2 } from '@angular/core';
 import { GridsterComponentInterface } from './gridster.interface';
 import { DirTypes, GridType } from './gridsterConfig.interface';
 import { GridsterItem } from './gridsterItem.interface';
+import {
+  CommonGridStyle,
+  GridColumnCachedStyle,
+  GridRowCachedStyle
+} from './gridsterRenderer.interface';
 
 export class GridsterRenderer {
+  /**
+   * Caches the last grid column styles.
+   * This improves the grid responsiveness by caching and reusing the last style object instead of creating a new one.
+   */
+  private lastGridColumnStyles: { [key: number]: GridColumnCachedStyle } = {};
+
+  /**
+   * Caches the last grid row styles.
+   * This improves the grid responsiveness by caching and reusing the last style object instead of creating a new one.
+   */
+  private lastGridRowStyles: { [key: number]: GridRowCachedStyle } = {};
+
   constructor(private gridster: GridsterComponentInterface) {}
 
   destroy(): void {
@@ -160,26 +177,68 @@ export class GridsterRenderer {
     this.gridster.renderer.removeClass(this.gridster.el, removeClass3);
   }
 
-  getGridColumnStyle(i: number): { [key: string]: string } {
-    return {
-      ...this.getLeftPosition(this.gridster.curColWidth * i),
-      width: this.gridster.curColWidth - this.gridster.$options.margin + 'px',
+  getGridColumnStyle(i: number): CommonGridStyle {
+    // generates the new style
+    const newPos: GridColumnCachedStyle = {
+      left: this.gridster.curColWidth * i,
+      width: this.gridster.curColWidth - this.gridster.$options.margin,
       height:
         this.gridster.gridRows.length * this.gridster.curRowHeight -
-        this.gridster.$options.margin +
-        'px'
+        this.gridster.$options.margin,
+      style: {}
     };
+    newPos.style = {
+      ...this.getLeftPosition(newPos.left),
+      width: newPos.width + 'px',
+      height: newPos.height + 'px'
+    };
+
+    // use the last cached style if it has same values as the generated one
+    const last = this.lastGridColumnStyles[i];
+    if (
+      last &&
+      last.left === newPos.left &&
+      last.width === newPos.width &&
+      last.height === newPos.height
+    ) {
+      return last.style;
+    }
+
+    // cache and set new style
+    this.lastGridColumnStyles[i] = newPos;
+    return newPos.style;
   }
 
-  getGridRowStyle(i: number): { [key: string]: string } {
-    return {
-      ...this.getTopPosition(this.gridster.curRowHeight * i),
+  getGridRowStyle(i: number): CommonGridStyle {
+    // generates the new style
+    const newPos: GridRowCachedStyle = {
+      top: this.gridster.curRowHeight * i,
       width:
-        this.gridster.gridColumns.length * this.gridster.curColWidth -
-        this.gridster.$options.margin +
-        'px',
-      height: this.gridster.curRowHeight - this.gridster.$options.margin + 'px'
+        this.gridster.gridColumns.length * this.gridster.curColWidth +
+        this.gridster.$options.margin,
+      height: this.gridster.curRowHeight - this.gridster.$options.margin,
+      style: {}
     };
+    newPos.style = {
+      ...this.getTopPosition(newPos.top),
+      width: newPos.width + 'px',
+      height: newPos.height + 'px'
+    };
+
+    // use the last cached style if it has same values as the generated one
+    const last = this.lastGridRowStyles[i];
+    if (
+      last &&
+      last.top === newPos.top &&
+      last.width === newPos.width &&
+      last.height === newPos.height
+    ) {
+      return last.style;
+    }
+
+    // cache and set new style
+    this.lastGridRowStyles[i] = newPos;
+    return newPos.style;
   }
 
   getLeftPosition(d: number): { left: string } | { transform: string } {
