@@ -7,7 +7,7 @@
 
 ### Angular implementation of angular-gridster [Demo](http://tiberiuzuld.github.io/angular-gridster2)
 
-### Requires Angular 15.x
+### Requires Angular 16.x
 
 ### For other Angular versions check the other branches.
 
@@ -93,24 +93,12 @@ Option 1 (without text selection):
 
 ```html
 <gridster-item>
-  <div
-    (mousedown)="$event.stopPropagation()"
-    (touchstart)="$event.stopPropagation()"
-  >
-    Some content to click without dragging the widget
-  </div>
+  <div (mousedown)="$event.stopPropagation()" (touchstart)="$event.stopPropagation()">Some content to click without dragging the widget</div>
   <div class="item-buttons">
     <button md-icon-button md-raised-button class="drag-handler">
       <md-icon>open_with</md-icon>
     </button>
-    <button
-      md-icon-button
-      md-raised-button
-      class="remove-button"
-      (click)="removeItem($event, item)"
-      (touchstart)="removeItem($event, item)"
-      mdTooltip="Remove"
-    >
+    <button md-icon-button md-raised-button class="remove-button" (click)="removeItem($event, item)" (touchstart)="removeItem($event, item)" mdTooltip="Remove">
       <md-icon>clear</md-icon>
     </button>
   </div>
@@ -121,21 +109,12 @@ Option 2 (with text selection):
 
 ```html
 <gridster-item>
-  <div class="gridster-item-content">
-    Some content to select and click without dragging the widget
-  </div>
+  <div class="gridster-item-content">Some content to select and click without dragging the widget</div>
   <div class="item-buttons">
     <button md-icon-button md-raised-button class="drag-handler">
       <md-icon>open_with</md-icon>
     </button>
-    <button
-      md-icon-button
-      md-raised-button
-      class="remove-button"
-      (click)="removeItem($event, item)"
-      (touchstart)="removeItem($event, item)"
-      mdTooltip="Remove"
-    >
+    <button md-icon-button md-raised-button class="remove-button" (click)="removeItem($event, item)" (touchstart)="removeItem($event, item)" mdTooltip="Remove">
       <md-icon>clear</md-icon>
     </button>
   </div>
