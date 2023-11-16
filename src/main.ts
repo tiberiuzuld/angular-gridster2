@@ -3,7 +3,7 @@ import { importProvidersFrom } from '@angular/core';
 import { bootstrapApplication, BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
-import { MarkdownModule, MarkedOptions } from 'ngx-markdown';
+import { MarkdownModule, MARKED_OPTIONS } from 'ngx-markdown';
 
 import { AppComponent } from './app/app.component';
 import { appRoutes } from './app/app.routes';
@@ -18,7 +18,7 @@ bootstrapApplication(AppComponent, {
       MarkdownModule.forRoot({
         loader: HttpClient,
         markedOptions: {
-          provide: MarkedOptions,
+          provide: MARKED_OPTIONS,
           useValue: { smartypants: true, breaks: true }
         }
       })
