@@ -72,7 +72,6 @@
     "@commitlint/cli": "18.4.2",
     "@commitlint/config-conventional": "18.4.2",
     "@types/jasmine": "5.1.2",
-    "@types/marked": "6.0.0",
     "@types/node": "20.9.2",
     "@typescript-eslint/eslint-plugin": "6.11.0",
     "@typescript-eslint/parser": "6.11.0",
