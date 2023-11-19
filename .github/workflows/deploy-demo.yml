@@ -19,7 +19,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: npm install, build, and deploy
         run: |
-          npm ci
+          npm ci --legacy-peer-deps
           npm run build-lib
           npm run deploy
         env:
