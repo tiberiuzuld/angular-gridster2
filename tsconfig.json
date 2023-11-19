@@ -2,15 +2,14 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": false,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
+    "esModuleInterop": true,
     "sourceMap": true,
     "declaration": false,
-    "downlevelIteration": true,
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
@@ -24,8 +23,8 @@
     ],
     "paths": {
       "angular-gridster2": [
-        "dist/angular-gridster2",
-        "projects/angular-gridster2/src/public_api.ts"
+        "./dist/angular-gridster2",
+        "./projects/angular-gridster2/src/public_api.ts"
       ]
     },
     "useDefineForClassFields": false
