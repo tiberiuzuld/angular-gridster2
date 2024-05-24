@@ -109,7 +109,8 @@
           "options": {
             "repo": "https://GH_TOKEN@github.com/tiberiuzuld/angular-gridster2.git",
             "name": "Tiberiu Zuld",
-            "email": "tiberiuzuld@gmail.com"
+            "email": "tiberiuzuld@gmail.com",
+            "dir": "dist/demo/browser"
           }
         }
       }

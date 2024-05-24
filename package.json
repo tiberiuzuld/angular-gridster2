@@ -14,7 +14,7 @@
     "test-lib": "ng test angular-gridster2",
     "lint": "ng lint",
     "watch": "ng build --watch --configuration development",
-    "deploy": "ng deploy --dir=dist/demo/browser",
+    "deploy": "ng deploy",
     "postinstall": "husky install"
   },
   "homepage": "https://tiberiuzuld.github.io/angular-gridster2",
