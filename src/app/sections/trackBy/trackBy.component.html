@@ -20,15 +20,17 @@
 </div>
 
 <gridster [options]="options">
-  <gridster-item *ngFor="let item of dashboard; trackBy: trackBy" [item]="item">
-    <button
-      (mousedown)="removeItem($event, item)"
-      (touchstart)="removeItem($event, item)"
-      mat-mini-fab
-      style="position: absolute; right: 10px; top: 10px"
-    >
-      <mat-icon>delete</mat-icon>
-    </button>
-    <app-trackby-item [id]="item.id"></app-trackby-item>
-  </gridster-item>
+  @for (item of dashboard; track item.id) {
+    <gridster-item [item]="item">
+      <button
+        (mousedown)="removeItem($event, item)"
+        (touchstart)="removeItem($event, item)"
+        mat-mini-fab
+        style="position: absolute; right: 10px; top: 10px"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
+      <app-trackby-item [id]="item.id"></app-trackby-item>
+    </gridster-item>
+  }
 </gridster>

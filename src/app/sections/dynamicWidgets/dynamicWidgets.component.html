@@ -12,10 +12,12 @@
 </div>
 
 <gridster [options]="options">
-  <gridster-item [item]="item" *ngFor="let item of dashboard">
-    <app-parent-dynamic
-      [widget]="item"
-      [resizeEvent]="resizeEvent"
-    ></app-parent-dynamic>
-  </gridster-item>
+  @for (item of dashboard; track item) {
+    <gridster-item [item]="item">
+      <app-parent-dynamic
+        [widget]="item"
+        [resizeEvent]="resizeEvent"
+      ></app-parent-dynamic>
+    </gridster-item>
+  }
 </gridster>

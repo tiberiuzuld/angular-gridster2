@@ -1,4 +1,3 @@
-import { NgForOf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -30,16 +29,12 @@ import { MarkdownModule } from 'ngx-markdown';
   standalone: true,
   imports: [
     FormsModule,
-    NgForOf,
-
     MatButtonModule,
     MatCheckboxModule,
     MatIconModule,
     MatInputModule,
     MatSelectModule,
-
     MarkdownModule,
-
     GridsterComponent,
     GridsterItemComponent
   ]

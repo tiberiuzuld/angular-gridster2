@@ -47,20 +47,22 @@
   >
     Push Items
   </mat-checkbox>
-  <mat-checkbox
-    [(ngModel)]="options.draggable.enabled"
-    *ngIf="options.draggable"
-    (ngModelChange)="changedOptions()"
-  >
-    Drag Items
-  </mat-checkbox>
-  <mat-checkbox
-    [(ngModel)]="options.resizable.enabled"
-    *ngIf="options.resizable"
-    (ngModelChange)="changedOptions()"
-  >
-    Resize Items
-  </mat-checkbox>
+  @if (options.draggable) {
+    <mat-checkbox
+      [(ngModel)]="options.draggable.enabled"
+      (ngModelChange)="changedOptions()"
+    >
+      Drag Items
+    </mat-checkbox>
+  }
+  @if (options.resizable) {
+    <mat-checkbox
+      [(ngModel)]="options.resizable.enabled"
+      (ngModelChange)="changedOptions()"
+    >
+      Resize Items
+    </mat-checkbox>
+  }
   <mat-checkbox
     [(ngModel)]="options.pushResizeItems"
     (ngModelChange)="changedOptions()"
@@ -82,14 +84,14 @@
   <mat-checkbox
     [(ngModel)]="options.outerMargin"
     (ngModelChange)="changedOptions()"
-    >Outer Margin</mat-checkbox
-  >
+    >Outer Margin
+  </mat-checkbox>
 
   <mat-checkbox
     [(ngModel)]="options.useBodyForBreakpoint"
     (ngModelChange)="changedOptions()"
-    >Use Body Width as Breakpoint</mat-checkbox
-  >
+    >Use Body Width as Breakpoint
+  </mat-checkbox>
   <mat-form-field>
     <input
       matInput
@@ -124,38 +126,50 @@
 </div>
 
 <gridster [options]="options">
-  <gridster-item [item]="item" *ngFor="let item of dashboard">
-    <div class="button-holder">
-      <div class="gridster-item-content" *ngIf="item.hasContent">
-        <div class="stuff">
-          <span
-            >Some content to select and click without dragging the widget</span
+  @for (item of dashboard; track item) {
+    <gridster-item [item]="item">
+      <div class="button-holder">
+        @if (item.hasContent) {
+          <div class="gridster-item-content">
+            <div class="stuff">
+              <span
+                >Some content to select and click without dragging the
+                widget</span
+              >
+              <a href="https://www.google.com" target="_blank"
+                >Link to Google</a
+              >
+            </div>
+          </div>
+        }
+        @if (item.hasContent) {
+          <div class="item-buttons">
+            <button class="drag-handler" mat-icon-button>
+              <mat-icon>open_with</mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              class="remove-button"
+              (mousedown)="removeItem($event, item)"
+              (touchstart)="removeItem($event, item)"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        }
+        @if (!item.hasContent) {
+          <label>{{ item.label }}</label>
+        }
+        @if (!item.hasContent) {
+          <button
+            mat-mini-fab
+            (mousedown)="removeItem($event, item)"
+            (touchstart)="removeItem($event, item)"
           >
-          <a href="https://www.google.com" target="_blank">Link to Google</a>
-        </div>
+            <mat-icon>delete</mat-icon>
+          </button>
+        }
       </div>
-      <div class="item-buttons" *ngIf="item.hasContent">
-        <button class="drag-handler" mat-icon-button>
-          <mat-icon>open_with</mat-icon>
-        </button>
-        <button
-          mat-icon-button
-          class="remove-button"
-          (mousedown)="removeItem($event, item)"
-          (touchstart)="removeItem($event, item)"
-        >
-          <mat-icon>delete</mat-icon>
-        </button>
-      </div>
-      <label *ngIf="!item.hasContent">{{ item.label }}</label>
-      <button
-        mat-mini-fab
-        *ngIf="!item.hasContent"
-        (mousedown)="removeItem($event, item)"
-        (touchstart)="removeItem($event, item)"
-      >
-        <mat-icon>delete</mat-icon>
-      </button>
-    </div>
-  </gridster-item>
+    </gridster-item>
+  }
 </gridster>

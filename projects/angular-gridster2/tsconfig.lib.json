@@ -4,13 +4,12 @@
   "compilerOptions": {
     "outDir": "../../out-tsc/angular-gridster2",
     "module": "ES2022",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
     "inlineSources": true,
     "emitDecoratorMetadata": true,
-    "downlevelIteration": true,
     "experimentalDecorators": true,
     "importHelpers": true,
     "types": []

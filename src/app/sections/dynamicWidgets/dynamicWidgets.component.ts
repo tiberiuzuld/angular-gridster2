@@ -1,4 +1,3 @@
-import { NgForOf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -27,16 +26,11 @@ import { ParentDynamicComponent } from './parentDynamic.component';
   encapsulation: ViewEncapsulation.None,
   standalone: true,
   imports: [
-    NgForOf,
-
     MatButtonModule,
     MatIconModule,
-
     MarkdownModule,
-
     GridsterComponent,
     GridsterItemComponent,
-
     ParentDynamicComponent
   ]
 })

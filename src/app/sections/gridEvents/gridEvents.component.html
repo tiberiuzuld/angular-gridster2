@@ -19,16 +19,20 @@
   </button>
 </div>
 
-<gridster [options]="options" *ngIf="!remove">
-  <gridster-item [item]="item" *ngFor="let item of dashboard">
-    <div class="button-holder">
-      <button
-        mat-mini-fab
-        (mousedown)="removeItem($event, item)"
-        (touchstart)="removeItem($event, item)"
-      >
-        <mat-icon>delete</mat-icon>
-      </button>
-    </div>
-  </gridster-item>
-</gridster>
+@if (!remove) {
+  <gridster [options]="options">
+    @for (item of dashboard; track item) {
+      <gridster-item [item]="item">
+        <div class="button-holder">
+          <button
+            mat-mini-fab
+            (mousedown)="removeItem($event, item)"
+            (touchstart)="removeItem($event, item)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </gridster-item>
+    }
+  </gridster>
+}

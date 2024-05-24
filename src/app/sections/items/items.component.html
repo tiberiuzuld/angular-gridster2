@@ -10,194 +10,198 @@
   </a>
   <markdown [src]="'assets/items.md'"></markdown>
 </div>
-<div class="options-header" *ngIf="dashboard[0]">
-  <mat-form-field>
-    <input
-      matInput
-      [(ngModel)]="dashboard[0].x"
-      type="number"
-      placeholder="X"
-      (ngModelChange)="changedOptions()"
-    />
-  </mat-form-field>
-  <mat-form-field>
-    <input
-      matInput
-      [(ngModel)]="dashboard[0].y"
-      type="number"
-      placeholder="Y"
-      (ngModelChange)="changedOptions()"
-    />
-  </mat-form-field>
-  <mat-form-field>
-    <input
-      matInput
-      [(ngModel)]="dashboard[0].rows"
-      type="number"
-      placeholder="Rows"
-      (ngModelChange)="changedOptions()"
-    />
-  </mat-form-field>
-  <mat-form-field>
-    <input
-      matInput
-      [(ngModel)]="dashboard[0].cols"
-      type="number"
-      placeholder="Cols"
-      (ngModelChange)="changedOptions()"
-    />
-  </mat-form-field>
-  <mat-form-field>
-    <input
-      matInput
-      [(ngModel)]="dashboard[0].maxItemCols"
-      type="number"
-      placeholder="Max Item Cols"
-      (ngModelChange)="changedOptions()"
-    />
-  </mat-form-field>
-  <mat-form-field>
-    <input
-      matInput
-      [(ngModel)]="dashboard[0].minItemCols"
-      type="number"
-      placeholder="Min Item Cols"
-      (ngModelChange)="changedOptions()"
-    />
-  </mat-form-field>
-  <mat-form-field>
-    <input
-      matInput
-      [(ngModel)]="dashboard[0].maxItemRows"
-      type="number"
-      placeholder="Max Item Rows"
-      (ngModelChange)="changedOptions()"
-    />
-  </mat-form-field>
-  <mat-form-field>
-    <input
-      matInput
-      [(ngModel)]="dashboard[0].minItemRows"
-      type="number"
-      placeholder="Min Item Rows"
-      (ngModelChange)="changedOptions()"
-    />
-  </mat-form-field>
-  <mat-form-field>
-    <input
-      matInput
-      [(ngModel)]="dashboard[0].maxItemArea"
-      type="number"
-      placeholder="Max Item Area"
-      (ngModelChange)="changedOptions()"
-    />
-  </mat-form-field>
-  <mat-form-field>
-    <input
-      matInput
-      [(ngModel)]="dashboard[0].minItemArea"
-      type="number"
-      placeholder="Min Item Area"
-      (ngModelChange)="changedOptions()"
-    />
-  </mat-form-field>
-  <mat-checkbox
-    [(ngModel)]="dashboard[0].dragEnabled"
-    (ngModelChange)="changedOptions()"
-  >
-    Drag
-  </mat-checkbox>
-  <mat-checkbox
-    [(ngModel)]="dashboard[0].resizeEnabled"
-    (ngModelChange)="changedOptions()"
-  >
-    Resize
-  </mat-checkbox>
-  <mat-checkbox
-    [(ngModel)]="dashboard[0].compactEnabled"
-    (ngModelChange)="changedOptions()"
-  >
-    Compact
-  </mat-checkbox>
-  <ng-container *ngIf="dashboard[0].resizableHandles">
+@if (dashboard[0]) {
+  <div class="options-header">
+    <mat-form-field>
+      <input
+        matInput
+        [(ngModel)]="dashboard[0].x"
+        type="number"
+        placeholder="X"
+        (ngModelChange)="changedOptions()"
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        [(ngModel)]="dashboard[0].y"
+        type="number"
+        placeholder="Y"
+        (ngModelChange)="changedOptions()"
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        [(ngModel)]="dashboard[0].rows"
+        type="number"
+        placeholder="Rows"
+        (ngModelChange)="changedOptions()"
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        [(ngModel)]="dashboard[0].cols"
+        type="number"
+        placeholder="Cols"
+        (ngModelChange)="changedOptions()"
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        [(ngModel)]="dashboard[0].maxItemCols"
+        type="number"
+        placeholder="Max Item Cols"
+        (ngModelChange)="changedOptions()"
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        [(ngModel)]="dashboard[0].minItemCols"
+        type="number"
+        placeholder="Min Item Cols"
+        (ngModelChange)="changedOptions()"
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        [(ngModel)]="dashboard[0].maxItemRows"
+        type="number"
+        placeholder="Max Item Rows"
+        (ngModelChange)="changedOptions()"
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        [(ngModel)]="dashboard[0].minItemRows"
+        type="number"
+        placeholder="Min Item Rows"
+        (ngModelChange)="changedOptions()"
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        [(ngModel)]="dashboard[0].maxItemArea"
+        type="number"
+        placeholder="Max Item Area"
+        (ngModelChange)="changedOptions()"
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        [(ngModel)]="dashboard[0].minItemArea"
+        type="number"
+        placeholder="Min Item Area"
+        (ngModelChange)="changedOptions()"
+      />
+    </mat-form-field>
     <mat-checkbox
-      [(ngModel)]="dashboard[0].resizableHandles.s"
+      [(ngModel)]="dashboard[0].dragEnabled"
       (ngModelChange)="changedOptions()"
     >
-      Resize South
+      Drag
     </mat-checkbox>
     <mat-checkbox
-      [(ngModel)]="dashboard[0].resizableHandles.e"
+      [(ngModel)]="dashboard[0].resizeEnabled"
       (ngModelChange)="changedOptions()"
     >
-      Resize East
+      Resize
     </mat-checkbox>
     <mat-checkbox
-      [(ngModel)]="dashboard[0].resizableHandles.n"
+      [(ngModel)]="dashboard[0].compactEnabled"
       (ngModelChange)="changedOptions()"
     >
-      Resize North
+      Compact
     </mat-checkbox>
-    <mat-checkbox
-      [(ngModel)]="dashboard[0].resizableHandles.w"
-      (ngModelChange)="changedOptions()"
-    >
-      Resize West
-    </mat-checkbox>
-    <mat-checkbox
-      [(ngModel)]="dashboard[0].resizableHandles.se"
-      (ngModelChange)="changedOptions()"
-    >
-      Resize South-East
-    </mat-checkbox>
-    <mat-checkbox
-      [(ngModel)]="dashboard[0].resizableHandles.ne"
-      (ngModelChange)="changedOptions()"
-    >
-      Resize North-East
-    </mat-checkbox>
-    <mat-checkbox
-      [(ngModel)]="dashboard[0].resizableHandles.sw"
-      (ngModelChange)="changedOptions()"
-    >
-      Resize South-West
-    </mat-checkbox>
-    <mat-checkbox
-      [(ngModel)]="dashboard[0].resizableHandles.nw"
-      (ngModelChange)="changedOptions()"
-    >
-      Resize North-West
-    </mat-checkbox>
-  </ng-container>
-  <mat-form-field>
-    <mat-select
-      aria-label="Compact type"
-      [(ngModel)]="options.compactType"
-      (ngModelChange)="changedOptions()"
-      placeholder="Compact Type"
-    >
-      <mat-option value="none">None</mat-option>
-      <mat-option value="compactUp">Compact Up</mat-option>
-      <mat-option value="compactLeft">Compact Left</mat-option>
-      <mat-option value="compactLeft&Up">Compact Left & Up</mat-option>
-      <mat-option value="compactUp&Left">Compact Up & Left</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <button mat-mini-fab (click)="addItem()" class="add-button cols-2">
-    <mat-icon>add</mat-icon>
-  </button>
-</div>
+    @if (dashboard[0].resizableHandles) {
+      <mat-checkbox
+        [(ngModel)]="dashboard[0].resizableHandles.s"
+        (ngModelChange)="changedOptions()"
+      >
+        Resize South
+      </mat-checkbox>
+      <mat-checkbox
+        [(ngModel)]="dashboard[0].resizableHandles.e"
+        (ngModelChange)="changedOptions()"
+      >
+        Resize East
+      </mat-checkbox>
+      <mat-checkbox
+        [(ngModel)]="dashboard[0].resizableHandles.n"
+        (ngModelChange)="changedOptions()"
+      >
+        Resize North
+      </mat-checkbox>
+      <mat-checkbox
+        [(ngModel)]="dashboard[0].resizableHandles.w"
+        (ngModelChange)="changedOptions()"
+      >
+        Resize West
+      </mat-checkbox>
+      <mat-checkbox
+        [(ngModel)]="dashboard[0].resizableHandles.se"
+        (ngModelChange)="changedOptions()"
+      >
+        Resize South-East
+      </mat-checkbox>
+      <mat-checkbox
+        [(ngModel)]="dashboard[0].resizableHandles.ne"
+        (ngModelChange)="changedOptions()"
+      >
+        Resize North-East
+      </mat-checkbox>
+      <mat-checkbox
+        [(ngModel)]="dashboard[0].resizableHandles.sw"
+        (ngModelChange)="changedOptions()"
+      >
+        Resize South-West
+      </mat-checkbox>
+      <mat-checkbox
+        [(ngModel)]="dashboard[0].resizableHandles.nw"
+        (ngModelChange)="changedOptions()"
+      >
+        Resize North-West
+      </mat-checkbox>
+    }
+    <mat-form-field>
+      <mat-select
+        aria-label="Compact type"
+        [(ngModel)]="options.compactType"
+        (ngModelChange)="changedOptions()"
+        placeholder="Compact Type"
+      >
+        <mat-option value="none">None</mat-option>
+        <mat-option value="compactUp">Compact Up</mat-option>
+        <mat-option value="compactLeft">Compact Left</mat-option>
+        <mat-option value="compactLeft&Up">Compact Left & Up</mat-option>
+        <mat-option value="compactUp&Left">Compact Up & Left</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button mat-mini-fab (click)="addItem()" class="add-button cols-2">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+}
 
 <gridster [options]="options">
-  <gridster-item [item]="item" *ngFor="let item of dashboard">
-    <div class="button-holder">
-      <button
-        mat-mini-fab
-        (mousedown)="removeItem($event, item)"
-        (touchstart)="removeItem($event, item)"
-      >
-        <mat-icon>delete</mat-icon>
-      </button>
-    </div>
-  </gridster-item>
+  @for (item of dashboard; track item) {
+    <gridster-item [item]="item">
+      <div class="button-holder">
+        <button
+          mat-mini-fab
+          (mousedown)="removeItem($event, item)"
+          (touchstart)="removeItem($event, item)"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </gridster-item>
+  }
 </gridster>

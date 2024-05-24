@@ -32,42 +32,42 @@
 </div>
 
 <gridster [options]="options">
-  <gridster-item #gridsterItem [item]="item" *ngFor="let item of dashboard">
-    <div>
-      <button
-        mat-icon-button
-        [matMenuTriggerFor]="menu"
-        aria-label="Example icon-button with a menu"
-      >
-        <mat-icon>more_vert</mat-icon>
-      </button>
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="gridsterItem.bringToFront(1)">
-          <mat-icon>arrow_upward</mat-icon>
-          <span>Bring To Front</span>
-        </button>
-        <button mat-menu-item (click)="gridsterItem.sendToBack(1)">
-          <mat-icon>arrow_downward</mat-icon>
-          <span>Send To Back</span>
-        </button>
-      </mat-menu>
-
-      <span
-        >LayerIndex:
-        <span style="margin-left: 10px; color: blueviolet">{{
-          item.layerIndex === undefined ? 1 : item.layerIndex
-        }}</span></span
-      >
-
-      <div class="button-holder">
+  @for (item of dashboard; track item) {
+    <gridster-item #gridsterItem [item]="item">
+      <div>
         <button
-          mat-mini-fab
-          (mousedown)="removeItem($event, item)"
-          (touchstart)="removeItem($event, item)"
+          mat-icon-button
+          [matMenuTriggerFor]="menu"
+          aria-label="Example icon-button with a menu"
         >
-          <mat-icon>delete</mat-icon>
+          <mat-icon>more_vert</mat-icon>
         </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="gridsterItem.bringToFront(1)">
+            <mat-icon>arrow_upward</mat-icon>
+            <span>Bring To Front</span>
+          </button>
+          <button mat-menu-item (click)="gridsterItem.sendToBack(1)">
+            <mat-icon>arrow_downward</mat-icon>
+            <span>Send To Back</span>
+          </button>
+        </mat-menu>
+        <span
+          >LayerIndex:
+          <span style="margin-left: 10px; color: blueviolet">{{
+            item.layerIndex === undefined ? 1 : item.layerIndex
+          }}</span></span
+        >
+        <div class="button-holder">
+          <button
+            mat-mini-fab
+            (mousedown)="removeItem($event, item)"
+            (touchstart)="removeItem($event, item)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
       </div>
-    </div>
-  </gridster-item>
+    </gridster-item>
+  }
 </gridster>

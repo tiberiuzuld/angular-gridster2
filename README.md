@@ -7,7 +7,7 @@
 
 ### Angular implementation of angular-gridster [Demo](http://tiberiuzuld.github.io/angular-gridster2)
 
-### Requires Angular 17.x
+### Requires Angular 18.x
 
 ### For other Angular versions check the other branches.
 
@@ -22,22 +22,23 @@ What Angular supports [here](https://github.com/angular/angular)
 ## How to use
 
 ```javascript
-import {NgForOf} from '@angular/common';
 import {Component} from '@angular/core';
 import {GridsterComponent, GridsterItemComponent} from 'angular-gridster2';
 
 @Component({
   standalone: true,
-  imports: [NgForOf, GridsterComponent, GridsterItemComponent],
+  imports: [GridsterComponent, GridsterItemComponent],
   ...
 })
 ```
 
 ```html
 <gridster [options]="options">
-  <gridster-item [item]="item" *ngFor="let item of dashboard">
+  @for (item of dashboard; track item) {
+  <gridster-item [item]="item">
     <!-- your content here -->
   </gridster-item>
+  }
 </gridster>
 ```
 
@@ -95,10 +96,10 @@ Option 1 (without text selection):
 <gridster-item>
   <div (mousedown)="$event.stopPropagation()" (touchstart)="$event.stopPropagation()">Some content to click without dragging the widget</div>
   <div class="item-buttons">
-    <button md-icon-button md-raised-button class="drag-handler">
+    <button class="drag-handler">
       <md-icon>open_with</md-icon>
     </button>
-    <button md-icon-button md-raised-button class="remove-button" (click)="removeItem($event, item)" (touchstart)="removeItem($event, item)" mdTooltip="Remove">
+    <button class="remove-button" (click)="removeItem($event, item)" (touchstart)="removeItem($event, item)">
       <md-icon>clear</md-icon>
     </button>
   </div>
@@ -111,10 +112,10 @@ Option 2 (with text selection):
 <gridster-item>
   <div class="gridster-item-content">Some content to select and click without dragging the widget</div>
   <div class="item-buttons">
-    <button md-icon-button md-raised-button class="drag-handler">
+    <button class="drag-handler">
       <md-icon>open_with</md-icon>
     </button>
-    <button md-icon-button md-raised-button class="remove-button" (click)="removeItem($event, item)" (touchstart)="removeItem($event, item)" mdTooltip="Remove">
+    <button class="remove-button" (click)="removeItem($event, item)" (touchstart)="removeItem($event, item)">
       <md-icon>clear</md-icon>
     </button>
   </div>
@@ -129,4 +130,4 @@ Option 2 (with text selection):
 
 The MIT License
 
-Copyright (c) 2023 Tiberiu Zuld
+Copyright (c) 2024 Tiberiu Zuld

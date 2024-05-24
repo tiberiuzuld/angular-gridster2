@@ -1,7 +1,3 @@
-/**
- * Created by YISH on 2020/02/28.
- */
-import { NgForOf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -31,15 +27,11 @@ import { MarkdownModule } from 'ngx-markdown';
   standalone: true,
   imports: [
     FormsModule,
-    NgForOf,
-
     MatButtonModule,
     MatCheckboxModule,
     MatIconModule,
     MatMenuModule,
-
     MarkdownModule,
-
     GridsterComponent,
     GridsterItemComponent
   ]

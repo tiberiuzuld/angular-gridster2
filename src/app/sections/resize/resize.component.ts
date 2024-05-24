@@ -1,4 +1,3 @@
-import { NgForOf, NgIf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -48,16 +47,11 @@ interface Safe extends GridsterConfig {
   standalone: true,
   imports: [
     FormsModule,
-    NgForOf,
-    NgIf,
-
     MatButtonModule,
     MatCheckboxModule,
     MatIconModule,
     MatInputModule,
-
     MarkdownModule,
-
     GridsterComponent,
     GridsterItemComponent
   ]

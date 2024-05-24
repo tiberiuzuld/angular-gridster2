@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -15,7 +14,7 @@ import { WidgetCComponent } from './widgetC.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   standalone: true,
-  imports: [NgIf, WidgetAComponent, WidgetBComponent, WidgetCComponent]
+  imports: [WidgetAComponent, WidgetBComponent, WidgetCComponent]
 })
 export class ParentDynamicComponent {
   @Input()

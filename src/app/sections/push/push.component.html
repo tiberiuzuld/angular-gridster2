@@ -29,34 +29,38 @@
   >
     Disable Push On Resize
   </mat-checkbox>
-  <mat-checkbox
-    [(ngModel)]="options.pushDirections.north"
-    *ngIf="options.pushDirections"
-    (ngModelChange)="changedOptions()"
-  >
-    Push North
-  </mat-checkbox>
-  <mat-checkbox
-    [(ngModel)]="options.pushDirections.east"
-    *ngIf="options.pushDirections"
-    (ngModelChange)="changedOptions()"
-  >
-    Push East
-  </mat-checkbox>
-  <mat-checkbox
-    [(ngModel)]="options.pushDirections.south"
-    *ngIf="options.pushDirections"
-    (ngModelChange)="changedOptions()"
-  >
-    Push South
-  </mat-checkbox>
-  <mat-checkbox
-    [(ngModel)]="options.pushDirections.west"
-    *ngIf="options.pushDirections"
-    (ngModelChange)="changedOptions()"
-  >
-    Push West
-  </mat-checkbox>
+  @if (options.pushDirections) {
+    <mat-checkbox
+      [(ngModel)]="options.pushDirections.north"
+      (ngModelChange)="changedOptions()"
+    >
+      Push North
+    </mat-checkbox>
+  }
+  @if (options.pushDirections) {
+    <mat-checkbox
+      [(ngModel)]="options.pushDirections.east"
+      (ngModelChange)="changedOptions()"
+    >
+      Push East
+    </mat-checkbox>
+  }
+  @if (options.pushDirections) {
+    <mat-checkbox
+      [(ngModel)]="options.pushDirections.south"
+      (ngModelChange)="changedOptions()"
+    >
+      Push South
+    </mat-checkbox>
+  }
+  @if (options.pushDirections) {
+    <mat-checkbox
+      [(ngModel)]="options.pushDirections.west"
+      (ngModelChange)="changedOptions()"
+    >
+      Push West
+    </mat-checkbox>
+  }
   <mat-checkbox
     [(ngModel)]="options.pushResizeItems"
     (ngModelChange)="changedOptions()"
@@ -69,15 +73,17 @@
 </div>
 
 <gridster [options]="options">
-  <gridster-item [item]="item" *ngFor="let item of dashboard">
-    <div class="button-holder">
-      <button
-        mat-mini-fab
-        (mousedown)="removeItem($event, item)"
-        (touchstart)="removeItem($event, item)"
-      >
-        <mat-icon>delete</mat-icon>
-      </button>
-    </div>
-  </gridster-item>
+  @for (item of dashboard; track item) {
+    <gridster-item [item]="item">
+      <div class="button-holder">
+        <button
+          mat-mini-fab
+          (mousedown)="removeItem($event, item)"
+          (touchstart)="removeItem($event, item)"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </gridster-item>
+  }
 </gridster>

@@ -1,4 +1,3 @@
-import { NgForOf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -28,16 +27,11 @@ import { TrackByItemComponent } from './trackByItem.component';
   encapsulation: ViewEncapsulation.None,
   standalone: true,
   imports: [
-    NgForOf,
-
     MatButtonModule,
     MatIconModule,
-
     MarkdownModule,
-
     GridsterComponent,
     GridsterItemComponent,
-
     TrackByItemComponent
   ]
 })
@@ -113,10 +107,6 @@ export class TrackByComponent implements OnInit {
 
   reset(): void {
     this.dashboard = this.dashboardOriginal.map(x => ({ ...x }));
-  }
-
-  trackBy(index: number, item: GridsterItem): number {
-    return item.id;
   }
 
   addItem(): void {

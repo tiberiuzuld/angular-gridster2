@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common';
 import {
   Component,
   ElementRef,
@@ -30,8 +29,7 @@ import { GridsterUtils } from './gridsterUtils.service';
   templateUrl: './gridsterItem.html',
   styleUrls: ['./gridsterItem.css'],
   encapsulation: ViewEncapsulation.None,
-  standalone: true,
-  imports: [NgIf]
+  standalone: true
 })
 export class GridsterItemComponent
   implements OnInit, OnDestroy, OnChanges, GridsterItemComponentInterface

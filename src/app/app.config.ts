@@ -1,17 +1,21 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { ApplicationConfig, importProvidersFrom } from '@angular/core';
+import { HttpClient, provideHttpClient } from '@angular/common/http';
+import {
+  ApplicationConfig,
+  importProvidersFrom,
+  provideZoneChangeDetection
+} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter } from '@angular/router';
 import { MarkdownModule, MARKED_OPTIONS } from 'ngx-markdown';
 import { appRoutes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    importProvidersFrom(BrowserModule),
-    importProvidersFrom(BrowserAnimationsModule),
+    provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(appRoutes),
-    importProvidersFrom(HttpClientModule),
+    provideHttpClient(),
+    provideAnimationsAsync(),
     importProvidersFrom(
       MarkdownModule.forRoot({
         loader: HttpClient,
@@ -20,6 +24,7 @@ export const appConfig: ApplicationConfig = {
           useValue: { smartypants: true, breaks: true }
         }
       })
-    )
+    ),
+    provideAnimationsAsync()
   ]
 };
