@@ -73,7 +73,7 @@
     "@commitlint/config-conventional": "19.2.2",
     "@types/jasmine": "5.1.4",
     "@types/node": "20.12.12",
-    "angular-cli-ghpages": "1.0.7",
+    "angular-cli-ghpages": "2.0.0-beta.2",
     "eslint": "8.57.0",
     "husky": "9.0.11",
     "jasmine-core": "5.1.2",

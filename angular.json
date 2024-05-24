@@ -107,6 +107,7 @@
         "deploy": {
           "builder": "angular-cli-ghpages:deploy",
           "options": {
+            "buildTarget": "gridster-app:build:production",
             "repo": "https://GH_TOKEN@github.com/tiberiuzuld/angular-gridster2.git",
             "name": "Tiberiu Zuld",
             "email": "tiberiuzuld@gmail.com",
