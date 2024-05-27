@@ -1,6 +1,6 @@
 {
   "name": "angular-gridster2",
-  "version": "18.0.0",
+  "version": "18.0.1",
   "license": "MIT",
   "scripts": {
     "husky": "husky",
@@ -55,7 +55,7 @@
     "@angular/platform-browser-dynamic": "18.0.0",
     "@angular/router": "18.0.0",
     "marked": "12.0.2",
-    "ngx-markdown": "17.2.1",
+    "ngx-markdown": "18.0.0",
     "rxjs": "7.8.1",
     "tslib": "2.6.2",
     "zone.js": "0.14.6"
@@ -82,7 +82,7 @@
     "karma-coverage": "2.2.1",
     "karma-jasmine": "5.1.0",
     "karma-jasmine-html-reporter": "2.1.0",
-    "lint-staged": "15.2.4",
+    "lint-staged": "15.2.5",
     "ng-packagr": "18.0.0",
     "prettier": "3.2.5",
     "typescript": "5.4.5",
