@@ -1,4 +1,3 @@
-import { NgZone } from '@angular/core';
 import { GridsterComponentInterface } from './gridster.interface';
 import { DirTypes } from './gridsterConfig.interface';
 import { GridsterItemComponentInterface } from './gridsterItem.interface';
@@ -73,8 +72,7 @@ export class GridsterResizable {
 
   constructor(
     gridsterItem: GridsterItemComponentInterface,
-    gridster: GridsterComponentInterface,
-    private zone: NgZone
+    gridster: GridsterComponentInterface
   ) {
     this.gridsterItem = gridsterItem;
     this.gridster = gridster;
@@ -113,18 +111,16 @@ export class GridsterResizable {
     e.stopPropagation();
     e.preventDefault();
 
-    this.zone.runOutsideAngular(() => {
-      this.mousemove = this.gridsterItem.renderer.listen(
-        'document',
-        'mousemove',
-        this.dragMove
-      );
-      this.touchmove = this.gridster.renderer.listen(
-        this.gridster.el,
-        'touchmove',
-        this.dragMove
-      );
-    });
+    this.mousemove = this.gridsterItem.renderer.listen(
+      'document',
+      'mousemove',
+      this.dragMove
+    );
+    this.touchmove = this.gridster.renderer.listen(
+      this.gridster.el,
+      'touchmove',
+      this.dragMove
+    );
     this.mouseup = this.gridsterItem.renderer.listen(
       'document',
       'mouseup',
@@ -294,9 +290,7 @@ export class GridsterResizable {
 
     this.lastMouse.clientX = e.clientX;
     this.lastMouse.clientY = e.clientY;
-    this.zone.run(() => {
-      this.gridster.updateGrid();
-    });
+    this.gridster.updateGrid();
   };
 
   dragStop = (e: MouseEvent): void => {
@@ -476,10 +470,7 @@ export class GridsterResizable {
     if (this.gridster.options.enableBoundaryControl) {
       const margin = this.outerMarginBottom ?? this.margin;
       const box = this.gridster.el.getBoundingClientRect();
-      this.bottom = Math.min(
-        this.bottom,
-        box.bottom - box.top - 2 * margin
-      );
+      this.bottom = Math.min(this.bottom, box.bottom - box.top - 2 * margin);
       this.height = this.bottom - this.top;
     }
     const marginBottom = this.gridster.options.pushItems ? 0 : this.margin;
@@ -603,58 +594,36 @@ export class GridsterResizable {
       cancelDrag();
     }, this.gridster.$options.resizable.delayStart);
 
-    const {
-      cancelMouse,
-      cancelMouseLeave,
-      cancelOnBlur,
-      cancelTouchMove,
-      cancelTouchEnd,
-      cancelTouchCancel
-    } = this.zone.runOutsideAngular(() => {
-      // Note: all of these events are being added within the `<root>` zone since they all
-      // don't do any view updates and don't require Angular running change detection.
-      // All event listeners call `cancelDrag` once the event is dispatched, the `cancelDrag`
-      // is responsible only for removing event listeners.
-
-      const cancelMouse = this.gridsterItem.renderer.listen(
-        'document',
-        'mouseup',
-        cancelDrag
-      );
-      const cancelMouseLeave = this.gridsterItem.renderer.listen(
-        'document',
-        'mouseleave',
-        cancelDrag
-      );
-      const cancelOnBlur = this.gridsterItem.renderer.listen(
-        'window',
-        'blur',
-        cancelDrag
-      );
-      const cancelTouchMove = this.gridsterItem.renderer.listen(
-        'document',
-        'touchmove',
-        cancelMove
-      );
-      const cancelTouchEnd = this.gridsterItem.renderer.listen(
-        'document',
-        'touchend',
-        cancelDrag
-      );
-      const cancelTouchCancel = this.gridsterItem.renderer.listen(
-        'document',
-        'touchcancel',
-        cancelDrag
-      );
-      return {
-        cancelMouse,
-        cancelMouseLeave,
-        cancelOnBlur,
-        cancelTouchMove,
-        cancelTouchEnd,
-        cancelTouchCancel
-      };
-    });
+    const cancelMouse = this.gridsterItem.renderer.listen(
+      'document',
+      'mouseup',
+      cancelDrag
+    );
+    const cancelMouseLeave = this.gridsterItem.renderer.listen(
+      'document',
+      'mouseleave',
+      cancelDrag
+    );
+    const cancelOnBlur = this.gridsterItem.renderer.listen(
+      'window',
+      'blur',
+      cancelDrag
+    );
+    const cancelTouchMove = this.gridsterItem.renderer.listen(
+      'document',
+      'touchmove',
+      cancelMove
+    );
+    const cancelTouchEnd = this.gridsterItem.renderer.listen(
+      'document',
+      'touchend',
+      cancelDrag
+    );
+    const cancelTouchCancel = this.gridsterItem.renderer.listen(
+      'document',
+      'touchcancel',
+      cancelDrag
+    );
 
     function cancelMove(eventMove: MouseEvent): void {
       GridsterUtils.checkTouchEvent(eventMove);

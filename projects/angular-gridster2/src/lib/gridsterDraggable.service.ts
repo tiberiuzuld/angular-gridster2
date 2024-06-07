@@ -1,4 +1,4 @@
-import { NgZone } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
 import { GridsterComponentInterface } from './gridster.interface';
 import { DirTypes } from './gridsterConfig.interface';
 import { GridsterItemComponentInterface } from './gridsterItem.interface';
@@ -20,6 +20,7 @@ enum Direction {
 export class GridsterDraggable {
   gridsterItem: GridsterItemComponentInterface;
   gridster: GridsterComponentInterface;
+  cdRef: ChangeDetectorRef;
   lastMouse: {
     clientX: number;
     clientY: number;
@@ -61,10 +62,11 @@ export class GridsterDraggable {
   constructor(
     gridsterItem: GridsterItemComponentInterface,
     gridster: GridsterComponentInterface,
-    private zone: NgZone
+    cdRef: ChangeDetectorRef
   ) {
     this.gridsterItem = gridsterItem;
     this.gridster = gridster;
+    this.cdRef = cdRef;
     this.lastMouse = {
       clientX: 0,
       clientY: 0
@@ -102,18 +104,16 @@ export class GridsterDraggable {
     e.stopPropagation();
     e.preventDefault();
 
-    this.zone.runOutsideAngular(() => {
-      this.mousemove = this.gridsterItem.renderer.listen(
-        'document',
-        'mousemove',
-        this.dragMove
-      );
-      this.touchmove = this.gridster.renderer.listen(
-        this.gridster.el,
-        'touchmove',
-        this.dragMove
-      );
-    });
+    this.mousemove = this.gridsterItem.renderer.listen(
+      'document',
+      'mousemove',
+      this.dragMove
+    );
+    this.touchmove = this.gridster.renderer.listen(
+      this.gridster.el,
+      'touchmove',
+      this.dragMove
+    );
     this.mouseup = this.gridsterItem.renderer.listen(
       'document',
       'mouseup',
@@ -231,7 +231,7 @@ export class GridsterDraggable {
       if (
         directions.includes(Direction.DOWN) &&
         this.gridsterItem.el.getBoundingClientRect().bottom >
-          this.gridster.el.getBoundingClientRect().bottom - 
+          this.gridster.el.getBoundingClientRect().bottom -
             (this.outerMarginBottom ?? this.margin)
       ) {
         directions = directions.filter(
@@ -273,9 +273,7 @@ export class GridsterDraggable {
     this.calculateItemPosition();
     this.lastMouse.clientX = e.clientX;
     this.lastMouse.clientY = e.clientY;
-    this.zone.run(() => {
-      this.gridster.updateGrid();
-    });
+    this.gridster.updateGrid();
   };
 
   calculateItemPositionWithScale(e: MouseEvent, scale: number): void {
@@ -346,6 +344,7 @@ export class GridsterDraggable {
       if (this.gridster) {
         this.gridster.movingItem = null;
         this.gridster.previewStyle(true);
+        this.cdRef.markForCheck();
       }
     });
   };
@@ -509,6 +508,7 @@ export class GridsterDraggable {
     const timeout = setTimeout(() => {
       this.dragStart(e);
       cancelDrag();
+      this.cdRef.markForCheck();
     }, this.gridster.$options.draggable.delayStart);
     const cancelMouse = this.gridsterItem.renderer.listen(
       'document',

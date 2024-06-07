@@ -84,13 +84,11 @@ export class GridsterEmptyCell {
         'drop',
         this.emptyCellDragDrop
       );
-      this.gridster.zone.runOutsideAngular(() => {
-        this.removeEmptyCellDragoverListenerFn = this.gridster.renderer.listen(
-          this.gridster.el,
-          'dragover',
-          this.emptyCellDragOver
-        );
-      });
+      this.removeEmptyCellDragoverListenerFn = this.gridster.renderer.listen(
+        this.gridster.el,
+        'dragover',
+        this.emptyCellDragOver
+      );
       this.removeDocumentDragendListenerFn = this.gridster.renderer.listen(
         'document',
         'dragend',
@@ -224,18 +222,16 @@ export class GridsterEmptyCell {
     this.initialItem = item;
     this.gridster.movingItem = item;
     this.gridster.previewStyle();
-    this.gridster.zone.runOutsideAngular(() => {
-      this.removeWindowMousemoveListenerFn = this.gridster.renderer.listen(
-        'window',
-        'mousemove',
-        this.emptyCellMouseMove
-      );
-      this.removeWindowTouchmoveListenerFn = this.gridster.renderer.listen(
-        'window',
-        'touchmove',
-        this.emptyCellMouseMove
-      );
-    });
+    this.removeWindowMousemoveListenerFn = this.gridster.renderer.listen(
+      'window',
+      'mousemove',
+      this.emptyCellMouseMove
+    );
+    this.removeWindowTouchmoveListenerFn = this.gridster.renderer.listen(
+      'window',
+      'touchmove',
+      this.emptyCellMouseMove
+    );
     this.removeWindowMouseupListenerFn = this.gridster.renderer.listen(
       'window',
       'mouseup',
