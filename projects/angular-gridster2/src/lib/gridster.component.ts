@@ -6,7 +6,6 @@ import {
   EventEmitter,
   Inject,
   Input,
-  NgZone,
   OnChanges,
   OnDestroy,
   OnInit,
@@ -72,8 +71,7 @@ export class GridsterComponent
   constructor(
     @Inject(ElementRef) el: ElementRef,
     @Inject(Renderer2) public renderer: Renderer2,
-    @Inject(ChangeDetectorRef) public cdRef: ChangeDetectorRef,
-    @Inject(NgZone) public zone: NgZone
+    @Inject(ChangeDetectorRef) public cdRef: ChangeDetectorRef
   ) {
     this.el = el.nativeElement;
     this.$options = JSON.parse(JSON.stringify(GridsterConfigService));
