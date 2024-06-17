@@ -1,11 +1,11 @@
 import {
+  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
   HostBinding,
   Inject,
   Input,
-  NgZone,
   OnChanges,
   OnDestroy,
   OnInit,
@@ -66,7 +66,7 @@ export class GridsterItemComponent
     @Inject(ElementRef) el: ElementRef,
     gridster: GridsterComponent,
     @Inject(Renderer2) public renderer: Renderer2,
-    @Inject(NgZone) private zone: NgZone
+    @Inject(ChangeDetectorRef) public cdRef: ChangeDetectorRef
   ) {
     this.el = el.nativeElement;
     this.$item = {
@@ -76,8 +76,8 @@ export class GridsterItemComponent
       y: -1
     };
     this.gridster = gridster;
-    this.drag = new GridsterDraggable(this, gridster, this.zone);
-    this.resize = new GridsterResizable(this, gridster, this.zone);
+    this.drag = new GridsterDraggable(this, gridster, this.cdRef);
+    this.resize = new GridsterResizable(this, gridster);
   }
 
   ngOnInit(): void {

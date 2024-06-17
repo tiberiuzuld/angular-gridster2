@@ -1,5 +1,5 @@
 import { GridsterConfigS } from './gridsterConfigS.interface';
-import { ChangeDetectorRef, NgZone, Renderer2 } from '@angular/core';
+import { ChangeDetectorRef, Renderer2 } from '@angular/core';
 import { Subject } from 'rxjs';
 import { GridsterEmptyCell } from './gridsterEmptyCell.service';
 import { GridsterCompact } from './gridsterCompact.service';
@@ -63,7 +63,6 @@ export abstract class GridsterComponentInterface {
   dragInProgress: boolean;
   emptyCell: GridsterEmptyCell;
   compact: GridsterCompact;
-  zone: NgZone;
   gridRows: Array<number>;
   gridColumns: Array<number>;
 }
