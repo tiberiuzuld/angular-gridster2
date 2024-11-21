@@ -35,7 +35,6 @@ interface Safe extends GridsterConfig {
   templateUrl: './home.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  standalone: true,
   imports: [
     FormsModule,
     MatButtonModule,

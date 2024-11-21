@@ -21,7 +21,7 @@ export const appConfig: ApplicationConfig = {
         loader: HttpClient,
         markedOptions: {
           provide: MARKED_OPTIONS,
-          useValue: { smartypants: true, breaks: true }
+          useValue: { breaks: true }
         }
       })
     ),

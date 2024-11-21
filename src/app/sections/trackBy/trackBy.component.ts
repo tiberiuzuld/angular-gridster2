@@ -25,7 +25,6 @@ import { TrackByItemComponent } from './trackByItem.component';
   templateUrl: './trackBy.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  standalone: true,
   imports: [
     MatButtonModule,
     MatIconModule,

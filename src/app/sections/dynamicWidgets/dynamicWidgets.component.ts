@@ -24,7 +24,6 @@ import { ParentDynamicComponent } from './parentDynamic.component';
   templateUrl: './dynamicWidgets.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  standalone: true,
   imports: [
     MatButtonModule,
     MatIconModule,

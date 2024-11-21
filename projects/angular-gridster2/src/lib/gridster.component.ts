@@ -36,7 +36,6 @@ import { GridsterUtils } from './gridsterUtils.service';
   templateUrl: './gridster.html',
   styleUrls: ['./gridster.css'],
   encapsulation: ViewEncapsulation.None,
-  standalone: true,
   imports: [NgStyle, GridsterPreviewComponent]
 })
 export class GridsterComponent

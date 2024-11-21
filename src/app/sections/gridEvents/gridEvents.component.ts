@@ -24,7 +24,6 @@ import { MarkdownModule } from 'ngx-markdown';
   templateUrl: './gridEvents.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  standalone: true,
   imports: [
     MatButtonModule,
     MatIconModule,
