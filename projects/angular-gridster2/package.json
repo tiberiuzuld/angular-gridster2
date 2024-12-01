@@ -4,11 +4,11 @@
   "license": "MIT",
   "sideEffects": false,
   "dependencies": {
-    "tslib": "^2.4.0"
+    "tslib": "^2.6.0"
   },
   "peerDependencies": {
-    "@angular/common": "^18.0.0",
-    "@angular/core": "^18.0.0",
+    "@angular/common": "^19.0.0",
+    "@angular/core": "^19.0.0",
     "rxjs": "^7.0.0"
   },
   "homepage": "https://tiberiuzuld.github.io/angular-gridster2",

@@ -24,7 +24,6 @@ import { MarkdownModule } from 'ngx-markdown';
   templateUrl: './swap.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  standalone: true,
   imports: [
     FormsModule,
     MatButtonModule,

@@ -25,7 +25,6 @@ import { MarkdownModule } from 'ngx-markdown';
   templateUrl: './emptyCell.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  standalone: true,
   imports: [
     FormsModule,
     MatButtonModule,

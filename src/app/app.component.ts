@@ -12,7 +12,6 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
   styleUrl: './app.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  standalone: true,
   imports: [RouterLink, RouterLinkActive, RouterOutlet, MatListModule]
 })
 export class AppComponent {}

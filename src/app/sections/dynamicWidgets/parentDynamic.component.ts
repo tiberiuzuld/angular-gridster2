@@ -13,7 +13,6 @@ import { WidgetCComponent } from './widgetC.component';
   templateUrl: './parentDynamic.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  standalone: true,
   imports: [WidgetAComponent, WidgetBComponent, WidgetCComponent]
 })
 export class ParentDynamicComponent {
