@@ -17,10 +17,8 @@ import {
 import { GridsterComponent } from './gridster.component';
 
 import { GridsterDraggable } from './gridsterDraggable.service';
-import {
-  GridsterItem,
-  GridsterItemComponentInterface
-} from './gridsterItem.interface';
+import type { GridsterItem } from './gridsterItem.interface';
+import { GridsterItemComponentInterface } from './gridsterItem.interface';
 import { GridsterResizable } from './gridsterResizable.service';
 import { GridsterUtils } from './gridsterUtils.service';
 

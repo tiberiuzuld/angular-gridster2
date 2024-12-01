@@ -19,7 +19,8 @@ import { GridsterComponentInterface } from './gridster.interface';
 import { GridsterCompact } from './gridsterCompact.service';
 
 import { GridsterConfigService } from './gridsterConfig.constant';
-import { GridsterConfig, GridType } from './gridsterConfig.interface';
+import type { GridsterConfig } from './gridsterConfig.interface';
+import { GridType } from './gridsterConfig.interface';
 import { GridsterConfigS } from './gridsterConfigS.interface';
 import { GridsterEmptyCell } from './gridsterEmptyCell.service';
 import {

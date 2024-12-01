@@ -1,10 +1,10 @@
 {
   "name": "angular-gridster2",
-  "version": "18.0.1",
+  "version": "19.0.0",
   "license": "MIT",
   "sideEffects": false,
   "dependencies": {
-    "tslib": "^2.6.0"
+    "tslib": "^2.4.0"
   },
   "peerDependencies": {
     "@angular/common": "^19.0.0",
