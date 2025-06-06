@@ -29,7 +29,7 @@ export class GridsterResizable {
     | null = null;
 
   resizeEnabled: boolean;
-  resizableHandles: {
+  resizableHandles?: {
     s: boolean;
     e: boolean;
     n: boolean;
@@ -476,10 +476,7 @@ export class GridsterResizable {
     if (this.gridster.options.enableBoundaryControl) {
       const margin = this.outerMarginBottom ?? this.margin;
       const box = this.gridster.el.getBoundingClientRect();
-      this.bottom = Math.min(
-        this.bottom,
-        box.bottom - box.top - 2 * margin
-      );
+      this.bottom = Math.min(this.bottom, box.bottom - box.top - 2 * margin);
       this.height = this.bottom - this.top;
     }
     const marginBottom = this.gridster.options.pushItems ? 0 : this.margin;
