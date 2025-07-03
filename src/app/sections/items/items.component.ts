@@ -79,11 +79,12 @@ export class ItemsComponent implements OnInit {
 
     this.dashboard = [
       {
-        cols: 2,
-        rows: 1,
+        cols: 4,
+        rows: 3,
         y: 0,
         x: 0,
         initCallback: ItemsComponent.itemInit,
+        itemAspectRatio: 4 / 3,
         minItemCols: 1,
         maxItemCols: 100,
         maxItemRows: 100,
@@ -104,11 +105,21 @@ export class ItemsComponent implements OnInit {
           nw: true
         }
       },
-      { cols: 2, rows: 2, y: 0, x: 2 },
-      { cols: 1, rows: 1, y: 0, x: 4 },
-      { cols: 3, rows: 2, y: 1, x: 4 },
-      { cols: 1, rows: 1, y: 2, x: 1 }
+      { cols: 1, rows: 1, y: 20, x: 20 }
     ];
+  }
+
+  changedAspectRatio() {
+    if (this.dashboard[0].itemAspectRatio === 1) {
+      this.dashboard[0].rows = this.dashboard[0].cols;
+    } else if (this.dashboard[0].itemAspectRatio === 4 / 3) {
+      this.dashboard[0].cols = 4;
+      this.dashboard[0].rows = 3;
+    } else if (this.dashboard[0].itemAspectRatio === 16 / 9) {
+      this.dashboard[0].cols = 16;
+      this.dashboard[0].rows = 9;
+    }
+    this.changedOptions();
   }
 
   changedOptions(): void {

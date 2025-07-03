@@ -32,6 +32,7 @@ export const GridsterConfigService: GridsterConfig = {
   maxRows: 100, // maximum amount of rows in the grid
   defaultItemCols: 1, // default width of an item in columns
   defaultItemRows: 1, // default height of an item in rows
+  itemAspectRatio: undefined, // set a fixed aspect ratio for an item to have in cols/rows e.g. 1/1 or 4/3 or 16/9
   maxItemCols: 50, // max item number of cols
   maxItemRows: 50, // max item number of rows
   minItemCols: 1, // min item number of columns

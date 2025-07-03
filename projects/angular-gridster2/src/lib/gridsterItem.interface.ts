@@ -59,6 +59,7 @@ export interface GridsterItem {
     nw?: boolean;
   };
   compactEnabled?: boolean;
+  itemAspectRatio?: number;
   maxItemRows?: number;
   minItemRows?: number;
   maxItemCols?: number;

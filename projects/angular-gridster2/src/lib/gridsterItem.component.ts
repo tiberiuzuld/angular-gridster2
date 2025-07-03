@@ -107,6 +107,7 @@ export class GridsterItemComponent
       dragEnabled: undefined,
       resizeEnabled: undefined,
       compactEnabled: undefined,
+      itemAspectRatio: undefined,
       maxItemRows: undefined,
       minItemRows: undefined,
       maxItemCols: undefined,

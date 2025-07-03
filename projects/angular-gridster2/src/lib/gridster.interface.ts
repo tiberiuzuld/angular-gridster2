@@ -14,7 +14,8 @@ export abstract class GridsterComponentInterface {
   $options: GridsterConfigS;
   grid: GridsterItemComponentInterface[];
   checkCollision: (
-    item: GridsterItem
+    item: GridsterItem,
+    checkRatio?: boolean
   ) => GridsterItemComponentInterface | boolean;
   checkCollisionForSwaping: (
     item: GridsterItem

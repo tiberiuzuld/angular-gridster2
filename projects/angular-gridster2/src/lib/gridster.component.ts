@@ -511,12 +511,15 @@ export class GridsterComponent
     }
   }
 
-  checkCollision(item: GridsterItem): GridsterItemComponentInterface | boolean {
+  checkCollision(
+    item: GridsterItem,
+    checkRatio?: boolean
+  ): GridsterItemComponentInterface | boolean {
     let collision: GridsterItemComponentInterface | boolean = false;
     if (this.options.itemValidateCallback) {
       collision = !this.options.itemValidateCallback(item);
     }
-    if (!collision && this.checkGridCollision(item)) {
+    if (!collision && this.checkGridCollision(item, checkRatio)) {
       collision = true;
     }
     if (!collision) {
@@ -528,7 +531,7 @@ export class GridsterComponent
     return collision;
   }
 
-  checkGridCollision(item: GridsterItem): boolean {
+  checkGridCollision(item: GridsterItem, checkRatio = false): boolean {
     const noNegativePosition = item.y > -1 && item.x > -1;
     const maxGridCols = item.cols + item.x <= this.$options.maxCols;
     const maxGridRows = item.rows + item.y <= this.$options.maxRows;
@@ -550,6 +553,14 @@ export class GridsterComponent
         : item.minItemRows;
     const inColsLimits = item.cols <= maxItemCols && item.cols >= minItemCols;
     const inRowsLimits = item.rows <= maxItemRows && item.rows >= minItemRows;
+    let inRatio: boolean = true;
+    if (checkRatio) {
+      const itemAspectRatio =
+        item.itemAspectRatio || this.$options.itemAspectRatio;
+      if (itemAspectRatio) {
+        inRatio = item.cols / item.rows === itemAspectRatio;
+      }
+    }
     const minAreaLimit =
       item.minItemArea === undefined
         ? this.$options.minItemArea
@@ -565,6 +576,7 @@ export class GridsterComponent
       noNegativePosition &&
       maxGridCols &&
       maxGridRows &&
+      inRatio &&
       inColsLimits &&
       inRowsLimits &&
       inMinArea &&

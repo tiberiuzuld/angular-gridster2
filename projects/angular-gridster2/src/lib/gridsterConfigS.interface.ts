@@ -31,6 +31,7 @@ export interface GridsterConfigS {
   maxRows: number;
   defaultItemCols: number;
   defaultItemRows: number;
+  itemAspectRatio: number;
   maxItemCols: number;
   maxItemRows: number;
   minItemCols: number;

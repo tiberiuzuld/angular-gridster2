@@ -13,92 +13,105 @@
 @if (dashboard[0]) {
   <div class="options-header">
     <mat-form-field>
+      <mat-label>X</mat-label>
       <input
         matInput
         [(ngModel)]="dashboard[0].x"
         type="number"
-        placeholder="X"
         (ngModelChange)="changedOptions()"
       />
     </mat-form-field>
     <mat-form-field>
+      <mat-label>Y</mat-label>
       <input
         matInput
         [(ngModel)]="dashboard[0].y"
         type="number"
-        placeholder="Y"
         (ngModelChange)="changedOptions()"
       />
     </mat-form-field>
     <mat-form-field>
+      <mat-label>Rows</mat-label>
       <input
         matInput
         [(ngModel)]="dashboard[0].rows"
         type="number"
-        placeholder="Rows"
         (ngModelChange)="changedOptions()"
       />
     </mat-form-field>
     <mat-form-field>
+      <mat-label>Cols</mat-label>
       <input
         matInput
         [(ngModel)]="dashboard[0].cols"
         type="number"
-        placeholder="Cols"
         (ngModelChange)="changedOptions()"
       />
     </mat-form-field>
     <mat-form-field>
+      <mat-label>Max Item Cols</mat-label>
       <input
         matInput
         [(ngModel)]="dashboard[0].maxItemCols"
         type="number"
-        placeholder="Max Item Cols"
         (ngModelChange)="changedOptions()"
       />
     </mat-form-field>
     <mat-form-field>
+      <mat-label>Min Item Cols</mat-label>
       <input
         matInput
         [(ngModel)]="dashboard[0].minItemCols"
         type="number"
-        placeholder="Min Item Cols"
         (ngModelChange)="changedOptions()"
       />
     </mat-form-field>
     <mat-form-field>
+      <mat-label>Max Item Rows</mat-label>
       <input
         matInput
         [(ngModel)]="dashboard[0].maxItemRows"
         type="number"
-        placeholder="Max Item Rows"
         (ngModelChange)="changedOptions()"
       />
     </mat-form-field>
     <mat-form-field>
+      <mat-label>Min Item Rows</mat-label>
       <input
         matInput
         [(ngModel)]="dashboard[0].minItemRows"
         type="number"
-        placeholder="Min Item Rows"
         (ngModelChange)="changedOptions()"
       />
     </mat-form-field>
     <mat-form-field>
+      <mat-label>Item Aspect Ratio</mat-label>
+      <mat-select
+        aria-label="Item Aspect Ratio"
+        [(ngModel)]="dashboard[0].itemAspectRatio"
+        (ngModelChange)="changedAspectRatio()"
+      >
+        <mat-option [value]="null">None</mat-option>
+        <mat-option [value]="1 / 1">1/1</mat-option>
+        <mat-option [value]="4 / 3">4/3</mat-option>
+        <mat-option [value]="16 / 9">16/9</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Max Item Area</mat-label>
       <input
         matInput
         [(ngModel)]="dashboard[0].maxItemArea"
         type="number"
-        placeholder="Max Item Area"
         (ngModelChange)="changedOptions()"
       />
     </mat-form-field>
     <mat-form-field>
+      <mat-label>Min Item Area</mat-label>
       <input
         matInput
         [(ngModel)]="dashboard[0].minItemArea"
         type="number"
-        placeholder="Min Item Area"
         (ngModelChange)="changedOptions()"
       />
     </mat-form-field>
@@ -171,11 +184,11 @@
       </mat-checkbox>
     }
     <mat-form-field>
+      <mat-label>Compact Type</mat-label>
       <mat-select
         aria-label="Compact type"
         [(ngModel)]="options.compactType"
         (ngModelChange)="changedOptions()"
-        placeholder="Compact Type"
       >
         <mat-option value="none">None</mat-option>
         <mat-option value="compactUp">Compact Up</mat-option>
@@ -194,6 +207,7 @@
   @for (item of dashboard; track item) {
     <gridster-item [item]="item">
       <div class="button-holder">
+        <span>{{ item.cols }} / {{ item.rows }}</span>
         <button
           mat-mini-fab
           (mousedown)="removeItem($event, item)"
