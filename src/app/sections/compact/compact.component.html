@@ -12,11 +12,11 @@
 </div>
 <div class="options-header">
   <mat-form-field>
+    <mat-label>Compact Type</mat-label>
     <mat-select
       aria-label="Compact type"
       [(ngModel)]="options.compactType"
       (ngModelChange)="changedOptions()"
-      placeholder="Compact Type"
     >
       <mat-option value="none">None</mat-option>
       <mat-option value="compactUp">Compact Up</mat-option>

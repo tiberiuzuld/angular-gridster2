@@ -12,10 +12,10 @@
 </div>
 <div class="options-header">
   <mat-form-field>
+    <mat-label>Display grid lines</mat-label>
     <mat-select
       aria-label="Display grid lines"
       [(ngModel)]="options.displayGrid"
-      placeholder="Display grid lines"
       (ngModelChange)="changedOptions()"
     >
       <mat-option value="always">Always</mat-option>

@@ -46,20 +46,20 @@
     Enable drag to add
   </mat-checkbox>
   <mat-form-field>
+    <mat-label>Drag Max Cols</mat-label>
     <input
       matInput
       [(ngModel)]="options.emptyCellDragMaxCols"
       type="number"
-      placeholder="Drag Max Cols"
       (ngModelChange)="changedOptions()"
     />
   </mat-form-field>
   <mat-form-field>
+    <mat-label>Drag Max Rows</mat-label>
     <input
       matInput
       [(ngModel)]="options.emptyCellDragMaxRows"
       type="number"
-      placeholder="Drag Max Rows"
       (ngModelChange)="changedOptions()"
     />
   </mat-form-field>

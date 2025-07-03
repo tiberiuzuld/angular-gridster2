@@ -19,11 +19,11 @@
       Resize Items
     </mat-checkbox>
     <mat-form-field>
+      <mat-label>Delay Start ms</mat-label>
       <input
         matInput
         [(ngModel)]="options.resizable.delayStart"
         type="number"
-        placeholder="Delay Start ms"
         (ngModelChange)="changedOptions()"
       />
     </mat-form-field>

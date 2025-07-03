@@ -57,11 +57,11 @@
     />
   </mat-form-field>
   <mat-form-field>
+    <mat-label>Grid Type</mat-label>
     <mat-select
       aria-label="Grid type"
       [(ngModel)]="options.gridType"
       (ngModelChange)="changedOptions()"
-      placeholder="Grid Type"
     >
       <mat-option value="fit">Fit to screen</mat-option>
       <mat-option value="scrollVertical">Scroll Vertical</mat-option>

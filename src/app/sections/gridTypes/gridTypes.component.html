@@ -12,11 +12,11 @@
 </div>
 <div class="options-header">
   <mat-form-field>
+    <mat-label>Grid Type</mat-label>
     <mat-select
       aria-label="Grid type"
       [(ngModel)]="options.gridType"
       (ngModelChange)="changedOptions()"
-      placeholder="Grid Type"
     >
       <mat-option value="fit">Fit to screen</mat-option>
       <mat-option value="scrollVertical">Scroll Vertical</mat-option>
@@ -27,29 +27,29 @@
     </mat-select>
   </mat-form-field>
   <mat-form-field>
+    <mat-label>Fixed Col Width</mat-label>
     <input
       matInput
       [(ngModel)]="options.fixedColWidth"
       type="number"
-      placeholder="Fixed Col Width"
       (ngModelChange)="changedOptions()"
     />
   </mat-form-field>
   <mat-form-field>
+    <mat-label>Fixed Row Height</mat-label>
     <input
       matInput
       [(ngModel)]="options.fixedRowHeight"
       type="number"
-      placeholder="Fixed Row Height"
       (ngModelChange)="changedOptions()"
     />
   </mat-form-field>
   <mat-form-field>
+    <mat-label>Row Height Ratio</mat-label>
     <input
       (ngModelChange)="changedOptions()"
       [(ngModel)]="options.rowHeightRatio"
       matInput
-      placeholder="Row Height Ratio"
       step="0.1"
       type="number"
     />
@@ -79,11 +79,11 @@
     Use Body Width as Breakpoint
   </mat-checkbox>
   <mat-form-field>
+    <mat-label>Mobile Breakpoint</mat-label>
     <input
       matInput
       [(ngModel)]="options.mobileBreakpoint"
       type="number"
-      placeholder="Mobile Breakpoint"
       (ngModelChange)="changedOptions()"
     />
   </mat-form-field>

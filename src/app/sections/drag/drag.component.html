@@ -55,29 +55,29 @@
       Enable Boundary Control
     </mat-checkbox>
     <mat-form-field>
+      <mat-label>Delay Start ms</mat-label>
       <input
         matInput
         [(ngModel)]="options.draggable.delayStart"
         type="number"
-        placeholder="Delay Start ms"
         (ngModelChange)="changedOptions()"
       />
     </mat-form-field>
     <mat-form-field>
+      <mat-label>Drag Handle Class</mat-label>
       <input
         matInput
         [(ngModel)]="options.draggable.dragHandleClass"
         type="text"
-        placeholder="Drag Handle Class"
         (ngModelChange)="changedOptions()"
       />
     </mat-form-field>
     <mat-form-field>
+      <mat-label>Ignore Content Class</mat-label>
       <input
         matInput
         [(ngModel)]="options.draggable.ignoreContentClass"
         type="text"
-        placeholder="Ignore Content Class"
         (ngModelChange)="changedOptions()"
       />
     </mat-form-field>

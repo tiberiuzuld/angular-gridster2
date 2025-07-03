@@ -12,11 +12,11 @@
 </div>
 <div class="options-header">
   <mat-form-field>
+    <mat-label>Grid Type</mat-label>
     <mat-select
       aria-label="Grid type"
       [(ngModel)]="options.gridType"
       (ngModelChange)="changedOptions()"
-      placeholder="Grid Type"
     >
       <mat-option value="fit">Fit to screen</mat-option>
       <mat-option value="scrollVertical">Scroll Vertical</mat-option>
@@ -27,10 +27,10 @@
     </mat-select>
   </mat-form-field>
   <mat-form-field>
+    <mat-label>Display grid lines</mat-label>
     <mat-select
       aria-label="Display grid lines"
       [(ngModel)]="options.displayGrid"
-      placeholder="Display grid lines"
       (ngModelChange)="changedOptions()"
     >
       <mat-option value="always">Always</mat-option>
@@ -71,6 +71,7 @@
     Push Resize Items
   </mat-checkbox>
   <mat-form-field>
+    <mat-label>Margin</mat-label>
     <input
       matInput
       [(ngModel)]="options.margin"
@@ -78,7 +79,6 @@
       max="30"
       step="1"
       type="number"
-      placeholder="Margin"
       (ngModelChange)="changedOptions()"
     />
   </mat-form-field>
@@ -88,30 +88,30 @@
     >Outer Margin
   </mat-checkbox>
   <mat-form-field>
+    <mat-label>Mobile Breakpoint</mat-label>
     <input
       matInput
       [(ngModel)]="options.mobileBreakpoint"
       type="number"
-      placeholder="Mobile Breakpoint"
       (ngModelChange)="changedOptions()"
     />
   </mat-form-field>
 
   <mat-form-field>
+    <mat-label>Fixed Col Width</mat-label>
     <input
       matInput
       [(ngModel)]="options.fixedColWidth"
       type="number"
-      placeholder="Fixed Col Width"
       (ngModelChange)="changedOptions()"
     />
   </mat-form-field>
   <mat-form-field>
+    <mat-label>Fixed Row Height</mat-label>
     <input
       matInput
       [(ngModel)]="options.fixedRowHeight"
       type="number"
-      placeholder="Fixed Row Height"
       (ngModelChange)="changedOptions()"
     />
   </mat-form-field>
