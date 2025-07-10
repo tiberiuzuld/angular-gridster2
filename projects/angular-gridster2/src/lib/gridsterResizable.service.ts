@@ -403,8 +403,14 @@ export class GridsterResizable {
       this.pushResize.checkPushBack();
       this.push.checkPushBack();
     }
-    this.setItemTop(this.top);
-    this.setItemHeight(this.height);
+    // Enforce aspect ratio if enabled
+    const hasRatio = !!(this.gridster.$options.itemAspectRatio || this.gridsterItem.$item.itemAspectRatio);
+    if (hasRatio && doChecks) {
+      this.enforceAspectRatio();
+    } else {
+      this.setItemTop(this.top);
+      this.setItemHeight(this.height);
+    }
   };
 
   private handleWest = (e: MouseEvent, doChecks = true): void => {
@@ -449,8 +455,14 @@ export class GridsterResizable {
       this.pushResize.checkPushBack();
       this.push.checkPushBack();
     }
-    this.setItemLeft(this.left);
-    this.setItemWidth(this.width);
+    // Enforce aspect ratio if enabled
+    const hasRatio = !!(this.gridster.$options.itemAspectRatio || this.gridsterItem.$item.itemAspectRatio);
+    if (hasRatio && doChecks) {
+      this.enforceAspectRatio();
+    } else {
+      this.setItemLeft(this.left);
+      this.setItemWidth(this.width);
+    }
   };
 
   private handleSouth = (e: MouseEvent, doChecks = true): void => {
@@ -493,7 +505,13 @@ export class GridsterResizable {
       this.pushResize.checkPushBack();
       this.push.checkPushBack();
     }
-    this.setItemHeight(this.height);
+    // Enforce aspect ratio if enabled
+    const hasRatio = !!(this.gridster.$options.itemAspectRatio || this.gridsterItem.$item.itemAspectRatio);
+    if (hasRatio && doChecks) {
+      this.enforceAspectRatio();
+    } else {
+      this.setItemHeight(this.height);
+    }
   };
 
   private handleEast = (e: MouseEvent, doChecks = true): void => {
@@ -541,7 +559,13 @@ export class GridsterResizable {
       this.pushResize.checkPushBack();
       this.push.checkPushBack();
     }
-    this.setItemWidth(this.width);
+    // Enforce aspect ratio if enabled
+    const hasRatio = !!(this.gridster.$options.itemAspectRatio || this.gridsterItem.$item.itemAspectRatio);
+    if (hasRatio && doChecks) {
+      this.enforceAspectRatio();
+    } else {
+      this.setItemWidth(this.width);
+    }
   };
 
   private handleNorthWest = (e: MouseEvent): void => {
@@ -552,10 +576,7 @@ export class GridsterResizable {
       this.gridsterItem.$item.itemAspectRatio
     );
     if (hasRatio) {
-      this.setItemTop(this.top);
-      this.setItemHeight(this.height);
-      this.setItemLeft(this.left);
-      this.setItemWidth(this.width);
+      this.enforceAspectRatio();
     }
     if (this.gridster.checkCollision(this.gridsterItem.$item, true)) {
       this.resetNorth(hasRatio);
@@ -575,9 +596,7 @@ export class GridsterResizable {
       this.gridsterItem.$item.itemAspectRatio
     );
     if (hasRatio) {
-      this.setItemTop(this.top);
-      this.setItemHeight(this.height);
-      this.setItemWidth(this.width);
+      this.enforceAspectRatio();
     }
     if (this.gridster.checkCollision(this.gridsterItem.$item, true)) {
       this.resetNorth(hasRatio);
@@ -597,9 +616,7 @@ export class GridsterResizable {
       this.gridsterItem.$item.itemAspectRatio
     );
     if (hasRatio) {
-      this.setItemLeft(this.left);
-      this.setItemHeight(this.height);
-      this.setItemWidth(this.width);
+      this.enforceAspectRatio();
     }
     if (this.gridster.checkCollision(this.gridsterItem.$item, true)) {
       this.resetSouth(hasRatio);
@@ -619,8 +636,7 @@ export class GridsterResizable {
       this.gridsterItem.$item.itemAspectRatio
     );
     if (hasRatio) {
-      this.setItemHeight(this.height);
-      this.setItemWidth(this.width);
+      this.enforceAspectRatio();
     }
     if (this.gridster.checkCollision(this.gridsterItem.$item, true)) {
       this.resetSouth(hasRatio);
@@ -806,5 +822,91 @@ export class GridsterResizable {
       'width',
       width + 'px'
     );
+  }
+  /**
+   * Enforces the aspect ratio by recalculating grid positions based on current pixel dimensions
+   */
+  private enforceAspectRatio(): void {
+    const aspectRatio = this.gridsterItem.$item.itemAspectRatio || this.gridster.$options.itemAspectRatio;
+    if (!aspectRatio) {
+      return;
+    }
+
+    // Calculate the target aspect ratio (cols/rows)
+    const targetRatio = aspectRatio;
+    
+    // Calculate current pixel dimensions
+    const currentWidth = this.width;
+    const currentHeight = this.height;
+    
+    // Determine which dimension to use as the base for aspect ratio calculation
+    // Use the larger dimension to avoid making the item too small
+    let newWidth = currentWidth;
+    let newHeight = currentHeight;
+    
+    if (currentWidth / currentHeight > targetRatio) {
+      // Current is wider than target ratio, adjust height based on width
+      newHeight = currentWidth / targetRatio;
+    } else {
+      // Current is taller than target ratio, adjust width based on height
+      newWidth = currentHeight * targetRatio;
+    }
+    
+    // Ensure minimum dimensions are respected
+    const minCols = this.gridsterItem.$item.minItemCols || this.gridster.$options.minItemCols;
+    const minRows = this.gridsterItem.$item.minItemRows || this.gridster.$options.minItemRows;
+    const minWidth = this.gridster.positionXToPixels(minCols) - this.margin;
+    const minHeight = this.gridster.positionYToPixels(minRows) - this.margin;
+    
+    // Ensure we don't go below minimum dimensions
+    if (newWidth < minWidth) {
+      newWidth = minWidth;
+      newHeight = newWidth / targetRatio;
+    }
+    if (newHeight < minHeight) {
+      newHeight = minHeight;
+      newWidth = newHeight * targetRatio;
+    }
+    
+    // Update pixel dimensions
+    this.width = newWidth;
+    this.height = newHeight;
+    
+    // Recalculate grid positions based on new dimensions
+    const marginLeft = this.gridster.options.pushItems ? this.margin : 0;
+    const marginTop = this.gridster.options.pushItems ? this.margin : 0;
+    
+    // Calculate new grid positions
+    const newX = this.gridster.pixelsToPositionX(this.left + marginLeft, Math.floor);
+    const newY = this.gridster.pixelsToPositionY(this.top + marginTop, Math.floor);
+    const newCols = this.gridster.pixelsToPositionX(this.left + this.width + marginLeft, Math.ceil) - newX;
+    const newRows = this.gridster.pixelsToPositionY(this.top + this.height + marginTop, Math.ceil) - newY;
+    
+    // Ensure minimum dimensions
+    if (newCols >= minCols && newRows >= minRows) {
+      // Backup current values
+      this.itemBackup[0] = this.gridsterItem.$item.x;
+      this.itemBackup[1] = this.gridsterItem.$item.y;
+      this.itemBackup[2] = this.gridsterItem.$item.cols;
+      this.itemBackup[3] = this.gridsterItem.$item.rows;
+      
+      // Update grid positions
+      this.gridsterItem.$item.x = newX;
+      this.gridsterItem.$item.y = newY;
+      this.gridsterItem.$item.cols = newCols;
+      this.gridsterItem.$item.rows = newRows;
+      
+      // Update pixel positions to match grid positions
+      this.left = this.gridster.positionXToPixels(newX);
+      this.top = this.gridster.positionYToPixels(newY);
+      this.right = this.left + this.width;
+      this.bottom = this.top + this.height;
+    }
+    
+    // Update visual dimensions
+    this.setItemTop(this.top);
+    this.setItemLeft(this.left);
+    this.setItemWidth(this.width);
+    this.setItemHeight(this.height);
   }
 }
