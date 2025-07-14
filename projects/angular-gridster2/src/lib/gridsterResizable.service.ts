@@ -97,7 +97,7 @@ export class GridsterResizable {
   }
 
   dragStart(e: MouseEvent): void {
-    if (e.which && e.which !== 1) {
+    if ((e.which && e.which !== 1) || this.gridster.dragInProgress) {
       return;
     }
     if (

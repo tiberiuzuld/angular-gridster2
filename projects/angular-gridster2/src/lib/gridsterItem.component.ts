@@ -163,7 +163,11 @@ export class GridsterItemComponent
       }
       this.itemInit.next({ item: this.item, itemComponent: this });
       if (this.gridster.$options.scrollToNewItems) {
-        this.el.scrollIntoView(false);
+        this.el.scrollIntoView({
+          block: 'end',
+          inline: 'nearest',
+          behavior: 'smooth'
+        });
       }
     }
     if (width !== this.width || height !== this.height) {

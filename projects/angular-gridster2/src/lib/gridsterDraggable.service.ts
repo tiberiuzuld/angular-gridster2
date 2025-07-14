@@ -84,7 +84,7 @@ export class GridsterDraggable {
   }
 
   dragStart(e: MouseEvent): void {
-    if (e.which && e.which !== 1) {
+    if ((e.which && e.which !== 1) || this.gridster.dragInProgress) {
       return;
     }
 
@@ -231,7 +231,7 @@ export class GridsterDraggable {
       if (
         directions.includes(Direction.DOWN) &&
         this.gridsterItem.el.getBoundingClientRect().bottom >
-          this.gridster.el.getBoundingClientRect().bottom - 
+          this.gridster.el.getBoundingClientRect().bottom -
             (this.outerMarginBottom ?? this.margin)
       ) {
         directions = directions.filter(
