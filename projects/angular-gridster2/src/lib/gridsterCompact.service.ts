@@ -68,6 +68,10 @@ export class GridsterCompact {
       ) {
         this.checkCompactMovement('x', 1);
         this.checkCompactMovement('y', 1);
+      } else if (
+        this.gridster.$options.compactType === CompactType.CompactGrid
+      ) {
+        this.checkCompactGrid();
       }
     }
   }
@@ -119,6 +123,10 @@ export class GridsterCompact {
       ) {
         this.moveTillCollision(item, 'x', 1);
         this.moveTillCollision(item, 'y', 1);
+      } else if (
+        this.gridster.$options.compactType === CompactType.CompactGrid
+      ) {
+        this.moveToGridPosition(item);
       }
     }
   }
@@ -153,5 +161,120 @@ export class GridsterCompact {
       this.moveTillCollision(item, direction, delta);
       return true;
     }
+  }
+
+  private checkCompactGrid(): void {
+    // Sort items by their current position (top to bottom, left to right)
+    const sortedItems = this.gridster.grid
+      .filter(
+        (widget: GridsterItemComponentInterface) =>
+          widget.$item.compactEnabled !== false
+      )
+      .sort(
+        (
+          a: GridsterItemComponentInterface,
+          b: GridsterItemComponentInterface
+        ) => {
+          if (a.$item.y !== b.$item.y) {
+            return a.$item.y - b.$item.y;
+          }
+          return a.$item.x - b.$item.x;
+        }
+      );
+
+    // Reposition all items in a grid-like manner
+    let currentY = 0;
+    let currentX = 0;
+    let maxYInRow = 0;
+
+    sortedItems.forEach((widget: GridsterItemComponentInterface) => {
+      const item = widget.$item;
+
+      // Check if item fits in current row
+      if (currentX + item.cols > this.gridster.columns) {
+        // Move to next row
+        currentY = maxYInRow;
+        currentX = 0;
+        maxYInRow = currentY;
+      }
+
+      // Position item
+      const oldX = item.x;
+      const oldY = item.y;
+      item.x = currentX;
+      item.y = currentY;
+
+      // Update widget if position changed
+      if (oldX !== item.x || oldY !== item.y) {
+        widget.item.x = item.x;
+        widget.item.y = item.y;
+        widget.itemChanged();
+      }
+
+      // Update position for next item
+      currentX += item.cols;
+      maxYInRow = Math.max(maxYInRow, currentY + item.rows);
+    });
+  }
+
+  private moveToGridPosition(item: GridsterItem): void {
+    // Find the next available position in grid layout
+    let currentY = 0;
+    let currentX = 0;
+    let maxYInRow = 0;
+
+    // Sort existing items to find occupied positions
+    const sortedItems = this.gridster.grid
+      .filter((widget: GridsterItemComponentInterface) => widget.$item !== item)
+      .sort(
+        (
+          a: GridsterItemComponentInterface,
+          b: GridsterItemComponentInterface
+        ) => {
+          if (a.$item.y !== b.$item.y) {
+            return a.$item.y - b.$item.y;
+          }
+          return a.$item.x - b.$item.x;
+        }
+      );
+
+    // Find the next available position
+    for (const widget of sortedItems) {
+      const existingItem = widget.$item;
+
+      // Check if we need to move to next row
+      if (currentX + existingItem.cols > this.gridster.columns) {
+        currentY = maxYInRow;
+        currentX = 0;
+        maxYInRow = currentY;
+      }
+
+      // Check if current item overlaps with the position we want to place our item
+      if (
+        currentY < existingItem.y + existingItem.rows &&
+        currentY + item.rows > existingItem.y &&
+        currentX < existingItem.x + existingItem.cols &&
+        currentX + item.cols > existingItem.x
+      ) {
+        // Move to position after this item
+        currentX = existingItem.x + existingItem.cols;
+        currentY = existingItem.y;
+        maxYInRow = Math.max(maxYInRow, currentY + existingItem.rows);
+      } else {
+        // Update position for next iteration
+        currentX += existingItem.cols;
+        maxYInRow = Math.max(maxYInRow, currentY + existingItem.rows);
+      }
+    }
+
+    // Check if item fits in current row
+    if (currentX + item.cols > this.gridster.columns) {
+      currentY = maxYInRow;
+      currentX = 0;
+    }
+
+    // Set the position
+    item.x = currentX;
+    item.y = currentY;
   }
 }

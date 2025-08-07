@@ -25,7 +25,8 @@ export type compactTypes =
   | 'compactDown&Left'
   | 'compactLeft&Down'
   | 'compactDown&Right'
-  | 'compactRight&Down';
+  | 'compactRight&Down'
+  | 'compactGrid';
 
 export enum GridType {
   Fit = 'fit',
@@ -55,7 +56,8 @@ export enum CompactType {
   CompactDownAndLeft = 'compactDown&Left',
   CompactLeftAndDown = 'compactLeft&Down',
   CompactDownAndRight = 'compactDown&Right',
-  CompactRightAndDown = 'compactRight&Down'
+  CompactRightAndDown = 'compactRight&Down',
+  CompactGrid = 'compactGrid'
 }
 
 export enum DirTypes {
