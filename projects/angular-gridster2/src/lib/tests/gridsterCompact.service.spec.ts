@@ -208,4 +208,30 @@ describe('gridsterCompact service', () => {
     const move = gridsterCompact.moveTillCollision(itemComponent, 'x', -1);
     expect(spyCheckMoveTillCollision).toHaveBeenCalled();
   });
+
+  it('should check if checkCompactGrid called when compactType is compactGrid', () => {
+    gridsterComponent.options.compactType = CompactType.CompactGrid;
+    gridsterComponent.columns = 10;
+    gridsterComponent.grid = [
+      { $item: { y: 0, x: 0, cols: 2, rows: 1, compactEnabled: true } },
+      { $item: { y: 0, x: 2, cols: 2, rows: 2, compactEnabled: true } },
+      { $item: { y: 1, x: 0, cols: 1, rows: 1, compactEnabled: true } }
+    ];
+
+    gridsterCompact = new GridsterCompact(gridsterComponent);
+    const spyCheckCompact = spyOn(gridsterCompact, 'checkCompact');
+    gridsterCompact.checkCompact();
+    expect(spyCheckCompact).toHaveBeenCalled();
+  });
+
+  it('should check if moveToGridPosition called when compactType is compactGrid', () => {
+    gridsterComponent.options.compactType = CompactType.CompactGrid;
+    gridsterComponent.columns = 10;
+    const item = { y: 5, x: 5, cols: 2, rows: 1 };
+
+    gridsterCompact = new GridsterCompact(gridsterComponent);
+    const spyCheckCompactItem = spyOn(gridsterCompact, 'checkCompactItem');
+    gridsterCompact.checkCompactItem(item);
+    expect(spyCheckCompactItem).toHaveBeenCalled();
+  });
 });
