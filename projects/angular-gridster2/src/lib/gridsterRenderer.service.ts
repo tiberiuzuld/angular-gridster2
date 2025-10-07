@@ -95,7 +95,9 @@ export class GridsterRenderer {
       renderer.setStyle(el, 'margin-bottom', marginBottom);
       renderer.setStyle(
         el,
-        DirTypes.LTR ? 'margin-right' : 'margin-left',
+        this.gridster.$options.dirType === DirTypes.LTR
+          ? 'margin-right'
+          : 'margin-left',
         marginRight
       );
     }
