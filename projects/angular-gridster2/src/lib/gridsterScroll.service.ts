@@ -1,5 +1,6 @@
 import { GridsterResizeEventType } from './gridsterResizeEventType.interface';
 import { GridsterComponentInterface } from './gridster.interface';
+import { DirTypes } from './gridsterConfig.interface';
 
 let scrollSensitivity: number;
 let scrollSpeed: number;
@@ -75,28 +76,19 @@ export function scroll(
   const elemLeftOffset = left - offsetLeft;
 
   if (!gridster.$options.disableScrollHorizontal) {
-    if (lastMouse.clientX < clientX && elemRightOffset <= scrollSensitivity) {
+    const isRTL = gridster.$options.dirType === DirTypes.RTL;
+    const moveRight = lastMouse.clientX < clientX;
+    const moveLeft = lastMouse.clientX > clientX;
+    const shouldScrollRight = isRTL ? moveLeft : moveRight;
+    const shouldScrollLeft = isRTL ? moveRight : moveLeft;
+    if (shouldScrollRight && elemRightOffset <= scrollSensitivity) {
       cancelW();
-      if (
-        (resizeEvent && resizeEventType && !resizeEventType.east) ||
-        intervalE
-      ) {
-        return;
-      }
-      intervalE = startHorizontal(1, calculateItemPosition, lastMouse);
-    } else if (
-      lastMouse.clientX > clientX &&
-      offsetLeft > 0 &&
-      elemLeftOffset < scrollSensitivity
-    ) {
+      if ((resizeEvent && resizeEventType && !resizeEventType.east) || intervalE) return;
+      intervalE = startHorizontal(1, calculateItemPosition, lastMouse, isRTL);
+    } else if (shouldScrollLeft && offsetLeft > 0 && elemLeftOffset < scrollSensitivity) {
       cancelE();
-      if (
-        (resizeEvent && resizeEventType && !resizeEventType.west) ||
-        intervalW
-      ) {
-        return;
-      }
-      intervalW = startHorizontal(-1, calculateItemPosition, lastMouse);
+      if ((resizeEvent && resizeEventType && !resizeEventType.west) || intervalW) return;
+      intervalW = startHorizontal(-1, calculateItemPosition, lastMouse, isRTL);
     } else if (lastMouse.clientX !== clientX) {
       cancelHorizontal();
     }
@@ -125,18 +117,19 @@ function startVertical(
 function startHorizontal(
   sign: number,
   calculateItemPosition: CalculatePosition,
-  lastMouse: Position
+  lastMouse: Position,
+  isRTL: boolean
 ): number {
   let clientX = lastMouse.clientX;
   return window.setInterval(() => {
-    if (
-      !gridsterElement ||
-      (sign === -1 && gridsterElement.scrollLeft - scrollSpeed < 0)
-    ) {
+    if (!gridsterElement) {
       cancelHorizontal();
+      return;
     }
-    gridsterElement!.scrollLeft += sign * scrollSpeed;
-    clientX += sign * scrollSpeed;
+    const scrollAmount = sign * scrollSpeed;
+    const left = isRTL ? -scrollAmount : scrollAmount;
+    gridsterElement.scrollBy({ left, behavior: 'auto' });
+    clientX += left;
     calculateItemPosition({ clientX, clientY: lastMouse.clientY });
   }, intervalDuration);
 }
