@@ -10,7 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 
 import {
   DisplayGrid,
-  GridsterComponent,
+  Gridster,
   GridsterConfig,
   GridsterItem,
   GridsterItemComponent,
@@ -28,7 +28,7 @@ import { ParentDynamicComponent } from './parentDynamic.component';
     MatButtonModule,
     MatIconModule,
     MarkdownModule,
-    GridsterComponent,
+    Gridster,
     GridsterItemComponent,
     ParentDynamicComponent
   ]

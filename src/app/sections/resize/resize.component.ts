@@ -12,7 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 
 import {
   DisplayGrid,
-  GridsterComponent,
+  Gridster,
   GridsterConfig,
   GridsterItem,
   GridsterItemComponent,
@@ -51,7 +51,7 @@ interface Safe extends GridsterConfig {
     MatIconModule,
     MatInputModule,
     MarkdownModule,
-    GridsterComponent,
+    Gridster,
     GridsterItemComponent
   ]
 })

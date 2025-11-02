@@ -10,7 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import {
   CompactType,
   DisplayGrid,
-  GridsterComponent,
+  Gridster,
   GridsterConfig,
   GridsterItem,
   GridsterItemComponent,
@@ -29,7 +29,7 @@ import { TrackByItemComponent } from './trackByItem.component';
     MatButtonModule,
     MatIconModule,
     MarkdownModule,
-    GridsterComponent,
+    Gridster,
     GridsterItemComponent,
     TrackByItemComponent
   ]

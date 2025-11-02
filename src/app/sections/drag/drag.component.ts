@@ -13,7 +13,7 @@ import { MatInputModule } from '@angular/material/input';
 import {
   DisplayGrid,
   Draggable,
-  GridsterComponent,
+  Gridster,
   GridsterConfig,
   GridsterItem,
   GridsterItemComponent,
@@ -38,7 +38,7 @@ interface Safe extends GridsterConfig {
     MatIconModule,
     MatInputModule,
     MarkdownModule,
-    GridsterComponent,
+    Gridster,
     GridsterItemComponent
   ]
 })
@@ -65,7 +65,7 @@ export class DragComponent implements OnInit {
   static overlapEvent(
     source: GridsterItem,
     target: GridsterItem,
-    grid: GridsterComponent
+    grid: Gridster
   ): void {
     console.log('overlap', source, target, grid);
   }

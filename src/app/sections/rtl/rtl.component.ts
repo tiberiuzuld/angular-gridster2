@@ -16,7 +16,7 @@ import {
   DirTypes,
   DisplayGrid,
   Draggable,
-  GridsterComponent,
+  Gridster,
   GridsterConfig,
   GridsterItem,
   GridsterItemComponent,
@@ -43,7 +43,7 @@ interface Safe extends GridsterConfig {
     MatInputModule,
     MatSelectModule,
     MarkdownModule,
-    GridsterComponent,
+    Gridster,
     GridsterItemComponent
   ]
 })

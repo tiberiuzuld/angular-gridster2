@@ -11,7 +11,7 @@ import { MatSelectModule } from '@angular/material/select';
 
 import {
   DisplayGrid,
-  GridsterComponent,
+  Gridster,
   GridsterConfig,
   GridsterItem,
   GridsterItemComponent,
@@ -30,7 +30,7 @@ import { MarkdownModule } from 'ngx-markdown';
     MatIconModule,
     MatSelectModule,
     MarkdownModule,
-    GridsterComponent,
+    Gridster,
     GridsterItemComponent
   ]
 })

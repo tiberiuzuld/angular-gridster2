@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 
-import { GridsterComponent } from './gridster.component';
+import { Gridster } from './gridster';
 import { GridsterItemComponent } from './gridsterItem.component';
 
 @NgModule({
-  imports: [GridsterComponent, GridsterItemComponent],
-  exports: [GridsterComponent, GridsterItemComponent]
+  imports: [Gridster, GridsterItemComponent],
+  exports: [Gridster, GridsterItemComponent]
 })
 export class GridsterModule {}

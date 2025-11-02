@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
   CompactType,
   DisplayGrid,
-  GridsterComponent,
+  Gridster,
   GridsterItem,
   GridsterItemComponent,
   GridsterItemComponentInterface,
@@ -22,7 +22,7 @@ function itemValidateCallback(
 }
 
 describe('gridsterCompact service', () => {
-  let fixture: ComponentFixture<GridsterComponent>;
+  let fixture: ComponentFixture<Gridster>;
   let gridsterComponent;
   let gridsterCompact;
 
@@ -31,15 +31,11 @@ describe('gridsterCompact service', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        GridsterComponent,
-        GridsterItemComponent,
-        GridsterPreviewComponent
-      ],
+      imports: [Gridster, GridsterItemComponent, GridsterPreviewComponent],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(GridsterComponent);
+    fixture = TestBed.createComponent(Gridster);
     gridsterComponent = fixture.componentInstance;
     gridsterComponent.options = {
       gridType: GridType.Fixed,

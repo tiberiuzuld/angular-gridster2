@@ -9,7 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 
 import {
   CompactType,
-  GridsterComponent,
+  Gridster,
   GridsterConfig,
   GridsterItem,
   GridsterItemComponent,
@@ -27,7 +27,7 @@ import { MarkdownModule } from 'ngx-markdown';
     MatButtonModule,
     MatIconModule,
     MarkdownModule,
-    GridsterComponent,
+    Gridster,
     GridsterItemComponent
   ]
 })

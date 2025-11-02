@@ -83,11 +83,23 @@ export function scroll(
     const shouldScrollLeft = isRTL ? moveRight : moveLeft;
     if (shouldScrollRight && elemRightOffset <= scrollSensitivity) {
       cancelW();
-      if ((resizeEvent && resizeEventType && !resizeEventType.east) || intervalE) return;
+      if (
+        (resizeEvent && resizeEventType && !resizeEventType.east) ||
+        intervalE
+      )
+        return;
       intervalE = startHorizontal(1, calculateItemPosition, lastMouse, isRTL);
-    } else if (shouldScrollLeft && offsetLeft > 0 && elemLeftOffset < scrollSensitivity) {
+    } else if (
+      shouldScrollLeft &&
+      offsetLeft > 0 &&
+      elemLeftOffset < scrollSensitivity
+    ) {
       cancelE();
-      if ((resizeEvent && resizeEventType && !resizeEventType.west) || intervalW) return;
+      if (
+        (resizeEvent && resizeEventType && !resizeEventType.west) ||
+        intervalW
+      )
+        return;
       intervalW = startHorizontal(-1, calculateItemPosition, lastMouse, isRTL);
     } else if (lastMouse.clientX !== clientX) {
       cancelHorizontal();

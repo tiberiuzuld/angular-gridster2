@@ -12,7 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 
 import {
   DisplayGrid,
-  GridsterComponent,
+  Gridster,
   GridsterConfig,
   GridsterItem,
   GridsterItemComponent,
@@ -32,7 +32,7 @@ import { MarkdownModule } from 'ngx-markdown';
     MatIconModule,
     MatInputModule,
     MarkdownModule,
-    GridsterComponent,
+    Gridster,
     GridsterItemComponent
   ]
 })
