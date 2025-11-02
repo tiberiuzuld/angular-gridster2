@@ -4,7 +4,7 @@ import {
   Component,
   ElementRef,
   EventEmitter,
-  Inject,
+  inject,
   Input,
   NgZone,
   OnChanges,
@@ -17,7 +17,6 @@ import {
 import { debounceTime, Subject, switchMap, takeUntil, timer } from 'rxjs';
 import { GridsterComponentInterface } from './gridster.interface';
 import { GridsterCompact } from './gridsterCompact.service';
-
 import { GridsterConfigService } from './gridsterConfig.constant';
 import type { GridsterConfig } from './gridsterConfig.interface';
 import { GridType } from './gridsterConfig.interface';
@@ -35,32 +34,37 @@ import { GridsterUtils } from './gridsterUtils.service';
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'gridster',
   templateUrl: './gridster.html',
-  styleUrls: ['./gridster.css'],
+  styleUrl: './gridster.css',
   encapsulation: ViewEncapsulation.None,
   imports: [NgStyle, GridsterPreviewComponent]
 })
-export class GridsterComponent
+export class Gridster
   implements OnInit, OnChanges, OnDestroy, GridsterComponentInterface
 {
+  readonly renderer = inject(Renderer2);
+  readonly cdRef = inject(ChangeDetectorRef);
+  readonly zone = inject(NgZone);
+  readonly elRef = inject<ElementRef<HTMLElement>>(ElementRef);
+
   @Input() options: GridsterConfig;
   movingItem: GridsterItem | null;
-  el: HTMLElement;
-  $options: GridsterConfigS;
-  mobile: boolean;
-  curWidth: number;
-  curHeight: number;
-  grid: GridsterItemComponentInterface[];
+  el: HTMLElement = this.elRef.nativeElement;
+  $options: GridsterConfigS = JSON.parse(JSON.stringify(GridsterConfigService));
+  mobile = false;
+  curWidth = 0;
+  curHeight = 0;
+  grid: GridsterItemComponentInterface[] = [];
   columns = 0;
   rows = 0;
-  curColWidth: number;
-  curRowHeight: number;
+  curColWidth = 0;
+  curRowHeight = 0;
   gridColumns = [];
   gridRows = [];
   windowResize: (() => void) | null;
-  dragInProgress: boolean;
-  emptyCell: GridsterEmptyCell;
-  compact: GridsterCompact;
-  gridRenderer: GridsterRenderer;
+  dragInProgress = false;
+  emptyCell: GridsterEmptyCell = new GridsterEmptyCell(this);
+  compact: GridsterCompact = new GridsterCompact(this);
+  gridRenderer: GridsterRenderer = new GridsterRenderer(this);
   previewStyle$: EventEmitter<GridsterItem | null> =
     new EventEmitter<GridsterItem | null>();
 
@@ -68,26 +72,6 @@ export class GridsterComponent
 
   private resize$ = new Subject<void>();
   private destroy$ = new Subject<void>();
-
-  constructor(
-    @Inject(ElementRef) el: ElementRef,
-    @Inject(Renderer2) public renderer: Renderer2,
-    @Inject(ChangeDetectorRef) public cdRef: ChangeDetectorRef,
-    @Inject(NgZone) public zone: NgZone
-  ) {
-    this.el = el.nativeElement;
-    this.$options = JSON.parse(JSON.stringify(GridsterConfigService));
-    this.mobile = false;
-    this.curWidth = 0;
-    this.curHeight = 0;
-    this.grid = [];
-    this.curColWidth = 0;
-    this.curRowHeight = 0;
-    this.dragInProgress = false;
-    this.emptyCell = new GridsterEmptyCell(this);
-    this.compact = new GridsterCompact(this);
-    this.gridRenderer = new GridsterRenderer(this);
-  }
 
   // ------ Function for swapWhileDragging option
 
@@ -459,12 +443,12 @@ export class GridsterComponent
       this.renderer.removeClass(this.el, 'display-grid');
     }
     this.setGridDimensions();
-    this.gridColumns.length = GridsterComponent.getNewArrayLength(
+    this.gridColumns.length = Gridster.getNewArrayLength(
       this.columns,
       this.curWidth,
       this.curColWidth
     );
-    this.gridRows.length = GridsterComponent.getNewArrayLength(
+    this.gridRows.length = Gridster.getNewArrayLength(
       this.rows,
       this.curHeight,
       this.curRowHeight
@@ -776,7 +760,7 @@ export class GridsterComponent
       widget = this.grid[widgetsIndex];
       if (
         widget.$item !== item &&
-        GridsterComponent.checkCollisionTwoItemsForSwaping(widget.$item, item)
+        Gridster.checkCollisionTwoItemsForSwaping(widget.$item, item)
       ) {
         return widget;
       }

@@ -2,7 +2,7 @@
  * Public API Surface of gridster
  */
 
-export { GridsterComponent } from './lib/gridster.component';
+export { Gridster } from './lib/gridster';
 export { GridsterItemComponent } from './lib/gridsterItem.component';
 export { GridsterItemComponentInterface } from './lib/gridsterItem.interface';
 export type { GridsterItem } from './lib/gridsterItem.interface';

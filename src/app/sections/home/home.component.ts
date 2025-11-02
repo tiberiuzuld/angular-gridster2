@@ -15,7 +15,7 @@ import {
   CompactType,
   DisplayGrid,
   Draggable,
-  GridsterComponent,
+  Gridster,
   GridsterConfig,
   GridsterItem,
   GridsterItemComponent,
@@ -42,7 +42,7 @@ interface Safe extends GridsterConfig {
     MatIconModule,
     MatInputModule,
     MatSelectModule,
-    GridsterComponent,
+    Gridster,
     GridsterItemComponent
   ]
 })

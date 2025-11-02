@@ -11,7 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 
 import {
   DisplayGrid,
-  GridsterComponent,
+  Gridster,
   GridsterConfig,
   GridsterItem,
   GridsterItemComponent,
@@ -30,7 +30,7 @@ import { MarkdownModule } from 'ngx-markdown';
     MatCheckboxModule,
     MatIconModule,
     MarkdownModule,
-    GridsterComponent,
+    Gridster,
     GridsterItemComponent
   ]
 })
