@@ -3,7 +3,6 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
-  EventEmitter,
   Inject,
   Input,
   NgZone,
@@ -12,6 +11,7 @@ import {
   OnInit,
   Renderer2,
   SimpleChanges,
+  viewChild,
   ViewEncapsulation
 } from '@angular/core';
 import { debounceTime, Subject, switchMap, takeUntil, timer } from 'rxjs';
@@ -42,6 +42,8 @@ import { GridsterUtils } from './gridsterUtils.service';
 export class GridsterComponent
   implements OnInit, OnChanges, OnDestroy, GridsterComponentInterface
 {
+  gridsterPreview = viewChild.required(GridsterPreviewComponent);
+
   @Input() options: GridsterConfig;
   movingItem: GridsterItem | null;
   el: HTMLElement;
@@ -61,8 +63,6 @@ export class GridsterComponent
   emptyCell: GridsterEmptyCell;
   compact: GridsterCompact;
   gridRenderer: GridsterRenderer;
-  previewStyle$: EventEmitter<GridsterItem | null> =
-    new EventEmitter<GridsterItem | null>();
 
   calculateLayout$ = new Subject<void>();
 
@@ -216,7 +216,6 @@ export class GridsterComponent
 
   ngOnDestroy(): void {
     this.destroy$.next();
-    this.previewStyle$.complete();
     if (this.windowResize) {
       this.windowResize();
     }
@@ -506,8 +505,15 @@ export class GridsterComponent
   removeItem(itemComponent: GridsterItemComponentInterface): void {
     this.grid.splice(this.grid.indexOf(itemComponent), 1);
     this.calculateLayout$.next();
+
     if (this.options.itemRemovedCallback) {
       this.options.itemRemovedCallback(itemComponent.item, itemComponent);
+    }
+
+    // check the moving item was removed
+    if (this.movingItem && this.movingItem === itemComponent.$item) {
+      this.movingItem = null;
+      this.previewStyle();
     }
   }
 
@@ -785,13 +791,15 @@ export class GridsterComponent
   }
 
   previewStyle(drag = false): void {
+    const preview = this.gridsterPreview();
+
     if (this.movingItem) {
       if (this.compact && drag) {
         this.compact.checkCompactItem(this.movingItem);
       }
-      this.previewStyle$.next(this.movingItem);
+      preview.previewStyle(this.movingItem);
     } else {
-      this.previewStyle$.next(null);
+      preview.previewStyle(null);
     }
   }
 
