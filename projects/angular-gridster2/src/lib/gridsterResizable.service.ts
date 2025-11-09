@@ -612,7 +612,7 @@ export class GridsterResizable {
     if (this.gridsterItem.$item.x !== this.itemBackup.x) {
       this.gridsterItem.$item.x = this.itemBackup.x;
       if (!soft) {
-        this.left = this.gridster.positionXToPixels(this.gridsterItem.$item.y);
+        this.left = this.gridster.positionXToPixels(this.gridsterItem.$item.x);
         this.setItemLeft(this.left);
       }
     }
