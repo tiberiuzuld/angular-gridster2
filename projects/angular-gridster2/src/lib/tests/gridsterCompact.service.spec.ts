@@ -1,23 +1,12 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import {
-  CompactType,
-  DisplayGrid,
-  Gridster,
-  GridsterItem,
-  GridsterItemComponent,
-  GridsterItemComponentInterface,
-  GridType
-} from 'angular-gridster2';
+import { CompactType, DisplayGrid, Gridster, GridsterItem, GridsterItemComponent, GridsterItemComponentInterface, GridType } from 'angular-gridster2';
 import { GridsterCompact } from '../gridsterCompact.service';
 import { GridsterPreviewComponent } from '../gridsterPreview.component';
 
 function emptyCellClick(event: MouseEvent, item): void {}
 
-function itemValidateCallback(
-  item: GridsterItem,
-  itemComponent: GridsterItemComponentInterface
-): boolean {
+function itemValidateCallback(item: GridsterItem, itemComponent: GridsterItemComponentInterface): boolean {
   return false;
 }
 
@@ -101,7 +90,7 @@ describe('gridsterCompact service', () => {
 
     gridsterComponent.grid = { $item: { y: 5, x: 5, rows: 30, cols: 30 } };
 
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     gridsterCompact = new GridsterCompact(gridsterComponent);
   });
@@ -114,7 +103,7 @@ describe('gridsterCompact service', () => {
     gridsterComponent.options.compact = CompactType.CompactUp;
 
     gridsterCompact = new GridsterCompact(gridsterComponent);
-    const spyCheckComponent = spyOn(gridsterCompact, 'checkCompact');
+    const spyCheckComponent = vi.spyOn(gridsterCompact, 'checkCompact');
     gridsterCompact.checkCompact();
     expect(spyCheckComponent).toHaveBeenCalled();
   });
@@ -122,7 +111,7 @@ describe('gridsterCompact service', () => {
   it('should check if checkCompactleft called', () => {
     gridsterComponent.options.compact = CompactType.CompactLeft;
 
-    const spyCheckComponent = spyOn(gridsterCompact, 'checkCompact');
+    const spyCheckComponent = vi.spyOn(gridsterCompact, 'checkCompact');
     gridsterCompact.checkCompact();
     expect(spyCheckComponent).toHaveBeenCalled();
   });
@@ -131,7 +120,7 @@ describe('gridsterCompact service', () => {
     compactType = CompactType.CompactUpAndLeft;
 
     gridsterCompact = new GridsterCompact(gridsterComponent);
-    const spyCheckComponent = spyOn(gridsterCompact, 'checkCompact');
+    const spyCheckComponent = vi.spyOn(gridsterCompact, 'checkCompact');
     gridsterCompact.checkCompact();
     expect(spyCheckComponent).toHaveBeenCalled();
   });
@@ -140,7 +129,7 @@ describe('gridsterCompact service', () => {
     compactType = CompactType.CompactLeftAndUp;
 
     gridsterCompact = new GridsterCompact(gridsterComponent);
-    const spyCheckComponent = spyOn(gridsterCompact, 'checkCompact');
+    const spyCheckComponent = vi.spyOn(gridsterCompact, 'checkCompact');
     gridsterCompact.checkCompact();
     expect(spyCheckComponent).toHaveBeenCalled();
   });
@@ -152,15 +141,11 @@ describe('gridsterCompact service', () => {
 
     gridsterComponent.grid = { $item: { y: 5, x: 5, rows: 3, cols: 3 } };
     gridsterComponent.options.collision = true;
-    gridsterComponent.options.itemValidateCallback =
-      itemValidateCallback.bind(this);
+    gridsterComponent.options.itemValidateCallback = itemValidateCallback.bind(this);
 
     const result = gridsterCompact.moveTillCollision(itemComponent, 'y', -1);
     expect(result).toBe(false);
-    const spyCheckMoveTillCollision = spyOn(
-      gridsterCompact,
-      'moveTillCollision'
-    );
+    const spyCheckMoveTillCollision = vi.spyOn(gridsterCompact, 'moveTillCollision');
     const move = gridsterCompact.moveTillCollision(itemComponent, 'y', -1);
     expect(spyCheckMoveTillCollision).toHaveBeenCalled();
   });
@@ -170,22 +155,15 @@ describe('gridsterCompact service', () => {
     const itemComponent = { $item: { y: 0, x: 0 } };
 
     gridsterCompact = new GridsterCompact(gridsterComponent);
-    expect(gridsterCompact.moveTillCollision(itemComponent, 'x', -1)).toBe(
-      false
-    );
+    expect(gridsterCompact.moveTillCollision(itemComponent, 'x', -1)).toBe(false);
   });
 
   it('should check if moveUpTillCollision called when compactType is compactUp', () => {
     compactType = CompactType.CompactUp;
     const itemComponent = { $item: { y: 5, x: 3, cols: 2, rows: 2 } };
     gridsterCompact = new GridsterCompact(gridsterComponent);
-    expect(gridsterCompact.moveTillCollision(itemComponent, 'y', -1)).toBe(
-      false
-    );
-    const spyCheckMoveTillCollision = spyOn(
-      gridsterCompact,
-      'moveTillCollision'
-    );
+    expect(gridsterCompact.moveTillCollision(itemComponent, 'y', -1)).toBe(false);
+    const spyCheckMoveTillCollision = vi.spyOn(gridsterCompact, 'moveTillCollision');
     const move = gridsterCompact.moveTillCollision(itemComponent, 'y', -1);
     expect(spyCheckMoveTillCollision).toHaveBeenCalled();
   });
@@ -194,13 +172,8 @@ describe('gridsterCompact service', () => {
     compactType = CompactType.CompactLeft;
     const itemComponent = { $item: { y: 0, x: 0 } };
     gridsterCompact = new GridsterCompact(gridsterComponent);
-    expect(gridsterCompact.moveTillCollision(itemComponent, 'x', -1)).toBe(
-      false
-    );
-    const spyCheckMoveTillCollision = spyOn(
-      gridsterCompact,
-      'moveTillCollision'
-    );
+    expect(gridsterCompact.moveTillCollision(itemComponent, 'x', -1)).toBe(false);
+    const spyCheckMoveTillCollision = vi.spyOn(gridsterCompact, 'moveTillCollision');
     const move = gridsterCompact.moveTillCollision(itemComponent, 'x', -1);
     expect(spyCheckMoveTillCollision).toHaveBeenCalled();
   });
@@ -215,7 +188,7 @@ describe('gridsterCompact service', () => {
     ];
 
     gridsterCompact = new GridsterCompact(gridsterComponent);
-    const spyCheckCompact = spyOn(gridsterCompact, 'checkCompact');
+    const spyCheckCompact = vi.spyOn(gridsterCompact, 'checkCompact');
     gridsterCompact.checkCompact();
     expect(spyCheckCompact).toHaveBeenCalled();
   });
@@ -226,7 +199,7 @@ describe('gridsterCompact service', () => {
     const item = { y: 5, x: 5, cols: 2, rows: 1 };
 
     gridsterCompact = new GridsterCompact(gridsterComponent);
-    const spyCheckCompactItem = spyOn(gridsterCompact, 'checkCompactItem');
+    const spyCheckCompactItem = vi.spyOn(gridsterCompact, 'checkCompactItem');
     gridsterCompact.checkCompactItem(item);
     expect(spyCheckCompactItem).toHaveBeenCalled();
   });

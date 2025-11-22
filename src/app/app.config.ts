@@ -1,10 +1,5 @@
 import { HttpClient, provideHttpClient } from '@angular/common/http';
-import {
-  ApplicationConfig,
-  importProvidersFrom,
-  provideBrowserGlobalErrorListeners,
-  provideZoneChangeDetection
-} from '@angular/core';
+import { ApplicationConfig, importProvidersFrom, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { MarkdownModule, MARKED_OPTIONS } from 'ngx-markdown';
 import { appRoutes } from './app.routes';
@@ -12,7 +7,6 @@ import { appRoutes } from './app.routes';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(appRoutes),
     provideHttpClient(),
     importProvidersFrom(

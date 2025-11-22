@@ -3,11 +3,13 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": false,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "isolatedModules": true,
+    "moduleResolution": "bundler",
     "experimentalDecorators": true,
     "importHelpers": true,
     "skipLibCheck": true,
@@ -25,7 +27,6 @@
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
-    "typeCheckHostBindings": true,
     "strictTemplates": true
   },
   "files": [],
