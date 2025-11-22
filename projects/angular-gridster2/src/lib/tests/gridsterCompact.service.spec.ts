@@ -1,4 +1,4 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CompactType, DisplayGrid, Gridster, GridsterItem, GridsterItemComponent, GridsterItemComponentInterface, GridType } from 'angular-gridster2';
 import { GridsterCompact } from '../gridsterCompact.service';
@@ -20,6 +20,7 @@ describe('gridsterCompact service', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      providers: [provideZonelessChangeDetection()],
       imports: [Gridster, GridsterItemComponent, GridsterPreviewComponent],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
