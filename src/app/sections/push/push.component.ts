@@ -12,7 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 import {
   DisplayGrid,
   Draggable,
-  GridsterComponent,
+  Gridster,
   GridsterConfig,
   GridsterItem,
   GridsterItemComponent,
@@ -39,7 +39,7 @@ interface Safe extends GridsterConfig {
     MatCheckboxModule,
     MatIconModule,
     MarkdownModule,
-    GridsterComponent,
+    Gridster,
     GridsterItemComponent
   ]
 })

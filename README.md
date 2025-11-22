@@ -23,11 +23,11 @@ What Angular supports [here](https://github.com/angular/angular)
 
 ```javascript
 import {Component} from '@angular/core';
-import {GridsterComponent, GridsterItemComponent} from 'angular-gridster2';
+import {Gridster, GridsterItemComponent} from 'angular-gridster2';
 
 @Component({
   standalone: true,
-  imports: [GridsterComponent, GridsterItemComponent],
+  imports: [Gridster, GridsterItemComponent],
   ...
 })
 ```

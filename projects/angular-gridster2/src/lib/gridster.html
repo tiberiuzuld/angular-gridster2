@@ -1,13 +1,11 @@
-@for (column of gridColumns; track i; let i = $index) {
+@for (_ of gridColumns; track i; let i = $index) {
 <div
   class="gridster-column"
   [ngStyle]="gridRenderer.getGridColumnStyle(i)"
 ></div>
-} @for (row of gridRows; track i; let i = $index) {
+} @for (_ of gridRows; track i; let i = $index) {
 <div class="gridster-row" [ngStyle]="gridRenderer.getGridRowStyle(i)"></div>
 }
-<ng-content></ng-content>
-<gridster-preview
-  [gridRenderer]="gridRenderer"
-  class="gridster-preview"
-></gridster-preview>
+<ng-content />
+
+<gridster-preview class="gridster-preview" [gridRenderer]="gridRenderer" />

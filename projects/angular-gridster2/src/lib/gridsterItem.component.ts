@@ -14,7 +14,7 @@ import {
   SimpleChanges,
   ViewEncapsulation
 } from '@angular/core';
-import { GridsterComponent } from './gridster.component';
+import { Gridster } from './gridster';
 
 import { GridsterDraggable } from './gridsterDraggable.service';
 import type { GridsterItem } from './gridsterItem.interface';
@@ -47,7 +47,7 @@ export class GridsterItemComponent
   }>();
   $item: GridsterItem;
   el: HTMLElement;
-  gridster: GridsterComponent;
+  gridster: Gridster;
   top: number;
   left: number;
   width: number;
@@ -64,7 +64,7 @@ export class GridsterItemComponent
 
   constructor(
     @Inject(ElementRef) el: ElementRef,
-    gridster: GridsterComponent,
+    gridster: Gridster,
     @Inject(Renderer2) public renderer: Renderer2,
     @Inject(NgZone) private zone: NgZone
   ) {
