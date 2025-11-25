@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnInit,
-  ViewEncapsulation
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -11,16 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 
-import {
-  CompactType,
-  DisplayGrid,
-  Gridster,
-  GridsterConfig,
-  GridsterItem,
-  GridsterItemComponent,
-  GridsterItemComponentInterface,
-  GridType
-} from 'angular-gridster2';
+import { CompactType, DisplayGrid, Gridster, GridsterConfig, GridsterItem, GridsterItemComponent, GridType } from 'angular-gridster2';
 import { MarkdownModule } from 'ngx-markdown';
 
 @Component({
@@ -36,18 +22,15 @@ import { MarkdownModule } from 'ngx-markdown';
     MatInputModule,
     MatSelectModule,
     MarkdownModule,
-    Gridster,
-    GridsterItemComponent
+    GridsterItemComponent,
+    Gridster
   ]
 })
 export class ItemsComponent implements OnInit {
   options: GridsterConfig;
   dashboard: Array<GridsterItem>;
 
-  static itemInit(
-    item: GridsterItem,
-    itemComponent: GridsterItemComponentInterface
-  ): void {
+  static itemInit(item: GridsterItem, itemComponent: GridsterItemComponent): void {
     console.info('itemInitialized', item, itemComponent);
   }
 

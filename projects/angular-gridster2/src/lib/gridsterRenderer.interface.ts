@@ -1,17 +1,17 @@
-export interface CommonGridStyle {
+export type CommonGridStyle = {
   [key: string]: string;
-}
+};
 
-export interface CommonGridCachedStyle {
+export type CommonGridCachedStyle = {
   width: number;
   height: number;
   style: CommonGridStyle;
-}
+};
 
-export interface GridColumnCachedStyle extends CommonGridCachedStyle {
+export type GridColumnCachedStyle = CommonGridCachedStyle & {
   left: number;
-}
+};
 
-export interface GridRowCachedStyle extends CommonGridCachedStyle {
+export type GridRowCachedStyle = CommonGridCachedStyle & {
   top: number;
-}
+};

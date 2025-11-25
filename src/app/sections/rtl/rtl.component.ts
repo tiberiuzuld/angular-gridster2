@@ -1,34 +1,12 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnDestroy,
-  OnInit,
-  ViewEncapsulation
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import {
-  CompactType,
-  DirTypes,
-  DisplayGrid,
-  Draggable,
-  Gridster,
-  GridsterConfig,
-  GridsterItem,
-  GridsterItemComponent,
-  GridType,
-  Resizable
-} from 'angular-gridster2';
+import { CompactType, DirTypes, DisplayGrid, Gridster, GridsterConfig, GridsterItem, GridsterItemComponent, GridType } from 'angular-gridster2';
 import { MarkdownModule } from 'ngx-markdown';
-
-interface Safe extends GridsterConfig {
-  draggable: Draggable;
-  resizable: Resizable;
-}
 
 @Component({
   selector: 'app-rtl',
@@ -48,7 +26,7 @@ interface Safe extends GridsterConfig {
   ]
 })
 export class RtlComponent implements OnInit, OnDestroy {
-  options: Safe;
+  options: GridsterConfig;
   dashboard: Array<GridsterItem>;
 
   ngOnInit(): void {

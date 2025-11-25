@@ -1,12 +1,10 @@
-import { GridsterComponentInterface } from './gridster.interface';
-import {
-  GridsterItem,
-  GridsterItemComponentInterface
-} from './gridsterItem.interface';
+import { Gridster } from './gridster';
 import { CompactType } from './gridsterConfig.interface';
+import { GridsterItemComponent } from './gridsterItem.component';
+import { GridsterItem } from './gridsterItem.interface';
 
 export class GridsterCompact {
-  constructor(private gridster: GridsterComponentInterface) {}
+  constructor(private gridster: Gridster) {}
 
   destroy(): void {
     this.gridster = null!;
@@ -16,61 +14,37 @@ export class GridsterCompact {
     if (this.gridster.$options.compactType !== CompactType.None) {
       if (this.gridster.$options.compactType === CompactType.CompactUp) {
         this.checkCompactMovement('y', -1);
-      } else if (
-        this.gridster.$options.compactType === CompactType.CompactLeft
-      ) {
+      } else if (this.gridster.$options.compactType === CompactType.CompactLeft) {
         this.checkCompactMovement('x', -1);
-      } else if (
-        this.gridster.$options.compactType === CompactType.CompactUpAndLeft
-      ) {
+      } else if (this.gridster.$options.compactType === CompactType.CompactUpAndLeft) {
         this.checkCompactMovement('y', -1);
         this.checkCompactMovement('x', -1);
-      } else if (
-        this.gridster.$options.compactType === CompactType.CompactLeftAndUp
-      ) {
+      } else if (this.gridster.$options.compactType === CompactType.CompactLeftAndUp) {
         this.checkCompactMovement('x', -1);
         this.checkCompactMovement('y', -1);
-      } else if (
-        this.gridster.$options.compactType === CompactType.CompactRight
-      ) {
+      } else if (this.gridster.$options.compactType === CompactType.CompactRight) {
         this.checkCompactMovement('x', 1);
-      } else if (
-        this.gridster.$options.compactType === CompactType.CompactUpAndRight
-      ) {
+      } else if (this.gridster.$options.compactType === CompactType.CompactUpAndRight) {
         this.checkCompactMovement('y', -1);
         this.checkCompactMovement('x', 1);
-      } else if (
-        this.gridster.$options.compactType === CompactType.CompactRightAndUp
-      ) {
+      } else if (this.gridster.$options.compactType === CompactType.CompactRightAndUp) {
         this.checkCompactMovement('x', 1);
         this.checkCompactMovement('y', -1);
-      } else if (
-        this.gridster.$options.compactType === CompactType.CompactDown
-      ) {
+      } else if (this.gridster.$options.compactType === CompactType.CompactDown) {
         this.checkCompactMovement('y', 1);
-      } else if (
-        this.gridster.$options.compactType === CompactType.CompactDownAndLeft
-      ) {
+      } else if (this.gridster.$options.compactType === CompactType.CompactDownAndLeft) {
         this.checkCompactMovement('y', 1);
         this.checkCompactMovement('x', -1);
-      } else if (
-        this.gridster.$options.compactType === CompactType.CompactDownAndRight
-      ) {
+      } else if (this.gridster.$options.compactType === CompactType.CompactDownAndRight) {
         this.checkCompactMovement('y', 1);
         this.checkCompactMovement('x', 1);
-      } else if (
-        this.gridster.$options.compactType === CompactType.CompactLeftAndDown
-      ) {
+      } else if (this.gridster.$options.compactType === CompactType.CompactLeftAndDown) {
         this.checkCompactMovement('x', -1);
         this.checkCompactMovement('y', 1);
-      } else if (
-        this.gridster.$options.compactType === CompactType.CompactRightAndDown
-      ) {
+      } else if (this.gridster.$options.compactType === CompactType.CompactRightAndDown) {
         this.checkCompactMovement('x', 1);
         this.checkCompactMovement('y', 1);
-      } else if (
-        this.gridster.$options.compactType === CompactType.CompactGrid
-      ) {
+      } else if (this.gridster.$options.compactType === CompactType.CompactGrid) {
         this.checkCompactGrid();
       }
     }
@@ -80,52 +54,32 @@ export class GridsterCompact {
     if (this.gridster.$options.compactType !== CompactType.None) {
       if (this.gridster.$options.compactType === CompactType.CompactUp) {
         this.moveTillCollision(item, 'y', -1);
-      } else if (
-        this.gridster.$options.compactType === CompactType.CompactLeft
-      ) {
+      } else if (this.gridster.$options.compactType === CompactType.CompactLeft) {
         this.moveTillCollision(item, 'x', -1);
-      } else if (
-        this.gridster.$options.compactType === CompactType.CompactUpAndLeft
-      ) {
+      } else if (this.gridster.$options.compactType === CompactType.CompactUpAndLeft) {
         this.moveTillCollision(item, 'y', -1);
         this.moveTillCollision(item, 'x', -1);
-      } else if (
-        this.gridster.$options.compactType === CompactType.CompactLeftAndUp
-      ) {
+      } else if (this.gridster.$options.compactType === CompactType.CompactLeftAndUp) {
         this.moveTillCollision(item, 'x', -1);
         this.moveTillCollision(item, 'y', -1);
-      } else if (
-        this.gridster.$options.compactType === CompactType.CompactUpAndRight
-      ) {
+      } else if (this.gridster.$options.compactType === CompactType.CompactUpAndRight) {
         this.moveTillCollision(item, 'y', -1);
         this.moveTillCollision(item, 'x', 1);
-      } else if (
-        this.gridster.$options.compactType === CompactType.CompactDown
-      ) {
+      } else if (this.gridster.$options.compactType === CompactType.CompactDown) {
         this.moveTillCollision(item, 'y', 1);
-      } else if (
-        this.gridster.$options.compactType === CompactType.CompactDownAndLeft
-      ) {
+      } else if (this.gridster.$options.compactType === CompactType.CompactDownAndLeft) {
         this.moveTillCollision(item, 'y', 1);
         this.moveTillCollision(item, 'x', -1);
-      } else if (
-        this.gridster.$options.compactType === CompactType.CompactLeftAndDown
-      ) {
+      } else if (this.gridster.$options.compactType === CompactType.CompactLeftAndDown) {
         this.moveTillCollision(item, 'x', -1);
         this.moveTillCollision(item, 'y', 1);
-      } else if (
-        this.gridster.$options.compactType === CompactType.CompactDownAndRight
-      ) {
+      } else if (this.gridster.$options.compactType === CompactType.CompactDownAndRight) {
         this.moveTillCollision(item, 'y', 1);
         this.moveTillCollision(item, 'x', 1);
-      } else if (
-        this.gridster.$options.compactType === CompactType.CompactRightAndDown
-      ) {
+      } else if (this.gridster.$options.compactType === CompactType.CompactRightAndDown) {
         this.moveTillCollision(item, 'x', 1);
         this.moveTillCollision(item, 'y', 1);
-      } else if (
-        this.gridster.$options.compactType === CompactType.CompactGrid
-      ) {
+      } else if (this.gridster.$options.compactType === CompactType.CompactGrid) {
         this.moveToGridPosition(item);
       }
     }
@@ -133,7 +87,7 @@ export class GridsterCompact {
 
   private checkCompactMovement(direction: 'x' | 'y', delta: number): void {
     let widgetMoved = false;
-    this.gridster.grid.forEach((widget: GridsterItemComponentInterface) => {
+    this.gridster.grid.forEach((widget: GridsterItemComponent) => {
       if (widget.$item.compactEnabled !== false) {
         const moved = this.moveTillCollision(widget.$item, direction, delta);
         if (moved) {
@@ -148,11 +102,7 @@ export class GridsterCompact {
     }
   }
 
-  private moveTillCollision(
-    item: GridsterItem,
-    direction: 'x' | 'y',
-    delta: number
-  ): boolean {
+  private moveTillCollision(item: GridsterItem, direction: 'x' | 'y', delta: number): boolean {
     item[direction] += delta;
     if (this.gridster.checkCollision(item)) {
       item[direction] -= delta;
@@ -166,28 +116,20 @@ export class GridsterCompact {
   private checkCompactGrid(): void {
     // Sort items by their current position (top to bottom, left to right)
     const sortedItems = this.gridster.grid
-      .filter(
-        (widget: GridsterItemComponentInterface) =>
-          widget.$item.compactEnabled !== false
-      )
-      .sort(
-        (
-          a: GridsterItemComponentInterface,
-          b: GridsterItemComponentInterface
-        ) => {
-          if (a.$item.y !== b.$item.y) {
-            return a.$item.y - b.$item.y;
-          }
-          return a.$item.x - b.$item.x;
+      .filter((widget: GridsterItemComponent) => widget.$item.compactEnabled !== false)
+      .sort((a: GridsterItemComponent, b: GridsterItemComponent) => {
+        if (a.$item.y !== b.$item.y) {
+          return a.$item.y - b.$item.y;
         }
-      );
+        return a.$item.x - b.$item.x;
+      });
 
     // Reposition all items in a grid-like manner
     let currentY = 0;
     let currentX = 0;
     let maxYInRow = 0;
 
-    sortedItems.forEach((widget: GridsterItemComponentInterface) => {
+    sortedItems.forEach((widget: GridsterItemComponent) => {
       const item = widget.$item;
 
       // Check if item fits in current row
@@ -225,18 +167,13 @@ export class GridsterCompact {
 
     // Sort existing items to find occupied positions
     const sortedItems = this.gridster.grid
-      .filter((widget: GridsterItemComponentInterface) => widget.$item !== item)
-      .sort(
-        (
-          a: GridsterItemComponentInterface,
-          b: GridsterItemComponentInterface
-        ) => {
-          if (a.$item.y !== b.$item.y) {
-            return a.$item.y - b.$item.y;
-          }
-          return a.$item.x - b.$item.x;
+      .filter((widget: GridsterItemComponent) => widget.$item !== item)
+      .sort((a: GridsterItemComponent, b: GridsterItemComponent) => {
+        if (a.$item.y !== b.$item.y) {
+          return a.$item.y - b.$item.y;
         }
-      );
+        return a.$item.x - b.$item.x;
+      });
 
     // Find the next available position
     for (const widget of sortedItems) {

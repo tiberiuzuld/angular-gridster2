@@ -1,16 +1,8 @@
-import { GridsterComponentInterface } from './gridster.interface';
-import {
-  GridsterItem,
-  GridsterItemComponentInterface
-} from './gridsterItem.interface';
+import { Gridster } from './gridster';
+import { GridsterItemComponent } from './gridsterItem.component';
+import { GridsterItem } from './gridsterItem.interface';
 
-export type gridTypes =
-  | 'fit'
-  | 'scrollVertical'
-  | 'scrollHorizontal'
-  | 'fixed'
-  | 'verticalFixed'
-  | 'horizontalFixed';
+export type gridTypes = 'fit' | 'scrollVertical' | 'scrollHorizontal' | 'fixed' | 'verticalFixed' | 'horizontalFixed';
 export type displayGrids = 'always' | 'onDrag&Resize' | 'none';
 export type compactTypes =
   | 'none'
@@ -67,7 +59,7 @@ export enum DirTypes {
 
 export type dirTypes = 'ltr' | 'rtl';
 
-export interface GridsterConfig {
+export type GridsterConfig = {
   gridType?: gridTypes;
   scale?: number;
   fixedColWidth?: number;
@@ -87,7 +79,7 @@ export interface GridsterConfig {
   maxRows?: number;
   defaultItemCols?: number;
   defaultItemRows?: number;
-  itemAspectRatio?: number;
+  itemAspectRatio?: number | null;
   maxItemCols?: number;
   maxItemRows?: number;
   minItemCols?: number;
@@ -103,27 +95,15 @@ export interface GridsterConfig {
   outerMarginBottom?: number | null;
   outerMarginLeft?: number | null;
   useTransformPositioning?: boolean;
-  scrollSensitivity?: number | null;
+  scrollSensitivity?: number;
   scrollSpeed?: number;
-  initCallback?: (gridster: GridsterComponentInterface) => void;
-  destroyCallback?: (gridster: GridsterComponentInterface) => void;
-  gridSizeChangedCallback?: (gridster: GridsterComponentInterface) => void;
-  itemChangeCallback?: (
-    item: GridsterItem,
-    itemComponent: GridsterItemComponentInterface
-  ) => void;
-  itemResizeCallback?: (
-    item: GridsterItem,
-    itemComponent: GridsterItemComponentInterface
-  ) => void;
-  itemInitCallback?: (
-    item: GridsterItem,
-    itemComponent: GridsterItemComponentInterface
-  ) => void;
-  itemRemovedCallback?: (
-    item: GridsterItem,
-    itemComponent: GridsterItemComponentInterface
-  ) => void;
+  initCallback?: (gridster: Gridster) => void;
+  destroyCallback?: (gridster: Gridster) => void;
+  gridSizeChangedCallback?: (gridster: Gridster) => void;
+  itemChangeCallback?: (item: GridsterItem, itemComponent: GridsterItemComponent) => void;
+  itemResizeCallback?: (item: GridsterItem, itemComponent: GridsterItemComponent) => void;
+  itemInitCallback?: (item: GridsterItem, itemComponent: GridsterItemComponent) => void;
+  itemRemovedCallback?: (item: GridsterItem, itemComponent: GridsterItemComponent) => void;
   itemValidateCallback?: (item: GridsterItem) => boolean;
   draggable?: Draggable;
   resizable?: Resizable;
@@ -148,10 +128,7 @@ export interface GridsterConfig {
   enableEmptyCellDrag?: boolean;
   enableOccupiedCellDrop?: boolean;
   emptyCellClickCallback?: (event: MouseEvent, item: GridsterItem) => void;
-  emptyCellContextMenuCallback?: (
-    event: MouseEvent,
-    item: GridsterItem
-  ) => void;
+  emptyCellContextMenuCallback?: (event: MouseEvent, item: GridsterItem) => void;
   emptyCellDropCallback?: (event: DragEvent, item: GridsterItem) => void;
   emptyCellDragCallback?: (event: MouseEvent, item: GridsterItem) => void;
   emptyCellDragMaxCols?: number;
@@ -164,44 +141,30 @@ export interface GridsterConfig {
     getNextPossiblePosition?: (newItem: GridsterItem) => boolean;
     getFirstPossiblePosition?: (item: GridsterItem) => GridsterItem;
     getLastPossiblePosition?: (item: GridsterItem) => GridsterItem;
-    getItemComponent?: (
-      item: GridsterItem
-    ) => GridsterItemComponentInterface | undefined;
+    getItemComponent?: (item: GridsterItem) => GridsterItemComponent | undefined;
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [propName: string]: any;
-}
+};
 
-export interface DragBase {
+export type DragBase = {
   enabled?: boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  stop?: (
-    item: GridsterItem,
-    itemComponent: GridsterItemComponentInterface,
-    event: MouseEvent
-  ) => Promise<any> | void;
-  start?: (
-    item: GridsterItem,
-    itemComponent: GridsterItemComponentInterface,
-    event: MouseEvent
-  ) => void;
+  stop?: (item: GridsterItem, itemComponent: GridsterItemComponent, event: MouseEvent) => Promise<any> | void;
+  start?: (item: GridsterItem, itemComponent: GridsterItemComponent, event: MouseEvent) => void;
   delayStart?: number;
-}
+};
 
-export interface Draggable extends DragBase {
+export type Draggable = DragBase & {
   ignoreContentClass?: string;
   ignoreContent?: boolean;
   dragHandleClass?: string;
   dropOverItems?: boolean;
-  dropOverItemsCallback?: (
-    source: GridsterItem,
-    target: GridsterItem,
-    grid?: GridsterComponentInterface
-  ) => void;
-}
+  dropOverItemsCallback?: (source: GridsterItem, target: GridsterItem, grid?: Gridster) => void;
+};
 
-export interface Resizable extends DragBase {
+export type Resizable = DragBase & {
   handles?: {
     s: boolean;
     e: boolean;
@@ -212,11 +175,16 @@ export interface Resizable extends DragBase {
     sw: boolean;
     nw: boolean;
   };
-}
+};
 
-export interface PushDirections {
+export type PushDirections = {
   north: boolean;
   east: boolean;
   south: boolean;
   west: boolean;
-}
+};
+
+export type GridsterConfigStrict = Required<GridsterConfig> & {
+  draggable: Required<Draggable>;
+  resizable: Required<Resizable>;
+};

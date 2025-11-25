@@ -17,7 +17,6 @@ import { Gridster } from './gridster';
 
 import { GridsterDraggable } from './gridsterDraggable.service';
 import type { GridsterItem } from './gridsterItem.interface';
-import { GridsterItemComponentInterface } from './gridsterItem.interface';
 import { GridsterResizable } from './gridsterResizable.service';
 import { GridsterUtils } from './gridsterUtils.service';
 
@@ -30,19 +29,19 @@ import { GridsterUtils } from './gridsterUtils.service';
     '[style.z-index]': `zIndex()`
   }
 })
-export class GridsterItemComponent implements OnInit, OnDestroy, OnChanges, GridsterItemComponentInterface {
+export class GridsterItemComponent implements OnInit, OnDestroy, OnChanges {
   @Input() item: GridsterItem;
   itemInit = output<{
     item: GridsterItem;
-    itemComponent: GridsterItemComponentInterface;
+    itemComponent: GridsterItemComponent;
   }>();
   itemChange = output<{
     item: GridsterItem;
-    itemComponent: GridsterItemComponentInterface;
+    itemComponent: GridsterItemComponent;
   }>();
   itemResize = output<{
     item: GridsterItem;
-    itemComponent: GridsterItemComponentInterface;
+    itemComponent: GridsterItemComponent;
   }>();
 
   readonly cdRef = inject(ChangeDetectorRef);

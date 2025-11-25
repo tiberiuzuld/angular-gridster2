@@ -1,4 +1,4 @@
-import { GridsterComponentInterface } from './gridster.interface';
+import { Gridster } from './gridster';
 
 export class GridsterUtils {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -33,10 +33,7 @@ export class GridsterUtils {
     }
   }
 
-  static checkContentClassForEvent(
-    gridster: GridsterComponentInterface,
-    e: MouseEvent
-  ): boolean {
+  static checkContentClassForEvent(gridster: Gridster, e: MouseEvent): boolean {
     if (gridster.$options.draggable.ignoreContent) {
       if (
         !GridsterUtils.checkDragHandleClass(
@@ -49,43 +46,21 @@ export class GridsterUtils {
         return true;
       }
     } else {
-      if (
-        GridsterUtils.checkContentClass(
-          e.target as HTMLElement,
-          e.currentTarget as HTMLElement,
-          gridster.$options.draggable.ignoreContentClass
-        )
-      ) {
+      if (GridsterUtils.checkContentClass(e.target as HTMLElement, e.currentTarget as HTMLElement, gridster.$options.draggable.ignoreContentClass)) {
         return true;
       }
     }
     return false;
   }
 
-  static checkContentClassForEmptyCellClickEvent(
-    gridster: GridsterComponentInterface,
-    e: MouseEvent
-  ): boolean {
+  static checkContentClassForEmptyCellClickEvent(gridster: Gridster, e: MouseEvent): boolean {
     return (
-      GridsterUtils.checkContentClass(
-        e.target as HTMLElement,
-        e.currentTarget as HTMLElement,
-        gridster.$options.draggable.ignoreContentClass
-      ) ||
-      GridsterUtils.checkContentClass(
-        e.target as HTMLElement,
-        e.currentTarget as HTMLElement,
-        gridster.$options.draggable.dragHandleClass
-      )
+      GridsterUtils.checkContentClass(e.target as HTMLElement, e.currentTarget as HTMLElement, gridster.$options.draggable.ignoreContentClass) ||
+      GridsterUtils.checkContentClass(e.target as HTMLElement, e.currentTarget as HTMLElement, gridster.$options.draggable.dragHandleClass)
     );
   }
 
-  static checkDragHandleClass(
-    target: HTMLElement,
-    current: HTMLElement,
-    dragHandleClass: string,
-    ignoreContentClass
-  ): boolean {
+  static checkDragHandleClass(target: HTMLElement, current: HTMLElement, dragHandleClass: string, ignoreContentClass: string): boolean {
     if (!target || target === current) {
       return false;
     }
@@ -98,40 +73,21 @@ export class GridsterUtils {
         return false;
       }
     }
-    return GridsterUtils.checkDragHandleClass(
-      target.parentNode as HTMLElement,
-      current,
-      dragHandleClass,
-      ignoreContentClass
-    );
+    return GridsterUtils.checkDragHandleClass(target.parentNode as HTMLElement, current, dragHandleClass, ignoreContentClass);
   }
 
-  static checkContentClass(
-    target: HTMLElement,
-    current: HTMLElement,
-    contentClass: string
-  ): boolean {
+  static checkContentClass(target: HTMLElement, current: HTMLElement, contentClass: string): boolean {
     if (!target || target === current) {
       return false;
     }
-    if (
-      target.hasAttribute('class') &&
-      target.getAttribute('class')!.split(' ').indexOf(contentClass) > -1
-    ) {
+    if (target.hasAttribute('class') && target.getAttribute('class')!.split(' ').indexOf(contentClass) > -1) {
       return true;
     } else {
-      return GridsterUtils.checkContentClass(
-        target.parentNode as HTMLElement,
-        current,
-        contentClass
-      );
+      return GridsterUtils.checkContentClass(target.parentNode as HTMLElement, current, contentClass);
     }
   }
 
-  static compareItems(
-    a: { x: number; y: number },
-    b: { x: number; y: number }
-  ): number {
+  static compareItems(a: { x: number; y: number }, b: { x: number; y: number }): number {
     if (a.y > b.y) {
       return -1;
     } else if (a.y < b.y) {

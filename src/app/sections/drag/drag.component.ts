@@ -1,72 +1,33 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnInit,
-  ViewEncapsulation
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
-import {
-  DisplayGrid,
-  Draggable,
-  Gridster,
-  GridsterConfig,
-  GridsterItem,
-  GridsterItemComponent,
-  GridsterItemComponentInterface,
-  GridType
-} from 'angular-gridster2';
+import { DisplayGrid, Gridster, GridsterConfig, GridsterItem, GridsterItemComponent, GridType } from 'angular-gridster2';
 import { MarkdownModule } from 'ngx-markdown';
-
-interface Safe extends GridsterConfig {
-  draggable: Draggable;
-}
 
 @Component({
   selector: 'app-drag',
   templateUrl: './drag.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [
-    FormsModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatIconModule,
-    MatInputModule,
-    MarkdownModule,
-    Gridster,
-    GridsterItemComponent
-  ]
+  imports: [FormsModule, MatButtonModule, MatCheckboxModule, MatIconModule, MatInputModule, MarkdownModule, Gridster, GridsterItemComponent]
 })
 export class DragComponent implements OnInit {
-  options: Safe;
+  options: GridsterConfig;
   dashboard: Array<GridsterItem>;
 
-  static eventStart(
-    item: GridsterItem,
-    itemComponent: GridsterItemComponentInterface,
-    event: MouseEvent
-  ): void {
+  static eventStart(item: GridsterItem, itemComponent: GridsterItemComponent, event: MouseEvent): void {
     console.info('eventStart', item, itemComponent, event);
   }
 
-  static eventStop(
-    item: GridsterItem,
-    itemComponent: GridsterItemComponentInterface,
-    event: MouseEvent
-  ): void {
+  static eventStop(item: GridsterItem, itemComponent: GridsterItemComponent, event: MouseEvent): void {
     console.info('eventStop', item, itemComponent, event);
   }
 
-  static overlapEvent(
-    source: GridsterItem,
-    target: GridsterItem,
-    grid: Gridster
-  ): void {
+  static overlapEvent(source: GridsterItem, target: GridsterItem, grid: Gridster): void {
     console.log('overlap', source, target, grid);
   }
 

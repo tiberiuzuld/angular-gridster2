@@ -15,17 +15,13 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { debounceTime, Subject, switchMap, takeUntil, timer } from 'rxjs';
-import { GridsterComponentInterface } from './gridster.interface';
 import { GridsterCompact } from './gridsterCompact.service';
 import { GridsterConfigService } from './gridsterConfig.constant';
-import type { GridsterConfig } from './gridsterConfig.interface';
+import { GridsterConfig, GridsterConfigStrict } from './gridsterConfig.interface';
 import { GridType } from './gridsterConfig.interface';
-import { GridsterConfigS } from './gridsterConfigS.interface';
 import { GridsterEmptyCell } from './gridsterEmptyCell.service';
-import {
-  GridsterItem,
-  GridsterItemComponentInterface
-} from './gridsterItem.interface';
+import { GridsterItemComponent } from './gridsterItem.component';
+import { GridsterItem } from './gridsterItem.interface';
 import { GridsterPreviewComponent } from './gridsterPreview.component';
 import { GridsterRenderer } from './gridsterRenderer.service';
 import { GridsterUtils } from './gridsterUtils.service';
@@ -38,9 +34,7 @@ import { GridsterUtils } from './gridsterUtils.service';
   encapsulation: ViewEncapsulation.None,
   imports: [NgStyle, GridsterPreviewComponent]
 })
-export class Gridster
-  implements OnInit, OnChanges, OnDestroy, GridsterComponentInterface
-{
+export class Gridster implements OnInit, OnChanges, OnDestroy {
   readonly renderer = inject(Renderer2);
   readonly cdRef = inject(ChangeDetectorRef);
   readonly zone = inject(NgZone);
@@ -51,11 +45,11 @@ export class Gridster
   @Input() options: GridsterConfig;
   movingItem: GridsterItem | null;
   el: HTMLElement = this.elRef.nativeElement;
-  $options: GridsterConfigS = JSON.parse(JSON.stringify(GridsterConfigService));
+  $options: GridsterConfigStrict = JSON.parse(JSON.stringify(GridsterConfigService));
   mobile = false;
   curWidth = 0;
   curHeight = 0;
-  grid: GridsterItemComponentInterface[] = [];
+  grid: GridsterItemComponent[] = [];
   columns = 0;
   rows = 0;
   curColWidth = 0;
@@ -76,10 +70,7 @@ export class Gridster
   // ------ Function for swapWhileDragging option
 
   // identical to checkCollision() except that here we add boundaries.
-  static checkCollisionTwoItemsForSwaping(
-    item: GridsterItem,
-    item2: GridsterItem
-  ): boolean {
+  static checkCollisionTwoItemsForSwaping(item: GridsterItem, item2: GridsterItem): boolean {
     // if the cols or rows of the items are 1 , doesnt make any sense to set a boundary. Only if the item is bigger we set a boundary
     const horizontalBoundaryItem1 = item.cols === 1 ? 0 : 1;
     const horizontalBoundaryItem2 = item2.cols === 1 ? 0 : 1;
@@ -94,11 +85,7 @@ export class Gridster
   }
 
   checkCollisionTwoItems(item: GridsterItem, item2: GridsterItem): boolean {
-    const collision =
-      item.x < item2.x + item2.cols &&
-      item.x + item.cols > item2.x &&
-      item.y < item2.y + item2.rows &&
-      item.y + item.rows > item2.y;
+    const collision = item.x < item2.x + item2.cols && item.x + item.cols > item2.x && item.y < item2.y + item2.rows && item.y + item.rows > item2.y;
     if (!collision) {
       return false;
     }
@@ -106,10 +93,8 @@ export class Gridster
       return true;
     }
     const defaultLayerIndex = this.$options.defaultLayerIndex;
-    const layerIndex =
-      item.layerIndex === undefined ? defaultLayerIndex : item.layerIndex;
-    const layerIndex2 =
-      item2.layerIndex === undefined ? defaultLayerIndex : item2.layerIndex;
+    const layerIndex = item.layerIndex === undefined ? defaultLayerIndex : item.layerIndex;
+    const layerIndex2 = item2.layerIndex === undefined ? defaultLayerIndex : item2.layerIndex;
     return layerIndex === layerIndex2;
   }
 
@@ -118,9 +103,7 @@ export class Gridster
       this.options.initCallback(this);
     }
 
-    this.calculateLayout$
-      .pipe(debounceTime(0), takeUntil(this.destroy$))
-      .subscribe(() => this.calculateLayout());
+    this.calculateLayout$.pipe(debounceTime(0), takeUntil(this.destroy$)).subscribe(() => this.calculateLayout());
 
     this.resize$
       .pipe(
@@ -160,26 +143,15 @@ export class Gridster
       width = this.el.clientWidth;
       height = this.el.clientHeight;
     }
-    if (
-      (width !== this.curWidth || height !== this.curHeight) &&
-      this.checkIfToResize()
-    ) {
+    if ((width !== this.curWidth || height !== this.curHeight) && this.checkIfToResize()) {
       this.onResize();
     }
   }
 
   setOptions(): void {
-    this.$options = GridsterUtils.merge(
-      this.$options,
-      this.options,
-      this.$options
-    );
+    this.$options = GridsterUtils.merge(this.$options, this.options, this.$options);
     if (!this.$options.disableWindowResize && !this.windowResize) {
-      this.windowResize = this.renderer.listen(
-        'window',
-        'resize',
-        this.onResize
-      );
+      this.windowResize = this.renderer.listen('window', 'resize', this.onResize);
     } else if (this.$options.disableWindowResize && this.windowResize) {
       this.windowResize();
       this.windowResize = null;
@@ -190,7 +162,7 @@ export class Gridster
   optionsChanged = (): void => {
     this.setOptions();
     let widgetsIndex: number = this.grid.length - 1;
-    let widget: GridsterItemComponentInterface;
+    let widget: GridsterItemComponent;
     for (; widgetsIndex >= 0; widgetsIndex--) {
       widget = this.grid[widgetsIndex];
       widget.updateOptions();
@@ -237,14 +209,9 @@ export class Gridster
     const clientHeight = this.el.clientHeight;
     const offsetHeight = this.el.offsetHeight;
     const scrollHeight = this.el.scrollHeight;
-    const verticalScrollPresent =
-      clientWidth < offsetWidth &&
-      scrollHeight > offsetHeight &&
-      scrollHeight - offsetHeight < offsetWidth - clientWidth;
+    const verticalScrollPresent = clientWidth < offsetWidth && scrollHeight > offsetHeight && scrollHeight - offsetHeight < offsetWidth - clientWidth;
     const horizontalScrollPresent =
-      clientHeight < offsetHeight &&
-      scrollWidth > offsetWidth &&
-      scrollWidth - offsetWidth < offsetHeight - clientHeight;
+      clientHeight < offsetHeight && scrollWidth > offsetWidth && scrollWidth - offsetWidth < offsetHeight - clientHeight;
     if (verticalScrollPresent) {
       return false;
     }
@@ -263,10 +230,7 @@ export class Gridster
     const el = this.el;
     let width;
     let height;
-    if (
-      this.$options.setGridSize ||
-      (this.$options.gridType === GridType.Fit && !this.mobile)
-    ) {
+    if (this.$options.setGridSize || (this.$options.gridType === GridType.Fit && !this.mobile)) {
       width = el.offsetWidth;
       height = el.offsetHeight;
     } else {
@@ -318,74 +282,38 @@ export class Gridster
       let marginWidth = -this.$options.margin;
       if (this.$options.outerMarginLeft !== null) {
         marginWidth += this.$options.outerMarginLeft;
-        this.renderer.setStyle(
-          this.el,
-          'padding-left',
-          this.$options.outerMarginLeft + 'px'
-        );
+        this.renderer.setStyle(this.el, 'padding-left', this.$options.outerMarginLeft + 'px');
       } else {
         marginWidth += this.$options.margin;
-        this.renderer.setStyle(
-          this.el,
-          'padding-left',
-          this.$options.margin + 'px'
-        );
+        this.renderer.setStyle(this.el, 'padding-left', this.$options.margin + 'px');
       }
       if (this.$options.outerMarginRight !== null) {
         marginWidth += this.$options.outerMarginRight;
-        this.renderer.setStyle(
-          this.el,
-          'padding-right',
-          this.$options.outerMarginRight + 'px'
-        );
+        this.renderer.setStyle(this.el, 'padding-right', this.$options.outerMarginRight + 'px');
       } else {
         marginWidth += this.$options.margin;
-        this.renderer.setStyle(
-          this.el,
-          'padding-right',
-          this.$options.margin + 'px'
-        );
+        this.renderer.setStyle(this.el, 'padding-right', this.$options.margin + 'px');
       }
       this.curColWidth = (this.curWidth - marginWidth) / this.columns;
       let marginHeight = -this.$options.margin;
       if (this.$options.outerMarginTop !== null) {
         marginHeight += this.$options.outerMarginTop;
-        this.renderer.setStyle(
-          this.el,
-          'padding-top',
-          this.$options.outerMarginTop + 'px'
-        );
+        this.renderer.setStyle(this.el, 'padding-top', this.$options.outerMarginTop + 'px');
       } else {
         marginHeight += this.$options.margin;
-        this.renderer.setStyle(
-          this.el,
-          'padding-top',
-          this.$options.margin + 'px'
-        );
+        this.renderer.setStyle(this.el, 'padding-top', this.$options.margin + 'px');
       }
       if (this.$options.outerMarginBottom !== null) {
         marginHeight += this.$options.outerMarginBottom;
-        this.renderer.setStyle(
-          this.el,
-          'padding-bottom',
-          this.$options.outerMarginBottom + 'px'
-        );
+        this.renderer.setStyle(this.el, 'padding-bottom', this.$options.outerMarginBottom + 'px');
       } else {
         marginHeight += this.$options.margin;
-        this.renderer.setStyle(
-          this.el,
-          'padding-bottom',
-          this.$options.margin + 'px'
-        );
+        this.renderer.setStyle(this.el, 'padding-bottom', this.$options.margin + 'px');
       }
-      this.curRowHeight =
-        ((this.curHeight - marginHeight) / this.rows) *
-        this.$options.rowHeightRatio;
+      this.curRowHeight = ((this.curHeight - marginHeight) / this.rows) * this.$options.rowHeightRatio;
     } else {
       this.curColWidth = (this.curWidth + this.$options.margin) / this.columns;
-      this.curRowHeight =
-        ((this.curHeight + this.$options.margin) / this.rows) *
-        this.$options.rowHeightRatio;
+      this.curRowHeight = ((this.curHeight + this.$options.margin) / this.rows) * this.$options.rowHeightRatio;
       this.renderer.setStyle(this.el, 'padding-left', 0 + 'px');
       this.renderer.setStyle(this.el, 'padding-right', 0 + 'px');
       this.renderer.setStyle(this.el, 'padding-top', 0 + 'px');
@@ -396,16 +324,8 @@ export class Gridster
     if (this.$options.setGridSize) {
       this.renderer.addClass(this.el, 'gridSize');
       if (!this.mobile) {
-        this.renderer.setStyle(
-          this.el,
-          'width',
-          this.columns * this.curColWidth + this.$options.margin + 'px'
-        );
-        this.renderer.setStyle(
-          this.el,
-          'height',
-          this.rows * this.curRowHeight + this.$options.margin + 'px'
-        );
+        this.renderer.setStyle(this.el, 'width', this.columns * this.curColWidth + this.$options.margin + 'px');
+        this.renderer.setStyle(this.el, 'height', this.rows * this.curRowHeight + this.$options.margin + 'px');
       }
     } else {
       this.renderer.removeClass(this.el, 'gridSize');
@@ -415,7 +335,7 @@ export class Gridster
     this.updateGrid();
 
     let widgetsIndex: number = this.grid.length - 1;
-    let widget: GridsterItemComponentInterface;
+    let widget: GridsterItemComponent;
     for (; widgetsIndex >= 0; widgetsIndex--) {
       widget = this.grid[widgetsIndex];
       widget.setSize();
@@ -429,33 +349,18 @@ export class Gridster
   updateGrid(): void {
     if (this.$options.displayGrid === 'always' && !this.mobile) {
       this.renderer.addClass(this.el, 'display-grid');
-    } else if (
-      this.$options.displayGrid === 'onDrag&Resize' &&
-      this.dragInProgress
-    ) {
+    } else if (this.$options.displayGrid === 'onDrag&Resize' && this.dragInProgress) {
       this.renderer.addClass(this.el, 'display-grid');
-    } else if (
-      this.$options.displayGrid === 'none' ||
-      !this.dragInProgress ||
-      this.mobile
-    ) {
+    } else if (this.$options.displayGrid === 'none' || !this.dragInProgress || this.mobile) {
       this.renderer.removeClass(this.el, 'display-grid');
     }
     this.setGridDimensions();
-    this.gridColumns.length = Gridster.getNewArrayLength(
-      this.columns,
-      this.curWidth,
-      this.curColWidth
-    );
-    this.gridRows.length = Gridster.getNewArrayLength(
-      this.rows,
-      this.curHeight,
-      this.curRowHeight
-    );
+    this.gridColumns.length = Gridster.getNewArrayLength(this.columns, this.curWidth, this.curColWidth);
+    this.gridRows.length = Gridster.getNewArrayLength(this.rows, this.curHeight, this.curRowHeight);
     this.cdRef.markForCheck();
   }
 
-  addItem(itemComponent: GridsterItemComponentInterface): void {
+  addItem(itemComponent: GridsterItemComponent): void {
     if (itemComponent.$item.cols === undefined) {
       itemComponent.$item.cols = this.$options.defaultItemCols;
       itemComponent.item.cols = itemComponent.$item.cols;
@@ -486,7 +391,7 @@ export class Gridster
     this.calculateLayout$.next();
   }
 
-  removeItem(itemComponent: GridsterItemComponentInterface): void {
+  removeItem(itemComponent: GridsterItemComponent): void {
     this.grid.splice(this.grid.indexOf(itemComponent), 1);
     this.calculateLayout$.next();
 
@@ -501,11 +406,8 @@ export class Gridster
     }
   }
 
-  checkCollision(
-    item: GridsterItem,
-    checkRatio?: boolean
-  ): GridsterItemComponentInterface | boolean {
-    let collision: GridsterItemComponentInterface | boolean = false;
+  checkCollision(item: GridsterItem, checkRatio?: boolean): GridsterItemComponent | boolean {
+    let collision: GridsterItemComponent | boolean = false;
     if (this.options.itemValidateCallback) {
       collision = !this.options.itemValidateCallback(item);
     }
@@ -525,89 +427,53 @@ export class Gridster
     const noNegativePosition = item.y > -1 && item.x > -1;
     const maxGridCols = item.cols + item.x <= this.$options.maxCols;
     const maxGridRows = item.rows + item.y <= this.$options.maxRows;
-    const maxItemCols =
-      item.maxItemCols === undefined
-        ? this.$options.maxItemCols
-        : item.maxItemCols;
-    const minItemCols =
-      item.minItemCols === undefined
-        ? this.$options.minItemCols
-        : item.minItemCols;
-    const maxItemRows =
-      item.maxItemRows === undefined
-        ? this.$options.maxItemRows
-        : item.maxItemRows;
-    const minItemRows =
-      item.minItemRows === undefined
-        ? this.$options.minItemRows
-        : item.minItemRows;
+    const maxItemCols = item.maxItemCols === undefined ? this.$options.maxItemCols : item.maxItemCols;
+    const minItemCols = item.minItemCols === undefined ? this.$options.minItemCols : item.minItemCols;
+    const maxItemRows = item.maxItemRows === undefined ? this.$options.maxItemRows : item.maxItemRows;
+    const minItemRows = item.minItemRows === undefined ? this.$options.minItemRows : item.minItemRows;
     const inColsLimits = item.cols <= maxItemCols && item.cols >= minItemCols;
     const inRowsLimits = item.rows <= maxItemRows && item.rows >= minItemRows;
     let inRatio: boolean = true;
     if (checkRatio) {
-      const itemAspectRatio =
-        item.itemAspectRatio || this.$options.itemAspectRatio;
+      const itemAspectRatio = item.itemAspectRatio || this.$options.itemAspectRatio;
       if (itemAspectRatio) {
         inRatio = item.cols / item.rows === itemAspectRatio;
       }
     }
-    const minAreaLimit =
-      item.minItemArea === undefined
-        ? this.$options.minItemArea
-        : item.minItemArea;
-    const maxAreaLimit =
-      item.maxItemArea === undefined
-        ? this.$options.maxItemArea
-        : item.maxItemArea;
+    const minAreaLimit = item.minItemArea === undefined ? this.$options.minItemArea : item.minItemArea;
+    const maxAreaLimit = item.maxItemArea === undefined ? this.$options.maxItemArea : item.maxItemArea;
     const area = item.cols * item.rows;
     const inMinArea = minAreaLimit <= area;
     const inMaxArea = maxAreaLimit >= area;
-    return !(
-      noNegativePosition &&
-      maxGridCols &&
-      maxGridRows &&
-      inRatio &&
-      inColsLimits &&
-      inRowsLimits &&
-      inMinArea &&
-      inMaxArea
-    );
+    return !(noNegativePosition && maxGridCols && maxGridRows && inRatio && inColsLimits && inRowsLimits && inMinArea && inMaxArea);
   }
 
-  findItemWithItem(
-    item: GridsterItem
-  ): GridsterItemComponentInterface | boolean {
+  findItemWithItem(item: GridsterItem): GridsterItemComponent | boolean {
     let widgetsIndex = 0;
-    let widget: GridsterItemComponentInterface;
+    let widget: GridsterItemComponent;
     for (; widgetsIndex < this.grid.length; widgetsIndex++) {
       widget = this.grid[widgetsIndex];
-      if (
-        widget.$item !== item &&
-        this.checkCollisionTwoItems(widget.$item, item)
-      ) {
+      if (widget.$item !== item && this.checkCollisionTwoItems(widget.$item, item)) {
         return widget;
       }
     }
     return false;
   }
 
-  findItemsWithItem(item: GridsterItem): Array<GridsterItemComponentInterface> {
-    const a: Array<GridsterItemComponentInterface> = [];
+  findItemsWithItem(item: GridsterItem): Array<GridsterItemComponent> {
+    const a: Array<GridsterItemComponent> = [];
     let widgetsIndex = 0;
-    let widget: GridsterItemComponentInterface;
+    let widget: GridsterItemComponent;
     for (; widgetsIndex < this.grid.length; widgetsIndex++) {
       widget = this.grid[widgetsIndex];
-      if (
-        widget.$item !== item &&
-        this.checkCollisionTwoItems(widget.$item, item)
-      ) {
+      if (widget.$item !== item && this.checkCollisionTwoItems(widget.$item, item)) {
         a.push(widget);
       }
     }
     return a;
   }
 
-  autoPositionItem(itemComponent: GridsterItemComponentInterface): void {
+  autoPositionItem(itemComponent: GridsterItemComponent): void {
     if (this.getNextPossiblePosition(itemComponent.$item)) {
       itemComponent.notPlaced = false;
       itemComponent.item.x = itemComponent.$item.x;
@@ -616,18 +482,12 @@ export class Gridster
     } else {
       itemComponent.notPlaced = true;
       if (!this.$options.disableWarnings) {
-        console.warn(
-          "Can't be placed in the bounds of the dashboard!/n" +
-            JSON.stringify(itemComponent.item, ['cols', 'rows', 'x', 'y'])
-        );
+        console.warn("Can't be placed in the bounds of the dashboard!/n" + JSON.stringify(itemComponent.item, ['cols', 'rows', 'x', 'y']));
       }
     }
   }
 
-  getNextPossiblePosition = (
-    newItem: GridsterItem,
-    startingFrom: { y?: number; x?: number } = {}
-  ): boolean => {
+  getNextPossiblePosition = (newItem: GridsterItem, startingFrom: { y?: number; x?: number } = {}): boolean => {
     if (newItem.cols === -1) {
       newItem.cols = this.$options.defaultItemCols;
     }
@@ -648,8 +508,7 @@ export class Gridster
       }
     }
     const canAddToRows = this.$options.maxRows >= this.rows + newItem.rows;
-    const canAddToColumns =
-      this.$options.maxCols >= this.columns + newItem.cols;
+    const canAddToColumns = this.$options.maxCols >= this.columns + newItem.cols;
     const addToRows = this.rows <= this.columns && canAddToRows;
     if (!addToRows && canAddToColumns) {
       newItem.x = this.columns;
@@ -671,34 +530,24 @@ export class Gridster
 
   getLastPossiblePosition = (item: GridsterItem): GridsterItem => {
     let farthestItem: { y: number; x: number } = { y: 0, x: 0 };
-    farthestItem = this.grid.reduce(
-      (
-        prev: { y: number; x: number },
-        curr: GridsterItemComponentInterface
-      ) => {
-        const currCoords = {
-          y: curr.$item.y + curr.$item.rows - 1,
-          x: curr.$item.x + curr.$item.cols - 1
-        };
-        if (GridsterUtils.compareItems(prev, currCoords) === 1) {
-          return currCoords;
-        } else {
-          return prev;
-        }
-      },
-      farthestItem
-    );
+    farthestItem = this.grid.reduce((prev: { y: number; x: number }, curr: GridsterItemComponent) => {
+      const currCoords = {
+        y: curr.$item.y + curr.$item.rows - 1,
+        x: curr.$item.x + curr.$item.cols - 1
+      };
+      if (GridsterUtils.compareItems(prev, currCoords) === 1) {
+        return currCoords;
+      } else {
+        return prev;
+      }
+    }, farthestItem);
 
     const tmpItem = Object.assign({}, item);
     this.getNextPossiblePosition(tmpItem, farthestItem);
     return tmpItem;
   };
 
-  pixelsToPositionX(
-    x: number,
-    roundingMethod: (x: number) => number,
-    noLimit?: boolean
-  ): number {
+  pixelsToPositionX(x: number, roundingMethod: (x: number) => number, noLimit?: boolean): number {
     const position = roundingMethod(x / this.curColWidth);
     if (noLimit) {
       return position;
@@ -707,11 +556,7 @@ export class Gridster
     }
   }
 
-  pixelsToPositionY(
-    y: number,
-    roundingMethod: (x: number) => number,
-    noLimit?: boolean
-  ): number {
+  pixelsToPositionY(y: number, roundingMethod: (x: number) => number, noLimit?: boolean): number {
     const position = roundingMethod(y / this.curRowHeight);
     if (noLimit) {
       return position;
@@ -728,19 +573,15 @@ export class Gridster
     return y * this.curRowHeight;
   }
 
-  getItemComponent(
-    item: GridsterItem
-  ): GridsterItemComponentInterface | undefined {
+  getItemComponent(item: GridsterItem): GridsterItemComponent | undefined {
     return this.grid.find(c => c.item === item);
   }
 
   // ------ Functions for swapWhileDragging option
 
   // identical to checkCollision() except that this function calls findItemWithItemForSwaping() instead of findItemWithItem()
-  checkCollisionForSwaping(
-    item: GridsterItem
-  ): GridsterItemComponentInterface | boolean {
-    let collision: GridsterItemComponentInterface | boolean = false;
+  checkCollisionForSwaping(item: GridsterItem): GridsterItemComponent | boolean {
+    let collision: GridsterItemComponent | boolean = false;
     if (this.options.itemValidateCallback) {
       collision = !this.options.itemValidateCallback(item);
     }
@@ -757,17 +598,12 @@ export class Gridster
   }
 
   // identical to findItemWithItem() except that this function calls checkCollisionTwoItemsForSwaping() instead of checkCollisionTwoItems()
-  findItemWithItemForSwapping(
-    item: GridsterItem
-  ): GridsterItemComponentInterface | boolean {
+  findItemWithItemForSwapping(item: GridsterItem): GridsterItemComponent | boolean {
     let widgetsIndex: number = this.grid.length - 1;
-    let widget: GridsterItemComponentInterface;
+    let widget: GridsterItemComponent;
     for (; widgetsIndex > -1; widgetsIndex--) {
       widget = this.grid[widgetsIndex];
-      if (
-        widget.$item !== item &&
-        Gridster.checkCollisionTwoItemsForSwaping(widget.$item, item)
-      ) {
+      if (widget.$item !== item && Gridster.checkCollisionTwoItemsForSwaping(widget.$item, item)) {
         return widget;
       }
     }
@@ -790,11 +626,7 @@ export class Gridster
   // ------ End of functions for swapWhileDragging option
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
-  private static getNewArrayLength(
-    length: number,
-    overallSize: number,
-    size: number
-  ): number {
+  private static getNewArrayLength(length: number, overallSize: number, size: number): number {
     const newLength = Math.max(length, Math.floor(overallSize / size));
 
     if (newLength < 0) {

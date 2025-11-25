@@ -1,77 +1,29 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnInit,
-  ViewEncapsulation
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
-import {
-  DisplayGrid,
-  Gridster,
-  GridsterConfig,
-  GridsterItem,
-  GridsterItemComponent,
-  GridsterItemComponentInterface,
-  GridType,
-  Resizable
-} from 'angular-gridster2';
+import { DisplayGrid, Gridster, GridsterConfig, GridsterItem, GridsterItemComponent, GridType } from 'angular-gridster2';
 import { MarkdownModule } from 'ngx-markdown';
-
-interface SafeResizable extends Resizable {
-  handles: {
-    s: boolean;
-    e: boolean;
-    n: boolean;
-    w: boolean;
-    se: boolean;
-    ne: boolean;
-    sw: boolean;
-    nw: boolean;
-  };
-}
-
-interface Safe extends GridsterConfig {
-  resizable: SafeResizable;
-}
 
 @Component({
   selector: 'app-resize',
   templateUrl: './resize.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [
-    FormsModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatIconModule,
-    MatInputModule,
-    MarkdownModule,
-    Gridster,
-    GridsterItemComponent
-  ]
+  imports: [FormsModule, MatButtonModule, MatCheckboxModule, MatIconModule, MatInputModule, MarkdownModule, GridsterItemComponent, Gridster]
 })
 export class ResizeComponent implements OnInit {
-  options: Safe;
+  options: GridsterConfig;
   dashboard: Array<GridsterItem>;
 
-  static eventStop(
-    item: GridsterItem,
-    itemComponent: GridsterItemComponentInterface,
-    event: MouseEvent
-  ): void {
+  static eventStop(item: GridsterItem, itemComponent: GridsterItemComponent, event: MouseEvent): void {
     console.info('eventStop', item, itemComponent, event);
   }
 
-  static eventStart(
-    item: GridsterItem,
-    itemComponent: GridsterItemComponentInterface,
-    event: MouseEvent
-  ): void {
+  static eventStart(item: GridsterItem, itemComponent: GridsterItemComponent, event: MouseEvent): void {
     console.info('eventStart', item, itemComponent, event);
   }
 

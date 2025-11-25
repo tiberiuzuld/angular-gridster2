@@ -1,22 +1,8 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnInit,
-  ViewEncapsulation
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
-import {
-  DisplayGrid,
-  Gridster,
-  GridsterComponentInterface,
-  GridsterConfig,
-  GridsterItem,
-  GridsterItemComponent,
-  GridsterItemComponentInterface,
-  GridType
-} from 'angular-gridster2';
+import { DisplayGrid, Gridster, GridsterConfig, GridsterItem, GridsterItemComponent, GridType } from 'angular-gridster2';
 import { MarkdownModule } from 'ngx-markdown';
 
 @Component({
@@ -24,44 +10,26 @@ import { MarkdownModule } from 'ngx-markdown';
   templateUrl: './gridEvents.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [
-    MatButtonModule,
-    MatIconModule,
-    MarkdownModule,
-    Gridster,
-    GridsterItemComponent
-  ]
+  imports: [MatButtonModule, MatIconModule, MarkdownModule, Gridster, GridsterItemComponent]
 })
 export class GridEventsComponent implements OnInit {
   options: GridsterConfig;
   dashboard: Array<GridsterItem>;
   remove: boolean;
 
-  static itemChange(
-    item: GridsterItem,
-    itemComponent: GridsterItemComponentInterface
-  ): void {
+  static itemChange(item: GridsterItem, itemComponent: GridsterItemComponent): void {
     console.info('itemChanged', item, itemComponent);
   }
 
-  static itemResize(
-    item: GridsterItem,
-    itemComponent: GridsterItemComponentInterface
-  ): void {
+  static itemResize(item: GridsterItem, itemComponent: GridsterItemComponent): void {
     console.info('itemResized', item, itemComponent);
   }
 
-  static itemInit(
-    item: GridsterItem,
-    itemComponent: GridsterItemComponentInterface
-  ): void {
+  static itemInit(item: GridsterItem, itemComponent: GridsterItemComponent): void {
     console.info('itemInitialized', item, itemComponent);
   }
 
-  static itemRemoved(
-    item: GridsterItem,
-    itemComponent: GridsterItemComponentInterface
-  ): void {
+  static itemRemoved(item: GridsterItem, itemComponent: GridsterItemComponent): void {
     console.info('itemRemoved', item, itemComponent);
   }
 
@@ -69,15 +37,15 @@ export class GridEventsComponent implements OnInit {
     return item.cols > 0 && item.rows > 0;
   }
 
-  static gridInit(grid: GridsterComponentInterface): void {
+  static gridInit(grid: Gridster): void {
     console.info('gridInit', grid);
   }
 
-  static gridDestroy(grid: GridsterComponentInterface): void {
+  static gridDestroy(grid: Gridster): void {
     console.info('gridDestroy', grid);
   }
 
-  static gridSizeChanged(grid: GridsterComponentInterface): void {
+  static gridSizeChanged(grid: Gridster): void {
     console.info('gridSizeChanged', grid);
   }
 
