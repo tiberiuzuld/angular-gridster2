@@ -16,9 +16,9 @@ import {
 } from '@angular/core';
 import { debounceTime, Subject, switchMap, takeUntil, timer } from 'rxjs';
 import { GridsterCompact } from './gridsterCompact';
-import { GridsterConfigService } from './gridsterConfig.constant';
-import { GridsterConfig, GridsterConfigStrict } from './gridsterConfig';
+import type { GridsterConfig, GridsterConfigStrict } from './gridsterConfig';
 import { GridType } from './gridsterConfig';
+import { GridsterConfigService } from './gridsterConfig.constant';
 import { GridsterEmptyCell } from './gridsterEmptyCell';
 import { GridsterItem } from './gridsterItem';
 import { GridsterItemConfig } from './gridsterItemConfig';
