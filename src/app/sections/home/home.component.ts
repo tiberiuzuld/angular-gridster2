@@ -6,18 +6,18 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 
-import { CompactType, DisplayGrid, Gridster, GridsterConfig, GridsterItem, GridsterItemComponent, GridType } from 'angular-gridster2';
+import { CompactType, DisplayGrid, Gridster, GridsterConfig, GridsterItemConfig, GridsterItem, GridType } from 'angular-gridster2';
 
 @Component({
   selector: 'app-general',
   templateUrl: './home.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [FormsModule, MatButtonModule, MatCheckboxModule, MatIconModule, MatInputModule, MatSelectModule, Gridster, GridsterItemComponent]
+  imports: [FormsModule, MatButtonModule, MatCheckboxModule, MatIconModule, MatInputModule, MatSelectModule, Gridster, GridsterItem]
 })
 export class HomeComponent implements OnInit {
   options: GridsterConfig;
-  dashboard: Array<GridsterItem>;
+  dashboard: Array<GridsterItemConfig>;
 
   ngOnInit(): void {
     this.options = {

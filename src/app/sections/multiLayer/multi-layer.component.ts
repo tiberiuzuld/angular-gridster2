@@ -1,22 +1,10 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnInit,
-  ViewEncapsulation
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import {
-  DisplayGrid,
-  Gridster,
-  GridsterConfig,
-  GridsterItem,
-  GridsterItemComponent,
-  GridType
-} from 'angular-gridster2';
+import { DisplayGrid, Gridster, GridsterConfig, GridsterItemConfig, GridsterItem, GridType } from 'angular-gridster2';
 import { MarkdownModule } from 'ngx-markdown';
 
 @Component({
@@ -24,20 +12,11 @@ import { MarkdownModule } from 'ngx-markdown';
   templateUrl: './multi-layer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [
-    FormsModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatIconModule,
-    MatMenuModule,
-    MarkdownModule,
-    Gridster,
-    GridsterItemComponent
-  ]
+  imports: [FormsModule, MatButtonModule, MatCheckboxModule, MatIconModule, MatMenuModule, MarkdownModule, Gridster, GridsterItem]
 })
 export class MultiLayerComponent implements OnInit {
   options: GridsterConfig;
-  dashboard: Array<GridsterItem>;
+  dashboard: Array<GridsterItemConfig>;
 
   // noinspection DuplicatedCode
   ngOnInit(): void {
@@ -80,7 +59,7 @@ export class MultiLayerComponent implements OnInit {
     }
   }
 
-  removeItem($event: MouseEvent | TouchEvent, item: GridsterItem): void {
+  removeItem($event: MouseEvent | TouchEvent, item: GridsterItemConfig): void {
     $event.preventDefault();
     $event.stopPropagation();
     this.dashboard.splice(this.dashboard.indexOf(item), 1);

@@ -1,8 +1,8 @@
 import { Renderer2 } from '@angular/core';
 
 import { Gridster } from './gridster';
-import { DirTypes, GridType } from './gridsterConfig.interface';
-import { GridsterItem } from './gridsterItem.interface';
+import { DirTypes, GridType } from './gridsterConfig';
+import { GridsterItemConfig } from './gridsterItemConfig';
 import { CommonGridStyle, GridColumnCachedStyle, GridRowCachedStyle } from './gridsterRenderer.interface';
 
 export class GridsterRenderer {
@@ -20,7 +20,7 @@ export class GridsterRenderer {
 
   constructor(private gridster: Gridster) {}
 
-  updateItem(el: Element, item: GridsterItem, renderer: Renderer2): void {
+  updateItem(el: Element, item: GridsterItemConfig, renderer: Renderer2): void {
     if (this.gridster.mobile) {
       this.clearCellPosition(renderer, el);
       if (this.gridster.$options.keepFixedHeightInMobile) {

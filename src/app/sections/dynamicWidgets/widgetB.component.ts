@@ -1,13 +1,5 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  ViewEncapsulation
-} from '@angular/core';
-import { GridsterItem } from 'angular-gridster2';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { GridsterItemConfig } from 'angular-gridster2';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -21,7 +13,7 @@ export class WidgetBComponent implements OnInit, OnDestroy {
   @Input()
   widget;
   @Input()
-  resizeEvent: EventEmitter<GridsterItem>;
+  resizeEvent: EventEmitter<GridsterItemConfig>;
 
   resizeSub: Subscription;
 

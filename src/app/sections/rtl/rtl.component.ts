@@ -5,7 +5,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { CompactType, DirTypes, DisplayGrid, Gridster, GridsterConfig, GridsterItem, GridsterItemComponent, GridType } from 'angular-gridster2';
+import { CompactType, DirTypes, DisplayGrid, Gridster, GridsterConfig, GridsterItemConfig, GridsterItem, GridType } from 'angular-gridster2';
 import { MarkdownModule } from 'ngx-markdown';
 
 @Component({
@@ -13,21 +13,11 @@ import { MarkdownModule } from 'ngx-markdown';
   templateUrl: './rtl.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [
-    FormsModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatIconModule,
-    MatInputModule,
-    MatSelectModule,
-    MarkdownModule,
-    Gridster,
-    GridsterItemComponent
-  ]
+  imports: [FormsModule, MatButtonModule, MatCheckboxModule, MatIconModule, MatInputModule, MatSelectModule, MarkdownModule, Gridster, GridsterItem]
 })
 export class RtlComponent implements OnInit, OnDestroy {
   options: GridsterConfig;
-  dashboard: Array<GridsterItem>;
+  dashboard: Array<GridsterItemConfig>;
 
   ngOnInit(): void {
     document.body.setAttribute('dir', 'rtl');

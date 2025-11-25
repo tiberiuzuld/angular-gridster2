@@ -1,23 +1,11 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnInit,
-  ViewEncapsulation
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
-import {
-  DisplayGrid,
-  Gridster,
-  GridsterConfig,
-  GridsterItem,
-  GridsterItemComponent,
-  GridType
-} from 'angular-gridster2';
+import { DisplayGrid, Gridster, GridsterConfig, GridsterItemConfig, GridsterItem, GridType } from 'angular-gridster2';
 import { MarkdownModule } from 'ngx-markdown';
 
 @Component({
@@ -25,20 +13,11 @@ import { MarkdownModule } from 'ngx-markdown';
   templateUrl: './emptyCell.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [
-    FormsModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatIconModule,
-    MatInputModule,
-    MarkdownModule,
-    Gridster,
-    GridsterItemComponent
-  ]
+  imports: [FormsModule, MatButtonModule, MatCheckboxModule, MatIconModule, MatInputModule, MarkdownModule, Gridster, GridsterItem]
 })
 export class EmptyCellComponent implements OnInit {
   options: GridsterConfig;
-  dashboard: Array<GridsterItem>;
+  dashboard: Array<GridsterItemConfig>;
 
   ngOnInit(): void {
     this.options = {
@@ -78,7 +57,7 @@ export class EmptyCellComponent implements OnInit {
     }
   }
 
-  emptyCellClick(event: MouseEvent, item: GridsterItem): void {
+  emptyCellClick(event: MouseEvent, item: GridsterItemConfig): void {
     console.info('empty cell click', event, item);
     this.dashboard.push(item);
   }

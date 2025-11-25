@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, NgZone } from '@angular/core';
 import { Gridster } from './gridster';
-import { DirTypes } from './gridsterConfig.interface';
-import { GridsterItemComponent } from './gridsterItem.component';
+import { DirTypes } from './gridsterConfig';
+import { GridsterItem } from './gridsterItem';
 import { GridsterPush } from './gridsterPush.service';
 import { cancelScroll, scroll } from './gridsterScroll.service';
 
@@ -18,7 +18,7 @@ enum Direction {
 }
 
 export class GridsterDraggable {
-  gridsterItem: GridsterItemComponent;
+  gridsterItem: GridsterItem;
   gridster: Gridster;
   lastMouse: {
     clientX: number;
@@ -56,10 +56,10 @@ export class GridsterDraggable {
   push: GridsterPush;
   swap: GridsterSwap;
   path: Array<{ x: number; y: number }>;
-  collision: GridsterItemComponent | boolean = false;
+  collision: GridsterItem | boolean = false;
 
   constructor(
-    gridsterItem: GridsterItemComponent,
+    gridsterItem: GridsterItem,
     gridster: Gridster,
     private zone: NgZone,
     private cdRef: ChangeDetectorRef

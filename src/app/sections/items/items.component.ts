@@ -6,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 
-import { CompactType, DisplayGrid, Gridster, GridsterConfig, GridsterItem, GridsterItemComponent, GridType } from 'angular-gridster2';
+import { CompactType, DisplayGrid, Gridster, GridsterConfig, GridsterItemConfig, GridsterItem, GridType } from 'angular-gridster2';
 import { MarkdownModule } from 'ngx-markdown';
 
 @Component({
@@ -14,23 +14,13 @@ import { MarkdownModule } from 'ngx-markdown';
   templateUrl: './items.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [
-    FormsModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatIconModule,
-    MatInputModule,
-    MatSelectModule,
-    MarkdownModule,
-    GridsterItemComponent,
-    Gridster
-  ]
+  imports: [FormsModule, MatButtonModule, MatCheckboxModule, MatIconModule, MatInputModule, MatSelectModule, MarkdownModule, GridsterItem, Gridster]
 })
 export class ItemsComponent implements OnInit {
   options: GridsterConfig;
-  dashboard: Array<GridsterItem>;
+  dashboard: Array<GridsterItemConfig>;
 
-  static itemInit(item: GridsterItem, itemComponent: GridsterItemComponent): void {
+  static itemInit(item: GridsterItemConfig, itemComponent: GridsterItem): void {
     console.info('itemInitialized', item, itemComponent);
   }
 

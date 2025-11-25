@@ -1,9 +1,9 @@
 import { Gridster } from './gridster';
 import { GridsterUtils } from './gridsterUtils.service';
-import { GridsterItem } from './gridsterItem.interface';
+import { GridsterItemConfig } from './gridsterItemConfig';
 
 export class GridsterEmptyCell {
-  initialItem: GridsterItem | null;
+  initialItem: GridsterItemConfig | null;
   removeEmptyCellClickListenerFn: (() => void) | null;
   removeEmptyCellTouchendListenerFn: (() => void) | null;
   removeEmptyCellContextMenuListenerFn: (() => void) | null;
@@ -215,14 +215,14 @@ export class GridsterEmptyCell {
     return e.clientY + this.gridster.el.scrollTop - rect.top - this.gridster.gridRenderer.getTopMargin();
   }
 
-  getValidItemFromEvent(e: MouseEvent, oldItem?: GridsterItem | null): GridsterItem | undefined {
+  getValidItemFromEvent(e: MouseEvent, oldItem?: GridsterItemConfig | null): GridsterItemConfig | undefined {
     e.preventDefault();
     e.stopPropagation();
     GridsterUtils.checkTouchEvent(e);
     const rect = this.gridster.el.getBoundingClientRect();
     const x = this.getPixelsX(e, rect);
     const y = this.getPixelsY(e, rect);
-    const item: GridsterItem = {
+    const item: GridsterItemConfig = {
       x: this.gridster.pixelsToPositionX(x, Math.floor, true),
       y: this.gridster.pixelsToPositionY(y, Math.floor, true),
       cols: this.gridster.$options.defaultItemCols,

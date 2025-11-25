@@ -1,24 +1,24 @@
 import { Gridster } from './gridster';
-import { GridsterItemComponent } from './gridsterItem.component';
-import { GridsterItem } from './gridsterItem.interface';
+import { GridsterItem } from './gridsterItem';
+import { GridsterItemConfig } from './gridsterItemConfig';
 
 export class GridsterPushResize {
   public fromSouth: string;
   public fromNorth: string;
   public fromEast: string;
   public fromWest: string;
-  private pushedItems: Array<GridsterItemComponent>;
-  private pushedItemsPath: Array<Array<GridsterItem>>;
-  private gridsterItem: GridsterItemComponent;
+  private pushedItems: Array<GridsterItem>;
+  private pushedItemsPath: Array<Array<GridsterItemConfig>>;
+  private gridsterItem: GridsterItem;
   private gridster: Gridster;
   private tryPattern: {
-    fromEast: (gridsterItemCollide: GridsterItemComponent, gridsterItem: GridsterItemComponent, direction: string) => boolean;
-    fromWest: (gridsterItemCollide: GridsterItemComponent, gridsterItem: GridsterItemComponent, direction: string) => boolean;
-    fromNorth: (gridsterItemCollide: GridsterItemComponent, gridsterItem: GridsterItemComponent, direction: string) => boolean;
-    fromSouth: (gridsterItemCollide: GridsterItemComponent, gridsterItem: GridsterItemComponent, direction: string) => boolean;
+    fromEast: (gridsterItemCollide: GridsterItem, gridsterItem: GridsterItem, direction: string) => boolean;
+    fromWest: (gridsterItemCollide: GridsterItem, gridsterItem: GridsterItem, direction: string) => boolean;
+    fromNorth: (gridsterItemCollide: GridsterItem, gridsterItem: GridsterItem, direction: string) => boolean;
+    fromSouth: (gridsterItemCollide: GridsterItem, gridsterItem: GridsterItem, direction: string) => boolean;
   };
 
-  constructor(gridsterItem: GridsterItemComponent) {
+  constructor(gridsterItem: GridsterItem) {
     this.pushedItems = [];
     this.pushedItemsPath = [];
     this.gridsterItem = gridsterItem;
@@ -50,7 +50,7 @@ export class GridsterPushResize {
   restoreItems(): void {
     let i = 0;
     const l: number = this.pushedItems.length;
-    let pushedItem: GridsterItemComponent;
+    let pushedItem: GridsterItem;
     for (; i < l; i++) {
       pushedItem = this.pushedItems[i];
       pushedItem.$item.x = pushedItem.item.x || 0;
@@ -66,7 +66,7 @@ export class GridsterPushResize {
   setPushedItems(): void {
     let i = 0;
     const l: number = this.pushedItems.length;
-    let pushedItem: GridsterItemComponent;
+    let pushedItem: GridsterItem;
     for (; i < l; i++) {
       pushedItem = this.pushedItems[i];
       pushedItem.checkItemChanges(pushedItem.$item, pushedItem.item);
@@ -88,8 +88,8 @@ export class GridsterPushResize {
     }
   }
 
-  private push(gridsterItem: GridsterItemComponent, direction: string): boolean {
-    const gridsterItemCollision: GridsterItemComponent | boolean = this.gridster.checkCollision(gridsterItem.$item);
+  private push(gridsterItem: GridsterItem, direction: string): boolean {
+    const gridsterItemCollision: GridsterItem | boolean = this.gridster.checkCollision(gridsterItem.$item);
     if (
       gridsterItemCollision &&
       gridsterItemCollision !== true &&
@@ -105,7 +105,7 @@ export class GridsterPushResize {
     return false;
   }
 
-  private trySouth(gridsterItemCollide: GridsterItemComponent, gridsterItem: GridsterItemComponent, direction: string): boolean {
+  private trySouth(gridsterItemCollide: GridsterItem, gridsterItem: GridsterItem, direction: string): boolean {
     const backUpY = gridsterItemCollide.$item.y;
     const backUpRows = gridsterItemCollide.$item.rows;
     gridsterItemCollide.$item.y = gridsterItem.$item.y + gridsterItem.$item.rows;
@@ -125,7 +125,7 @@ export class GridsterPushResize {
     return false;
   }
 
-  private tryNorth(gridsterItemCollide: GridsterItemComponent, gridsterItem: GridsterItemComponent, direction: string): boolean {
+  private tryNorth(gridsterItemCollide: GridsterItem, gridsterItem: GridsterItem, direction: string): boolean {
     const backUpRows = gridsterItemCollide.$item.rows;
     gridsterItemCollide.$item.rows = gridsterItem.$item.y - gridsterItemCollide.$item.y;
     if (
@@ -142,7 +142,7 @@ export class GridsterPushResize {
     return false;
   }
 
-  private tryEast(gridsterItemCollide: GridsterItemComponent, gridsterItem: GridsterItemComponent, direction: string): boolean {
+  private tryEast(gridsterItemCollide: GridsterItem, gridsterItem: GridsterItem, direction: string): boolean {
     const backUpX = gridsterItemCollide.$item.x;
     const backUpCols = gridsterItemCollide.$item.cols;
     gridsterItemCollide.$item.x = gridsterItem.$item.x + gridsterItem.$item.cols;
@@ -162,7 +162,7 @@ export class GridsterPushResize {
     return false;
   }
 
-  private tryWest(gridsterItemCollide: GridsterItemComponent, gridsterItem: GridsterItemComponent, direction: string): boolean {
+  private tryWest(gridsterItemCollide: GridsterItem, gridsterItem: GridsterItem, direction: string): boolean {
     const backUpCols = gridsterItemCollide.$item.cols;
     gridsterItemCollide.$item.cols = gridsterItem.$item.x - gridsterItemCollide.$item.x;
     if (
@@ -179,7 +179,7 @@ export class GridsterPushResize {
     return false;
   }
 
-  private addToPushed(gridsterItem: GridsterItemComponent): void {
+  private addToPushed(gridsterItem: GridsterItem): void {
     if (this.pushedItems.indexOf(gridsterItem) < 0) {
       this.pushedItems.push(gridsterItem);
       this.pushedItemsPath.push([
@@ -214,7 +214,7 @@ export class GridsterPushResize {
     }
   }
 
-  private checkPushedItem(pushedItem: GridsterItemComponent, i: number): boolean {
+  private checkPushedItem(pushedItem: GridsterItem, i: number): boolean {
     const path = this.pushedItemsPath[i];
     let j = path.length - 2;
     let lastPosition: { x: number; y: number; cols: number; rows: number };

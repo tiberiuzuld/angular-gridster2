@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
-import { DisplayGrid, Gridster, GridsterConfig, GridsterItem, GridsterItemComponent, GridType } from 'angular-gridster2';
+import { DisplayGrid, Gridster, GridsterConfig, GridsterItemConfig, GridsterItem, GridType } from 'angular-gridster2';
 import { MarkdownModule } from 'ngx-markdown';
 
 @Component({
@@ -10,30 +10,30 @@ import { MarkdownModule } from 'ngx-markdown';
   templateUrl: './gridEvents.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [MatButtonModule, MatIconModule, MarkdownModule, Gridster, GridsterItemComponent]
+  imports: [MatButtonModule, MatIconModule, MarkdownModule, Gridster, GridsterItem]
 })
 export class GridEventsComponent implements OnInit {
   options: GridsterConfig;
-  dashboard: Array<GridsterItem>;
+  dashboard: Array<GridsterItemConfig>;
   remove: boolean;
 
-  static itemChange(item: GridsterItem, itemComponent: GridsterItemComponent): void {
+  static itemChange(item: GridsterItemConfig, itemComponent: GridsterItem): void {
     console.info('itemChanged', item, itemComponent);
   }
 
-  static itemResize(item: GridsterItem, itemComponent: GridsterItemComponent): void {
+  static itemResize(item: GridsterItemConfig, itemComponent: GridsterItem): void {
     console.info('itemResized', item, itemComponent);
   }
 
-  static itemInit(item: GridsterItem, itemComponent: GridsterItemComponent): void {
+  static itemInit(item: GridsterItemConfig, itemComponent: GridsterItem): void {
     console.info('itemInitialized', item, itemComponent);
   }
 
-  static itemRemoved(item: GridsterItem, itemComponent: GridsterItemComponent): void {
+  static itemRemoved(item: GridsterItemConfig, itemComponent: GridsterItem): void {
     console.info('itemRemoved', item, itemComponent);
   }
 
-  static itemValidate(item: GridsterItem): boolean {
+  static itemValidate(item: GridsterItemConfig): boolean {
     return item.cols > 0 && item.rows > 0;
   }
 

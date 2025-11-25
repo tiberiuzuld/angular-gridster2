@@ -5,7 +5,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
-import { DisplayGrid, Gridster, GridsterConfig, GridsterItem, GridsterItemComponent, GridType } from 'angular-gridster2';
+import { DisplayGrid, Gridster, GridsterConfig, GridsterItemConfig, GridsterItem, GridType } from 'angular-gridster2';
 import { MarkdownModule } from 'ngx-markdown';
 
 @Component({
@@ -13,21 +13,21 @@ import { MarkdownModule } from 'ngx-markdown';
   templateUrl: './drag.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [FormsModule, MatButtonModule, MatCheckboxModule, MatIconModule, MatInputModule, MarkdownModule, Gridster, GridsterItemComponent]
+  imports: [FormsModule, MatButtonModule, MatCheckboxModule, MatIconModule, MatInputModule, MarkdownModule, Gridster, GridsterItem]
 })
 export class DragComponent implements OnInit {
   options: GridsterConfig;
-  dashboard: Array<GridsterItem>;
+  dashboard: Array<GridsterItemConfig>;
 
-  static eventStart(item: GridsterItem, itemComponent: GridsterItemComponent, event: MouseEvent): void {
+  static eventStart(item: GridsterItemConfig, itemComponent: GridsterItem, event: MouseEvent): void {
     console.info('eventStart', item, itemComponent, event);
   }
 
-  static eventStop(item: GridsterItem, itemComponent: GridsterItemComponent, event: MouseEvent): void {
+  static eventStop(item: GridsterItemConfig, itemComponent: GridsterItem, event: MouseEvent): void {
     console.info('eventStop', item, itemComponent, event);
   }
 
-  static overlapEvent(source: GridsterItem, target: GridsterItem, grid: Gridster): void {
+  static overlapEvent(source: GridsterItemConfig, target: GridsterItemConfig, grid: Gridster): void {
     console.log('overlap', source, target, grid);
   }
 

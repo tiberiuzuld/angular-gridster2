@@ -17,11 +17,11 @@ import {
 import { debounceTime, Subject, switchMap, takeUntil, timer } from 'rxjs';
 import { GridsterCompact } from './gridsterCompact.service';
 import { GridsterConfigService } from './gridsterConfig.constant';
-import { GridsterConfig, GridsterConfigStrict } from './gridsterConfig.interface';
-import { GridType } from './gridsterConfig.interface';
+import { GridsterConfig, GridsterConfigStrict } from './gridsterConfig';
+import { GridType } from './gridsterConfig';
 import { GridsterEmptyCell } from './gridsterEmptyCell.service';
-import { GridsterItemComponent } from './gridsterItem.component';
-import { GridsterItem } from './gridsterItem.interface';
+import { GridsterItem } from './gridsterItem';
+import { GridsterItemConfig } from './gridsterItemConfig';
 import { GridsterPreviewComponent } from './gridsterPreview.component';
 import { GridsterRenderer } from './gridsterRenderer.service';
 import { GridsterUtils } from './gridsterUtils.service';
@@ -43,13 +43,13 @@ export class Gridster implements OnInit, OnChanges, OnDestroy {
   gridsterPreview = viewChild.required(GridsterPreviewComponent);
 
   @Input() options: GridsterConfig;
-  movingItem: GridsterItem | null;
+  movingItem: GridsterItemConfig | null;
   el: HTMLElement = this.elRef.nativeElement;
   $options: GridsterConfigStrict = JSON.parse(JSON.stringify(GridsterConfigService));
   mobile = false;
   curWidth = 0;
   curHeight = 0;
-  grid: GridsterItemComponent[] = [];
+  grid: GridsterItem[] = [];
   columns = 0;
   rows = 0;
   curColWidth = 0;
@@ -70,7 +70,7 @@ export class Gridster implements OnInit, OnChanges, OnDestroy {
   // ------ Function for swapWhileDragging option
 
   // identical to checkCollision() except that here we add boundaries.
-  static checkCollisionTwoItemsForSwaping(item: GridsterItem, item2: GridsterItem): boolean {
+  static checkCollisionTwoItemsForSwaping(item: GridsterItemConfig, item2: GridsterItemConfig): boolean {
     // if the cols or rows of the items are 1 , doesnt make any sense to set a boundary. Only if the item is bigger we set a boundary
     const horizontalBoundaryItem1 = item.cols === 1 ? 0 : 1;
     const horizontalBoundaryItem2 = item2.cols === 1 ? 0 : 1;
@@ -84,7 +84,7 @@ export class Gridster implements OnInit, OnChanges, OnDestroy {
     );
   }
 
-  checkCollisionTwoItems(item: GridsterItem, item2: GridsterItem): boolean {
+  checkCollisionTwoItems(item: GridsterItemConfig, item2: GridsterItemConfig): boolean {
     const collision = item.x < item2.x + item2.cols && item.x + item.cols > item2.x && item.y < item2.y + item2.rows && item.y + item.rows > item2.y;
     if (!collision) {
       return false;
@@ -124,7 +124,7 @@ export class Gridster implements OnInit, OnChanges, OnDestroy {
         getNextPossiblePosition: this.getNextPossiblePosition,
         getFirstPossiblePosition: this.getFirstPossiblePosition,
         getLastPossiblePosition: this.getLastPossiblePosition,
-        getItemComponent: (item: GridsterItem) => this.getItemComponent(item)
+        getItemComponent: (item: GridsterItemConfig) => this.getItemComponent(item)
       };
       this.columns = this.$options.minCols;
       this.rows = this.$options.minRows + this.$options.addEmptyRowsCount;
@@ -162,7 +162,7 @@ export class Gridster implements OnInit, OnChanges, OnDestroy {
   optionsChanged = (): void => {
     this.setOptions();
     let widgetsIndex: number = this.grid.length - 1;
-    let widget: GridsterItemComponent;
+    let widget: GridsterItem;
     for (; widgetsIndex >= 0; widgetsIndex--) {
       widget = this.grid[widgetsIndex];
       widget.updateOptions();
@@ -335,7 +335,7 @@ export class Gridster implements OnInit, OnChanges, OnDestroy {
     this.updateGrid();
 
     let widgetsIndex: number = this.grid.length - 1;
-    let widget: GridsterItemComponent;
+    let widget: GridsterItem;
     for (; widgetsIndex >= 0; widgetsIndex--) {
       widget = this.grid[widgetsIndex];
       widget.setSize();
@@ -360,7 +360,7 @@ export class Gridster implements OnInit, OnChanges, OnDestroy {
     this.cdRef.markForCheck();
   }
 
-  addItem(itemComponent: GridsterItemComponent): void {
+  addItem(itemComponent: GridsterItem): void {
     if (itemComponent.$item.cols === undefined) {
       itemComponent.$item.cols = this.$options.defaultItemCols;
       itemComponent.item.cols = itemComponent.$item.cols;
@@ -391,7 +391,7 @@ export class Gridster implements OnInit, OnChanges, OnDestroy {
     this.calculateLayout$.next();
   }
 
-  removeItem(itemComponent: GridsterItemComponent): void {
+  removeItem(itemComponent: GridsterItem): void {
     this.grid.splice(this.grid.indexOf(itemComponent), 1);
     this.calculateLayout$.next();
 
@@ -406,8 +406,8 @@ export class Gridster implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  checkCollision(item: GridsterItem, checkRatio?: boolean): GridsterItemComponent | boolean {
-    let collision: GridsterItemComponent | boolean = false;
+  checkCollision(item: GridsterItemConfig, checkRatio?: boolean): GridsterItem | boolean {
+    let collision: GridsterItem | boolean = false;
     if (this.options.itemValidateCallback) {
       collision = !this.options.itemValidateCallback(item);
     }
@@ -423,7 +423,7 @@ export class Gridster implements OnInit, OnChanges, OnDestroy {
     return collision;
   }
 
-  checkGridCollision(item: GridsterItem, checkRatio = false): boolean {
+  checkGridCollision(item: GridsterItemConfig, checkRatio = false): boolean {
     const noNegativePosition = item.y > -1 && item.x > -1;
     const maxGridCols = item.cols + item.x <= this.$options.maxCols;
     const maxGridRows = item.rows + item.y <= this.$options.maxRows;
@@ -448,9 +448,9 @@ export class Gridster implements OnInit, OnChanges, OnDestroy {
     return !(noNegativePosition && maxGridCols && maxGridRows && inRatio && inColsLimits && inRowsLimits && inMinArea && inMaxArea);
   }
 
-  findItemWithItem(item: GridsterItem): GridsterItemComponent | boolean {
+  findItemWithItem(item: GridsterItemConfig): GridsterItem | boolean {
     let widgetsIndex = 0;
-    let widget: GridsterItemComponent;
+    let widget: GridsterItem;
     for (; widgetsIndex < this.grid.length; widgetsIndex++) {
       widget = this.grid[widgetsIndex];
       if (widget.$item !== item && this.checkCollisionTwoItems(widget.$item, item)) {
@@ -460,10 +460,10 @@ export class Gridster implements OnInit, OnChanges, OnDestroy {
     return false;
   }
 
-  findItemsWithItem(item: GridsterItem): Array<GridsterItemComponent> {
-    const a: Array<GridsterItemComponent> = [];
+  findItemsWithItem(item: GridsterItemConfig): Array<GridsterItem> {
+    const a: Array<GridsterItem> = [];
     let widgetsIndex = 0;
-    let widget: GridsterItemComponent;
+    let widget: GridsterItem;
     for (; widgetsIndex < this.grid.length; widgetsIndex++) {
       widget = this.grid[widgetsIndex];
       if (widget.$item !== item && this.checkCollisionTwoItems(widget.$item, item)) {
@@ -473,7 +473,7 @@ export class Gridster implements OnInit, OnChanges, OnDestroy {
     return a;
   }
 
-  autoPositionItem(itemComponent: GridsterItemComponent): void {
+  autoPositionItem(itemComponent: GridsterItem): void {
     if (this.getNextPossiblePosition(itemComponent.$item)) {
       itemComponent.notPlaced = false;
       itemComponent.item.x = itemComponent.$item.x;
@@ -487,7 +487,7 @@ export class Gridster implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  getNextPossiblePosition = (newItem: GridsterItem, startingFrom: { y?: number; x?: number } = {}): boolean => {
+  getNextPossiblePosition = (newItem: GridsterItemConfig, startingFrom: { y?: number; x?: number } = {}): boolean => {
     if (newItem.cols === -1) {
       newItem.cols = this.$options.defaultItemCols;
     }
@@ -522,15 +522,15 @@ export class Gridster implements OnInit, OnChanges, OnDestroy {
     return false;
   };
 
-  getFirstPossiblePosition = (item: GridsterItem): GridsterItem => {
+  getFirstPossiblePosition = (item: GridsterItemConfig): GridsterItemConfig => {
     const tmpItem = Object.assign({}, item);
     this.getNextPossiblePosition(tmpItem);
     return tmpItem;
   };
 
-  getLastPossiblePosition = (item: GridsterItem): GridsterItem => {
+  getLastPossiblePosition = (item: GridsterItemConfig): GridsterItemConfig => {
     let farthestItem: { y: number; x: number } = { y: 0, x: 0 };
-    farthestItem = this.grid.reduce((prev: { y: number; x: number }, curr: GridsterItemComponent) => {
+    farthestItem = this.grid.reduce((prev: { y: number; x: number }, curr: GridsterItem) => {
       const currCoords = {
         y: curr.$item.y + curr.$item.rows - 1,
         x: curr.$item.x + curr.$item.cols - 1
@@ -573,15 +573,15 @@ export class Gridster implements OnInit, OnChanges, OnDestroy {
     return y * this.curRowHeight;
   }
 
-  getItemComponent(item: GridsterItem): GridsterItemComponent | undefined {
+  getItemComponent(item: GridsterItemConfig): GridsterItem | undefined {
     return this.grid.find(c => c.item === item);
   }
 
   // ------ Functions for swapWhileDragging option
 
   // identical to checkCollision() except that this function calls findItemWithItemForSwaping() instead of findItemWithItem()
-  checkCollisionForSwaping(item: GridsterItem): GridsterItemComponent | boolean {
-    let collision: GridsterItemComponent | boolean = false;
+  checkCollisionForSwaping(item: GridsterItemConfig): GridsterItem | boolean {
+    let collision: GridsterItem | boolean = false;
     if (this.options.itemValidateCallback) {
       collision = !this.options.itemValidateCallback(item);
     }
@@ -598,9 +598,9 @@ export class Gridster implements OnInit, OnChanges, OnDestroy {
   }
 
   // identical to findItemWithItem() except that this function calls checkCollisionTwoItemsForSwaping() instead of checkCollisionTwoItems()
-  findItemWithItemForSwapping(item: GridsterItem): GridsterItemComponent | boolean {
+  findItemWithItemForSwapping(item: GridsterItemConfig): GridsterItem | boolean {
     let widgetsIndex: number = this.grid.length - 1;
-    let widget: GridsterItemComponent;
+    let widget: GridsterItem;
     for (; widgetsIndex > -1; widgetsIndex--) {
       widget = this.grid[widgetsIndex];
       if (widget.$item !== item && Gridster.checkCollisionTwoItemsForSwaping(widget.$item, item)) {

@@ -1,12 +1,12 @@
 import { Gridster } from './gridster';
-import { GridsterItemComponent } from './gridsterItem.component';
+import { GridsterItem } from './gridsterItem';
 
 export class GridsterSwap {
-  private swapedItem: GridsterItemComponent | undefined;
-  private gridsterItem: GridsterItemComponent;
+  private swapedItem: GridsterItem | undefined;
+  private gridsterItem: GridsterItem;
   private gridster: Gridster;
 
-  constructor(gridsterItem: GridsterItemComponent) {
+  constructor(gridsterItem: GridsterItem) {
     this.gridsterItem = gridsterItem;
     this.gridster = gridsterItem.gridster;
   }
@@ -56,7 +56,7 @@ export class GridsterSwap {
     }
   }
 
-  checkSwap(pushedBy: GridsterItemComponent): void {
+  checkSwap(pushedBy: GridsterItem): void {
     let gridsterItemCollision;
     if (this.gridster.$options.swapWhileDragging) {
       gridsterItemCollision = this.gridster.checkCollisionForSwaping(pushedBy.$item);
@@ -64,7 +64,7 @@ export class GridsterSwap {
       gridsterItemCollision = this.gridster.checkCollision(pushedBy.$item);
     }
     if (gridsterItemCollision && gridsterItemCollision !== true && gridsterItemCollision.canBeDragged()) {
-      const gridsterItemCollide: GridsterItemComponent = gridsterItemCollision;
+      const gridsterItemCollide: GridsterItem = gridsterItemCollision;
       const copyCollisionX = gridsterItemCollide.$item.x;
       const copyCollisionY = gridsterItemCollide.$item.y;
       const copyX = pushedBy.$item.x;

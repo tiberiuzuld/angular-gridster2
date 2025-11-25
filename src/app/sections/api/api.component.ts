@@ -1,21 +1,8 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnInit,
-  ViewEncapsulation
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
-import {
-  CompactType,
-  Gridster,
-  GridsterConfig,
-  GridsterItem,
-  GridsterItemComponent,
-  GridsterPush,
-  GridType
-} from 'angular-gridster2';
+import { CompactType, Gridster, GridsterConfig, GridsterItemConfig, GridsterItem, GridsterPush, GridType } from 'angular-gridster2';
 import { MarkdownModule } from 'ngx-markdown';
 
 @Component({
@@ -23,18 +10,12 @@ import { MarkdownModule } from 'ngx-markdown';
   templateUrl: './api.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [
-    MatButtonModule,
-    MatIconModule,
-    MarkdownModule,
-    Gridster,
-    GridsterItemComponent
-  ]
+  imports: [MatButtonModule, MatIconModule, MarkdownModule, Gridster, GridsterItem]
 })
 export class ApiComponent implements OnInit {
   options: GridsterConfig;
-  dashboard: GridsterItem[];
-  itemToPush: GridsterItemComponent;
+  dashboard: GridsterItemConfig[];
+  itemToPush: GridsterItem;
 
   ngOnInit(): void {
     this.options = {
@@ -80,7 +61,7 @@ export class ApiComponent implements OnInit {
     this.dashboard.push({ x: 0, y: 0, cols: 1, rows: 1 });
   }
 
-  initItem(item: GridsterItem, itemComponent: GridsterItemComponent): void {
+  initItem(item: GridsterItemConfig, itemComponent: GridsterItem): void {
     this.itemToPush = itemComponent;
   }
 
@@ -92,10 +73,7 @@ export class ApiComponent implements OnInit {
       push.checkPushBack(); // check for items can restore to original position
       push.setPushedItems(); // save the items pushed
       this.itemToPush.setSize();
-      this.itemToPush.checkItemChanges(
-        this.itemToPush.$item,
-        this.itemToPush.item
-      );
+      this.itemToPush.checkItemChanges(this.itemToPush.$item, this.itemToPush.item);
     } else {
       this.itemToPush.$item.rows -= 4;
       push.restoreItems(); // restore to initial state the pushed items

@@ -1,22 +1,10 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnInit,
-  ViewEncapsulation
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 
-import {
-  CompactType,
-  Gridster,
-  GridsterConfig,
-  GridsterItem,
-  GridsterItemComponent,
-  GridType
-} from 'angular-gridster2';
+import { CompactType, Gridster, GridsterConfig, GridsterItemConfig, GridsterItem, GridType } from 'angular-gridster2';
 import { MarkdownModule } from 'ngx-markdown';
 
 @Component({
@@ -24,19 +12,11 @@ import { MarkdownModule } from 'ngx-markdown';
   templateUrl: './compact.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [
-    FormsModule,
-    MatButtonModule,
-    MatIconModule,
-    MatSelectModule,
-    MarkdownModule,
-    Gridster,
-    GridsterItemComponent
-  ]
+  imports: [FormsModule, MatButtonModule, MatIconModule, MatSelectModule, MarkdownModule, Gridster, GridsterItem]
 })
 export class CompactComponent implements OnInit {
   options: GridsterConfig;
-  dashboard: Array<GridsterItem>;
+  dashboard: Array<GridsterItemConfig>;
 
   ngOnInit(): void {
     this.options = {

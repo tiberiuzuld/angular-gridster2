@@ -1,12 +1,12 @@
 import { NO_ERRORS_SCHEMA, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { CompactType, DisplayGrid, Gridster, GridsterItem, GridsterItemComponent, GridType } from 'angular-gridster2';
+import { CompactType, DisplayGrid, Gridster, GridsterItemConfig, GridsterItem, GridType } from 'angular-gridster2';
 import { GridsterCompact } from '../gridsterCompact.service';
 import { GridsterPreviewComponent } from '../gridsterPreview.component';
 
 function emptyCellClick(event: MouseEvent, item): void {}
 
-function itemValidateCallback(item: GridsterItem, itemComponent: GridsterItemComponent): boolean {
+function itemValidateCallback(item: GridsterItemConfig, itemComponent: GridsterItem): boolean {
   return false;
 }
 
@@ -21,7 +21,7 @@ describe('gridsterCompact service', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       providers: [provideZonelessChangeDetection()],
-      imports: [Gridster, GridsterItemComponent, GridsterPreviewComponent],
+      imports: [Gridster, GridsterItem, GridsterPreviewComponent],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
 

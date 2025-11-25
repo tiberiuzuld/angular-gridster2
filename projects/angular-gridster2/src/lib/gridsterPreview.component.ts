@@ -1,6 +1,6 @@
 import { Component, ElementRef, inject, Renderer2, ViewEncapsulation } from '@angular/core';
 import { Gridster } from './gridster';
-import { GridsterItem } from './gridsterItem.interface';
+import { GridsterItemConfig } from './gridsterItemConfig';
 
 @Component({
   selector: 'gridster-preview',
@@ -13,7 +13,7 @@ export class GridsterPreviewComponent {
   private readonly gridster = inject(Gridster);
   private readonly renderer = inject(Renderer2);
 
-  previewStyle(item: GridsterItem | null): void {
+  previewStyle(item: GridsterItemConfig | null): void {
     if (item) {
       this.renderer.setStyle(this.el, 'display', 'block');
       this.gridster.gridRenderer.updateItem(this.el, item, this.renderer);

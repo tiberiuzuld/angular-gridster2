@@ -1,4 +1,4 @@
-import { CompactType, DirTypes, DisplayGrid, GridsterConfig, GridType } from './gridsterConfig.interface';
+import { CompactType, DirTypes, DisplayGrid, GridsterConfig, GridType } from './gridsterConfig';
 
 export const GridsterConfigService: GridsterConfig = {
   gridType: GridType.Fit, // 'fit' will fit the items in the container without scroll;

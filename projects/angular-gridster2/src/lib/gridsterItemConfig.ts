@@ -1,12 +1,12 @@
-import { GridsterItemComponent } from './gridsterItem.component';
+import { GridsterItem } from './gridsterItem';
 
-export type GridsterItem = {
+export type GridsterItemConfig = {
   x: number;
   y: number;
   rows: number;
   cols: number;
   layerIndex?: number;
-  initCallback?: (item: GridsterItem, itemComponent: GridsterItemComponent) => void;
+  initCallback?: (item: GridsterItemConfig, itemComponent: GridsterItem) => void;
   dragEnabled?: boolean;
   resizeEnabled?: boolean;
   resizableHandles?: {

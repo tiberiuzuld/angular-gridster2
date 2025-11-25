@@ -1,7 +1,7 @@
 import { NgZone } from '@angular/core';
 import { Gridster } from './gridster';
-import { GridsterItemComponent } from './gridsterItem.component';
-import { DirTypes } from './gridsterConfig.interface';
+import { GridsterItem } from './gridsterItem';
+import { DirTypes } from './gridsterConfig';
 import { GridsterPush } from './gridsterPush.service';
 import { GridsterPushResize } from './gridsterPushResize.service';
 import { GridsterResizeEventType } from './gridsterResizeEventType.interface';
@@ -10,7 +10,7 @@ import { cancelScroll, scroll } from './gridsterScroll.service';
 import { GridsterUtils } from './gridsterUtils.service';
 
 export class GridsterResizable {
-  gridsterItem: GridsterItemComponent;
+  gridsterItem: GridsterItem;
   gridster: Gridster;
   lastMouse: {
     clientX: number;
@@ -70,7 +70,7 @@ export class GridsterResizable {
   hasRatio: boolean;
 
   constructor(
-    gridsterItem: GridsterItemComponent,
+    gridsterItem: GridsterItem,
     gridster: Gridster,
     private zone: NgZone
   ) {

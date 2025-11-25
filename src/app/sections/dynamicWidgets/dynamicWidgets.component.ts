@@ -1,21 +1,8 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  OnInit,
-  ViewEncapsulation
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
-import {
-  DisplayGrid,
-  Gridster,
-  GridsterConfig,
-  GridsterItem,
-  GridsterItemComponent,
-  GridType
-} from 'angular-gridster2';
+import { DisplayGrid, Gridster, GridsterConfig, GridsterItemConfig, GridsterItem, GridType } from 'angular-gridster2';
 import { MarkdownModule } from 'ngx-markdown';
 import { ParentDynamicComponent } from './parentDynamic.component';
 
@@ -24,19 +11,12 @@ import { ParentDynamicComponent } from './parentDynamic.component';
   templateUrl: './dynamicWidgets.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [
-    MatButtonModule,
-    MatIconModule,
-    MarkdownModule,
-    Gridster,
-    GridsterItemComponent,
-    ParentDynamicComponent
-  ]
+  imports: [MatButtonModule, MatIconModule, MarkdownModule, Gridster, GridsterItem, ParentDynamicComponent]
 })
 export class DynamicWidgetsComponent implements OnInit {
   options: GridsterConfig;
-  dashboard: GridsterItem[];
-  resizeEvent: EventEmitter<GridsterItem> = new EventEmitter<GridsterItem>();
+  dashboard: GridsterItemConfig[];
+  resizeEvent: EventEmitter<GridsterItemConfig> = new EventEmitter<GridsterItemConfig>();
 
   ngOnInit(): void {
     this.options = {

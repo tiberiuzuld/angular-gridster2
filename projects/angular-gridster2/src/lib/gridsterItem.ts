@@ -16,7 +16,7 @@ import {
 import { Gridster } from './gridster';
 
 import { GridsterDraggable } from './gridsterDraggable.service';
-import type { GridsterItem } from './gridsterItem.interface';
+import type { GridsterItemConfig } from './gridsterItemConfig';
 import { GridsterResizable } from './gridsterResizable.service';
 import { GridsterUtils } from './gridsterUtils.service';
 
@@ -29,19 +29,19 @@ import { GridsterUtils } from './gridsterUtils.service';
     '[style.z-index]': `zIndex()`
   }
 })
-export class GridsterItemComponent implements OnInit, OnDestroy, OnChanges {
-  @Input() item: GridsterItem;
+export class GridsterItem implements OnInit, OnDestroy, OnChanges {
+  @Input() item: GridsterItemConfig;
   itemInit = output<{
-    item: GridsterItem;
-    itemComponent: GridsterItemComponent;
+    item: GridsterItemConfig;
+    itemComponent: GridsterItem;
   }>();
   itemChange = output<{
-    item: GridsterItem;
-    itemComponent: GridsterItemComponent;
+    item: GridsterItemConfig;
+    itemComponent: GridsterItem;
   }>();
   itemResize = output<{
-    item: GridsterItem;
-    itemComponent: GridsterItemComponent;
+    item: GridsterItemConfig;
+    itemComponent: GridsterItem;
   }>();
 
   readonly cdRef = inject(ChangeDetectorRef);
@@ -50,7 +50,7 @@ export class GridsterItemComponent implements OnInit, OnDestroy, OnChanges {
   readonly renderer = inject(Renderer2);
   private readonly zone = inject(NgZone);
 
-  $item: GridsterItem = {
+  $item: GridsterItemConfig = {
     cols: -1,
     rows: -1,
     x: -1,
@@ -172,7 +172,7 @@ export class GridsterItemComponent implements OnInit, OnDestroy, OnChanges {
     this.itemChange.emit({ item: this.item, itemComponent: this });
   }
 
-  checkItemChanges(newValue: GridsterItem, oldValue: GridsterItem): void {
+  checkItemChanges(newValue: GridsterItemConfig, oldValue: GridsterItemConfig): void {
     if (newValue.rows === oldValue.rows && newValue.cols === oldValue.cols && newValue.x === oldValue.x && newValue.y === oldValue.y) {
       return;
     }

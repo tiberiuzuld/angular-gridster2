@@ -1,7 +1,7 @@
 import { Gridster } from './gridster';
-import { CompactType } from './gridsterConfig.interface';
-import { GridsterItemComponent } from './gridsterItem.component';
-import { GridsterItem } from './gridsterItem.interface';
+import { CompactType } from './gridsterConfig';
+import { GridsterItem } from './gridsterItem';
+import { GridsterItemConfig } from './gridsterItemConfig';
 
 export class GridsterCompact {
   constructor(private gridster: Gridster) {}
@@ -50,7 +50,7 @@ export class GridsterCompact {
     }
   }
 
-  checkCompactItem(item: GridsterItem): void {
+  checkCompactItem(item: GridsterItemConfig): void {
     if (this.gridster.$options.compactType !== CompactType.None) {
       if (this.gridster.$options.compactType === CompactType.CompactUp) {
         this.moveTillCollision(item, 'y', -1);
@@ -87,7 +87,7 @@ export class GridsterCompact {
 
   private checkCompactMovement(direction: 'x' | 'y', delta: number): void {
     let widgetMoved = false;
-    this.gridster.grid.forEach((widget: GridsterItemComponent) => {
+    this.gridster.grid.forEach((widget: GridsterItem) => {
       if (widget.$item.compactEnabled !== false) {
         const moved = this.moveTillCollision(widget.$item, direction, delta);
         if (moved) {
@@ -102,7 +102,7 @@ export class GridsterCompact {
     }
   }
 
-  private moveTillCollision(item: GridsterItem, direction: 'x' | 'y', delta: number): boolean {
+  private moveTillCollision(item: GridsterItemConfig, direction: 'x' | 'y', delta: number): boolean {
     item[direction] += delta;
     if (this.gridster.checkCollision(item)) {
       item[direction] -= delta;
@@ -116,8 +116,8 @@ export class GridsterCompact {
   private checkCompactGrid(): void {
     // Sort items by their current position (top to bottom, left to right)
     const sortedItems = this.gridster.grid
-      .filter((widget: GridsterItemComponent) => widget.$item.compactEnabled !== false)
-      .sort((a: GridsterItemComponent, b: GridsterItemComponent) => {
+      .filter((widget: GridsterItem) => widget.$item.compactEnabled !== false)
+      .sort((a: GridsterItem, b: GridsterItem) => {
         if (a.$item.y !== b.$item.y) {
           return a.$item.y - b.$item.y;
         }
@@ -129,7 +129,7 @@ export class GridsterCompact {
     let currentX = 0;
     let maxYInRow = 0;
 
-    sortedItems.forEach((widget: GridsterItemComponent) => {
+    sortedItems.forEach((widget: GridsterItem) => {
       const item = widget.$item;
 
       // Check if item fits in current row
@@ -159,7 +159,7 @@ export class GridsterCompact {
     });
   }
 
-  private moveToGridPosition(item: GridsterItem): void {
+  private moveToGridPosition(item: GridsterItemConfig): void {
     // Find the next available position in grid layout
     let currentY = 0;
     let currentX = 0;
@@ -167,8 +167,8 @@ export class GridsterCompact {
 
     // Sort existing items to find occupied positions
     const sortedItems = this.gridster.grid
-      .filter((widget: GridsterItemComponent) => widget.$item !== item)
-      .sort((a: GridsterItemComponent, b: GridsterItemComponent) => {
+      .filter((widget: GridsterItem) => widget.$item !== item)
+      .sort((a: GridsterItem, b: GridsterItem) => {
         if (a.$item.y !== b.$item.y) {
           return a.$item.y - b.$item.y;
         }
