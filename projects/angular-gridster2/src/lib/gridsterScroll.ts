@@ -4,14 +4,16 @@ import { DirTypes } from './gridsterConfig';
 
 let scrollSensitivity: number;
 let scrollSpeed: number;
-const intervalDuration = 50;
+const intervalDuration = 20;
 let gridsterElement: HTMLElement | null;
 let resizeEvent: boolean | undefined;
 let resizeEventType: GridsterResizeEventType | undefined;
-let intervalE: number;
-let intervalW: number;
-let intervalN: number;
-let intervalS: number;
+let scrollE = false;
+let scrollW = false;
+let scrollN = false;
+let scrollS = false;
+let animationH: number | null;
+let animationV: number | null = null;
 
 type Position = Pick<MouseEvent, 'clientX' | 'clientY'>;
 
@@ -47,16 +49,16 @@ export function scroll(
   if (!gridster.$options.disableScrollVertical) {
     if (lastMouse.clientY < clientY && elemBottomOffset < scrollSensitivity) {
       cancelN();
-      if ((resizeEvent && resizeEventType && !resizeEventType.south) || intervalS) {
+      if ((resizeEvent && resizeEventType && !resizeEventType.south) || scrollS) {
         return;
       }
-      intervalS = startVertical(1, calculateItemPosition, lastMouse);
+      startVertical(1, calculateItemPosition, lastMouse);
     } else if (lastMouse.clientY > clientY && offsetTop > 0 && elemTopOffset < scrollSensitivity) {
       cancelS();
-      if ((resizeEvent && resizeEventType && !resizeEventType.north) || intervalN) {
+      if ((resizeEvent && resizeEventType && !resizeEventType.north) || scrollN) {
         return;
       }
-      intervalN = startVertical(-1, calculateItemPosition, lastMouse);
+      startVertical(-1, calculateItemPosition, lastMouse);
     } else if (lastMouse.clientY !== clientY) {
       cancelVertical();
     }
@@ -73,43 +75,88 @@ export function scroll(
     const shouldScrollLeft = isRTL ? moveRight : moveLeft;
     if (shouldScrollRight && elemRightOffset <= scrollSensitivity) {
       cancelW();
-      if ((resizeEvent && resizeEventType && !resizeEventType.east) || intervalE) return;
-      intervalE = startHorizontal(1, calculateItemPosition, lastMouse, isRTL);
+      if ((resizeEvent && resizeEventType && !resizeEventType.east) || scrollE) return;
+      startHorizontal(1, calculateItemPosition, lastMouse, isRTL);
     } else if (shouldScrollLeft && offsetLeft > 0 && elemLeftOffset < scrollSensitivity) {
       cancelE();
-      if ((resizeEvent && resizeEventType && !resizeEventType.west) || intervalW) return;
-      intervalW = startHorizontal(-1, calculateItemPosition, lastMouse, isRTL);
+      if ((resizeEvent && resizeEventType && !resizeEventType.west) || scrollW) return;
+      startHorizontal(-1, calculateItemPosition, lastMouse, isRTL);
     } else if (lastMouse.clientX !== clientX) {
       cancelHorizontal();
     }
   }
 }
 
-function startVertical(sign: number, calculateItemPosition: CalculatePosition, lastMouse: Position): number {
+function startVertical(sign: number, calculateItemPosition: CalculatePosition, lastMouse: Position): void {
   let clientY = lastMouse.clientY;
-  return window.setInterval(() => {
+
+  if (sign > 0) {
+    scrollS = true;
+  } else {
+    scrollN = true;
+  }
+
+  let lastUpdate: number | undefined;
+
+  const callback = (timestamp: number) => {
+    if (lastUpdate === undefined) {
+      lastUpdate = timestamp;
+      animationV = requestAnimationFrame(callback);
+      return;
+    }
+
     if (!gridsterElement || (sign === -1 && gridsterElement.scrollTop - scrollSpeed < 0)) {
       cancelVertical();
+      return;
     }
-    gridsterElement!.scrollTop += sign * scrollSpeed;
+
+    const delta = (timestamp - lastUpdate) / intervalDuration;
+    lastUpdate = timestamp;
+
+    gridsterElement!.scrollTop += sign * Math.round(scrollSpeed * delta);
     clientY += sign * scrollSpeed;
     calculateItemPosition({ clientX: lastMouse.clientX, clientY });
-  }, intervalDuration);
+    animationV = requestAnimationFrame(callback);
+  };
+  animationV = requestAnimationFrame(callback);
 }
 
-function startHorizontal(sign: number, calculateItemPosition: CalculatePosition, lastMouse: Position, isRTL: boolean): number {
+function startHorizontal(sign: number, calculateItemPosition: CalculatePosition, lastMouse: Position, isRTL: boolean): void {
   let clientX = lastMouse.clientX;
-  return window.setInterval(() => {
+
+  if (sign > 0) {
+    scrollE = true;
+  } else {
+    scrollW = true;
+  }
+
+  let lastUpdate: number | undefined;
+
+  const callback = (timestamp: number) => {
+    if (lastUpdate === undefined) {
+      lastUpdate = timestamp;
+      animationH = requestAnimationFrame(callback);
+      return;
+    }
+
     if (!gridsterElement) {
       cancelHorizontal();
       return;
     }
-    const scrollAmount = sign * scrollSpeed;
+
+    const delta = (timestamp - lastUpdate) / intervalDuration;
+    lastUpdate = timestamp;
+
+    const scrollAmount = sign * Math.round(scrollSpeed * delta);
     const left = isRTL ? -scrollAmount : scrollAmount;
-    gridsterElement.scrollBy({ left, behavior: 'auto' });
+
+    gridsterElement.scrollLeft += left;
     clientX += left;
     calculateItemPosition({ clientX, clientY: lastMouse.clientY });
-  }, intervalDuration);
+    animationH = requestAnimationFrame(callback);
+  };
+
+  animationH = requestAnimationFrame(callback);
 }
 
 export function cancelScroll(): void {
@@ -119,39 +166,41 @@ export function cancelScroll(): void {
 }
 
 function cancelHorizontal(): void {
-  cancelE();
-  cancelW();
+  if (animationH !== null) {
+    cancelAnimationFrame(animationH);
+    scrollE = false;
+    scrollW = false;
+  }
 }
 
 function cancelVertical(): void {
-  cancelN();
-  cancelS();
+  if (animationV !== null) {
+    cancelAnimationFrame(animationV);
+    scrollN = false;
+    scrollS = false;
+  }
 }
 
 function cancelE(): void {
-  if (intervalE) {
-    clearInterval(intervalE);
-    intervalE = 0;
+  if (scrollE !== null) {
+    cancelHorizontal();
   }
 }
 
 function cancelW(): void {
-  if (intervalW) {
-    clearInterval(intervalW);
-    intervalW = 0;
+  if (scrollW !== null) {
+    cancelHorizontal();
   }
 }
 
 function cancelS(): void {
-  if (intervalS) {
-    clearInterval(intervalS);
-    intervalS = 0;
+  if (scrollS !== null) {
+    cancelVertical();
   }
 }
 
 function cancelN(): void {
-  if (intervalN) {
-    clearInterval(intervalN);
-    intervalN = 0;
+  if (scrollN !== null) {
+    cancelVertical();
   }
 }
