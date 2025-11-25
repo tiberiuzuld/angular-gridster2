@@ -1,57 +1,37 @@
-import { GridsterUtils } from '../gridsterUtils.service';
+import { GridsterUtils } from '../gridsterUtils';
 
 describe('merge method', () => {
   it('should check if merge is working correctly', () => {
     const obj1 = { key1: 'value1', key2: 'value2' };
     const obj2 = { key1: 'value2', key2: 'value4' };
     const properties = { key1: 'value2', key2: 'value5' };
-    expect(JSON.stringify(GridsterUtils.merge(obj1, obj2, properties))).toBe(
-      JSON.stringify(obj2)
-    );
-    expect(
-      JSON.stringify(GridsterUtils.merge(obj1, obj2, properties))
-    ).not.toBe(JSON.stringify(properties));
+    expect(JSON.stringify(GridsterUtils.merge(obj1, obj2, properties))).toBe(JSON.stringify(obj2));
+    expect(JSON.stringify(GridsterUtils.merge(obj1, obj2, properties))).not.toBe(JSON.stringify(properties));
   });
   it("should check if 'properties' doesn't contain any part of 'obj2", () => {
     const obj1 = { key1: 'value1' };
     const obj2 = { key1: 'value3', key2: 'value4' };
     const properties = { key3: 'value2' };
-    expect(JSON.stringify(GridsterUtils.merge(obj1, obj2, properties))).toBe(
-      JSON.stringify(obj1)
-    );
-    expect(
-      JSON.stringify(GridsterUtils.merge(obj1, obj2, properties))
-    ).not.toBe(JSON.stringify(properties));
+    expect(JSON.stringify(GridsterUtils.merge(obj1, obj2, properties))).toBe(JSON.stringify(obj1));
+    expect(JSON.stringify(GridsterUtils.merge(obj1, obj2, properties))).not.toBe(JSON.stringify(properties));
   });
   it("should check obj1 when typeof obj2['p'] == 'object", () => {
     const obj1 = { key1: 'value1', key3: {} };
     const obj2 = { key1: 'value3', key2: 'value4', key3: { key4: 'value10' } };
     const properties = { key1: 'value3', key3: { key4: 'value11' } };
     const output = { key1: 'value3', key3: { key4: 'value10' } };
-    expect(JSON.stringify(GridsterUtils.merge(obj1, obj2, properties))).toBe(
-      JSON.stringify(output)
-    );
-    expect(
-      JSON.stringify(GridsterUtils.merge(obj1, obj2, properties))
-    ).not.toBe(JSON.stringify(obj2));
-    expect(
-      JSON.stringify(GridsterUtils.merge(obj1, obj2, properties))
-    ).not.toBe(JSON.stringify(properties));
+    expect(JSON.stringify(GridsterUtils.merge(obj1, obj2, properties))).toBe(JSON.stringify(output));
+    expect(JSON.stringify(GridsterUtils.merge(obj1, obj2, properties))).not.toBe(JSON.stringify(obj2));
+    expect(JSON.stringify(GridsterUtils.merge(obj1, obj2, properties))).not.toBe(JSON.stringify(properties));
   });
   it("should check obj1 when typeof obj2['p'] == 'object and obj1 does not include 'p'", () => {
     const obj1 = { key1: 'value1' };
     const obj2 = { key1: 'value3', key2: 'value4', key3: { key4: 'value10' } };
     const properties = { key1: 'value3', key3: { key4: 'value11' } };
     const output = { key1: 'value3', key3: { key4: 'value10' } };
-    expect(JSON.stringify(GridsterUtils.merge(obj1, obj2, properties))).toBe(
-      JSON.stringify(output)
-    );
-    expect(
-      JSON.stringify(GridsterUtils.merge(obj1, obj2, properties))
-    ).not.toBe(JSON.stringify(obj2));
-    expect(
-      JSON.stringify(GridsterUtils.merge(obj1, obj2, properties))
-    ).not.toBe(JSON.stringify(properties));
+    expect(JSON.stringify(GridsterUtils.merge(obj1, obj2, properties))).toBe(JSON.stringify(output));
+    expect(JSON.stringify(GridsterUtils.merge(obj1, obj2, properties))).not.toBe(JSON.stringify(obj2));
+    expect(JSON.stringify(GridsterUtils.merge(obj1, obj2, properties))).not.toBe(JSON.stringify(properties));
   });
 });
 
@@ -111,9 +91,7 @@ describe('check content class for event', () => {
         }
       }
     };
-    expect(GridsterUtils.checkContentClassForEvent(gridster, event)).toBe(
-      false
-    );
+    expect(GridsterUtils.checkContentClassForEvent(gridster, event)).toBe(false);
   });
   it('should check when draghandleClass is false but ignoreContentClass is true', () => {
     const gridster: any = {
@@ -147,16 +125,8 @@ describe('check content class', () => {
     // expect(GridsterUtils.checkContentClass(target, current, contentClass)).toBe(false);
   });
   it('should check in classList', () => {
-    expect(
-      GridsterUtils.checkContentClass(
-        event.target,
-        event.currentTarget,
-        'divClass'
-      )
-    ).toBe(true);
-    expect(
-      GridsterUtils.checkContentClass(event.target, event.currentTarget, 'body')
-    ).toBe(true);
+    expect(GridsterUtils.checkContentClass(event.target, event.currentTarget, 'divClass')).toBe(true);
+    expect(GridsterUtils.checkContentClass(event.target, event.currentTarget, 'body')).toBe(true);
   });
 });
 

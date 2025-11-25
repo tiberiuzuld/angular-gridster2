@@ -2,12 +2,12 @@ import { NgZone } from '@angular/core';
 import { Gridster } from './gridster';
 import { GridsterItem } from './gridsterItem';
 import { DirTypes } from './gridsterConfig';
-import { GridsterPush } from './gridsterPush.service';
-import { GridsterPushResize } from './gridsterPushResize.service';
-import { GridsterResizeEventType } from './gridsterResizeEventType.interface';
+import { GridsterPush } from './gridsterPush';
+import { GridsterPushResize } from './gridsterPushResize';
+import { GridsterResizeEventType } from './gridsterResizeEventType';
 
-import { cancelScroll, scroll } from './gridsterScroll.service';
-import { GridsterUtils } from './gridsterUtils.service';
+import { cancelScroll, scroll } from './gridsterScroll';
+import { GridsterUtils } from './gridsterUtils';
 
 export class GridsterResizable {
   gridsterItem: GridsterItem;

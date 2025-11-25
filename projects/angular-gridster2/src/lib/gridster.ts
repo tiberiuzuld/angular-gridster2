@@ -15,16 +15,16 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { debounceTime, Subject, switchMap, takeUntil, timer } from 'rxjs';
-import { GridsterCompact } from './gridsterCompact.service';
+import { GridsterCompact } from './gridsterCompact';
 import { GridsterConfigService } from './gridsterConfig.constant';
 import { GridsterConfig, GridsterConfigStrict } from './gridsterConfig';
 import { GridType } from './gridsterConfig';
-import { GridsterEmptyCell } from './gridsterEmptyCell.service';
+import { GridsterEmptyCell } from './gridsterEmptyCell';
 import { GridsterItem } from './gridsterItem';
 import { GridsterItemConfig } from './gridsterItemConfig';
-import { GridsterPreviewComponent } from './gridsterPreview.component';
-import { GridsterRenderer } from './gridsterRenderer.service';
-import { GridsterUtils } from './gridsterUtils.service';
+import { GridsterPreview } from './gridsterPreview';
+import { GridsterRenderer } from './gridsterRenderer';
+import { GridsterUtils } from './gridsterUtils';
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
@@ -32,7 +32,7 @@ import { GridsterUtils } from './gridsterUtils.service';
   templateUrl: './gridster.html',
   styleUrl: './gridster.css',
   encapsulation: ViewEncapsulation.None,
-  imports: [NgStyle, GridsterPreviewComponent]
+  imports: [NgStyle, GridsterPreview]
 })
 export class Gridster implements OnInit, OnChanges, OnDestroy {
   readonly renderer = inject(Renderer2);
@@ -40,7 +40,7 @@ export class Gridster implements OnInit, OnChanges, OnDestroy {
   readonly zone = inject(NgZone);
   readonly elRef = inject<ElementRef<HTMLElement>>(ElementRef);
 
-  gridsterPreview = viewChild.required(GridsterPreviewComponent);
+  gridsterPreview = viewChild.required(GridsterPreview);
 
   @Input() options: GridsterConfig;
   movingItem: GridsterItemConfig | null;

@@ -8,7 +8,7 @@ import { GridsterItemConfig } from './gridsterItemConfig';
   styleUrl: './gridsterPreview.css',
   encapsulation: ViewEncapsulation.None
 })
-export class GridsterPreviewComponent {
+export class GridsterPreview {
   private readonly el = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
   private readonly gridster = inject(Gridster);
   private readonly renderer = inject(Renderer2);

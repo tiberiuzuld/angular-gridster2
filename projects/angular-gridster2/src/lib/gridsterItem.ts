@@ -15,10 +15,10 @@ import {
 } from '@angular/core';
 import { Gridster } from './gridster';
 
-import { GridsterDraggable } from './gridsterDraggable.service';
+import { GridsterDraggable } from './gridsterDraggable';
 import type { GridsterItemConfig } from './gridsterItemConfig';
-import { GridsterResizable } from './gridsterResizable.service';
-import { GridsterUtils } from './gridsterUtils.service';
+import { GridsterResizable } from './gridsterResizable';
+import { GridsterUtils } from './gridsterUtils';
 
 @Component({
   selector: 'gridster-item',

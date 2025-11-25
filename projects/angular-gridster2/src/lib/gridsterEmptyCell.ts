@@ -1,5 +1,5 @@
 import { Gridster } from './gridster';
-import { GridsterUtils } from './gridsterUtils.service';
+import { GridsterUtils } from './gridsterUtils';
 import { GridsterItemConfig } from './gridsterItemConfig';
 
 export class GridsterEmptyCell {

@@ -1,5 +1,5 @@
 import { Gridster } from './gridster';
-import { GridsterResizeEventType } from './gridsterResizeEventType.interface';
+import { GridsterResizeEventType } from './gridsterResizeEventType';
 import { DirTypes } from './gridsterConfig';
 
 let scrollSensitivity: number;

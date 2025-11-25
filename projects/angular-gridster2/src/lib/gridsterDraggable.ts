@@ -2,11 +2,11 @@ import { ChangeDetectorRef, NgZone } from '@angular/core';
 import { Gridster } from './gridster';
 import { DirTypes } from './gridsterConfig';
 import { GridsterItem } from './gridsterItem';
-import { GridsterPush } from './gridsterPush.service';
-import { cancelScroll, scroll } from './gridsterScroll.service';
+import { GridsterPush } from './gridsterPush';
+import { cancelScroll, scroll } from './gridsterScroll';
 
-import { GridsterSwap } from './gridsterSwap.service';
-import { GridsterUtils } from './gridsterUtils.service';
+import { GridsterSwap } from './gridsterSwap';
+import { GridsterUtils } from './gridsterUtils';
 
 const GRIDSTER_ITEM_RESIZABLE_HANDLER_CLASS = 'gridster-item-resizable-handler';
 
