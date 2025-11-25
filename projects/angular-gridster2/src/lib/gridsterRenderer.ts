@@ -3,7 +3,7 @@ import { Renderer2 } from '@angular/core';
 import { Gridster } from './gridster';
 import { DirTypes, GridType } from './gridsterConfig';
 import { GridsterItemConfig } from './gridsterItemConfig';
-import { CommonGridStyle, GridColumnCachedStyle, GridRowCachedStyle } from './gridsterRenderer.interface';
+import { CommonGridStyle, GridColumnCachedStyle, GridRowCachedStyle } from './gridsterRendererTypes';
 
 export class GridsterRenderer {
   /**
