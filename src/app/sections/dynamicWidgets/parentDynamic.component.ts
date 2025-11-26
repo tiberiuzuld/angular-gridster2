@@ -1,9 +1,5 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  ViewEncapsulation
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, input, ViewEncapsulation } from '@angular/core';
+import { GridsterItemConfig } from 'angular-gridster2';
 import { WidgetAComponent } from './widgetA.component';
 import { WidgetBComponent } from './widgetB.component';
 import { WidgetCComponent } from './widgetC.component';
@@ -16,8 +12,6 @@ import { WidgetCComponent } from './widgetC.component';
   imports: [WidgetAComponent, WidgetBComponent, WidgetCComponent]
 })
 export class ParentDynamicComponent {
-  @Input()
-  widget;
-  @Input()
-  resizeEvent;
+  widget = input.required<GridsterItemConfig>();
+  resizeEvent = input.required<EventEmitter<GridsterItemConfig>>();
 }

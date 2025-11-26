@@ -15,8 +15,8 @@ import { TrackByItemComponent } from './trackByItem.component';
 })
 export class TrackByComponent implements OnInit {
   options: GridsterConfig;
-  dashboard: Array<GridsterItemConfig>;
-  dashboardOriginal: Array<GridsterItemConfig>;
+  dashboard: GridsterItemConfig[];
+  dashboardOriginal: GridsterItemConfig[];
 
   static itemInit(item: GridsterItemConfig, itemComponent: GridsterItem): void {
     console.info('itemInitialized', item, itemComponent);
@@ -90,11 +90,11 @@ export class TrackByComponent implements OnInit {
       y: 0,
       cols: 1,
       rows: 1,
-      id: this.dashboard.length
+      id: this.dashboard.at(-1)?.id + 1
     });
   }
 
-  removeItem($event: MouseEvent | TouchEvent, item): void {
+  removeItem($event: MouseEvent | TouchEvent, item: GridsterItemConfig): void {
     $event.preventDefault();
     $event.stopPropagation();
     this.dashboard.splice(this.dashboard.indexOf(item), 1);

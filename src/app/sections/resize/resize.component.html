@@ -12,69 +12,19 @@
 </div>
 @if (options.resizable && options.resizable.handles) {
   <div class="options-header">
-    <mat-checkbox
-      [(ngModel)]="options.resizable.enabled"
-      (ngModelChange)="changedOptions()"
-    >
-      Resize Items
-    </mat-checkbox>
+    <mat-checkbox [(ngModel)]="options.resizable.enabled" (ngModelChange)="changedOptions()"> Resize Items </mat-checkbox>
     <mat-form-field>
       <mat-label>Delay Start ms</mat-label>
-      <input
-        matInput
-        [(ngModel)]="options.resizable.delayStart"
-        type="number"
-        (ngModelChange)="changedOptions()"
-      />
+      <input matInput [(ngModel)]="options.resizable.delayStart" (ngModelChange)="changedOptions()" type="number" />
     </mat-form-field>
-    <mat-checkbox
-      [(ngModel)]="options.resizable.handles.s"
-      (ngModelChange)="changedOptions()"
-    >
-      Resize South
-    </mat-checkbox>
-    <mat-checkbox
-      [(ngModel)]="options.resizable.handles.e"
-      (ngModelChange)="changedOptions()"
-    >
-      Resize East
-    </mat-checkbox>
-    <mat-checkbox
-      [(ngModel)]="options.resizable.handles.n"
-      (ngModelChange)="changedOptions()"
-    >
-      Resize North
-    </mat-checkbox>
-    <mat-checkbox
-      [(ngModel)]="options.resizable.handles.w"
-      (ngModelChange)="changedOptions()"
-    >
-      Resize West
-    </mat-checkbox>
-    <mat-checkbox
-      [(ngModel)]="options.resizable.handles.se"
-      (ngModelChange)="changedOptions()"
-    >
-      Resize South-East
-    </mat-checkbox>
-    <mat-checkbox
-      [(ngModel)]="options.resizable.handles.ne"
-      (ngModelChange)="changedOptions()"
-    >
-      Resize North-East
-    </mat-checkbox>
-    <mat-checkbox
-      [(ngModel)]="options.resizable.handles.sw"
-      (ngModelChange)="changedOptions()"
-    >
-      Resize South-West
-    </mat-checkbox>
-    <mat-checkbox
-      [(ngModel)]="options.resizable.handles.nw"
-      (ngModelChange)="changedOptions()"
-    >
-      Resize North-West
-    </mat-checkbox>
+    <mat-checkbox [(ngModel)]="options.resizable.handles.s" (ngModelChange)="changedOptions()"> Resize South </mat-checkbox>
+    <mat-checkbox [(ngModel)]="options.resizable.handles.e" (ngModelChange)="changedOptions()"> Resize East </mat-checkbox>
+    <mat-checkbox [(ngModel)]="options.resizable.handles.n" (ngModelChange)="changedOptions()"> Resize North </mat-checkbox>
+    <mat-checkbox [(ngModel)]="options.resizable.handles.w" (ngModelChange)="changedOptions()"> Resize West </mat-checkbox>
+    <mat-checkbox [(ngModel)]="options.resizable.handles.se" (ngModelChange)="changedOptions()"> Resize South-East </mat-checkbox>
+    <mat-checkbox [(ngModel)]="options.resizable.handles.ne" (ngModelChange)="changedOptions()"> Resize North-East </mat-checkbox>
+    <mat-checkbox [(ngModel)]="options.resizable.handles.sw" (ngModelChange)="changedOptions()"> Resize South-West </mat-checkbox>
+    <mat-checkbox [(ngModel)]="options.resizable.handles.nw" (ngModelChange)="changedOptions()"> Resize North-West </mat-checkbox>
     <button mat-mini-fab (click)="addItem()" class="add-button cols-2">
       <mat-icon>add</mat-icon>
     </button>
@@ -82,14 +32,10 @@
 }
 
 <gridster [options]="options">
-  @for (item of dashboard; track item) {
+  @for (item of dashboard; track item.id) {
     <gridster-item [item]="item">
       <div class="button-holder">
-        <button
-          mat-mini-fab
-          (mousedown)="removeItem($event, item)"
-          (touchstart)="removeItem($event, item)"
-        >
+        <button mat-mini-fab (mousedown)="removeItem($event, item)" (touchstart)="removeItem($event, item)">
           <mat-icon>delete</mat-icon>
         </button>
       </div>

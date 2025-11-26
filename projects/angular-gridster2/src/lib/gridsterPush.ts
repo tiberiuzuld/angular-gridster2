@@ -2,15 +2,14 @@ import { Gridster } from './gridster';
 import { GridsterItem } from './gridsterItem';
 
 export class GridsterPush {
-  public fromSouth: string;
-  public fromNorth: string;
-  public fromEast: string;
-  public fromWest: string;
-  private pushedItems: GridsterItem[];
-  private pushedItemsTemp: GridsterItem[];
-  private pushedItemsTempPath: { x: number; y: number }[][];
-  private pushedItemsPath: { x: number; y: number }[][];
-  private gridsterItem: GridsterItem;
+  public fromSouth: string = 'fromSouth';
+  public fromNorth: string = 'fromNorth';
+  public fromEast: string = 'fromEast';
+  public fromWest: string = 'fromWest';
+  private pushedItems: GridsterItem[] = [];
+  private pushedItemsTemp: GridsterItem[] = [];
+  private pushedItemsTempPath: { x: number; y: number }[][] = [];
+  private pushedItemsPath: { x: number; y: number }[][] = [];
   private gridster: Gridster;
   private pushedItemsOrder: GridsterItem[];
   private tryPattern: {
@@ -18,26 +17,16 @@ export class GridsterPush {
     fromWest: ((gridsterItemCollide: GridsterItem, gridsterItem: GridsterItem) => boolean)[];
     fromNorth: ((gridsterItemCollide: GridsterItem, gridsterItem: GridsterItem) => boolean)[];
     fromSouth: ((gridsterItemCollide: GridsterItem, gridsterItem: GridsterItem) => boolean)[];
+  } = {
+    fromEast: [this.tryWest, this.trySouth, this.tryNorth, this.tryEast],
+    fromWest: [this.tryEast, this.trySouth, this.tryNorth, this.tryWest],
+    fromNorth: [this.trySouth, this.tryEast, this.tryWest, this.tryNorth],
+    fromSouth: [this.tryNorth, this.tryEast, this.tryWest, this.trySouth]
   };
   private iteration = 0;
 
-  constructor(gridsterItem: GridsterItem) {
-    this.pushedItems = [];
-    this.pushedItemsTemp = [];
-    this.pushedItemsTempPath = [];
-    this.pushedItemsPath = [];
-    this.gridsterItem = gridsterItem;
+  constructor(private gridsterItem: GridsterItem) {
     this.gridster = gridsterItem.gridster;
-    this.tryPattern = {
-      fromEast: [this.tryWest, this.trySouth, this.tryNorth, this.tryEast],
-      fromWest: [this.tryEast, this.trySouth, this.tryNorth, this.tryWest],
-      fromNorth: [this.trySouth, this.tryEast, this.tryWest, this.tryNorth],
-      fromSouth: [this.tryNorth, this.tryEast, this.tryWest, this.trySouth]
-    };
-    this.fromSouth = 'fromSouth';
-    this.fromNorth = 'fromNorth';
-    this.fromEast = 'fromEast';
-    this.fromWest = 'fromWest';
   }
 
   destroy(): void {
@@ -74,8 +63,8 @@ export class GridsterPush {
     let pushedItem: GridsterItem;
     for (; i < l; i++) {
       pushedItem = this.pushedItems[i];
-      pushedItem.$item.x = pushedItem.item.x || 0;
-      pushedItem.$item.y = pushedItem.item.y || 0;
+      pushedItem.$item().x = pushedItem.item().x || 0;
+      pushedItem.$item().y = pushedItem.item().y || 0;
       pushedItem.setSize();
     }
     this.pushedItems = [];
@@ -88,7 +77,7 @@ export class GridsterPush {
     let pushedItem: GridsterItem;
     for (; i < l; i++) {
       pushedItem = this.pushedItems[i];
-      pushedItem.checkItemChanges(pushedItem.$item, pushedItem.item);
+      pushedItem.checkItemChanges(pushedItem.$item(), pushedItem.item());
     }
     this.pushedItems = [];
     this.pushedItemsPath = [];
@@ -112,21 +101,21 @@ export class GridsterPush {
       console.warn('max iteration reached');
       return false;
     }
-    if (this.gridster.checkGridCollision(gridsterItem.$item)) {
+    if (this.gridster.checkGridCollision(gridsterItem.$item())) {
       return false;
     }
     if (direction === '') {
       return false;
     }
-    const conflicts: GridsterItem[] = this.gridster.findItemsWithItem(gridsterItem.$item);
+    const conflicts: GridsterItem[] = this.gridster.findItemsWithItem(gridsterItem.$item());
     const invert = direction === this.fromNorth || direction === this.fromWest;
     // sort the list of conflicts in order of [y,x]. Invert when the push is from north and west
     // this is done so they don't conflict witch each other and revert positions, keeping the previous order
     conflicts.sort((a, b) => {
       if (invert) {
-        return b.$item.y - a.$item.y || b.$item.x - a.$item.x;
+        return b.$item().y - a.$item().y || b.$item().x - a.$item().x;
       } else {
-        return a.$item.y - b.$item.y || a.$item.x - b.$item.x;
+        return a.$item().y - b.$item().y || a.$item().x - b.$item().x;
       }
     });
     let i = 0;
@@ -186,7 +175,7 @@ export class GridsterPush {
       return false;
     }
     this.addToTempPushed(gridsterItemCollide);
-    gridsterItemCollide.$item.y = gridsterItem.$item.y + gridsterItem.$item.rows;
+    gridsterItemCollide.$item().y = gridsterItem.$item().y + gridsterItem.$item().rows;
     if (this.push(gridsterItemCollide, this.fromNorth)) {
       gridsterItemCollide.setSize();
       this.addToPushed(gridsterItemCollide);
@@ -202,7 +191,7 @@ export class GridsterPush {
       return false;
     }
     this.addToTempPushed(gridsterItemCollide);
-    gridsterItemCollide.$item.y = gridsterItem.$item.y - gridsterItemCollide.$item.rows;
+    gridsterItemCollide.$item().y = gridsterItem.$item().y - gridsterItemCollide.$item().rows;
     if (this.push(gridsterItemCollide, this.fromSouth)) {
       gridsterItemCollide.setSize();
       this.addToPushed(gridsterItemCollide);
@@ -218,7 +207,7 @@ export class GridsterPush {
       return false;
     }
     this.addToTempPushed(gridsterItemCollide);
-    gridsterItemCollide.$item.x = gridsterItem.$item.x + gridsterItem.$item.cols;
+    gridsterItemCollide.$item().x = gridsterItem.$item().x + gridsterItem.$item().cols;
     if (this.push(gridsterItemCollide, this.fromWest)) {
       gridsterItemCollide.setSize();
       this.addToPushed(gridsterItemCollide);
@@ -234,7 +223,7 @@ export class GridsterPush {
       return false;
     }
     this.addToTempPushed(gridsterItemCollide);
-    gridsterItemCollide.$item.x = gridsterItem.$item.x - gridsterItemCollide.$item.cols;
+    gridsterItemCollide.$item().x = gridsterItem.$item().x - gridsterItemCollide.$item().cols;
     if (this.push(gridsterItemCollide, this.fromEast)) {
       gridsterItemCollide.setSize();
       this.addToPushed(gridsterItemCollide);
@@ -252,8 +241,8 @@ export class GridsterPush {
       this.pushedItemsTempPath[i] = [];
     }
     this.pushedItemsTempPath[i].push({
-      x: gridsterItem.$item.x,
-      y: gridsterItem.$item.y
+      x: gridsterItem.$item().x,
+      y: gridsterItem.$item().y
     });
   }
 
@@ -263,8 +252,8 @@ export class GridsterPush {
     if (!tempPosition) {
       return;
     }
-    gridsterItem.$item.x = tempPosition.x;
-    gridsterItem.$item.y = tempPosition.y;
+    gridsterItem.$item().x = tempPosition.x;
+    gridsterItem.$item().y = tempPosition.y;
     gridsterItem.setSize();
     if (!this.pushedItemsTempPath[i].length) {
       this.pushedItemsTemp.splice(i, 1);
@@ -276,14 +265,14 @@ export class GridsterPush {
     if (this.pushedItems.indexOf(gridsterItem) < 0) {
       this.pushedItems.push(gridsterItem);
       this.pushedItemsPath.push([
-        { x: gridsterItem.item.x || 0, y: gridsterItem.item.y || 0 },
-        { x: gridsterItem.$item.x, y: gridsterItem.$item.y }
+        { x: gridsterItem.item().x || 0, y: gridsterItem.item().y || 0 },
+        { x: gridsterItem.$item().x, y: gridsterItem.$item().y }
       ]);
     } else {
       const i = this.pushedItems.indexOf(gridsterItem);
       this.pushedItemsPath[i].push({
-        x: gridsterItem.$item.x,
-        y: gridsterItem.$item.y
+        x: gridsterItem.$item().x,
+        y: gridsterItem.$item().y
       });
     }
   }
@@ -315,17 +304,17 @@ export class GridsterPush {
     let change = false;
     for (; j > -1; j--) {
       lastPosition = path[j];
-      x = pushedItem.$item.x;
-      y = pushedItem.$item.y;
-      pushedItem.$item.x = lastPosition.x;
-      pushedItem.$item.y = lastPosition.y;
-      if (!this.gridster.findItemWithItem(pushedItem.$item)) {
+      x = pushedItem.$item().x;
+      y = pushedItem.$item().y;
+      pushedItem.$item().x = lastPosition.x;
+      pushedItem.$item().y = lastPosition.y;
+      if (!this.gridster.findItemWithItem(pushedItem.$item())) {
         pushedItem.setSize();
         path.splice(j + 1, path.length - j - 1);
         change = true;
       } else {
-        pushedItem.$item.x = x;
-        pushedItem.$item.y = y;
+        pushedItem.$item().x = x;
+        pushedItem.$item().y = y;
       }
     }
     if (path.length < 2) {

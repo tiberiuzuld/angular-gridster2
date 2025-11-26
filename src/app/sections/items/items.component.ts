@@ -18,7 +18,34 @@ import { MarkdownModule } from 'ngx-markdown';
 })
 export class ItemsComponent implements OnInit {
   options: GridsterConfig;
-  dashboard: Array<GridsterItemConfig>;
+  dashboard: GridsterItemConfig[];
+
+  itemConfig: GridsterItemConfig = {
+    cols: 4,
+    rows: 3,
+    y: 0,
+    x: 0,
+    itemAspectRatio: 4 / 3,
+    minItemCols: 1,
+    maxItemCols: 100,
+    maxItemRows: 100,
+    minItemRows: 1,
+    minItemArea: 1,
+    maxItemArea: 2500,
+    dragEnabled: true,
+    resizeEnabled: true,
+    compactEnabled: true,
+    resizableHandles: {
+      s: true,
+      e: true,
+      n: true,
+      w: true,
+      se: true,
+      ne: true,
+      sw: true,
+      nw: true
+    }
+  };
 
   static itemInit(item: GridsterItemConfig, itemComponent: GridsterItem): void {
     console.info('itemInitialized', item, itemComponent);
@@ -52,6 +79,7 @@ export class ItemsComponent implements OnInit {
 
     this.dashboard = [
       {
+        id: 1,
         cols: 4,
         rows: 3,
         y: 0,
@@ -78,30 +106,34 @@ export class ItemsComponent implements OnInit {
           nw: true
         }
       },
-      { cols: 1, rows: 1, y: 20, x: 20 }
+      { id: 2, cols: 1, rows: 1, y: 20, x: 20 }
     ];
   }
 
   changedAspectRatio() {
-    if (this.dashboard[0].itemAspectRatio === 1) {
-      this.dashboard[0].rows = this.dashboard[0].cols;
-    } else if (this.dashboard[0].itemAspectRatio === 4 / 3) {
-      this.dashboard[0].cols = 4;
-      this.dashboard[0].rows = 3;
-    } else if (this.dashboard[0].itemAspectRatio === 16 / 9) {
-      this.dashboard[0].cols = 16;
-      this.dashboard[0].rows = 9;
+    if (this.itemConfig.itemAspectRatio === 1) {
+      this.itemConfig.rows = this.itemConfig.cols;
+    } else if (this.itemConfig.itemAspectRatio === 4 / 3) {
+      this.itemConfig.cols = 4;
+      this.itemConfig.rows = 3;
+    } else if (this.itemConfig.itemAspectRatio === 16 / 9) {
+      this.itemConfig.cols = 16;
+      this.itemConfig.rows = 9;
     }
-    this.changedOptions();
+    this.changedItemConfig();
   }
 
-  changedOptions(): void {
+  changedItemConfig(): void {
+    this.dashboard[0] = { id: this.dashboard[0].id, ...this.itemConfig };
+  }
+
+  changeGridConfig(): void {
     if (this.options.api && this.options.api.optionsChanged) {
       this.options.api.optionsChanged();
     }
   }
 
-  removeItem($event: MouseEvent | TouchEvent, item): void {
+  removeItem($event: MouseEvent | TouchEvent, item: GridsterItemConfig): void {
     $event.preventDefault();
     $event.stopPropagation();
     this.dashboard.splice(this.dashboard.indexOf(item), 1);

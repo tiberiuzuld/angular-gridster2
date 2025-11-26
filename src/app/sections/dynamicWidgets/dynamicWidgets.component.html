@@ -12,12 +12,9 @@
 </div>
 
 <gridster [options]="options">
-  @for (item of dashboard; track item) {
+  @for (item of dashboard; track item.id) {
     <gridster-item [item]="item">
-      <app-parent-dynamic
-        [widget]="item"
-        [resizeEvent]="resizeEvent"
-      ></app-parent-dynamic>
+      <app-parent-dynamic [widget]="item" [resizeEvent]="resizeEvent"></app-parent-dynamic>
     </gridster-item>
   }
 </gridster>

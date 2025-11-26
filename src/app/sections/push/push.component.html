@@ -11,76 +11,32 @@
   <markdown [src]="'assets/push.md'"></markdown>
 </div>
 <div class="options-header">
-  <mat-checkbox
-    [(ngModel)]="options.pushItems"
-    (ngModelChange)="changedOptions()"
-  >
-    Push Items
-  </mat-checkbox>
-  <mat-checkbox
-    [(ngModel)]="options.disablePushOnDrag"
-    (ngModelChange)="changedOptions()"
-  >
-    Disable Push On Drag
-  </mat-checkbox>
-  <mat-checkbox
-    [(ngModel)]="options.disablePushOnResize"
-    (ngModelChange)="changedOptions()"
-  >
-    Disable Push On Resize
-  </mat-checkbox>
+  <mat-checkbox [(ngModel)]="options.pushItems" (ngModelChange)="changedOptions()"> Push Items </mat-checkbox>
+  <mat-checkbox [(ngModel)]="options.disablePushOnDrag" (ngModelChange)="changedOptions()"> Disable Push On Drag </mat-checkbox>
+  <mat-checkbox [(ngModel)]="options.disablePushOnResize" (ngModelChange)="changedOptions()"> Disable Push On Resize </mat-checkbox>
   @if (options.pushDirections) {
-    <mat-checkbox
-      [(ngModel)]="options.pushDirections.north"
-      (ngModelChange)="changedOptions()"
-    >
-      Push North
-    </mat-checkbox>
+    <mat-checkbox [(ngModel)]="options.pushDirections.north" (ngModelChange)="changedOptions()"> Push North </mat-checkbox>
   }
   @if (options.pushDirections) {
-    <mat-checkbox
-      [(ngModel)]="options.pushDirections.east"
-      (ngModelChange)="changedOptions()"
-    >
-      Push East
-    </mat-checkbox>
+    <mat-checkbox [(ngModel)]="options.pushDirections.east" (ngModelChange)="changedOptions()"> Push East </mat-checkbox>
   }
   @if (options.pushDirections) {
-    <mat-checkbox
-      [(ngModel)]="options.pushDirections.south"
-      (ngModelChange)="changedOptions()"
-    >
-      Push South
-    </mat-checkbox>
+    <mat-checkbox [(ngModel)]="options.pushDirections.south" (ngModelChange)="changedOptions()"> Push South </mat-checkbox>
   }
   @if (options.pushDirections) {
-    <mat-checkbox
-      [(ngModel)]="options.pushDirections.west"
-      (ngModelChange)="changedOptions()"
-    >
-      Push West
-    </mat-checkbox>
+    <mat-checkbox [(ngModel)]="options.pushDirections.west" (ngModelChange)="changedOptions()"> Push West </mat-checkbox>
   }
-  <mat-checkbox
-    [(ngModel)]="options.pushResizeItems"
-    (ngModelChange)="changedOptions()"
-  >
-    Push Resize Items
-  </mat-checkbox>
+  <mat-checkbox [(ngModel)]="options.pushResizeItems" (ngModelChange)="changedOptions()"> Push Resize Items </mat-checkbox>
   <button mat-mini-fab (click)="addItem()" class="add-button cols-2">
     <mat-icon>add</mat-icon>
   </button>
 </div>
 
 <gridster [options]="options">
-  @for (item of dashboard; track item) {
+  @for (item of dashboard; track item.id) {
     <gridster-item [item]="item">
       <div class="button-holder">
-        <button
-          mat-mini-fab
-          (mousedown)="removeItem($event, item)"
-          (touchstart)="removeItem($event, item)"
-        >
+        <button mat-mini-fab (mousedown)="removeItem($event, item)" (touchstart)="removeItem($event, item)">
           <mat-icon>delete</mat-icon>
         </button>
       </div>

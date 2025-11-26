@@ -88,11 +88,11 @@ export class GridsterCompact {
   private checkCompactMovement(direction: 'x' | 'y', delta: number): void {
     let widgetMoved = false;
     this.gridster.grid.forEach((widget: GridsterItem) => {
-      if (widget.$item.compactEnabled !== false) {
-        const moved = this.moveTillCollision(widget.$item, direction, delta);
+      if (widget.$item().compactEnabled !== false) {
+        const moved = this.moveTillCollision(widget.$item(), direction, delta);
         if (moved) {
           widgetMoved = true;
-          widget.item[direction] = widget.$item[direction];
+          widget.item()[direction] = widget.$item()[direction];
           widget.itemChanged();
         }
       }
@@ -116,12 +116,12 @@ export class GridsterCompact {
   private checkCompactGrid(): void {
     // Sort items by their current position (top to bottom, left to right)
     const sortedItems = this.gridster.grid
-      .filter((widget: GridsterItem) => widget.$item.compactEnabled !== false)
+      .filter((widget: GridsterItem) => widget.$item().compactEnabled !== false)
       .sort((a: GridsterItem, b: GridsterItem) => {
-        if (a.$item.y !== b.$item.y) {
-          return a.$item.y - b.$item.y;
+        if (a.$item().y !== b.$item().y) {
+          return a.$item().y - b.$item().y;
         }
-        return a.$item.x - b.$item.x;
+        return a.$item().x - b.$item().x;
       });
 
     // Reposition all items in a grid-like manner
@@ -130,7 +130,7 @@ export class GridsterCompact {
     let maxYInRow = 0;
 
     sortedItems.forEach((widget: GridsterItem) => {
-      const item = widget.$item;
+      const item = widget.$item();
 
       // Check if item fits in current row
       if (currentX + item.cols > this.gridster.columns) {
@@ -148,8 +148,8 @@ export class GridsterCompact {
 
       // Update widget if position changed
       if (oldX !== item.x || oldY !== item.y) {
-        widget.item.x = item.x;
-        widget.item.y = item.y;
+        widget.item().x = item.x;
+        widget.item().y = item.y;
         widget.itemChanged();
       }
 
@@ -167,17 +167,17 @@ export class GridsterCompact {
 
     // Sort existing items to find occupied positions
     const sortedItems = this.gridster.grid
-      .filter((widget: GridsterItem) => widget.$item !== item)
+      .filter((widget: GridsterItem) => widget.$item() !== item)
       .sort((a: GridsterItem, b: GridsterItem) => {
-        if (a.$item.y !== b.$item.y) {
-          return a.$item.y - b.$item.y;
+        if (a.$item().y !== b.$item().y) {
+          return a.$item().y - b.$item().y;
         }
-        return a.$item.x - b.$item.x;
+        return a.$item().x - b.$item().x;
       });
 
     // Find the next available position
     for (const widget of sortedItems) {
-      const existingItem = widget.$item;
+      const existingItem = widget.$item();
 
       // Check if we need to move to next row
       if (currentX + existingItem.cols > this.gridster.columns) {

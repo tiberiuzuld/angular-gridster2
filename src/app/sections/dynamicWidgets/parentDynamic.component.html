@@ -1,9 +1,9 @@
-@if (widget.type === 'widgetA') {
-  <app-widget-a [resizeEvent]="resizeEvent" [widget]="widget"></app-widget-a>
+@if (widget().type === 'widgetA') {
+  <app-widget-a [resizeEvent]="resizeEvent()" [widget]="widget()"></app-widget-a>
 }
-@if (widget.type === 'widgetB') {
-  <app-widget-b [widget]="widget" [resizeEvent]="resizeEvent"></app-widget-b>
+@if (widget().type === 'widgetB') {
+  <app-widget-b [widget]="widget()" [resizeEvent]="resizeEvent()"></app-widget-b>
 }
-@if (widget.type === 'widgetC') {
-  <app-widget-c [widget]="widget" [resizeEvent]="resizeEvent"></app-widget-c>
+@if (widget().type === 'widgetC') {
+  <app-widget-c [widget]="widget()" [resizeEvent]="resizeEvent()"></app-widget-c>
 }

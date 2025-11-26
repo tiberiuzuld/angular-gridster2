@@ -13,11 +13,7 @@
 <div class="options-header">
   <mat-form-field>
     <mat-label>Grid Type</mat-label>
-    <mat-select
-      aria-label="Grid type"
-      [(ngModel)]="options.gridType"
-      (ngModelChange)="changedOptions()"
-    >
+    <mat-select aria-label="Grid type" [(ngModel)]="options.gridType" (ngModelChange)="changedOptions()">
       <mat-option value="fit">Fit to screen</mat-option>
       <mat-option value="scrollVertical">Scroll Vertical</mat-option>
       <mat-option value="scrollHorizontal">Scroll Horizontal</mat-option>
@@ -28,68 +24,24 @@
   </mat-form-field>
   <mat-form-field>
     <mat-label>Margin</mat-label>
-    <input
-      matInput
-      [(ngModel)]="options.margin"
-      min="0"
-      max="30"
-      step="1"
-      type="number"
-      (ngModelChange)="changedOptions()"
-    />
+    <input matInput [(ngModel)]="options.margin" min="0" max="30" step="1" type="number" (ngModelChange)="changedOptions()" />
   </mat-form-field>
-  <mat-checkbox
-    [(ngModel)]="options.outerMargin"
-    (ngModelChange)="changedOptions()"
-    >Outer Margin
-  </mat-checkbox>
+  <mat-checkbox [(ngModel)]="options.outerMargin" (ngModelChange)="changedOptions()">Outer Margin </mat-checkbox>
   <mat-form-field>
     <mat-label>Grid Margin Top</mat-label>
-    <input
-      matInput
-      [(ngModel)]="options.outerMarginTop"
-      min="0"
-      max="30"
-      step="1"
-      type="number"
-      (ngModelChange)="changedOptions()"
-    />
+    <input matInput [(ngModel)]="options.outerMarginTop" min="0" max="30" step="1" type="number" (ngModelChange)="changedOptions()" />
   </mat-form-field>
   <mat-form-field>
     <mat-label>Grid Margin Right</mat-label>
-    <input
-      matInput
-      [(ngModel)]="options.outerMarginRight"
-      min="0"
-      max="30"
-      step="1"
-      type="number"
-      (ngModelChange)="changedOptions()"
-    />
+    <input matInput [(ngModel)]="options.outerMarginRight" min="0" max="30" step="1" type="number" (ngModelChange)="changedOptions()" />
   </mat-form-field>
   <mat-form-field>
     <mat-label>Grid Margin Bottom</mat-label>
-    <input
-      matInput
-      [(ngModel)]="options.outerMarginBottom"
-      min="0"
-      max="30"
-      step="1"
-      type="number"
-      (ngModelChange)="changedOptions()"
-    />
+    <input matInput [(ngModel)]="options.outerMarginBottom" min="0" max="30" step="1" type="number" (ngModelChange)="changedOptions()" />
   </mat-form-field>
   <mat-form-field>
     <mat-label>Grid Margin Left</mat-label>
-    <input
-      matInput
-      [(ngModel)]="options.outerMarginLeft"
-      min="0"
-      max="30"
-      step="1"
-      type="number"
-      (ngModelChange)="changedOptions()"
-    />
+    <input matInput [(ngModel)]="options.outerMarginLeft" min="0" max="30" step="1" type="number" (ngModelChange)="changedOptions()" />
   </mat-form-field>
   <button mat-mini-fab (click)="addItem()" class="add-button cols-2">
     <mat-icon>add</mat-icon>
@@ -97,14 +49,10 @@
 </div>
 
 <gridster [options]="options">
-  @for (item of dashboard; track item) {
+  @for (item of dashboard; track item.id) {
     <gridster-item [item]="item">
       <div class="button-holder">
-        <button
-          mat-mini-fab
-          (mousedown)="removeItem($event, item)"
-          (touchstart)="removeItem($event, item)"
-        >
+        <button mat-mini-fab (mousedown)="removeItem($event, item)" (touchstart)="removeItem($event, item)">
           <mat-icon>delete</mat-icon>
         </button>
       </div>

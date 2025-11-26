@@ -12,74 +12,24 @@
 </div>
 @if (options.draggable) {
   <div class="options-header">
-    <mat-checkbox
-      [(ngModel)]="options.draggable.enabled"
-      (ngModelChange)="changedOptions()"
-    >
-      Drag Items
-    </mat-checkbox>
-    <mat-checkbox
-      [(ngModel)]="options.pushItems"
-      (ngModelChange)="changedOptions()"
-    >
-      Push Items
-    </mat-checkbox>
-    <mat-checkbox
-      [(ngModel)]="options.draggable.dropOverItems"
-      (ngModelChange)="changedOptions()"
-    >
-      Allow Drop Over Items
-    </mat-checkbox>
-    <mat-checkbox
-      [(ngModel)]="options.draggable.ignoreContent"
-      (ngModelChange)="changedOptions()"
-    >
-      Ignore Content
-    </mat-checkbox>
-    <mat-checkbox
-      [(ngModel)]="options.disableScrollVertical"
-      (ngModelChange)="changedOptions()"
-    >
-      Disable Vertical Scroll
-    </mat-checkbox>
-    <mat-checkbox
-      [(ngModel)]="options.disableScrollHorizontal"
-      (ngModelChange)="changedOptions()"
-    >
-      Disable Horizontal Scroll
-    </mat-checkbox>
-    <mat-checkbox
-      [(ngModel)]="options.enableBoundaryControl"
-      (ngModelChange)="changedOptions()"
-    >
-      Enable Boundary Control
-    </mat-checkbox>
+    <mat-checkbox [(ngModel)]="options.draggable.enabled" (ngModelChange)="changedOptions()"> Drag Items </mat-checkbox>
+    <mat-checkbox [(ngModel)]="options.pushItems" (ngModelChange)="changedOptions()"> Push Items </mat-checkbox>
+    <mat-checkbox [(ngModel)]="options.draggable.dropOverItems" (ngModelChange)="changedOptions()"> Allow Drop Over Items </mat-checkbox>
+    <mat-checkbox [(ngModel)]="options.draggable.ignoreContent" (ngModelChange)="changedOptions()"> Ignore Content </mat-checkbox>
+    <mat-checkbox [(ngModel)]="options.disableScrollVertical" (ngModelChange)="changedOptions()"> Disable Vertical Scroll </mat-checkbox>
+    <mat-checkbox [(ngModel)]="options.disableScrollHorizontal" (ngModelChange)="changedOptions()"> Disable Horizontal Scroll </mat-checkbox>
+    <mat-checkbox [(ngModel)]="options.enableBoundaryControl" (ngModelChange)="changedOptions()"> Enable Boundary Control </mat-checkbox>
     <mat-form-field>
       <mat-label>Delay Start ms</mat-label>
-      <input
-        matInput
-        [(ngModel)]="options.draggable.delayStart"
-        type="number"
-        (ngModelChange)="changedOptions()"
-      />
+      <input matInput [(ngModel)]="options.draggable.delayStart" type="number" (ngModelChange)="changedOptions()" />
     </mat-form-field>
     <mat-form-field>
       <mat-label>Drag Handle Class</mat-label>
-      <input
-        matInput
-        [(ngModel)]="options.draggable.dragHandleClass"
-        type="text"
-        (ngModelChange)="changedOptions()"
-      />
+      <input matInput [(ngModel)]="options.draggable.dragHandleClass" type="text" (ngModelChange)="changedOptions()" />
     </mat-form-field>
     <mat-form-field>
       <mat-label>Ignore Content Class</mat-label>
-      <input
-        matInput
-        [(ngModel)]="options.draggable.ignoreContentClass"
-        type="text"
-        (ngModelChange)="changedOptions()"
-      />
+      <input matInput [(ngModel)]="options.draggable.ignoreContentClass" type="text" (ngModelChange)="changedOptions()" />
     </mat-form-field>
     <button mat-mini-fab (click)="addItem()" class="add-button cols-2">
       <mat-icon>add</mat-icon>
@@ -88,19 +38,14 @@
 }
 
 <gridster [options]="options">
-  @for (item of dashboard; track item) {
+  @for (item of dashboard; track item.id) {
     <gridster-item [item]="item">
       <div class="button-holder">
         @if (item.hasContent) {
           <div class="gridster-item-content">
             <div class="stuff">
-              <span
-                >Some content to select and click without dragging the
-                widget</span
-              >
-              <a href="https://www.google.com" target="_blank"
-                >Link to Google</a
-              >
+              <span>Some content to select and click without dragging the widget</span>
+              <a href="https://www.google.com" target="_blank">Link to Google</a>
             </div>
           </div>
         }
@@ -109,12 +54,7 @@
             <button class="drag-handler" mat-icon-button>
               <mat-icon>open_with</mat-icon>
             </button>
-            <button
-              mat-icon-button
-              class="remove-button"
-              (mousedown)="removeItem($event, item)"
-              (touchstart)="removeItem($event, item)"
-            >
+            <button mat-icon-button class="remove-button" (mousedown)="removeItem($event, item)" (touchstart)="removeItem($event, item)">
               <mat-icon>delete</mat-icon>
             </button>
           </div>
@@ -123,11 +63,7 @@
           <label>{{ item.label }}</label>
         }
         @if (!item.hasContent) {
-          <button
-            mat-mini-fab
-            (mousedown)="removeItem($event, item)"
-            (touchstart)="removeItem($event, item)"
-          >
+          <button mat-mini-fab (mousedown)="removeItem($event, item)" (touchstart)="removeItem($event, item)">
             <mat-icon>delete</mat-icon>
           </button>
         }

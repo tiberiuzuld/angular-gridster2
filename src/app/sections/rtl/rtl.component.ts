@@ -17,7 +17,7 @@ import { MarkdownModule } from 'ngx-markdown';
 })
 export class RtlComponent implements OnInit, OnDestroy {
   options: GridsterConfig;
-  dashboard: Array<GridsterItemConfig>;
+  dashboard: GridsterItemConfig[];
 
   ngOnInit(): void {
     document.body.setAttribute('dir', 'rtl');
@@ -79,12 +79,12 @@ export class RtlComponent implements OnInit, OnDestroy {
     };
 
     this.dashboard = [
-      { cols: 2, rows: 1, y: 0, x: 0 },
-      { cols: 2, rows: 2, y: 0, x: 2, hasContent: true },
-      { cols: 1, rows: 1, y: 0, x: 4 },
-      { cols: 1, rows: 1, y: 2, x: 5 },
-      { cols: 1, rows: 1, y: 1, x: 0 },
-      { cols: 1, rows: 1, y: 1, x: 0 },
+      { cols: 2, rows: 1, y: 0, x: 0, id: 1 },
+      { cols: 2, rows: 2, y: 0, x: 2, hasContent: true, id: 2 },
+      { cols: 1, rows: 1, y: 0, x: 4, id: 3 },
+      { cols: 1, rows: 1, y: 2, x: 5, id: 4 },
+      { cols: 1, rows: 1, y: 1, x: 0, id: 5 },
+      { cols: 1, rows: 1, y: 1, x: 0, id: 6 },
       {
         cols: 2,
         rows: 2,
@@ -92,7 +92,8 @@ export class RtlComponent implements OnInit, OnDestroy {
         x: 5,
         minItemRows: 2,
         minItemCols: 2,
-        label: 'Min rows & cols = 2'
+        label: 'Min rows & cols = 2',
+        id: 7
       },
       {
         cols: 2,
@@ -101,7 +102,8 @@ export class RtlComponent implements OnInit, OnDestroy {
         x: 0,
         maxItemRows: 2,
         maxItemCols: 2,
-        label: 'Max rows & cols = 2'
+        label: 'Max rows & cols = 2',
+        id: 8
       },
       {
         cols: 2,
@@ -110,7 +112,8 @@ export class RtlComponent implements OnInit, OnDestroy {
         x: 2,
         dragEnabled: true,
         resizeEnabled: true,
-        label: 'Drag&Resize Enabled'
+        label: 'Drag&Resize Enabled',
+        id: 9
       },
       {
         cols: 1,
@@ -119,55 +122,10 @@ export class RtlComponent implements OnInit, OnDestroy {
         x: 4,
         dragEnabled: false,
         resizeEnabled: false,
-        label: 'Drag&Resize Disabled'
+        label: 'Drag&Resize Disabled',
+        id: 10
       },
-      { cols: 1, rows: 1, y: 2, x: 6 }
-    ];
-
-    this.dashboard = [
-      { cols: 2, rows: 1, y: 0, x: 0 },
-      { cols: 2, rows: 2, y: 0, x: 2, hasContent: true },
-      { cols: 1, rows: 1, y: 0, x: 4 },
-      { cols: 1, rows: 1, y: 2, x: 5 },
-      { cols: 1, rows: 1, y: 1, x: 0 },
-      { cols: 1, rows: 1, y: 1, x: 0 },
-      {
-        cols: 2,
-        rows: 2,
-        y: 3,
-        x: 5,
-        minItemRows: 2,
-        minItemCols: 2,
-        label: 'Min rows & cols = 2'
-      },
-      {
-        cols: 2,
-        rows: 2,
-        y: 2,
-        x: 0,
-        maxItemRows: 2,
-        maxItemCols: 2,
-        label: 'Max rows & cols = 2'
-      },
-      {
-        cols: 2,
-        rows: 1,
-        y: 2,
-        x: 2,
-        dragEnabled: true,
-        resizeEnabled: true,
-        label: 'Drag&Resize Enabled'
-      },
-      {
-        cols: 1,
-        rows: 1,
-        y: 2,
-        x: 4,
-        dragEnabled: false,
-        resizeEnabled: false,
-        label: 'Drag&Resize Disabled'
-      },
-      { cols: 1, rows: 1, y: 2, x: 6 }
+      { cols: 1, rows: 1, y: 2, x: 6, id: 11 }
     ];
   }
 
@@ -177,14 +135,14 @@ export class RtlComponent implements OnInit, OnDestroy {
     }
   }
 
-  removeItem($event: MouseEvent | TouchEvent, item): void {
+  removeItem($event: MouseEvent | TouchEvent, item: GridsterItemConfig): void {
     $event.preventDefault();
     $event.stopPropagation();
     this.dashboard.splice(this.dashboard.indexOf(item), 1);
   }
 
   addItem(): void {
-    this.dashboard.push({ x: 0, y: 0, cols: 1, rows: 1 });
+    this.dashboard.push({ x: 0, y: 0, cols: 1, rows: 1, id: this.dashboard.at(-1)?.id + 1 });
   }
 
   ngOnDestroy(): void {

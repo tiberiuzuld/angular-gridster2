@@ -10,14 +10,17 @@ import { cancelScroll, scroll } from './gridsterScroll';
 import { GridsterUtils } from './gridsterUtils';
 
 export class GridsterResizable {
-  gridsterItem: GridsterItem;
-  gridster: Gridster;
-  lastMouse: {
-    clientX: number;
-    clientY: number;
+  lastMouse = {
+    clientX: 0,
+    clientY: 0
   };
   itemBackup = { x: 0, y: 0, cols: 0, rows: 0 };
-  resizeEventScrollType: GridsterResizeEventType;
+  resizeEventScrollType: GridsterResizeEventType = {
+    west: false,
+    east: false,
+    north: false,
+    south: false
+  };
 
   /**
    * The direction function may reference any of the `GridsterResizable` class methods, that are
@@ -70,23 +73,10 @@ export class GridsterResizable {
   hasRatio: boolean;
 
   constructor(
-    gridsterItem: GridsterItem,
-    gridster: Gridster,
+    private gridsterItem: GridsterItem,
+    private gridster: Gridster,
     private zone: NgZone
-  ) {
-    this.gridsterItem = gridsterItem;
-    this.gridster = gridster;
-    this.lastMouse = {
-      clientX: 0,
-      clientY: 0
-    };
-    this.resizeEventScrollType = {
-      west: false,
-      east: false,
-      north: false,
-      south: false
-    };
-  }
+  ) {}
 
   destroy(): void {
     this.gridster?.previewStyle();
@@ -98,7 +88,7 @@ export class GridsterResizable {
       return;
     }
     if (this.gridster.options.resizable && this.gridster.options.resizable.start) {
-      this.gridster.options.resizable.start(this.gridsterItem.item, this.gridsterItem, e);
+      this.gridster.options.resizable.start(this.gridsterItem.item(), this.gridsterItem, e);
     }
     e.stopPropagation();
     e.preventDefault();
@@ -135,14 +125,14 @@ export class GridsterResizable {
     this.diffRight = e.clientX + this.offsetLeft - this.right;
     this.diffTop = e.clientY + this.offsetTop - this.top;
     this.diffBottom = e.clientY + this.offsetTop - this.bottom;
-    this.minHeight = this.gridster.positionYToPixels(this.gridsterItem.$item.minItemRows || this.gridster.$options.minItemRows) - this.margin;
-    this.minWidth = this.gridster.positionXToPixels(this.gridsterItem.$item.minItemCols || this.gridster.$options.minItemCols) - this.margin;
-    this.gridster.movingItem = this.gridsterItem.$item;
+    this.minHeight = this.gridster.positionYToPixels(this.gridsterItem.$item().minItemRows || this.gridster.$options.minItemRows) - this.margin;
+    this.minWidth = this.gridster.positionXToPixels(this.gridsterItem.$item().minItemCols || this.gridster.$options.minItemCols) - this.margin;
+    this.gridster.movingItem = this.gridsterItem.$item();
     this.gridster.previewStyle();
     this.push = new GridsterPush(this.gridsterItem);
     this.pushResize = new GridsterPushResize(this.gridsterItem);
     this.gridster.dragInProgress = true;
-    this.hasRatio = !!(this.gridster.$options.itemAspectRatio || this.gridsterItem.$item.itemAspectRatio);
+    this.hasRatio = !!(this.gridster.$options.itemAspectRatio || this.gridsterItem.$item().itemAspectRatio);
     this.itemBackup = { x: 0, y: 0, cols: 0, rows: 0 };
     this.gridster.updateGrid();
 
@@ -258,7 +248,7 @@ export class GridsterResizable {
     };
     this.gridster.updateGrid();
     if (this.gridster.options.resizable && this.gridster.options.resizable.stop) {
-      Promise.resolve(this.gridster.options.resizable.stop(this.gridsterItem.item, this.gridsterItem, e)).then(this.makeResize, this.cancelResize);
+      Promise.resolve(this.gridster.options.resizable.stop(this.gridsterItem.item(), this.gridsterItem, e)).then(this.makeResize, this.cancelResize);
     } else {
       this.makeResize();
     }
@@ -272,10 +262,12 @@ export class GridsterResizable {
   };
 
   cancelResize = (): void => {
-    this.gridsterItem.$item.cols = this.gridsterItem.item.cols || 1;
-    this.gridsterItem.$item.rows = this.gridsterItem.item.rows || 1;
-    this.gridsterItem.$item.x = this.gridsterItem.item.x || 0;
-    this.gridsterItem.$item.y = this.gridsterItem.item.y || 0;
+    const $item = this.gridsterItem.$item();
+    const item = this.gridsterItem.item();
+    $item.cols = item.cols || 1;
+    $item.rows = item.rows || 1;
+    $item.x = item.x || 0;
+    $item.y = item.y || 0;
     this.gridsterItem.setSize();
     this.push.restoreItems();
     this.pushResize.restoreItems();
@@ -287,7 +279,7 @@ export class GridsterResizable {
 
   makeResize = (): void => {
     this.gridsterItem.setSize();
-    this.gridsterItem.checkItemChanges(this.gridsterItem.$item, this.gridsterItem.item);
+    this.gridsterItem.checkItemChanges(this.gridsterItem.$item(), this.gridsterItem.item());
     this.push.setPushedItems();
     this.pushResize.setPushedItems();
     this.push.destroy();
@@ -300,7 +292,7 @@ export class GridsterResizable {
     this.hasRatio && this.enforceAspectRatio();
     this.pushResize.pushItems(direction);
     this.push.pushItems(direction, this.gridster.$options.disablePushOnResize);
-    if (this.gridster.checkCollision(this.gridsterItem.$item, true)) {
+    if (this.gridster.checkCollision(this.gridsterItem.$item(), true)) {
       this.resetItem(this.hasRatio);
       return false;
     }
@@ -326,10 +318,11 @@ export class GridsterResizable {
 
   private handleNorth = (e: MouseEvent): void => {
     const newPosition = this.getNewNorthPosition(e);
-    if (this.gridsterItem.$item.y !== newPosition) {
+    const $item = this.gridsterItem.$item();
+    if ($item.y !== newPosition) {
       this.makeItemBackup();
-      this.gridsterItem.$item.rows += this.gridsterItem.$item.y - newPosition;
-      this.gridsterItem.$item.y = newPosition;
+      $item.rows += $item.y - newPosition;
+      $item.y = newPosition;
       if (!this.check(this.pushResize.fromSouth)) {
         return;
       }
@@ -356,10 +349,11 @@ export class GridsterResizable {
 
   private handleWest = (e: MouseEvent): void => {
     const newPosition = this.getNewWestPosition(e);
-    if (this.gridsterItem.$item.x !== newPosition) {
+    const $item = this.gridsterItem.$item();
+    if ($item.x !== newPosition) {
       this.makeItemBackup();
-      this.gridsterItem.$item.cols += this.gridsterItem.$item.x - newPosition;
-      this.gridsterItem.$item.x = newPosition;
+      $item.cols += $item.x - newPosition;
+      $item.x = newPosition;
       if (!this.check(this.pushResize.fromEast)) {
         return;
       }
@@ -386,9 +380,10 @@ export class GridsterResizable {
 
   private handleSouth = (e: MouseEvent): void => {
     const newPosition = this.getNewSouthPosition(e);
-    if (this.gridsterItem.$item.y + this.gridsterItem.$item.rows !== newPosition) {
+    const $item = this.gridsterItem.$item();
+    if ($item.y + $item.rows !== newPosition) {
       this.makeItemBackup();
-      this.gridsterItem.$item.rows = newPosition - this.gridsterItem.$item.y;
+      $item.rows = newPosition - $item.y;
       if (!this.check(this.pushResize.fromNorth)) {
         return;
       }
@@ -416,9 +411,10 @@ export class GridsterResizable {
 
   private handleEast = (e: MouseEvent): void => {
     const newPosition = this.getNewEastPosition(e);
-    if (this.gridsterItem.$item.x + this.gridsterItem.$item.cols !== newPosition) {
+    const $item = this.gridsterItem.$item();
+    if ($item.x + $item.cols !== newPosition) {
       this.makeItemBackup();
-      this.gridsterItem.$item.cols = newPosition - this.gridsterItem.$item.x;
+      $item.cols = newPosition - $item.x;
       if (!this.check(this.pushResize.fromWest)) {
         return;
       }
@@ -429,12 +425,13 @@ export class GridsterResizable {
   private handleNorthWest = (e: MouseEvent): void => {
     const newNorth = this.getNewNorthPosition(e);
     const newWest = this.getNewWestPosition(e);
-    if (this.gridsterItem.$item.y !== newNorth || this.gridsterItem.$item.x !== newWest) {
+    const $item = this.gridsterItem.$item();
+    if ($item.y !== newNorth || $item.x !== newWest) {
       this.makeItemBackup();
-      this.gridsterItem.$item.rows += this.gridsterItem.$item.y - newNorth;
-      this.gridsterItem.$item.y = newNorth;
-      this.gridsterItem.$item.cols += this.gridsterItem.$item.x - newWest;
-      this.gridsterItem.$item.x = newWest;
+      $item.rows += $item.y - newNorth;
+      $item.y = newNorth;
+      $item.cols += $item.x - newWest;
+      $item.x = newWest;
       if (!this.check(this.pushResize.fromSouth)) {
         return;
       }
@@ -448,11 +445,12 @@ export class GridsterResizable {
   private handleNorthEast = (e: MouseEvent): void => {
     const newNorth = this.getNewNorthPosition(e);
     const newEast = this.getNewEastPosition(e);
-    if (this.gridsterItem.$item.y !== newNorth || this.gridsterItem.$item.x + this.gridsterItem.$item.cols !== newEast) {
+    const $item = this.gridsterItem.$item();
+    if ($item.y !== newNorth || $item.x + $item.cols !== newEast) {
       this.makeItemBackup();
-      this.gridsterItem.$item.rows += this.gridsterItem.$item.y - newNorth;
-      this.gridsterItem.$item.y = newNorth;
-      this.gridsterItem.$item.cols = newEast - this.gridsterItem.$item.x;
+      $item.rows += $item.y - newNorth;
+      $item.y = newNorth;
+      $item.cols = newEast - $item.x;
       if (!this.check(this.pushResize.fromSouth)) {
         return;
       }
@@ -465,11 +463,12 @@ export class GridsterResizable {
   private handleSouthWest = (e: MouseEvent): void => {
     const newSouth = this.getNewSouthPosition(e);
     const newWest = this.getNewWestPosition(e);
-    if (this.gridsterItem.$item.y + this.gridsterItem.$item.rows !== newSouth || this.gridsterItem.$item.x !== newWest) {
+    const $item = this.gridsterItem.$item();
+    if ($item.y + $item.rows !== newSouth || $item.x !== newWest) {
       this.makeItemBackup();
-      this.gridsterItem.$item.rows = newSouth - this.gridsterItem.$item.y;
-      this.gridsterItem.$item.cols += this.gridsterItem.$item.x - newWest;
-      this.gridsterItem.$item.x = newWest;
+      $item.rows = newSouth - $item.y;
+      $item.cols += $item.x - newWest;
+      $item.x = newWest;
       if (!this.check(this.pushResize.fromNorth)) {
         return;
       }
@@ -482,13 +481,11 @@ export class GridsterResizable {
   private handleSouthEast = (e: MouseEvent): void => {
     const newSouth = this.getNewSouthPosition(e);
     const newEast = this.getNewEastPosition(e);
-    if (
-      this.gridsterItem.$item.y + this.gridsterItem.$item.rows !== newSouth ||
-      this.gridsterItem.$item.x + this.gridsterItem.$item.cols !== newEast
-    ) {
+    const $item = this.gridsterItem.$item();
+    if ($item.y + $item.rows !== newSouth || $item.x + $item.cols !== newEast) {
       this.makeItemBackup();
-      this.gridsterItem.$item.rows = newSouth - this.gridsterItem.$item.y;
-      this.gridsterItem.$item.cols = newEast - this.gridsterItem.$item.x;
+      $item.rows = newSouth - $item.y;
+      $item.cols = newEast - $item.x;
       if (!this.check(this.pushResize.fromNorth)) {
         return;
       }
@@ -498,37 +495,39 @@ export class GridsterResizable {
   };
 
   private makeItemBackup() {
-    this.itemBackup.x = this.gridsterItem.$item.x;
-    this.itemBackup.y = this.gridsterItem.$item.y;
-    this.itemBackup.cols = this.gridsterItem.$item.cols;
-    this.itemBackup.rows = this.gridsterItem.$item.rows;
+    const $item = this.gridsterItem.$item();
+    this.itemBackup.x = $item.x;
+    this.itemBackup.y = $item.y;
+    this.itemBackup.cols = $item.cols;
+    this.itemBackup.rows = $item.rows;
   }
 
   private resetItem(soft = false) {
-    if (this.gridsterItem.$item.x !== this.itemBackup.x) {
-      this.gridsterItem.$item.x = this.itemBackup.x;
+    const $item = this.gridsterItem.$item();
+    if ($item.x !== this.itemBackup.x) {
+      $item.x = this.itemBackup.x;
       if (!soft) {
-        this.left = this.gridster.positionXToPixels(this.gridsterItem.$item.x);
+        this.left = this.gridster.positionXToPixels($item.x);
         this.setItemLeft(this.left);
       }
     }
-    if (this.gridsterItem.$item.y !== this.itemBackup.y) {
-      this.gridsterItem.$item.y = this.itemBackup.y;
+    if ($item.y !== this.itemBackup.y) {
+      $item.y = this.itemBackup.y;
       if (!soft) {
-        this.top = this.gridster.positionYToPixels(this.gridsterItem.$item.y);
+        this.top = this.gridster.positionYToPixels($item.y);
         this.setItemTop(this.top);
       }
     }
-    if (this.gridsterItem.$item.cols !== this.itemBackup.cols) {
-      this.gridsterItem.$item.cols = this.itemBackup.cols;
+    if ($item.cols !== this.itemBackup.cols) {
+      $item.cols = this.itemBackup.cols;
       if (!soft) {
-        this.setItemWidth(this.gridster.positionXToPixels(this.gridsterItem.$item.cols) - this.margin);
+        this.setItemWidth(this.gridster.positionXToPixels($item.cols) - this.margin);
       }
     }
-    if (this.gridsterItem.$item.rows !== this.itemBackup.rows) {
-      this.gridsterItem.$item.rows = this.itemBackup.rows;
+    if ($item.rows !== this.itemBackup.rows) {
+      $item.rows = this.itemBackup.rows;
       if (!soft) {
-        this.setItemHeight(this.gridster.positionYToPixels(this.gridsterItem.$item.rows) - this.margin);
+        this.setItemHeight(this.gridster.positionYToPixels($item.rows) - this.margin);
       }
     }
   }
@@ -611,7 +610,8 @@ export class GridsterResizable {
    * Enforces the aspect ratio by recalculating grid positions based on current pixel dimensions
    */
   private enforceAspectRatio(): void {
-    const aspectRatio = this.gridsterItem.$item.itemAspectRatio || this.gridster.$options.itemAspectRatio;
+    const $item = this.gridsterItem.$item();
+    const aspectRatio = $item.itemAspectRatio || this.gridster.$options.itemAspectRatio;
     if (!aspectRatio) {
       return;
     }
@@ -620,13 +620,13 @@ export class GridsterResizable {
     const targetRatio = aspectRatio * (this.gridster.curColWidth / this.gridster.curRowHeight);
 
     // Get min/max dimensions
-    const minCols = this.gridsterItem.$item.minItemCols || this.gridster.$options.minItemCols;
-    const minRows = this.gridsterItem.$item.minItemRows || this.gridster.$options.minItemRows;
+    const minCols = $item.minItemCols || this.gridster.$options.minItemCols;
+    const minRows = $item.minItemRows || this.gridster.$options.minItemRows;
     const minWidth = this.gridster.positionXToPixels(minCols) - this.margin;
     const minHeight = this.gridster.positionYToPixels(minRows) - this.margin;
 
-    const maxCols = this.gridsterItem.$item.maxItemCols || this.gridster.$options.maxItemCols || 0;
-    const maxRows = this.gridsterItem.$item.maxItemRows || this.gridster.$options.maxItemRows || 0;
+    const maxCols = $item.maxItemCols || this.gridster.$options.maxItemCols || 0;
+    const maxRows = $item.maxItemRows || this.gridster.$options.maxItemRows || 0;
     const maxWidth = maxCols ? this.gridster.positionXToPixels(maxCols) - this.margin : Number.MAX_VALUE;
     const maxHeight = maxRows ? this.gridster.positionYToPixels(maxRows) - this.margin : Number.MAX_VALUE;
 
@@ -715,10 +715,10 @@ export class GridsterResizable {
     const marginRight = this.gridster.options.pushItems ? this.margin : 0;
     const marginBottom = this.gridster.options.pushItems ? this.margin : 0;
 
-    this.gridsterItem.$item.x = this.gridster.pixelsToPositionX(this.left + marginLeft, Math.floor);
-    this.gridsterItem.$item.y = this.gridster.pixelsToPositionY(this.top + marginTop, Math.floor);
-    this.gridsterItem.$item.cols = this.gridster.pixelsToPositionX(this.width + marginRight, Math.ceil);
-    this.gridsterItem.$item.rows = this.gridster.pixelsToPositionY(this.height + marginBottom, Math.ceil);
+    $item.x = this.gridster.pixelsToPositionX(this.left + marginLeft, Math.floor);
+    $item.y = this.gridster.pixelsToPositionY(this.top + marginTop, Math.floor);
+    $item.cols = this.gridster.pixelsToPositionX(this.width + marginRight, Math.ceil);
+    $item.rows = this.gridster.pixelsToPositionY(this.height + marginBottom, Math.ceil);
 
     // Update visual dimensions
     this.setItemTop(this.top);
