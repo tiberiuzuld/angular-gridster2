@@ -1,27 +1,66 @@
 import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatSelectModule } from '@angular/material/select';
 
 import { DisplayGrid, Gridster, GridsterConfig, GridsterItemConfig, GridsterItem, GridType } from 'angular-gridster2';
 import { MarkdownModule } from 'ngx-markdown';
 
 @Component({
-  selector: 'app-display-grid',
-  templateUrl: './displayGrid.component.html',
+  selector: 'app-grid-events',
+  templateUrl: './grid-events.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [FormsModule, MatButtonModule, MatIconModule, MatSelectModule, MarkdownModule, Gridster, GridsterItem]
+  imports: [MatButtonModule, MatIconModule, MarkdownModule, Gridster, GridsterItem]
 })
-export class DisplayGridComponent implements OnInit {
+export class GridEvents implements OnInit {
   options: GridsterConfig;
   dashboard: GridsterItemConfig[];
+  remove: boolean;
+
+  static itemChange(item: GridsterItemConfig, itemComponent: GridsterItem): void {
+    console.info('itemChanged', item, itemComponent);
+  }
+
+  static itemResize(item: GridsterItemConfig, itemComponent: GridsterItem): void {
+    console.info('itemResized', item, itemComponent);
+  }
+
+  static itemInit(item: GridsterItemConfig, itemComponent: GridsterItem): void {
+    console.info('itemInitialized', item, itemComponent);
+  }
+
+  static itemRemoved(item: GridsterItemConfig, itemComponent: GridsterItem): void {
+    console.info('itemRemoved', item, itemComponent);
+  }
+
+  static itemValidate(item: GridsterItemConfig): boolean {
+    return item.cols > 0 && item.rows > 0;
+  }
+
+  static gridInit(grid: Gridster): void {
+    console.info('gridInit', grid);
+  }
+
+  static gridDestroy(grid: Gridster): void {
+    console.info('gridDestroy', grid);
+  }
+
+  static gridSizeChanged(grid: Gridster): void {
+    console.info('gridSizeChanged', grid);
+  }
 
   ngOnInit(): void {
     this.options = {
       gridType: GridType.Fit,
       displayGrid: DisplayGrid.Always,
+      initCallback: GridEvents.gridInit,
+      destroyCallback: GridEvents.gridDestroy,
+      gridSizeChangedCallback: GridEvents.gridSizeChanged,
+      itemChangeCallback: GridEvents.itemChange,
+      itemResizeCallback: GridEvents.itemResize,
+      itemInitCallback: GridEvents.itemInit,
+      itemRemovedCallback: GridEvents.itemRemoved,
+      itemValidateCallback: GridEvents.itemValidate,
       pushItems: true,
       draggable: {
         enabled: true
@@ -60,5 +99,9 @@ export class DisplayGridComponent implements OnInit {
 
   addItem(): void {
     this.dashboard.push({ x: 0, y: 0, cols: 1, rows: 1, id: this.dashboard.at(-1)?.id + 1 });
+  }
+
+  destroy(): void {
+    this.remove = !this.remove;
   }
 }

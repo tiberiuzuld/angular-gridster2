@@ -4,16 +4,16 @@ import { MatIconModule } from '@angular/material/icon';
 
 import { DisplayGrid, Gridster, GridsterConfig, GridsterItemConfig, GridsterItem, GridType } from 'angular-gridster2';
 import { MarkdownModule } from 'ngx-markdown';
-import { ParentDynamicComponent } from './parentDynamic.component';
+import { ParentDynamic } from './parent-dynamic';
 
 @Component({
   selector: 'app-dynamic-widgets',
-  templateUrl: './dynamicWidgets.component.html',
+  templateUrl: './dynamic-widgets.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [MatButtonModule, MatIconModule, MarkdownModule, Gridster, GridsterItem, ParentDynamicComponent]
+  imports: [MatButtonModule, MatIconModule, MarkdownModule, Gridster, GridsterItem, ParentDynamic]
 })
-export class DynamicWidgetsComponent implements OnInit {
+export class DynamicWidgets implements OnInit {
   options: GridsterConfig;
   dashboard: GridsterItemConfig[];
   resizeEvent: EventEmitter<GridsterItemConfig> = new EventEmitter<GridsterItemConfig>();

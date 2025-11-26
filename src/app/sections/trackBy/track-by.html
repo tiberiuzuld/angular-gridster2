@@ -11,9 +11,7 @@
   <markdown [src]="'assets/trackBy.md'"></markdown>
 </div>
 <div class="options-header">
-  <button (click)="reset()" class="cols-2" color="accent" mat-raised-button>
-    Reset
-  </button>
+  <button (click)="reset()" class="cols-2" color="accent" mat-raised-button>Reset</button>
   <button (click)="addItem()" class="add-button cols-2" mat-mini-fab>
     <mat-icon>add</mat-icon>
   </button>
@@ -30,7 +28,7 @@
       >
         <mat-icon>delete</mat-icon>
       </button>
-      <app-trackby-item [id]="item.id"></app-trackby-item>
+      <app-track-by-item [id]="item.id"></app-track-by-item>
     </gridster-item>
   }
 </gridster>

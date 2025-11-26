@@ -1,13 +1,7 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  OnInit,
-  ViewEncapsulation
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector: 'app-trackby-item',
+  selector: 'app-track-by-item',
   template: `
     <div class="button-holder">
       <div style="font-size: 30px">ID: {{ id }}</div>
@@ -17,7 +11,7 @@ import {
   encapsulation: ViewEncapsulation.None,
   standalone: true
 })
-export class TrackByItemComponent implements OnInit {
+export class TrackByItem implements OnInit {
   @Input() id: string;
 
   ngOnInit(): void {

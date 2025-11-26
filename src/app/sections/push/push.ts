@@ -3,35 +3,45 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
 
-import { DisplayGrid, Gridster, GridsterConfig, GridsterItemConfig, GridsterItem, GridType } from 'angular-gridster2';
+import {
+  DisplayGrid,
+  Draggable,
+  Gridster,
+  GridsterConfig,
+  GridsterItemConfig,
+  GridsterItem,
+  GridType,
+  PushDirections,
+  Resizable
+} from 'angular-gridster2';
 import { MarkdownModule } from 'ngx-markdown';
 
+interface Safe extends GridsterConfig {
+  draggable: Draggable;
+  resizable: Resizable;
+  pushDirections: PushDirections;
+}
+
 @Component({
-  selector: 'app-grid-types',
-  templateUrl: './gridTypes.component.html',
+  selector: 'app-push',
+  templateUrl: './push.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [FormsModule, MatButtonModule, MatCheckboxModule, MatIconModule, MatInputModule, MatSelectModule, MarkdownModule, Gridster, GridsterItem]
+  imports: [FormsModule, MatButtonModule, MatCheckboxModule, MatIconModule, MarkdownModule, Gridster, GridsterItem]
 })
-export class GridTypesComponent implements OnInit {
-  options: GridsterConfig;
+export class Push implements OnInit {
+  options: Safe;
   dashboard: GridsterItemConfig[];
 
   ngOnInit(): void {
     this.options = {
       gridType: GridType.Fit,
       displayGrid: DisplayGrid.Always,
-      fixedColWidth: 105,
-      fixedRowHeight: 105,
-      keepFixedHeightInMobile: false,
-      keepFixedWidthInMobile: false,
-      mobileBreakpoint: 640,
-      useBodyForBreakpoint: false,
       pushItems: true,
-      rowHeightRatio: 1,
+      pushDirections: { north: true, east: true, south: true, west: true },
+      pushResizeItems: false,
+      swap: false,
       draggable: {
         enabled: true
       },

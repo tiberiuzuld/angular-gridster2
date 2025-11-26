@@ -10,12 +10,12 @@ import { MarkdownModule } from 'ngx-markdown';
 
 @Component({
   selector: 'app-rtl',
-  templateUrl: './rtl.component.html',
+  templateUrl: './rtl.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   imports: [FormsModule, MatButtonModule, MatCheckboxModule, MatIconModule, MatInputModule, MatSelectModule, MarkdownModule, Gridster, GridsterItem]
 })
-export class RtlComponent implements OnInit, OnDestroy {
+export class Rtl implements OnInit, OnDestroy {
   options: GridsterConfig;
   dashboard: GridsterItemConfig[];
 

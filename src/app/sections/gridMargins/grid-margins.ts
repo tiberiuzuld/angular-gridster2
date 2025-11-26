@@ -3,51 +3,33 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 
-import {
-  DisplayGrid,
-  Draggable,
-  Gridster,
-  GridsterConfig,
-  GridsterItemConfig,
-  GridsterItem,
-  GridType,
-  PushDirections,
-  Resizable
-} from 'angular-gridster2';
+import { DisplayGrid, Gridster, GridsterConfig, GridsterItemConfig, GridsterItem, GridType } from 'angular-gridster2';
 import { MarkdownModule } from 'ngx-markdown';
 
-interface Safe extends GridsterConfig {
-  draggable: Draggable;
-  resizable: Resizable;
-  pushDirections: PushDirections;
-}
-
 @Component({
-  selector: 'app-push',
-  templateUrl: './push.component.html',
+  selector: 'app-grid-margins',
+  templateUrl: './grid-margins.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [FormsModule, MatButtonModule, MatCheckboxModule, MatIconModule, MarkdownModule, Gridster, GridsterItem]
+  imports: [FormsModule, MatButtonModule, MatCheckboxModule, MatIconModule, MatInputModule, MatSelectModule, MarkdownModule, Gridster, GridsterItem]
 })
-export class PushComponent implements OnInit {
-  options: Safe;
+export class GridMargins implements OnInit {
+  options: GridsterConfig;
   dashboard: GridsterItemConfig[];
 
   ngOnInit(): void {
     this.options = {
       gridType: GridType.Fit,
       displayGrid: DisplayGrid.Always,
-      pushItems: true,
-      pushDirections: { north: true, east: true, south: true, west: true },
-      pushResizeItems: false,
-      swap: false,
-      draggable: {
-        enabled: true
-      },
-      resizable: {
-        enabled: true
-      }
+      margin: 10,
+      outerMargin: true,
+      outerMarginTop: null,
+      outerMarginRight: null,
+      outerMarginBottom: null,
+      outerMarginLeft: null
     };
 
     this.dashboard = [

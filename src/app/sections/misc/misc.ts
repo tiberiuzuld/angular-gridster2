@@ -1,20 +1,22 @@
 import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 
 import { DisplayGrid, Gridster, GridsterConfig, GridsterItemConfig, GridsterItem, GridType } from 'angular-gridster2';
 import { MarkdownModule } from 'ngx-markdown';
 
 @Component({
-  selector: 'app-grid-sizes',
-  templateUrl: './gridSizes.component.html',
+  selector: 'app-misc',
+  templateUrl: './misc.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [FormsModule, MatButtonModule, MatIconModule, MatInputModule, MarkdownModule, Gridster, GridsterItem]
+  imports: [FormsModule, MatButtonModule, MatCheckboxModule, MatIconModule, MatInputModule, MatSelectModule, MarkdownModule, Gridster, GridsterItem]
 })
-export class GridSizesComponent implements OnInit {
+export class Misc implements OnInit {
   options: GridsterConfig;
   dashboard: GridsterItemConfig[];
 
@@ -22,26 +24,14 @@ export class GridSizesComponent implements OnInit {
     this.options = {
       gridType: GridType.Fit,
       displayGrid: DisplayGrid.Always,
-      pushItems: true,
-      draggable: {
-        enabled: true
-      },
-      resizable: {
-        enabled: true
-      },
-      minCols: 1,
-      maxCols: 100,
-      minRows: 1,
-      maxRows: 100,
-      maxItemCols: 100,
-      minItemCols: 1,
-      maxItemRows: 100,
-      minItemRows: 1,
-      maxItemArea: 2500,
-      minItemArea: 1,
-      defaultItemCols: 1,
-      defaultItemRows: 1,
-      addEmptyRowsCount: 2
+      draggable: { enabled: true },
+      resizable: { enabled: true },
+      disableWindowResize: true,
+      scrollToNewItems: false,
+      disableWarnings: false,
+      ignoreMarginInRow: false,
+      setGridSize: false,
+      scale: 1
     };
 
     this.dashboard = [

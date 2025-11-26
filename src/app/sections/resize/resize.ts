@@ -3,33 +3,49 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 
 import { DisplayGrid, Gridster, GridsterConfig, GridsterItemConfig, GridsterItem, GridType } from 'angular-gridster2';
 import { MarkdownModule } from 'ngx-markdown';
 
 @Component({
-  selector: 'app-swap',
-  templateUrl: './swap.component.html',
+  selector: 'app-resize',
+  templateUrl: './resize.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [FormsModule, MatButtonModule, MatCheckboxModule, MatIconModule, MarkdownModule, Gridster, GridsterItem]
+  imports: [FormsModule, MatButtonModule, MatCheckboxModule, MatIconModule, MatInputModule, MarkdownModule, GridsterItem, Gridster]
 })
-export class SwapComponent implements OnInit {
+export class Resize implements OnInit {
   options: GridsterConfig;
   dashboard: GridsterItemConfig[];
+
+  static eventStop(item: GridsterItemConfig, itemComponent: GridsterItem, event: MouseEvent): void {
+    console.info('eventStop', item, itemComponent, event);
+  }
+
+  static eventStart(item: GridsterItemConfig, itemComponent: GridsterItem, event: MouseEvent): void {
+    console.info('eventStart', item, itemComponent, event);
+  }
 
   ngOnInit(): void {
     this.options = {
       gridType: GridType.Fit,
       displayGrid: DisplayGrid.Always,
-      pushItems: false,
-      swap: true,
-      swapWhileDragging: false,
-      draggable: {
-        enabled: true
-      },
       resizable: {
-        enabled: true
+        delayStart: 0,
+        enabled: true,
+        start: Resize.eventStart,
+        stop: Resize.eventStop,
+        handles: {
+          s: true,
+          e: true,
+          n: true,
+          w: true,
+          se: true,
+          ne: true,
+          sw: true,
+          nw: true
+        }
       }
     };
 

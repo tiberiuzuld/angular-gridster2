@@ -1,17 +1,17 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, input, ViewEncapsulation } from '@angular/core';
 import { GridsterItemConfig } from 'angular-gridster2';
-import { WidgetAComponent } from './widgetA.component';
-import { WidgetBComponent } from './widgetB.component';
-import { WidgetCComponent } from './widgetC.component';
+import { WidgetA } from './widget-a';
+import { WidgetB } from './widget-b';
+import { WidgetC } from './widget-c';
 
 @Component({
   selector: 'app-parent-dynamic',
-  templateUrl: './parentDynamic.component.html',
+  templateUrl: './parent-dynamic.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [WidgetAComponent, WidgetBComponent, WidgetCComponent]
+  imports: [WidgetA, WidgetB, WidgetC]
 })
-export class ParentDynamicComponent {
+export class ParentDynamic {
   widget = input.required<GridsterItemConfig>();
   resizeEvent = input.required<EventEmitter<GridsterItemConfig>>();
 }

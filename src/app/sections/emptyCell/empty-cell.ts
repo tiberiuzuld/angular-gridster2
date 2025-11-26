@@ -9,44 +9,31 @@ import { DisplayGrid, Gridster, GridsterConfig, GridsterItemConfig, GridsterItem
 import { MarkdownModule } from 'ngx-markdown';
 
 @Component({
-  selector: 'app-resize',
-  templateUrl: './resize.component.html',
+  selector: 'app-empty-cell',
+  templateUrl: './empty-cell.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [FormsModule, MatButtonModule, MatCheckboxModule, MatIconModule, MatInputModule, MarkdownModule, GridsterItem, Gridster]
+  imports: [FormsModule, MatButtonModule, MatCheckboxModule, MatIconModule, MatInputModule, MarkdownModule, Gridster, GridsterItem]
 })
-export class ResizeComponent implements OnInit {
+export class EmptyCell implements OnInit {
   options: GridsterConfig;
   dashboard: GridsterItemConfig[];
-
-  static eventStop(item: GridsterItemConfig, itemComponent: GridsterItem, event: MouseEvent): void {
-    console.info('eventStop', item, itemComponent, event);
-  }
-
-  static eventStart(item: GridsterItemConfig, itemComponent: GridsterItem, event: MouseEvent): void {
-    console.info('eventStart', item, itemComponent, event);
-  }
 
   ngOnInit(): void {
     this.options = {
       gridType: GridType.Fit,
       displayGrid: DisplayGrid.Always,
-      resizable: {
-        delayStart: 0,
-        enabled: true,
-        start: ResizeComponent.eventStart,
-        stop: ResizeComponent.eventStop,
-        handles: {
-          s: true,
-          e: true,
-          n: true,
-          w: true,
-          se: true,
-          ne: true,
-          sw: true,
-          nw: true
-        }
-      }
+      enableEmptyCellClick: false,
+      enableEmptyCellContextMenu: false,
+      enableEmptyCellDrop: false,
+      enableEmptyCellDrag: false,
+      enableOccupiedCellDrop: false,
+      emptyCellClickCallback: this.emptyCellClick.bind(this),
+      emptyCellContextMenuCallback: this.emptyCellClick.bind(this),
+      emptyCellDropCallback: this.emptyCellClick.bind(this),
+      emptyCellDragCallback: this.emptyCellClick.bind(this),
+      emptyCellDragMaxCols: 50,
+      emptyCellDragMaxRows: 50
     };
 
     this.dashboard = [
@@ -70,6 +57,12 @@ export class ResizeComponent implements OnInit {
     }
   }
 
+  emptyCellClick(event: MouseEvent, item: GridsterItemConfig): void {
+    console.info('empty cell click', event, item);
+    item.id = this.dashboard.at(-1)?.id + 1;
+    this.dashboard.push(item);
+  }
+
   removeItem($event: MouseEvent | TouchEvent, item: GridsterItemConfig): void {
     $event.preventDefault();
     $event.stopPropagation();
@@ -78,5 +71,12 @@ export class ResizeComponent implements OnInit {
 
   addItem(): void {
     this.dashboard.push({ x: 0, y: 0, cols: 1, rows: 1, id: this.dashboard.at(-1)?.id + 1 });
+  }
+
+  dragStartHandler(ev: DragEvent): void {
+    if (ev.dataTransfer) {
+      ev.dataTransfer.setData('text/plain', 'Drag Me Button');
+      ev.dataTransfer.dropEffect = 'copy';
+    }
   }
 }

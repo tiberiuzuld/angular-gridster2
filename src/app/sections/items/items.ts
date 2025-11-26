@@ -11,12 +11,12 @@ import { MarkdownModule } from 'ngx-markdown';
 
 @Component({
   selector: 'app-items',
-  templateUrl: './items.component.html',
+  templateUrl: './items.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   imports: [FormsModule, MatButtonModule, MatCheckboxModule, MatIconModule, MatInputModule, MatSelectModule, MarkdownModule, GridsterItem, Gridster]
 })
-export class ItemsComponent implements OnInit {
+export class Items implements OnInit {
   options: GridsterConfig;
   dashboard: GridsterItemConfig[];
 
@@ -84,7 +84,7 @@ export class ItemsComponent implements OnInit {
         rows: 3,
         y: 0,
         x: 0,
-        initCallback: ItemsComponent.itemInit,
+        initCallback: Items.itemInit,
         itemAspectRatio: 4 / 3,
         minItemCols: 1,
         maxItemCols: 100,

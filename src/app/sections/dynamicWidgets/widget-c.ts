@@ -3,13 +3,13 @@ import { GridsterItemConfig } from 'angular-gridster2';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-widget-a',
+  selector: 'app-widget-c',
   template: '{{widget().type}}',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   standalone: true
 })
-export class WidgetAComponent implements OnInit, OnDestroy {
+export class WidgetC implements OnInit, OnDestroy {
   widget = input.required<GridsterItemConfig>();
   resizeEvent = input.required<EventEmitter<GridsterItemConfig>>();
 

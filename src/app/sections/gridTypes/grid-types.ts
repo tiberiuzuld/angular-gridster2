@@ -4,18 +4,19 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 
 import { DisplayGrid, Gridster, GridsterConfig, GridsterItemConfig, GridsterItem, GridType } from 'angular-gridster2';
 import { MarkdownModule } from 'ngx-markdown';
 
 @Component({
-  selector: 'app-empty-cell',
-  templateUrl: './emptyCell.component.html',
+  selector: 'app-grid-types',
+  templateUrl: './grid-types.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [FormsModule, MatButtonModule, MatCheckboxModule, MatIconModule, MatInputModule, MarkdownModule, Gridster, GridsterItem]
+  imports: [FormsModule, MatButtonModule, MatCheckboxModule, MatIconModule, MatInputModule, MatSelectModule, MarkdownModule, Gridster, GridsterItem]
 })
-export class EmptyCellComponent implements OnInit {
+export class GridTypes implements OnInit {
   options: GridsterConfig;
   dashboard: GridsterItemConfig[];
 
@@ -23,17 +24,20 @@ export class EmptyCellComponent implements OnInit {
     this.options = {
       gridType: GridType.Fit,
       displayGrid: DisplayGrid.Always,
-      enableEmptyCellClick: false,
-      enableEmptyCellContextMenu: false,
-      enableEmptyCellDrop: false,
-      enableEmptyCellDrag: false,
-      enableOccupiedCellDrop: false,
-      emptyCellClickCallback: this.emptyCellClick.bind(this),
-      emptyCellContextMenuCallback: this.emptyCellClick.bind(this),
-      emptyCellDropCallback: this.emptyCellClick.bind(this),
-      emptyCellDragCallback: this.emptyCellClick.bind(this),
-      emptyCellDragMaxCols: 50,
-      emptyCellDragMaxRows: 50
+      fixedColWidth: 105,
+      fixedRowHeight: 105,
+      keepFixedHeightInMobile: false,
+      keepFixedWidthInMobile: false,
+      mobileBreakpoint: 640,
+      useBodyForBreakpoint: false,
+      pushItems: true,
+      rowHeightRatio: 1,
+      draggable: {
+        enabled: true
+      },
+      resizable: {
+        enabled: true
+      }
     };
 
     this.dashboard = [
@@ -57,12 +61,6 @@ export class EmptyCellComponent implements OnInit {
     }
   }
 
-  emptyCellClick(event: MouseEvent, item: GridsterItemConfig): void {
-    console.info('empty cell click', event, item);
-    item.id = this.dashboard.at(-1)?.id + 1;
-    this.dashboard.push(item);
-  }
-
   removeItem($event: MouseEvent | TouchEvent, item: GridsterItemConfig): void {
     $event.preventDefault();
     $event.stopPropagation();
@@ -71,12 +69,5 @@ export class EmptyCellComponent implements OnInit {
 
   addItem(): void {
     this.dashboard.push({ x: 0, y: 0, cols: 1, rows: 1, id: this.dashboard.at(-1)?.id + 1 });
-  }
-
-  dragStartHandler(ev: DragEvent): void {
-    if (ev.dataTransfer) {
-      ev.dataTransfer.setData('text/plain', 'Drag Me Button');
-      ev.dataTransfer.dropEffect = 'copy';
-    }
   }
 }

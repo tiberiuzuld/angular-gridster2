@@ -4,76 +4,53 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
 
-import { CompactType, DisplayGrid, Gridster, GridsterConfig, GridsterItemConfig, GridsterItem, GridType } from 'angular-gridster2';
+import { DisplayGrid, Gridster, GridsterConfig, GridsterItemConfig, GridsterItem, GridType } from 'angular-gridster2';
+import { MarkdownModule } from 'ngx-markdown';
 
 @Component({
-  selector: 'app-general',
-  templateUrl: './home.component.html',
+  selector: 'app-drag',
+  templateUrl: './drag.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [FormsModule, MatButtonModule, MatCheckboxModule, MatIconModule, MatInputModule, MatSelectModule, Gridster, GridsterItem]
+  imports: [FormsModule, MatButtonModule, MatCheckboxModule, MatIconModule, MatInputModule, MarkdownModule, Gridster, GridsterItem]
 })
-export class HomeComponent implements OnInit {
+export class Drag implements OnInit {
   options: GridsterConfig;
   dashboard: GridsterItemConfig[];
+
+  static eventStart(item: GridsterItemConfig, itemComponent: GridsterItem, event: MouseEvent): void {
+    console.info('eventStart', item, itemComponent, event);
+  }
+
+  static eventStop(item: GridsterItemConfig, itemComponent: GridsterItem, event: MouseEvent): void {
+    console.info('eventStop', item, itemComponent, event);
+  }
+
+  static overlapEvent(source: GridsterItemConfig, target: GridsterItemConfig, grid: Gridster): void {
+    console.log('overlap', source, target, grid);
+  }
 
   ngOnInit(): void {
     this.options = {
       gridType: GridType.Fit,
-      compactType: CompactType.None,
-      margin: 10,
-      outerMargin: true,
-      outerMarginTop: null,
-      outerMarginRight: null,
-      outerMarginBottom: null,
-      outerMarginLeft: null,
-      useTransformPositioning: true,
-      mobileBreakpoint: 640,
-      useBodyForBreakpoint: false,
-      minCols: 1,
-      maxCols: 100,
-      minRows: 1,
-      maxRows: 100,
-      maxItemCols: 100,
-      minItemCols: 1,
-      maxItemRows: 100,
-      minItemRows: 1,
-      maxItemArea: 2500,
-      minItemArea: 1,
-      defaultItemCols: 1,
-      defaultItemRows: 1,
-      fixedColWidth: 105,
-      fixedRowHeight: 105,
-      keepFixedHeightInMobile: false,
-      keepFixedWidthInMobile: false,
-      scrollSensitivity: 10,
-      scrollSpeed: 20,
-      enableEmptyCellClick: false,
-      enableEmptyCellContextMenu: false,
-      enableEmptyCellDrop: false,
-      enableEmptyCellDrag: false,
-      enableOccupiedCellDrop: false,
-      emptyCellDragMaxCols: 50,
-      emptyCellDragMaxRows: 50,
-      ignoreMarginInRow: false,
+      displayGrid: DisplayGrid.Always,
+      pushItems: true,
+      swap: false,
       draggable: {
-        enabled: true
+        delayStart: 0,
+        enabled: true,
+        ignoreContentClass: 'gridster-item-content',
+        ignoreContent: false,
+        dragHandleClass: 'drag-handler',
+        stop: Drag.eventStop,
+        start: Drag.eventStart,
+        dropOverItems: false,
+        dropOverItemsCallback: Drag.overlapEvent
       },
       resizable: {
         enabled: true
-      },
-      swap: false,
-      pushItems: true,
-      disablePushOnDrag: false,
-      disablePushOnResize: false,
-      pushDirections: { north: true, east: true, south: true, west: true },
-      pushResizeItems: false,
-      displayGrid: DisplayGrid.Always,
-      disableWindowResize: false,
-      disableWarnings: false,
-      scrollToNewItems: false
+      }
     };
 
     this.dashboard = [

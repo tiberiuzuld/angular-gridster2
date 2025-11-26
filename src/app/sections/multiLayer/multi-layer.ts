@@ -3,37 +3,43 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-
+import { MatMenuModule } from '@angular/material/menu';
 import { DisplayGrid, Gridster, GridsterConfig, GridsterItemConfig, GridsterItem, GridType } from 'angular-gridster2';
 import { MarkdownModule } from 'ngx-markdown';
 
 @Component({
-  selector: 'app-grid-margins',
-  templateUrl: './gridMargins.component.html',
+  selector: 'app-swap',
+  templateUrl: './multi-layer.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [FormsModule, MatButtonModule, MatCheckboxModule, MatIconModule, MatInputModule, MatSelectModule, MarkdownModule, Gridster, GridsterItem]
+  imports: [FormsModule, MatButtonModule, MatCheckboxModule, MatIconModule, MatMenuModule, MarkdownModule, Gridster, GridsterItem]
 })
-export class GridMarginsComponent implements OnInit {
+export class MultiLayer implements OnInit {
   options: GridsterConfig;
   dashboard: GridsterItemConfig[];
 
+  // noinspection DuplicatedCode
   ngOnInit(): void {
     this.options = {
       gridType: GridType.Fit,
       displayGrid: DisplayGrid.Always,
-      margin: 10,
-      outerMargin: true,
-      outerMarginTop: null,
-      outerMarginRight: null,
-      outerMarginBottom: null,
-      outerMarginLeft: null
+      pushItems: false,
+      swap: true,
+      allowMultiLayer: true,
+      defaultLayerIndex: 1,
+      baseLayerIndex: 2,
+      maxLayerIndex: 2,
+      swapWhileDragging: false,
+      draggable: {
+        enabled: true
+      },
+      resizable: {
+        enabled: true
+      }
     };
 
     this.dashboard = [
-      { cols: 2, rows: 1, y: 0, x: 0, id: 1 },
+      { cols: 2, rows: 1, y: 0, x: 0, layerIndex: 2, id: 1 },
       { cols: 2, rows: 2, y: 0, x: 2, id: 2 },
       { cols: 1, rows: 1, y: 0, x: 4, id: 3 },
       { cols: 3, rows: 2, y: 1, x: 4, id: 4 },
@@ -60,6 +66,6 @@ export class GridMarginsComponent implements OnInit {
   }
 
   addItem(): void {
-    this.dashboard.push({ x: 0, y: 0, cols: 1, rows: 1, id: this.dashboard.at(-1)?.id + 1 });
+    this.dashboard.push({ x: 0, y: 0, cols: 2, rows: 1, id: this.dashboard.at(-1)?.id + 1 });
   }
 }

@@ -4,16 +4,16 @@ import { MatIconModule } from '@angular/material/icon';
 
 import { CompactType, DisplayGrid, Gridster, GridsterConfig, GridsterItemConfig, GridsterItem, GridType } from 'angular-gridster2';
 import { MarkdownModule } from 'ngx-markdown';
-import { TrackByItemComponent } from './trackByItem.component';
+import { TrackByItem } from './track-by-item';
 
 @Component({
-  selector: 'app-trackby',
-  templateUrl: './trackBy.component.html',
+  selector: 'app-track-by',
+  templateUrl: './track-by.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [MatButtonModule, MatIconModule, MarkdownModule, Gridster, GridsterItem, TrackByItemComponent]
+  imports: [MatButtonModule, MatIconModule, MarkdownModule, Gridster, GridsterItem, TrackByItem]
 })
-export class TrackByComponent implements OnInit {
+export class TrackBy implements OnInit {
   options: GridsterConfig;
   dashboard: GridsterItemConfig[];
   dashboardOriginal: GridsterItemConfig[];
@@ -54,7 +54,7 @@ export class TrackByComponent implements OnInit {
         rows: 1,
         y: 0,
         x: 0,
-        initCallback: TrackByComponent.itemInit,
+        initCallback: TrackBy.itemInit,
         minItemCols: 1,
         maxItemCols: 100,
         maxItemRows: 100,

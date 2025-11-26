@@ -1,43 +1,43 @@
 import { Routes } from '@angular/router';
-import { ApiComponent } from './sections/api/api.component';
-import { CompactComponent } from './sections/compact/compact.component';
-import { DisplayGridComponent } from './sections/displayGrid/displayGrid.component';
-import { DragComponent } from './sections/drag/drag.component';
-import { DynamicWidgetsComponent } from './sections/dynamicWidgets/dynamicWidgets.component';
-import { EmptyCellComponent } from './sections/emptyCell/emptyCell.component';
-import { GridEventsComponent } from './sections/gridEvents/gridEvents.component';
-import { GridMarginsComponent } from './sections/gridMargins/gridMargins.component';
-import { GridSizesComponent } from './sections/gridSizes/gridSizes.component';
-import { GridTypesComponent } from './sections/gridTypes/gridTypes.component';
-import { HomeComponent } from './sections/home/home.component';
-import { ItemsComponent } from './sections/items/items.component';
-import { MiscComponent } from './sections/misc/misc.component';
-import { MultiLayerComponent } from './sections/multiLayer/multi-layer.component';
-import { PushComponent } from './sections/push/push.component';
-import { ResizeComponent } from './sections/resize/resize.component';
-import { RtlComponent } from './sections/rtl/rtl.component';
-import { SwapComponent } from './sections/swap/swap.component';
-import { TrackByComponent } from './sections/trackBy/trackBy.component';
+import { Api } from './sections/api/api';
+import { Compact } from './sections/compact/compact';
+import { DisplayGrid } from './sections/displayGrid/display-grid';
+import { Drag } from './sections/drag/drag';
+import { DynamicWidgets } from './sections/dynamicWidgets/dynamic-widgets';
+import { EmptyCell } from './sections/emptyCell/empty-cell';
+import { GridEvents } from './sections/gridEvents/grid-events';
+import { GridMargins } from './sections/gridMargins/grid-margins';
+import { GridSizes } from './sections/gridSizes/grid-sizes';
+import { GridTypes } from './sections/gridTypes/grid-types';
+import { Home } from './sections/home/home';
+import { Items } from './sections/items/items';
+import { Misc } from './sections/misc/misc';
+import { MultiLayer } from './sections/multiLayer/multi-layer';
+import { Push } from './sections/push/push';
+import { Resize } from './sections/resize/resize';
+import { Rtl } from './sections/rtl/rtl';
+import { Swap } from './sections/swap/swap';
+import { TrackBy } from './sections/trackBy/track-by';
 
 export const appRoutes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'api', component: ApiComponent },
-  { path: 'compact', component: CompactComponent },
-  { path: 'displayGrid', component: DisplayGridComponent },
-  { path: 'drag', component: DragComponent },
-  { path: 'dynamicWidgets', component: DynamicWidgetsComponent },
-  { path: 'emptyCell', component: EmptyCellComponent },
-  { path: 'gridEvents', component: GridEventsComponent },
-  { path: 'gridMargins', component: GridMarginsComponent },
-  { path: 'gridSizes', component: GridSizesComponent },
-  { path: 'gridTypes', component: GridTypesComponent },
-  { path: 'items', component: ItemsComponent },
-  { path: 'trackBy', component: TrackByComponent },
-  { path: 'push', component: PushComponent },
-  { path: 'resize', component: ResizeComponent },
-  { path: 'swap', component: SwapComponent },
-  { path: 'multiLayer', component: MultiLayerComponent },
-  { path: 'misc', component: MiscComponent },
-  { path: 'rtl', component: RtlComponent },
+  { path: '', component: Home },
+  { path: 'api', component: Api },
+  { path: 'compact', component: Compact },
+  { path: 'displayGrid', component: DisplayGrid },
+  { path: 'drag', component: Drag },
+  { path: 'dynamicWidgets', component: DynamicWidgets },
+  { path: 'emptyCell', component: EmptyCell },
+  { path: 'gridEvents', component: GridEvents },
+  { path: 'gridMargins', component: GridMargins },
+  { path: 'gridSizes', component: GridSizes },
+  { path: 'gridTypes', component: GridTypes },
+  { path: 'items', component: Items },
+  { path: 'trackBy', component: TrackBy },
+  { path: 'push', component: Push },
+  { path: 'resize', component: Resize },
+  { path: 'swap', component: Swap },
+  { path: 'multiLayer', component: MultiLayer },
+  { path: 'misc', component: Misc },
+  { path: 'rtl', component: Rtl },
   { path: '**', redirectTo: '' }
 ];

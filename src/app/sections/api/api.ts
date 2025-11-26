@@ -1,29 +1,26 @@
 import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatSelectModule } from '@angular/material/select';
 
-import { CompactType, Gridster, GridsterConfig, GridsterItemConfig, GridsterItem, GridType } from 'angular-gridster2';
+import { CompactType, Gridster, GridsterConfig, GridsterItemConfig, GridsterItem, GridsterPush, GridType } from 'angular-gridster2';
 import { MarkdownModule } from 'ngx-markdown';
 
 @Component({
-  selector: 'app-compact',
-  templateUrl: './compact.component.html',
+  selector: 'app-api',
+  templateUrl: './api.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [FormsModule, MatButtonModule, MatIconModule, MatSelectModule, MarkdownModule, Gridster, GridsterItem]
+  imports: [MatButtonModule, MatIconModule, MarkdownModule, Gridster, GridsterItem]
 })
-export class CompactComponent implements OnInit {
+export class Api implements OnInit {
   options: GridsterConfig;
   dashboard: GridsterItemConfig[];
+  itemToPush: GridsterItem;
 
   ngOnInit(): void {
     this.options = {
       gridType: GridType.Fit,
       compactType: CompactType.None,
-      maxCols: 10,
-      maxRows: 10,
       pushItems: true,
       draggable: {
         enabled: true
@@ -34,7 +31,7 @@ export class CompactComponent implements OnInit {
     };
 
     this.dashboard = [
-      { cols: 2, rows: 1, y: 0, x: 0, id: 1 },
+      { cols: 2, rows: 1, y: 0, x: 0, initCallback: this.initItem.bind(this), id: 1 },
       { cols: 2, rows: 2, y: 0, x: 2, id: 2 },
       { cols: 1, rows: 1, y: 0, x: 4, id: 3 },
       { cols: 3, rows: 2, y: 1, x: 4, id: 4 },
@@ -62,5 +59,32 @@ export class CompactComponent implements OnInit {
 
   addItem(): void {
     this.dashboard.push({ x: 0, y: 0, cols: 1, rows: 1, id: this.dashboard.at(-1)?.id + 1 });
+  }
+
+  initItem(item: GridsterItemConfig, itemComponent: GridsterItem): void {
+    this.itemToPush = itemComponent;
+  }
+
+  pushItem(): void {
+    const push = new GridsterPush(this.itemToPush); // init the service
+    this.itemToPush.$item().rows += 4; // move/resize your item
+    if (push.pushItems(push.fromNorth)) {
+      // push items from a direction
+      push.checkPushBack(); // check for items can restore to original position
+      push.setPushedItems(); // save the items pushed
+      this.itemToPush.setSize();
+      this.itemToPush.checkItemChanges(this.itemToPush.$item(), this.itemToPush.item());
+    } else {
+      this.itemToPush.$item().rows -= 4;
+      push.restoreItems(); // restore to initial state the pushed items
+    }
+    push.destroy(); // destroy push instance
+    // similar for GridsterPushResize and GridsterSwap
+  }
+
+  getItemComponent(): void {
+    if (this.options.api && this.options.api.getItemComponent) {
+      console.log(this.options.api.getItemComponent(this.dashboard[0]));
+    }
   }
 }
