@@ -14,6 +14,12 @@ let scrollN = false;
 let scrollS = false;
 let animationH: number | null;
 let animationV: number | null = null;
+let lastMouseX = 0;
+let lastMouseY = 0;
+
+const mouseMoveThreshold = 15;
+let mouseMoveDirectionY = 0;
+let mouseMoveDirectionX = 0;
 
 type Position = Pick<MouseEvent, 'clientX' | 'clientY'>;
 
@@ -41,55 +47,57 @@ export function scroll(
   const offsetHeight = gridsterElement.offsetHeight;
   const offsetLeft = gridsterElement.scrollLeft;
   const offsetTop = gridsterElement.scrollTop;
-  const elemTopOffset = top - offsetTop;
-  const elemBottomOffset = offsetHeight + offsetTop - top - height;
 
   const { clientX, clientY } = event;
 
+  updateMouseInfo(event, lastMouse);
+
   if (!gridster.$options.disableScrollVertical) {
-    if (lastMouse.clientY < clientY && elemBottomOffset < scrollSensitivity) {
+    const elemTopOffset = top - offsetTop;
+    const elemBottomOffset = offsetHeight + offsetTop - top - height;
+
+    if (mouseMoveDirectionY >= 0 && elemBottomOffset < scrollSensitivity) {
       cancelN();
-      if ((resizeEvent && resizeEventType && !resizeEventType.south) || scrollS) {
-        return;
+      if (!(resizeEvent && resizeEventType && !resizeEventType.south) && !scrollS) {
+        startVertical(1, calculateItemPosition);
       }
-      startVertical(1, calculateItemPosition, lastMouse);
-    } else if (lastMouse.clientY > clientY && offsetTop > 0 && elemTopOffset < scrollSensitivity) {
+    } else if (mouseMoveDirectionY <= 0 && offsetTop > 0 && elemTopOffset < scrollSensitivity) {
       cancelS();
-      if ((resizeEvent && resizeEventType && !resizeEventType.north) || scrollN) {
-        return;
+      if (!(resizeEvent && resizeEventType && !resizeEventType.north) && !scrollN) {
+        startVertical(-1, calculateItemPosition);
       }
-      startVertical(-1, calculateItemPosition, lastMouse);
     } else if (lastMouse.clientY !== clientY) {
       cancelVertical();
     }
   }
 
-  const elemRightOffset = offsetLeft + offsetWidth - left - width;
-  const elemLeftOffset = left - offsetLeft;
-
   if (!gridster.$options.disableScrollHorizontal) {
+    const elemRightOffset = offsetLeft + offsetWidth - left - width;
+    const elemLeftOffset = left - offsetLeft;
+
     const isRTL = gridster.$options.dirType === DirTypes.RTL;
-    const moveRight = lastMouse.clientX < clientX;
-    const moveLeft = lastMouse.clientX > clientX;
+    const moveRight = mouseMoveDirectionX >= 0;
+    const moveLeft = mouseMoveDirectionX <= 0;
     const shouldScrollRight = isRTL ? moveLeft : moveRight;
     const shouldScrollLeft = isRTL ? moveRight : moveLeft;
+
     if (shouldScrollRight && elemRightOffset <= scrollSensitivity) {
       cancelW();
-      if ((resizeEvent && resizeEventType && !resizeEventType.east) || scrollE) return;
-      startHorizontal(1, calculateItemPosition, lastMouse, isRTL);
+      if (!(resizeEvent && resizeEventType && !resizeEventType.east) && !scrollE) {
+        startHorizontal(1, calculateItemPosition, isRTL);
+      }
     } else if (shouldScrollLeft && offsetLeft > 0 && elemLeftOffset < scrollSensitivity) {
       cancelE();
-      if ((resizeEvent && resizeEventType && !resizeEventType.west) || scrollW) return;
-      startHorizontal(-1, calculateItemPosition, lastMouse, isRTL);
+      if (!(resizeEvent && resizeEventType && !resizeEventType.west) && !scrollW) {
+        startHorizontal(-1, calculateItemPosition, isRTL);
+      }
     } else if (lastMouse.clientX !== clientX) {
       cancelHorizontal();
     }
   }
 }
 
-function startVertical(sign: number, calculateItemPosition: CalculatePosition, lastMouse: Position): void {
-  let clientY = lastMouse.clientY;
-
+function startVertical(sign: number, calculateItemPosition: CalculatePosition): void {
   if (sign > 0) {
     scrollS = true;
   } else {
@@ -113,17 +121,16 @@ function startVertical(sign: number, calculateItemPosition: CalculatePosition, l
     const delta = (timestamp - lastUpdate) / intervalDuration;
     lastUpdate = timestamp;
 
-    gridsterElement!.scrollTop += sign * Math.round(scrollSpeed * delta);
-    clientY += sign * scrollSpeed;
-    calculateItemPosition({ clientX: lastMouse.clientX, clientY });
+    const top = sign * Math.round(scrollSpeed * delta);
+    gridsterElement.scrollTop += top;
+    lastMouseY += top;
+    calculateItemPosition({ clientX: lastMouseX, clientY: lastMouseY });
     animationV = requestAnimationFrame(callback);
   };
   animationV = requestAnimationFrame(callback);
 }
 
-function startHorizontal(sign: number, calculateItemPosition: CalculatePosition, lastMouse: Position, isRTL: boolean): void {
-  let clientX = lastMouse.clientX;
-
+function startHorizontal(sign: number, calculateItemPosition: CalculatePosition, isRTL: boolean): void {
   if (sign > 0) {
     scrollE = true;
   } else {
@@ -151,8 +158,8 @@ function startHorizontal(sign: number, calculateItemPosition: CalculatePosition,
     const left = isRTL ? -scrollAmount : scrollAmount;
 
     gridsterElement.scrollLeft += left;
-    clientX += left;
-    calculateItemPosition({ clientX, clientY: lastMouse.clientY });
+    lastMouseX += left;
+    calculateItemPosition({ clientX: lastMouseX, clientY: lastMouseY });
     animationH = requestAnimationFrame(callback);
   };
 
@@ -168,39 +175,71 @@ export function cancelScroll(): void {
 function cancelHorizontal(): void {
   if (animationH !== null) {
     cancelAnimationFrame(animationH);
-    scrollE = false;
-    scrollW = false;
   }
+  scrollE = false;
+  scrollW = false;
 }
 
 function cancelVertical(): void {
   if (animationV !== null) {
     cancelAnimationFrame(animationV);
-    scrollN = false;
-    scrollS = false;
   }
+  scrollN = false;
+  scrollS = false;
 }
 
 function cancelE(): void {
-  if (scrollE !== null) {
+  if (scrollE) {
     cancelHorizontal();
   }
 }
 
 function cancelW(): void {
-  if (scrollW !== null) {
+  if (scrollW) {
     cancelHorizontal();
   }
 }
 
 function cancelS(): void {
-  if (scrollS !== null) {
+  if (scrollS) {
     cancelVertical();
   }
 }
 
 function cancelN(): void {
-  if (scrollN !== null) {
+  if (scrollN) {
     cancelVertical();
+  }
+}
+
+/**
+ * Updates the mouse position and mouse move direction
+ */
+function updateMouseInfo(currentMouseEvent: { clientX: number; clientY: number }, lastMouseEvent: { clientX: number; clientY: number }) {
+  lastMouseX = currentMouseEvent.clientX;
+  lastMouseY = currentMouseEvent.clientY;
+
+  const deltaX = currentMouseEvent.clientX - lastMouseEvent.clientX;
+
+  if (deltaX !== 0) {
+    mouseMoveDirectionX += Math.sign(deltaX);
+  }
+
+  if (mouseMoveDirectionX > 0) {
+    mouseMoveDirectionX = Math.min(mouseMoveDirectionX, mouseMoveThreshold);
+  } else {
+    mouseMoveDirectionX = Math.max(mouseMoveDirectionX, -mouseMoveThreshold);
+  }
+
+  const deltaY = currentMouseEvent.clientX - lastMouseEvent.clientX;
+
+  if (deltaY !== 0) {
+    mouseMoveDirectionY += Math.sign(deltaY);
+  }
+
+  if (mouseMoveDirectionY > 0) {
+    mouseMoveDirectionY = Math.min(mouseMoveDirectionY, mouseMoveThreshold);
+  } else {
+    mouseMoveDirectionY = Math.max(mouseMoveDirectionY, -mouseMoveThreshold);
   }
 }
