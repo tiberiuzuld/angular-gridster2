@@ -4,7 +4,7 @@ import { DirTypes } from './gridsterConfig';
 
 let scrollSensitivity: number;
 let scrollSpeed: number;
-const intervalDuration = 20;
+const intervalDuration = 40;
 let gridsterElement: HTMLElement | null;
 let resizeEvent: boolean | undefined;
 let resizeEventType: GridsterResizeEventType | undefined;
@@ -17,9 +17,20 @@ let animationV: number | null = null;
 let lastMouseX = 0;
 let lastMouseY = 0;
 
-const mouseMoveThreshold = 15;
-let mouseMoveDirectionY = 0;
-let mouseMoveDirectionX = 0;
+/**
+ * "requestAnimation" frame is widely supported, but some server engines,
+ * such as deno currently do not support it so we do a fallback to setTimeout
+ */
+let requestAnimation: (callback: (timestamp: number) => void) => number;
+let cancelAnimation: (id: number) => void;
+
+if (window.requestAnimationFrame && window.cancelAnimationFrame) {
+  requestAnimation = window.requestAnimationFrame;
+  cancelAnimation = window.cancelAnimationFrame;
+} else {
+  requestAnimation = callback => setTimeout(() => callback(Date.now()), 50);
+  cancelAnimation = id => clearTimeout(id);
+}
 
 type Position = Pick<MouseEvent, 'clientX' | 'clientY'>;
 
@@ -50,18 +61,19 @@ export function scroll(
 
   const { clientX, clientY } = event;
 
-  updateMouseInfo(event, lastMouse);
+  lastMouseX = clientX;
+  lastMouseY = clientY;
 
   if (!gridster.$options.disableScrollVertical) {
     const elemTopOffset = top - offsetTop;
     const elemBottomOffset = offsetHeight + offsetTop - top - height;
 
-    if (mouseMoveDirectionY >= 0 && elemBottomOffset < scrollSensitivity) {
+    if (elemBottomOffset < scrollSensitivity) {
       cancelN();
       if (!(resizeEvent && resizeEventType && !resizeEventType.south) && !scrollS) {
         startVertical(1, calculateItemPosition);
       }
-    } else if (mouseMoveDirectionY <= 0 && offsetTop > 0 && elemTopOffset < scrollSensitivity) {
+    } else if (offsetTop > 0 && elemTopOffset < scrollSensitivity) {
       cancelS();
       if (!(resizeEvent && resizeEventType && !resizeEventType.north) && !scrollN) {
         startVertical(-1, calculateItemPosition);
@@ -76,17 +88,13 @@ export function scroll(
     const elemLeftOffset = left - offsetLeft;
 
     const isRTL = gridster.$options.dirType === DirTypes.RTL;
-    const moveRight = mouseMoveDirectionX >= 0;
-    const moveLeft = mouseMoveDirectionX <= 0;
-    const shouldScrollRight = isRTL ? moveLeft : moveRight;
-    const shouldScrollLeft = isRTL ? moveRight : moveLeft;
 
-    if (shouldScrollRight && elemRightOffset <= scrollSensitivity) {
+    if (elemRightOffset <= scrollSensitivity) {
       cancelW();
       if (!(resizeEvent && resizeEventType && !resizeEventType.east) && !scrollE) {
         startHorizontal(1, calculateItemPosition, isRTL);
       }
-    } else if (shouldScrollLeft && offsetLeft > 0 && elemLeftOffset < scrollSensitivity) {
+    } else if (offsetLeft > 0 && elemLeftOffset < scrollSensitivity) {
       cancelE();
       if (!(resizeEvent && resizeEventType && !resizeEventType.west) && !scrollW) {
         startHorizontal(-1, calculateItemPosition, isRTL);
@@ -109,7 +117,7 @@ function startVertical(sign: number, calculateItemPosition: CalculatePosition): 
   const callback = (timestamp: number) => {
     if (lastUpdate === undefined) {
       lastUpdate = timestamp;
-      animationV = requestAnimationFrame(callback);
+      animationV = requestAnimation(callback);
       return;
     }
 
@@ -125,9 +133,9 @@ function startVertical(sign: number, calculateItemPosition: CalculatePosition): 
     gridsterElement.scrollTop += top;
     lastMouseY += top;
     calculateItemPosition({ clientX: lastMouseX, clientY: lastMouseY });
-    animationV = requestAnimationFrame(callback);
+    animationV = requestAnimation(callback);
   };
-  animationV = requestAnimationFrame(callback);
+  animationV = requestAnimation(callback);
 }
 
 function startHorizontal(sign: number, calculateItemPosition: CalculatePosition, isRTL: boolean): void {
@@ -142,7 +150,7 @@ function startHorizontal(sign: number, calculateItemPosition: CalculatePosition,
   const callback = (timestamp: number) => {
     if (lastUpdate === undefined) {
       lastUpdate = timestamp;
-      animationH = requestAnimationFrame(callback);
+      animationH = requestAnimation(callback);
       return;
     }
 
@@ -160,10 +168,10 @@ function startHorizontal(sign: number, calculateItemPosition: CalculatePosition,
     gridsterElement.scrollLeft += left;
     lastMouseX += left;
     calculateItemPosition({ clientX: lastMouseX, clientY: lastMouseY });
-    animationH = requestAnimationFrame(callback);
+    animationH = requestAnimation(callback);
   };
 
-  animationH = requestAnimationFrame(callback);
+  animationH = requestAnimation(callback);
 }
 
 export function cancelScroll(): void {
@@ -174,7 +182,7 @@ export function cancelScroll(): void {
 
 function cancelHorizontal(): void {
   if (animationH !== null) {
-    cancelAnimationFrame(animationH);
+    cancelAnimation(animationH);
   }
   scrollE = false;
   scrollW = false;
@@ -182,7 +190,7 @@ function cancelHorizontal(): void {
 
 function cancelVertical(): void {
   if (animationV !== null) {
-    cancelAnimationFrame(animationV);
+    cancelAnimation(animationV);
   }
   scrollN = false;
   scrollS = false;
@@ -209,37 +217,5 @@ function cancelS(): void {
 function cancelN(): void {
   if (scrollN) {
     cancelVertical();
-  }
-}
-
-/**
- * Updates the mouse position and mouse move direction
- */
-function updateMouseInfo(currentMouseEvent: { clientX: number; clientY: number }, lastMouseEvent: { clientX: number; clientY: number }) {
-  lastMouseX = currentMouseEvent.clientX;
-  lastMouseY = currentMouseEvent.clientY;
-
-  const deltaX = currentMouseEvent.clientX - lastMouseEvent.clientX;
-
-  if (deltaX !== 0) {
-    mouseMoveDirectionX += Math.sign(deltaX);
-  }
-
-  if (mouseMoveDirectionX > 0) {
-    mouseMoveDirectionX = Math.min(mouseMoveDirectionX, mouseMoveThreshold);
-  } else {
-    mouseMoveDirectionX = Math.max(mouseMoveDirectionX, -mouseMoveThreshold);
-  }
-
-  const deltaY = currentMouseEvent.clientX - lastMouseEvent.clientX;
-
-  if (deltaY !== 0) {
-    mouseMoveDirectionY += Math.sign(deltaY);
-  }
-
-  if (mouseMoveDirectionY > 0) {
-    mouseMoveDirectionY = Math.min(mouseMoveDirectionY, mouseMoveThreshold);
-  } else {
-    mouseMoveDirectionY = Math.max(mouseMoveDirectionY, -mouseMoveThreshold);
   }
 }
