@@ -21,104 +21,102 @@ export class GridsterRenderer {
   constructor(private gridster: Gridster) {}
 
   updateItem(el: Element, item: GridsterItemConfig, renderer: Renderer2): void {
+    const $options = this.gridster.$options();
     if (this.gridster.mobile) {
       this.clearCellPosition(renderer, el);
-      if (this.gridster.$options.keepFixedHeightInMobile) {
-        renderer.setStyle(el, 'height', (item.rows - 1) * this.gridster.$options.margin + item.rows * this.gridster.$options.fixedRowHeight + 'px');
+      if ($options.keepFixedHeightInMobile) {
+        renderer.setStyle(el, 'height', (item.rows - 1) * $options.margin + item.rows * $options.fixedRowHeight + 'px');
       } else {
         renderer.setStyle(el, 'height', (item.rows * this.gridster.curWidth) / item.cols + 'px');
       }
-      if (this.gridster.$options.keepFixedWidthInMobile) {
-        renderer.setStyle(el, 'width', this.gridster.$options.fixedColWidth + 'px');
+      if ($options.keepFixedWidthInMobile) {
+        renderer.setStyle(el, 'width', $options.fixedColWidth + 'px');
       } else {
         renderer.setStyle(el, 'width', '');
       }
 
-      renderer.setStyle(el, 'margin-bottom', this.gridster.$options.margin + 'px');
+      renderer.setStyle(el, 'margin-bottom', $options.margin + 'px');
       renderer.setStyle(el, DirTypes.LTR ? 'margin-right' : 'margin-left', '');
     } else {
       const x = Math.round(this.gridster.curColWidth * item.x);
       const y = Math.round(this.gridster.curRowHeight * item.y);
-      const width = this.gridster.curColWidth * item.cols - this.gridster.$options.margin;
-      const height = this.gridster.curRowHeight * item.rows - this.gridster.$options.margin;
+      const width = this.gridster.curColWidth * item.cols - $options.margin;
+      const height = this.gridster.curRowHeight * item.rows - $options.margin;
       // set the cell style
       this.setCellPosition(renderer, el, x, y);
       renderer.setStyle(el, 'width', width + 'px');
       renderer.setStyle(el, 'height', height + 'px');
       let marginBottom: string | null = null;
       let marginRight: string | null = null;
-      if (this.gridster.$options.outerMargin) {
+      if ($options.outerMargin) {
         if (this.gridster.rows === item.rows + item.y) {
-          if (this.gridster.$options.outerMarginBottom !== null) {
-            marginBottom = this.gridster.$options.outerMarginBottom + 'px';
+          if ($options.outerMarginBottom !== null) {
+            marginBottom = $options.outerMarginBottom + 'px';
           } else {
-            marginBottom = this.gridster.$options.margin + 'px';
+            marginBottom = $options.margin + 'px';
           }
         }
         if (this.gridster.columns === item.cols + item.x) {
-          if (this.gridster.$options.outerMarginBottom !== null) {
-            marginRight = this.gridster.$options.outerMarginRight + 'px';
+          if ($options.outerMarginBottom !== null) {
+            marginRight = $options.outerMarginRight + 'px';
           } else {
-            marginRight = this.gridster.$options.margin + 'px';
+            marginRight = $options.margin + 'px';
           }
         }
       }
 
       renderer.setStyle(el, 'margin-bottom', marginBottom);
-      renderer.setStyle(el, this.gridster.$options.dirType === DirTypes.LTR ? 'margin-right' : 'margin-left', marginRight);
+      renderer.setStyle(el, $options.dirType === DirTypes.LTR ? 'margin-right' : 'margin-left', marginRight);
     }
   }
 
   updateGridster(): void {
+    const $options = this.gridster.$options();
     let addClass = '';
     let removeClass1 = '';
     let removeClass2 = '';
     let removeClass3 = '';
-    if (this.gridster.$options.gridType === GridType.Fit) {
+    if ($options.gridType === GridType.Fit) {
       addClass = GridType.Fit;
       removeClass1 = GridType.ScrollVertical;
       removeClass2 = GridType.ScrollHorizontal;
       removeClass3 = GridType.Fixed;
-    } else if (this.gridster.$options.gridType === GridType.ScrollVertical) {
-      this.gridster.curRowHeight = this.gridster.curColWidth * this.gridster.$options.rowHeightRatio;
+    } else if ($options.gridType === GridType.ScrollVertical) {
+      this.gridster.curRowHeight = this.gridster.curColWidth * $options.rowHeightRatio;
       addClass = GridType.ScrollVertical;
       removeClass1 = GridType.Fit;
       removeClass2 = GridType.ScrollHorizontal;
       removeClass3 = GridType.Fixed;
-    } else if (this.gridster.$options.gridType === GridType.ScrollHorizontal) {
-      const widthRatio = this.gridster.$options.rowHeightRatio;
+    } else if ($options.gridType === GridType.ScrollHorizontal) {
+      const widthRatio = $options.rowHeightRatio;
       const calWidthRatio = widthRatio >= 1 ? widthRatio : widthRatio + 1;
       this.gridster.curColWidth = this.gridster.curRowHeight * calWidthRatio;
       addClass = GridType.ScrollHorizontal;
       removeClass1 = GridType.Fit;
       removeClass2 = GridType.ScrollVertical;
       removeClass3 = GridType.Fixed;
-    } else if (this.gridster.$options.gridType === GridType.Fixed) {
-      this.gridster.curColWidth =
-        this.gridster.$options.fixedColWidth + (this.gridster.$options.ignoreMarginInRow ? 0 : this.gridster.$options.margin);
-      this.gridster.curRowHeight =
-        this.gridster.$options.fixedRowHeight + (this.gridster.$options.ignoreMarginInRow ? 0 : this.gridster.$options.margin);
+    } else if ($options.gridType === GridType.Fixed) {
+      this.gridster.curColWidth = $options.fixedColWidth + ($options.ignoreMarginInRow ? 0 : $options.margin);
+      this.gridster.curRowHeight = $options.fixedRowHeight + ($options.ignoreMarginInRow ? 0 : $options.margin);
       addClass = GridType.Fixed;
       removeClass1 = GridType.Fit;
       removeClass2 = GridType.ScrollVertical;
       removeClass3 = GridType.ScrollHorizontal;
-    } else if (this.gridster.$options.gridType === GridType.VerticalFixed) {
-      this.gridster.curRowHeight =
-        this.gridster.$options.fixedRowHeight + (this.gridster.$options.ignoreMarginInRow ? 0 : this.gridster.$options.margin);
+    } else if ($options.gridType === GridType.VerticalFixed) {
+      this.gridster.curRowHeight = $options.fixedRowHeight + ($options.ignoreMarginInRow ? 0 : $options.margin);
       addClass = GridType.ScrollVertical;
       removeClass1 = GridType.Fit;
       removeClass2 = GridType.ScrollHorizontal;
       removeClass3 = GridType.Fixed;
-    } else if (this.gridster.$options.gridType === GridType.HorizontalFixed) {
-      this.gridster.curColWidth =
-        this.gridster.$options.fixedColWidth + (this.gridster.$options.ignoreMarginInRow ? 0 : this.gridster.$options.margin);
+    } else if ($options.gridType === GridType.HorizontalFixed) {
+      this.gridster.curColWidth = $options.fixedColWidth + ($options.ignoreMarginInRow ? 0 : $options.margin);
       addClass = GridType.ScrollHorizontal;
       removeClass1 = GridType.Fit;
       removeClass2 = GridType.ScrollVertical;
       removeClass3 = GridType.Fixed;
     }
 
-    if (this.gridster.mobile || (this.gridster.$options.setGridSize && this.gridster.$options.gridType !== GridType.Fit)) {
+    if (this.gridster.mobile || ($options.setGridSize && $options.gridType !== GridType.Fit)) {
       this.gridster.renderer.removeClass(this.gridster.el, addClass);
     } else {
       this.gridster.renderer.addClass(this.gridster.el, addClass);
@@ -129,11 +127,12 @@ export class GridsterRenderer {
   }
 
   getGridColumnStyle(i: number): CommonGridStyle {
+    const margin = this.gridster.$options().margin;
     // generates the new style
     const newPos: GridColumnCachedStyle = {
       left: this.gridster.curColWidth * i,
-      width: this.gridster.curColWidth - this.gridster.$options.margin,
-      height: this.gridster.gridRows.length * this.gridster.curRowHeight - this.gridster.$options.margin,
+      width: this.gridster.curColWidth - margin,
+      height: this.gridster.gridRows.length * this.gridster.curRowHeight - margin,
       style: {}
     };
     newPos.style = {
@@ -154,11 +153,12 @@ export class GridsterRenderer {
   }
 
   getGridRowStyle(i: number): CommonGridStyle {
+    const margin = this.gridster.$options().margin;
     // generates the new style
     const newPos: GridRowCachedStyle = {
       top: this.gridster.curRowHeight * i,
-      width: this.gridster.gridColumns.length * this.gridster.curColWidth + this.gridster.$options.margin,
-      height: this.gridster.curRowHeight - this.gridster.$options.margin,
+      width: this.gridster.gridColumns.length * this.gridster.curColWidth + margin,
+      height: this.gridster.curRowHeight - margin,
       style: {}
     };
     newPos.style = {
@@ -179,8 +179,9 @@ export class GridsterRenderer {
   }
 
   getLeftPosition(d: number): { left: string } | { transform: string } {
-    const dPosition = this.gridster.$options.dirType === DirTypes.RTL ? -d : d;
-    if (this.gridster.$options.useTransformPositioning) {
+    const $options = this.gridster.$options();
+    const dPosition = $options.dirType === DirTypes.RTL ? -d : d;
+    if ($options.useTransformPositioning) {
       return {
         transform: 'translateX(' + dPosition + 'px)'
       };
@@ -192,7 +193,7 @@ export class GridsterRenderer {
   }
 
   getTopPosition(d: number): { top: string } | { transform: string } {
-    if (this.gridster.$options.useTransformPositioning) {
+    if (this.gridster.$options().useTransformPositioning) {
       return {
         transform: 'translateY(' + d + 'px)'
       };
@@ -204,7 +205,7 @@ export class GridsterRenderer {
   }
 
   clearCellPosition(renderer: Renderer2, el: Element): void {
-    if (this.gridster.$options.useTransformPositioning) {
+    if (this.gridster.$options().useTransformPositioning) {
       renderer.setStyle(el, 'transform', '');
     } else {
       renderer.setStyle(el, 'top', '');
@@ -213,8 +214,9 @@ export class GridsterRenderer {
   }
 
   setCellPosition(renderer: Renderer2, el: Element, x: number, y: number): void {
-    const xPosition = this.gridster.$options.dirType === DirTypes.RTL ? -x : x;
-    if (this.gridster.$options.useTransformPositioning) {
+    const $options = this.gridster.$options();
+    const xPosition = this.gridster.$options().dirType === DirTypes.RTL ? -x : x;
+    if (this.gridster.$options().useTransformPositioning) {
       const transform = 'translate3d(' + xPosition + 'px, ' + y + 'px, 0)';
       renderer.setStyle(el, 'transform', transform);
     } else {
@@ -224,11 +226,12 @@ export class GridsterRenderer {
   }
 
   getLeftMargin(): number {
-    if (this.gridster.$options.outerMargin) {
-      if (this.gridster.$options.outerMarginLeft !== null) {
-        return this.gridster.$options.outerMarginLeft;
+    const $options = this.gridster.$options();
+    if ($options.outerMargin) {
+      if ($options.outerMarginLeft !== null) {
+        return $options.outerMarginLeft;
       } else {
-        return this.gridster.$options.margin;
+        return $options.margin;
       }
     } else {
       return 0;
@@ -236,11 +239,12 @@ export class GridsterRenderer {
   }
 
   getTopMargin(): number {
-    if (this.gridster.$options.outerMargin) {
-      if (this.gridster.$options.outerMarginTop !== null) {
-        return this.gridster.$options.outerMarginTop;
+    const $options = this.gridster.$options();
+    if ($options.outerMargin) {
+      if ($options.outerMarginTop !== null) {
+        return $options.outerMarginTop;
       } else {
-        return this.gridster.$options.margin;
+        return $options.margin;
       }
     } else {
       return 0;

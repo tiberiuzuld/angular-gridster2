@@ -91,7 +91,7 @@ export class GridsterItem implements OnInit, OnDestroy {
   init: boolean;
 
   zIndex(): number {
-    return this.getLayerIndex() + this.gridster.$options.baseLayerIndex;
+    return this.getLayerIndex() + this.gridster.$options().baseLayerIndex;
   }
 
   constructor() {
@@ -123,11 +123,13 @@ export class GridsterItem implements OnInit, OnDestroy {
   }
 
   updateItemSize(): void {
+    const options = this.gridster.options();
+    const $options = this.gridster.$options();
     const $item = this.$item();
     const top = $item.y * this.gridster.curRowHeight;
     const left = $item.x * this.gridster.curColWidth;
-    const width = $item.cols * this.gridster.curColWidth - this.gridster.$options.margin;
-    const height = $item.rows * this.gridster.curRowHeight - this.gridster.$options.margin;
+    const width = $item.cols * this.gridster.curColWidth - $options.margin;
+    const height = $item.rows * this.gridster.curRowHeight - $options.margin;
 
     this.top = top;
     this.left = left;
@@ -138,11 +140,11 @@ export class GridsterItem implements OnInit, OnDestroy {
       if (item.initCallback) {
         item.initCallback(item, this);
       }
-      if (this.gridster.options.itemInitCallback) {
-        this.gridster.options.itemInitCallback(item, this);
+      if (options.itemInitCallback) {
+        options.itemInitCallback(item, this);
       }
       this.itemInit.emit({ item, itemComponent: this });
-      if (this.gridster.$options.scrollToNewItems) {
+      if ($options.scrollToNewItems) {
         this.el.scrollIntoView({
           block: 'end',
           inline: 'nearest',
@@ -153,17 +155,18 @@ export class GridsterItem implements OnInit, OnDestroy {
     if (width !== this.width || height !== this.height) {
       this.width = width;
       this.height = height;
-      if (this.gridster.options.itemResizeCallback) {
-        this.gridster.options.itemResizeCallback(item, this);
+      if (options.itemResizeCallback) {
+        options.itemResizeCallback(item, this);
       }
       this.itemResize.emit({ item, itemComponent: this });
     }
   }
 
   itemChanged(): void {
+    const options = this.gridster.options();
     const item = this.item();
-    if (this.gridster.options.itemChangeCallback) {
-      this.gridster.options.itemChangeCallback(item, this);
+    if (options.itemChangeCallback) {
+      options.itemChangeCallback(item, this);
     }
     this.itemChange.emit({ item, itemComponent: this });
   }
@@ -191,21 +194,21 @@ export class GridsterItem implements OnInit, OnDestroy {
   }
 
   canBeDragged(): boolean {
-    const gridDragEnabled = this.gridster.$options.draggable.enabled;
+    const gridDragEnabled = this.gridster.$options().draggable.enabled;
     const $item = this.$item();
     const itemDragEnabled = $item.dragEnabled === undefined ? gridDragEnabled : $item.dragEnabled;
     return !this.gridster.mobile && gridDragEnabled && itemDragEnabled;
   }
 
   canBeResized(): boolean {
-    const gridResizable = this.gridster.$options.resizable.enabled;
+    const gridResizable = this.gridster.$options().resizable.enabled;
     const $item = this.$item();
     const itemResizable = $item.resizeEnabled === undefined ? gridResizable : $item.resizeEnabled;
     return !this.gridster.mobile && gridResizable && itemResizable;
   }
 
   getResizableHandles() {
-    const gridResizableHandles = this.gridster.$options.resizable.handles;
+    const gridResizableHandles = this.gridster.$options().resizable.handles;
     const itemResizableHandles = this.$item().resizableHandles;
     // use grid settings if no settings are provided for the item.
     if (itemResizableHandles === undefined) {
@@ -223,7 +226,7 @@ export class GridsterItem implements OnInit, OnDestroy {
       return;
     }
     const layerIndex = this.getLayerIndex();
-    const topIndex = this.gridster.$options.maxLayerIndex;
+    const topIndex = this.gridster.$options().maxLayerIndex;
     if (layerIndex < topIndex) {
       const targetIndex = offset ? layerIndex + offset : topIndex;
       this.item().layerIndex = this.$item().layerIndex = targetIndex > topIndex ? topIndex : targetIndex;
@@ -246,8 +249,8 @@ export class GridsterItem implements OnInit, OnDestroy {
     if (item.layerIndex !== undefined) {
       return item.layerIndex;
     }
-    if (this.gridster.$options.defaultLayerIndex !== undefined) {
-      return this.gridster.$options.defaultLayerIndex;
+    if (this.gridster.$options().defaultLayerIndex !== undefined) {
+      return this.gridster.$options().defaultLayerIndex;
     }
     return 0;
   }

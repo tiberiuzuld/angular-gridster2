@@ -79,8 +79,10 @@ export class GridsterDraggable {
       return;
     }
 
-    if (this.gridster.options.draggable && this.gridster.options.draggable.start) {
-      this.gridster.options.draggable.start(this.gridsterItem.item(), this.gridsterItem, e);
+    const options = this.gridster.options();
+    const $options = this.gridster.$options();
+    if (options.draggable && options.draggable.start) {
+      options.draggable.start(this.gridsterItem.item(), this.gridsterItem, e);
     }
 
     e.stopPropagation();
@@ -96,11 +98,11 @@ export class GridsterDraggable {
     this.touchend = this.gridsterItem.renderer.listen('document', 'touchend', this.dragStop);
     this.touchcancel = this.gridsterItem.renderer.listen('document', 'touchcancel', this.dragStop);
     this.gridsterItem.renderer.addClass(this.gridsterItem.el, 'gridster-item-moving');
-    this.margin = this.gridster.$options.margin;
-    this.outerMarginTop = this.gridster.$options.outerMarginTop;
-    this.outerMarginRight = this.gridster.$options.outerMarginRight;
-    this.outerMarginBottom = this.gridster.$options.outerMarginBottom;
-    this.outerMarginLeft = this.gridster.$options.outerMarginLeft;
+    this.margin = $options.margin;
+    this.outerMarginTop = $options.outerMarginTop;
+    this.outerMarginRight = $options.outerMarginRight;
+    this.outerMarginBottom = $options.outerMarginBottom;
+    this.outerMarginLeft = $options.outerMarginLeft;
     this.offsetLeft = this.gridster.el.scrollLeft - this.gridster.el.offsetLeft;
     this.offsetTop = this.gridster.el.scrollTop - this.gridster.el.offsetTop;
     this.left = this.gridsterItem.left - this.margin;
@@ -109,7 +111,7 @@ export class GridsterDraggable {
     this.originalClientY = e.clientY;
     this.width = this.gridsterItem.width;
     this.height = this.gridsterItem.height;
-    if (this.gridster.$options.dirType === DirTypes.RTL) {
+    if ($options.dirType === DirTypes.RTL) {
       this.diffLeft = e.clientX - this.gridster.el.scrollWidth + this.gridsterItem.left;
     } else {
       this.diffLeft = e.clientX + this.offsetLeft - this.margin - this.left;
@@ -135,7 +137,8 @@ export class GridsterDraggable {
     // get the directions of the mouse event
     let directions = this.getDirections(e);
 
-    if (this.gridster.options.enableBoundaryControl) {
+    const $options = this.gridster.$options();
+    if ($options.enableBoundaryControl) {
       // prevent moving up at the top of gridster
       if (
         directions.includes(Direction.UP) &&
@@ -194,21 +197,20 @@ export class GridsterDraggable {
   };
 
   calculateItemPositionFromMousePosition = (e: MouseEvent): void => {
-    if (this.gridster.options.scale) {
-      this.calculateItemPositionWithScale(e, this.gridster.options.scale);
+    const options = this.gridster.options();
+    if (options.scale) {
+      this.calculateItemPositionWithScale(e, options.scale);
     } else {
       this.calculateItemPositionWithoutScale(e);
     }
     this.calculateItemPosition();
     this.lastMouse.clientX = e.clientX;
     this.lastMouse.clientY = e.clientY;
-    this.zone.run(() => {
-      this.gridster.updateGrid();
-    });
+    this.zone.run(() => this.gridster.updateGrid());
   };
 
   calculateItemPositionWithScale(e: MouseEvent, scale: number): void {
-    if (this.gridster.$options.dirType === DirTypes.RTL) {
+    if (this.gridster.$options().dirType === DirTypes.RTL) {
       this.left = this.gridster.el.scrollWidth - this.originalClientX + (e.clientX - this.originalClientX) / scale + this.diffLeft;
     } else {
       this.left = this.originalClientX + (e.clientX - this.originalClientX) / scale + this.offsetLeft - this.diffLeft;
@@ -217,7 +219,7 @@ export class GridsterDraggable {
   }
 
   calculateItemPositionWithoutScale(e: MouseEvent): void {
-    const isRTL = this.gridster.$options.dirType === DirTypes.RTL;
+    const isRTL = this.gridster.$options().dirType === DirTypes.RTL;
     if (isRTL) {
       this.left = this.gridster.el.offsetWidth - (e.clientX + this.offsetLeft - this.diffLeft);
     } else {
@@ -243,8 +245,9 @@ export class GridsterDraggable {
     this.gridster.dragInProgress = false;
     this.gridster.updateGrid();
     this.path = [];
-    if (this.gridster.options.draggable && this.gridster.options.draggable.stop) {
-      Promise.resolve(this.gridster.options.draggable.stop(this.gridsterItem.item(), this.gridsterItem, e)).then(this.makeDrag, this.cancelDrag);
+    const options = this.gridster.options();
+    if (options.draggable && options.draggable.stop) {
+      Promise.resolve(options.draggable.stop(this.gridsterItem.item(), this.gridsterItem, e)).then(this.makeDrag, this.cancelDrag);
     } else {
       this.makeDrag();
     }
@@ -278,15 +281,16 @@ export class GridsterDraggable {
   };
 
   makeDrag = (): void => {
+    const options = this.gridster.options();
     if (
-      this.gridster.$options.draggable.dropOverItems &&
-      this.gridster.options.draggable &&
-      this.gridster.options.draggable.dropOverItemsCallback &&
+      this.gridster.$options().draggable.dropOverItems &&
+      options.draggable &&
+      options.draggable.dropOverItemsCallback &&
       this.collision &&
       this.collision !== true &&
       this.collision.$item()
     ) {
-      this.gridster.options.draggable.dropOverItemsCallback(this.gridsterItem.item(), this.collision.item(), this.gridster);
+      options.draggable.dropOverItemsCallback(this.gridsterItem.item(), this.collision.item(), this.gridster);
     }
     this.collision = false;
     this.gridsterItem.setSize();
@@ -335,13 +339,14 @@ export class GridsterDraggable {
       } else if (lastPosition.y > $item.y) {
         direction = this.push.fromSouth;
       }
-      this.push.pushItems(direction, this.gridster.$options.disablePushOnDrag);
+      const $options = this.gridster.$options();
+      this.push.pushItems(direction, $options.disablePushOnDrag);
       this.swap.swapItems();
       this.collision = this.gridster.checkCollision($item);
       if (this.collision) {
         $item.x = this.positionXBackup;
         $item.y = this.positionYBackup;
-        if (this.gridster.$options.draggable.dropOverItems && this.collision !== true && this.collision.$item()) {
+        if ($options.draggable.dropOverItems && this.collision !== true && this.collision.$item()) {
           this.gridster.movingItem = null;
         }
       } else {
@@ -382,7 +387,8 @@ export class GridsterDraggable {
       return;
     }
     GridsterUtils.checkTouchEvent(e);
-    if (!this.gridster.$options.draggable.delayStart) {
+    const $options = this.gridster.$options();
+    if (!$options.draggable.delayStart) {
       this.dragStart(e);
       return;
     }
@@ -390,7 +396,7 @@ export class GridsterDraggable {
       this.dragStart(e);
       cancelDrag();
       this.cdRef.markForCheck();
-    }, this.gridster.$options.draggable.delayStart);
+    }, $options.draggable.delayStart);
     const cancelMouse = this.gridsterItem.renderer.listen('document', 'mouseup', cancelDrag);
     const cancelMouseLeave = this.gridsterItem.renderer.listen('document', 'mouseleave', cancelDrag);
     const cancelOnBlur = this.gridsterItem.renderer.listen('window', 'blur', cancelDrag);

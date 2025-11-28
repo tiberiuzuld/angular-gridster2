@@ -11,75 +11,77 @@ export class GridsterCompact {
   }
 
   checkCompact(): void {
-    if (this.gridster.$options.compactType !== CompactType.None) {
-      if (this.gridster.$options.compactType === CompactType.CompactUp) {
+    const $options = this.gridster.$options();
+    if ($options.compactType !== CompactType.None) {
+      if ($options.compactType === CompactType.CompactUp) {
         this.checkCompactMovement('y', -1);
-      } else if (this.gridster.$options.compactType === CompactType.CompactLeft) {
+      } else if ($options.compactType === CompactType.CompactLeft) {
         this.checkCompactMovement('x', -1);
-      } else if (this.gridster.$options.compactType === CompactType.CompactUpAndLeft) {
+      } else if ($options.compactType === CompactType.CompactUpAndLeft) {
         this.checkCompactMovement('y', -1);
         this.checkCompactMovement('x', -1);
-      } else if (this.gridster.$options.compactType === CompactType.CompactLeftAndUp) {
+      } else if ($options.compactType === CompactType.CompactLeftAndUp) {
         this.checkCompactMovement('x', -1);
         this.checkCompactMovement('y', -1);
-      } else if (this.gridster.$options.compactType === CompactType.CompactRight) {
+      } else if ($options.compactType === CompactType.CompactRight) {
         this.checkCompactMovement('x', 1);
-      } else if (this.gridster.$options.compactType === CompactType.CompactUpAndRight) {
+      } else if ($options.compactType === CompactType.CompactUpAndRight) {
         this.checkCompactMovement('y', -1);
         this.checkCompactMovement('x', 1);
-      } else if (this.gridster.$options.compactType === CompactType.CompactRightAndUp) {
+      } else if ($options.compactType === CompactType.CompactRightAndUp) {
         this.checkCompactMovement('x', 1);
         this.checkCompactMovement('y', -1);
-      } else if (this.gridster.$options.compactType === CompactType.CompactDown) {
+      } else if ($options.compactType === CompactType.CompactDown) {
         this.checkCompactMovement('y', 1);
-      } else if (this.gridster.$options.compactType === CompactType.CompactDownAndLeft) {
+      } else if ($options.compactType === CompactType.CompactDownAndLeft) {
         this.checkCompactMovement('y', 1);
         this.checkCompactMovement('x', -1);
-      } else if (this.gridster.$options.compactType === CompactType.CompactDownAndRight) {
+      } else if ($options.compactType === CompactType.CompactDownAndRight) {
         this.checkCompactMovement('y', 1);
         this.checkCompactMovement('x', 1);
-      } else if (this.gridster.$options.compactType === CompactType.CompactLeftAndDown) {
+      } else if ($options.compactType === CompactType.CompactLeftAndDown) {
         this.checkCompactMovement('x', -1);
         this.checkCompactMovement('y', 1);
-      } else if (this.gridster.$options.compactType === CompactType.CompactRightAndDown) {
+      } else if ($options.compactType === CompactType.CompactRightAndDown) {
         this.checkCompactMovement('x', 1);
         this.checkCompactMovement('y', 1);
-      } else if (this.gridster.$options.compactType === CompactType.CompactGrid) {
+      } else if ($options.compactType === CompactType.CompactGrid) {
         this.checkCompactGrid();
       }
     }
   }
 
   checkCompactItem(item: GridsterItemConfig): void {
-    if (this.gridster.$options.compactType !== CompactType.None) {
-      if (this.gridster.$options.compactType === CompactType.CompactUp) {
+    const $options = this.gridster.$options();
+    if ($options.compactType !== CompactType.None) {
+      if ($options.compactType === CompactType.CompactUp) {
         this.moveTillCollision(item, 'y', -1);
-      } else if (this.gridster.$options.compactType === CompactType.CompactLeft) {
+      } else if ($options.compactType === CompactType.CompactLeft) {
         this.moveTillCollision(item, 'x', -1);
-      } else if (this.gridster.$options.compactType === CompactType.CompactUpAndLeft) {
+      } else if ($options.compactType === CompactType.CompactUpAndLeft) {
         this.moveTillCollision(item, 'y', -1);
         this.moveTillCollision(item, 'x', -1);
-      } else if (this.gridster.$options.compactType === CompactType.CompactLeftAndUp) {
+      } else if ($options.compactType === CompactType.CompactLeftAndUp) {
         this.moveTillCollision(item, 'x', -1);
         this.moveTillCollision(item, 'y', -1);
-      } else if (this.gridster.$options.compactType === CompactType.CompactUpAndRight) {
+      } else if ($options.compactType === CompactType.CompactUpAndRight) {
         this.moveTillCollision(item, 'y', -1);
         this.moveTillCollision(item, 'x', 1);
-      } else if (this.gridster.$options.compactType === CompactType.CompactDown) {
+      } else if ($options.compactType === CompactType.CompactDown) {
         this.moveTillCollision(item, 'y', 1);
-      } else if (this.gridster.$options.compactType === CompactType.CompactDownAndLeft) {
+      } else if ($options.compactType === CompactType.CompactDownAndLeft) {
         this.moveTillCollision(item, 'y', 1);
         this.moveTillCollision(item, 'x', -1);
-      } else if (this.gridster.$options.compactType === CompactType.CompactLeftAndDown) {
+      } else if ($options.compactType === CompactType.CompactLeftAndDown) {
         this.moveTillCollision(item, 'x', -1);
         this.moveTillCollision(item, 'y', 1);
-      } else if (this.gridster.$options.compactType === CompactType.CompactDownAndRight) {
+      } else if ($options.compactType === CompactType.CompactDownAndRight) {
         this.moveTillCollision(item, 'y', 1);
         this.moveTillCollision(item, 'x', 1);
-      } else if (this.gridster.$options.compactType === CompactType.CompactRightAndDown) {
+      } else if ($options.compactType === CompactType.CompactRightAndDown) {
         this.moveTillCollision(item, 'x', 1);
         this.moveTillCollision(item, 'y', 1);
-      } else if (this.gridster.$options.compactType === CompactType.CompactGrid) {
+      } else if ($options.compactType === CompactType.CompactGrid) {
         this.moveToGridPosition(item);
       }
     }

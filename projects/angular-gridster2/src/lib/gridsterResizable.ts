@@ -87,8 +87,10 @@ export class GridsterResizable {
     if ((e.which && e.which !== 1) || this.gridster.dragInProgress) {
       return;
     }
-    if (this.gridster.options.resizable && this.gridster.options.resizable.start) {
-      this.gridster.options.resizable.start(this.gridsterItem.item(), this.gridsterItem, e);
+    const options = this.gridster.options();
+    const $options = this.gridster.$options();
+    if (options.resizable && options.resizable.start) {
+      options.resizable.start(this.gridsterItem.item(), this.gridsterItem, e);
     }
     e.stopPropagation();
     e.preventDefault();
@@ -114,25 +116,25 @@ export class GridsterResizable {
     this.height = this.gridsterItem.height;
     this.bottom = this.gridsterItem.top + this.gridsterItem.height;
     this.right = this.gridsterItem.left + this.gridsterItem.width;
-    this.margin = this.gridster.$options.margin;
-    this.outerMarginTop = this.gridster.$options.outerMarginTop;
-    this.outerMarginRight = this.gridster.$options.outerMarginRight;
-    this.outerMarginBottom = this.gridster.$options.outerMarginBottom;
-    this.outerMarginLeft = this.gridster.$options.outerMarginLeft;
+    this.margin = $options.margin;
+    this.outerMarginTop = $options.outerMarginTop;
+    this.outerMarginRight = $options.outerMarginRight;
+    this.outerMarginBottom = $options.outerMarginBottom;
+    this.outerMarginLeft = $options.outerMarginLeft;
     this.offsetLeft = this.gridster.el.scrollLeft - this.gridster.el.offsetLeft;
     this.offsetTop = this.gridster.el.scrollTop - this.gridster.el.offsetTop;
     this.diffLeft = e.clientX + this.offsetLeft - this.left;
     this.diffRight = e.clientX + this.offsetLeft - this.right;
     this.diffTop = e.clientY + this.offsetTop - this.top;
     this.diffBottom = e.clientY + this.offsetTop - this.bottom;
-    this.minHeight = this.gridster.positionYToPixels(this.gridsterItem.$item().minItemRows || this.gridster.$options.minItemRows) - this.margin;
-    this.minWidth = this.gridster.positionXToPixels(this.gridsterItem.$item().minItemCols || this.gridster.$options.minItemCols) - this.margin;
+    this.minHeight = this.gridster.positionYToPixels(this.gridsterItem.$item().minItemRows || $options.minItemRows) - this.margin;
+    this.minWidth = this.gridster.positionXToPixels(this.gridsterItem.$item().minItemCols || $options.minItemCols) - this.margin;
     this.gridster.movingItem = this.gridsterItem.$item();
     this.gridster.previewStyle();
     this.push = new GridsterPush(this.gridsterItem);
     this.pushResize = new GridsterPushResize(this.gridsterItem);
     this.gridster.dragInProgress = true;
-    this.hasRatio = !!(this.gridster.$options.itemAspectRatio || this.gridsterItem.$item().itemAspectRatio);
+    this.hasRatio = !!($options.itemAspectRatio || this.gridsterItem.$item().itemAspectRatio);
     this.itemBackup = { x: 0, y: 0, cols: 0, rows: 0 };
     this.gridster.updateGrid();
 
@@ -142,7 +144,7 @@ export class GridsterResizable {
       this.resizeEventScrollType.north = true;
       this.directionFunction = this.handleNorth;
     } else if (classList.contains('handle-w')) {
-      if (this.gridster.$options.dirType === DirTypes.RTL) {
+      if ($options.dirType === DirTypes.RTL) {
         this.resizeEventScrollType.east = true;
         this.directionFunction = this.handleEast;
       } else {
@@ -153,7 +155,7 @@ export class GridsterResizable {
       this.resizeEventScrollType.south = true;
       this.directionFunction = this.handleSouth;
     } else if (classList.contains('handle-e')) {
-      if (this.gridster.$options.dirType === DirTypes.RTL) {
+      if ($options.dirType === DirTypes.RTL) {
         this.resizeEventScrollType.west = true;
         this.directionFunction = this.handleWest;
       } else {
@@ -161,7 +163,7 @@ export class GridsterResizable {
         this.directionFunction = this.handleEast;
       }
     } else if (classList.contains('handle-nw')) {
-      if (this.gridster.$options.dirType === DirTypes.RTL) {
+      if ($options.dirType === DirTypes.RTL) {
         this.resizeEventScrollType.north = true;
         this.resizeEventScrollType.east = true;
         this.directionFunction = this.handleNorthEast;
@@ -171,7 +173,7 @@ export class GridsterResizable {
         this.directionFunction = this.handleNorthWest;
       }
     } else if (classList.contains('handle-ne')) {
-      if (this.gridster.$options.dirType === DirTypes.RTL) {
+      if ($options.dirType === DirTypes.RTL) {
         this.resizeEventScrollType.north = true;
         this.resizeEventScrollType.west = true;
         this.directionFunction = this.handleNorthWest;
@@ -181,7 +183,7 @@ export class GridsterResizable {
         this.directionFunction = this.handleNorthEast;
       }
     } else if (classList.contains('handle-sw')) {
-      if (this.gridster.$options.dirType === DirTypes.RTL) {
+      if ($options.dirType === DirTypes.RTL) {
         this.resizeEventScrollType.south = true;
         this.resizeEventScrollType.east = true;
         this.directionFunction = this.handleSouthEast;
@@ -191,7 +193,7 @@ export class GridsterResizable {
         this.directionFunction = this.handleSouthWest;
       }
     } else if (classList.contains('handle-se')) {
-      if (this.gridster.$options.dirType === DirTypes.RTL) {
+      if ($options.dirType === DirTypes.RTL) {
         this.resizeEventScrollType.south = true;
         this.resizeEventScrollType.west = true;
         this.directionFunction = this.handleSouthWest;
@@ -215,7 +217,7 @@ export class GridsterResizable {
     this.offsetLeft = this.gridster.el.scrollLeft - this.gridster.el.offsetLeft;
     scroll(this.gridster, this.left, this.top, this.width, this.height, e, this.lastMouse, this.directionFunction, true, this.resizeEventScrollType);
 
-    const scale = this.gridster.options.scale || 1;
+    const scale = this.gridster.$options().scale;
     this.directionFunction({
       clientX: this.originalClientX + (e.clientX - this.originalClientX) / scale,
       clientY: this.originalClientY + (e.clientY - this.originalClientY) / scale
@@ -247,8 +249,9 @@ export class GridsterResizable {
       south: false
     };
     this.gridster.updateGrid();
-    if (this.gridster.options.resizable && this.gridster.options.resizable.stop) {
-      Promise.resolve(this.gridster.options.resizable.stop(this.gridsterItem.item(), this.gridsterItem, e)).then(this.makeResize, this.cancelResize);
+    const options = this.gridster.options();
+    if (options.resizable && options.resizable.stop) {
+      Promise.resolve(options.resizable.stop(this.gridsterItem.item(), this.gridsterItem, e)).then(this.makeResize, this.cancelResize);
     } else {
       this.makeResize();
     }
@@ -291,7 +294,7 @@ export class GridsterResizable {
   private check = (direction: string): boolean => {
     this.hasRatio && this.enforceAspectRatio();
     this.pushResize.pushItems(direction);
-    this.push.pushItems(direction, this.gridster.$options.disablePushOnResize);
+    this.push.pushItems(direction, this.gridster.$options().disablePushOnResize);
     if (this.gridster.checkCollision(this.gridsterItem.$item(), true)) {
       this.resetItem(this.hasRatio);
       return false;
@@ -308,11 +311,11 @@ export class GridsterResizable {
     if (this.minHeight > this.height) {
       this.height = this.minHeight;
       this.top = this.bottom - this.minHeight;
-    } else if (this.gridster.options.enableBoundaryControl) {
+    } else if (this.gridster.$options().enableBoundaryControl) {
       this.top = Math.max(0, this.top);
       this.height = this.bottom - this.top;
     }
-    const marginTop = this.gridster.options.pushItems ? this.margin : 0;
+    const marginTop = this.gridster.$options().pushItems ? this.margin : 0;
     return this.gridster.pixelsToPositionY(this.top + marginTop, Math.floor);
   };
 
@@ -332,18 +335,19 @@ export class GridsterResizable {
   };
 
   private getNewWestPosition = (e: MouseEvent): number => {
-    const clientX = this.gridster.$options.dirType === DirTypes.RTL ? this.originalClientX + (this.originalClientX - e.clientX) : e.clientX;
+    const $options = this.gridster.$options();
+    const clientX = $options.dirType === DirTypes.RTL ? this.originalClientX + (this.originalClientX - e.clientX) : e.clientX;
     this.left = clientX + this.offsetLeft - this.diffLeft;
 
     this.width = this.right - this.left;
     if (this.minWidth > this.width) {
       this.width = this.minWidth;
       this.left = this.right - this.minWidth;
-    } else if (this.gridster.options.enableBoundaryControl) {
+    } else if ($options.enableBoundaryControl) {
       this.left = Math.max(0, this.left);
       this.width = this.right - this.left;
     }
-    const marginLeft = this.gridster.options.pushItems ? this.margin : 0;
+    const marginLeft = $options.pushItems ? this.margin : 0;
     return this.gridster.pixelsToPositionX(this.left + marginLeft, Math.floor);
   };
 
@@ -368,13 +372,14 @@ export class GridsterResizable {
       this.height = this.minHeight;
     }
     this.bottom = this.top + this.height;
-    if (this.gridster.options.enableBoundaryControl) {
+    const $options = this.gridster.$options();
+    if ($options.enableBoundaryControl) {
       const margin = this.outerMarginBottom ?? this.margin;
       const box = this.gridster.el.getBoundingClientRect();
       this.bottom = Math.min(this.bottom, box.bottom - box.top - 2 * margin);
       this.height = this.bottom - this.top;
     }
-    const marginBottom = this.gridster.options.pushItems ? 0 : this.margin;
+    const marginBottom = $options.pushItems ? 0 : this.margin;
     return this.gridster.pixelsToPositionY(this.bottom + marginBottom, Math.ceil);
   };
 
@@ -392,20 +397,21 @@ export class GridsterResizable {
   };
 
   private getNewEastPosition = (e: MouseEvent) => {
-    const clientX = this.gridster.$options.dirType === DirTypes.RTL ? this.originalClientX + (this.originalClientX - e.clientX) : e.clientX;
+    const $options = this.gridster.$options();
+    const clientX = $options.dirType === DirTypes.RTL ? this.originalClientX + (this.originalClientX - e.clientX) : e.clientX;
     this.width = clientX + this.offsetLeft - this.diffRight - this.left;
 
     if (this.minWidth > this.width) {
       this.width = this.minWidth;
     }
     this.right = this.left + this.width;
-    if (this.gridster.options.enableBoundaryControl) {
+    if ($options.enableBoundaryControl) {
       const margin = this.outerMarginRight ?? this.margin;
       const box = this.gridster.el.getBoundingClientRect();
       this.right = Math.min(this.right, box.right - box.left - 2 * margin);
       this.width = this.right - this.left;
     }
-    const marginRight = this.gridster.options.pushItems ? 0 : this.margin;
+    const marginRight = $options.pushItems ? 0 : this.margin;
     return this.gridster.pixelsToPositionX(this.right + marginRight, Math.ceil);
   };
 
@@ -540,7 +546,7 @@ export class GridsterResizable {
   dragStartDelay(e: MouseEvent | TouchEvent): void {
     GridsterUtils.checkTouchEvent(e);
 
-    if (!this.gridster.$options.resizable.delayStart) {
+    if (!this.gridster.$options().resizable.delayStart) {
       this.dragStart(e as MouseEvent);
       return;
     }
@@ -548,7 +554,7 @@ export class GridsterResizable {
     const timeout = setTimeout(() => {
       this.dragStart(e as MouseEvent);
       cancelDrag();
-    }, this.gridster.$options.resizable.delayStart);
+    }, this.gridster.$options().resizable.delayStart);
 
     const { cancelMouse, cancelMouseLeave, cancelOnBlur, cancelTouchMove, cancelTouchEnd, cancelTouchCancel } = this.zone.runOutsideAngular(() => {
       // Note: all of these events are being added within the `<root>` zone since they all
@@ -610,8 +616,9 @@ export class GridsterResizable {
    * Enforces the aspect ratio by recalculating grid positions based on current pixel dimensions
    */
   private enforceAspectRatio(): void {
+    const $options = this.gridster.$options();
     const $item = this.gridsterItem.$item();
-    const aspectRatio = $item.itemAspectRatio || this.gridster.$options.itemAspectRatio;
+    const aspectRatio = $item.itemAspectRatio || $options.itemAspectRatio;
     if (!aspectRatio) {
       return;
     }
@@ -620,13 +627,13 @@ export class GridsterResizable {
     const targetRatio = aspectRatio * (this.gridster.curColWidth / this.gridster.curRowHeight);
 
     // Get min/max dimensions
-    const minCols = $item.minItemCols || this.gridster.$options.minItemCols;
-    const minRows = $item.minItemRows || this.gridster.$options.minItemRows;
+    const minCols = $item.minItemCols || $options.minItemCols;
+    const minRows = $item.minItemRows || $options.minItemRows;
     const minWidth = this.gridster.positionXToPixels(minCols) - this.margin;
     const minHeight = this.gridster.positionYToPixels(minRows) - this.margin;
 
-    const maxCols = $item.maxItemCols || this.gridster.$options.maxItemCols || 0;
-    const maxRows = $item.maxItemRows || this.gridster.$options.maxItemRows || 0;
+    const maxCols = $item.maxItemCols || $options.maxItemCols || 0;
+    const maxRows = $item.maxItemRows || $options.maxItemRows || 0;
     const maxWidth = maxCols ? this.gridster.positionXToPixels(maxCols) - this.margin : Number.MAX_VALUE;
     const maxHeight = maxRows ? this.gridster.positionYToPixels(maxRows) - this.margin : Number.MAX_VALUE;
 
@@ -661,7 +668,7 @@ export class GridsterResizable {
     }
 
     // Ensure we don't exceed grid boundaries
-    if (this.gridster.options.enableBoundaryControl) {
+    if ($options.enableBoundaryControl) {
       const box = this.gridster.el.getBoundingClientRect();
       const margin = Math.max(
         this.outerMarginTop || this.margin,
@@ -710,10 +717,10 @@ export class GridsterResizable {
     }
 
     // Update grid positions
-    const marginLeft = this.gridster.options.pushItems ? 0 : this.margin;
-    const marginTop = this.gridster.options.pushItems ? 0 : this.margin;
-    const marginRight = this.gridster.options.pushItems ? this.margin : 0;
-    const marginBottom = this.gridster.options.pushItems ? this.margin : 0;
+    const marginLeft = $options.pushItems ? 0 : this.margin;
+    const marginTop = $options.pushItems ? 0 : this.margin;
+    const marginRight = $options.pushItems ? this.margin : 0;
+    const marginBottom = $options.pushItems ? this.margin : 0;
 
     $item.x = this.gridster.pixelsToPositionX(this.left + marginLeft, Math.floor);
     $item.y = this.gridster.pixelsToPositionY(this.top + marginTop, Math.floor);

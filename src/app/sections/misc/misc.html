@@ -12,7 +12,7 @@
 </div>
 <div class="options-header">
   <mat-checkbox [(ngModel)]="options.disableWindowResize" (ngModelChange)="changedOptions()"> Disable window resize </mat-checkbox>
-  <mat-checkbox (ngModelChange)="changedOptions()" [(ngModel)]="options.setGridSize"> Set grid size </mat-checkbox>
+  <mat-checkbox [(ngModel)]="options.setGridSize" (ngModelChange)="changedOptions()"> Set grid size </mat-checkbox>
   <mat-checkbox [(ngModel)]="options.scrollToNewItems" (ngModelChange)="changedOptions()"> Scroll to new items </mat-checkbox>
   <mat-checkbox [(ngModel)]="options.disableWarnings" (ngModelChange)="changedOptions()"> Disable console warnings </mat-checkbox>
   <mat-checkbox [(ngModel)]="options.ignoreMarginInRow" (ngModelChange)="changedOptions()"> Ignore margin in row </mat-checkbox>

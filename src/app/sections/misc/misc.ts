@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -16,43 +16,35 @@ import { MarkdownModule } from 'ngx-markdown';
   encapsulation: ViewEncapsulation.None,
   imports: [FormsModule, MatButtonModule, MatCheckboxModule, MatIconModule, MatInputModule, MatSelectModule, MarkdownModule, Gridster, GridsterItem]
 })
-export class Misc implements OnInit {
-  options: GridsterConfig;
-  dashboard: GridsterItemConfig[];
-
-  ngOnInit(): void {
-    this.options = {
-      gridType: GridType.Fit,
-      displayGrid: DisplayGrid.Always,
-      draggable: { enabled: true },
-      resizable: { enabled: true },
-      disableWindowResize: true,
-      scrollToNewItems: false,
-      disableWarnings: false,
-      ignoreMarginInRow: false,
-      setGridSize: false,
-      scale: 1
-    };
-
-    this.dashboard = [
-      { cols: 2, rows: 1, y: 0, x: 0, id: 1 },
-      { cols: 2, rows: 2, y: 0, x: 2, id: 2 },
-      { cols: 1, rows: 1, y: 0, x: 4, id: 3 },
-      { cols: 3, rows: 2, y: 1, x: 4, id: 4 },
-      { cols: 1, rows: 1, y: 4, x: 5, id: 5 },
-      { cols: 1, rows: 1, y: 2, x: 1, id: 6 },
-      { cols: 2, rows: 2, y: 5, x: 5, id: 7 },
-      { cols: 2, rows: 2, y: 3, x: 2, id: 8 },
-      { cols: 2, rows: 1, y: 2, x: 2, id: 9 },
-      { cols: 1, rows: 1, y: 3, x: 4, id: 10 },
-      { cols: 1, rows: 1, y: 0, x: 6, id: 11 }
-    ];
-  }
+export class Misc {
+  options: GridsterConfig = {
+    gridType: GridType.Fit,
+    displayGrid: DisplayGrid.Always,
+    draggable: { enabled: true },
+    resizable: { enabled: true },
+    disableWindowResize: true,
+    scrollToNewItems: false,
+    disableWarnings: false,
+    ignoreMarginInRow: false,
+    setGridSize: false,
+    scale: 1
+  };
+  dashboard: GridsterItemConfig[] = [
+    { cols: 2, rows: 1, y: 0, x: 0, id: 1 },
+    { cols: 2, rows: 2, y: 0, x: 2, id: 2 },
+    { cols: 1, rows: 1, y: 0, x: 4, id: 3 },
+    { cols: 3, rows: 2, y: 1, x: 4, id: 4 },
+    { cols: 1, rows: 1, y: 4, x: 5, id: 5 },
+    { cols: 1, rows: 1, y: 2, x: 1, id: 6 },
+    { cols: 2, rows: 2, y: 5, x: 5, id: 7 },
+    { cols: 2, rows: 2, y: 3, x: 2, id: 8 },
+    { cols: 2, rows: 1, y: 2, x: 2, id: 9 },
+    { cols: 1, rows: 1, y: 3, x: 4, id: 10 },
+    { cols: 1, rows: 1, y: 0, x: 6, id: 11 }
+  ];
 
   changedOptions(): void {
-    if (this.options.api && this.options.api.optionsChanged) {
-      this.options.api.optionsChanged();
-    }
+    this.options = Object.assign({}, this.options);
   }
 
   removeItem($event: MouseEvent | TouchEvent, item: GridsterItemConfig): void {

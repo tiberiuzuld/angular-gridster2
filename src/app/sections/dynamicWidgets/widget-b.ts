@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, input, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { GridsterItemConfig } from 'angular-gridster2';
 import { Subscription } from 'rxjs';
 

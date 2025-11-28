@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
-import { CompactType, Gridster, GridsterConfig, GridsterItemConfig, GridsterItem, GridsterPush, GridType } from 'angular-gridster2';
+import { CompactType, Gridster, GridsterConfig, GridsterItem, GridsterItemConfig, GridsterPush, GridType } from 'angular-gridster2';
 import { MarkdownModule } from 'ngx-markdown';
+import { GridsterApi } from '../../../../projects/angular-gridster2/src/lib/gridsterConfig';
 
 @Component({
   selector: 'app-api',
@@ -12,44 +13,34 @@ import { MarkdownModule } from 'ngx-markdown';
   encapsulation: ViewEncapsulation.None,
   imports: [MatButtonModule, MatIconModule, MarkdownModule, Gridster, GridsterItem]
 })
-export class Api implements OnInit {
-  options: GridsterConfig;
-  dashboard: GridsterItemConfig[];
-  itemToPush: GridsterItem;
-
-  ngOnInit(): void {
-    this.options = {
-      gridType: GridType.Fit,
-      compactType: CompactType.None,
-      pushItems: true,
-      draggable: {
-        enabled: true
-      },
-      resizable: {
-        enabled: true
-      }
-    };
-
-    this.dashboard = [
-      { cols: 2, rows: 1, y: 0, x: 0, initCallback: this.initItem.bind(this), id: 1 },
-      { cols: 2, rows: 2, y: 0, x: 2, id: 2 },
-      { cols: 1, rows: 1, y: 0, x: 4, id: 3 },
-      { cols: 3, rows: 2, y: 1, x: 4, id: 4 },
-      { cols: 1, rows: 1, y: 4, x: 5, id: 5 },
-      { cols: 1, rows: 1, y: 2, x: 1, id: 6 },
-      { cols: 2, rows: 2, y: 5, x: 5, id: 7 },
-      { cols: 2, rows: 2, y: 3, x: 2, id: 8 },
-      { cols: 2, rows: 1, y: 2, x: 2, id: 9 },
-      { cols: 1, rows: 1, y: 3, x: 4, id: 10 },
-      { cols: 1, rows: 1, y: 0, x: 6, id: 11 }
-    ];
-  }
-
-  changedOptions(): void {
-    if (this.options.api && this.options.api.optionsChanged) {
-      this.options.api.optionsChanged();
+export class Api {
+  options: GridsterConfig = {
+    initCallback: (gridster, gridsterApi) => (this.gridApi = gridsterApi),
+    gridType: GridType.Fit,
+    compactType: CompactType.None,
+    pushItems: true,
+    draggable: {
+      enabled: true
+    },
+    resizable: {
+      enabled: true
     }
-  }
+  };
+  dashboard: GridsterItemConfig[] = [
+    { cols: 2, rows: 1, y: 0, x: 0, initCallback: this.initItem.bind(this), id: 1 },
+    { cols: 2, rows: 2, y: 0, x: 2, id: 2 },
+    { cols: 1, rows: 1, y: 0, x: 4, id: 3 },
+    { cols: 3, rows: 2, y: 1, x: 4, id: 4 },
+    { cols: 1, rows: 1, y: 4, x: 5, id: 5 },
+    { cols: 1, rows: 1, y: 2, x: 1, id: 6 },
+    { cols: 2, rows: 2, y: 5, x: 5, id: 7 },
+    { cols: 2, rows: 2, y: 3, x: 2, id: 8 },
+    { cols: 2, rows: 1, y: 2, x: 2, id: 9 },
+    { cols: 1, rows: 1, y: 3, x: 4, id: 10 },
+    { cols: 1, rows: 1, y: 0, x: 6, id: 11 }
+  ];
+  itemToPush: GridsterItem;
+  gridApi: GridsterApi;
 
   removeItem($event: MouseEvent | TouchEvent, item: GridsterItemConfig): void {
     $event.preventDefault();
@@ -83,8 +74,8 @@ export class Api implements OnInit {
   }
 
   getItemComponent(): void {
-    if (this.options.api && this.options.api.getItemComponent) {
-      console.log(this.options.api.getItemComponent(this.dashboard[0]));
+    if (this.gridApi) {
+      console.log(this.gridApi.getItemComponent(this.dashboard[0]));
     }
   }
 }

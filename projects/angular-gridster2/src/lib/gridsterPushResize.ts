@@ -31,7 +31,7 @@ export class GridsterPushResize {
   }
 
   pushItems(direction: string): boolean {
-    if (this.gridster.$options.pushResizeItems) {
+    if (this.gridster.$options().pushResizeItems) {
       return this.push(this.gridsterItem, direction);
     } else {
       return false;

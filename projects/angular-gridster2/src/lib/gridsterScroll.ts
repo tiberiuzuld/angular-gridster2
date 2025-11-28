@@ -48,8 +48,9 @@ export function scroll(
   resize?: boolean,
   resizeEventScrollType?: GridsterResizeEventType
 ): void {
-  scrollSensitivity = gridster.$options.scrollSensitivity;
-  scrollSpeed = gridster.$options.scrollSpeed;
+  const $options = gridster.$options();
+  scrollSensitivity = $options.scrollSensitivity;
+  scrollSpeed = $options.scrollSpeed;
   gridsterElement = gridster.el;
   resizeEvent = resize;
   resizeEventType = resizeEventScrollType;
@@ -64,7 +65,7 @@ export function scroll(
   lastMouseX = clientX;
   lastMouseY = clientY;
 
-  if (!gridster.$options.disableScrollVertical) {
+  if (!$options.disableScrollVertical) {
     const elemTopOffset = top - offsetTop;
     const elemBottomOffset = offsetHeight + offsetTop - top - height;
 
@@ -83,11 +84,11 @@ export function scroll(
     }
   }
 
-  if (!gridster.$options.disableScrollHorizontal) {
+  if (!$options.disableScrollHorizontal) {
     const elemRightOffset = offsetLeft + offsetWidth - left - width;
     const elemLeftOffset = left - offsetLeft;
 
-    const isRTL = gridster.$options.dirType === DirTypes.RTL;
+    const isRTL = $options.dirType === DirTypes.RTL;
 
     if (elemRightOffset <= scrollSensitivity) {
       cancelW();

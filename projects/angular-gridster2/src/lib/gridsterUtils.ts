@@ -34,19 +34,20 @@ export class GridsterUtils {
   }
 
   static checkContentClassForEvent(gridster: Gridster, e: MouseEvent): boolean {
-    if (gridster.$options.draggable.ignoreContent) {
+    const $options = gridster.$options();
+    if ($options.draggable.ignoreContent) {
       if (
         !GridsterUtils.checkDragHandleClass(
           e.target as HTMLElement,
           e.currentTarget as HTMLElement,
-          gridster.$options.draggable.dragHandleClass,
-          gridster.$options.draggable.ignoreContentClass
+          $options.draggable.dragHandleClass,
+          $options.draggable.ignoreContentClass
         )
       ) {
         return true;
       }
     } else {
-      if (GridsterUtils.checkContentClass(e.target as HTMLElement, e.currentTarget as HTMLElement, gridster.$options.draggable.ignoreContentClass)) {
+      if (GridsterUtils.checkContentClass(e.target as HTMLElement, e.currentTarget as HTMLElement, $options.draggable.ignoreContentClass)) {
         return true;
       }
     }
@@ -54,9 +55,10 @@ export class GridsterUtils {
   }
 
   static checkContentClassForEmptyCellClickEvent(gridster: Gridster, e: MouseEvent): boolean {
+    const $options = gridster.$options();
     return (
-      GridsterUtils.checkContentClass(e.target as HTMLElement, e.currentTarget as HTMLElement, gridster.$options.draggable.ignoreContentClass) ||
-      GridsterUtils.checkContentClass(e.target as HTMLElement, e.currentTarget as HTMLElement, gridster.$options.draggable.dragHandleClass)
+      GridsterUtils.checkContentClass(e.target as HTMLElement, e.currentTarget as HTMLElement, $options.draggable.ignoreContentClass) ||
+      GridsterUtils.checkContentClass(e.target as HTMLElement, e.currentTarget as HTMLElement, $options.draggable.dragHandleClass)
     );
   }
 

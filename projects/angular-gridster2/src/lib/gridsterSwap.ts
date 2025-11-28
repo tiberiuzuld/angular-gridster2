@@ -14,7 +14,7 @@ export class GridsterSwap {
   }
 
   swapItems(): void {
-    if (this.gridster.$options.swap) {
+    if (this.gridster.$options().swap) {
       this.checkSwapBack();
       this.checkSwap(this.gridsterItem);
     }
@@ -62,7 +62,7 @@ export class GridsterSwap {
     const $item = pushedBy.$item();
     const item = pushedBy.item();
     let gridsterItemCollision;
-    if (this.gridster.$options.swapWhileDragging) {
+    if (this.gridster.$options().swapWhileDragging) {
       gridsterItemCollision = this.gridster.checkCollisionForSwaping($item);
     } else {
       gridsterItemCollision = this.gridster.checkCollision($item);
@@ -88,7 +88,7 @@ export class GridsterSwap {
       } else {
         gridsterItemCollide.setSize();
         this.swapedItem = gridsterItemCollide;
-        if (this.gridster.$options.swapWhileDragging) {
+        if (this.gridster.$options().swapWhileDragging) {
           this.gridsterItem.checkItemChanges(this.gridsterItem.$item(), this.gridsterItem.item());
           this.setSwapItem();
         }

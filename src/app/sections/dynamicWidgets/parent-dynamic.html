@@ -1,5 +1,5 @@
 @if (widget().type === 'widgetA') {
-  <app-widget-a [resizeEvent]="resizeEvent()" [widget]="widget()"></app-widget-a>
+  <app-widget-a [widget]="widget()" [resizeEvent]="resizeEvent()"></app-widget-a>
 }
 @if (widget().type === 'widgetB') {
   <app-widget-b [widget]="widget()" [resizeEvent]="resizeEvent()"></app-widget-b>

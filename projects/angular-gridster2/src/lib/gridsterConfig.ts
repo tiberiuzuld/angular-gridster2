@@ -59,6 +59,15 @@ export enum DirTypes {
 
 export type dirTypes = 'ltr' | 'rtl';
 
+export type GridsterApi = {
+  calculateLayout: () => void;
+  resize: () => void;
+  getNextPossiblePosition: (newItem: GridsterItemConfig, startingFrom?: { y?: number; x?: number }) => void;
+  getFirstPossiblePosition: (item: GridsterItemConfig) => GridsterItemConfig;
+  getLastPossiblePosition: (item: GridsterItemConfig) => GridsterItemConfig;
+  getItemComponent: (item: GridsterItemConfig) => GridsterItem | undefined;
+};
+
 export type GridsterConfig = {
   gridType?: gridTypes;
   scale?: number;
@@ -97,7 +106,7 @@ export type GridsterConfig = {
   useTransformPositioning?: boolean;
   scrollSensitivity?: number;
   scrollSpeed?: number;
-  initCallback?: (gridster: Gridster) => void;
+  initCallback?: (gridster: Gridster, gridApi: GridsterApi) => void;
   destroyCallback?: (gridster: Gridster) => void;
   gridSizeChangedCallback?: (gridster: Gridster) => void;
   itemChangeCallback?: (item: GridsterItemConfig, itemComponent: GridsterItem) => void;
@@ -135,14 +144,6 @@ export type GridsterConfig = {
   emptyCellDragMaxRows?: number;
   ignoreMarginInRow?: boolean;
   dirType?: dirTypes;
-  api?: {
-    resize?: () => void;
-    optionsChanged?: () => void;
-    getNextPossiblePosition?: (newItem: GridsterItemConfig) => boolean;
-    getFirstPossiblePosition?: (item: GridsterItemConfig) => GridsterItemConfig;
-    getLastPossiblePosition?: (item: GridsterItemConfig) => GridsterItemConfig;
-    getItemComponent?: (item: GridsterItemConfig) => GridsterItem | undefined;
-  };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [propName: string]: any;

@@ -34,7 +34,7 @@ export class GridsterPush {
   }
 
   pushItems(direction: string, disable?: boolean): boolean {
-    if (this.gridster.$options.pushItems && !disable) {
+    if (this.gridster.$options().pushItems && !disable) {
       this.pushedItemsOrder = [];
       this.iteration = 0;
       const pushed = this.push(this.gridsterItem, direction);
@@ -171,7 +171,7 @@ export class GridsterPush {
   }
 
   private trySouth(gridsterItemCollide: GridsterItem, gridsterItem: GridsterItem): boolean {
-    if (!this.gridster.$options.pushDirections.south) {
+    if (!this.gridster.$options().pushDirections.south) {
       return false;
     }
     this.addToTempPushed(gridsterItemCollide);
@@ -187,7 +187,7 @@ export class GridsterPush {
   }
 
   private tryNorth(gridsterItemCollide: GridsterItem, gridsterItem: GridsterItem): boolean {
-    if (!this.gridster.$options.pushDirections.north) {
+    if (!this.gridster.$options().pushDirections.north) {
       return false;
     }
     this.addToTempPushed(gridsterItemCollide);
@@ -203,7 +203,7 @@ export class GridsterPush {
   }
 
   private tryEast(gridsterItemCollide: GridsterItem, gridsterItem: GridsterItem): boolean {
-    if (!this.gridster.$options.pushDirections.east) {
+    if (!this.gridster.$options().pushDirections.east) {
       return false;
     }
     this.addToTempPushed(gridsterItemCollide);
@@ -219,7 +219,7 @@ export class GridsterPush {
   }
 
   private tryWest(gridsterItemCollide: GridsterItem, gridsterItem: GridsterItem): boolean {
-    if (!this.gridster.$options.pushDirections.west) {
+    if (!this.gridster.$options().pushDirections.west) {
       return false;
     }
     this.addToTempPushed(gridsterItemCollide);

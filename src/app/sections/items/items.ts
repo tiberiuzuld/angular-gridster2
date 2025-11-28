@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -16,9 +16,62 @@ import { MarkdownModule } from 'ngx-markdown';
   encapsulation: ViewEncapsulation.None,
   imports: [FormsModule, MatButtonModule, MatCheckboxModule, MatIconModule, MatInputModule, MatSelectModule, MarkdownModule, GridsterItem, Gridster]
 })
-export class Items implements OnInit {
-  options: GridsterConfig;
-  dashboard: GridsterItemConfig[];
+export class Items {
+  options: GridsterConfig = {
+    gridType: GridType.Fit,
+    displayGrid: DisplayGrid.Always,
+    compactType: CompactType.None,
+    pushItems: true,
+    draggable: {
+      enabled: true
+    },
+    resizable: {
+      enabled: true
+    },
+    minCols: 1,
+    maxCols: 100,
+    minRows: 1,
+    maxRows: 100,
+    maxItemCols: 100,
+    minItemCols: 1,
+    maxItemRows: 100,
+    minItemRows: 1,
+    maxItemArea: 2500,
+    minItemArea: 1,
+    defaultItemCols: 1,
+    defaultItemRows: 1
+  };
+  dashboard: GridsterItemConfig[] = [
+    {
+      id: 1,
+      cols: 4,
+      rows: 3,
+      y: 0,
+      x: 0,
+      initCallback: Items.itemInit,
+      itemAspectRatio: 4 / 3,
+      minItemCols: 1,
+      maxItemCols: 100,
+      maxItemRows: 100,
+      minItemRows: 1,
+      minItemArea: 1,
+      maxItemArea: 2500,
+      dragEnabled: true,
+      resizeEnabled: true,
+      compactEnabled: true,
+      resizableHandles: {
+        s: true,
+        e: true,
+        n: true,
+        w: true,
+        se: true,
+        ne: true,
+        sw: true,
+        nw: true
+      }
+    },
+    { id: 2, cols: 1, rows: 1, y: 20, x: 20 }
+  ];
 
   itemConfig: GridsterItemConfig = {
     cols: 4,
@@ -51,65 +104,6 @@ export class Items implements OnInit {
     console.info('itemInitialized', item, itemComponent);
   }
 
-  ngOnInit(): void {
-    this.options = {
-      gridType: GridType.Fit,
-      displayGrid: DisplayGrid.Always,
-      compactType: CompactType.None,
-      pushItems: true,
-      draggable: {
-        enabled: true
-      },
-      resizable: {
-        enabled: true
-      },
-      minCols: 1,
-      maxCols: 100,
-      minRows: 1,
-      maxRows: 100,
-      maxItemCols: 100,
-      minItemCols: 1,
-      maxItemRows: 100,
-      minItemRows: 1,
-      maxItemArea: 2500,
-      minItemArea: 1,
-      defaultItemCols: 1,
-      defaultItemRows: 1
-    };
-
-    this.dashboard = [
-      {
-        id: 1,
-        cols: 4,
-        rows: 3,
-        y: 0,
-        x: 0,
-        initCallback: Items.itemInit,
-        itemAspectRatio: 4 / 3,
-        minItemCols: 1,
-        maxItemCols: 100,
-        maxItemRows: 100,
-        minItemRows: 1,
-        minItemArea: 1,
-        maxItemArea: 2500,
-        dragEnabled: true,
-        resizeEnabled: true,
-        compactEnabled: true,
-        resizableHandles: {
-          s: true,
-          e: true,
-          n: true,
-          w: true,
-          se: true,
-          ne: true,
-          sw: true,
-          nw: true
-        }
-      },
-      { id: 2, cols: 1, rows: 1, y: 20, x: 20 }
-    ];
-  }
-
   changedAspectRatio() {
     if (this.itemConfig.itemAspectRatio === 1) {
       this.itemConfig.rows = this.itemConfig.cols;
@@ -128,9 +122,7 @@ export class Items implements OnInit {
   }
 
   changeGridConfig(): void {
-    if (this.options.api && this.options.api.optionsChanged) {
-      this.options.api.optionsChanged();
-    }
+    this.options = Object.assign({}, this.options);
   }
 
   removeItem($event: MouseEvent | TouchEvent, item: GridsterItemConfig): void {

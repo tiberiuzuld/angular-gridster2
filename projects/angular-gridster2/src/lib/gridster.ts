@@ -2,21 +2,21 @@ import { NgStyle } from '@angular/common';
 import {
   ChangeDetectorRef,
   Component,
+  computed,
+  effect,
   ElementRef,
   inject,
-  Input,
+  input,
   NgZone,
-  OnChanges,
   OnDestroy,
   OnInit,
   Renderer2,
-  SimpleChanges,
   viewChild,
   ViewEncapsulation
 } from '@angular/core';
 import { debounceTime, Subject, switchMap, takeUntil, timer } from 'rxjs';
 import { GridsterCompact } from './gridsterCompact';
-import type { GridsterConfig, GridsterConfigStrict } from './gridsterConfig';
+import type { GridsterApi, GridsterConfig, GridsterConfigStrict } from './gridsterConfig';
 import { GridType } from './gridsterConfig';
 import { GridsterConfigService } from './gridsterConfig.constant';
 import { GridsterEmptyCell } from './gridsterEmptyCell';
@@ -27,25 +27,36 @@ import { GridsterRenderer } from './gridsterRenderer';
 import { GridsterUtils } from './gridsterUtils';
 
 @Component({
-  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'gridster',
   templateUrl: './gridster.html',
   styleUrl: './gridster.css',
   encapsulation: ViewEncapsulation.None,
   imports: [NgStyle, GridsterPreview]
 })
-export class Gridster implements OnInit, OnChanges, OnDestroy {
+export class Gridster implements OnInit, OnDestroy {
   readonly renderer = inject(Renderer2);
   readonly cdRef = inject(ChangeDetectorRef);
   readonly zone = inject(NgZone);
   readonly elRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  readonly api: GridsterApi = {
+    calculateLayout: () => this.calculateLayout(),
+    resize: () => this.onResize(),
+    getNextPossiblePosition: (newItem: GridsterItemConfig, startingFrom?: { y?: number; x?: number }) =>
+      this.getNextPossiblePosition(newItem, startingFrom),
+    getFirstPossiblePosition: (item: GridsterItemConfig) => this.getFirstPossiblePosition(item),
+    getLastPossiblePosition: (item: GridsterItemConfig) => this.getLastPossiblePosition(item),
+    getItemComponent: (item: GridsterItemConfig) => this.getItemComponent(item)
+  };
 
   gridsterPreview = viewChild.required(GridsterPreview);
 
-  @Input() options: GridsterConfig;
+  options = input.required<GridsterConfig>();
+  $options = computed<GridsterConfigStrict>(() =>
+    GridsterUtils.merge(JSON.parse(JSON.stringify(GridsterConfigService)), this.options(), GridsterConfigService)
+  );
+
   movingItem: GridsterItemConfig | null;
   el: HTMLElement = this.elRef.nativeElement;
-  $options: GridsterConfigStrict = JSON.parse(JSON.stringify(GridsterConfigService));
   mobile = false;
   curWidth = 0;
   curHeight = 0;
@@ -67,11 +78,28 @@ export class Gridster implements OnInit, OnChanges, OnDestroy {
   private resize$ = new Subject<void>();
   private destroy$ = new Subject<void>();
 
+  constructor() {
+    effect(() => {
+      const $options = this.$options();
+      if (!$options.disableWindowResize && !this.windowResize) {
+        this.windowResize = this.renderer.listen('window', 'resize', this.onResize);
+      } else if ($options.disableWindowResize && this.windowResize) {
+        this.windowResize();
+        this.windowResize = null;
+      }
+      this.emptyCell.updateOptions();
+      this.columns = $options.minCols;
+      this.rows = $options.minRows + $options.addEmptyRowsCount;
+      this.setGridSize();
+      this.calculateLayout();
+    });
+  }
+
   // ------ Function for swapWhileDragging option
 
   // identical to checkCollision() except that here we add boundaries.
   static checkCollisionTwoItemsForSwaping(item: GridsterItemConfig, item2: GridsterItemConfig): boolean {
-    // if the cols or rows of the items are 1 , doesnt make any sense to set a boundary. Only if the item is bigger we set a boundary
+    // if the cols or rows of the items are 1 , doesn't make any sense to set a boundary. Only if the item is bigger we set a boundary
     const horizontalBoundaryItem1 = item.cols === 1 ? 0 : 1;
     const horizontalBoundaryItem2 = item2.cols === 1 ? 0 : 1;
     const verticalBoundaryItem1 = item.rows === 1 ? 0 : 1;
@@ -89,18 +117,19 @@ export class Gridster implements OnInit, OnChanges, OnDestroy {
     if (!collision) {
       return false;
     }
-    if (!this.$options.allowMultiLayer) {
+    if (!this.$options().allowMultiLayer) {
       return true;
     }
-    const defaultLayerIndex = this.$options.defaultLayerIndex;
+    const defaultLayerIndex = this.$options().defaultLayerIndex;
     const layerIndex = item.layerIndex === undefined ? defaultLayerIndex : item.layerIndex;
     const layerIndex2 = item2.layerIndex === undefined ? defaultLayerIndex : item2.layerIndex;
     return layerIndex === layerIndex2;
   }
 
   ngOnInit(): void {
-    if (this.options.initCallback) {
-      this.options.initCallback(this);
+    const options = this.options();
+    if (options.initCallback) {
+      options.initCallback(this, this.api);
     }
 
     this.calculateLayout$.pipe(debounceTime(0), takeUntil(this.destroy$)).subscribe(() => this.calculateLayout());
@@ -115,28 +144,10 @@ export class Gridster implements OnInit, OnChanges, OnDestroy {
       .subscribe(() => this.resize());
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes.options) {
-      this.setOptions();
-      this.options.api = {
-        optionsChanged: this.optionsChanged,
-        resize: this.onResize,
-        getNextPossiblePosition: this.getNextPossiblePosition,
-        getFirstPossiblePosition: this.getFirstPossiblePosition,
-        getLastPossiblePosition: this.getLastPossiblePosition,
-        getItemComponent: (item: GridsterItemConfig) => this.getItemComponent(item)
-      };
-      this.columns = this.$options.minCols;
-      this.rows = this.$options.minRows + this.$options.addEmptyRowsCount;
-      this.setGridSize();
-      this.calculateLayout();
-    }
-  }
-
   private resize(): void {
-    let height;
-    let width;
-    if (this.$options.gridType === 'fit' && !this.mobile) {
+    let height: number;
+    let width: number;
+    if (this.$options().gridType === 'fit' && !this.mobile) {
       width = this.el.offsetWidth;
       height = this.el.offsetHeight;
     } else {
@@ -148,35 +159,14 @@ export class Gridster implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  setOptions(): void {
-    this.$options = GridsterUtils.merge(this.$options, this.options, this.$options);
-    if (!this.$options.disableWindowResize && !this.windowResize) {
-      this.windowResize = this.renderer.listen('window', 'resize', this.onResize);
-    } else if (this.$options.disableWindowResize && this.windowResize) {
-      this.windowResize();
-      this.windowResize = null;
-    }
-    this.emptyCell.updateOptions();
-  }
-
-  optionsChanged = (): void => {
-    this.setOptions();
-    this.calculateLayout();
-  };
-
   ngOnDestroy(): void {
     this.destroy$.next();
     if (this.windowResize) {
       this.windowResize();
     }
-    if (this.options && this.options.destroyCallback) {
-      this.options.destroyCallback(this);
-    }
-    if (this.options && this.options.api) {
-      this.options.api.resize = undefined;
-      this.options.api.optionsChanged = undefined;
-      this.options.api.getNextPossiblePosition = undefined;
-      this.options.api = undefined;
+    const options = this.options();
+    if (options && options.destroyCallback) {
+      options.destroyCallback(this);
     }
     this.emptyCell.destroy();
     this.emptyCell = null!;
@@ -186,8 +176,9 @@ export class Gridster implements OnInit, OnChanges, OnDestroy {
 
   onResize = (): void => {
     if (this.el.clientWidth) {
-      if (this.options.setGridSize) {
-        // reset width/height so the size is recalculated afterwards
+      const $options = this.$options();
+      if ($options.setGridSize) {
+        // reset width/height so the size is recalculated afterward
         this.renderer.setStyle(this.el, 'width', '');
         this.renderer.setStyle(this.el, 'height', '');
       }
@@ -213,10 +204,11 @@ export class Gridster implements OnInit, OnChanges, OnDestroy {
   }
 
   checkIfMobile(): boolean {
-    if (this.$options.useBodyForBreakpoint) {
-      return this.$options.mobileBreakpoint > document.body.clientWidth;
+    const $options = this.$options();
+    if ($options.useBodyForBreakpoint) {
+      return $options.mobileBreakpoint > document.body.clientWidth;
     } else {
-      return this.$options.mobileBreakpoint > this.curWidth;
+      return $options.mobileBreakpoint > this.curWidth;
     }
   }
 
@@ -224,7 +216,8 @@ export class Gridster implements OnInit, OnChanges, OnDestroy {
     const el = this.el;
     let width: number;
     let height: number;
-    if (this.$options.setGridSize || (this.$options.gridType === GridType.Fit && !this.mobile)) {
+    const $options = this.$options();
+    if ($options.setGridSize || ($options.gridType === GridType.Fit && !this.mobile)) {
       width = el.offsetWidth;
       height = el.offsetHeight;
     } else {
@@ -244,8 +237,9 @@ export class Gridster implements OnInit, OnChanges, OnDestroy {
       this.mobile = !this.mobile;
       this.renderer.removeClass(this.el, 'mobile');
     }
-    let rows = this.$options.minRows;
-    let columns = this.$options.minCols;
+    const $options = this.$options();
+    let rows = $options.minRows;
+    let columns = $options.minCols;
 
     for (let i = this.grid.length - 1; i >= 0; i--) {
       const widget = this.grid[i];
@@ -255,12 +249,13 @@ export class Gridster implements OnInit, OnChanges, OnDestroy {
         columns = Math.max(columns, $item.x + $item.cols);
       }
     }
-    rows += this.$options.addEmptyRowsCount;
+    rows += $options.addEmptyRowsCount;
     if (this.columns !== columns || this.rows !== rows) {
       this.columns = columns;
       this.rows = rows;
-      if (this.options.gridSizeChangedCallback) {
-        this.options.gridSizeChangedCallback(this);
+      const options = this.options();
+      if (options.gridSizeChangedCallback) {
+        options.gridSizeChangedCallback(this);
       }
     }
   }
@@ -271,42 +266,43 @@ export class Gridster implements OnInit, OnChanges, OnDestroy {
     }
 
     this.setGridDimensions();
-    if (this.$options.outerMargin) {
-      let marginWidth = -this.$options.margin;
-      if (this.$options.outerMarginLeft !== null) {
-        marginWidth += this.$options.outerMarginLeft;
-        this.renderer.setStyle(this.el, 'padding-left', this.$options.outerMarginLeft + 'px');
+    const $options = this.$options();
+    if ($options.outerMargin) {
+      let marginWidth = -$options.margin;
+      if ($options.outerMarginLeft !== null) {
+        marginWidth += $options.outerMarginLeft;
+        this.renderer.setStyle(this.el, 'padding-left', $options.outerMarginLeft + 'px');
       } else {
-        marginWidth += this.$options.margin;
-        this.renderer.setStyle(this.el, 'padding-left', this.$options.margin + 'px');
+        marginWidth += $options.margin;
+        this.renderer.setStyle(this.el, 'padding-left', $options.margin + 'px');
       }
-      if (this.$options.outerMarginRight !== null) {
-        marginWidth += this.$options.outerMarginRight;
-        this.renderer.setStyle(this.el, 'padding-right', this.$options.outerMarginRight + 'px');
+      if ($options.outerMarginRight !== null) {
+        marginWidth += $options.outerMarginRight;
+        this.renderer.setStyle(this.el, 'padding-right', $options.outerMarginRight + 'px');
       } else {
-        marginWidth += this.$options.margin;
-        this.renderer.setStyle(this.el, 'padding-right', this.$options.margin + 'px');
+        marginWidth += $options.margin;
+        this.renderer.setStyle(this.el, 'padding-right', $options.margin + 'px');
       }
       this.curColWidth = (this.curWidth - marginWidth) / this.columns;
-      let marginHeight = -this.$options.margin;
-      if (this.$options.outerMarginTop !== null) {
-        marginHeight += this.$options.outerMarginTop;
-        this.renderer.setStyle(this.el, 'padding-top', this.$options.outerMarginTop + 'px');
+      let marginHeight = -$options.margin;
+      if ($options.outerMarginTop !== null) {
+        marginHeight += $options.outerMarginTop;
+        this.renderer.setStyle(this.el, 'padding-top', $options.outerMarginTop + 'px');
       } else {
-        marginHeight += this.$options.margin;
-        this.renderer.setStyle(this.el, 'padding-top', this.$options.margin + 'px');
+        marginHeight += $options.margin;
+        this.renderer.setStyle(this.el, 'padding-top', $options.margin + 'px');
       }
-      if (this.$options.outerMarginBottom !== null) {
-        marginHeight += this.$options.outerMarginBottom;
-        this.renderer.setStyle(this.el, 'padding-bottom', this.$options.outerMarginBottom + 'px');
+      if ($options.outerMarginBottom !== null) {
+        marginHeight += $options.outerMarginBottom;
+        this.renderer.setStyle(this.el, 'padding-bottom', $options.outerMarginBottom + 'px');
       } else {
-        marginHeight += this.$options.margin;
-        this.renderer.setStyle(this.el, 'padding-bottom', this.$options.margin + 'px');
+        marginHeight += $options.margin;
+        this.renderer.setStyle(this.el, 'padding-bottom', $options.margin + 'px');
       }
-      this.curRowHeight = ((this.curHeight - marginHeight) / this.rows) * this.$options.rowHeightRatio;
+      this.curRowHeight = ((this.curHeight - marginHeight) / this.rows) * $options.rowHeightRatio;
     } else {
-      this.curColWidth = (this.curWidth + this.$options.margin) / this.columns;
-      this.curRowHeight = ((this.curHeight + this.$options.margin) / this.rows) * this.$options.rowHeightRatio;
+      this.curColWidth = (this.curWidth + $options.margin) / this.columns;
+      this.curRowHeight = ((this.curHeight + $options.margin) / this.rows) * $options.rowHeightRatio;
       this.renderer.setStyle(this.el, 'padding-left', 0 + 'px');
       this.renderer.setStyle(this.el, 'padding-right', 0 + 'px');
       this.renderer.setStyle(this.el, 'padding-top', 0 + 'px');
@@ -314,11 +310,11 @@ export class Gridster implements OnInit, OnChanges, OnDestroy {
     }
     this.gridRenderer.updateGridster();
 
-    if (this.$options.setGridSize) {
+    if ($options.setGridSize) {
       this.renderer.addClass(this.el, 'gridSize');
       if (!this.mobile) {
-        this.renderer.setStyle(this.el, 'width', this.columns * this.curColWidth + this.$options.margin + 'px');
-        this.renderer.setStyle(this.el, 'height', this.rows * this.curRowHeight + this.$options.margin + 'px');
+        this.renderer.setStyle(this.el, 'width', this.columns * this.curColWidth + $options.margin + 'px');
+        this.renderer.setStyle(this.el, 'height', this.rows * this.curRowHeight + $options.margin + 'px');
       }
     } else {
       this.renderer.removeClass(this.el, 'gridSize');
@@ -338,11 +334,12 @@ export class Gridster implements OnInit, OnChanges, OnDestroy {
   }
 
   updateGrid(): void {
-    if (this.$options.displayGrid === 'always' && !this.mobile) {
+    const $options = this.$options();
+    if ($options.displayGrid === 'always' && !this.mobile) {
       this.renderer.addClass(this.el, 'display-grid');
-    } else if (this.$options.displayGrid === 'onDrag&Resize' && this.dragInProgress) {
+    } else if ($options.displayGrid === 'onDrag&Resize' && this.dragInProgress) {
       this.renderer.addClass(this.el, 'display-grid');
-    } else if (this.$options.displayGrid === 'none' || !this.dragInProgress || this.mobile) {
+    } else if ($options.displayGrid === 'none' || !this.dragInProgress || this.mobile) {
       this.renderer.removeClass(this.el, 'display-grid');
     }
     this.setGridDimensions();
@@ -354,27 +351,28 @@ export class Gridster implements OnInit, OnChanges, OnDestroy {
   addItem(itemComponent: GridsterItem): void {
     const $item = itemComponent.$item();
     const item = itemComponent.item();
+    const $options = this.$options();
     if ($item.cols === undefined) {
-      $item.cols = this.$options.defaultItemCols;
+      $item.cols = $options.defaultItemCols;
       item.cols = $item.cols;
       itemComponent.itemChanged();
     }
     if ($item.rows === undefined) {
-      $item.rows = this.$options.defaultItemRows;
+      $item.rows = $options.defaultItemRows;
       item.rows = $item.rows;
       itemComponent.itemChanged();
     }
     if ($item.x === -1 || $item.y === -1) {
       this.autoPositionItem(itemComponent);
     } else if (this.checkCollision($item)) {
-      if (!this.$options.disableWarnings) {
+      if (!$options.disableWarnings) {
         itemComponent.notPlaced = true;
         console.warn(
           "Can't be placed in the bounds of the dashboard, trying to auto position!/n" +
             JSON.stringify(itemComponent.item, ['cols', 'rows', 'x', 'y'])
         );
       }
-      if (!this.$options.disableAutoPositionOnConflict) {
+      if (!$options.disableAutoPositionOnConflict) {
         this.autoPositionItem(itemComponent);
       } else {
         itemComponent.notPlaced = true;
@@ -388,8 +386,9 @@ export class Gridster implements OnInit, OnChanges, OnDestroy {
     this.grid.splice(this.grid.indexOf(itemComponent), 1);
     this.calculateLayout$.next();
 
-    if (this.options.itemRemovedCallback) {
-      this.options.itemRemovedCallback(itemComponent.item(), itemComponent);
+    const options = this.options();
+    if (options.itemRemovedCallback) {
+      options.itemRemovedCallback(itemComponent.item(), itemComponent);
     }
 
     // check the moving item was removed
@@ -401,8 +400,9 @@ export class Gridster implements OnInit, OnChanges, OnDestroy {
 
   checkCollision(item: GridsterItemConfig, checkRatio?: boolean): GridsterItem | boolean {
     let collision: GridsterItem | boolean = false;
-    if (this.options.itemValidateCallback) {
-      collision = !this.options.itemValidateCallback(item);
+    const options = this.options();
+    if (options.itemValidateCallback) {
+      collision = !options.itemValidateCallback(item);
     }
     if (!collision && this.checkGridCollision(item, checkRatio)) {
       collision = true;
@@ -417,24 +417,25 @@ export class Gridster implements OnInit, OnChanges, OnDestroy {
   }
 
   checkGridCollision(item: GridsterItemConfig, checkRatio = false): boolean {
+    const $options = this.$options();
     const noNegativePosition = item.y > -1 && item.x > -1;
-    const maxGridCols = item.cols + item.x <= this.$options.maxCols;
-    const maxGridRows = item.rows + item.y <= this.$options.maxRows;
-    const maxItemCols = item.maxItemCols === undefined ? this.$options.maxItemCols : item.maxItemCols;
-    const minItemCols = item.minItemCols === undefined ? this.$options.minItemCols : item.minItemCols;
-    const maxItemRows = item.maxItemRows === undefined ? this.$options.maxItemRows : item.maxItemRows;
-    const minItemRows = item.minItemRows === undefined ? this.$options.minItemRows : item.minItemRows;
+    const maxGridCols = item.cols + item.x <= $options.maxCols;
+    const maxGridRows = item.rows + item.y <= $options.maxRows;
+    const maxItemCols = item.maxItemCols === undefined ? $options.maxItemCols : item.maxItemCols;
+    const minItemCols = item.minItemCols === undefined ? $options.minItemCols : item.minItemCols;
+    const maxItemRows = item.maxItemRows === undefined ? $options.maxItemRows : item.maxItemRows;
+    const minItemRows = item.minItemRows === undefined ? $options.minItemRows : item.minItemRows;
     const inColsLimits = item.cols <= maxItemCols && item.cols >= minItemCols;
     const inRowsLimits = item.rows <= maxItemRows && item.rows >= minItemRows;
     let inRatio: boolean = true;
     if (checkRatio) {
-      const itemAspectRatio = item.itemAspectRatio || this.$options.itemAspectRatio;
+      const itemAspectRatio = item.itemAspectRatio || $options.itemAspectRatio;
       if (itemAspectRatio) {
         inRatio = item.cols / item.rows === itemAspectRatio;
       }
     }
-    const minAreaLimit = item.minItemArea === undefined ? this.$options.minItemArea : item.minItemArea;
-    const maxAreaLimit = item.maxItemArea === undefined ? this.$options.maxItemArea : item.maxItemArea;
+    const minAreaLimit = item.minItemArea === undefined ? $options.minItemArea : item.minItemArea;
+    const maxAreaLimit = item.maxItemArea === undefined ? $options.maxItemArea : item.maxItemArea;
     const area = item.cols * item.rows;
     const inMinArea = minAreaLimit <= area;
     const inMaxArea = maxAreaLimit >= area;
@@ -470,18 +471,19 @@ export class Gridster implements OnInit, OnChanges, OnDestroy {
       itemComponent.itemChanged();
     } else {
       itemComponent.notPlaced = true;
-      if (!this.$options.disableWarnings) {
+      if (!this.$options().disableWarnings) {
         console.warn("Can't be placed in the bounds of the dashboard!/n" + JSON.stringify(itemComponent.item, ['cols', 'rows', 'x', 'y']));
       }
     }
   }
 
   getNextPossiblePosition = (newItem: GridsterItemConfig, startingFrom: { y?: number; x?: number } = {}): boolean => {
+    const $options = this.$options();
     if (newItem.cols === -1) {
-      newItem.cols = this.$options.defaultItemCols;
+      newItem.cols = $options.defaultItemCols;
     }
     if (newItem.rows === -1) {
-      newItem.rows = this.$options.defaultItemRows;
+      newItem.rows = $options.defaultItemRows;
     }
     this.setGridDimensions();
     for (let y = startingFrom.y || 0; y < this.rows; y++) {
@@ -493,8 +495,8 @@ export class Gridster implements OnInit, OnChanges, OnDestroy {
         }
       }
     }
-    const canAddToRows = this.$options.maxRows >= this.rows + newItem.rows;
-    const canAddToColumns = this.$options.maxCols >= this.columns + newItem.cols;
+    const canAddToRows = $options.maxRows >= this.rows + newItem.rows;
+    const canAddToColumns = $options.maxCols >= this.columns + newItem.cols;
     const addToRows = this.rows <= this.columns && canAddToRows;
     if (!addToRows && canAddToColumns) {
       newItem.x = this.columns;
@@ -569,8 +571,9 @@ export class Gridster implements OnInit, OnChanges, OnDestroy {
   // identical to checkCollision() except that this function calls findItemWithItemForSwaping() instead of findItemWithItem()
   checkCollisionForSwaping(item: GridsterItemConfig): GridsterItem | boolean {
     let collision: GridsterItem | boolean = false;
-    if (this.options.itemValidateCallback) {
-      collision = !this.options.itemValidateCallback(item);
+    const options = this.options();
+    if (options.itemValidateCallback) {
+      collision = !options.itemValidateCallback(item);
     }
     if (!collision && this.checkGridCollision(item)) {
       collision = true;
