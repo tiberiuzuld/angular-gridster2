@@ -1,4 +1,4 @@
-import { NO_ERRORS_SCHEMA, provideZonelessChangeDetection } from '@angular/core';
+import { NO_ERRORS_SCHEMA, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { Gridster } from '../gridster';
@@ -31,7 +31,7 @@ describe('gridsterCompact service', () => {
 
     fixture = TestBed.createComponent(Gridster);
     gridsterComponent = fixture.componentInstance;
-    gridsterComponent.options = {
+    gridsterComponent.options = signal({
       gridType: GridType.Fixed,
       compactType: CompactType.None,
       margin: 10,
@@ -91,7 +91,7 @@ describe('gridsterCompact service', () => {
       scrollToNewItems: true,
 
       itemValidateCallback: itemValidateCallback.bind(this)
-    };
+    });
 
     gridsterComponent.grid = { $item: { y: 5, x: 5, rows: 30, cols: 30 } };
 

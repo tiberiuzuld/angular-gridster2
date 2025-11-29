@@ -1,3 +1,4 @@
+import { signal } from '@angular/core';
 import { GridsterUtils } from '../gridsterUtils';
 
 describe('merge method', () => {
@@ -70,38 +71,38 @@ describe('check content class for event', () => {
 
   it('should check when ignoreContent is true and target & currentTarget is same', () => {
     const gridster: any = {
-      $options: {
+      $options: signal({
         draggable: {
           ignoreContent: true,
           dragHandleClass: 'class1',
           ignoreContentClass: 'class2'
         }
-      }
+      })
     };
     const e: any = { target: 'element', currentTarget: 'element' };
     expect(GridsterUtils.checkContentClassForEvent(gridster, e)).toBe(true);
   });
   it('should check when ignoreContent is true but target and currentTarget is not same', () => {
     const gridster: any = {
-      $options: {
+      $options: signal({
         draggable: {
           ignoreContent: true,
           dragHandleClass: 'divClass',
           ignoreContentClass: 'class2'
         }
-      }
+      })
     };
     expect(GridsterUtils.checkContentClassForEvent(gridster, event)).toBe(false);
   });
   it('should check when draghandleClass is false but ignoreContentClass is true', () => {
     const gridster: any = {
-      $options: {
+      $options: signal({
         draggable: {
           ignoreContent: false,
           dragHandleClass: 'divClass1',
           ignoreContentClass: 'body'
         }
-      }
+      })
     };
     expect(GridsterUtils.checkContentClassForEvent(gridster, event)).toBe(true);
   });
