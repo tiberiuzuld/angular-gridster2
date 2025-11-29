@@ -49,7 +49,7 @@ gridster.gridSize.fit {
 gridster .gridster-column, gridster .gridster-row {
   position: absolute;
   display: none;
-  transition: .3s;
+  transition: transform .3s;
   box-sizing: border-box;
 }
 
