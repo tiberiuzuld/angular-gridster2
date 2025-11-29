@@ -1,11 +1,11 @@
 ### Options
 
-Can be access from `this.options.api` after the grid has initialized.
+Can be access from `viewChild(Gridster).api` or get it from `options.initCallback(gridster, gridsterApi)` after the grid has initialized.
 
 | API                                          | Description                                                                                             | Return                |
 | -------------------------------------------- | ------------------------------------------------------------------------------------------------------- | --------------------- |
 | resize()                                     | call if size of container changes. Grid will auto resize on window resize                               | Void                  |
-| optionsChanged()                             | call on change of options after initialization                                                          | Void                  |
+| calculateLayout()                            | call if a recalculation is needed                                                                       | Void                  |
 | getNextPossiblePosition(item: GridsterItem)  | call to get a viable position for item. Returns true if found.                                          | Boolean               |
 | getFirstPossiblePosition(item: GridsterItem) | call to get the first viable position for an item. Returns a copy of the item with the future position. | GridsterItem          |
 | getLastPossiblePosition(item: GridsterItem)  | call to get a viable position for item. Returns a copy of the item with the future position.            | GridsterItem          |
