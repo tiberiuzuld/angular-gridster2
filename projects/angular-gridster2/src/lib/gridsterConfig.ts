@@ -106,7 +106,7 @@ export type GridsterConfig = {
   useTransformPositioning?: boolean;
   scrollSensitivity?: number;
   scrollSpeed?: number;
-  initCallback?: (gridster: Gridster, gridApi: GridsterApi) => void;
+  initCallback?: (gridster: Gridster, gridsterApi: GridsterApi) => void;
   destroyCallback?: (gridster: Gridster) => void;
   gridSizeChangedCallback?: (gridster: Gridster) => void;
   itemChangeCallback?: (item: GridsterItemConfig, itemComponent: GridsterItem) => void;

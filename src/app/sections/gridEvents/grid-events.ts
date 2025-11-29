@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
-import { DisplayGrid, Gridster, GridsterConfig, GridsterItemConfig, GridsterItem, GridType } from 'angular-gridster2';
+import { DisplayGrid, Gridster, GridsterConfig, GridsterItemConfig, GridsterItem, GridType, GridsterApi } from 'angular-gridster2';
 import { MarkdownModule } from 'ngx-markdown';
 
 @Component({
@@ -67,8 +67,8 @@ export class GridEvents {
     return item.cols > 0 && item.rows > 0;
   }
 
-  static gridInit(grid: Gridster): void {
-    console.info('gridInit', grid);
+  static gridInit(grid: Gridster, gridsterApi: GridsterApi): void {
+    console.info('gridInit', grid, gridsterApi);
   }
 
   static gridDestroy(grid: Gridster): void {
