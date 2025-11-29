@@ -1,5 +1,16 @@
 import { GridsterItem } from './gridsterItem';
 
+export type ResizableHandles = {
+  s?: boolean;
+  e?: boolean;
+  n?: boolean;
+  w?: boolean;
+  se?: boolean;
+  ne?: boolean;
+  sw?: boolean;
+  nw?: boolean;
+};
+
 export type GridsterItemConfig = {
   x: number;
   y: number;
@@ -9,16 +20,7 @@ export type GridsterItemConfig = {
   initCallback?: (item: GridsterItemConfig, itemComponent: GridsterItem) => void;
   dragEnabled?: boolean;
   resizeEnabled?: boolean;
-  resizableHandles?: {
-    s?: boolean;
-    e?: boolean;
-    n?: boolean;
-    w?: boolean;
-    se?: boolean;
-    ne?: boolean;
-    sw?: boolean;
-    nw?: boolean;
-  };
+  resizableHandles?: ResizableHandles;
   compactEnabled?: boolean;
   itemAspectRatio?: number;
   maxItemRows?: number;

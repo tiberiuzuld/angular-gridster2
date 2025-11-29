@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   computed,
@@ -15,10 +16,10 @@ import {
   untracked,
   ViewEncapsulation
 } from '@angular/core';
-import { Gridster } from './gridster';
 
+import { Gridster } from './gridster';
 import { GridsterDraggable } from './gridsterDraggable';
-import type { GridsterItemConfig } from './gridsterItemConfig';
+import type { GridsterItemConfig, ResizableHandles } from './gridsterItemConfig';
 import { GridsterResizable } from './gridsterResizable';
 import { GridsterUtils } from './gridsterUtils';
 
@@ -26,6 +27,7 @@ import { GridsterUtils } from './gridsterUtils';
   selector: 'gridster-item',
   templateUrl: './gridsterItem.html',
   styleUrls: ['./gridsterItem.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
     '[style.z-index]': `zIndex()`
@@ -207,7 +209,7 @@ export class GridsterItem implements OnInit, OnDestroy {
     return !this.gridster.mobile && gridResizable && itemResizable;
   }
 
-  getResizableHandles() {
+  getResizableHandles(): ResizableHandles {
     const gridResizableHandles = this.gridster.$options().resizable.handles;
     const itemResizableHandles = this.$item().resizableHandles;
     // use grid settings if no settings are provided for the item.

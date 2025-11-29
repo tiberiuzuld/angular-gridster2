@@ -1,7 +1,11 @@
 import { NO_ERRORS_SCHEMA, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { CompactType, DisplayGrid, Gridster, GridsterItemConfig, GridsterItem, GridType } from 'angular-gridster2';
+
+import { Gridster } from '../gridster';
 import { GridsterCompact } from '../gridsterCompact';
+import { CompactType, DisplayGrid, GridType } from '../gridsterConfig';
+import { GridsterItem } from '../gridsterItem';
+import { GridsterItemConfig } from '../gridsterItemConfig';
 import { GridsterPreview } from '../gridsterPreview';
 
 function emptyCellClick(event: MouseEvent, item): void {}

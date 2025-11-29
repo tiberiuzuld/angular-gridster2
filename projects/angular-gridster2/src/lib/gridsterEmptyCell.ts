@@ -1,6 +1,6 @@
 import { Gridster } from './gridster';
-import { GridsterUtils } from './gridsterUtils';
 import { GridsterItemConfig } from './gridsterItemConfig';
+import { GridsterUtils } from './gridsterUtils';
 
 export class GridsterEmptyCell {
   initialItem: GridsterItemConfig | null;

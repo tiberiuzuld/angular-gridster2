@@ -1,6 +1,6 @@
 import { Gridster } from './gridster';
 import { GridsterItem } from './gridsterItem';
-import { GridsterItemConfig } from './gridsterItemConfig';
+import { GridsterItemConfig, ResizableHandles } from './gridsterItemConfig';
 
 export type gridTypes = 'fit' | 'scrollVertical' | 'scrollHorizontal' | 'fixed' | 'verticalFixed' | 'horizontalFixed';
 export type displayGrids = 'always' | 'onDrag&Resize' | 'none';
@@ -166,16 +166,7 @@ export type Draggable = DragBase & {
 };
 
 export type Resizable = DragBase & {
-  handles?: {
-    s: boolean;
-    e: boolean;
-    n: boolean;
-    w: boolean;
-    se: boolean;
-    ne: boolean;
-    sw: boolean;
-    nw: boolean;
-  };
+  handles?: ResizableHandles;
 };
 
 export type PushDirections = {

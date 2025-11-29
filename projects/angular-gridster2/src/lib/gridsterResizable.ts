@@ -1,11 +1,12 @@
-import { NgZone } from '@angular/core';
+import { NgZone, signal } from '@angular/core';
+
 import { Gridster } from './gridster';
-import { GridsterItem } from './gridsterItem';
 import { DirTypes } from './gridsterConfig';
+import { GridsterItem } from './gridsterItem';
+import { ResizableHandles } from './gridsterItemConfig';
 import { GridsterPush } from './gridsterPush';
 import { GridsterPushResize } from './gridsterPushResize';
 import { GridsterResizeEventType } from './gridsterResizeEventType';
-
 import { cancelScroll, scroll } from './gridsterScroll';
 import { GridsterUtils } from './gridsterUtils';
 
@@ -29,17 +30,17 @@ export class GridsterResizable {
    */
   private directionFunction: ((event: Pick<MouseEvent, 'clientX' | 'clientY'>) => void) | null = null;
 
-  resizeEnabled: boolean;
-  resizableHandles?: {
-    s: boolean;
-    e: boolean;
-    n: boolean;
-    w: boolean;
-    se: boolean;
-    ne: boolean;
-    sw: boolean;
-    nw: boolean;
-  };
+  resizeEnabled = signal<boolean>(false);
+  resizableHandles = signal<ResizableHandles>({
+    s: false,
+    e: false,
+    n: false,
+    w: false,
+    se: false,
+    ne: false,
+    sw: false,
+    nw: false
+  });
   mousemove: () => void;
   mouseup: () => void;
   mouseleave: () => void;
@@ -539,8 +540,8 @@ export class GridsterResizable {
   }
 
   toggle(): void {
-    this.resizeEnabled = this.gridsterItem.canBeResized();
-    this.resizableHandles = this.gridsterItem.getResizableHandles();
+    this.resizeEnabled.set(this.gridsterItem.canBeResized());
+    this.resizableHandles.set(this.gridsterItem.getResizableHandles());
   }
 
   dragStartDelay(e: MouseEvent | TouchEvent): void {

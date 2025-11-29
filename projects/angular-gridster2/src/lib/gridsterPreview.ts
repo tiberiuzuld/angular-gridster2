@@ -1,4 +1,5 @@
-import { Component, ElementRef, inject, Renderer2, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, inject, Renderer2, ViewEncapsulation } from '@angular/core';
+
 import { Gridster } from './gridster';
 import { GridsterItemConfig } from './gridsterItemConfig';
 
@@ -6,6 +7,7 @@ import { GridsterItemConfig } from './gridsterItemConfig';
   selector: 'gridster-preview',
   template: '',
   styleUrl: './gridsterPreview.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None
 })
 export class GridsterPreview {

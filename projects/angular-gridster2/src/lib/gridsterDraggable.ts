@@ -1,10 +1,10 @@
 import { ChangeDetectorRef, NgZone } from '@angular/core';
+
 import { Gridster } from './gridster';
 import { DirTypes } from './gridsterConfig';
 import { GridsterItem } from './gridsterItem';
 import { GridsterPush } from './gridsterPush';
 import { cancelScroll, scroll } from './gridsterScroll';
-
 import { GridsterSwap } from './gridsterSwap';
 import { GridsterUtils } from './gridsterUtils';
 

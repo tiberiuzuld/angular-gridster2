@@ -1,5 +1,6 @@
 import { NgStyle } from '@angular/common';
 import {
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   computed,
@@ -15,6 +16,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { debounceTime, Subject, switchMap, takeUntil, timer } from 'rxjs';
+
 import { GridsterCompact } from './gridsterCompact';
 import type { GridsterApi, GridsterConfig, GridsterConfigStrict } from './gridsterConfig';
 import { GridType } from './gridsterConfig';
@@ -30,6 +32,7 @@ import { GridsterUtils } from './gridsterUtils';
   selector: 'gridster',
   templateUrl: './gridster.html',
   styleUrl: './gridster.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   imports: [NgStyle, GridsterPreview]
 })
