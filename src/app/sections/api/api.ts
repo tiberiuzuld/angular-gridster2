@@ -2,9 +2,8 @@ import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
-import { CompactType, Gridster, GridsterConfig, GridsterItem, GridsterItemConfig, GridsterPush, GridType } from 'angular-gridster2';
+import { GridsterApi, CompactType, Gridster, GridsterConfig, GridsterItem, GridsterItemConfig, GridsterPush, GridType } from 'angular-gridster2';
 import { MarkdownModule } from 'ngx-markdown';
-import { GridsterApi } from '../../../../projects/angular-gridster2/src/lib/gridsterConfig';
 
 @Component({
   selector: 'app-api',
