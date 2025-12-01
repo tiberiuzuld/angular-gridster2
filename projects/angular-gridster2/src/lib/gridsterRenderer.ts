@@ -215,8 +215,8 @@ export class GridsterRenderer {
 
   setCellPosition(renderer: Renderer2, el: Element, x: number, y: number): void {
     const $options = this.gridster.$options();
-    const xPosition = this.gridster.$options().dirType === DirTypes.RTL ? -x : x;
-    if (this.gridster.$options().useTransformPositioning) {
+    const xPosition = $options.dirType === DirTypes.RTL ? -x : x;
+    if ($options.useTransformPositioning) {
       const transform = 'translate3d(' + xPosition + 'px, ' + y + 'px, 0)';
       renderer.setStyle(el, 'transform', transform);
     } else {
