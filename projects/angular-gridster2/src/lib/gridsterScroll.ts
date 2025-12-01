@@ -74,13 +74,12 @@ export function scroll(
     if (elemBottomOffset < scrollSensitivity) {
       cancelN();
       if (!(resizeEvent && resizeEventType && !resizeEventType.south) && !scrollS) {
-        maxScrollY = $options.maxRows * gridster.curRowHeight + $options.margin * 2 - offsetHeight;
-        startVerticalScroll(1, calculateItemPosition);
+        startVerticalScroll(1, calculateItemPosition, gridster);
       }
     } else if (offsetTop > 0 && elemTopOffset < scrollSensitivity) {
       cancelS();
       if (!(resizeEvent && resizeEventType && !resizeEventType.north) && !scrollN) {
-        startVerticalScroll(-1, calculateItemPosition);
+        startVerticalScroll(-1, calculateItemPosition, gridster);
       }
     } else if (lastMouse.clientY !== clientY) {
       cancelVerticalScroll();
@@ -96,13 +95,12 @@ export function scroll(
     if (elemRightOffset <= scrollSensitivity) {
       cancelW();
       if (!(resizeEvent && resizeEventType && !resizeEventType.east) && !scrollE) {
-        maxScrollX = $options.maxCols * gridster.curColWidth + $options.margin * 2 - offsetWidth;
-        startHorizontalScroll(1, calculateItemPosition, isRTL);
+        startHorizontalScroll(1, calculateItemPosition, gridster, isRTL);
       }
     } else if (offsetLeft > 0 && elemLeftOffset < scrollSensitivity) {
       cancelE();
       if (!(resizeEvent && resizeEventType && !resizeEventType.west) && !scrollW) {
-        startHorizontalScroll(-1, calculateItemPosition, isRTL);
+        startHorizontalScroll(-1, calculateItemPosition, gridster, isRTL);
       }
     } else if (lastMouse.clientX !== clientX) {
       cancelHorizontalScroll();
@@ -110,9 +108,12 @@ export function scroll(
   }
 }
 
-function startVerticalScroll(sign: number, calculateItemPosition: CalculatePosition): void {
+function startVerticalScroll(sign: number, calculateItemPosition: CalculatePosition, gridster: Gridster): void {
   if (sign > 0) {
     scrollS = true;
+
+    const $options = gridster.$options();
+    maxScrollY = $options.maxRows * gridster.curRowHeight + $options.margin - gridster.el.offsetHeight;
   } else {
     scrollN = true;
   }
@@ -150,9 +151,12 @@ function startVerticalScroll(sign: number, calculateItemPosition: CalculatePosit
   animationV = requestAnimation(callback);
 }
 
-function startHorizontalScroll(sign: number, calculateItemPosition: CalculatePosition, isRTL: boolean): void {
+function startHorizontalScroll(sign: number, calculateItemPosition: CalculatePosition, gridster: Gridster, isRTL: boolean): void {
   if (sign > 0) {
     scrollE = true;
+
+    const $options = gridster.$options();
+    maxScrollX = $options.maxCols * gridster.curColWidth + $options.margin - gridster.el.offsetWidth;
   } else {
     scrollW = true;
   }
