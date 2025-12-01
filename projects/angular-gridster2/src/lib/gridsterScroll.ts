@@ -16,6 +16,8 @@ let animationH: number | null;
 let animationV: number | null = null;
 let lastMouseX = 0;
 let lastMouseY = 0;
+let maxScrollX = Infinity;
+let maxScrollY = Infinity;
 
 /**
  * "requestAnimation" frame is widely supported, but some server engines,
@@ -72,15 +74,16 @@ export function scroll(
     if (elemBottomOffset < scrollSensitivity) {
       cancelN();
       if (!(resizeEvent && resizeEventType && !resizeEventType.south) && !scrollS) {
-        startVertical(1, calculateItemPosition);
+        maxScrollY = $options.maxRows * gridster.curRowHeight + $options.margin * 2 - offsetHeight;
+        startVerticalScroll(1, calculateItemPosition);
       }
     } else if (offsetTop > 0 && elemTopOffset < scrollSensitivity) {
       cancelS();
       if (!(resizeEvent && resizeEventType && !resizeEventType.north) && !scrollN) {
-        startVertical(-1, calculateItemPosition);
+        startVerticalScroll(-1, calculateItemPosition);
       }
     } else if (lastMouse.clientY !== clientY) {
-      cancelVertical();
+      cancelVerticalScroll();
     }
   }
 
@@ -93,20 +96,21 @@ export function scroll(
     if (elemRightOffset <= scrollSensitivity) {
       cancelW();
       if (!(resizeEvent && resizeEventType && !resizeEventType.east) && !scrollE) {
-        startHorizontal(1, calculateItemPosition, isRTL);
+        maxScrollX = $options.maxCols * gridster.curColWidth + $options.margin * 2 - offsetWidth;
+        startHorizontalScroll(1, calculateItemPosition, isRTL);
       }
     } else if (offsetLeft > 0 && elemLeftOffset < scrollSensitivity) {
       cancelE();
       if (!(resizeEvent && resizeEventType && !resizeEventType.west) && !scrollW) {
-        startHorizontal(-1, calculateItemPosition, isRTL);
+        startHorizontalScroll(-1, calculateItemPosition, isRTL);
       }
     } else if (lastMouse.clientX !== clientX) {
-      cancelHorizontal();
+      cancelHorizontalScroll();
     }
   }
 }
 
-function startVertical(sign: number, calculateItemPosition: CalculatePosition): void {
+function startVerticalScroll(sign: number, calculateItemPosition: CalculatePosition): void {
   if (sign > 0) {
     scrollS = true;
   } else {
@@ -123,7 +127,7 @@ function startVertical(sign: number, calculateItemPosition: CalculatePosition): 
     }
 
     if (!gridsterElement || (sign === -1 && gridsterElement.scrollTop - scrollSpeed < 0)) {
-      cancelVertical();
+      cancelVerticalScroll();
       return;
     }
 
@@ -131,6 +135,13 @@ function startVertical(sign: number, calculateItemPosition: CalculatePosition): 
     lastUpdate = timestamp;
 
     const top = sign * Math.round(scrollSpeed * delta);
+
+    // check if maximum scroll position is reached
+    if (scrollS && gridsterElement.scrollTop + top > maxScrollY) {
+      cancelVerticalScroll();
+      return;
+    }
+
     gridsterElement.scrollTop += top;
     lastMouseY += top;
     calculateItemPosition({ clientX: lastMouseX, clientY: lastMouseY });
@@ -139,7 +150,7 @@ function startVertical(sign: number, calculateItemPosition: CalculatePosition): 
   animationV = requestAnimation(callback);
 }
 
-function startHorizontal(sign: number, calculateItemPosition: CalculatePosition, isRTL: boolean): void {
+function startHorizontalScroll(sign: number, calculateItemPosition: CalculatePosition, isRTL: boolean): void {
   if (sign > 0) {
     scrollE = true;
   } else {
@@ -156,7 +167,7 @@ function startHorizontal(sign: number, calculateItemPosition: CalculatePosition,
     }
 
     if (!gridsterElement) {
-      cancelHorizontal();
+      cancelHorizontalScroll();
       return;
     }
 
@@ -165,6 +176,12 @@ function startHorizontal(sign: number, calculateItemPosition: CalculatePosition,
 
     const scrollAmount = sign * Math.round(scrollSpeed * delta);
     const left = isRTL ? -scrollAmount : scrollAmount;
+
+    // check if maximum scroll position is reached
+    if (scrollE && gridsterElement.scrollLeft + left > maxScrollX) {
+      cancelHorizontalScroll();
+      return;
+    }
 
     gridsterElement.scrollLeft += left;
     lastMouseX += left;
@@ -176,12 +193,12 @@ function startHorizontal(sign: number, calculateItemPosition: CalculatePosition,
 }
 
 export function cancelScroll(): void {
-  cancelHorizontal();
-  cancelVertical();
+  cancelHorizontalScroll();
+  cancelVerticalScroll();
   gridsterElement = null;
 }
 
-function cancelHorizontal(): void {
+function cancelHorizontalScroll(): void {
   if (animationH !== null) {
     cancelAnimation(animationH);
   }
@@ -189,7 +206,7 @@ function cancelHorizontal(): void {
   scrollW = false;
 }
 
-function cancelVertical(): void {
+function cancelVerticalScroll(): void {
   if (animationV !== null) {
     cancelAnimation(animationV);
   }
@@ -199,24 +216,24 @@ function cancelVertical(): void {
 
 function cancelE(): void {
   if (scrollE) {
-    cancelHorizontal();
+    cancelHorizontalScroll();
   }
 }
 
 function cancelW(): void {
   if (scrollW) {
-    cancelHorizontal();
+    cancelHorizontalScroll();
   }
 }
 
 function cancelS(): void {
   if (scrollS) {
-    cancelVertical();
+    cancelVerticalScroll();
   }
 }
 
 function cancelN(): void {
   if (scrollN) {
-    cancelVertical();
+    cancelVerticalScroll();
   }
 }
