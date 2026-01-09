@@ -130,4 +130,4 @@ Option 2 (with text selection):
 
 The MIT License
 
-Copyright (c) 2025 Tiberiu Zuld
+Copyright (c) 2026 Tiberiu Zuld
