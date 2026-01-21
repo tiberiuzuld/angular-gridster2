@@ -23,11 +23,11 @@ What Angular supports [here](https://github.com/angular/angular)
 
 ```javascript
 import {Component} from '@angular/core';
-import {Gridster, GridsterItemComponent} from 'angular-gridster2';
+import {Gridster, GridsterItem} from 'angular-gridster2';
 
 @Component({
   standalone: true,
-  imports: [Gridster, GridsterItemComponent],
+  imports: [Gridster, GridsterItem],
   ...
 })
 ```
@@ -47,7 +47,7 @@ Initialize a simple dashboard:
 ```typescript
    import { GridsterConfig, GridsterItem }  from 'angular-gridster2';
    options: GridsterConfig;
-   dashboard: Array<GridsterItem>;
+   dashboard: GridsterItem[];
 
    static itemChange(item, itemComponent) {
      console.info('itemChanged', item, itemComponent);
@@ -70,7 +70,7 @@ Initialize a simple dashboard:
    }
 
    changedOptions() {
-     this.options.api.optionsChanged();
+     this.options = Object.assign({}, this.options);
    }
 
    removeItem(item) {
