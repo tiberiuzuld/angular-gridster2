@@ -45,15 +45,15 @@ import {Gridster, GridsterItem} from 'angular-gridster2';
 Initialize a simple dashboard:
 
 ```typescript
-   import { GridsterConfig, GridsterItem }  from 'angular-gridster2';
+   import { GridsterConfig, GridsterItemConfig }  from 'angular-gridster2';
    options: GridsterConfig;
-   dashboard: GridsterItem[];
+   dashboard: GridsterItemConfig[];
 
-   static itemChange(item, itemComponent) {
+   static itemChange(item: GridsterItemConfig, itemComponent) {
      console.info('itemChanged', item, itemComponent);
    }
 
-   static itemResize(item, itemComponent) {
+   static itemResize(item: GridsterItemConfig, itemComponent) {
      console.info('itemResized', item, itemComponent);
    }
 
@@ -73,12 +73,12 @@ Initialize a simple dashboard:
      this.options = Object.assign({}, this.options);
    }
 
-   removeItem(item) {
+   removeItem(item: GridsterItemConfig) {
      this.dashboard.splice(this.dashboard.indexOf(item), 1);
    }
 
    addItem() {
-     this.dashboard.push({});
+     this.dashboard.push({cols: 1, rows: 1, y: 0, x: 0});
    }
 ```
 
