@@ -207,6 +207,10 @@ export class GridsterResizable {
   }
 
   dragMove = (e: MouseEvent): void => {
+    if (!this.gridster || !this.gridster.dragInProgress || !this.push || !this.pushResize) {
+      return;
+    }
+
     if (this.directionFunction === null) {
       throw new Error('The `directionFunction` has not been set before calling `dragMove`.');
     }
@@ -232,6 +236,10 @@ export class GridsterResizable {
   };
 
   dragStop = (e: MouseEvent): void => {
+    if (!this.gridster || !this.push || !this.pushResize) {
+      return;
+    }
+
     e.stopPropagation();
     e.preventDefault();
     cancelScroll();
@@ -266,6 +274,12 @@ export class GridsterResizable {
   };
 
   cancelResize = (): void => {
+    const push = this.push;
+    const pushResize = this.pushResize;
+    if (!push && !pushResize) {
+      return;
+    }
+
     const $item = this.gridsterItem.$item();
     const item = this.gridsterItem.item();
     $item.cols = item.cols || 1;
@@ -273,27 +287,49 @@ export class GridsterResizable {
     $item.x = item.x || 0;
     $item.y = item.y || 0;
     this.gridsterItem.setSize();
-    this.push.restoreItems();
-    this.pushResize.restoreItems();
-    this.push.destroy();
-    this.push = null!;
-    this.pushResize.destroy();
-    this.pushResize = null!;
+    if (push) {
+      push.restoreItems();
+      push.destroy();
+      this.push = null!;
+    }
+    if (pushResize) {
+      pushResize.restoreItems();
+      pushResize.destroy();
+      this.pushResize = null!;
+    }
+    this.directionFunction = null;
   };
 
   makeResize = (): void => {
+    const push = this.push;
+    const pushResize = this.pushResize;
+    if (!push && !pushResize) {
+      return;
+    }
+
     this.gridsterItem.setSize();
     this.gridsterItem.checkItemChanges(this.gridsterItem.$item(), this.gridsterItem.item());
-    this.push.setPushedItems();
-    this.pushResize.setPushedItems();
-    this.push.destroy();
-    this.push = null!;
-    this.pushResize.destroy();
-    this.pushResize = null!;
+    if (push) {
+      push.setPushedItems();
+      push.destroy();
+      this.push = null!;
+    }
+    if (pushResize) {
+      pushResize.setPushedItems();
+      pushResize.destroy();
+      this.pushResize = null!;
+    }
+    this.directionFunction = null;
   };
 
   private check = (direction: string): boolean => {
-    this.hasRatio && this.enforceAspectRatio();
+    if (!this.push || !this.pushResize) {
+      return false;
+    }
+
+    if (this.hasRatio) {
+      this.enforceAspectRatio();
+    }
     this.pushResize.pushItems(direction);
     this.push.pushItems(direction, this.gridster.$options().disablePushOnResize);
     if (this.gridster.checkCollision(this.gridsterItem.$item(), true)) {
