@@ -365,6 +365,9 @@ export class Gridster implements OnInit, OnDestroy {
       item.rows = $item.rows;
       itemComponent.itemChanged();
     }
+    if (this.clampItemSizeToLimits($item, item)) {
+      itemComponent.itemChanged();
+    }
     if ($item.x === -1 || $item.y === -1) {
       this.autoPositionItem(itemComponent);
     } else if (this.checkCollision($item)) {
@@ -399,6 +402,22 @@ export class Gridster implements OnInit, OnDestroy {
       this.movingItem = null;
       this.previewStyle();
     }
+  }
+
+  private clampItemSizeToLimits($item: GridsterItemConfig, item: GridsterItemConfig): boolean {
+    const $options = this.$options();
+    const minItemCols = $item.minItemCols === undefined ? $options.minItemCols : $item.minItemCols;
+    const maxItemCols = $item.maxItemCols === undefined ? $options.maxItemCols : $item.maxItemCols;
+    const minItemRows = $item.minItemRows === undefined ? $options.minItemRows : $item.minItemRows;
+    const maxItemRows = $item.maxItemRows === undefined ? $options.maxItemRows : $item.maxItemRows;
+    const cols = Math.min(Math.max($item.cols, minItemCols), maxItemCols);
+    const rows = Math.min(Math.max($item.rows, minItemRows), maxItemRows);
+    if ($item.cols === cols && $item.rows === rows) {
+      return false;
+    }
+    $item.cols = item.cols = cols;
+    $item.rows = item.rows = rows;
+    return true;
   }
 
   checkCollision(item: GridsterItemConfig, checkRatio?: boolean): GridsterItem | boolean {
