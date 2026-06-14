@@ -316,8 +316,9 @@ export class Gridster implements OnInit, OnDestroy {
     if ($options.setGridSize) {
       this.renderer.addClass(this.el, 'gridSize');
       if (!this.mobile) {
-        this.renderer.setStyle(this.el, 'width', this.columns * this.curColWidth + $options.margin + 'px');
-        this.renderer.setStyle(this.el, 'height', this.rows * this.curRowHeight + $options.margin + 'px');
+        const outerMarginSize = $options.outerMargin ? $options.margin : -$options.margin;
+        this.renderer.setStyle(this.el, 'width', this.columns * this.curColWidth + outerMarginSize + 'px');
+        this.renderer.setStyle(this.el, 'height', this.rows * this.curRowHeight + outerMarginSize + 'px');
       }
     } else {
       this.renderer.removeClass(this.el, 'gridSize');
