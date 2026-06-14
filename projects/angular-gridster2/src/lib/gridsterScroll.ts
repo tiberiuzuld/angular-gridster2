@@ -106,13 +106,21 @@ export function scroll(
 
     if (elemRightOffset <= scrollSensitivity) {
       cancelW();
-      if (!(resizeEvent && resizeEventType && !resizeEventType.east) && !scrollE) {
-        startHorizontalScroll(1, calculateItemPosition, gridster, isRTL);
+      if (isMovingTowardScrollEdge(lastMouse.clientX, clientX, 1)) {
+        if (!(resizeEvent && resizeEventType && !resizeEventType.east) && !scrollE) {
+          startHorizontalScroll(1, calculateItemPosition, gridster, isRTL);
+        }
+      } else {
+        cancelE();
       }
     } else if (offsetLeft > 0 && elemLeftOffset < scrollSensitivity) {
       cancelE();
-      if (!(resizeEvent && resizeEventType && !resizeEventType.west) && !scrollW) {
-        startHorizontalScroll(-1, calculateItemPosition, gridster, isRTL);
+      if (isMovingTowardScrollEdge(lastMouse.clientX, clientX, -1)) {
+        if (!(resizeEvent && resizeEventType && !resizeEventType.west) && !scrollW) {
+          startHorizontalScroll(-1, calculateItemPosition, gridster, isRTL);
+        }
+      } else {
+        cancelW();
       }
     } else if (lastMouse.clientX !== clientX) {
       cancelHorizontalScroll();
