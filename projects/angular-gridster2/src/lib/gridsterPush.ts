@@ -125,7 +125,8 @@ export class GridsterPush {
     for (; i < conflicts.length; i++) {
       itemCollision = conflicts[i];
       if (itemCollision === this.gridsterItem) {
-        continue;
+        makePush = false;
+        break;
       }
       if (!itemCollision.canBeDragged()) {
         makePush = false;
@@ -288,7 +289,7 @@ export class GridsterPush {
     const i = this.pushedItems.indexOf(gridsterItem);
     if (i > -1) {
       this.pushedItemsPath[i].pop();
-      if (!this.pushedItemsPath.length) {
+      if (!this.pushedItemsPath[i].length) {
         this.pushedItems.splice(i, 1);
         this.pushedItemsPath.splice(i, 1);
       }
