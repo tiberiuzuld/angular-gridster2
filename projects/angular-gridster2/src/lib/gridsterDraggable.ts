@@ -64,14 +64,12 @@ export class GridsterDraggable {
   ) {}
 
   destroy(): void {
-    if (this.gridster.previewStyle) {
+    if (this.gridster?.previewStyle) {
       this.gridster.previewStyle(true);
     }
+    this.removeStartListeners();
+    this.removeDragListeners();
     this.gridsterItem = this.gridster = this.collision = null!;
-    if (this.mousedown) {
-      this.mousedown();
-      this.touchstart();
-    }
   }
 
   dragStart(e: MouseEvent): void {
@@ -232,15 +230,12 @@ export class GridsterDraggable {
   dragStop = (e: MouseEvent): void => {
     e.stopPropagation();
     e.preventDefault();
+    if (!this.gridster || !this.gridsterItem) {
+      return;
+    }
 
     cancelScroll();
-    this.cancelOnBlur();
-    this.mousemove();
-    this.mouseup();
-    this.mouseleave();
-    this.touchmove();
-    this.touchend();
-    this.touchcancel();
+    this.removeDragListeners();
     this.gridsterItem.renderer.removeClass(this.gridsterItem.el, 'gridster-item-moving');
     this.gridster.dragInProgress = false;
     this.gridster.updateGrid();
@@ -259,6 +254,23 @@ export class GridsterDraggable {
       }
     });
   };
+
+  private removeStartListeners(): void {
+    this.mousedown?.();
+    this.touchstart?.();
+    this.mousedown = this.touchstart = null!;
+  }
+
+  private removeDragListeners(): void {
+    this.cancelOnBlur?.();
+    this.mousemove?.();
+    this.mouseup?.();
+    this.mouseleave?.();
+    this.touchmove?.();
+    this.touchend?.();
+    this.touchcancel?.();
+    this.cancelOnBlur = this.mousemove = this.mouseup = this.mouseleave = this.touchmove = this.touchend = this.touchcancel = null!;
+  }
 
   cancelDrag = (): void => {
     this.gridsterItem.$item().x = this.gridsterItem.item().x || 0;
