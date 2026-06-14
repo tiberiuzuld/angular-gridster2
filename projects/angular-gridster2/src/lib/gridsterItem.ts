@@ -20,6 +20,7 @@ import {
 import { Gridster } from './gridster';
 import { GridsterDraggable } from './gridsterDraggable';
 import type { GridsterItemConfig, ResizableHandles } from './gridsterItemConfig';
+import { getItemHeightMargin, getItemWidthMargin } from './gridsterMargin';
 import { GridsterResizable } from './gridsterResizable';
 import { GridsterUtils } from './gridsterUtils';
 
@@ -130,8 +131,8 @@ export class GridsterItem implements OnInit, OnDestroy {
     const $item = this.$item();
     const top = $item.y * this.gridster.curRowHeight;
     const left = $item.x * this.gridster.curColWidth;
-    const width = $item.cols * this.gridster.curColWidth - $options.margin;
-    const height = $item.rows * this.gridster.curRowHeight - $options.margin;
+    const width = $item.cols * this.gridster.curColWidth - getItemWidthMargin($options);
+    const height = $item.rows * this.gridster.curRowHeight - getItemHeightMargin($options);
 
     this.top = top;
     this.left = left;
