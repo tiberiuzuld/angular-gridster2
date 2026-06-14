@@ -45,6 +45,7 @@ export class GridsterDraggable {
   mousemove: () => void;
   mouseup: () => void;
   mouseleave: () => void;
+  contextmenu: () => void;
   cancelOnBlur: () => void;
   touchmove: () => void;
   touchend: () => void;
@@ -94,6 +95,7 @@ export class GridsterDraggable {
     });
     this.mouseup = this.gridsterItem.renderer.listen('document', 'mouseup', this.dragStop);
     this.mouseleave = this.gridsterItem.renderer.listen('document', 'mouseleave', this.dragStop);
+    this.contextmenu = this.gridsterItem.renderer.listen('document', 'contextmenu', this.dragStopOnContextMenu);
     this.cancelOnBlur = this.gridsterItem.renderer.listen('window', 'blur', this.dragStop);
     this.touchend = this.gridsterItem.renderer.listen('document', 'touchend', this.dragStop);
     this.touchcancel = this.gridsterItem.renderer.listen('document', 'touchcancel', this.dragStop);
@@ -229,15 +231,18 @@ export class GridsterDraggable {
     this.top = e.clientY + this.offsetTop - this.diffTop;
   }
 
-  dragStop = (e: MouseEvent): void => {
-    e.stopPropagation();
-    e.preventDefault();
+  dragStop = (e: MouseEvent, preventEvent = true): void => {
+    if (preventEvent) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
 
     cancelScroll();
     this.cancelOnBlur();
     this.mousemove();
     this.mouseup();
     this.mouseleave();
+    this.contextmenu();
     this.touchmove();
     this.touchend();
     this.touchcancel();
@@ -258,6 +263,10 @@ export class GridsterDraggable {
         this.cdRef.markForCheck();
       }
     });
+  };
+
+  dragStopOnContextMenu = (e: MouseEvent): void => {
+    this.dragStop(e, false);
   };
 
   cancelDrag = (): void => {
