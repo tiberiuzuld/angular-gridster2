@@ -81,6 +81,7 @@ export class GridsterResizable {
 
   destroy(): void {
     this.gridster?.previewStyle();
+    this.removeDragListeners();
     this.gridster = this.gridsterItem = null!;
   }
 
@@ -234,14 +235,12 @@ export class GridsterResizable {
   dragStop = (e: MouseEvent): void => {
     e.stopPropagation();
     e.preventDefault();
+    if (!this.gridster || !this.gridsterItem) {
+      return;
+    }
+
     cancelScroll();
-    this.mousemove();
-    this.mouseup();
-    this.mouseleave();
-    this.cancelOnBlur();
-    this.touchmove();
-    this.touchend();
-    this.touchcancel();
+    this.removeDragListeners();
     this.gridster.dragInProgress = false;
     this.resizeEventScrollType = {
       west: false,
@@ -264,6 +263,17 @@ export class GridsterResizable {
       }
     });
   };
+
+  private removeDragListeners(): void {
+    this.mousemove?.();
+    this.mouseup?.();
+    this.mouseleave?.();
+    this.cancelOnBlur?.();
+    this.touchmove?.();
+    this.touchend?.();
+    this.touchcancel?.();
+    this.mousemove = this.mouseup = this.mouseleave = this.cancelOnBlur = this.touchmove = this.touchend = this.touchcancel = null!;
+  }
 
   cancelResize = (): void => {
     const $item = this.gridsterItem.$item();
@@ -293,7 +303,9 @@ export class GridsterResizable {
   };
 
   private check = (direction: string): boolean => {
-    this.hasRatio && this.enforceAspectRatio();
+    if (this.hasRatio) {
+      this.enforceAspectRatio();
+    }
     this.pushResize.pushItems(direction);
     this.push.pushItems(direction, this.gridster.$options().disablePushOnResize);
     if (this.gridster.checkCollision(this.gridsterItem.$item(), true)) {
