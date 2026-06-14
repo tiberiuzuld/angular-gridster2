@@ -263,7 +263,7 @@ export class Gridster implements OnInit, OnDestroy {
     }
   }
 
-  private calculateLayout(): void {
+  calculateLayout(): void {
     if (this.compact) {
       this.compact.checkCompact();
     }
