@@ -98,6 +98,7 @@ export class GridsterDraggable {
     this.touchend = this.gridsterItem.renderer.listen('document', 'touchend', this.dragStop);
     this.touchcancel = this.gridsterItem.renderer.listen('document', 'touchcancel', this.dragStop);
     this.gridsterItem.renderer.addClass(this.gridsterItem.el, 'gridster-item-moving');
+    this.gridsterItem.isMoving.set(true);
     this.margin = $options.margin;
     this.outerMarginTop = $options.outerMarginTop;
     this.outerMarginRight = $options.outerMarginRight;
@@ -242,6 +243,7 @@ export class GridsterDraggable {
     this.touchend();
     this.touchcancel();
     this.gridsterItem.renderer.removeClass(this.gridsterItem.el, 'gridster-item-moving');
+    this.gridsterItem.isMoving.set(false);
     this.gridster.dragInProgress = false;
     this.gridster.updateGrid();
     this.path = [];
