@@ -245,6 +245,8 @@ export class GridsterEmptyCell {
         item.y = this.gridster.movingItem ? this.gridster.movingItem.y : 0;
       }
     }
+    item.x = Math.min(item.x, Math.max($options.maxCols - item.cols, 0));
+    item.y = Math.min(item.y, Math.max($options.maxRows - item.rows, 0));
     if (!$options.enableOccupiedCellDrop && this.gridster.checkCollision(item)) {
       return;
     }
