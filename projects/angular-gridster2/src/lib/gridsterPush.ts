@@ -18,10 +18,10 @@ export class GridsterPush {
     fromNorth: ((gridsterItemCollide: GridsterItem, gridsterItem: GridsterItem) => boolean)[];
     fromSouth: ((gridsterItemCollide: GridsterItem, gridsterItem: GridsterItem) => boolean)[];
   } = {
-    fromEast: [this.tryWest, this.trySouth, this.tryNorth, this.tryEast],
-    fromWest: [this.tryEast, this.trySouth, this.tryNorth, this.tryWest],
-    fromNorth: [this.trySouth, this.tryEast, this.tryWest, this.tryNorth],
-    fromSouth: [this.tryNorth, this.tryEast, this.tryWest, this.trySouth]
+    fromEast: [this.tryWest, this.trySouth, this.tryNorth],
+    fromWest: [this.tryEast, this.trySouth, this.tryNorth],
+    fromNorth: [this.trySouth, this.tryEast, this.tryWest],
+    fromSouth: [this.tryNorth, this.tryEast, this.tryWest]
   };
   private iteration = 0;
 
@@ -144,9 +144,6 @@ export class GridsterPush {
         this.pushedItemsOrder.push(itemCollision);
         pushedItems.push(itemCollision);
       } else if (this.tryPattern[direction][2].call(this, itemCollision, gridsterItem)) {
-        this.pushedItemsOrder.push(itemCollision);
-        pushedItems.push(itemCollision);
-      } else if (this.tryPattern[direction][3].call(this, itemCollision, gridsterItem)) {
         this.pushedItemsOrder.push(itemCollision);
         pushedItems.push(itemCollision);
       } else {
