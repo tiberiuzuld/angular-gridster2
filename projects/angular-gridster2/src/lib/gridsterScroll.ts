@@ -38,6 +38,10 @@ type Position = Pick<MouseEvent, 'clientX' | 'clientY'>;
 
 type CalculatePosition = (position: Position) => void;
 
+export function isMovingTowardScrollEdge(lastPosition: number, currentPosition: number, scrollDirection: -1 | 1): boolean {
+  return scrollDirection === 1 ? lastPosition <= currentPosition : lastPosition >= currentPosition;
+}
+
 export function scroll(
   gridster: Gridster,
   left: number,
@@ -73,13 +77,21 @@ export function scroll(
 
     if (elemBottomOffset < scrollSensitivity) {
       cancelN();
-      if (!(resizeEvent && resizeEventType && !resizeEventType.south) && !scrollS) {
-        startVerticalScroll(1, calculateItemPosition, gridster);
+      if (isMovingTowardScrollEdge(lastMouse.clientY, clientY, 1)) {
+        if (!(resizeEvent && resizeEventType && !resizeEventType.south) && !scrollS) {
+          startVerticalScroll(1, calculateItemPosition, gridster);
+        }
+      } else {
+        cancelS();
       }
     } else if (offsetTop > 0 && elemTopOffset < scrollSensitivity) {
       cancelS();
-      if (!(resizeEvent && resizeEventType && !resizeEventType.north) && !scrollN) {
-        startVerticalScroll(-1, calculateItemPosition, gridster);
+      if (isMovingTowardScrollEdge(lastMouse.clientY, clientY, -1)) {
+        if (!(resizeEvent && resizeEventType && !resizeEventType.north) && !scrollN) {
+          startVerticalScroll(-1, calculateItemPosition, gridster);
+        }
+      } else {
+        cancelN();
       }
     } else if (lastMouse.clientY !== clientY) {
       cancelVerticalScroll();
@@ -94,13 +106,21 @@ export function scroll(
 
     if (elemRightOffset <= scrollSensitivity) {
       cancelW();
-      if (!(resizeEvent && resizeEventType && !resizeEventType.east) && !scrollE) {
-        startHorizontalScroll(1, calculateItemPosition, gridster, isRTL);
+      if (isMovingTowardScrollEdge(lastMouse.clientX, clientX, 1)) {
+        if (!(resizeEvent && resizeEventType && !resizeEventType.east) && !scrollE) {
+          startHorizontalScroll(1, calculateItemPosition, gridster, isRTL);
+        }
+      } else {
+        cancelE();
       }
     } else if (offsetLeft > 0 && elemLeftOffset < scrollSensitivity) {
       cancelE();
-      if (!(resizeEvent && resizeEventType && !resizeEventType.west) && !scrollW) {
-        startHorizontalScroll(-1, calculateItemPosition, gridster, isRTL);
+      if (isMovingTowardScrollEdge(lastMouse.clientX, clientX, -1)) {
+        if (!(resizeEvent && resizeEventType && !resizeEventType.west) && !scrollW) {
+          startHorizontalScroll(-1, calculateItemPosition, gridster, isRTL);
+        }
+      } else {
+        cancelW();
       }
     } else if (lastMouse.clientX !== clientX) {
       cancelHorizontalScroll();
