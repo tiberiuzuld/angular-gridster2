@@ -228,21 +228,23 @@ export class GridsterEmptyCell {
     const item: GridsterItemConfig = {
       x: this.gridster.pixelsToPositionX(x, Math.floor, true),
       y: this.gridster.pixelsToPositionY(y, Math.floor, true),
-      cols: $options.defaultItemCols,
-      rows: $options.defaultItemRows
+      cols: Math.max($options.defaultItemCols, $options.minItemCols),
+      rows: Math.max($options.defaultItemRows, $options.minItemRows)
     };
     if (oldItem) {
-      item.cols = Math.min(Math.abs(oldItem.x - item.x) + 1, $options.emptyCellDragMaxCols);
-      item.rows = Math.min(Math.abs(oldItem.y - item.y) + 1, $options.emptyCellDragMaxRows);
-      if (oldItem.x < item.x) {
+      const cellX = item.x;
+      const cellY = item.y;
+      item.cols = Math.min(Math.max(Math.abs(oldItem.x - cellX) + 1, $options.minItemCols), $options.emptyCellDragMaxCols);
+      item.rows = Math.min(Math.max(Math.abs(oldItem.y - cellY) + 1, $options.minItemRows), $options.emptyCellDragMaxRows);
+      if (oldItem.x <= cellX) {
         item.x = oldItem.x;
-      } else if (oldItem.x - item.x > $options.emptyCellDragMaxCols - 1) {
-        item.x = this.gridster.movingItem ? this.gridster.movingItem.x : 0;
+      } else {
+        item.x = oldItem.x - item.cols + 1;
       }
-      if (oldItem.y < item.y) {
+      if (oldItem.y <= cellY) {
         item.y = oldItem.y;
-      } else if (oldItem.y - item.y > $options.emptyCellDragMaxRows - 1) {
-        item.y = this.gridster.movingItem ? this.gridster.movingItem.y : 0;
+      } else {
+        item.y = oldItem.y - item.rows + 1;
       }
     }
     if (!$options.enableOccupiedCellDrop && this.gridster.checkCollision(item)) {
