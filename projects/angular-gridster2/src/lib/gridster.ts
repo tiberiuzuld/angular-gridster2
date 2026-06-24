@@ -80,6 +80,7 @@ export class Gridster implements OnInit, OnDestroy {
 
   private resize$ = new Subject<void>();
   private destroy$ = new Subject<void>();
+  private resizeObserver: ResizeObserver | null = null;
 
   constructor() {
     effect(() => {
@@ -145,6 +146,18 @@ export class Gridster implements OnInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe(() => this.resize());
+
+    this.observeElementResize();
+  }
+
+  private observeElementResize(): void {
+    if (typeof ResizeObserver === 'undefined' || this.resizeObserver) {
+      return;
+    }
+    this.zone.runOutsideAngular(() => {
+      this.resizeObserver = new ResizeObserver(() => this.onResize());
+      this.resizeObserver.observe(this.el);
+    });
   }
 
   private resize(): void {
@@ -166,6 +179,10 @@ export class Gridster implements OnInit, OnDestroy {
     this.destroy$.next();
     if (this.windowResize) {
       this.windowResize();
+    }
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+      this.resizeObserver = null;
     }
     const options = this.options();
     if (options && options.destroyCallback) {
