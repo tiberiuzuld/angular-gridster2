@@ -10,6 +10,8 @@ import { GridsterUtils } from './gridsterUtils';
 
 const GRIDSTER_ITEM_RESIZABLE_HANDLER_CLASS = 'gridster-item-resizable-handler';
 
+type MousePosition = Pick<MouseEvent, 'clientX' | 'clientY'>;
+
 enum Direction {
   UP = 'UP',
   DOWN = 'DOWN',
@@ -51,6 +53,7 @@ export class GridsterDraggable {
   touchcancel: () => void;
   mousedown: () => void;
   touchstart: () => void;
+  scrollListener: () => void;
   push: GridsterPush;
   swap: GridsterSwap;
   path: { x: number; y: number }[] = [];
@@ -91,6 +94,7 @@ export class GridsterDraggable {
     this.zone.runOutsideAngular(() => {
       this.mousemove = this.gridsterItem.renderer.listen('document', 'mousemove', this.dragMove);
       this.touchmove = this.gridster.renderer.listen(this.gridster.el, 'touchmove', this.dragMove);
+      this.scrollListener = this.gridster.renderer.listen(this.gridster.el, 'scroll', this.dragScroll);
     });
     this.mouseup = this.gridsterItem.renderer.listen('document', 'mouseup', this.dragStop);
     this.mouseleave = this.gridsterItem.renderer.listen('document', 'mouseleave', this.dragStop);
@@ -110,6 +114,8 @@ export class GridsterDraggable {
     this.top = this.gridsterItem.top - this.margin;
     this.originalClientX = e.clientX;
     this.originalClientY = e.clientY;
+    this.lastMouse.clientX = e.clientX;
+    this.lastMouse.clientY = e.clientY;
     this.width = this.gridsterItem.width;
     this.height = this.gridsterItem.height;
     if ($options.dirType === DirTypes.RTL) {
@@ -197,7 +203,13 @@ export class GridsterDraggable {
     }
   };
 
-  calculateItemPositionFromMousePosition = (e: MouseEvent): void => {
+  dragScroll = (): void => {
+    this.offsetLeft = this.gridster.el.scrollLeft - this.gridster.el.offsetLeft;
+    this.offsetTop = this.gridster.el.scrollTop - this.gridster.el.offsetTop;
+    this.calculateItemPositionFromMousePosition(this.lastMouse);
+  };
+
+  calculateItemPositionFromMousePosition = (e: MousePosition): void => {
     const options = this.gridster.options();
     if (options.scale) {
       this.calculateItemPositionWithScale(e, options.scale);
@@ -210,7 +222,7 @@ export class GridsterDraggable {
     this.zone.run(() => this.gridster.updateGrid());
   };
 
-  calculateItemPositionWithScale(e: MouseEvent, scale: number): void {
+  calculateItemPositionWithScale(e: MousePosition, scale: number): void {
     if (this.gridster.$options().dirType === DirTypes.RTL) {
       this.left = this.gridster.el.scrollWidth - this.originalClientX + (e.clientX - this.originalClientX) / scale + this.diffLeft;
     } else {
@@ -219,7 +231,7 @@ export class GridsterDraggable {
     this.top = this.originalClientY + (e.clientY - this.originalClientY) / scale + this.offsetTop - this.diffTop;
   }
 
-  calculateItemPositionWithoutScale(e: MouseEvent): void {
+  calculateItemPositionWithoutScale(e: MousePosition): void {
     const isRTL = this.gridster.$options().dirType === DirTypes.RTL;
     if (isRTL) {
       this.left = this.gridster.el.offsetWidth - (e.clientX + this.offsetLeft - this.diffLeft);
@@ -240,6 +252,7 @@ export class GridsterDraggable {
     this.mouseup();
     this.mouseleave();
     this.touchmove();
+    this.scrollListener();
     this.touchend();
     this.touchcancel();
     this.gridsterItem.renderer.removeClass(this.gridsterItem.el, 'gridster-item-moving');
