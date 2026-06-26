@@ -1,13 +1,12 @@
-import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
-import { MatListModule } from '@angular/material/list';
+import { Component, ViewEncapsulation } from '@angular/core';
+import { MatListItem, MatNavList } from '@angular/material/list';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [RouterLink, RouterLinkActive, RouterOutlet, MatListModule]
+  imports: [RouterLink, RouterLinkActive, RouterOutlet, MatNavList, MatListItem]
 })
 export class App {}

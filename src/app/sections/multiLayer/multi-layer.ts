@@ -1,18 +1,30 @@
-import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatIconModule } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
-import { DisplayGrid, Gridster, GridsterConfig, GridsterItemConfig, GridsterItem, GridType } from 'angular-gridster2';
-import { MarkdownModule } from 'ngx-markdown';
+import { MatButton, MatIconButton, MatMiniFabButton } from '@angular/material/button';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatIcon } from '@angular/material/icon';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { DisplayGrid, Gridster, GridsterConfig, GridsterItem, GridsterItemConfig, GridType } from 'angular-gridster2';
+import { MarkdownComponent } from 'ngx-markdown';
 
 @Component({
   selector: 'app-swap',
   templateUrl: './multi-layer.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [FormsModule, MatButtonModule, MatCheckboxModule, MatIconModule, MatMenuModule, MarkdownModule, Gridster, GridsterItem]
+  imports: [
+    FormsModule,
+    MarkdownComponent,
+    Gridster,
+    GridsterItem,
+    MatButton,
+    MatIcon,
+    MatCheckbox,
+    MatMiniFabButton,
+    MatIconButton,
+    MatMenuTrigger,
+    MatMenu,
+    MatMenuItem
+  ]
 })
 export class MultiLayer {
   options: GridsterConfig = {

@@ -1,16 +1,15 @@
-import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
+import { Component, ViewEncapsulation } from '@angular/core';
+import { MatButton, MatMiniFabButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
-import { GridsterApi, CompactType, Gridster, GridsterConfig, GridsterItem, GridsterItemConfig, GridsterPush, GridType } from 'angular-gridster2';
-import { MarkdownModule } from 'ngx-markdown';
+import { CompactType, Gridster, GridsterApi, GridsterConfig, GridsterItem, GridsterItemConfig, GridsterPush, GridType } from 'angular-gridster2';
+import { MarkdownComponent } from 'ngx-markdown';
 
 @Component({
   selector: 'app-api',
   templateUrl: './api.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [MatButtonModule, MatIconModule, MarkdownModule, Gridster, GridsterItem]
+  imports: [MarkdownComponent, Gridster, GridsterItem, MatButton, MatIcon, MatMiniFabButton]
 })
 export class Api {
   options: GridsterConfig = {

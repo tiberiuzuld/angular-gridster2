@@ -1,11 +1,10 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { GridsterItemConfig } from 'angular-gridster2';
 import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-widget-b',
   template: '{{widget().type}}',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   standalone: true
 })

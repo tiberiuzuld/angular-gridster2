@@ -1,17 +1,16 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, OnDestroy, ViewEncapsulation } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
+import { Component, EventEmitter, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 import { DisplayGrid, Gridster, GridsterConfig, GridsterItem, GridsterItemConfig, GridType } from 'angular-gridster2';
-import { MarkdownModule } from 'ngx-markdown';
+import { MarkdownComponent } from 'ngx-markdown';
 import { ParentDynamic } from './parent-dynamic';
 
 @Component({
   selector: 'app-dynamic-widgets',
   templateUrl: './dynamic-widgets.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [MatButtonModule, MatIconModule, MarkdownModule, Gridster, GridsterItem, ParentDynamic]
+  imports: [MarkdownComponent, Gridster, GridsterItem, ParentDynamic, MatButton, MatIcon]
 })
 export class DynamicWidgets implements OnDestroy {
   options: GridsterConfig = {

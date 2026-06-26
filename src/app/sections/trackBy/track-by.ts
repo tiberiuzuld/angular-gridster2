@@ -1,17 +1,16 @@
-import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
+import { Component, ViewEncapsulation } from '@angular/core';
+import { MatButton, MatMiniFabButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
-import { CompactType, DisplayGrid, Gridster, GridsterConfig, GridsterItemConfig, GridsterItem, GridType } from 'angular-gridster2';
-import { MarkdownModule } from 'ngx-markdown';
+import { CompactType, DisplayGrid, Gridster, GridsterConfig, GridsterItem, GridsterItemConfig, GridType } from 'angular-gridster2';
+import { MarkdownComponent } from 'ngx-markdown';
 import { TrackByItem } from './track-by-item';
 
 @Component({
   selector: 'app-track-by',
   templateUrl: './track-by.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [MatButtonModule, MatIconModule, MarkdownModule, Gridster, GridsterItem, TrackByItem]
+  imports: [MatButton, MatIcon, MatMiniFabButton, MarkdownComponent, Gridster, GridsterItem, TrackByItem]
 })
 export class TrackBy {
   options: GridsterConfig = {

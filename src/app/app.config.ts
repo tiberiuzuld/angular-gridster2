@@ -1,7 +1,7 @@
 import { HttpClient, provideHttpClient } from '@angular/common/http';
-import { ApplicationConfig, importProvidersFrom, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
+import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { MarkdownModule, MARKED_OPTIONS } from 'ngx-markdown';
+import { MARKED_OPTIONS, provideMarkdown } from 'ngx-markdown';
 import { appRoutes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
@@ -10,14 +10,12 @@ export const appConfig: ApplicationConfig = {
     provideZonelessChangeDetection(),
     provideRouter(appRoutes),
     provideHttpClient(),
-    importProvidersFrom(
-      MarkdownModule.forRoot({
-        loader: HttpClient,
-        markedOptions: {
-          provide: MARKED_OPTIONS,
-          useValue: { breaks: true }
-        }
-      })
-    )
+    provideMarkdown({
+      loader: HttpClient,
+      markedOptions: {
+        provide: MARKED_OPTIONS,
+        useValue: { breaks: true }
+      }
+    })
   ]
 };

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'app-track-by-item',
@@ -7,7 +7,6 @@ import { ChangeDetectionStrategy, Component, Input, OnInit, ViewEncapsulation } 
       <div style="font-size: 30px">ID: {{ id }}</div>
     </div>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   standalone: true
 })
