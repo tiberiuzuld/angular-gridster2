@@ -265,6 +265,8 @@ export class GridsterDraggable {
   cancelDrag = (): void => {
     this.gridsterItem.$item().x = this.gridsterItem.item().x || 0;
     this.gridsterItem.$item().y = this.gridsterItem.item().y || 0;
+    this.positionX = this.positionXBackup = this.gridsterItem.$item().x;
+    this.positionY = this.positionYBackup = this.gridsterItem.$item().y;
     this.gridsterItem.setSize();
     if (this.push) {
       this.push.restoreItems();
