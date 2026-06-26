@@ -544,7 +544,8 @@ export class Gridster implements OnInit, OnDestroy {
     if (noLimit) {
       return position;
     } else {
-      return Math.max(position, 0);
+      const maxPosition = Math.max(this.$options().maxCols - 1, 0);
+      return Math.min(Math.max(position, 0), maxPosition);
     }
   }
 
@@ -553,7 +554,8 @@ export class Gridster implements OnInit, OnDestroy {
     if (noLimit) {
       return position;
     } else {
-      return Math.max(position, 0);
+      const maxPosition = Math.max(this.$options().maxRows - 1, 0);
+      return Math.min(Math.max(position, 0), maxPosition);
     }
   }
 
