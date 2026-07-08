@@ -3,6 +3,7 @@ import { Renderer2 } from '@angular/core';
 import { Gridster } from './gridster';
 import { DirTypes, GridType } from './gridsterConfig';
 import { GridsterItemConfig } from './gridsterItemConfig';
+import { getItemHeightMargin, getItemWidthMargin } from './gridsterMargin';
 import { CommonGridStyle, GridColumnCachedStyle, GridRowCachedStyle } from './gridsterRendererTypes';
 
 export class GridsterRenderer {
@@ -40,8 +41,8 @@ export class GridsterRenderer {
     } else {
       const x = Math.round(this.gridster.curColWidth * item.x);
       const y = Math.round(this.gridster.curRowHeight * item.y);
-      const width = this.gridster.curColWidth * item.cols - $options.margin;
-      const height = this.gridster.curRowHeight * item.rows - $options.margin;
+      const width = this.gridster.curColWidth * item.cols - getItemWidthMargin($options);
+      const height = this.gridster.curRowHeight * item.rows - getItemHeightMargin($options);
       // set the cell style
       this.setCellPosition(renderer, el, x, y);
       renderer.setStyle(el, 'width', width + 'px');
@@ -127,12 +128,14 @@ export class GridsterRenderer {
   }
 
   getGridColumnStyle(i: number): CommonGridStyle {
-    const margin = this.gridster.$options().margin;
+    const $options = this.gridster.$options();
+    const widthMargin = getItemWidthMargin($options);
+    const heightMargin = getItemHeightMargin($options);
     // generates the new style
     const newPos: GridColumnCachedStyle = {
       left: this.gridster.curColWidth * i,
-      width: this.gridster.curColWidth - margin,
-      height: this.gridster.gridRows.length * this.gridster.curRowHeight - margin,
+      width: this.gridster.curColWidth - widthMargin,
+      height: this.gridster.gridRows.length * this.gridster.curRowHeight - heightMargin,
       style: {}
     };
     newPos.style = {
@@ -153,12 +156,14 @@ export class GridsterRenderer {
   }
 
   getGridRowStyle(i: number): CommonGridStyle {
-    const margin = this.gridster.$options().margin;
+    const $options = this.gridster.$options();
+    const widthMargin = getItemWidthMargin($options);
+    const heightMargin = getItemHeightMargin($options);
     // generates the new style
     const newPos: GridRowCachedStyle = {
       top: this.gridster.curRowHeight * i,
-      width: this.gridster.gridColumns.length * this.gridster.curColWidth + margin,
-      height: this.gridster.curRowHeight - margin,
+      width: this.gridster.gridColumns.length * this.gridster.curColWidth + widthMargin,
+      height: this.gridster.curRowHeight - heightMargin,
       style: {}
     };
     newPos.style = {
