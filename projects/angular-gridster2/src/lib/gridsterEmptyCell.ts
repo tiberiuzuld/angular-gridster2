@@ -1,4 +1,5 @@
 import { Gridster } from './gridster';
+import { DirTypes } from './gridsterConfig';
 import { GridsterItemConfig } from './gridsterItemConfig';
 import { GridsterUtils } from './gridsterUtils';
 
@@ -203,10 +204,14 @@ export class GridsterEmptyCell {
 
   getPixelsX(e: MouseEvent, rect: ClientRect): number {
     const scale = this.gridster.options().scale;
+    const $options = this.gridster.$options();
+    const leftMargin = this.gridster.gridRenderer.getLeftMargin();
+    const scrollOffset = this.gridster.el.scrollLeft - leftMargin;
+    const distanceFromEdge = $options.dirType === DirTypes.RTL ? rect.right - e.clientX : e.clientX - rect.left;
     if (scale) {
-      return (e.clientX - rect.left) / scale + this.gridster.el.scrollLeft - this.gridster.gridRenderer.getLeftMargin();
+      return distanceFromEdge / scale + scrollOffset;
     }
-    return e.clientX + this.gridster.el.scrollLeft - rect.left - this.gridster.gridRenderer.getLeftMargin();
+    return distanceFromEdge + scrollOffset;
   }
 
   getPixelsY(e: MouseEvent, rect: ClientRect): number {
