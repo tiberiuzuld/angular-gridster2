@@ -145,7 +145,7 @@ export class GridsterEmptyCell {
   };
 
   emptyCellMouseDown = (e: MouseEvent): void => {
-    if (GridsterUtils.checkContentClassForEmptyCellClickEvent(this.gridster, e)) {
+    if (GridsterUtils.checkContentClassForEmptyCellClickEvent(this.gridster, e) || this.isEventFromScrollbar(e)) {
       return;
     }
     e.preventDefault();
@@ -249,5 +249,28 @@ export class GridsterEmptyCell {
       return;
     }
     return item;
+  }
+
+  private isEventFromScrollbar(e: MouseEvent): boolean {
+    const el = this.gridster.el;
+    const rect = el.getBoundingClientRect();
+    const verticalScrollbarWidth = el.offsetWidth - el.clientWidth;
+    const horizontalScrollbarHeight = el.offsetHeight - el.clientHeight;
+    const offsetX = e.clientX - rect.left;
+    const offsetY = e.clientY - rect.top;
+    const hasVerticalScrollbar = verticalScrollbarWidth > 0 && el.scrollHeight > el.clientHeight;
+    const hasHorizontalScrollbar = horizontalScrollbarHeight > 0 && el.scrollWidth > el.clientWidth;
+    const direction = getComputedStyle(el).direction;
+    const withinElementWidth = offsetX >= 0 && offsetX <= el.offsetWidth;
+    const withinElementHeight = offsetY >= 0 && offsetY <= el.offsetHeight;
+    const onVerticalScrollbar =
+      hasVerticalScrollbar &&
+      withinElementWidth &&
+      withinElementHeight &&
+      (direction === 'rtl' ? offsetX <= verticalScrollbarWidth : offsetX >= el.clientWidth) &&
+      offsetX <= el.offsetWidth;
+    const onHorizontalScrollbar = hasHorizontalScrollbar && withinElementWidth && offsetY >= el.clientHeight && offsetY <= el.offsetHeight;
+
+    return onVerticalScrollbar || onHorizontalScrollbar;
   }
 }
