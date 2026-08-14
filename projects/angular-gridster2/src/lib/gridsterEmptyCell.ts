@@ -10,6 +10,8 @@ export class GridsterEmptyCell {
   removeEmptyCellDropListenerFn: (() => void) | null;
   removeEmptyCellMousedownListenerFn: (() => void) | null;
   removeEmptyCellTouchstartListenerFn: (() => void) | null;
+  removeEmptyCellHoverMoveListenerFn: (() => void) | null;
+  removeEmptyCellHoverLeaveListenerFn: (() => void) | null;
   removeWindowMousemoveListenerFn: () => void;
   removeWindowTouchmoveListenerFn: () => void;
   removeWindowMouseupListenerFn: () => void;
@@ -20,6 +22,7 @@ export class GridsterEmptyCell {
   constructor(private gridster: Gridster) {}
 
   destroy(): void {
+    this.removeEmptyCellHoverListeners();
     if (this.gridster.previewStyle) {
       this.gridster.previewStyle();
     }
@@ -80,10 +83,24 @@ export class GridsterEmptyCell {
       this.removeEmptyCellMousedownListenerFn = null;
       this.removeEmptyCellTouchstartListenerFn = null;
     }
+    if ($options.enableEmptyCellHover && !this.removeEmptyCellHoverMoveListenerFn) {
+      this.gridster.zone.runOutsideAngular(() => {
+        this.removeEmptyCellHoverMoveListenerFn = this.gridster.renderer.listen(this.gridster.el, 'mousemove', this.emptyCellHoverMove);
+        this.removeEmptyCellHoverLeaveListenerFn = this.gridster.renderer.listen(this.gridster.el, 'mouseleave', this.emptyCellHoverLeave);
+      });
+    } else if (!$options.enableEmptyCellHover && this.removeEmptyCellHoverMoveListenerFn && this.removeEmptyCellHoverLeaveListenerFn) {
+      this.removeEmptyCellHoverListeners();
+      this.hideEmptyCellHover();
+    }
   }
 
   emptyCellClickCb = (e: MouseEvent): void => {
-    if (!this.gridster || this.gridster.movingItem || GridsterUtils.checkContentClassForEmptyCellClickEvent(this.gridster, e)) {
+    if (
+      !this.gridster ||
+      this.initialItem ||
+      this.gridster.dragInProgress ||
+      GridsterUtils.checkContentClassForEmptyCellClickEvent(this.gridster, e)
+    ) {
       return;
     }
     const item = this.getValidItemFromEvent(e);
@@ -98,7 +115,7 @@ export class GridsterEmptyCell {
   };
 
   emptyCellContextMenuCb = (e: MouseEvent): void => {
-    if (this.gridster.movingItem || GridsterUtils.checkContentClassForEmptyCellClickEvent(this.gridster, e)) {
+    if (this.initialItem || this.gridster.dragInProgress || GridsterUtils.checkContentClassForEmptyCellClickEvent(this.gridster, e)) {
       return;
     }
     e.preventDefault();
@@ -201,6 +218,43 @@ export class GridsterEmptyCell {
     this.gridster.cdRef.markForCheck();
   };
 
+  emptyCellHoverMove = (e: MouseEvent): void => {
+    if (!this.gridster) {
+      return;
+    }
+    if (e.buttons) {
+      this.hideEmptyCellHover();
+      return;
+    }
+    const rect = this.gridster.el.getBoundingClientRect();
+    const $options = this.gridster.$options();
+    const item: GridsterItemConfig = {
+      x: this.gridster.pixelsToPositionX(this.getPixelsX(e, rect), Math.floor, true),
+      y: this.gridster.pixelsToPositionY(this.getPixelsY(e, rect), Math.floor, true),
+      cols: $options.defaultItemCols,
+      rows: $options.defaultItemRows
+    };
+    if (this.gridster.checkCollision(item)) {
+      this.hideEmptyCellHover();
+      return;
+    }
+    if (
+      this.gridster.movingItem &&
+      this.gridster.movingItem.x === item.x &&
+      this.gridster.movingItem.y === item.y &&
+      this.gridster.movingItem.cols === item.cols &&
+      this.gridster.movingItem.rows === item.rows
+    ) {
+      return;
+    }
+    this.gridster.movingItem = item;
+    this.gridster.previewStyle();
+  };
+
+  emptyCellHoverLeave = (): void => {
+    this.hideEmptyCellHover();
+  };
+
   getPixelsX(e: MouseEvent, rect: ClientRect): number {
     const scale = this.gridster.options().scale;
     if (scale) {
@@ -249,5 +303,26 @@ export class GridsterEmptyCell {
       return;
     }
     return item;
+  }
+
+  private hideEmptyCellHover(): void {
+    if (!this.gridster || this.initialItem || this.gridster.dragInProgress) {
+      return;
+    }
+    if (this.gridster.movingItem) {
+      this.gridster.movingItem = null;
+      this.gridster.previewStyle();
+    }
+  }
+
+  private removeEmptyCellHoverListeners(): void {
+    if (this.removeEmptyCellHoverMoveListenerFn) {
+      this.removeEmptyCellHoverMoveListenerFn();
+      this.removeEmptyCellHoverMoveListenerFn = null;
+    }
+    if (this.removeEmptyCellHoverLeaveListenerFn) {
+      this.removeEmptyCellHoverLeaveListenerFn();
+      this.removeEmptyCellHoverLeaveListenerFn = null;
+    }
   }
 }

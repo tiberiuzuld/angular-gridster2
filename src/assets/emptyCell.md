@@ -6,6 +6,7 @@
 | enableEmptyCellContextMenu   | enable empty cell context menu (right click) events | Boolean                       | false     |
 | enableEmptyCellDrop          | enable empty cell drop events                       | Boolean                       | false     |
 | enableEmptyCellDrag          | enable empty cell drag events                       | Boolean                       | false     |
+| enableEmptyCellHover         | show item preview on empty cell hover               | Boolean                       | false     |
 | enableOccupiedCellDrop       | enable occupied cell drop events                    | Boolean                       | false     |
 | emptyCellDragMaxCols         | limit empty cell drag max cols                      | Number                        | 50        |
 | emptyCellDragMaxRows         | limit empty cell drag max rows                      | Number                        | 50        |

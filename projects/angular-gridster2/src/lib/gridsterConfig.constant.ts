@@ -61,6 +61,7 @@ export const GridsterConfigService: GridsterConfig = {
   enableEmptyCellContextMenu: false, // enable empty cell context menu (right click) events
   enableEmptyCellDrop: false, // enable empty cell drop events
   enableEmptyCellDrag: false, // enable empty cell drag events
+  enableEmptyCellHover: false, // show preview on empty cell hover
   enableOccupiedCellDrop: false, // enable occupied cell drop events
   emptyCellClickCallback: undefined, // empty cell click callback
   emptyCellContextMenuCallback: undefined, // empty cell context menu (right click) callback
