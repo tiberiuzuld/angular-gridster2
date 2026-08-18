@@ -34,6 +34,7 @@ export class EmptyCell {
     enableEmptyCellContextMenu: false,
     enableEmptyCellDrop: false,
     enableEmptyCellDrag: false,
+    enableEmptyCellHover: true,
     enableOccupiedCellDrop: false,
     emptyCellClickCallback: (event, item) => this.emptyCellClick(event, item),
     emptyCellContextMenuCallback: (event, item) => this.emptyCellClick(event, item),

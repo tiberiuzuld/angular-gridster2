@@ -64,6 +64,7 @@ describe('gridsterCompact service', () => {
       enableEmptyCellContextMenu: false,
       enableEmptyCellDrop: true,
       enableEmptyCellDrag: false,
+      enableEmptyCellHover: false,
       enableOccupiedCellDrop: false,
       emptyCellClickCallback: emptyCellClick.bind(this),
       emptyCellContextMenuCallback: emptyCellClick.bind(this),

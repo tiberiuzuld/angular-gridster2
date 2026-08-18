@@ -63,6 +63,7 @@ export class Rtl implements OnDestroy {
     enableEmptyCellContextMenu: false,
     enableEmptyCellDrop: false,
     enableEmptyCellDrag: false,
+    enableEmptyCellHover: false,
     enableOccupiedCellDrop: false,
     emptyCellDragMaxCols: 50,
     emptyCellDragMaxRows: 50,
