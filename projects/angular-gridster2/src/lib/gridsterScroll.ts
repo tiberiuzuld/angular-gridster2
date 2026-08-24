@@ -40,10 +40,6 @@ type CalculatePosition = (position: Position) => void;
 
 export function scroll(
   gridster: Gridster,
-  left: number,
-  top: number,
-  width: number,
-  height: number,
   event: MouseEvent,
   lastMouse: Position,
   calculateItemPosition: CalculatePosition,
@@ -57,26 +53,28 @@ export function scroll(
   resizeEvent = resize;
   resizeEventType = resizeEventScrollType;
 
-  const offsetWidth = gridsterElement.offsetWidth;
-  const offsetHeight = gridsterElement.offsetHeight;
   const offsetLeft = gridsterElement.scrollLeft;
   const offsetTop = gridsterElement.scrollTop;
 
   const { clientX, clientY } = event;
+  // the rect is affected by `scale`, so the distances below are divided by it
+  // to keep `scrollSensitivity` expressed in unscaled grid pixels
+  const gridRect = gridsterElement.getBoundingClientRect();
+  const scale = $options.scale || 1;
 
   lastMouseX = clientX;
   lastMouseY = clientY;
 
   if (!$options.disableScrollVertical) {
-    const elemTopOffset = top - offsetTop;
-    const elemBottomOffset = offsetHeight + offsetTop - top - height;
+    const pointerTopOffset = (clientY - gridRect.top) / scale;
+    const pointerBottomOffset = (gridRect.bottom - clientY) / scale;
 
-    if (elemBottomOffset < scrollSensitivity) {
+    if (pointerBottomOffset < scrollSensitivity) {
       cancelN();
       if (!(resizeEvent && resizeEventType && !resizeEventType.south) && !scrollS) {
         startVerticalScroll(1, calculateItemPosition, gridster);
       }
-    } else if (offsetTop > 0 && elemTopOffset < scrollSensitivity) {
+    } else if (offsetTop > 0 && pointerTopOffset < scrollSensitivity) {
       cancelS();
       if (!(resizeEvent && resizeEventType && !resizeEventType.north) && !scrollN) {
         startVerticalScroll(-1, calculateItemPosition, gridster);
@@ -87,17 +85,18 @@ export function scroll(
   }
 
   if (!$options.disableScrollHorizontal) {
-    const elemRightOffset = offsetLeft + offsetWidth - left - width;
-    const elemLeftOffset = left - offsetLeft;
-
     const isRTL = $options.dirType === DirTypes.RTL;
 
-    if (elemRightOffset <= scrollSensitivity) {
+    // start/end follow the writing direction, so the physical edges are swapped in RTL
+    const pointerStartOffset = (isRTL ? gridRect.right - clientX : clientX - gridRect.left) / scale;
+    const pointerEndOffset = (isRTL ? clientX - gridRect.left : gridRect.right - clientX) / scale;
+
+    if (pointerEndOffset <= scrollSensitivity) {
       cancelW();
       if (!(resizeEvent && resizeEventType && !resizeEventType.east) && !scrollE) {
         startHorizontalScroll(1, calculateItemPosition, gridster, isRTL);
       }
-    } else if (offsetLeft > 0 && elemLeftOffset < scrollSensitivity) {
+    } else if (offsetLeft > 0 && pointerStartOffset < scrollSensitivity) {
       cancelE();
       if (!(resizeEvent && resizeEventType && !resizeEventType.west) && !scrollW) {
         startHorizontalScroll(-1, calculateItemPosition, gridster, isRTL);
