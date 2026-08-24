@@ -1,3 +1,5 @@
+import { signal } from '@angular/core';
+
 import { GridsterDraggable } from '../gridsterDraggable';
 import { DirTypes } from '../gridsterConfig';
 
@@ -67,6 +69,7 @@ describe('GridsterDraggable', () => {
       height: 100,
       item: vi.fn(() => item),
       $item: vi.fn(() => $item),
+      isMoving: signal(false),
       setSize: vi.fn(),
       checkItemChanges: vi.fn()
     };
@@ -99,6 +102,7 @@ describe('GridsterDraggable', () => {
     expect(cleanupByEvent.mousemove).toHaveBeenCalledOnce();
     expect(cleanupByEvent.mouseup).toHaveBeenCalledOnce();
     expect(renderer.removeClass).toHaveBeenCalledWith(gridsterItem.el, 'gridster-item-moving');
+    expect(gridsterItem.isMoving()).toBe(false);
     expect(gridsterItem.checkItemChanges).toHaveBeenCalledWith($item, item);
   });
 });

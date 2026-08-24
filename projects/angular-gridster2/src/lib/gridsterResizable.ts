@@ -221,7 +221,7 @@ export class GridsterResizable {
     GridsterUtils.checkTouchEvent(e);
     this.offsetTop = this.gridster.el.scrollTop - this.gridster.el.offsetTop;
     this.offsetLeft = this.gridster.el.scrollLeft - this.gridster.el.offsetLeft;
-    scroll(this.gridster, this.left, this.top, this.width, this.height, e, this.lastMouse, this.directionFunction, true, this.resizeEventScrollType);
+    scroll(this.gridster, e, this.lastMouse, this.directionFunction, true, this.resizeEventScrollType);
 
     const scale = this.gridster.$options().scale;
     this.directionFunction({

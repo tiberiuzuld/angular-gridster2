@@ -193,7 +193,7 @@ export class GridsterDraggable {
     if (directions.length) {
       this.offsetLeft = this.gridster.el.scrollLeft - this.gridster.el.offsetLeft;
       this.offsetTop = this.gridster.el.scrollTop - this.gridster.el.offsetTop;
-      scroll(this.gridster, this.left, this.top, this.width, this.height, e, this.lastMouse, this.calculateItemPositionFromMousePosition);
+      scroll(this.gridster, e, this.lastMouse, this.calculateItemPositionFromMousePosition);
 
       this.calculateItemPositionFromMousePosition(e);
     }
