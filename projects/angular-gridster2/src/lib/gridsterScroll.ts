@@ -127,7 +127,7 @@ function startVerticalScroll(sign: number, calculateItemPosition: CalculatePosit
       return;
     }
 
-    if (!gridsterElement || (sign === -1 && gridsterElement.scrollTop - scrollSpeed < 0)) {
+    if (!gridsterElement) {
       cancelVerticalScroll();
       return;
     }
@@ -135,18 +135,24 @@ function startVerticalScroll(sign: number, calculateItemPosition: CalculatePosit
     const delta = (timestamp - lastUpdate) / intervalDuration;
     lastUpdate = timestamp;
 
-    const top = sign * Math.round(scrollSpeed * delta);
+    let top = sign * Math.round(scrollSpeed * delta);
 
-    // check if maximum scroll position is reached
-    if (scrollS && gridsterElement.scrollTop + top > maxScrollY) {
-      cancelVerticalScroll();
-      return;
+    // clamp top to the remaining distance if necessary
+    if (scrollN && gridsterElement.scrollTop + top <= 0) {
+      top = -gridsterElement.scrollTop;
+    } else if (scrollS && gridsterElement.scrollTop + top > maxScrollY) {
+      top = maxScrollY - gridsterElement.scrollTop;
     }
 
     gridsterElement.scrollTop += top;
     lastMouseY += top;
     calculateItemPosition({ clientX: lastMouseX, clientY: lastMouseY });
-    animationV = requestAnimation(callback);
+
+    if ((scrollN && gridsterElement.scrollTop <= 0) || (scrollS && gridsterElement.scrollTop >= maxScrollY)) {
+      cancelVerticalScroll();
+    } else {
+      animationV = requestAnimation(callback);
+    }
   };
   animationV = requestAnimation(callback);
 }
