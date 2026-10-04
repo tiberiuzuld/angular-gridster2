@@ -51,7 +51,7 @@
     "@angular/forms": "22.0.3",
     "@angular/material": "22.0.2",
     "@angular/platform-browser": "22.0.3",
-    "@angular/router": "22.0.3",
+    "@angular/router": "22.2.0",
     "marked": "18.0.5",
     "ngx-markdown": "22.0.0",
     "rxjs": "7.8.2",
